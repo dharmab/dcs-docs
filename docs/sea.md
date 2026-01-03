@@ -6,6 +6,28 @@ This document describes the naval units available in DCS World, organized by ves
 
 Ship definitions are located in `_G/db/Units/Ships/Ship/*.lua`. Each file defines a Lua table with fields including `DisplayName`, `type`, `tags`, `Categories`, physical dimensions, sensors, and weapon systems.
 
+## Ship Classifications
+
+Naval vessels are classified by size, armament, and intended role. These classifications evolved over centuries and continue to adapt as technology changes warfare at sea. While modern navies sometimes blur these distinctions, the traditional hierarchy provides useful context for understanding a fleet's composition and capabilities.
+
+**Aircraft Carriers** are the largest surface combatants, designed to launch and recover fixed-wing aircraft. Fleet carriers (designated CV or CVN for nuclear-powered) operate catapult-launched aircraft and form the centerpiece of a carrier strike group, projecting power across vast distances. Light carriers and amphibious assault ships (LHA/LHD) are smaller vessels that operate helicopters and short takeoff/vertical landing (STOVL) aircraft like the Harrier. Carriers themselves carry minimal offensive armament, relying instead on their air wings and escorting warships for protection.
+
+**Battlecruisers** occupy an unusual position between cruisers and the now-obsolete battleships. Only Russia operates battlecruisers today, with the Kirov-class vessels displacing over 25,000 tons and carrying massive anti-ship missile batteries alongside extensive air defense systems. These ships are designed to hunt carrier battle groups or lead surface action groups, combining the firepower of a battleship with cruiser-like speed.
+
+**Cruisers** are large, multi-mission surface combatants ranging from 9,000 to 12,000 tons. In modern navies, cruisers primarily serve as air defense coordinators, using powerful radar systems and long-range surface-to-air missiles to protect carrier strike groups or lead independent task forces. American Ticonderoga-class cruisers with the Aegis Combat System exemplify this role. Russian cruisers like the Slava class emphasize anti-ship missiles for striking at enemy fleets.
+
+**Destroyers** evolved from small torpedo boats designed to "destroy" enemy torpedo craft and now serve as the backbone of most surface fleets. Modern destroyers range from 6,000 to 10,000 tons and perform multiple roles including anti-air, anti-submarine, and anti-surface warfare. The distinction between cruisers and destroyers has blurred considerably, with large destroyers like the Arleigh Burke class rivaling cruisers in capability. Destroyers typically operate as escorts for carrier groups or in independent surface action groups.
+
+**Frigates** are smaller than destroyers, typically 3,000 to 4,500 tons, and were traditionally specialized for convoy escort and anti-submarine warfare. The frigate prioritizes endurance and seakeeping over raw combat power, making them economical platforms for patrol, presence, and protection of merchant shipping. Modern frigates increasingly carry area air defense systems, narrowing the gap with destroyers. Many navies that cannot afford destroyer fleets rely on frigates as their primary surface combatants.
+
+**Corvettes** are the smallest ocean-going warships, typically 500 to 3,000 tons, designed for coastal defense and littoral operations. Corvettes sacrifice range and seakeeping for reduced cost, allowing navies to maintain larger numbers of hulls for patrol and presence missions. Despite their size, corvettes can carry potent anti-ship missiles, making them dangerous opponents in confined waters. Russia's Tarantul-class corvettes, armed with supersonic Moskit missiles, exemplify how small platforms can threaten much larger vessels.
+
+**Fast Attack Craft** (FAC) are small, high-speed vessels under 500 tons designed for hit-and-run attacks with missiles or torpedoes. These boats trade protection and endurance for speed and concentrated firepower, attacking from coastal waters and retreating before escorts can respond. Fast attack craft are particularly effective in archipelagic waters, straits, and littorals where their small size and shallow draft provide tactical advantages.
+
+**Submarines** operate beneath the surface, providing stealth capabilities unmatched by surface ships. Nuclear-powered attack submarines (SSN) can remain submerged indefinitely, hunting enemy submarines and surface ships or launching cruise missiles. Conventional diesel-electric submarines (SSK) are quieter when running on batteries but must periodically surface or snorkel to recharge, limiting their endurance. Both types are extremely difficult to detect and track, making anti-submarine warfare one of the most challenging naval disciplines.
+
+**Amphibious Warfare Ships** are specialized vessels that transport ground forces and their equipment for landing operations. Landing Platform Docks (LPD) carry troops, vehicles, and landing craft in a well deck. Landing Ships Tank (LST) can beach themselves to discharge vehicles directly onto shore. Amphibious assault ships combine helicopter flight decks with well decks to deliver Marines by both air and sea. These vessels form the core of naval expeditionary capability, allowing ground forces to strike from the sea.
+
 ## Aircraft Carriers
 
 ### United States Navy
