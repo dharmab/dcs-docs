@@ -256,30 +256,35 @@ Custom kneeboard cards can be added by placing images in the `Saved Games\DCS\Kn
 
 ## Mission Options
 
-Mission-level options can be enforced on players:
-- Permit Crash Recovery, External Views, F10 View Options
-- Labels, Game Flight Mode, Game Avionic Mode
-- Immortal, Unlimited Fuel/Weapons
-- Easy Communication, Radio Assists
-- Padlock, Tool Tips, Wake Turbulence
-- G-Effect level, Random System Failures
-- Civilian Traffic density, Bird Strike probability
+Mission-level options can be enforced on players. These settings control gameplay realism, assistance features, and environmental factors.
 
-## Battlefield Commanders (Multiplayer)
+### Easy Communication
 
-Multiplayer roles beyond pilots:
-- **Game Master**: Full control and visibility of both sides
-- **Tactical Commander**: Strategic ground unit control with JTAC capability
-- **JTAC/Operator**: First-person vehicle control with JTAC capability
-- **Observer**: Unlimited camera access without control
+Always disable Easy Communication. This option simplifies radio communication by automatically tuning frequencies and bypassing proper radio procedures, but it breaks many scripting features and third-party tools that rely on proper radio simulation. Scripts that monitor radio frequencies, trigger events based on radio calls, or implement custom ATC systems will malfunction when Easy Communication is enabled. Even casual players encounter problems with this setting enabled, as popular mods and server-side features depend on the standard radio behavior.
 
-## Keyboard Shortcuts
+### Civilian Traffic
 
-- **Ctrl+C / Ctrl+V**: Copy/paste groups
-- **Left click**: Place waypoint or select unit
-- **Right click + drag**: Pan map view
-- **Mouse wheel**: Zoom map
-- **RShift+K**: Open kneeboard in-flight
+This setting controls the density of civilian vehicles on roads. Civilian traffic in DCS is entirely oblivious to combat operations, which creates immersion problems in mission scenarios. Civilian cars will drive directly through tank columns, appear on thermal imaging alongside military targets, and generally ignore the fact that a war is happening around them. Disable civilian traffic in combat missions to avoid these immersion-breaking situations. The option is suitable only for peacetime scenarios or missions where ground combat is not a factor.
+
+### Bird Strikes
+
+Disable bird strikes. Despite the name, DCS does not render flocks of birds that pilots could see and avoid. Instead, this option simply applies a random chance of engine failure at low altitudes with no visual indication of what caused it. The result feels like arbitrary bad luck rather than a realistic hazard, since there is nothing the pilot could have done differently to prevent it.
+
+### Other Options
+
+Additional mission options include:
+- **Permit Crash Recovery**: Allow players to respawn after crashes
+- **External Views**: Enable third-person camera views
+- **F10 View Options**: Control what appears on the map view
+- **Labels**: Show floating name labels above units
+- **Immortal**: Units cannot be destroyed
+- **Unlimited Fuel/Weapons**: Disable resource consumption
+- **Radio Assists**: Provide radio frequency hints
+- **Padlock**: Camera tracking of enemy aircraft
+- **Tool Tips**: Show help text on cockpit controls
+- **Wake Turbulence**: Simulate turbulence behind aircraft
+- **G-Effect level**: Intensity of pilot blackout/redout effects
+- **Random System Failures**: Enable random equipment malfunctions
 
 ## File Formats
 
