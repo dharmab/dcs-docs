@@ -6,7 +6,9 @@ A MIZ file is the mission file format used by DCS World. It is a standard ZIP ar
 
 ### mission
 
-A Lua table containing the primary mission data. This is the core of the mission file and defines:
+A Lua table containing the primary mission data. This is the core of the mission file. See [Mission File Schema](mission-file-schema.md) for complete documentation of every key and data structure.
+
+The mission file defines:
 
 - **Date and time**: The mission date (`date`) and start time
 - **Weather**: Wind speeds and directions at multiple altitudes, cloud coverage and presets, fog, visibility, temperature, and atmospheric conditions
