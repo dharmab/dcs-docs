@@ -303,17 +303,19 @@ Common events include:
 
 | Event | When it fires |
 |-------|---------------|
-| `S_EVENT_SHOT` | A weapon is fired |
-| `S_EVENT_HIT` | An object is struck by a weapon |
-| `S_EVENT_TAKEOFF` | An aircraft departs |
-| `S_EVENT_LAND` | An aircraft lands |
-| `S_EVENT_CRASH` | An aircraft crashes |
-| `S_EVENT_EJECTION` | A pilot ejects |
-| `S_EVENT_DEAD` | An object is destroyed |
-| `S_EVENT_BIRTH` | A unit spawns |
-| `S_EVENT_PLAYER_ENTER_UNIT` | A player takes control of a unit |
-| `S_EVENT_KILL` | One unit kills another |
-| `S_EVENT_MARK_ADDED` | A map marker is created |
+| [`S_EVENT_SHOT`](#s_event_shot) | A weapon is fired |
+| [`S_EVENT_HIT`](#s_event_hit) | An object is struck by a weapon |
+| [`S_EVENT_TAKEOFF`](#s_event_takeoff) | An aircraft departs |
+| [`S_EVENT_LAND`](#s_event_land) | An aircraft lands |
+| [`S_EVENT_RUNWAY_TAKEOFF`](#s_event_runway_takeoff) | An aircraft leaves the ground |
+| [`S_EVENT_RUNWAY_TOUCH`](#s_event_runway_touch) | An aircraft touches down |
+| [`S_EVENT_CRASH`](#s_event_crash) | An aircraft crashes |
+| [`S_EVENT_EJECTION`](#s_event_ejection) | A pilot ejects |
+| [`S_EVENT_DEAD`](#s_event_dead) | An object is destroyed |
+| [`S_EVENT_BIRTH`](#s_event_birth) | A unit spawns |
+| [`S_EVENT_PLAYER_ENTER_UNIT`](#s_event_player_enter_unit) | A player takes control of a unit |
+| [`S_EVENT_KILL`](#s_event_kill) | One unit kills another |
+| [`S_EVENT_MARK_ADDED`](#s_event_mark_added) | A map marker is created |
 
 The event table passed to your handler contains different information depending on the event type. Most events include `id` (which event occurred), `time` (mission time), and `initiator` (the object involved).
 
@@ -3430,6 +3432,8 @@ Fires at the exact moment an aircraft leaves the ground.
 }
 ```
 
+**Gotchas:** On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
+
 ##### S_EVENT_RUNWAY_TOUCH
 
 Fires at the exact moment an aircraft touches the ground after being airborne.
@@ -3443,6 +3447,8 @@ Fires at the exact moment an aircraft touches the ground after being airborne.
     place = Airbase
 }
 ```
+
+**Gotchas:** On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
 
 ##### S_EVENT_REFUELING
 
