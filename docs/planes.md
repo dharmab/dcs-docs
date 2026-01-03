@@ -155,6 +155,8 @@ This document provides comprehensive information about all aircraft in DCS World
 
 **Playable:** Yes
 
+**Usage Notes:** Suitable for AI aircraft in Cold War and Desert Storm era missions. Not recommended as a player aircraft.
+
 ### Background
 
 The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Warthog', entered USAF service in 1977. Designed specifically for close air support (CAS) and tank-killing missions, it features the massive GAU-8/A Avenger 30mm rotary cannon and exceptional survivability. The A-10A is the original single-seat variant.
@@ -466,9 +468,11 @@ The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Wartho
 
 **Playable:** Yes
 
+**Supersedes:** A-10C
+
 ### Background
 
-The A-10C II is the latest upgrade to the Warthog fleet, incorporating the AN/AAQ-28(V) LITENING targeting pod as standard equipment, enhanced defensive systems, and improved data-link capabilities for increased situational awareness.
+The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007, featuring precision engagement capabilities including GPS/laser-guided munitions, improved avionics, and glass cockpit displays while retaining the legendary GAU-8/A cannon. The "A-10C II" is a simulator-created aircraft based on a subset of upgrades applied to real-world A-10Cs, including laser-guided Maverick missiles, APKWS rockets, Scorpion helmet-mounted display, and ARC-210 radio system.
 
 ### Tasks
 
@@ -1086,6 +1090,8 @@ The A-10C II is the latest upgrade to the Warthog fleet, incorporating the AN/AA
 **Type ID:** `A-10C`
 
 **Playable:** Yes
+
+**Deprecated:** Yes — superseded by A-10C II
 
 ### Background
 
@@ -3357,9 +3363,11 @@ The Lockheed F-117 Nighthawk is the world's first operational stealth aircraft, 
 
 **Playable:** Yes
 
+**Supersedes:** F-14A
+
 ### Background
 
-The Grumman F-14A Tomcat is the U.S. Navy's premier air superiority fighter from the era of 1974 to 2006. This early variant represents the GE F110-powered aircraft before digital upgrades, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability.
+The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A-135-GR (Early) represents an early TF30-powered aircraft before digital upgrades.
 
 ### Tasks
 
@@ -3635,9 +3643,11 @@ The Grumman F-14A Tomcat is the U.S. Navy's premier air superiority fighter from
 
 **Playable:** Yes
 
+**Supersedes:** F-14A
+
 ### Background
 
-The F-14A-135-GR represents the late-production GE F110-powered Tomcat variant with enhanced avionics and improved reliability. It maintains the iconic variable-geometry wing design and carrier-based fighter capabilities.
+The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A-135-GR represents a late-production TF30-powered variant with enhanced avionics and improved reliability.
 
 ### Tasks
 
@@ -3913,9 +3923,11 @@ The F-14A-135-GR represents the late-production GE F110-powered Tomcat variant w
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-14A-135-GR (Early) and F-14A-135-GR
+
 ### Background
 
-The F-14A is the initial production variant of the Tomcat with Pratt & Whitney TF30 engines, entering service in 1974. Despite engine reliability issues, it proved itself as an exceptional interceptor and fleet defense fighter.
+The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A is the initial production variant with Pratt & Whitney TF30 engines. Despite engine reliability issues, it proved itself as an exceptional interceptor.
 
 ### Tasks
 
@@ -4005,7 +4017,7 @@ The F-14A is the initial production variant of the Tomcat with Pratt & Whitney T
 
 ### Background
 
-The F-14B Tomcat combines the improved F110-GE-400 engines with upgraded avionics, entering service in 1988. It offers significantly improved thrust and reliability while retaining the aircraft's superb air combat capabilities.
+The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14B combines improved F110-GE-400 engines with upgraded avionics, entering service in 1988, offering significantly improved thrust and reliability.
 
 ### Tasks
 
@@ -5033,9 +5045,11 @@ The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15 that ente
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-16CM bl.50
+
 ### Background
 
-The F-16A MLU (Mid-Life Update) is a European partner nations' upgrade of F-16A/Bs, bringing early-model aircraft to Block 50/52 equivalent capability with modern radar, weapons systems, and avionics.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16A MLU (Mid-Life Update) is a European partner nations' upgrade bringing early-model aircraft to Block 50/52 equivalent capability.
 
 ### Tasks
 
@@ -5223,9 +5237,11 @@ The F-16A MLU (Mid-Life Update) is a European partner nations' upgrade of F-16A/
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-16CM bl.50
+
 ### Background
 
-The General Dynamics F-16A Fighting Falcon is the initial single-seat production variant, entering service in 1979. A revolutionary lightweight fighter featuring fly-by-wire controls, it established the multi-role fighter concept that dominates combat aviation.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16A is the initial single-seat production variant.
 
 ### Tasks
 
@@ -5377,9 +5393,11 @@ The General Dynamics F-16A Fighting Falcon is the initial single-seat production
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-16CM bl.50
+
 ### Background
 
-The F-16C Block 50 is an advanced multi-role variant featuring the F110-GE-129 engine and capability for HARM targeting system (HTS) for the SEAD mission, entering service in 1991.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16C Block 50 is an advanced variant featuring the F110-GE-129 engine and HARM targeting system (HTS) for the SEAD mission, entering service in 1991.
 
 ### Tasks
 
@@ -5591,9 +5609,11 @@ The F-16C Block 50 is an advanced multi-role variant featuring the F110-GE-129 e
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-16CM bl.50
+
 ### Background
 
-The F-16C Block 52D is an export variant with conformal fuel tanks and the F100-PW-229 engine, providing extended range and enhanced air-to-ground capability.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16C Block 52D is an export variant with conformal fuel tanks and the F100-PW-229 engine, providing extended range.
 
 ### Tasks
 
@@ -5816,9 +5836,11 @@ The F-16C Block 52D is an export variant with conformal fuel tanks and the F100-
 
 **Playable:** Yes
 
+**Supersedes:** F-16A, F-16A MLU, F-16C bl.50, F-16C bl.52d
+
 ### Background
 
-The F-16CM Block 50 is the current USAF designation for upgraded Block 50 aircraft, featuring modern avionics including the APG-68(V)9 radar and advanced targeting systems.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16CM Block 50 is the current USAF designation for upgraded Block 50 aircraft, featuring the APG-68(V)9 radar and advanced targeting systems.
 
 ### Tasks
 
@@ -6051,9 +6073,11 @@ The F-16CM Block 50 is the current USAF designation for upgraded Block 50 aircra
 
 **Playable:** Yes
 
+**Supersedes:** F-4E
+
 ### Background
 
-The F-4E-45MC is a modernized Phantom II variant with updated avionics and weapons systems, extending the aircraft's operational relevance for operators worldwide.
+The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and features leading-edge slats for improved maneuverability.
 
 ### Tasks
 
@@ -6567,6 +6591,8 @@ The F-4E-45MC is a modernized Phantom II variant with updated avionics and weapo
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-4E-45MC
+
 ### Background
 
 The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and features leading-edge slats for improved maneuverability.
@@ -6699,6 +6725,8 @@ The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the lege
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-5E-3
+
 ### Background
 
 The Northrop F-5E Tiger II Flaming Cliffs variant provides a simplified simulation of this lightweight tactical fighter for players seeking a less complex experience while enjoying the F-5's renowned handling characteristics.
@@ -6808,6 +6836,8 @@ The Northrop F-5E Tiger II Flaming Cliffs variant provides a simplified simulati
 **Type ID:** `F-5E-3`
 
 **Playable:** Yes
+
+**Supersedes:** F-5E FC
 
 ### Background
 
@@ -7093,6 +7123,8 @@ The Northrop F-5E Tiger II is a lightweight tactical fighter that entered servic
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F-86F
+
 ### Background
 
 The North American F-86F Sabre Flaming Cliffs variant provides a simplified simulation of this legendary Korean War-era jet fighter, allowing players to experience swept-wing jet combat without full-fidelity systems.
@@ -7184,6 +7216,8 @@ The North American F-86F Sabre Flaming Cliffs variant provides a simplified simu
 **Type ID:** `F-86F Sabre`
 
 **Playable:** No
+
+**Supersedes:** F-86F FC
 
 ### Background
 
@@ -7277,9 +7311,11 @@ The North American F-86F Sabre is the definitive day-fighter variant of the lege
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by F/A-18C
+
 ### Background
 
-The McDonnell Douglas F/A-18A Hornet is the initial single-seat variant of the Navy's strike-fighter, entering service in 1983. It represents a new concept in carrier aviation: a true multi-role aircraft equally capable in air-to-air and air-to-ground missions.
+The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18A is the initial single-seat production variant.
 
 ### Tasks
 
@@ -7410,9 +7446,11 @@ The McDonnell Douglas F/A-18A Hornet is the initial single-seat variant of the N
 
 **Playable:** Yes
 
+**Deprecated:** Yes — superseded by F/A-18C
+
 ### Background
 
-The F/A-18C Lot 20 is the fully-upgraded late-production Hornet with all Block II improvements, including APG-73 radar, enhanced weapons compatibility, and night attack capability.
+The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18C Lot 20 is the fully-upgraded late-production variant with APG-73 radar, enhanced weapons compatibility, and night attack capability.
 
 ### Tasks
 
@@ -7665,9 +7703,11 @@ The F/A-18C Lot 20 is the fully-upgraded late-production Hornet with all Block I
 
 **Playable:** No
 
+**Supersedes:** F/A-18A, F/A-18C Lot 20
+
 ### Background
 
-The F/A-18C Hornet introduced significant avionics upgrades including night attack capability, entering service in 1987. It serves as the backbone of Navy and Marine Corps tactical aviation.
+The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18C introduced significant avionics upgrades including night attack capability, entering service in 1987.
 
 ### Tasks
 
@@ -9685,6 +9725,8 @@ The Aermacchi MB-339 is an Italian military jet trainer and light attack aircraf
 
 **Playable:** No
 
+**Deprecated:** Yes — superseded by MiG-15bis
+
 ### Background
 
 The Mikoyan-Gurevich MiG-15bis Flaming Cliffs variant provides a simplified simulation of the legendary Korean War-era Soviet jet fighter, offering accessible gameplay while capturing the essence of early jet combat.
@@ -9732,6 +9774,8 @@ The Mikoyan-Gurevich MiG-15bis Flaming Cliffs variant provides a simplified simu
 **Type ID:** `MiG-15bis`
 
 **Playable:** No
+
+**Supersedes:** MiG-15bis FC
 
 ### Background
 
@@ -10388,6 +10432,8 @@ The Mikoyan MiG-27K is an advanced Soviet ground-attack variant based on the MiG
 
 **Playable:** No
 
+**Supersedes:** MiG-29A
+
 ### Background
 
 The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combines excellent maneuverability with advanced weapons systems.
@@ -10575,6 +10621,8 @@ The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fo
 **Type ID:** `MiG-29A`
 
 **Playable:** Yes
+
+**Deprecated:** Yes — superseded by MiG-29A Fulcrum
 
 ### Background
 
@@ -11027,7 +11075,7 @@ The Dassault Mirage 2000-5 is a multirole upgrade of the Mirage 2000, featuring 
 
 ### Background
 
-The Dassault Mirage F1AD is the ground attack variant exported to Libya, entering service in 1978. It features enhanced air-to-ground capability while retaining fighter performance.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1AD is the ground attack variant exported to Libya, entering service in 1978. It features enhanced air-to-ground capability while retaining fighter performance.
 
 ### Tasks
 
@@ -11231,7 +11279,7 @@ The Dassault Mirage F1AD is the ground attack variant exported to Libya, enterin
 
 ### Background
 
-The Dassault Mirage F1AZ is the South African Air Force's ground attack variant, entering service in 1975. It saw extensive combat during the South African Border War.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1AZ is the South African Air Force's ground attack variant, entering service in 1975. It saw extensive combat during the South African Border War.
 
 ### Tasks
 
@@ -11433,7 +11481,7 @@ The Dassault Mirage F1AZ is the South African Air Force's ground attack variant,
 
 ### Background
 
-The Dassault Mirage F1B is the two-seat trainer variant of the Mirage F1, entering French service in 1980. It retains full combat capability while providing operational conversion training.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1B is the two-seat trainer variant, entering French service in 1980. It retains full combat capability while providing operational conversion training.
 
 ### Tasks
 
@@ -11645,7 +11693,7 @@ The Dassault Mirage F1B is the two-seat trainer variant of the Mirage F1, enteri
 
 ### Background
 
-The Dassault Mirage F1BD is the two-seat trainer variant exported to Libya, combining training capability with operational ground attack systems.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BD is the two-seat trainer variant exported to Libya, combining training capability with operational ground attack systems.
 
 ### Tasks
 
@@ -11886,7 +11934,7 @@ The Dassault Mirage F1BD is the two-seat trainer variant exported to Libya, comb
 
 ### Background
 
-The Dassault Mirage F1BE is the two-seat trainer variant for Spain, entering service in 1975. It provides conversion training for Spanish Mirage F1 pilots.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BE is the two-seat trainer variant for Spain, entering service in 1975. It provides conversion training for Spanish Mirage F1 pilots.
 
 ### Tasks
 
@@ -12177,7 +12225,7 @@ The Dassault Mirage F1BE is the two-seat trainer variant for Spain, entering ser
 
 ### Background
 
-The Dassault Mirage F1BQ is the two-seat trainer variant exported to Iraq that served alongside single-seat variants during the Iran-Iraq War.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BQ is the two-seat trainer variant exported to Iraq that served alongside single-seat variants during the Iran-Iraq War.
 
 ### Tasks
 
@@ -12418,7 +12466,7 @@ The Dassault Mirage F1BQ is the two-seat trainer variant exported to Iraq that s
 
 ### Background
 
-The Dassault Mirage F1C-200 is an improved French Air Force variant with a fixed refueling probe, extending operational range for overseas deployments.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1C-200 is an improved French Air Force variant with a fixed refueling probe, extending operational range for overseas deployments.
 
 ### Tasks
 
@@ -12634,7 +12682,7 @@ The Dassault Mirage F1C-200 is an improved French Air Force variant with a fixed
 
 ### Background
 
-The Dassault Mirage F1C is the initial production air defense variant for the French Air Force, entering service in 1973. It served as France's primary interceptor until replaced by the Mirage 2000.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1C is the initial production air defense variant for the French Air Force. It served as France's primary interceptor until replaced by the Mirage 2000.
 
 ### Tasks
 
@@ -12846,7 +12894,7 @@ The Dassault Mirage F1C is the initial production air defense variant for the Fr
 
 ### Background
 
-The Dassault Mirage F1CE is the export variant for Spain, entering service in 1975. It served as the Spanish Air Force's primary interceptor for decades.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CE is the export variant for Spain, entering service in 1975. It served as the Spanish Air Force's primary interceptor for decades.
 
 ### Tasks
 
@@ -13137,7 +13185,7 @@ The Dassault Mirage F1CE is the export variant for Spain, entering service in 19
 
 ### Background
 
-The Dassault Mirage F1CG is the export variant for Greece, entering Hellenic Air Force service in 1975. It provides air defense capability alongside F-4 Phantoms.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CG is the export variant for Greece, entering Hellenic Air Force service in 1975. It provides air defense capability alongside F-4 Phantoms.
 
 ### Tasks
 
@@ -13361,7 +13409,7 @@ The Dassault Mirage F1CG is the export variant for Greece, entering Hellenic Air
 
 ### Background
 
-The Dassault Mirage F1CH is the export variant for Morocco, entering service in 1978. It has seen combat action in the Western Sahara conflict.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CH is the export variant for Morocco, entering service in 1978. It has seen combat action in the Western Sahara conflict.
 
 ### Tasks
 
@@ -13577,7 +13625,7 @@ The Dassault Mirage F1CH is the export variant for Morocco, entering service in 
 
 ### Background
 
-The Dassault Mirage F1CJ is the export variant for Jordan, entering Royal Jordanian Air Force service in 1981.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CJ is the export variant for Jordan, entering Royal Jordanian Air Force service in 1981.
 
 ### Tasks
 
@@ -13793,7 +13841,7 @@ The Dassault Mirage F1CJ is the export variant for Jordan, entering Royal Jordan
 
 ### Background
 
-The Dassault Mirage F1CK is the export variant for Kuwait, entering service in 1977. It served until replaced by F/A-18 Hornets.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CK is the export variant for Kuwait, entering service in 1977. It served until replaced by F/A-18 Hornets.
 
 ### Tasks
 
@@ -14009,7 +14057,7 @@ The Dassault Mirage F1CK is the export variant for Kuwait, entering service in 1
 
 ### Background
 
-The Dassault Mirage F1CR is the dedicated reconnaissance variant for the French Air Force, entering service in 1983. It carries internal cameras and external sensor pods.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CR is the dedicated reconnaissance variant for the French Air Force, entering service in 1983. It carries internal cameras and external sensor pods.
 
 ### Tasks
 
@@ -14227,7 +14275,7 @@ The Dassault Mirage F1CR is the dedicated reconnaissance variant for the French 
 
 ### Background
 
-The Dassault Mirage F1CT is a conversion of French F1C interceptors to the ground attack role, extending the aircraft's service life with enhanced strike capability.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CT is a conversion of French F1C interceptors to the ground attack role, extending the aircraft's service life with enhanced strike capability.
 
 ### Tasks
 
@@ -14445,7 +14493,7 @@ The Dassault Mirage F1CT is a conversion of French F1C interceptors to the groun
 
 ### Background
 
-The Dassault Mirage F1CZ is the export air defense variant for South Africa, entering service in 1975. It achieved multiple aerial victories during the South African Border War.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CZ is the export air defense variant for South Africa, entering service in 1975. It achieved multiple aerial victories during the South African Border War.
 
 ### Tasks
 
@@ -14661,7 +14709,7 @@ The Dassault Mirage F1CZ is the export air defense variant for South Africa, ent
 
 ### Background
 
-The Dassault Mirage F1DDA is the two-seat training variant for Qatar, providing operational conversion capability.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1DDA is the two-seat training variant for Qatar, providing operational conversion capability.
 
 ### Tasks
 
@@ -14892,7 +14940,7 @@ The Dassault Mirage F1DDA is the two-seat training variant for Qatar, providing 
 
 ### Background
 
-The Dassault Mirage F1ED is the export ground attack variant for Libya, featuring enhanced air-to-ground systems.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1ED is the export ground attack variant for Libya, featuring enhanced air-to-ground systems.
 
 ### Tasks
 
@@ -15133,7 +15181,7 @@ The Dassault Mirage F1ED is the export ground attack variant for Libya, featurin
 
 ### Background
 
-The Dassault Mirage F1EDA is an improved ground attack variant for Libya with additional weapons capability.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EDA is an improved ground attack variant for Libya with additional weapons capability.
 
 ### Tasks
 
@@ -15364,7 +15412,7 @@ The Dassault Mirage F1EDA is an improved ground attack variant for Libya with ad
 
 ### Background
 
-The Dassault Mirage F1EE is the multi-role export variant for Spain, combining air defense and ground attack capabilities.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EE is the multi-role export variant for Spain, combining air defense and ground attack capabilities.
 
 ### Tasks
 
@@ -15657,7 +15705,7 @@ The Dassault Mirage F1EE is the multi-role export variant for Spain, combining a
 
 ### Background
 
-The Dassault Mirage F1EH is the multi-role export variant for Morocco, entering service in the 1970s.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EH is the multi-role export variant for Morocco, entering service in the 1970s.
 
 ### Tasks
 
@@ -15873,7 +15921,7 @@ The Dassault Mirage F1EH is the multi-role export variant for Morocco, entering 
 
 ### Background
 
-The Dassault Mirage F1EQ is the multi-role export variant for Iraq that saw extensive combat during the Iran-Iraq War. It carried Exocet anti-ship missiles in attacks on tankers.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EQ is the multi-role export variant for Iraq that saw extensive combat during the Iran-Iraq War. It carried Exocet anti-ship missiles in attacks on tankers.
 
 ### Tasks
 
@@ -16114,7 +16162,7 @@ The Dassault Mirage F1EQ is the multi-role export variant for Iraq that saw exte
 
 ### Background
 
-The Dassault Mirage F1JA is the export variant for Ecuador, entering service in 1979. It saw combat during the Cenepa War with Peru.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1JA is the export variant for Ecuador, entering service in 1979. It saw combat during the Cenepa War with Peru.
 
 ### Tasks
 
@@ -16310,7 +16358,7 @@ The Dassault Mirage F1JA is the export variant for Ecuador, entering service in 
 
 ### Background
 
-The Dassault Mirage F1M is a modernized Spanish variant, designated C.14 in Spanish service. This variant represents early production aircraft (serials 1-25 and 32-51) upgraded with improved avionics and weapons systems.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1M is a modernized Spanish variant, designated C.14 in Spanish service. This variant represents early production aircraft (serials 1-25 and 32-51) upgraded with improved avionics and weapons systems.
 
 ### Tasks
 
@@ -16601,7 +16649,7 @@ The Dassault Mirage F1M is a modernized Spanish variant, designated C.14 in Span
 
 ### Background
 
-The Dassault Mirage F1M C.14 (serials 52-73) represents later Spanish production aircraft with the modernization package that served until the type's retirement in 2013.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1M C.14 (serials 52-73) represents later Spanish production aircraft with the modernization package that served until the type's retirement in 2013.
 
 ### Tasks
 
