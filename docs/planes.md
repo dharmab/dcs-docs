@@ -11934,7 +11934,7 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BE is the two-seat trainer variant for Spain, entering service in 1975. It provides conversion training for Spanish Mirage F1 pilots.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BE is the two-seat trainer variant for Spain, entering service in 1980. It provides conversion training for Spanish Mirage F1 pilots.
 
 ### Tasks
 
@@ -14940,7 +14940,7 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1ED is the export ground attack variant for Libya, featuring enhanced air-to-ground systems.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1ED is the export interceptor variant for Libya.
 
 ### Tasks
 
@@ -15181,7 +15181,7 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EDA is an improved ground attack variant for Libya with additional weapons capability.
+The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EDA is the multi-role export variant for Qatar.
 
 ### Tasks
 
