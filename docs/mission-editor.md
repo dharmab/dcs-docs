@@ -281,7 +281,7 @@ Multiplayer roles beyond pilots:
 
 ## File Formats
 
-- **.miz**: Mission file format (compressed archive containing mission data and resources)
+- **.miz**: Mission file format (ZIP archive containing mission data and resources). See [MIZ File Format](miz-file-format.md) for complete documentation of the archive structure and contents.
 - **.trk**: Track recording file for replay
 
 ## Further Reading
