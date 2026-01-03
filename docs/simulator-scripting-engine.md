@@ -481,64 +481,66 @@ DCS World uses a right-handed coordinate system where the origin varies by map. 
 
 ```lua
 Vec2 = {
-    x = number,  -- East-West position (positive = East)
-    y = number   -- North-South position (positive = North)
+    x = number,
+    y = number
 }
 ```
+
+The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the North-South position, where positive values indicate positions to the North.
 
 **Vec3** represents a 3D point in world space:
 
 ```lua
 Vec3 = {
-    x = number,  -- East-West position (positive = East)
-    y = number,  -- Altitude (positive = up)
-    z = number   -- North-South position (positive = North)
+    x = number,
+    y = number,
+    z = number
 }
 ```
 
-Note that Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the North-South position. In Vec3, `y` is altitude while `z` is North-South. This is a common source of confusion when converting between the two formats.
+The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the altitude, where positive values indicate positions above sea level. The `z` field contains the North-South position, where positive values indicate positions to the North.
+
+Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the North-South position. In Vec3, `y` is altitude while `z` is North-South. This difference is a common source of confusion when converting between the two formats.
 
 **Position3** represents both position and orientation in 3D space:
 
 ```lua
 Position3 = {
-    p = Vec3,  -- World position
-    x = Vec3,  -- Forward unit vector (out the nose)
-    y = Vec3,  -- Up unit vector (out the top)
-    z = Vec3   -- Right unit vector (out the right side)
+    p = Vec3,
+    x = Vec3,
+    y = Vec3,
+    z = Vec3
 }
 ```
 
-The orientation vectors form an orthonormal basis. You can calculate heading and pitch from Position3:
+The `p` field contains the world position as a Vec3. The `x` field contains the forward unit vector, pointing out of the object's nose. The `y` field contains the up unit vector, pointing out of the object's top. The `z` field contains the right unit vector, pointing out of the object's right side. These orientation vectors form an orthonormal basis. You can calculate heading and pitch from a Position3 value:
 
 ```lua
 local pos = unit:getPosition()
-local heading = math.atan2(pos.x.z, pos.x.x)  -- radians, 0 = North
-local pitch = math.asin(pos.x.y)              -- radians, positive = nose up
+local heading = math.atan2(pos.x.z, pos.x.x)
+local pitch = math.asin(pos.x.y)
 ```
+
+The heading calculation returns radians where 0 represents North. The pitch calculation returns radians where positive values indicate the nose is pointing up.
 
 #### Time Values
 
-Mission time is measured in seconds as a floating-point number with millisecond precision. The timer singleton provides time-related functions:
-
-- `timer.getTime()` returns mission time (seconds since mission start, pauses when game is paused)
-- `timer.getAbsTime()` returns absolute time (seconds since midnight of the mission date)
-- `timer.getTime0()` returns the mission start time as absolute time
+The DCS scripting engine measures mission time in seconds as a floating-point number with millisecond precision. The timer singleton provides time-related functions. The `timer.getTime()` function returns mission time, which is the number of seconds since the mission started and pauses when the game is paused. The `timer.getAbsTime()` function returns absolute time, which is the number of seconds since midnight of the mission date. The `timer.getTime0()` function returns the mission start time expressed as absolute time.
 
 #### Distance and Angles
 
-All distances are in meters. All angles are in radians unless otherwise noted. To convert:
+All distances in the DCS scripting engine are measured in meters. All angles are measured in radians unless otherwise noted. To convert between degrees and radians:
 
 ```lua
 local radians = degrees * math.pi / 180
 local degrees = radians * 180 / math.pi
 ```
 
-Headings use true north as 0, increasing clockwise (East = π/2, South = π, West = 3π/2).
+Headings use true north as 0 and increase clockwise: East is π/2, South is π, and West is 3π/2.
 
 #### Country and Coalition
 
-Countries are identified by numeric IDs from the `country.id` enum. Coalition membership is determined by the country. The three coalitions are:
+Countries are identified by numeric IDs from the `country.id` enum. The game determines coalition membership based on the country. The three coalitions are represented by the `coalition.side` enum:
 
 ```lua
 coalition.side = {
@@ -548,7 +550,7 @@ coalition.side = {
 }
 ```
 
-A value of -1 represents "all coalitions" in some functions like `markupToAll`.
+Some functions such as `markupToAll` accept a coalition value of -1, which represents "all coalitions."
 
 ### Singletons
 
@@ -564,12 +566,11 @@ The timer singleton provides mission time information and function scheduling.
 number timer.getTime()
 ```
 
-Returns the mission time in seconds since the mission started. This value pauses when the simulation is paused. Precision is to three decimal places.
+The `timer.getTime` function returns the mission time in seconds since the mission started. This value pauses when the simulation is paused. The precision is to three decimal places.
 
-**Returns:** Mission time in seconds (e.g., `65.385`).
+**Returns:** The mission time as a number in seconds, such as `65.385`.
 
 ```lua
--- Check if 5 minutes have elapsed
 if timer.getTime() > 300 then
     startSecondWave()
 end
@@ -581,12 +582,11 @@ end
 number timer.getAbsTime()
 ```
 
-Returns the time of day as seconds since midnight on the mission date. Unlike `getTime()`, this includes the mission start time offset.
+The `timer.getAbsTime` function returns the time of day as seconds since midnight on the mission date. Unlike `timer.getTime`, this value includes the mission start time offset.
 
-**Returns:** Absolute time in seconds since midnight.
+**Returns:** The absolute time as a number in seconds since midnight.
 
 ```lua
--- Check if it's past noon (12:00)
 if timer.getAbsTime() > 43200 then
     env.info("It's afternoon")
 end
@@ -598,12 +598,11 @@ end
 number timer.getTime0()
 ```
 
-Returns the mission's start time as seconds since midnight. This represents the "start time" configured in the Mission Editor.
+The `timer.getTime0` function returns the mission's start time as seconds since midnight. This value represents the "start time" configured in the Mission Editor.
 
-**Returns:** Mission start time as absolute time.
+**Returns:** The mission start time as absolute time in seconds since midnight.
 
 ```lua
--- Calculate current time of day
 local currentTimeOfDay = timer.getTime0() + timer.getTime()
 local hours = math.floor(currentTimeOfDay / 3600) % 24
 ```
@@ -614,33 +613,28 @@ local hours = math.floor(currentTimeOfDay / 3600) % 24
 functionId timer.scheduleFunction(function callback, any argument, number runTime)
 ```
 
-Schedules a function to run at a specific mission time. The callback receives the provided argument and the scheduled time. If the callback returns a number, it will be rescheduled for that mission time.
+The `timer.scheduleFunction` function schedules a function to run at a specific mission time. The callback receives the provided argument and the scheduled time as its parameters. If the callback returns a number, the game will reschedule the callback for that mission time. If you schedule a function for a time that has already passed, the game runs it immediately on the next simulation frame.
 
 **Parameters:**
-- `callback` (function): The function to call. Signature: `function(argument, time)`.
-- `argument` (any): Value passed to the callback. Use a table to pass multiple values.
-- `runTime` (number): Mission time when the function should run.
+- `callback` (function): The function to call. The function signature is `function(argument, time)`.
+- `argument` (any): The value passed to the callback as its first parameter. Use a table to pass multiple values.
+- `runTime` (number): The mission time in seconds when the function should run.
 
-**Returns:** A function ID that can be used with `removeFunction` or `setFunctionTime`.
-
-**Gotchas:** If you schedule a function for a time that has already passed, it runs immediately on the next simulation frame.
+**Returns:** A function ID that can be used with `timer.removeFunction` or `timer.setFunctionTime`.
 
 ```lua
--- Run a function every 30 seconds
 local function periodicCheck(_, time)
     local aliveCount = countAliveUnits()
     env.info("Alive units: " .. aliveCount)
-    return time + 30  -- Reschedule 30 seconds from now
+    return time + 30
 end
 
 timer.scheduleFunction(periodicCheck, nil, timer.getTime() + 30)
 ```
 
 ```lua
--- Run once after a delay, passing data
 local function delayedMessage(data, time)
     trigger.action.outText(data.message, data.duration)
-    -- Return nil to not reschedule
 end
 
 timer.scheduleFunction(delayedMessage, {message = "5 minutes elapsed!", duration = 10}, timer.getTime() + 300)
@@ -652,14 +646,13 @@ timer.scheduleFunction(delayedMessage, {message = "5 minutes elapsed!", duration
 nil timer.removeFunction(functionId id)
 ```
 
-Removes a scheduled function so it will not run. Has no effect if the function has already run or was already removed.
+The `timer.removeFunction` function removes a scheduled function so it will not run. This function has no effect if the function has already run or was already removed.
 
 **Parameters:**
-- `id` (functionId): The ID returned by `scheduleFunction`.
+- `id` (functionId): The ID returned by `timer.scheduleFunction`.
 
 ```lua
 local funcId = timer.scheduleFunction(myCallback, nil, timer.getTime() + 60)
--- Later, cancel it
 timer.removeFunction(funcId)
 ```
 
@@ -669,15 +662,14 @@ timer.removeFunction(funcId)
 nil timer.setFunctionTime(functionId id, number newTime)
 ```
 
-Changes when a scheduled function will run. Useful for delaying or advancing scheduled tasks.
+The `timer.setFunctionTime` function changes when a scheduled function will run. This function is useful for delaying or advancing scheduled tasks.
 
 **Parameters:**
-- `id` (functionId): The ID returned by `scheduleFunction`.
-- `newTime` (number): New mission time when the function should run.
+- `id` (functionId): The ID returned by `timer.scheduleFunction`.
+- `newTime` (number): The new mission time in seconds when the function should run.
 
 ```lua
 local funcId = timer.scheduleFunction(myCallback, nil, timer.getTime() + 60)
--- Delay it by another 30 seconds
 timer.setFunctionTime(funcId, timer.getTime() + 90)
 ```
 
@@ -691,11 +683,11 @@ The env singleton provides logging, mission information, and warning systems.
 nil env.info(string message, boolean showMessageBox)
 ```
 
-Logs an informational message to `dcs.log`. This is the primary debugging tool for mission scripts.
+The `env.info` function logs an informational message to `dcs.log`. This function is the primary debugging tool for mission scripts.
 
 **Parameters:**
 - `message` (string): The message to log.
-- `showMessageBox` (boolean): Optional. If true, also displays a message box to the user. Default is false.
+- `showMessageBox` (boolean): Optional. If true, the function also displays a message box to the user. The default is false.
 
 ```lua
 env.info("Script initialized successfully")
@@ -708,11 +700,11 @@ env.info("Player entered zone: " .. zoneName)
 nil env.warning(string message, boolean showMessageBox)
 ```
 
-Logs a warning message to `dcs.log`. Use for recoverable issues.
+The `env.warning` function logs a warning message to `dcs.log`. Use this function for recoverable issues.
 
 **Parameters:**
-- `message` (string): The warning message.
-- `showMessageBox` (boolean): Optional. If true, displays a message box.
+- `message` (string): The warning message to log.
+- `showMessageBox` (boolean): Optional. If true, the function displays a message box to the user.
 
 ```lua
 if not targetGroup then
@@ -726,11 +718,11 @@ end
 nil env.error(string message, boolean showMessageBox)
 ```
 
-Logs an error message to `dcs.log`. Use for serious problems that may affect mission functionality.
+The `env.error` function logs an error message to `dcs.log`. Use this function for serious problems that may affect mission functionality.
 
 **Parameters:**
-- `message` (string): The error message.
-- `showMessageBox` (boolean): Optional. If true, displays a message box.
+- `message` (string): The error message to log.
+- `showMessageBox` (boolean): Optional. If true, the function displays a message box to the user.
 
 ```lua
 if not requiredUnit then
@@ -744,13 +736,12 @@ end
 nil env.setErrorMessageBoxEnabled(boolean enabled)
 ```
 
-Enables or disables the error message box that appears when script errors occur.
+The `env.setErrorMessageBoxEnabled` function enables or disables the error message box that appears when script errors occur.
 
 **Parameters:**
-- `enabled` (boolean): True to show error dialogs, false to suppress them.
+- `enabled` (boolean): Set to true to show error dialogs, or false to suppress them.
 
 ```lua
--- Disable error popups for production missions
 env.setErrorMessageBoxEnabled(false)
 ```
 
@@ -760,22 +751,20 @@ env.setErrorMessageBoxEnabled(false)
 string env.getValueDictByKey(string key)
 ```
 
-Returns a localized string from the mission's dictionary. Used for internationalization.
+The `env.getValueDictByKey` function returns a localized string from the mission's dictionary. This function is used for internationalization.
 
 **Parameters:**
-- `key` (string): The dictionary key.
+- `key` (string): The dictionary key to look up.
 
-**Returns:** The localized string value, or the key if not found.
+**Returns:** The localized string value, or the key itself if the key is not found.
 
 ##### env.mission
 
-A table containing the complete mission data as loaded from the MIZ file. This includes all groups, units, triggers, and other mission elements in their raw format.
+The `env.mission` field is a table containing the complete mission data as loaded from the MIZ file. This table includes all groups, units, triggers, and other mission elements in their raw format.
 
 ```lua
--- Access mission start time
 local startTime = env.mission.start_time
 
--- Iterate through coalition groups
 for coalitionName, coalitionData in pairs(env.mission.coalition) do
     env.info("Coalition: " .. coalitionName)
 end
@@ -783,7 +772,7 @@ end
 
 #### trigger
 
-The trigger singleton provides access to trigger zones, user flags, and trigger-style actions like messages, smoke, and explosions. It is divided into two sub-tables: `trigger.action` for actions and `trigger.misc` for utilities.
+The trigger singleton provides access to trigger zones, user flags, and trigger-style actions like messages, smoke, and explosions. The singleton is divided into two sub-tables: `trigger.action` for actions and `trigger.misc` for utilities.
 
 ##### trigger.action.outText
 
@@ -791,12 +780,12 @@ The trigger singleton provides access to trigger zones, user flags, and trigger-
 nil trigger.action.outText(string text, number displayTime, boolean clearView)
 ```
 
-Displays a message to all players on screen.
+The `trigger.action.outText` function displays a message to all players on screen.
 
 **Parameters:**
 - `text` (string): The message to display.
-- `displayTime` (number): How long the message remains visible in seconds.
-- `clearView` (boolean): Optional. If true, clears other messages first.
+- `displayTime` (number): The duration in seconds that the message remains visible.
+- `clearView` (boolean): Optional. If true, the function clears other messages before displaying this one.
 
 ```lua
 trigger.action.outText("Mission objective updated!", 10)
@@ -808,13 +797,13 @@ trigger.action.outText("Mission objective updated!", 10)
 nil trigger.action.outTextForCoalition(number coalitionId, string text, number displayTime, boolean clearView)
 ```
 
-Displays a message only to players of a specific coalition.
+The `trigger.action.outTextForCoalition` function displays a message only to players of a specific coalition.
 
 **Parameters:**
-- `coalitionId` (number): The coalition (0=neutral, 1=red, 2=blue).
+- `coalitionId` (number): The coalition to display the message to. Use `coalition.side.NEUTRAL` (0), `coalition.side.RED` (1), or `coalition.side.BLUE` (2).
 - `text` (string): The message to display.
-- `displayTime` (number): Display duration in seconds.
-- `clearView` (boolean): Optional. If true, clears other messages first.
+- `displayTime` (number): The duration in seconds that the message remains visible.
+- `clearView` (boolean): Optional. If true, the function clears other messages before displaying this one.
 
 ```lua
 trigger.action.outTextForCoalition(coalition.side.BLUE, "Blue team: reinforcements inbound", 15)
@@ -826,13 +815,13 @@ trigger.action.outTextForCoalition(coalition.side.BLUE, "Blue team: reinforcemen
 nil trigger.action.outTextForGroup(number groupId, string text, number displayTime, boolean clearView)
 ```
 
-Displays a message only to players in a specific group.
+The `trigger.action.outTextForGroup` function displays a message only to players in a specific group.
 
 **Parameters:**
-- `groupId` (number): The group's numeric ID.
+- `groupId` (number): The group's numeric ID. Call `group:getID()` on a Group object to obtain this value.
 - `text` (string): The message to display.
-- `displayTime` (number): Display duration in seconds.
-- `clearView` (boolean): Optional.
+- `displayTime` (number): The duration in seconds that the message remains visible.
+- `clearView` (boolean): Optional. If true, the function clears other messages before displaying this one.
 
 ```lua
 local group = Group.getByName("Player Flight")
@@ -847,13 +836,13 @@ end
 nil trigger.action.outTextForUnit(number unitId, string text, number displayTime, boolean clearView)
 ```
 
-Displays a message only to a specific player unit.
+The `trigger.action.outTextForUnit` function displays a message only to a specific player unit.
 
 **Parameters:**
-- `unitId` (number): The unit's numeric ID.
+- `unitId` (number): The unit's numeric ID. Call `unit:getID()` on a Unit object to obtain this value.
 - `text` (string): The message to display.
-- `displayTime` (number): Display duration in seconds.
-- `clearView` (boolean): Optional.
+- `displayTime` (number): The duration in seconds that the message remains visible.
+- `clearView` (boolean): Optional. If true, the function clears other messages before displaying this one.
 
 ##### trigger.action.smoke
 
@@ -861,11 +850,13 @@ Displays a message only to a specific player unit.
 nil trigger.action.smoke(Vec3 position, number smokeColor)
 ```
 
-Creates a smoke marker at the specified position.
+The `trigger.action.smoke` function creates a smoke marker at the specified position.
 
 **Parameters:**
-- `position` (Vec3): World position for the smoke.
-- `smokeColor` (number): Color from `trigger.smokeColor` enum (0=Green, 1=Red, 2=White, 3=Orange, 4=Blue).
+- `position` (Vec3): The world position where the smoke appears.
+- `smokeColor` (number): The smoke color from the `trigger.smokeColor` enum.
+
+The `trigger.smokeColor` enum defines the available smoke colors:
 
 ```lua
 trigger.smokeColor = {
@@ -888,13 +879,13 @@ trigger.action.smoke(targetPos, trigger.smokeColor.Red)
 nil trigger.action.effectSmokeBig(Vec3 position, number smokeType, number density, string name)
 ```
 
-Creates a large smoke effect at the specified position.
+The `trigger.action.effectSmokeBig` function creates a large smoke effect at the specified position.
 
 **Parameters:**
-- `position` (Vec3): World position.
-- `smokeType` (number): Type of smoke (1-3, larger numbers = more smoke).
-- `density` (number): Smoke density (0.1 to 1.0).
-- `name` (string): Unique identifier for this smoke effect.
+- `position` (Vec3): The world position where the smoke effect appears.
+- `smokeType` (number): The type of smoke, where values range from 1 to 3 and larger numbers produce more smoke.
+- `density` (number): The smoke density, where values range from 0.1 to 1.0.
+- `name` (string): A unique identifier for this smoke effect.
 
 ```lua
 local crashSite = {x = 100000, y = 0, z = 200000}
@@ -907,14 +898,14 @@ trigger.action.effectSmokeBig(crashSite, 2, 0.8, "crash_smoke_1")
 nil trigger.action.illuminationBomb(Vec3 position, number power)
 ```
 
-Creates an illumination flare at the specified position.
+The `trigger.action.illuminationBomb` function creates an illumination flare at the specified position. The altitude component of the position determines where the flare appears in the sky.
 
 **Parameters:**
-- `position` (Vec3): World position (altitude determines where the flare appears).
-- `power` (number): Brightness of the illumination.
+- `position` (Vec3): The world position where the flare appears.
+- `power` (number): The brightness of the illumination.
 
 ```lua
-local flarePos = {x = 100000, y = 500, z = 200000}  -- 500m altitude
+local flarePos = {x = 100000, y = 500, z = 200000}
 trigger.action.illuminationBomb(flarePos, 1000000)
 ```
 
@@ -924,12 +915,14 @@ trigger.action.illuminationBomb(flarePos, 1000000)
 nil trigger.action.signalFlare(Vec3 position, number flareColor, number azimuth)
 ```
 
-Fires a signal flare from the specified position.
+The `trigger.action.signalFlare` function fires a signal flare from the specified position.
 
 **Parameters:**
-- `position` (Vec3): Launch position.
-- `flareColor` (number): Color from `trigger.flareColor` enum (0=Green, 1=Red, 2=White, 3=Yellow).
-- `azimuth` (number): Direction in radians.
+- `position` (Vec3): The launch position for the flare.
+- `flareColor` (number): The flare color from the `trigger.flareColor` enum.
+- `azimuth` (number): The direction in radians.
+
+The `trigger.flareColor` enum defines the available flare colors:
 
 ```lua
 trigger.flareColor = {
@@ -946,16 +939,13 @@ trigger.flareColor = {
 nil trigger.action.explosion(Vec3 position, number power)
 ```
 
-Creates an explosion at the specified position.
+The `trigger.action.explosion` function creates an explosion at the specified position. Very large explosions can cause performance issues, so values above 1000 should be used carefully.
 
 **Parameters:**
-- `position` (Vec3): World position.
-- `power` (number): Explosion power (equivalent to kg of explosives).
-
-**Gotchas:** Very large explosions can cause performance issues. Values above 1000 should be used carefully.
+- `position` (Vec3): The world position where the explosion occurs.
+- `power` (number): The explosion power, equivalent to kilograms of explosives.
 
 ```lua
--- Create a small explosion
 trigger.action.explosion({x = 100000, y = 100, z = 200000}, 100)
 ```
 
@@ -965,7 +955,7 @@ trigger.action.explosion({x = 100000, y = 100, z = 200000}, 100)
 nil trigger.action.setUserFlag(string flagName, number value)
 ```
 
-Sets the value of a user flag. Flags are integer values that can be read by triggers or scripts.
+The `trigger.action.setUserFlag` function sets the value of a user flag. Flags are integer values that can be read by triggers or scripts.
 
 **Parameters:**
 - `flagName` (string): The flag name or number.
@@ -981,10 +971,10 @@ trigger.action.setUserFlag("objective_complete", 1)
 number trigger.misc.getUserFlag(string flagName)
 ```
 
-Returns the current value of a user flag.
+The `trigger.misc.getUserFlag` function returns the current value of a user flag.
 
 **Parameters:**
-- `flagName` (string): The flag name or number.
+- `flagName` (string): The flag name or number to look up.
 
 **Returns:** The flag's value as a number.
 
@@ -1000,30 +990,34 @@ end
 table trigger.misc.getZone(string zoneName)
 ```
 
-Returns information about a trigger zone defined in the Mission Editor.
+The `trigger.misc.getZone` function returns information about a trigger zone defined in the Mission Editor.
 
 **Parameters:**
-- `zoneName` (string): The name of the trigger zone.
+- `zoneName` (string): The name of the trigger zone to look up.
 
-**Returns:** A table with zone properties, or nil if the zone doesn't exist.
+**Returns:** A table with zone properties, or nil if the zone does not exist.
 
-For circular zones:
+For circular zones, the returned table contains:
+
 ```lua
 {
-    point = Vec3,    -- Center position
-    radius = number  -- Radius in meters
+    point = Vec3,
+    radius = number
 }
 ```
 
-For polygon zones (quad-point zones):
+The `point` field contains the center position of the zone. The `radius` field contains the radius of the zone in meters.
+
+For polygon zones (quad-point zones), the returned table contains:
+
 ```lua
 {
-    point = Vec3,           -- Center position
-    verticies = {Vec3, ...} -- Corner points (note the typo in the API)
+    point = Vec3,
+    verticies = {Vec3, ...}
 }
 ```
 
-**Gotchas:** The API uses "verticies" (misspelled) rather than "vertices".
+The `point` field contains the center position of the zone. The `verticies` field contains an array of Vec3 values representing the corner points. The API uses "verticies" (misspelled) rather than "vertices."
 
 ```lua
 local zone = trigger.misc.getZone("LandingZone")
@@ -1044,7 +1038,7 @@ The world singleton provides event handling and object searching capabilities. S
 nil world.addEventHandler(table handler)
 ```
 
-Registers an event handler to receive game events. The handler must be a table with an `onEvent` function.
+The `world.addEventHandler` function registers an event handler to receive game events. The handler must be a table with an `onEvent` function.
 
 **Parameters:**
 - `handler` (table): A table containing an `onEvent(self, event)` function.
@@ -1070,10 +1064,10 @@ world.addEventHandler(myHandler)
 nil world.removeEventHandler(table handler)
 ```
 
-Unregisters a previously registered event handler.
+The `world.removeEventHandler` function unregisters a previously registered event handler.
 
 **Parameters:**
-- `handler` (table): The same handler table that was passed to `addEventHandler`.
+- `handler` (table): The same handler table that was passed to `world.addEventHandler`.
 
 ##### world.getPlayer
 
@@ -1081,11 +1075,9 @@ Unregisters a previously registered event handler.
 Unit world.getPlayer()
 ```
 
-Returns the player's unit in single-player missions.
+The `world.getPlayer` function returns the player's unit in single-player missions. This function only works in single-player; in multiplayer, use `coalition.getPlayers()` instead.
 
 **Returns:** The player's Unit object, or nil in multiplayer.
-
-**Gotchas:** Only works in single-player. In multiplayer, use `coalition.getPlayers()` instead.
 
 ##### world.getAirbases
 
@@ -1093,12 +1085,12 @@ Returns the player's unit in single-player missions.
 table world.getAirbases(number coalitionId)
 ```
 
-Returns all airbases belonging to a coalition. This includes airports, FARPs, and carrier ships.
+The `world.getAirbases` function returns all airbases belonging to a coalition. The returned list includes airports, FARPs, and carrier ships.
 
 **Parameters:**
-- `coalitionId` (number): Optional. If provided, returns only airbases for that coalition.
+- `coalitionId` (number): Optional. If provided, the function returns only airbases for that coalition.
 
-**Returns:** Array of Airbase objects.
+**Returns:** An array of Airbase objects.
 
 ```lua
 local blueAirbases = world.getAirbases(coalition.side.BLUE)
@@ -1113,14 +1105,15 @@ end
 nil world.searchObjects(number objectCategory, table searchVolume, function handler)
 ```
 
-Searches for objects within a 3D volume and calls a handler for each one found.
+The `world.searchObjects` function searches for objects within a 3D volume and calls a handler function for each object found.
 
 **Parameters:**
-- `objectCategory` (number): Category from `Object.Category` (UNIT, WEAPON, STATIC, BASE, SCENERY, CARGO).
-- `searchVolume` (table): Defines the search area (sphere, box, or pyramid).
-- `handler` (function): Called for each found object. Return true to continue searching, false to stop.
+- `objectCategory` (number): The category of objects to search for, from the `Object.Category` enum. Valid values are UNIT, WEAPON, STATIC, BASE, SCENERY, and CARGO.
+- `searchVolume` (table): A table that defines the search area. The table must have an `id` field specifying the volume type and a `params` field containing the volume parameters.
+- `handler` (function): A function called for each found object. Return true from the handler to continue searching, or false to stop.
 
-Volume types:
+The `world.VolumeType` enum defines the available volume types:
+
 ```lua
 world.VolumeType = {
     SEGMENT = 0,
@@ -1131,7 +1124,6 @@ world.VolumeType = {
 ```
 
 ```lua
--- Search for all units within 5km of a point
 local searchVolume = {
     id = world.VolumeType.SPHERE,
     params = {
@@ -1143,7 +1135,7 @@ local searchVolume = {
 local foundUnits = {}
 world.searchObjects(Object.Category.UNIT, searchVolume, function(foundObject)
     table.insert(foundUnits, foundObject)
-    return true  -- Continue searching
+    return true
 end)
 ```
 
@@ -1153,15 +1145,14 @@ end)
 number world.removeJunk(table searchVolume)
 ```
 
-Removes debris and wreckage within a volume.
+The `world.removeJunk` function removes debris and wreckage within a volume.
 
 **Parameters:**
-- `searchVolume` (table): The area to clear (same format as `searchObjects`).
+- `searchVolume` (table): The area to clear. This table uses the same format as the `searchVolume` parameter of `world.searchObjects`.
 
 **Returns:** The number of objects removed.
 
 ```lua
--- Clear debris around an airfield
 local clearZone = {
     id = world.VolumeType.SPHERE,
     params = {
@@ -1179,9 +1170,9 @@ env.info("Removed " .. removed .. " debris objects")
 table world.getMarkPanels()
 ```
 
-Returns all map markers currently visible.
+The `world.getMarkPanels` function returns all map markers currently visible.
 
-**Returns:** Array of marker tables with fields: `idx` (marker ID), `time` (creation time), `initiator` (Unit that created it), `coalition` (-1 for all), `groupID` (-1 for all), `text`, `pos` (Vec3).
+**Returns:** An array of marker tables. Each marker table contains the following fields: `idx` (the marker ID), `time` (the creation time), `initiator` (the Unit that created the marker), `coalition` (the coalition the marker is visible to, or -1 for all coalitions), `groupID` (the group the marker is visible to, or -1 for all groups), `text` (the marker text), and `pos` (the marker position as a Vec3).
 
 #### coalition
 
@@ -1193,55 +1184,51 @@ The coalition singleton provides functions to query and spawn groups and static 
 Group coalition.addGroup(number countryId, number groupCategory, table groupData)
 ```
 
-Dynamically spawns a group into the mission. This is one of the most powerful scripting functions, enabling dynamic spawning of any unit type.
+The `coalition.addGroup` function dynamically spawns a group into the mission. This function is one of the most powerful scripting functions, enabling dynamic spawning of any unit type.
+
+You must add a delay before accessing the group's controller after spawning, because issuing tasks immediately can crash the game. If a group or unit name matches an existing object, the game destroys the existing object. You cannot spawn aircraft with skill "Client" but can use "Player" in single-player, which destroys the current player aircraft. Spawn FARPs with `groupCategory = -1`.
 
 **Parameters:**
-- `countryId` (number): Country ID from `country.id` enum.
-- `groupCategory` (number): Category from `Group.Category` (AIRPLANE, HELICOPTER, GROUND, SHIP, TRAIN).
-- `groupData` (table): Complete group definition (see below).
+- `countryId` (number): The country ID from the `country.id` enum.
+- `groupCategory` (number): The category from `Group.Category`. Valid values are AIRPLANE, HELICOPTER, GROUND, SHIP, and TRAIN.
+- `groupData` (table): The complete group definition. See the structure below.
 
 **Returns:** The spawned Group object.
 
-**Gotchas:**
-- You **MUST** add a delay before accessing the group's controller after spawning. Issuing tasks immediately can crash the game.
-- If a group or unit name matches an existing object, the existing object is destroyed.
-- Cannot spawn aircraft with skill "Client" but can use "Player" in single-player (destroys current player aircraft).
-- FARPs are spawned with `groupCategory = -1`.
+The `groupData` table has the following structure:
 
-Group data structure:
 ```lua
 groupData = {
-    -- Required
-    name = string,           -- Unique group name
-    task = string,           -- Main task (e.g., "Ground Nothing", "CAP", "CAS")
-    units = {                -- Array of unit definitions
+    name = string,
+    task = string,
+    units = {
         [1] = {
-            name = string,   -- Unique unit name
-            type = string,   -- Unit type (e.g., "M1A2", "F-16C_50")
-            x = number,      -- East-West position
-            y = number,      -- North-South position (Vec2 convention)
-            -- Aircraft also require:
-            alt = number,    -- Altitude in meters
-            alt_type = string, -- "BARO" or "RADIO"
-            speed = number,  -- Speed in m/s
-            payload = table, -- Weapons and fuel
-            callsign = table -- {[1]=name_index, [2]=number, [3]=flight_number}
+            name = string,
+            type = string,
+            x = number,
+            y = number,
+            alt = number,
+            alt_type = string,
+            speed = number,
+            payload = table,
+            callsign = table
         },
     },
-
-    -- Optional
-    groupId = number,        -- Custom group ID (auto-generated if omitted)
-    start_time = number,     -- Spawn delay in seconds (0 = immediate)
-    lateActivation = boolean, -- Require trigger to activate
-    hidden = boolean,        -- Hide from F10 map
-    hiddenOnMFD = boolean,   -- Hide from aircraft MFDs
-    route = table,           -- Waypoints and tasks
-    uncontrolled = boolean,  -- For aircraft: spawn inactive
+    groupId = number,
+    start_time = number,
+    lateActivation = boolean,
+    hidden = boolean,
+    hiddenOnMFD = boolean,
+    route = table,
+    uncontrolled = boolean,
 }
 ```
 
+The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the East-West position), and `y` (the North-South position using Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number).
+
+The optional fields are `groupId` (a custom group ID that is auto-generated if omitted), `start_time` (spawn delay in seconds where 0 means immediate), `lateActivation` (whether to require a trigger to activate), `hidden` (whether to hide from the F10 map), `hiddenOnMFD` (whether to hide from aircraft MFDs), `route` (waypoints and tasks), and `uncontrolled` (for aircraft, whether to spawn inactive).
+
 ```lua
--- Spawn a simple ground unit
 local groupData = {
     name = "Reinforcement Tank",
     task = "Ground Nothing",
@@ -1259,10 +1246,8 @@ local groupData = {
 
 local newGroup = coalition.addGroup(country.id.USA, Group.Category.GROUND, groupData)
 
--- IMPORTANT: Wait before issuing commands
 timer.scheduleFunction(function()
     local controller = newGroup:getController()
-    -- Now safe to issue tasks
 end, nil, timer.getTime() + 1)
 ```
 
@@ -1272,11 +1257,11 @@ end, nil, timer.getTime() + 1)
 StaticObject coalition.addStaticObject(number countryId, table staticData)
 ```
 
-Spawns a static object into the mission.
+The `coalition.addStaticObject` function spawns a static object into the mission.
 
 **Parameters:**
-- `countryId` (number): Country ID from `country.id` enum.
-- `staticData` (table): Static object definition.
+- `countryId` (number): The country ID from the `country.id` enum.
+- `staticData` (table): The static object definition.
 
 **Returns:** The spawned StaticObject.
 
@@ -1298,13 +1283,13 @@ coalition.addStaticObject(country.id.USA, staticData)
 table coalition.getGroups(number coalitionId, number groupCategory)
 ```
 
-Returns all groups belonging to a coalition.
+The `coalition.getGroups` function returns all groups belonging to a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
-- `groupCategory` (number): Optional. Filter by `Group.Category`.
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `groupCategory` (number): Optional. If provided, the function filters the results by `Group.Category`.
 
-**Returns:** Array of Group objects.
+**Returns:** An array of Group objects.
 
 ```lua
 local redAircraft = coalition.getGroups(coalition.side.RED, Group.Category.AIRPLANE)
@@ -1319,12 +1304,12 @@ end
 table coalition.getStaticObjects(number coalitionId)
 ```
 
-Returns all static objects belonging to a coalition.
+The `coalition.getStaticObjects` function returns all static objects belonging to a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
+- `coalitionId` (number): The coalition from `coalition.side`.
 
-**Returns:** Array of StaticObject objects.
+**Returns:** An array of StaticObject objects.
 
 ##### coalition.getPlayers
 
@@ -1332,12 +1317,12 @@ Returns all static objects belonging to a coalition.
 table coalition.getPlayers(number coalitionId)
 ```
 
-Returns all human player units in a coalition.
+The `coalition.getPlayers` function returns all human player units in a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
+- `coalitionId` (number): The coalition from `coalition.side`.
 
-**Returns:** Array of Unit objects (only player-controlled units).
+**Returns:** An array of Unit objects containing only player-controlled units.
 
 ```lua
 local bluePlayers = coalition.getPlayers(coalition.side.BLUE)
@@ -1353,12 +1338,12 @@ end
 table coalition.getAirbases(number coalitionId)
 ```
 
-Returns all airbases belonging to a coalition.
+The `coalition.getAirbases` function returns all airbases belonging to a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
+- `coalitionId` (number): The coalition from `coalition.side`.
 
-**Returns:** Array of Airbase objects.
+**Returns:** An array of Airbase objects.
 
 ##### coalition.getServiceProviders
 
@@ -1366,13 +1351,13 @@ Returns all airbases belonging to a coalition.
 table coalition.getServiceProviders(number coalitionId, number serviceType)
 ```
 
-Returns groups providing a specific service.
+The `coalition.getServiceProviders` function returns groups providing a specific service.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
-- `serviceType` (number): Service from `coalition.service` (ATC=0, AWACS=1, TANKER=2, FAC=3).
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `serviceType` (number): The service type from the `coalition.service` enum. Valid values are ATC (0), AWACS (1), TANKER (2), and FAC (3).
 
-**Returns:** Array of Group objects providing that service.
+**Returns:** An array of Group objects providing the specified service.
 
 ```lua
 local tankers = coalition.getServiceProviders(coalition.side.BLUE, coalition.service.TANKER)
@@ -1384,11 +1369,11 @@ local tankers = coalition.getServiceProviders(coalition.side.BLUE, coalition.ser
 nil coalition.addRefPoint(number coalitionId, table refPoint)
 ```
 
-Adds a reference point (bullseye or custom waypoint) for a coalition.
+The `coalition.addRefPoint` function adds a reference point (such as a bullseye or custom waypoint) for a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
-- `refPoint` (table): Reference point with `callsign` (string) and `point` (Vec3).
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `refPoint` (table): The reference point definition. This table must contain a `callsign` field (a string) and a `point` field (a Vec3).
 
 ##### coalition.getRefPoints
 
@@ -1396,12 +1381,12 @@ Adds a reference point (bullseye or custom waypoint) for a coalition.
 table coalition.getRefPoints(number coalitionId)
 ```
 
-Returns all reference points for a coalition.
+The `coalition.getRefPoints` function returns all reference points for a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
+- `coalitionId` (number): The coalition from `coalition.side`.
 
-**Returns:** Table of reference points indexed by callsign.
+**Returns:** A table of reference points indexed by callsign.
 
 ##### coalition.getMainRefPoint
 
@@ -1409,12 +1394,12 @@ Returns all reference points for a coalition.
 Vec3 coalition.getMainRefPoint(number coalitionId)
 ```
 
-Returns the main bullseye position for a coalition.
+The `coalition.getMainRefPoint` function returns the main bullseye position for a coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
+- `coalitionId` (number): The coalition from `coalition.side`.
 
-**Returns:** Vec3 position of the bullseye.
+**Returns:** The bullseye position as a Vec3.
 
 ```lua
 local bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
@@ -1427,12 +1412,12 @@ env.info("Blue bullseye at: " .. bullseye.x .. ", " .. bullseye.z)
 number coalition.getCountryCoalition(number countryId)
 ```
 
-Returns which coalition a country belongs to.
+The `coalition.getCountryCoalition` function returns which coalition a country belongs to.
 
 **Parameters:**
-- `countryId` (number): Country ID from `country.id`.
+- `countryId` (number): The country ID from the `country.id` enum.
 
-**Returns:** Coalition from `coalition.side`.
+**Returns:** The coalition from `coalition.side`.
 
 #### missionCommands
 
@@ -1444,23 +1429,21 @@ The missionCommands singleton allows you to add and remove entries in the F10 "O
 table missionCommands.addCommand(string name, table path, function handler, any argument)
 ```
 
-Adds a command to the F10 menu that all players can see and use.
+The `missionCommands.addCommand` function adds a command to the F10 menu that all players can see and use.
 
 **Parameters:**
 - `name` (string): The menu item text.
-- `path` (table): Parent menu path, or nil for the root menu.
-- `handler` (function): Function called when the command is selected.
-- `argument` (any): Value passed to the handler.
+- `path` (table): The parent menu path. Pass nil to add the command to the root menu.
+- `handler` (function): The function called when the player selects the command.
+- `argument` (any): The value passed to the handler function.
 
-**Returns:** Path table identifying this command.
+**Returns:** A path table identifying this command. Use this value with `missionCommands.removeItem` to remove the command later.
 
 ```lua
--- Add a command at the root level
 missionCommands.addCommand("Request SITREP", nil, function()
     trigger.action.outText("All objectives intact", 10)
 end)
 
--- Add a command in a submenu
 local supportMenu = missionCommands.addSubMenu("Support", nil)
 missionCommands.addCommand("Call Artillery", supportMenu, function()
     fireArtillery()
@@ -1473,13 +1456,13 @@ end)
 table missionCommands.addSubMenu(string name, table path)
 ```
 
-Adds a submenu to the F10 menu.
+The `missionCommands.addSubMenu` function adds a submenu to the F10 menu.
 
 **Parameters:**
 - `name` (string): The submenu text.
-- `path` (table): Parent menu path, or nil for the root menu.
+- `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
 
-**Returns:** Path table for this submenu (use as `path` for child items).
+**Returns:** A path table for this submenu. Use this value as the `path` parameter when adding child items.
 
 ```lua
 local mainMenu = missionCommands.addSubMenu("Mission Control", nil)
@@ -1493,10 +1476,10 @@ missionCommands.addCommand("CAS Strike", airMenu, performCAS)
 nil missionCommands.removeItem(table path)
 ```
 
-Removes a command or submenu from the F10 menu.
+The `missionCommands.removeItem` function removes a command or submenu from the F10 menu.
 
 **Parameters:**
-- `path` (table): The path returned by `addCommand` or `addSubMenu`.
+- `path` (table): The path table returned by `missionCommands.addCommand` or `missionCommands.addSubMenu`.
 
 ##### missionCommands.addCommandForCoalition
 
@@ -1504,13 +1487,16 @@ Removes a command or submenu from the F10 menu.
 table missionCommands.addCommandForCoalition(number coalitionId, string name, table path, function handler, any argument)
 ```
 
-Adds a command visible only to a specific coalition.
+The `missionCommands.addCommandForCoalition` function adds a command visible only to players of a specific coalition.
 
 **Parameters:**
-- `coalitionId` (number): Coalition from `coalition.side`.
-- `name`, `path`, `handler`, `argument`: Same as `addCommand`.
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `name` (string): The menu item text.
+- `path` (table): The parent menu path. Pass nil to add the command to the root menu.
+- `handler` (function): The function called when the player selects the command.
+- `argument` (any): The value passed to the handler function.
 
-**Returns:** Path table for this command.
+**Returns:** A path table for this command.
 
 ##### missionCommands.addSubMenuForCoalition
 
@@ -1518,7 +1504,14 @@ Adds a command visible only to a specific coalition.
 table missionCommands.addSubMenuForCoalition(number coalitionId, string name, table path)
 ```
 
-Adds a submenu visible only to a specific coalition.
+The `missionCommands.addSubMenuForCoalition` function adds a submenu visible only to players of a specific coalition.
+
+**Parameters:**
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `name` (string): The submenu text.
+- `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
+
+**Returns:** A path table for this submenu.
 
 ##### missionCommands.removeItemForCoalition
 
@@ -1526,7 +1519,11 @@ Adds a submenu visible only to a specific coalition.
 nil missionCommands.removeItemForCoalition(number coalitionId, table path)
 ```
 
-Removes a coalition-specific menu item.
+The `missionCommands.removeItemForCoalition` function removes a coalition-specific menu item.
+
+**Parameters:**
+- `coalitionId` (number): The coalition from `coalition.side`.
+- `path` (table): The path table returned when the item was created.
 
 ##### missionCommands.addCommandForGroup
 
@@ -1534,13 +1531,16 @@ Removes a coalition-specific menu item.
 table missionCommands.addCommandForGroup(number groupId, string name, table path, function handler, any argument)
 ```
 
-Adds a command visible only to a specific group. This is the most common way to create player-specific menus.
+The `missionCommands.addCommandForGroup` function adds a command visible only to players in a specific group. This function is the most common way to create player-specific menus.
 
 **Parameters:**
-- `groupId` (number): The group's numeric ID.
-- `name`, `path`, `handler`, `argument`: Same as `addCommand`.
+- `groupId` (number): The group's numeric ID. Call `group:getID()` on a Group object to obtain this value.
+- `name` (string): The menu item text.
+- `path` (table): The parent menu path. Pass nil to add the command to the root menu.
+- `handler` (function): The function called when the player selects the command.
+- `argument` (any): The value passed to the handler function.
 
-**Returns:** Path table for this command.
+**Returns:** A path table for this command.
 
 ```lua
 local function setupPlayerMenu(unit)
@@ -1561,7 +1561,14 @@ end
 table missionCommands.addSubMenuForGroup(number groupId, string name, table path)
 ```
 
-Adds a submenu visible only to a specific group.
+The `missionCommands.addSubMenuForGroup` function adds a submenu visible only to players in a specific group.
+
+**Parameters:**
+- `groupId` (number): The group's numeric ID. Call `group:getID()` on a Group object to obtain this value.
+- `name` (string): The submenu text.
+- `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
+
+**Returns:** A path table for this submenu.
 
 ##### missionCommands.removeItemForGroup
 
@@ -1569,7 +1576,11 @@ Adds a submenu visible only to a specific group.
 nil missionCommands.removeItemForGroup(number groupId, table path)
 ```
 
-Removes a group-specific menu item.
+The `missionCommands.removeItemForGroup` function removes a group-specific menu item.
+
+**Parameters:**
+- `groupId` (number): The group's numeric ID.
+- `path` (table): The path table returned when the item was created.
 
 #### coord
 
@@ -1581,14 +1592,14 @@ The coord singleton provides coordinate conversion between the game's internal X
 number, number, number coord.LLtoLO(number latitude, number longitude, number altitude)
 ```
 
-Converts Latitude/Longitude/Altitude to the game's XYZ coordinate system.
+The `coord.LLtoLO` function converts Latitude/Longitude/Altitude to the game's XYZ coordinate system.
 
 **Parameters:**
-- `latitude` (number): Latitude in decimal degrees (positive = North).
-- `longitude` (number): Longitude in decimal degrees (positive = East).
-- `altitude` (number): Altitude in meters MSL.
+- `latitude` (number): The latitude in decimal degrees, where positive values indicate North.
+- `longitude` (number): The longitude in decimal degrees, where positive values indicate East.
+- `altitude` (number): The altitude in meters above mean sea level.
 
-**Returns:** x, y, z (game coordinates, where y is altitude).
+**Returns:** Three numbers representing the x, y, and z game coordinates, where y is altitude.
 
 ```lua
 local x, y, z = coord.LLtoLO(41.657, 41.597, 0)
@@ -1601,14 +1612,14 @@ local position = {x = x, y = y, z = z}
 number, number, number coord.LOtoLL(number x, number y, number z)
 ```
 
-Converts game XYZ coordinates to Latitude/Longitude/Altitude.
+The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/Altitude.
 
 **Parameters:**
-- `x` (number): X coordinate (East-West).
-- `y` (number): Y coordinate (altitude).
-- `z` (number): Z coordinate (North-South).
+- `x` (number): The X coordinate representing the East-West position.
+- `y` (number): The Y coordinate representing altitude.
+- `z` (number): The Z coordinate representing the North-South position.
 
-**Returns:** latitude, longitude, altitude.
+**Returns:** Three numbers representing the latitude, longitude, and altitude.
 
 ```lua
 local pos = unit:getPoint()
@@ -1622,13 +1633,13 @@ env.info(string.format("Position: %.4f, %.4f", lat, lon))
 table coord.LLtoMGRS(number latitude, number longitude)
 ```
 
-Converts Latitude/Longitude to MGRS (Military Grid Reference System).
+The `coord.LLtoMGRS` function converts Latitude/Longitude to MGRS (Military Grid Reference System).
 
 **Parameters:**
-- `latitude` (number): Latitude in decimal degrees.
-- `longitude` (number): Longitude in decimal degrees.
+- `latitude` (number): The latitude in decimal degrees.
+- `longitude` (number): The longitude in decimal degrees.
 
-**Returns:** MGRS table with fields: `UTMZone`, `MGRSDigraph`, `Easting`, `Northing`.
+**Returns:** An MGRS table with the following fields: `UTMZone`, `MGRSDigraph`, `Easting`, and `Northing`.
 
 ```lua
 local mgrs = coord.LLtoMGRS(41.657, 41.597)
@@ -1643,12 +1654,12 @@ local mgrsString = mgrs.UTMZone .. mgrs.MGRSDigraph .. " " ..
 number, number coord.MGRStoLL(table mgrs)
 ```
 
-Converts MGRS coordinates to Latitude/Longitude.
+The `coord.MGRStoLL` function converts MGRS coordinates to Latitude/Longitude.
 
 **Parameters:**
-- `mgrs` (table): MGRS table with `UTMZone`, `MGRSDigraph`, `Easting`, `Northing`.
+- `mgrs` (table): An MGRS table with the following fields: `UTMZone`, `MGRSDigraph`, `Easting`, and `Northing`.
 
-**Returns:** latitude, longitude.
+**Returns:** Two numbers representing the latitude and longitude.
 
 #### land
 
@@ -1660,12 +1671,12 @@ The land singleton provides terrain information and pathfinding.
 number land.getHeight(Vec2 position)
 ```
 
-Returns the terrain height at a position.
+The `land.getHeight` function returns the terrain height at a position.
 
 **Parameters:**
 - `position` (Vec2): A table with x and y coordinates.
 
-**Returns:** Height in meters above sea level.
+**Returns:** The height in meters above sea level.
 
 ```lua
 local height = land.getHeight({x = 100000, y = 200000})
@@ -1677,12 +1688,12 @@ local height = land.getHeight({x = 100000, y = 200000})
 number land.getSurfaceHeightWithSeabed(Vec2 position)
 ```
 
-Returns the height including the seabed (returns negative values for underwater terrain).
+The `land.getSurfaceHeightWithSeabed` function returns the height including the seabed. This function returns negative values for underwater terrain.
 
 **Parameters:**
 - `position` (Vec2): A table with x and y coordinates.
 
-**Returns:** Height in meters (negative for seabed).
+**Returns:** The height in meters, where negative values indicate the seabed.
 
 ##### land.getSurfaceType
 
@@ -1690,12 +1701,14 @@ Returns the height including the seabed (returns negative values for underwater 
 number land.getSurfaceType(Vec2 position)
 ```
 
-Returns the surface type at a position.
+The `land.getSurfaceType` function returns the surface type at a position.
 
 **Parameters:**
 - `position` (Vec2): A table with x and y coordinates.
 
-**Returns:** Surface type enum value.
+**Returns:** A surface type enum value from `land.SurfaceType`.
+
+The `land.SurfaceType` enum defines the available surface types:
 
 ```lua
 land.SurfaceType = {
@@ -1703,9 +1716,11 @@ land.SurfaceType = {
     SHALLOW_WATER = 2,
     WATER = 3,
     ROAD = 4,
-    RUNWAY = 5  -- Also includes taxiways and ramps
+    RUNWAY = 5
 }
 ```
+
+The RUNWAY value also includes taxiways and ramps.
 
 ```lua
 local surface = land.getSurfaceType({x = pos.x, y = pos.z})
@@ -1720,13 +1735,13 @@ end
 boolean land.isVisible(Vec3 origin, Vec3 destination)
 ```
 
-Checks if there is line-of-sight between two points (terrain only, ignores objects).
+The `land.isVisible` function checks if there is line-of-sight between two points. This function only considers terrain and ignores objects.
 
 **Parameters:**
-- `origin` (Vec3): Starting position.
-- `destination` (Vec3): Target position.
+- `origin` (Vec3): The starting position.
+- `destination` (Vec3): The target position.
 
-**Returns:** True if visible, false if terrain blocks the view.
+**Returns:** True if the destination is visible from the origin, or false if terrain blocks the view.
 
 ```lua
 local observer = Unit.getByName("JTAC"):getPoint()
@@ -1742,21 +1757,18 @@ end
 Vec3 land.getIP(Vec3 origin, Vec3 direction, number distance)
 ```
 
-Performs a ray cast and returns the intersection point with terrain.
+The `land.getIP` function performs a ray cast and returns the intersection point with terrain. The direction parameter is a vector, not angles; use unit vectors from `getPosition()`.
 
 **Parameters:**
-- `origin` (Vec3): Starting position.
-- `direction` (Vec3): Direction vector (will be normalized).
-- `distance` (number): Maximum ray distance in meters.
+- `origin` (Vec3): The starting position for the ray.
+- `direction` (Vec3): The direction vector. The function normalizes this vector.
+- `distance` (number): The maximum ray distance in meters.
 
-**Returns:** Vec3 intersection point, or nil if no intersection.
-
-**Gotchas:** The direction is a vector, not angles. Use unit vectors from `getPosition()`.
+**Returns:** The intersection point as a Vec3, or nil if there is no intersection within the specified distance.
 
 ```lua
--- Find where an aircraft's nose is pointing at the ground
 local pos = aircraft:getPosition()
-local impactPoint = land.getIP(pos.p, pos.x, 20000)  -- pos.x is forward vector
+local impactPoint = land.getIP(pos.p, pos.x, 20000)
 if impactPoint then
     env.info("Looking at ground point: " .. impactPoint.x .. ", " .. impactPoint.z)
 end
@@ -1768,13 +1780,13 @@ end
 table land.profile(Vec2 start, Vec2 finish)
 ```
 
-Returns terrain heights along a path between two points.
+The `land.profile` function returns terrain heights along a path between two points.
 
 **Parameters:**
-- `start` (Vec2): Starting position.
-- `finish` (Vec2): Ending position.
+- `start` (Vec2): The starting position.
+- `finish` (Vec2): The ending position.
 
-**Returns:** Array of Vec3 points along the terrain profile.
+**Returns:** An array of Vec3 points along the terrain profile.
 
 ##### land.getClosestPointOnRoads
 
@@ -1782,14 +1794,14 @@ Returns terrain heights along a path between two points.
 number, number land.getClosestPointOnRoads(string roadType, number x, number y)
 ```
 
-Finds the nearest point on a road network.
+The `land.getClosestPointOnRoads` function finds the nearest point on a road network.
 
 **Parameters:**
-- `roadType` (string): "roads" or "railroads".
-- `x` (number): X coordinate.
-- `y` (number): Y coordinate (Vec2 convention).
+- `roadType` (string): The type of road network. Valid values are "roads" or "railroads".
+- `x` (number): The X coordinate.
+- `y` (number): The Y coordinate using Vec2 convention.
 
-**Returns:** x, y coordinates of the nearest road point.
+**Returns:** The x and y coordinates of the nearest road point.
 
 ```lua
 local roadX, roadY = land.getClosestPointOnRoads("roads", unitPos.x, unitPos.z)
@@ -1801,14 +1813,16 @@ local roadX, roadY = land.getClosestPointOnRoads("roads", unitPos.x, unitPos.z)
 table land.findPathOnRoads(string roadType, number x1, number y1, number x2, number y2)
 ```
 
-Finds a path along roads between two points.
+The `land.findPathOnRoads` function finds a path along roads between two points.
 
 **Parameters:**
-- `roadType` (string): "roads" or "railroads".
-- `x1`, `y1` (number): Start coordinates.
-- `x2`, `y2` (number): End coordinates.
+- `roadType` (string): The type of road network. Valid values are "roads" or "railroads".
+- `x1` (number): The starting X coordinate.
+- `y1` (number): The starting Y coordinate.
+- `x2` (number): The ending X coordinate.
+- `y2` (number): The ending Y coordinate.
 
-**Returns:** Array of Vec2 waypoints along the road.
+**Returns:** An array of Vec2 waypoints along the road.
 
 ```lua
 local path = land.findPathOnRoads("roads", startX, startZ, endX, endZ)
@@ -1829,12 +1843,12 @@ The atmosphere singleton provides weather information.
 Vec3 atmosphere.getWind(Vec3 position)
 ```
 
-Returns the wind vector at a position (without turbulence).
+The `atmosphere.getWind` function returns the wind vector at a position without including turbulence effects. The returned vector indicates the direction the wind is blowing to, not from.
 
 **Parameters:**
-- `position` (Vec3): World position.
+- `position` (Vec3): The world position to query.
 
-**Returns:** Vec3 wind vector in m/s (direction wind is blowing TO, not FROM).
+**Returns:** A Vec3 wind vector in meters per second.
 
 ```lua
 local windVec = atmosphere.getWind(unit:getPoint())
@@ -1848,12 +1862,12 @@ local windHeading = math.atan2(windVec.z, windVec.x)
 Vec3 atmosphere.getWindWithTurbulence(Vec3 position)
 ```
 
-Returns the wind vector including turbulence effects.
+The `atmosphere.getWindWithTurbulence` function returns the wind vector including turbulence effects.
 
 **Parameters:**
-- `position` (Vec3): World position.
+- `position` (Vec3): The world position to query.
 
-**Returns:** Vec3 wind vector in m/s.
+**Returns:** A Vec3 wind vector in meters per second.
 
 ##### atmosphere.getTemperatureAndPressure
 
@@ -1861,28 +1875,29 @@ Returns the wind vector including turbulence effects.
 number, number atmosphere.getTemperatureAndPressure(Vec3 position)
 ```
 
-Returns atmospheric conditions at a position.
+The `atmosphere.getTemperatureAndPressure` function returns atmospheric conditions at a position.
 
 **Parameters:**
-- `position` (Vec3): World position.
+- `position` (Vec3): The world position to query.
 
-**Returns:** temperature (Kelvin), pressure (Pascals).
+**Returns:** Two numbers representing the temperature in Kelvin and the pressure in Pascals.
 
 ```lua
 local temp, pressure = atmosphere.getTemperatureAndPressure(unit:getPoint())
-local tempC = temp - 273.15  -- Convert to Celsius
-local pressureHPa = pressure / 100  -- Convert to hPa/mbar
+local tempC = temp - 273.15
+local pressureHPa = pressure / 100
 ```
 
 ### Classes
 
-Classes represent game objects like units, groups, and airbases. You call their functions using colon notation (e.g., `unit:getName()`). Objects are obtained through static functions, other objects, or events.
+Classes represent game objects like units, groups, and airbases. You call their methods using colon notation (such as `unit:getName()`). You obtain objects through static functions, other objects, or events.
 
 #### Object
 
-The base class for all objects with a physical presence in the game world. This is an abstract class; you work with its subclasses (Unit, Weapon, StaticObject, etc.).
+The Object class is the base class for all objects with a physical presence in the game world. This is an abstract class; you work with its subclasses such as Unit, Weapon, and StaticObject.
 
-**Category Enum:**
+The `Object.Category` enum defines the object categories:
+
 ```lua
 Object.Category = {
     UNIT = 1,
@@ -1900,11 +1915,9 @@ Object.Category = {
 boolean object:isExist()
 ```
 
-Returns whether the object currently exists in the mission. Objects cease to exist when destroyed.
+The `object:isExist` method returns whether the object currently exists in the mission. Objects cease to exist when destroyed. Always check `isExist()` before calling other methods on objects obtained from stored references, as the object may have been destroyed since you acquired the reference.
 
-**Returns:** True if the object exists, false otherwise.
-
-**Gotchas:** Always check `isExist()` before calling other functions on objects obtained from stored references, as the object may have been destroyed since you acquired the reference.
+**Returns:** True if the object exists, or false otherwise.
 
 ```lua
 local unit = Unit.getByName("Target 1")
@@ -1919,7 +1932,7 @@ end
 nil object:destroy()
 ```
 
-Destroys the object, removing it from the mission. For units, this kills them instantly without any death animation or explosion.
+The `object:destroy` method destroys the object, removing it from the mission. For units, this method kills them instantly without any death animation or explosion.
 
 ```lua
 local debris = StaticObject.getByName("wreckage")
@@ -1934,9 +1947,9 @@ end
 number object:getCategory()
 ```
 
-Returns the object's category from `Object.Category`.
+The `object:getCategory` method returns the object's category from the `Object.Category` enum.
 
-**Returns:** Category enum value.
+**Returns:** A category enum value.
 
 ```lua
 local cat = object:getCategory()
@@ -1951,9 +1964,9 @@ end
 string object:getTypeName()
 ```
 
-Returns the object's type name as used in the mission file (e.g., "F-16C_50", "SA-11 Buk LN 9A310M1").
+The `object:getTypeName` method returns the object's type name as used in the mission file, such as "F-16C_50" or "SA-11 Buk LN 9A310M1".
 
-**Returns:** Type name string.
+**Returns:** The type name as a string.
 
 ```lua
 local typeName = unit:getTypeName()
@@ -1966,9 +1979,9 @@ env.info("Unit type: " .. typeName)
 table object:getDesc()
 ```
 
-Returns a description table with detailed information about the object type. The contents vary by object type.
+The `object:getDesc` method returns a description table with detailed information about the object type. The contents of the table vary by object type.
 
-**Returns:** Description table with at minimum `life` and `box` fields.
+**Returns:** A description table that contains at minimum the `life` and `box` fields.
 
 ```lua
 local desc = unit:getDesc()
@@ -1981,12 +1994,12 @@ env.info("Max life: " .. desc.life)
 boolean object:hasAttribute(string attributeName)
 ```
 
-Checks if the object has a specific attribute (e.g., "Air", "Ground Units", "SAM related").
+The `object:hasAttribute` method checks if the object has a specific attribute, such as "Air", "Ground Units", or "SAM related".
 
 **Parameters:**
 - `attributeName` (string): The attribute to check for.
 
-**Returns:** True if the object has the attribute.
+**Returns:** True if the object has the attribute, or false otherwise.
 
 ```lua
 if unit:hasAttribute("SAM related") then
@@ -2000,9 +2013,9 @@ end
 string object:getName()
 ```
 
-Returns the object's unique name as defined in the Mission Editor.
+The `object:getName` method returns the object's unique name as defined in the Mission Editor.
 
-**Returns:** Object name string.
+**Returns:** The object name as a string.
 
 ```lua
 local name = unit:getName()
@@ -2015,9 +2028,9 @@ trigger.action.outText(name .. " has been spotted", 10)
 Vec3 object:getPoint()
 ```
 
-Returns the object's position in 3D space.
+The `object:getPoint` method returns the object's position in 3D space.
 
-**Returns:** Vec3 with x, y (altitude), z coordinates.
+**Returns:** A Vec3 containing the x, y (altitude), and z coordinates.
 
 ```lua
 local pos = unit:getPoint()
@@ -2031,9 +2044,9 @@ env.info("Altitude: " .. altitude .. " meters")
 Position3 object:getPosition()
 ```
 
-Returns the object's position and orientation.
+The `object:getPosition` method returns the object's position and orientation.
 
-**Returns:** Position3 table with `p` (position) and `x`, `y`, `z` (orientation vectors).
+**Returns:** A Position3 table with `p` (the position) and `x`, `y`, `z` (the orientation vectors).
 
 ```lua
 local pos = unit:getPosition()
@@ -2046,9 +2059,9 @@ local heading = math.atan2(pos.x.z, pos.x.x)
 Vec3 object:getVelocity()
 ```
 
-Returns the object's velocity vector.
+The `object:getVelocity` method returns the object's velocity vector.
 
-**Returns:** Vec3 velocity in m/s for each axis.
+**Returns:** A Vec3 containing the velocity in meters per second for each axis.
 
 ```lua
 local vel = unit:getVelocity()
@@ -2062,9 +2075,9 @@ env.info("Speed: " .. speed .. " m/s")
 boolean object:inAir()
 ```
 
-Returns whether the object is airborne.
+The `object:inAir` method returns whether the object is airborne.
 
-**Returns:** True if in the air, false if on the ground.
+**Returns:** True if the object is in the air, or false if the object is on the ground.
 
 ```lua
 if unit:inAir() then
@@ -2076,7 +2089,7 @@ end
 
 #### CoalitionObject
 
-Extends Object with coalition and country information. Base class for Unit, Weapon, StaticObject, and Airbase.
+The CoalitionObject class extends Object with coalition and country information. This class is the base class for Unit, Weapon, StaticObject, and Airbase.
 
 ##### CoalitionObject.getCoalition
 
@@ -2084,9 +2097,9 @@ Extends Object with coalition and country information. Base class for Unit, Weap
 number object:getCoalition()
 ```
 
-Returns the object's coalition.
+The `object:getCoalition` method returns the object's coalition.
 
-**Returns:** Coalition from `coalition.side` (0=neutral, 1=red, 2=blue).
+**Returns:** A coalition value from `coalition.side`. The value is 0 for neutral, 1 for red, or 2 for blue.
 
 ```lua
 if unit:getCoalition() == coalition.side.BLUE then
@@ -2100,9 +2113,9 @@ end
 number object:getCountry()
 ```
 
-Returns the object's country.
+The `object:getCountry` method returns the object's country.
 
-**Returns:** Country ID from `country.id`.
+**Returns:** A country ID from the `country.id` enum.
 
 ```lua
 local countryId = unit:getCountry()
@@ -2110,14 +2123,12 @@ local countryId = unit:getCountry()
 
 #### Unit
 
-Represents controllable units: aircraft, helicopters, ground vehicles, ships, and armed structures. Inherits from Object and CoalitionObject.
+The Unit class represents controllable units: aircraft, helicopters, ground vehicles, ships, and armed structures. This class inherits from Object and CoalitionObject.
 
-**Obtaining Units:**
-- `Unit.getByName("name")` - Get by Mission Editor name
-- `group:getUnits()` - Get all units in a group
-- `event.initiator` - From events
+You can obtain Unit objects using `Unit.getByName("name")` to get a unit by its Mission Editor name, `group:getUnits()` to get all units in a group, or `event.initiator` to get the unit from an event.
 
-**Category Enum:**
+The `Unit.Category` enum defines the unit categories:
+
 ```lua
 Unit.Category = {
     AIRPLANE = 0,
@@ -2128,7 +2139,7 @@ Unit.Category = {
 }
 ```
 
-**Gotchas:** `unit:getCategory()` returns `Object.Category.UNIT`. To get the unit type (airplane, helicopter, etc.), use `unit:getDesc().category` which returns `Unit.Category`.
+The `unit:getCategory()` method returns `Object.Category.UNIT`. To get the unit type (airplane, helicopter, etc.), use `unit:getDesc().category` which returns a value from `Unit.Category`.
 
 ##### Unit.getByName
 
@@ -2136,12 +2147,12 @@ Unit.Category = {
 Unit Unit.getByName(string name)
 ```
 
-Static function that returns a unit by its Mission Editor name.
+The `Unit.getByName` function is a static function that returns a unit by its Mission Editor name.
 
 **Parameters:**
-- `name` (string): The unit's name.
+- `name` (string): The unit's name as defined in the Mission Editor.
 
-**Returns:** Unit object, or nil if not found or destroyed.
+**Returns:** A Unit object, or nil if the unit is not found or has been destroyed.
 
 ```lua
 local player = Unit.getByName("Player F-16")
@@ -2156,9 +2167,9 @@ end
 boolean unit:isActive()
 ```
 
-Returns whether the unit is active. Units with late activation are inactive until activated by trigger.
+The `unit:isActive` method returns whether the unit is active. Units with late activation are inactive until activated by a trigger.
 
-**Returns:** True if active.
+**Returns:** True if the unit is active, or false otherwise.
 
 ```lua
 if not unit:isActive() then
@@ -2172,9 +2183,9 @@ end
 string unit:getPlayerName()
 ```
 
-Returns the player's name if this unit is controlled by a human.
+The `unit:getPlayerName` method returns the player's name if this unit is controlled by a human.
 
-**Returns:** Player name string, or nil for AI units.
+**Returns:** The player name as a string, or nil for AI units.
 
 ```lua
 local playerName = unit:getPlayerName()
@@ -2189,9 +2200,9 @@ end
 number unit:getID()
 ```
 
-Returns the unit's unique numeric ID.
+The `unit:getID` method returns the unit's unique numeric ID.
 
-**Returns:** Unit ID number.
+**Returns:** The unit ID as a number.
 
 ##### Unit.getNumber
 
@@ -2199,9 +2210,9 @@ Returns the unit's unique numeric ID.
 number unit:getNumber()
 ```
 
-Returns the unit's position number within its group (1-based).
+The `unit:getNumber` method returns the unit's position number within its group. The numbering is 1-based.
 
-**Returns:** Position in group.
+**Returns:** The position in the group as a number.
 
 ```lua
 local num = unit:getNumber()
@@ -2216,9 +2227,9 @@ end
 Group unit:getGroup()
 ```
 
-Returns the group this unit belongs to.
+The `unit:getGroup` method returns the group this unit belongs to.
 
-**Returns:** Group object.
+**Returns:** A Group object.
 
 ```lua
 local group = unit:getGroup()
@@ -2231,9 +2242,9 @@ local groupName = group:getName()
 string unit:getCallsign()
 ```
 
-Returns the unit's callsign.
+The `unit:getCallsign` method returns the unit's callsign.
 
-**Returns:** Callsign string (e.g., "Enfield11").
+**Returns:** The callsign as a string, such as "Enfield11".
 
 ```lua
 local callsign = unit:getCallsign()
@@ -2246,11 +2257,9 @@ trigger.action.outText(callsign .. ", cleared hot", 5)
 number unit:getLife()
 ```
 
-Returns the unit's current hit points. Units with life < 1 are considered dead.
+The `unit:getLife` method returns the unit's current hit points. Units with a life value less than 1 are considered dead. Ground units that are on fire but have not yet exploded return 0.
 
-**Returns:** Current hit points.
-
-**Gotchas:** Ground units that are on fire but haven't exploded yet return 0.
+**Returns:** The current hit points as a number.
 
 ```lua
 local life = unit:getLife()
@@ -2264,9 +2273,9 @@ local healthPercent = (life / maxLife) * 100
 number unit:getLife0()
 ```
 
-Returns the unit's initial (maximum) hit points.
+The `unit:getLife0` method returns the unit's initial (maximum) hit points.
 
-**Returns:** Initial hit points.
+**Returns:** The initial hit points as a number.
 
 ##### Unit.getFuel
 
@@ -2274,11 +2283,9 @@ Returns the unit's initial (maximum) hit points.
 number unit:getFuel()
 ```
 
-Returns the unit's fuel level as a fraction of internal fuel capacity.
+The `unit:getFuel` method returns the unit's fuel level as a fraction of internal fuel capacity. Ground vehicles and ships always return 1. Aircraft with external tanks can return values above 1.0.
 
-**Returns:** Fuel fraction (0.0 to 1.0+). Values above 1.0 indicate external tanks.
-
-**Gotchas:** Ground vehicles and ships always return 1. Aircraft with external tanks can return values above 1.0.
+**Returns:** The fuel fraction as a number from 0.0 to 1.0 or higher. Values above 1.0 indicate external tanks are present.
 
 ```lua
 local fuel = unit:getFuel()
@@ -2293,9 +2300,9 @@ end
 table unit:getAmmo()
 ```
 
-Returns detailed ammunition information.
+The `unit:getAmmo` method returns detailed ammunition information.
 
-**Returns:** Array of ammo entries, each with `count` and `desc` (weapon description) fields.
+**Returns:** An array of ammo entries. Each entry contains a `count` field and a `desc` field with the weapon description.
 
 ```lua
 local ammo = unit:getAmmo()
@@ -2310,9 +2317,9 @@ end
 Controller unit:getController()
 ```
 
-Returns the unit's AI controller. For aircraft, individual units can be controlled. For ground/ship units, use the group controller instead.
+The `unit:getController` method returns the unit's AI controller. For aircraft, you can control individual units. For ground and ship units, use the group controller instead.
 
-**Returns:** Controller object.
+**Returns:** A Controller object.
 
 ```lua
 local controller = unit:getController()
@@ -2325,9 +2332,9 @@ controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_FREE)
 table unit:getSensors()
 ```
 
-Returns information about the unit's sensors (radar, IRST, etc.).
+The `unit:getSensors` method returns information about the unit's sensors, such as radar and IRST.
 
-**Returns:** Table of sensor information.
+**Returns:** A table of sensor information.
 
 ##### Unit.getRadar
 
@@ -2335,9 +2342,9 @@ Returns information about the unit's sensors (radar, IRST, etc.).
 boolean, Object unit:getRadar()
 ```
 
-Returns radar status and current target.
+The `unit:getRadar` method returns the radar status and current target.
 
-**Returns:** isOn (boolean), target (Object or nil).
+**Returns:** Two values: a boolean indicating whether the radar is on, and the target Object or nil if no target is locked.
 
 ```lua
 local radarOn, target = unit:getRadar()
@@ -2352,26 +2359,23 @@ end
 nil unit:enableEmission(boolean enable)
 ```
 
-Enables or disables radar/radio emissions for the unit.
+The `unit:enableEmission` method enables or disables radar and radio emissions for the unit.
 
 **Parameters:**
-- `enable` (boolean): True to enable emissions, false to disable.
+- `enable` (boolean): Set to true to enable emissions, or false to disable.
 
 ```lua
--- Go emissions silent
 unit:enableEmission(false)
 ```
 
 #### Group
 
-Represents a group of units. Groups are the primary unit of control for AI.
+The Group class represents a group of units. Groups are the primary unit of control for AI.
 
-**Obtaining Groups:**
-- `Group.getByName("name")` - Get by Mission Editor name
-- `unit:getGroup()` - Get from a unit
-- `coalition.getGroups(coalitionId)` - Get all groups for a coalition
+You can obtain Group objects using `Group.getByName("name")` to get a group by its Mission Editor name, `unit:getGroup()` to get the group from a unit, or `coalition.getGroups(coalitionId)` to get all groups for a coalition.
 
-**Category Enum:**
+The `Group.Category` enum defines the group categories:
+
 ```lua
 Group.Category = {
     AIRPLANE = 0,
@@ -2388,12 +2392,12 @@ Group.Category = {
 Group Group.getByName(string name)
 ```
 
-Static function that returns a group by its Mission Editor name.
+The `Group.getByName` function is a static function that returns a group by its Mission Editor name.
 
 **Parameters:**
-- `name` (string): The group's name.
+- `name` (string): The group's name as defined in the Mission Editor.
 
-**Returns:** Group object, or nil if not found.
+**Returns:** A Group object, or nil if the group is not found.
 
 ```lua
 local enemyGroup = Group.getByName("Enemy CAP")
@@ -2408,9 +2412,9 @@ end
 boolean group:isExist()
 ```
 
-Returns whether the group exists. Groups cease to exist when all units are destroyed.
+The `group:isExist` method returns whether the group exists. Groups cease to exist when all units are destroyed.
 
-**Returns:** True if at least one unit is alive.
+**Returns:** True if at least one unit is alive, or false otherwise.
 
 ##### Group.activate
 
@@ -2418,7 +2422,7 @@ Returns whether the group exists. Groups cease to exist when all units are destr
 nil group:activate()
 ```
 
-Activates a late-activation group, causing it to spawn and begin its mission.
+The `group:activate` method activates a late-activation group, causing it to spawn and begin its mission.
 
 ```lua
 local reinforcements = Group.getByName("Reinforcements")
@@ -2431,7 +2435,7 @@ reinforcements:activate()
 nil group:destroy()
 ```
 
-Destroys the entire group, removing all units.
+The `group:destroy` method destroys the entire group, removing all units.
 
 ##### Group.getCategory
 
@@ -2439,9 +2443,9 @@ Destroys the entire group, removing all units.
 number group:getCategory()
 ```
 
-Returns the group category.
+The `group:getCategory` method returns the group category.
 
-**Returns:** Category from `Group.Category`.
+**Returns:** A category value from `Group.Category`.
 
 ##### Group.getCoalition
 
@@ -2449,9 +2453,9 @@ Returns the group category.
 number group:getCoalition()
 ```
 
-Returns the group's coalition.
+The `group:getCoalition` method returns the group's coalition.
 
-**Returns:** Coalition from `coalition.side`.
+**Returns:** A coalition value from `coalition.side`.
 
 ##### Group.getName
 
@@ -2459,9 +2463,9 @@ Returns the group's coalition.
 string group:getName()
 ```
 
-Returns the group's name.
+The `group:getName` method returns the group's name.
 
-**Returns:** Group name string.
+**Returns:** The group name as a string.
 
 ##### Group.getID
 
@@ -2469,9 +2473,9 @@ Returns the group's name.
 number group:getID()
 ```
 
-Returns the group's unique numeric ID. Used for group-specific menu commands and messages.
+The `group:getID` method returns the group's unique numeric ID. This ID is used for group-specific menu commands and messages.
 
-**Returns:** Group ID number.
+**Returns:** The group ID as a number.
 
 ```lua
 local groupId = group:getID()
@@ -2484,12 +2488,12 @@ missionCommands.addCommandForGroup(groupId, "Request Support", nil, requestSuppo
 Unit group:getUnit(number index)
 ```
 
-Returns a specific unit from the group by index (1-based).
+The `group:getUnit` method returns a specific unit from the group by index. The indexing is 1-based.
 
 **Parameters:**
-- `index` (number): Unit position in group (1 = lead).
+- `index` (number): The unit position in the group, where 1 is the lead.
 
-**Returns:** Unit object.
+**Returns:** A Unit object.
 
 ```lua
 local lead = group:getUnit(1)
@@ -2502,9 +2506,9 @@ local wingman = group:getUnit(2)
 table group:getUnits()
 ```
 
-Returns all units in the group.
+The `group:getUnits` method returns all units in the group.
 
-**Returns:** Array of Unit objects.
+**Returns:** An array of Unit objects.
 
 ```lua
 for i, unit in ipairs(group:getUnits()) do
@@ -2518,9 +2522,9 @@ end
 number group:getSize()
 ```
 
-Returns the number of units currently alive in the group.
+The `group:getSize` method returns the number of units currently alive in the group.
 
-**Returns:** Current unit count.
+**Returns:** The current unit count as a number.
 
 ##### Group.getInitialSize
 
@@ -2528,9 +2532,9 @@ Returns the number of units currently alive in the group.
 number group:getInitialSize()
 ```
 
-Returns the number of units the group started with.
+The `group:getInitialSize` method returns the number of units the group started with.
 
-**Returns:** Initial unit count.
+**Returns:** The initial unit count as a number.
 
 ```lua
 local current = group:getSize()
@@ -2544,9 +2548,9 @@ local losses = initial - current
 Controller group:getController()
 ```
 
-Returns the group's AI controller. This is the primary way to control AI behavior.
+The `group:getController` method returns the group's AI controller. This method is the primary way to control AI behavior.
 
-**Returns:** Controller object.
+**Returns:** A Controller object.
 
 ```lua
 local controller = group:getController()
@@ -2559,21 +2563,19 @@ controller:setTask(orbitTask)
 nil group:enableEmission(boolean enable)
 ```
 
-Enables or disables radar/radio emissions for all units in the group.
+The `group:enableEmission` method enables or disables radar and radio emissions for all units in the group.
 
 **Parameters:**
-- `enable` (boolean): True to enable, false to disable.
+- `enable` (boolean): Set to true to enable emissions, or false to disable.
 
 #### Airbase
 
-Represents airports, FARPs (Forward Arming and Refueling Points), and ships with flight decks. Inherits from Object and CoalitionObject.
+The Airbase class represents airports, FARPs (Forward Arming and Refueling Points), and ships with flight decks. This class inherits from Object and CoalitionObject.
 
-**Obtaining Airbases:**
-- `Airbase.getByName("name")` - Get by name
-- `coalition.getAirbases(coalitionId)` - Get all for a coalition
-- `world.getAirbases()` - Get all in mission
+You can obtain Airbase objects using `Airbase.getByName("name")` to get an airbase by name, `coalition.getAirbases(coalitionId)` to get all airbases for a coalition, or `world.getAirbases()` to get all airbases in the mission.
 
-**Category Enum:**
+The `Airbase.Category` enum defines the airbase categories:
+
 ```lua
 Airbase.Category = {
     AIRDROME = 0,
@@ -2582,7 +2584,7 @@ Airbase.Category = {
 }
 ```
 
-**Gotchas:** `airbase:getCategory()` returns `Object.Category.BASE`. Use `airbase:getDesc().category` to get `Airbase.Category`.
+The `airbase:getCategory()` method returns `Object.Category.BASE`. Use `airbase:getDesc().category` to get a value from `Airbase.Category`.
 
 ##### Airbase.getByName
 
@@ -2590,12 +2592,12 @@ Airbase.Category = {
 Airbase Airbase.getByName(string name)
 ```
 
-Static function that returns an airbase by name.
+The `Airbase.getByName` function is a static function that returns an airbase by name.
 
 **Parameters:**
-- `name` (string): The airbase name (e.g., "Batumi", "CVN-74 John C. Stennis").
+- `name` (string): The airbase name, such as "Batumi" or "CVN-74 John C. Stennis".
 
-**Returns:** Airbase object, or nil if not found.
+**Returns:** An Airbase object, or nil if the airbase is not found.
 
 ```lua
 local batumi = Airbase.getByName("Batumi")
@@ -2608,9 +2610,9 @@ local pos = batumi:getPoint()
 string airbase:getCallsign()
 ```
 
-Returns the airbase's radio callsign.
+The `airbase:getCallsign` method returns the airbase's radio callsign.
 
-**Returns:** Callsign string.
+**Returns:** The callsign as a string.
 
 ##### Airbase.getUnit
 
@@ -2618,12 +2620,12 @@ Returns the airbase's radio callsign.
 Unit airbase:getUnit(number index)
 ```
 
-For ship-based airbases, returns the ship unit.
+The `airbase:getUnit` method returns the ship unit for ship-based airbases.
 
 **Parameters:**
-- `index` (number): Unit index (typically 1).
+- `index` (number): The unit index, typically 1.
 
-**Returns:** Unit object for ships, nil for ground airbases.
+**Returns:** A Unit object for ships, or nil for ground airbases.
 
 ##### Airbase.getParking
 
@@ -2631,12 +2633,12 @@ For ship-based airbases, returns the ship unit.
 table airbase:getParking(boolean available)
 ```
 
-Returns parking spot information.
+The `airbase:getParking` method returns parking spot information.
 
 **Parameters:**
-- `available` (boolean): Optional. If true, returns only unoccupied spots.
+- `available` (boolean): Optional. If true, the method returns only unoccupied spots.
 
-**Returns:** Array of parking spot tables with `Term_Index`, `vTerminalPos`, `fDistToRW`, `Term_Type`, etc.
+**Returns:** An array of parking spot tables. Each table contains fields such as `Term_Index`, `vTerminalPos`, `fDistToRW`, and `Term_Type`.
 
 ```lua
 local spots = airbase:getParking(true)
@@ -2651,9 +2653,9 @@ end
 table airbase:getRunways()
 ```
 
-Returns runway information.
+The `airbase:getRunways` method returns runway information.
 
-**Returns:** Array of runway tables with heading, length, and position data.
+**Returns:** An array of runway tables containing heading, length, and position data.
 
 ##### Airbase.getRadioSilentMode
 
@@ -2661,9 +2663,9 @@ Returns runway information.
 boolean airbase:getRadioSilentMode()
 ```
 
-Returns whether the airbase's radio is silenced.
+The `airbase:getRadioSilentMode` method returns whether the airbase's radio is silenced.
 
-**Returns:** True if radio is silent.
+**Returns:** True if the radio is silent, or false otherwise.
 
 ##### Airbase.setRadioSilentMode
 
@@ -2671,10 +2673,10 @@ Returns whether the airbase's radio is silenced.
 nil airbase:setRadioSilentMode(boolean silent)
 ```
 
-Enables or disables the airbase's radio.
+The `airbase:setRadioSilentMode` method enables or disables the airbase's radio.
 
 **Parameters:**
-- `silent` (boolean): True to silence, false to enable.
+- `silent` (boolean): Set to true to silence the radio, or false to enable it.
 
 ##### Airbase.setCoalition
 
@@ -2682,13 +2684,12 @@ Enables or disables the airbase's radio.
 nil airbase:setCoalition(number coalitionId)
 ```
 
-Changes the airbase's coalition (captures it).
+The `airbase:setCoalition` method changes the airbase's coalition, effectively capturing it.
 
 **Parameters:**
-- `coalitionId` (number): New coalition from `coalition.side`.
+- `coalitionId` (number): The new coalition from `coalition.side`.
 
 ```lua
--- Capture the airbase for blue team
 airbase:setCoalition(coalition.side.BLUE)
 ```
 
@@ -2698,10 +2699,10 @@ airbase:setCoalition(coalition.side.BLUE)
 nil airbase:autoCapture(boolean enable)
 ```
 
-Enables or disables automatic capture when ground forces are nearby.
+The `airbase:autoCapture` method enables or disables automatic capture when ground forces are nearby.
 
 **Parameters:**
-- `enable` (boolean): True to enable auto-capture.
+- `enable` (boolean): Set to true to enable auto-capture, or false to disable.
 
 ##### Airbase.autoCaptureIsOn
 
@@ -2709,9 +2710,9 @@ Enables or disables automatic capture when ground forces are nearby.
 boolean airbase:autoCaptureIsOn()
 ```
 
-Returns whether auto-capture is enabled.
+The `airbase:autoCaptureIsOn` method returns whether auto-capture is enabled.
 
-**Returns:** True if auto-capture is on.
+**Returns:** True if auto-capture is on, or false otherwise.
 
 ##### Airbase.getWarehouse
 
@@ -2719,17 +2720,15 @@ Returns whether auto-capture is enabled.
 Warehouse airbase:getWarehouse()
 ```
 
-Returns the airbase's warehouse (logistics) object.
+The `airbase:getWarehouse` method returns the airbase's warehouse (logistics) object.
 
-**Returns:** Warehouse object.
+**Returns:** A Warehouse object.
 
 #### StaticObject
 
-Represents non-moving objects placed in the mission: buildings, cargo, decorations. Inherits from Object and CoalitionObject.
+The StaticObject class represents non-moving objects placed in the mission, such as buildings, cargo, and decorations. This class inherits from Object and CoalitionObject.
 
-**Obtaining StaticObjects:**
-- `StaticObject.getByName("name")` - Get by name
-- `coalition.getStaticObjects(coalitionId)` - Get all for a coalition
+You can obtain StaticObject objects using `StaticObject.getByName("name")` to get a static object by name, or `coalition.getStaticObjects(coalitionId)` to get all static objects for a coalition.
 
 ##### StaticObject.getByName
 
@@ -2737,12 +2736,12 @@ Represents non-moving objects placed in the mission: buildings, cargo, decoratio
 StaticObject StaticObject.getByName(string name)
 ```
 
-Static function that returns a static object by name.
+The `StaticObject.getByName` function is a static function that returns a static object by name.
 
 **Parameters:**
-- `name` (string): The object's name.
+- `name` (string): The object's name as defined in the Mission Editor.
 
-**Returns:** StaticObject, or nil if not found.
+**Returns:** A StaticObject, or nil if the object is not found.
 
 ##### StaticObject.getLife
 
@@ -2750,15 +2749,16 @@ Static function that returns a static object by name.
 number staticObject:getLife()
 ```
 
-Returns the object's current hit points.
+The `staticObject:getLife` method returns the object's current hit points.
 
-**Returns:** Current hit points.
+**Returns:** The current hit points as a number.
 
 #### Weapon
 
-Represents a weapon in flight: missiles, bombs, rockets, shells. Inherits from Object and CoalitionObject. Obtained through events.
+The Weapon class represents a weapon in flight: missiles, bombs, rockets, and shells. This class inherits from Object and CoalitionObject. You obtain Weapon objects through events.
 
-**Category Enum:**
+The `Weapon.Category` enum defines the weapon categories:
+
 ```lua
 Weapon.Category = {
     SHELL = 0,
@@ -2768,7 +2768,8 @@ Weapon.Category = {
 }
 ```
 
-**Guidance Enum:**
+The `Weapon.GuidanceType` enum defines the guidance types:
+
 ```lua
 Weapon.GuidanceType = {
     INS = 1,
@@ -2782,7 +2783,7 @@ Weapon.GuidanceType = {
 }
 ```
 
-**Gotchas:** `weapon:getCategory()` returns `Object.Category.WEAPON`. Use `weapon:getDesc().category` for `Weapon.Category`.
+The `weapon:getCategory()` method returns `Object.Category.WEAPON`. Use `weapon:getDesc().category` to get a value from `Weapon.Category`.
 
 ##### Weapon.getLauncher
 
@@ -2790,9 +2791,9 @@ Weapon.GuidanceType = {
 Unit weapon:getLauncher()
 ```
 
-Returns the unit that fired this weapon.
+The `weapon:getLauncher` method returns the unit that fired this weapon.
 
-**Returns:** Unit object, or nil.
+**Returns:** A Unit object, or nil.
 
 ```lua
 function handler:onEvent(event)
@@ -2810,15 +2811,16 @@ end
 Object weapon:getTarget()
 ```
 
-Returns the weapon's target.
+The `weapon:getTarget` method returns the weapon's target.
 
-**Returns:** Target Object, or nil for unguided weapons.
+**Returns:** The target Object, or nil for unguided weapons.
 
 #### Controller
 
-The AI control interface. Controllers are obtained from groups or units and used to issue tasks, commands, and options.
+The Controller class is the AI control interface. You obtain controllers from groups or units and use them to issue tasks, commands, and options.
 
-**Detection Enum:**
+The `Controller.Detection` enum defines the detection types:
+
 ```lua
 Controller.Detection = {
     VISUAL = 1,
@@ -2836,12 +2838,10 @@ Controller.Detection = {
 nil controller:setTask(table task)
 ```
 
-Sets the group's main task, replacing any existing task.
+The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, add a delay before setting tasks to avoid crashes.
 
 **Parameters:**
-- `task` (table): Task definition table.
-
-**Gotchas:** For newly spawned groups, add a delay before setting tasks to avoid crashes.
+- `task` (table): The task definition table.
 
 ```lua
 local orbitTask = {
@@ -2862,10 +2862,10 @@ controller:setTask(orbitTask)
 nil controller:pushTask(table task)
 ```
 
-Adds a task to the front of the task queue. The current task is suspended until the new task completes.
+The `controller:pushTask` method adds a task to the front of the task queue. The current task is suspended until the new task completes.
 
 **Parameters:**
-- `task` (table): Task definition table.
+- `task` (table): The task definition table.
 
 ##### Controller.popTask
 
@@ -2873,7 +2873,7 @@ Adds a task to the front of the task queue. The current task is suspended until 
 nil controller:popTask()
 ```
 
-Removes and discards the current task, resuming the previous one.
+The `controller:popTask` method removes and discards the current task, resuming the previous one.
 
 ##### Controller.resetTask
 
@@ -2881,7 +2881,7 @@ Removes and discards the current task, resuming the previous one.
 nil controller:resetTask()
 ```
 
-Clears all tasks from the controller.
+The `controller:resetTask` method clears all tasks from the controller.
 
 ##### Controller.hasTask
 
@@ -2889,9 +2889,9 @@ Clears all tasks from the controller.
 boolean controller:hasTask()
 ```
 
-Returns whether the controller has any active task.
+The `controller:hasTask` method returns whether the controller has any active task.
 
-**Returns:** True if a task is active.
+**Returns:** True if a task is active, or false otherwise.
 
 ##### Controller.setCommand
 
@@ -2899,10 +2899,10 @@ Returns whether the controller has any active task.
 nil controller:setCommand(table command)
 ```
 
-Issues an immediate command to the controller.
+The `controller:setCommand` method issues an immediate command to the controller.
 
 **Parameters:**
-- `command` (table): Command definition table.
+- `command` (table): The command definition table.
 
 ```lua
 local startCommand = {
@@ -2918,17 +2918,15 @@ controller:setCommand(startCommand)
 nil controller:setOption(number optionId, any value)
 ```
 
-Sets an AI behavior option.
+The `controller:setOption` method sets an AI behavior option.
 
 **Parameters:**
-- `optionId` (number): Option ID from `AI.Option.[Air/Ground/Naval].id`.
-- `value` (any): Option value from corresponding enum.
+- `optionId` (number): The option ID from `AI.Option.[Air/Ground/Naval].id`.
+- `value` (any): The option value from the corresponding enum.
 
 ```lua
--- Set weapons free ROE
 controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_FREE)
 
--- Set reaction to threat: evade
 controller:setOption(AI.Option.Air.id.REACTION_ON_THREAT, AI.Option.Air.val.REACTION_ON_THREAT.EVADE_FIRE)
 ```
 
@@ -2938,10 +2936,10 @@ controller:setOption(AI.Option.Air.id.REACTION_ON_THREAT, AI.Option.Air.val.REAC
 nil controller:setOnOff(boolean on)
 ```
 
-Enables or disables the AI controller.
+The `controller:setOnOff` method enables or disables the AI controller.
 
 **Parameters:**
-- `on` (boolean): True to enable, false to disable (unit becomes passive).
+- `on` (boolean): Set to true to enable the controller, or false to disable it and make the unit passive.
 
 ##### Controller.setAltitude
 
@@ -2949,12 +2947,12 @@ Enables or disables the AI controller.
 nil controller:setAltitude(number altitude, boolean keep, string altType)
 ```
 
-Sets the desired altitude for aircraft.
+The `controller:setAltitude` method sets the desired altitude for aircraft.
 
 **Parameters:**
-- `altitude` (number): Altitude in meters.
-- `keep` (boolean): If true, maintains altitude even when not tasked.
-- `altType` (string): "RADIO" (AGL) or "BARO" (MSL).
+- `altitude` (number): The altitude in meters.
+- `keep` (boolean): If true, the aircraft maintains altitude even when not tasked.
+- `altType` (string): The altitude type. Use "RADIO" for altitude above ground level (AGL) or "BARO" for altitude above mean sea level (MSL).
 
 ```lua
 controller:setAltitude(8000, true, "BARO")
@@ -2966,11 +2964,11 @@ controller:setAltitude(8000, true, "BARO")
 nil controller:setSpeed(number speed, boolean keep)
 ```
 
-Sets the desired speed for aircraft.
+The `controller:setSpeed` method sets the desired speed for aircraft.
 
 **Parameters:**
-- `speed` (number): Speed in m/s.
-- `keep` (boolean): If true, maintains speed even when not tasked.
+- `speed` (number): The speed in meters per second.
+- `keep` (boolean): If true, the aircraft maintains speed even when not tasked.
 
 ##### Controller.getDetectedTargets
 
@@ -2978,12 +2976,12 @@ Sets the desired speed for aircraft.
 table controller:getDetectedTargets(number detectionTypes)
 ```
 
-Returns targets detected by the unit/group.
+The `controller:getDetectedTargets` method returns targets detected by the unit or group.
 
 **Parameters:**
-- `detectionTypes` (number): Optional. Bitmask of `Controller.Detection` values.
+- `detectionTypes` (number): Optional. A bitmask of `Controller.Detection` values.
 
-**Returns:** Array of detected target tables with `object`, `visible`, `type`, and `distance` fields.
+**Returns:** An array of detected target tables. Each table contains `object`, `visible`, `type`, and `distance` fields.
 
 ```lua
 local targets = controller:getDetectedTargets(Controller.Detection.RADAR + Controller.Detection.VISUAL)
@@ -3000,11 +2998,11 @@ end
 boolean, boolean, ... controller:isTargetDetected(Object target, number detectionTypes)
 ```
 
-Checks if a specific target is detected.
+The `controller:isTargetDetected` method checks if a specific target is detected.
 
 **Parameters:**
 - `target` (Object): The object to check.
-- `detectionTypes` (number): Bitmask of detection types.
+- `detectionTypes` (number): A bitmask of detection types.
 
 **Returns:** Multiple values indicating detection status by each sensor type.
 
@@ -3014,24 +3012,24 @@ Checks if a specific target is detected.
 nil controller:knowTarget(Object target, boolean type, boolean distance)
 ```
 
-Forces the AI to "know" about a target.
+The `controller:knowTarget` method forces the AI to "know" about a target.
 
 **Parameters:**
-- `target` (Object): Target to reveal.
-- `type` (boolean): If true, AI knows the target type.
-- `distance` (boolean): If true, AI knows the exact distance.
+- `target` (Object): The target to reveal to the AI.
+- `type` (boolean): If true, the AI knows the target type.
+- `distance` (boolean): If true, the AI knows the exact distance to the target.
 
 ```lua
--- Reveal an enemy unit to friendly AI
 local enemy = Unit.getByName("Hidden Enemy")
 controller:knowTarget(enemy, true, true)
 ```
 
 #### Spot
 
-Represents a laser or infrared designator spot. Created dynamically through static functions.
+The Spot class represents a laser or infrared designator spot. You create spots dynamically through static functions.
 
-**Category Enum:**
+The `Spot.Category` enum defines the spot categories:
+
 ```lua
 Spot.Category = {
     INFRA_RED = 0,
@@ -3045,15 +3043,15 @@ Spot.Category = {
 Spot Spot.createLaser(Object source, table localPosition, Vec3 targetPoint, number laserCode)
 ```
 
-Creates a laser spot emanating from an object.
+The `Spot.createLaser` function creates a laser spot emanating from an object.
 
 **Parameters:**
 - `source` (Object): The object the laser originates from.
-- `localPosition` (table): Offset from the object's center.
-- `targetPoint` (Vec3): Where the laser is pointing.
-- `laserCode` (number): 4-digit laser code (1111-1788).
+- `localPosition` (table): The offset from the object's center.
+- `targetPoint` (Vec3): The point where the laser is pointing.
+- `laserCode` (number): The 4-digit laser code, ranging from 1111 to 1788.
 
-**Returns:** Spot object.
+**Returns:** A Spot object.
 
 ```lua
 local jtac = Unit.getByName("JTAC")
@@ -3134,7 +3132,7 @@ Changes the laser code.
 
 ### Events
 
-The event system allows scripts to react to game events like weapon fire, unit deaths, takeoffs, and player actions. Events are received through handlers registered with `world.addEventHandler()`.
+The event system notifies your scripts when things happen in the simulation. You create an event handler and register it with the game, then your handler function gets called whenever events occur.
 
 #### Event System Overview
 
@@ -3204,17 +3202,19 @@ world.event = {
 
 ##### S_EVENT_SHOT
 
-Fires when a unit fires a weapon (missile, bomb, rocket). Does not fire for guns.
+The `S_EVENT_SHOT` event fires when a unit fires a weapon such as a missile, bomb, or rocket. This event does not fire for guns; use `S_EVENT_SHOOTING_START` and `S_EVENT_SHOOTING_END` to detect gun fire.
 
 **Event Table:**
 ```lua
 {
     id = 1,
     time = number,
-    initiator = Unit,    -- Unit that fired
-    weapon = Weapon      -- The weapon object
+    initiator = Unit,
+    weapon = Weapon
 }
 ```
+
+The `initiator` field contains the Unit object that fired the weapon. The `weapon` field contains the Weapon object representing the projectile in flight.
 
 ```lua
 function handler:onEvent(event)
@@ -3230,24 +3230,24 @@ end
 
 ##### S_EVENT_HIT
 
-Fires when a weapon hits a target.
+The `S_EVENT_HIT` event fires when a weapon hits a target. In multiplayer, the `weapon` field may be nil due to network desync.
 
 **Event Table:**
 ```lua
 {
     id = 2,
     time = number,
-    initiator = Unit,    -- Unit that fired the weapon
-    weapon = Weapon,     -- The weapon that hit
-    target = Object      -- Object that was hit
+    initiator = Unit,
+    weapon = Weapon,
+    target = Object
 }
 ```
 
-**Gotchas:** In multiplayer, the `weapon` field may be nil due to network desync.
+The `initiator` field contains the Unit object that fired the weapon. The `weapon` field contains the Weapon object that hit the target. The `target` field contains the Object that was struck.
 
 ##### S_EVENT_SHOOTING_START
 
-Fires when a unit begins firing guns (continuous fire weapons).
+The `S_EVENT_SHOOTING_START` event fires when a unit begins firing guns or other continuous fire weapons.
 
 **Event Table:**
 ```lua
@@ -3255,13 +3255,15 @@ Fires when a unit begins firing guns (continuous fire weapons).
     id = 23,
     time = number,
     initiator = Unit,
-    weapon_name = string  -- Weapon type name
+    weapon_name = string
 }
 ```
 
+The `initiator` field contains the Unit object that is firing. The `weapon_name` field contains the type name of the weapon being fired.
+
 ##### S_EVENT_SHOOTING_END
 
-Fires when a unit stops firing guns.
+The `S_EVENT_SHOOTING_END` event fires when a unit stops firing guns.
 
 **Event Table:**
 ```lua
@@ -3273,38 +3275,42 @@ Fires when a unit stops firing guns.
 }
 ```
 
+The `initiator` field contains the Unit object that stopped firing. The `weapon_name` field contains the type name of the weapon that was being fired.
+
 ##### S_EVENT_KILL
 
-Fires when a unit kills another unit.
+The `S_EVENT_KILL` event fires when a unit kills another unit.
 
 **Event Table:**
 ```lua
 {
     id = 28,
     time = number,
-    initiator = Unit,    -- Killer
-    target = Unit,       -- Victim
-    weapon = Weapon,     -- Weapon used
-    weapon_name = string -- Weapon type name
+    initiator = Unit,
+    target = Unit,
+    weapon = Weapon,
+    weapon_name = string
 }
 ```
+
+The `initiator` field contains the Unit object that scored the kill. The `target` field contains the Unit object that was killed. The `weapon` field contains the Weapon object used in the kill. The `weapon_name` field contains the type name of the weapon.
 
 #### Death and Damage Events
 
 ##### S_EVENT_DEAD
 
-Fires when a unit is destroyed (HP reaches 0).
+The `S_EVENT_DEAD` event fires when a unit is destroyed and its hit points reach zero. For aircraft, `S_EVENT_CRASH` may fire instead of or in addition to `S_EVENT_DEAD`.
 
 **Event Table:**
 ```lua
 {
     id = 8,
     time = number,
-    initiator = Object  -- The object that died
+    initiator = Object
 }
 ```
 
-**Gotchas:** For aircraft, `S_EVENT_CRASH` may fire instead of or in addition to `S_EVENT_DEAD`.
+The `initiator` field contains the Object that was destroyed.
 
 ```lua
 function handler:onEvent(event)
@@ -3319,33 +3325,37 @@ end
 
 ##### S_EVENT_CRASH
 
-Fires when an aircraft crashes into the ground and is completely destroyed.
+The `S_EVENT_CRASH` event fires when an aircraft crashes into the ground and is completely destroyed.
 
 **Event Table:**
 ```lua
 {
     id = 5,
     time = number,
-    initiator = Unit  -- Aircraft that crashed
+    initiator = Unit
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that crashed.
+
 ##### S_EVENT_PILOT_DEAD
 
-Fires when a pilot dies (separate from aircraft destruction).
+The `S_EVENT_PILOT_DEAD` event fires when a pilot dies, which is tracked separately from aircraft destruction.
 
 **Event Table:**
 ```lua
 {
     id = 9,
     time = number,
-    initiator = Unit  -- Aircraft whose pilot died
+    initiator = Unit
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft whose pilot died.
+
 ##### S_EVENT_UNIT_LOST
 
-Fires when any unit is lost from the mission for any reason.
+The `S_EVENT_UNIT_LOST` event fires when any unit is lost from the mission for any reason.
 
 **Event Table:**
 ```lua
@@ -3356,9 +3366,11 @@ Fires when any unit is lost from the mission for any reason.
 }
 ```
 
+The `initiator` field contains the Unit object that was lost.
+
 ##### S_EVENT_HUMAN_FAILURE
 
-Fires when a player-controlled aircraft experiences a system failure.
+The `S_EVENT_HUMAN_FAILURE` event fires when a player-controlled aircraft experiences a system failure.
 
 **Event Table:**
 ```lua
@@ -3369,9 +3381,11 @@ Fires when a player-controlled aircraft experiences a system failure.
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that experienced the failure.
+
 ##### S_EVENT_DETAILED_FAILURE
 
-Fires with detailed information about system failures.
+The `S_EVENT_DETAILED_FAILURE` event fires with detailed information about system failures.
 
 **Event Table:**
 ```lua
@@ -3382,45 +3396,47 @@ Fires with detailed information about system failures.
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that experienced the failure.
+
 #### Flight Events
 
 ##### S_EVENT_TAKEOFF
 
-Fires when an aircraft takes off from an airbase, FARP, or ship. Fires several seconds after liftoff.
+The `S_EVENT_TAKEOFF` event fires when an aircraft takes off from an airbase, FARP, or ship. This event fires several seconds after liftoff, after the aircraft has been airborne for a short period of time. Use `S_EVENT_RUNWAY_TAKEOFF` if you need to detect the exact moment of liftoff.
 
 **Event Table:**
 ```lua
 {
     id = 3,
     time = number,
-    initiator = Unit,    -- Aircraft that took off
-    place = Airbase,     -- Airbase/FARP/ship
-    subPlace = number    -- Sub-location identifier
+    initiator = Unit,
+    place = Airbase,
+    subPlace = number
 }
 ```
 
-**Gotchas:**  This event fires after the aircraft has been airborne for a short period of time. Use `S_EVENT_RUNWAY_TAKEOFF` if you need to detect the exact moment of liftoff.
+The `initiator` field contains the Unit object representing the aircraft that took off. The `place` field contains the Airbase object representing the airport, FARP, or ship from which the aircraft departed. The `subPlace` field contains a sub-location identifier.
 
 ##### S_EVENT_LAND
 
-Fires when an aircraft lands at an airbase, FARP, or ship and sufficiently slows down.
+The `S_EVENT_LAND` event fires when an aircraft lands at an airbase, FARP, or ship and sufficiently slows down. This event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
 
 **Event Table:**
 ```lua
 {
     id = 4,
     time = number,
-    initiator = Unit,    -- Aircraft that landed
-    place = Airbase,     -- Where it landed
+    initiator = Unit,
+    place = Airbase,
     subPlace = number
 }
 ```
 
-**Gotchas:** This event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
+The `initiator` field contains the Unit object representing the aircraft that landed. The `place` field contains the Airbase object where the aircraft landed. The `subPlace` field contains a sub-location identifier.
 
 ##### S_EVENT_RUNWAY_TAKEOFF
 
-Fires at the exact moment an aircraft leaves the ground.
+The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
 
 **Event Table:**
 ```lua
@@ -3432,11 +3448,11 @@ Fires at the exact moment an aircraft leaves the ground.
 }
 ```
 
-**Gotchas:** On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
+The `initiator` field contains the Unit object representing the aircraft. The `place` field contains the Airbase object.
 
 ##### S_EVENT_RUNWAY_TOUCH
 
-Fires at the exact moment an aircraft touches the ground after being airborne.
+The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
 
 **Event Table:**
 ```lua
@@ -3448,24 +3464,26 @@ Fires at the exact moment an aircraft touches the ground after being airborne.
 }
 ```
 
-**Gotchas:** On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
+The `initiator` field contains the Unit object representing the aircraft. The `place` field contains the Airbase object.
 
 ##### S_EVENT_REFUELING
 
-Fires when an aircraft connects with a tanker and begins taking on fuel.
+The `S_EVENT_REFUELING` event fires when an aircraft connects with a tanker and begins taking on fuel.
 
 **Event Table:**
 ```lua
 {
     id = 7,
     time = number,
-    initiator = Unit  -- Aircraft receiving fuel
+    initiator = Unit
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft receiving fuel.
+
 ##### S_EVENT_REFUELING_STOP
 
-Fires when an aircraft disconnects from a tanker.
+The `S_EVENT_REFUELING_STOP` event fires when an aircraft disconnects from a tanker.
 
 **Event Table:**
 ```lua
@@ -3476,25 +3494,27 @@ Fires when an aircraft disconnects from a tanker.
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that disconnected from the tanker.
+
 ##### S_EVENT_EJECTION
 
-Fires when a pilot ejects from an aircraft.
+The `S_EVENT_EJECTION` event fires when a pilot ejects from an aircraft. For aircraft with ejector seats, the `target` field contains the seat object rather than the pilot; wait for `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` to get the pilot. The pilot object is special and most scripting functions do not work on it.
 
 **Event Table:**
 ```lua
 {
     id = 6,
     time = number,
-    initiator = Unit,  -- Aircraft being ejected from
-    target = Object    -- Ejector seat or pilot object
+    initiator = Unit,
+    target = Object
 }
 ```
 
-**Gotchas:** For aircraft with ejector seats, `target` is the seat object. Wait for `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` to get the pilot. The pilot object is special and most scripting functions don't work on it.
+The `initiator` field contains the Unit object representing the aircraft from which the pilot ejected. The `target` field contains the ejector seat or pilot object.
 
 ##### S_EVENT_DISCARD_CHAIR_AFTER_EJECTION
 
-Fires when the ejector seat separates from the pilot.
+The `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` event fires when the ejector seat separates from the pilot.
 
 **Event Table:**
 ```lua
@@ -3502,13 +3522,15 @@ Fires when the ejector seat separates from the pilot.
     id = 32,
     time = number,
     initiator = Unit,
-    target = Object  -- Pilot object
+    target = Object
 }
 ```
 
+The `initiator` field contains the Unit object representing the original aircraft. The `target` field contains the pilot object.
+
 ##### S_EVENT_LANDING_AFTER_EJECTION
 
-Fires when an ejected pilot lands (parachute touchdown).
+The `S_EVENT_LANDING_AFTER_EJECTION` event fires when an ejected pilot lands after the parachute touchdown.
 
 **Event Table:**
 ```lua
@@ -3516,13 +3538,15 @@ Fires when an ejected pilot lands (parachute touchdown).
     id = 31,
     time = number,
     initiator = Unit,
-    target = Object  -- Pilot object
+    target = Object
 }
 ```
 
+The `initiator` field contains the Unit object representing the original aircraft. The `target` field contains the pilot object.
+
 ##### S_EVENT_ENGINE_STARTUP
 
-Fires when an aircraft starts its engines.
+The `S_EVENT_ENGINE_STARTUP` event fires when an aircraft starts its engines.
 
 **Event Table:**
 ```lua
@@ -3533,9 +3557,11 @@ Fires when an aircraft starts its engines.
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that started its engines.
+
 ##### S_EVENT_ENGINE_SHUTDOWN
 
-Fires when an aircraft shuts down its engines.
+The `S_EVENT_ENGINE_SHUTDOWN` event fires when an aircraft shuts down its engines.
 
 **Event Table:**
 ```lua
@@ -3546,9 +3572,11 @@ Fires when an aircraft shuts down its engines.
 }
 ```
 
+The `initiator` field contains the Unit object representing the aircraft that shut down its engines.
+
 ##### S_EVENT_LANDING_QUALITY_MARK
 
-Fires for carrier landings with LSO grade information.
+The `S_EVENT_LANDING_QUALITY_MARK` event fires for carrier landings and includes LSO grade information.
 
 **Event Table:**
 ```lua
@@ -3557,24 +3585,28 @@ Fires for carrier landings with LSO grade information.
     time = number,
     initiator = Unit,
     place = Airbase,
-    comment = string  -- LSO grade comments
+    comment = string
 }
 ```
+
+The `initiator` field contains the Unit object representing the aircraft that landed. The `place` field contains the Airbase object representing the carrier. The `comment` field contains the LSO grade comments.
 
 #### Player Events
 
 ##### S_EVENT_BIRTH
 
-Fires when any unit spawns into the mission.
+The `S_EVENT_BIRTH` event fires when any unit spawns into the mission.
 
 **Event Table:**
 ```lua
 {
     id = 15,
     time = number,
-    initiator = Unit  -- Unit that was born
+    initiator = Unit
 }
 ```
+
+The `initiator` field contains the Unit object that was spawned.
 
 ```lua
 -- Set up player menus when they spawn
@@ -3590,18 +3622,18 @@ end
 
 ##### S_EVENT_PLAYER_ENTER_UNIT
 
-Fires when a player takes control of a unit.
+The `S_EVENT_PLAYER_ENTER_UNIT` event fires when a player takes control of a unit. This event correctly fires for Combined Arms units.
 
 **Event Table:**
 ```lua
 {
     id = 20,
     time = number,
-    initiator = Unit  -- Unit being controlled
+    initiator = Unit
 }
 ```
 
-**Gotchas:** This event correctly fires for Combined Arms units.
+The `initiator` field contains the Unit object that the player is now controlling.
 
 ```lua
 function handler:onEvent(event)
@@ -3615,7 +3647,7 @@ end
 
 ##### S_EVENT_PLAYER_LEAVE_UNIT
 
-Fires when a player leaves a unit (disconnects, spectates, or changes slot).
+The `S_EVENT_PLAYER_LEAVE_UNIT` event fires when a player leaves a unit, whether by disconnecting, spectating, or changing slot.
 
 **Event Table:**
 ```lua
@@ -3626,9 +3658,11 @@ Fires when a player leaves a unit (disconnects, spectates, or changes slot).
 }
 ```
 
+The `initiator` field contains the Unit object that the player left.
+
 ##### S_EVENT_PLAYER_COMMENT
 
-Fires when a player sends a chat message.
+The `S_EVENT_PLAYER_COMMENT` event fires when a player sends a chat message.
 
 **Event Table:**
 ```lua
@@ -3636,15 +3670,17 @@ Fires when a player sends a chat message.
     id = 22,
     time = number,
     initiator = Unit,
-    comment = string  -- Chat message text
+    comment = string
 }
 ```
+
+The `initiator` field contains the Unit object representing the player who sent the message. The `comment` field contains the chat message text.
 
 #### Mission Events
 
 ##### S_EVENT_MISSION_START
 
-Fires when the mission begins.
+The `S_EVENT_MISSION_START` event fires when the mission begins.
 
 **Event Table:**
 ```lua
@@ -3656,7 +3692,7 @@ Fires when the mission begins.
 
 ##### S_EVENT_MISSION_END
 
-Fires when the mission ends.
+The `S_EVENT_MISSION_END` event fires when the mission ends.
 
 **Event Table:**
 ```lua
@@ -3668,21 +3704,23 @@ Fires when the mission ends.
 
 ##### S_EVENT_BASE_CAPTURED
 
-Fires when an airbase changes coalition.
+The `S_EVENT_BASE_CAPTURED` event fires when an airbase changes coalition.
 
 **Event Table:**
 ```lua
 {
     id = 10,
     time = number,
-    initiator = Unit,    -- Unit that captured
-    place = Airbase      -- Airbase that was captured
+    initiator = Unit,
+    place = Airbase
 }
 ```
 
+The `initiator` field contains the Unit object that captured the base. The `place` field contains the Airbase object that was captured.
+
 ##### S_EVENT_AI_ABORT_MISSION
 
-Fires when an AI group aborts its mission.
+The `S_EVENT_AI_ABORT_MISSION` event fires when an AI group aborts its mission.
 
 **Event Table:**
 ```lua
@@ -3693,27 +3731,31 @@ Fires when an AI group aborts its mission.
 }
 ```
 
+The `initiator` field contains the Unit object representing a unit from the group that aborted its mission.
+
 #### Marker Events
 
 Map marker events allow scripts to respond to player map annotations.
 
 ##### S_EVENT_MARK_ADDED
 
-Fires when a mark or shape is added to the map.
+The `S_EVENT_MARK_ADDED` event fires when a mark or shape is added to the map.
 
 **Event Table:**
 ```lua
 {
     id = 25,
     time = number,
-    initiator = Unit,     -- Unit that created the mark (nil for scripts)
-    idx = number,         -- Unique mark ID
-    coalition = number,   -- -1 if visible to all
-    groupID = number,     -- -1 if visible to all in coalition
-    text = string,        -- Mark text
-    pos = Vec3            -- Mark position
+    initiator = Unit,
+    idx = number,
+    coalition = number,
+    groupID = number,
+    text = string,
+    pos = Vec3
 }
 ```
+
+The `initiator` field contains the Unit object that created the mark, or nil if the mark was created by a script. The `idx` field contains a unique marker ID. The `coalition` field contains the coalition the marker is visible to, or -1 if visible to all coalitions. The `groupID` field contains the group the marker is visible to, or -1 if visible to all groups in the coalition. The `text` field contains the marker text. The `pos` field contains the marker position as a Vec3.
 
 ```lua
 -- React to player placing marks with keywords
@@ -3728,7 +3770,7 @@ end
 
 ##### S_EVENT_MARK_CHANGE
 
-Fires when a mark is modified.
+The `S_EVENT_MARK_CHANGE` event fires when a mark is modified.
 
 **Event Table:**
 ```lua
@@ -3744,9 +3786,11 @@ Fires when a mark is modified.
 }
 ```
 
+The fields have the same meanings as in `S_EVENT_MARK_ADDED`.
+
 ##### S_EVENT_MARK_REMOVE
 
-Fires when a mark is deleted.
+The `S_EVENT_MARK_REMOVE` event fires when a mark is deleted.
 
 **Event Table:**
 ```lua
@@ -3761,11 +3805,13 @@ Fires when a mark is deleted.
 }
 ```
 
+The fields have the same meanings as in `S_EVENT_MARK_ADDED`.
+
 #### Weapon Events
 
 ##### S_EVENT_WEAPON_ADD
 
-Fires when a weapon is added to a unit (e.g., during rearming).
+The `S_EVENT_WEAPON_ADD` event fires when a weapon is added to a unit, such as during rearming.
 
 **Event Table:**
 ```lua
@@ -3776,6 +3822,8 @@ Fires when a weapon is added to a unit (e.g., during rearming).
     weapon_name = string
 }
 ```
+
+The `initiator` field contains the Unit object that received the weapon. The `weapon_name` field contains the type name of the weapon that was added.
 
 ### AI Control
 
@@ -3789,9 +3837,7 @@ AI behavior is controlled through three mechanisms:
 - **Commands** are instant actions that execute immediately (set frequency, activate beacon, etc.). They do not enter the task queue.
 - **Options** configure AI behavior settings (ROE, reaction to threat, formation, etc.).
 
-Tasks are issued via `controller:setTask()`, `controller:pushTask()`, or `controller:popTask()`. Commands use `controller:setCommand()`. Options use `controller:setOption()`.
-
-**Gotchas:** After spawning a group with `coalition.addGroup()`, you must add a delay before issuing tasks to the controller. Issuing tasks immediately after spawning can crash the game. Use `timer.scheduleFunction()` to delay by at least 1 second.
+Tasks are issued via `controller:setTask()`, `controller:pushTask()`, or `controller:popTask()`. Commands use `controller:setCommand()`. Options use `controller:setOption()`. After spawning a group with `coalition.addGroup()`, you must add a delay before issuing tasks to the controller, because issuing tasks immediately after spawning can crash the game. Use `timer.scheduleFunction()` to delay by at least 1 second.
 
 #### Task Structure
 
@@ -3817,7 +3863,7 @@ Tasks are divided into:
 
 ##### ComboTask
 
-A container that holds multiple tasks to be executed in sequence.
+The `ComboTask` wrapper is a container that holds multiple tasks to be executed in sequence. This is the default task format used by the Mission Editor for groups with multiple waypoint tasks.
 
 ```lua
 local combo = {
@@ -3832,11 +3878,11 @@ local combo = {
 }
 ```
 
-This is the default task format used by the Mission Editor for groups with multiple waypoint tasks.
+The `tasks` field contains an array of task definitions that will be executed in order.
 
 ##### ControlledTask
 
-Wraps a task with start and stop conditions.
+The `ControlledTask` wrapper wraps a task with start and stop conditions. Options and commands do not support stop conditions because they execute instantly.
 
 ```lua
 local controlled = {
@@ -3844,27 +3890,25 @@ local controlled = {
     params = {
         task = innerTask,
         condition = {
-            -- Start conditions (evaluated once when task is reached)
-            time = number,        -- Mission time in seconds
-            condition = string,   -- Lua code returning true/false
-            userFlag = string,    -- Flag name to check
-            userFlagValue = boolean,  -- Expected flag value
-            probability = number  -- 0-100 chance of execution
-        },
-        stopCondition = {
-            -- Stop conditions (evaluated continuously)
             time = number,
             condition = string,
             userFlag = string,
             userFlagValue = boolean,
-            duration = number,    -- Seconds to run before stopping
-            lastWaypoint = number -- Stop when reaching this waypoint
+            probability = number
+        },
+        stopCondition = {
+            time = number,
+            condition = string,
+            userFlag = string,
+            userFlagValue = boolean,
+            duration = number,
+            lastWaypoint = number
         }
     }
 }
 ```
 
-**Gotchas:** Options and commands do NOT support stopConditions because they execute instantly.
+The `task` field contains the inner task to be controlled. The `condition` field contains start conditions that are evaluated once when the task is reached: `time` specifies a mission time in seconds, `condition` contains Lua code returning true or false, `userFlag` specifies a flag name to check, `userFlagValue` specifies the expected flag value, and `probability` specifies a 0-100 chance of execution. The `stopCondition` field contains stop conditions that are evaluated continuously: `duration` specifies seconds to run before stopping, and `lastWaypoint` specifies the waypoint index at which to stop.
 
 ```lua
 -- Task with 70% chance that runs for 15 minutes
@@ -3884,7 +3928,7 @@ local timedOrbit = {
             probability = 70
         },
         stopCondition = {
-            duration = 900  -- 15 minutes
+            duration = 900
         }
     }
 }
@@ -3892,7 +3936,7 @@ local timedOrbit = {
 
 ##### WrappedAction
 
-Wraps a command or option as a task so it can be placed in the task queue.
+The `WrappedAction` wrapper wraps a command or option as a task so it can be placed in the task queue.
 
 ```lua
 local wrapped = {
@@ -3910,13 +3954,15 @@ local wrapped = {
 }
 ```
 
+The `action` field contains the command or option to be wrapped.
+
 #### Main Tasks
 
 Main tasks define the primary behavior of a group.
 
 ##### Orbit
 
-Orders aircraft to orbit at a location.
+The `Orbit` task orders aircraft to orbit at a location.
 
 **For:** Airplanes, Helicopters
 
@@ -3924,19 +3970,20 @@ Orders aircraft to orbit at a location.
 local orbit = {
     id = 'Orbit',
     params = {
-        pattern = string,     -- "Circle", "Race-Track", or "Anchored"
-        point = Vec2,         -- Center point (optional, uses current waypoint)
-        point2 = Vec2,        -- Second point for Race-Track (optional)
-        speed = number,       -- Speed in m/s (optional, defaults to 1.5x stall)
-        altitude = number,    -- Altitude in meters (optional)
-        -- For Anchored pattern only:
-        hotLegDir = number,   -- Heading in radians for return leg
-        legLength = number,   -- Distance in meters before turning
-        width = number,       -- Orbit diameter in meters
-        clockWise = boolean   -- true for clockwise (default: false)
+        pattern = string,
+        point = Vec2,
+        point2 = Vec2,
+        speed = number,
+        altitude = number,
+        hotLegDir = number,
+        legLength = number,
+        width = number,
+        clockWise = boolean
     }
 }
 ```
+
+The `pattern` field specifies the orbit pattern: "Circle", "Race-Track", or "Anchored". The `point` field contains the center point as a Vec2; if omitted, the aircraft uses the current waypoint. The `point2` field specifies a second point for Race-Track patterns. The `speed` field specifies the orbit speed in meters per second; if omitted, the aircraft defaults to approximately 1.5 times its stall speed. The `altitude` field specifies the orbit altitude in meters. For the Anchored pattern only, the `hotLegDir` field specifies the heading in radians for the return leg, the `legLength` field specifies the distance in meters before turning, the `width` field specifies the orbit diameter in meters, and the `clockWise` field specifies whether to orbit clockwise (defaults to false).
 
 **Pattern Enum:**
 ```lua
@@ -3944,11 +3991,11 @@ AI.Task.OrbitPattern = {
     RACE_TRACK = "Race-Track",
     CIRCLE = "Circle"
 }
--- "Anchored" is also valid but not in the enum
 ```
 
+The "Anchored" pattern is also valid but is not included in the `AI.Task.OrbitPattern` enum.
+
 ```lua
--- Make an aircraft orbit at 8000m altitude
 local orbit = {
     id = 'Orbit',
     params = {
@@ -3963,7 +4010,7 @@ Group.getByName('CAP Flight'):getController():setTask(orbit)
 
 ##### AttackUnit
 
-Orders aircraft to attack a specific unit.
+The `AttackUnit` task orders aircraft to attack a specific unit. The target unit is automatically detected by the attacking group.
 
 **For:** Airplanes, Helicopters
 
@@ -3971,16 +4018,18 @@ Orders aircraft to attack a specific unit.
 local attack = {
     id = 'AttackUnit',
     params = {
-        unitId = number,          -- Required: Target unit ID
-        weaponType = number,      -- Weapon flags bitmask (optional)
-        expend = string,          -- Ordnance per pass (optional)
-        direction = number,       -- Attack azimuth in radians (optional)
-        attackQtyLimit = boolean, -- Enable attack count limit (optional)
-        attackQty = number,       -- Number of attack passes (optional)
-        groupAttack = boolean     -- All aircraft attack same target (optional)
+        unitId = number,
+        weaponType = number,
+        expend = string,
+        direction = number,
+        attackQtyLimit = boolean,
+        attackQty = number,
+        groupAttack = boolean
     }
 }
 ```
+
+The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a weapon flags bitmask. The `expend` field specifies how much ordnance to use per pass. The `direction` field specifies the attack azimuth in radians. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
 
 **WeaponExpend Enum:**
 ```lua
@@ -3995,12 +4044,11 @@ AI.Task.WeaponExpend = {
 ```
 
 ```lua
--- Attack a unit with 2 missiles, single pass
 local attack = {
     id = 'AttackUnit',
     params = {
         unitId = Unit.getByName("Target"):getID(),
-        weaponType = 4161536,  -- Any ASM
+        weaponType = 4161536,
         expend = "Two",
         attackQtyLimit = true,
         attackQty = 1
@@ -4008,11 +4056,9 @@ local attack = {
 }
 ```
 
-**Gotchas:** The target unit is automatically detected by the attacking group. Set `groupAttack = true` when attacking heavily defended targets (like ships) that require multiple simultaneous hits.
-
 ##### AttackGroup
 
-Orders aircraft to attack all units in a group.
+The `AttackGroup` task orders aircraft to attack all units in a group.
 
 **For:** Airplanes, Helicopters
 
@@ -4020,7 +4066,7 @@ Orders aircraft to attack all units in a group.
 local attack = {
     id = 'AttackGroup',
     params = {
-        groupId = number,         -- Required: Target group ID
+        groupId = number,
         weaponType = number,
         expend = string,
         direction = number,
@@ -4030,9 +4076,11 @@ local attack = {
 }
 ```
 
+The `groupId` field is required and contains the unique numeric identifier of the target group; call `group:getID()` on a Group object to obtain this value. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task.
+
 ##### Bombing
 
-Orders aircraft to bomb a specific point.
+The `Bombing` task orders aircraft to bomb a specific point.
 
 **For:** Airplanes, Helicopters
 
@@ -4040,21 +4088,23 @@ Orders aircraft to bomb a specific point.
 local bomb = {
     id = 'Bombing',
     params = {
-        point = Vec2,             -- Required: Target coordinates
+        point = Vec2,
         weaponType = number,
         expend = string,
         attackQtyLimit = boolean,
         attackQty = number,
         direction = number,
-        altitude = number,        -- Attack altitude in meters
-        attackType = string       -- "Dive" or horizontal
+        altitude = number,
+        attackType = string
     }
 }
 ```
 
+The `point` field is required and contains the target coordinates as a Vec2. The `altitude` field specifies the attack altitude in meters. The `attackType` field specifies the attack profile, such as "Dive" for dive bombing or horizontal for level bombing. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task.
+
 ##### BombingRunway
 
-Orders aircraft to bomb an airfield runway.
+The `BombingRunway` task orders aircraft to bomb an airfield runway.
 
 **For:** Airplanes
 
@@ -4062,7 +4112,7 @@ Orders aircraft to bomb an airfield runway.
 local bomb = {
     id = 'BombingRunway',
     params = {
-        runwayId = number,        -- Airbase ID
+        runwayId = number,
         weaponType = number,
         expend = string,
         direction = number
@@ -4070,9 +4120,11 @@ local bomb = {
 }
 ```
 
+The `runwayId` field contains the airbase ID. The `weaponType`, `expend`, and `direction` fields work the same as in the `AttackUnit` task.
+
 ##### CarpetBombing
 
-Orders aircraft to perform carpet bombing along a path.
+The `CarpetBombing` task orders aircraft to perform carpet bombing along a path.
 
 **For:** Airplanes
 
@@ -4080,19 +4132,21 @@ Orders aircraft to perform carpet bombing along a path.
 local carpet = {
     id = 'CarpetBombing',
     params = {
-        point = Vec2,             -- Start point
+        point = Vec2,
         weaponType = number,
         expend = string,
         direction = number,
         attackQty = number,
-        carpetLength = number     -- Length of carpet in meters
+        carpetLength = number
     }
 }
 ```
 
+The `point` field contains the start point as a Vec2. The `carpetLength` field specifies the length of the carpet in meters. The `weaponType`, `expend`, `direction`, and `attackQty` fields work the same as in the `AttackUnit` task.
+
 ##### Escort
 
-Orders aircraft to escort and protect another group.
+The `Escort` task orders aircraft to escort and protect another group.
 
 **For:** Airplanes, Helicopters
 
@@ -4100,19 +4154,21 @@ Orders aircraft to escort and protect another group.
 local escort = {
     id = 'Escort',
     params = {
-        groupId = number,         -- Group to escort
-        engagementDistMax = number, -- Max engagement range in meters
-        targetTypes = table,      -- Array of attribute names to engage
-        pos = Vec3,               -- Offset from escorted group
+        groupId = number,
+        engagementDistMax = number,
+        targetTypes = table,
+        pos = Vec3,
         lastWptIndexFlag = boolean,
         lastWptIndex = number
     }
 }
 ```
 
+The `groupId` field contains the ID of the group to escort. The `engagementDistMax` field specifies the maximum engagement range in meters. The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `pos` field specifies the position offset from the escorted group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the escort task ends.
+
 ##### Follow
 
-Orders aircraft to follow another group in formation.
+The `Follow` task orders aircraft to follow another group in formation.
 
 **For:** Airplanes, Helicopters
 
@@ -4120,17 +4176,19 @@ Orders aircraft to follow another group in formation.
 local follow = {
     id = 'Follow',
     params = {
-        groupId = number,         -- Group to follow
-        pos = Vec3,               -- Position offset
+        groupId = number,
+        pos = Vec3,
         lastWptIndexFlag = boolean,
         lastWptIndex = number
     }
 }
 ```
 
+The `groupId` field contains the ID of the group to follow. The `pos` field specifies the position offset from the followed group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the follow task ends.
+
 ##### GoToWaypoint
 
-Orders the group to proceed to a specific waypoint.
+The `GoToWaypoint` task orders the group to proceed to a specific waypoint.
 
 **For:** Airplanes, Helicopters, Ground, Ships
 
@@ -4138,15 +4196,17 @@ Orders the group to proceed to a specific waypoint.
 local goto = {
     id = 'GoToWaypoint',
     params = {
-        fromWaypointIndex = number, -- Starting waypoint
-        goToWaypointIndex = number  -- Destination waypoint
+        fromWaypointIndex = number,
+        goToWaypointIndex = number
     }
 }
 ```
 
+The `fromWaypointIndex` field specifies the starting waypoint index. The `goToWaypointIndex` field specifies the destination waypoint index.
+
 ##### Hold
 
-Orders ground units to stop and hold position.
+The `Hold` task orders ground units to stop and hold position. This task takes no parameters.
 
 **For:** Ground Vehicles
 
@@ -4159,7 +4219,7 @@ local hold = {
 
 ##### FireAtPoint
 
-Orders ground units to fire at a specific location.
+The `FireAtPoint` task orders ground units to fire at a specific location.
 
 **For:** Ground Vehicles (artillery)
 
@@ -4167,17 +4227,19 @@ Orders ground units to fire at a specific location.
 local fire = {
     id = 'FireAtPoint',
     params = {
-        point = Vec2,             -- Target coordinates
-        radius = number,          -- Dispersion radius in meters
-        expendQty = number,       -- Rounds to fire (optional)
+        point = Vec2,
+        radius = number,
+        expendQty = number,
         expendQtyEnabled = boolean
     }
 }
 ```
 
+The `point` field contains the target coordinates as a Vec2. The `radius` field specifies the dispersion radius in meters. The `expendQty` field specifies how many rounds to fire when `expendQtyEnabled` is true.
+
 ##### Land
 
-Orders aircraft to land at an airbase or point.
+The `Land` task orders aircraft to land at an airbase or point.
 
 **For:** Airplanes, Helicopters
 
@@ -4185,16 +4247,18 @@ Orders aircraft to land at an airbase or point.
 local land = {
     id = 'Land',
     params = {
-        point = Vec2,             -- Landing point
+        point = Vec2,
         durationFlag = boolean,
-        duration = number         -- Time to stay on ground
+        duration = number
     }
 }
 ```
 
+The `point` field contains the landing point as a Vec2. The `duration` field specifies how long to stay on the ground when `durationFlag` is true.
+
 ##### RecoveryTanker
 
-Orders a tanker to act as a carrier recovery tanker.
+The `RecoveryTanker` task orders a tanker to act as a carrier recovery tanker.
 
 **For:** Airplanes (tankers)
 
@@ -4202,7 +4266,7 @@ Orders a tanker to act as a carrier recovery tanker.
 local recovery = {
     id = 'RecoveryTanker',
     params = {
-        groupId = number,         -- Carrier group ID
+        groupId = number,
         speed = number,
         altitude = number,
         lastWptIndexFlag = boolean,
@@ -4211,13 +4275,15 @@ local recovery = {
 }
 ```
 
+The `groupId` field contains the carrier group ID. The `speed` field specifies the tanker's orbit speed. The `altitude` field specifies the orbit altitude. The `lastWptIndexFlag` and `lastWptIndex` fields control when the task ends.
+
 #### En-route Tasks
 
 En-route tasks run alongside the main mission, defining ongoing behaviors.
 
 ##### EngageTargets
 
-Orders aircraft to engage detected targets of specified types.
+The `EngageTargets` en-route task orders aircraft to engage detected targets of specified types.
 
 **For:** Airplanes, Helicopters
 
@@ -4225,14 +4291,15 @@ Orders aircraft to engage detected targets of specified types.
 local engage = {
     id = 'EngageTargets',
     params = {
-        targetTypes = table,      -- Array of attribute names
-        priority = number         -- Lower = higher priority (default: 0)
+        targetTypes = table,
+        priority = number
     }
 }
 ```
 
+The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority, where lower values indicate higher priority; the default is 0.
+
 ```lua
--- Engage any detected air targets
 local cap = {
     id = 'EngageTargets',
     params = {
@@ -4244,7 +4311,7 @@ local cap = {
 
 ##### EngageTargetsInZone
 
-Orders aircraft to engage targets within a specified zone.
+The `EngageTargetsInZone` en-route task orders aircraft to engage targets within a specified zone.
 
 **For:** Airplanes, Helicopters
 
@@ -4252,17 +4319,19 @@ Orders aircraft to engage targets within a specified zone.
 local engage = {
     id = 'EngageTargetsInZone',
     params = {
-        point = Vec2,             -- Zone center
-        zoneRadius = number,      -- Zone radius in meters
-        targetTypes = table,      -- Array of attribute names
+        point = Vec2,
+        zoneRadius = number,
+        targetTypes = table,
         priority = number
     }
 }
 ```
 
+The `point` field contains the zone center as a Vec2. The `zoneRadius` field specifies the zone radius in meters. The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority.
+
 ##### EngageGroup
 
-Orders aircraft to engage a specific enemy group.
+The `EngageGroup` en-route task orders aircraft to engage a specific enemy group.
 
 **For:** Airplanes, Helicopters
 
@@ -4270,7 +4339,7 @@ Orders aircraft to engage a specific enemy group.
 local engage = {
     id = 'EngageGroup',
     params = {
-        groupId = number,         -- Target group ID
+        groupId = number,
         weaponType = number,
         expend = string,
         priority = number
@@ -4278,9 +4347,11 @@ local engage = {
 }
 ```
 
+The `groupId` field contains the target group ID. The `weaponType` and `expend` fields work the same as in the `AttackUnit` task. The `priority` field specifies the task priority.
+
 ##### EngageUnit
 
-Orders aircraft to engage a specific enemy unit.
+The `EngageUnit` en-route task orders aircraft to engage a specific enemy unit.
 
 **For:** Airplanes, Helicopters
 
@@ -4297,9 +4368,11 @@ local engage = {
 }
 ```
 
+The `unitId` field contains the target unit ID. The `weaponType`, `expend`, and `groupAttack` fields work the same as in the `AttackUnit` task. The `priority` field specifies the task priority.
+
 ##### AWACS
 
-Designates an aircraft as an AWACS, providing radar coverage for friendly forces.
+The `AWACS` en-route task designates an aircraft as an AWACS, providing radar coverage for friendly forces. This task takes no parameters.
 
 **For:** Airplanes (AWACS-capable)
 
@@ -4312,7 +4385,7 @@ local awacs = {
 
 ##### Tanker
 
-Designates an aircraft as an aerial refueling tanker.
+The `Tanker` en-route task designates an aircraft as an aerial refueling tanker. This task takes no parameters.
 
 **For:** Airplanes (tanker-capable)
 
@@ -4325,7 +4398,7 @@ local tanker = {
 
 ##### FAC
 
-Designates a unit as a Forward Air Controller.
+The `FAC` en-route task designates a unit as a Forward Air Controller.
 
 **For:** Airplanes, Helicopters, Ground Vehicles
 
@@ -4333,17 +4406,19 @@ Designates a unit as a Forward Air Controller.
 local fac = {
     id = 'FAC',
     params = {
-        frequency = number,       -- Radio frequency in Hz
-        modulation = number,      -- 0 = AM, 1 = FM
-        callname = number,        -- FAC callsign index
-        number = number           -- FAC number
+        frequency = number,
+        modulation = number,
+        callname = number,
+        number = number
     }
 }
 ```
 
+The `frequency` field specifies the radio frequency in Hz. The `modulation` field specifies the modulation type, where 0 is AM and 1 is FM. The `callname` field specifies the FAC callsign index. The `number` field specifies the FAC number.
+
 ##### FAC_EngageGroup
 
-Orders a FAC to designate a group for attack.
+The `FAC_EngageGroup` en-route task orders a FAC to designate a group for attack.
 
 **For:** Airplanes, Helicopters, Ground Vehicles
 
@@ -4351,9 +4426,9 @@ Orders a FAC to designate a group for attack.
 local facEngage = {
     id = 'FAC_EngageGroup',
     params = {
-        groupId = number,         -- Target group
+        groupId = number,
         weaponType = number,
-        designation = string,     -- Designation method
+        designation = string,
         datalink = boolean,
         frequency = number,
         modulation = number,
@@ -4362,6 +4437,8 @@ local facEngage = {
     }
 }
 ```
+
+The `groupId` field contains the target group ID. The `weaponType` field specifies the weapon flags bitmask. The `designation` field specifies the designation method from the `AI.Task.Designation` enum. The `datalink` field specifies whether to use datalink. The `frequency`, `modulation`, `callname`, and `number` fields work the same as in the `FAC` task.
 
 **Designation Enum:**
 ```lua
@@ -4376,7 +4453,7 @@ AI.Task.Designation = {
 
 ##### EWR
 
-Designates a unit as an Early Warning Radar.
+The `EWR` en-route task designates a unit as an Early Warning Radar. This task takes no parameters.
 
 **For:** Ground Vehicles (radar-equipped)
 
@@ -4393,7 +4470,7 @@ Commands are instant actions that execute immediately. They do not enter the tas
 
 ##### SetFrequency
 
-Changes the group's radio frequency.
+The `SetFrequency` command changes the group's radio frequency.
 
 **For:** Airplanes, Helicopters, Ground Vehicles
 
@@ -4401,16 +4478,17 @@ Changes the group's radio frequency.
 local cmd = {
     id = 'SetFrequency',
     params = {
-        frequency = number,       -- Frequency in Hz (e.g., 251000000 for 251 MHz)
-        modulation = number,      -- 0 = AM, 1 = FM
-        power = number            -- Power in watts (10 is typical)
+        frequency = number,
+        modulation = number,
+        power = number
     }
 }
 controller:setCommand(cmd)
 ```
 
+The `frequency` field specifies the frequency in Hz; for example, 251000000 represents 251 MHz. The `modulation` field specifies the modulation type, where 0 is AM and 1 is FM. The `power` field specifies the transmission power in watts; 10 is a typical value.
+
 ```lua
--- Set frequency to 131 MHz AM
 local freq = {
     id = "SetFrequency",
     params = {
@@ -4424,7 +4502,7 @@ Group.getByName("AWACS"):getController():setCommand(freq)
 
 ##### SetInvisible
 
-Makes the group invisible to enemy AI sensors.
+The `SetInvisible` command makes the group invisible to enemy AI sensors.
 
 **For:** All unit types
 
@@ -4432,14 +4510,16 @@ Makes the group invisible to enemy AI sensors.
 local cmd = {
     id = 'SetInvisible',
     params = {
-        value = boolean           -- true = invisible
+        value = boolean
     }
 }
 ```
 
+The `value` field specifies whether to enable invisibility; set to true to make the group invisible.
+
 ##### SetImmortal
 
-Makes the group invulnerable to all damage.
+The `SetImmortal` command makes the group invulnerable to all damage.
 
 **For:** All unit types
 
@@ -4447,14 +4527,16 @@ Makes the group invulnerable to all damage.
 local cmd = {
     id = 'SetImmortal',
     params = {
-        value = boolean           -- true = immortal
+        value = boolean
     }
 }
 ```
 
+The `value` field specifies whether to enable invulnerability; set to true to make the group immortal.
+
 ##### SetUnlimitedFuel
 
-Gives the group unlimited fuel.
+The `SetUnlimitedFuel` command gives the group unlimited fuel.
 
 **For:** Airplanes, Helicopters
 
@@ -4467,9 +4549,11 @@ local cmd = {
 }
 ```
 
+The `value` field specifies whether to enable unlimited fuel.
+
 ##### Start
 
-Starts the engines of an aircraft.
+The `Start` command starts the engines of an aircraft. This command takes no parameters.
 
 **For:** Airplanes, Helicopters
 
@@ -4482,7 +4566,7 @@ local cmd = {
 
 ##### SwitchWaypoint
 
-Changes the group's current waypoint.
+The `SwitchWaypoint` command changes the group's current waypoint.
 
 **For:** Airplanes, Helicopters, Ground, Ships
 
@@ -4496,9 +4580,11 @@ local cmd = {
 }
 ```
 
+The `fromWaypointIndex` field specifies the starting waypoint index. The `goToWaypointIndex` field specifies the destination waypoint index.
+
 ##### StopRoute
 
-Stops or resumes the group's route following.
+The `StopRoute` command stops or resumes the group's route following.
 
 **For:** All unit types
 
@@ -4506,14 +4592,16 @@ Stops or resumes the group's route following.
 local cmd = {
     id = 'StopRoute',
     params = {
-        value = boolean           -- true = stop route
+        value = boolean
     }
 }
 ```
 
+The `value` field specifies whether to stop the route; set to true to stop route following.
+
 ##### SwitchAction
 
-Switches the group's current action.
+The `SwitchAction` command switches the group's current action.
 
 **For:** All unit types
 
@@ -4526,9 +4614,11 @@ local cmd = {
 }
 ```
 
+The `actionIndex` field specifies the index of the action to switch to.
+
 ##### ActivateBeacon
 
-Activates a navigation beacon on the unit.
+The `ActivateBeacon` command activates a navigation beacon on the unit. Only one beacon can be active per unit at a time; activating a new beacon deactivates any existing beacon.
 
 **For:** All unit types
 
@@ -4536,14 +4626,16 @@ Activates a navigation beacon on the unit.
 local cmd = {
     id = 'ActivateBeacon',
     params = {
-        type = number,            -- Beacon type
-        system = number,          -- Beacon system
-        name = string,            -- Display name (optional)
-        callsign = string,        -- Morse code callsign
-        frequency = number        -- Frequency in Hz
+        type = number,
+        system = number,
+        name = string,
+        callsign = string,
+        frequency = number
     }
 }
 ```
+
+The `type` field specifies the beacon type from the beacon type constants. The `system` field specifies the beacon system from the `SystemName` enum. The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign. The `frequency` field specifies the beacon frequency in Hz.
 
 **Beacon Types:**
 ```lua
@@ -4578,11 +4670,9 @@ SystemName = {
 }
 ```
 
-**Gotchas:** Only one beacon can be active per unit at a time. Activating a new beacon deactivates the old one.
-
 ##### DeactivateBeacon
 
-Deactivates any active beacon.
+The `DeactivateBeacon` command deactivates any active beacon on the unit. This command takes no parameters.
 
 **For:** All unit types
 
@@ -4595,7 +4685,7 @@ local cmd = {
 
 ##### ActivateACLS
 
-Activates the Automatic Carrier Landing System on a carrier.
+The `ActivateACLS` command activates the Automatic Carrier Landing System on a carrier. This command takes no parameters.
 
 **For:** Ships (carriers)
 
@@ -4608,7 +4698,7 @@ local cmd = {
 
 ##### DeactivateACLS
 
-Deactivates ACLS.
+The `DeactivateACLS` command deactivates the Automatic Carrier Landing System. This command takes no parameters.
 
 **For:** Ships (carriers)
 
@@ -4621,7 +4711,7 @@ local cmd = {
 
 ##### ActivateLink4
 
-Activates Link 4 datalink on a carrier.
+The `ActivateLink4` command activates Link 4 datalink on a carrier.
 
 **For:** Ships (carriers)
 
@@ -4629,15 +4719,17 @@ Activates Link 4 datalink on a carrier.
 local cmd = {
     id = 'ActivateLink4',
     params = {
-        unitId = number,          -- Aircraft unit ID
-        frequency = number        -- Link 4 frequency
+        unitId = number,
+        frequency = number
     }
 }
 ```
 
+The `unitId` field contains the aircraft unit ID. The `frequency` field specifies the Link 4 frequency.
+
 ##### DeactivateLink4
 
-Deactivates Link 4 datalink.
+The `DeactivateLink4` command deactivates Link 4 datalink. This command takes no parameters.
 
 **For:** Ships (carriers)
 
@@ -4650,7 +4742,7 @@ local cmd = {
 
 ##### ActivateICLS
 
-Activates the Instrument Carrier Landing System.
+The `ActivateICLS` command activates the Instrument Carrier Landing System.
 
 **For:** Ships (carriers)
 
@@ -4658,14 +4750,16 @@ Activates the Instrument Carrier Landing System.
 local cmd = {
     id = 'ActivateICLS',
     params = {
-        channel = number          -- ICLS channel
+        channel = number
     }
 }
 ```
 
+The `channel` field specifies the ICLS channel.
+
 ##### DeactivateICLS
 
-Deactivates ICLS.
+The `DeactivateICLS` command deactivates the Instrument Carrier Landing System. This command takes no parameters.
 
 **For:** Ships (carriers)
 
@@ -4678,7 +4772,7 @@ local cmd = {
 
 ##### EPLRS
 
-Enables or disables EPLRS (Enhanced Position Location Reporting System).
+The `EPLRS` command enables or disables EPLRS (Enhanced Position Location Reporting System).
 
 **For:** All unit types
 
@@ -4687,14 +4781,16 @@ local cmd = {
     id = 'EPLRS',
     params = {
         value = boolean,
-        groupId = number          -- Group to link with (optional)
+        groupId = number
     }
 }
 ```
 
+The `value` field specifies whether to enable EPLRS. The `groupId` field is optional and specifies the group to link with.
+
 ##### TransmitMessage
 
-Transmits an audio message.
+The `TransmitMessage` command transmits an audio message.
 
 **For:** All unit types
 
@@ -4702,17 +4798,19 @@ Transmits an audio message.
 local cmd = {
     id = 'TransmitMessage',
     params = {
-        file = string,            -- Sound file path
-        duration = number,        -- Message duration
-        subtitle = string,        -- Subtitle text
+        file = string,
+        duration = number,
+        subtitle = string,
         loop = boolean
     }
 }
 ```
 
+The `file` field specifies the sound file path. The `duration` field specifies the message duration. The `subtitle` field specifies the subtitle text. The `loop` field specifies whether to loop the message.
+
 ##### StopTransmission
 
-Stops any active transmission.
+The `StopTransmission` command stops any active transmission. This command takes no parameters.
 
 **For:** All unit types
 
@@ -4725,7 +4823,7 @@ local cmd = {
 
 ##### Smoke_On_Off
 
-Toggles smoke trail on or off.
+The `Smoke_On_Off` command toggles a smoke trail on or off.
 
 **For:** Airplanes (aerobatic aircraft)
 
@@ -4737,6 +4835,8 @@ local cmd = {
     }
 }
 ```
+
+The `value` field specifies whether to enable the smoke trail.
 
 #### Options
 
@@ -4752,52 +4852,47 @@ Options are separated by unit domain: Air, Ground, and Naval.
 
 ##### ROE (Rules of Engagement)
 
-Controls when AI aircraft will engage targets.
+The `ROE` option controls when AI aircraft will engage targets.
 
 ```lua
 AI.Option.Air.id.ROE = 0
 
 AI.Option.Air.val.ROE = {
-    WEAPON_FREE = 0,          -- Attack any detected enemy
-    OPEN_FIRE_WEAPON_FREE = 1, -- Attack enemies attacking friendlies, engage at will
-    OPEN_FIRE = 2,            -- Attack enemies attacking friendlies only
-    RETURN_FIRE = 3,          -- Only fire when fired upon
-    WEAPON_HOLD = 4           -- Never fire
+    WEAPON_FREE = 0,
+    OPEN_FIRE_WEAPON_FREE = 1,
+    OPEN_FIRE = 2,
+    RETURN_FIRE = 3,
+    WEAPON_HOLD = 4
 }
 ```
 
+The `WEAPON_FREE` value allows attacking any detected enemy. The `OPEN_FIRE_WEAPON_FREE` value allows attacking enemies attacking friendlies while engaging at will. The `OPEN_FIRE` value allows attacking only enemies attacking friendlies. The `RETURN_FIRE` value allows firing only when fired upon. The `WEAPON_HOLD` value prevents all weapons fire.
+
 ```lua
--- Set weapons free
 controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_FREE)
 ```
 
 ##### REACTION_ON_THREAT
 
-Defines how aircraft respond to threats.
+The `REACTION_ON_THREAT` option defines how aircraft respond to threats.
 
 ```lua
 AI.Option.Air.id.REACTION_ON_THREAT = 1
 
 AI.Option.Air.val.REACTION_ON_THREAT = {
-    NO_REACTION = 0,          -- Ignore threats
-    PASSIVE_DEFENCE = 1,      -- Use countermeasures only
-    EVADE_FIRE = 2,           -- Defensive maneuvers + countermeasures
-    BYPASS_AND_ESCAPE = 3,    -- Avoid threat zones entirely
-    ALLOW_ABORT_MISSION = 4   -- May abort if threat is severe
+    NO_REACTION = 0,
+    PASSIVE_DEFENCE = 1,
+    EVADE_FIRE = 2,
+    BYPASS_AND_ESCAPE = 3,
+    ALLOW_ABORT_MISSION = 4
 }
--- AAA_EVADE_FIRE = 5 is also valid (S-turns at altitude)
 ```
 
-**Behaviors:**
-- **No Reaction:** No defensive actions
-- **Passive Defence:** Jammers and countermeasures only, no maneuvering
-- **Evade Fire:** Defensive maneuvers plus countermeasures
-- **Bypass and Escape:** Route around threat zones, fly above threats
-- **Allow Abort Mission:** May RTB if situation becomes too dangerous
+The `NO_REACTION` value causes no defensive actions. The `PASSIVE_DEFENCE` value causes the aircraft to use jammers and countermeasures only, without maneuvering. The `EVADE_FIRE` value causes defensive maneuvers plus countermeasures. The `BYPASS_AND_ESCAPE` value causes the aircraft to route around threat zones and fly above threats. The `ALLOW_ABORT_MISSION` value allows the aircraft to return to base if the situation becomes too dangerous. The value 5 (AAA_EVADE_FIRE) is also valid and causes S-turns at altitude.
 
 ##### RADAR_USING
 
-Controls radar usage.
+The `RADAR_USING` option controls radar usage.
 
 ```lua
 AI.Option.Air.id.RADAR_USING = 3
@@ -4812,7 +4907,7 @@ AI.Option.Air.val.RADAR_USING = {
 
 ##### FLARE_USING
 
-Controls flare and chaff deployment.
+The `FLARE_USING` option controls flare and chaff deployment.
 
 ```lua
 AI.Option.Air.id.FLARE_USING = 4
@@ -4827,43 +4922,39 @@ AI.Option.Air.val.FLARE_USING = {
 
 ##### Formation
 
-Sets the flight formation.
+The `Formation` option sets the flight formation. The value is a formation index number.
 
 ```lua
 AI.Option.Air.id.Formation = 5
--- Value is a formation index number
 ```
 
 ##### RTB_ON_BINGO
 
-Controls whether aircraft return to base when fuel is low.
+The `RTB_ON_BINGO` option controls whether aircraft return to base when fuel is low. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.RTB_ON_BINGO = 6
--- Value: boolean
 ```
 
 ##### SILENCE
 
-Disables radio communications.
+The `SILENCE` option disables radio communications. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.SILENCE = 7
--- Value: boolean
 ```
 
 ##### RTB_ON_OUT_OF_AMMO
 
-Controls whether aircraft return to base when out of ammunition.
+The `RTB_ON_OUT_OF_AMMO` option controls whether aircraft return to base when out of ammunition. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.RTB_ON_OUT_OF_AMMO = 10
--- Value: boolean
 ```
 
 ##### ECM_USING
 
-Controls ECM (Electronic Counter Measures) usage.
+The `ECM_USING` option controls ECM (Electronic Counter Measures) usage.
 
 ```lua
 AI.Option.Air.id.ECM_USING = 13
@@ -4878,104 +4969,99 @@ AI.Option.Air.val.ECM_USING = {
 
 ##### PROHIBIT_AA
 
-Prohibits air-to-air attacks.
+The `PROHIBIT_AA` option prohibits air-to-air attacks. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PROHIBIT_AA = 14
--- Value: boolean
 ```
 
 ##### PROHIBIT_JETT
 
-Prohibits jettisoning stores.
+The `PROHIBIT_JETT` option prohibits jettisoning stores. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PROHIBIT_JETT = 15
--- Value: boolean
 ```
 
 ##### PROHIBIT_AB
 
-Prohibits afterburner use.
+The `PROHIBIT_AB` option prohibits afterburner use. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PROHIBIT_AB = 16
--- Value: boolean
 ```
 
 ##### PROHIBIT_AG
 
-Prohibits air-to-ground attacks.
+The `PROHIBIT_AG` option prohibits air-to-ground attacks. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PROHIBIT_AG = 17
--- Value: boolean
 ```
 
 ##### MISSILE_ATTACK
 
-Controls missile launch range behavior.
+The `MISSILE_ATTACK` option controls missile launch range behavior.
 
 ```lua
 AI.Option.Air.id.MISSILE_ATTACK = 18
 
 AI.Option.Air.val.MISSILE_ATTACK = {
-    MAX_RANGE = 0,            -- Fire at maximum range
-    NEZ_RANGE = 1,            -- Fire at no-escape zone range
-    HALF_WAY_RMAX_NEZ = 2,    -- Fire halfway between max and NEZ
-    TARGET_THREAT_EST = 3,    -- Based on target threat assessment
-    RANDOM_RANGE = 4          -- Random range selection
+    MAX_RANGE = 0,
+    NEZ_RANGE = 1,
+    HALF_WAY_RMAX_NEZ = 2,
+    TARGET_THREAT_EST = 3,
+    RANDOM_RANGE = 4
 }
 ```
 
+The `MAX_RANGE` value causes firing at maximum range. The `NEZ_RANGE` value causes firing at no-escape zone range. The `HALF_WAY_RMAX_NEZ` value causes firing halfway between maximum and no-escape zone range. The `TARGET_THREAT_EST` value causes firing based on target threat assessment. The `RANDOM_RANGE` value causes random range selection.
+
 ##### PROHIBIT_WP_PASS_REPORT
 
-Disables waypoint passage radio calls.
+The `PROHIBIT_WP_PASS_REPORT` option disables waypoint passage radio calls. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PROHIBIT_WP_PASS_REPORT = 19
--- Value: boolean
 ```
 
 ##### JETT_TANKS_IF_EMPTY
 
-Jettisons external fuel tanks when empty.
+The `JETT_TANKS_IF_EMPTY` option causes the aircraft to jettison external fuel tanks when empty. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.JETT_TANKS_IF_EMPTY = 25
--- Value: boolean
 ```
 
 ##### FORCED_ATTACK
 
-Forces AI to continue attack regardless of threats.
+The `FORCED_ATTACK` option forces the AI to continue attacking regardless of threats. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.FORCED_ATTACK = 26
--- Value: boolean
 ```
 
 ##### PREFER_VERTICAL
 
-AI prefers vertical maneuvering in combat.
+The `PREFER_VERTICAL` option causes the AI to prefer vertical maneuvering in combat. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.PREFER_VERTICAL = 32
--- Value: boolean
 ```
 
 ##### ALLOW_FORMATION_SIDE_SWAP
 
-Allows wingmen to switch formation sides.
+The `ALLOW_FORMATION_SIDE_SWAP` option allows wingmen to switch formation sides. The value is a boolean.
 
 ```lua
 AI.Option.Air.id.ALLOW_FORMATION_SIDE_SWAP = 35
--- Value: boolean
 ```
 
 #### Ground Options
 
 ##### ROE
+
+The `ROE` option for ground units controls when they will engage targets.
 
 ```lua
 AI.Option.Ground.id.ROE = 0
@@ -4989,63 +5075,62 @@ AI.Option.Ground.val.ROE = {
 
 ##### ALARM_STATE
 
-Sets the group's alert level.
+The `ALARM_STATE` option sets the group's alert level.
 
 ```lua
 AI.Option.Ground.id.ALARM_STATE = 9
 
 AI.Option.Ground.val.ALARM_STATE = {
-    AUTO = 0,                 -- Automatic based on situation
-    GREEN = 1,                -- Relaxed, weapons safe
-    RED = 2                   -- Combat ready, weapons hot
+    AUTO = 0,
+    GREEN = 1,
+    RED = 2
 }
 ```
 
+The `AUTO` value causes automatic state changes based on the situation. The `GREEN` value puts the group in a relaxed state with weapons safe. The `RED` value puts the group in combat ready state with weapons hot.
+
 ```lua
--- Set SAM site to combat ready
 local controller = Group.getByName("SA-10"):getController()
 controller:setOption(AI.Option.Ground.id.ALARM_STATE, AI.Option.Ground.val.ALARM_STATE.RED)
 ```
 
 ##### DISPERSE_ON_ATTACK
 
-Ground units disperse when attacked.
+The `DISPERSE_ON_ATTACK` option causes ground units to disperse when attacked. The value is a boolean.
 
 ```lua
 AI.Option.Ground.id.DISPERSE_ON_ATTACK = 8
--- Value: boolean
 ```
 
 ##### ENGAGE_AIR_WEAPONS
 
-Controls what types of air targets to engage.
+The `ENGAGE_AIR_WEAPONS` option controls what types of air targets to engage. The value is a boolean.
 
 ```lua
 AI.Option.Ground.id.ENGAGE_AIR_WEAPONS = 20
--- Value: boolean
 ```
 
 ##### AC_ENGAGEMENT_RANGE_RESTRICTION
 
-Limits engagement range for air defense.
+The `AC_ENGAGEMENT_RANGE_RESTRICTION` option limits the engagement range for air defense units. The value is a range expressed as a percentage from 0 to 100.
 
 ```lua
 AI.Option.Ground.id.AC_ENGAGEMENT_RANGE_RESTRICTION = 24
--- Value: range as percentage (0-100)
 ```
 
 ##### Evasion of ARM
 
-Controls SAM behavior when targeted by anti-radiation missiles.
+The `EVASION_OF_ARM` option controls SAM behavior when targeted by anti-radiation missiles. The value is a boolean; when set to true, the unit shuts down its radar when an anti-radiation missile is detected.
 
 ```lua
 AI.Option.Ground.id.EVASION_OF_ARM = 31
--- Value: boolean (true = shut down radar when ARM detected)
 ```
 
 #### Naval Options
 
 ##### ROE
+
+The `ROE` option for naval units controls when they will engage targets.
 
 ```lua
 AI.Option.Naval.id.ROE = 0
@@ -5059,7 +5144,7 @@ AI.Option.Naval.val.ROE = {
 
 #### AI Skill Levels
 
-The AI enum also includes skill level constants:
+The `AI.Skill` enum defines the skill level constants used in unit definitions when spawning groups dynamically.
 
 ```lua
 AI.Skill = {
@@ -5072,23 +5157,31 @@ AI.Skill = {
 }
 ```
 
-These are used in unit definitions when spawning groups dynamically.
-
 #### AI Task Enums
 
-Additional enumerators for task parameters:
+The `AI.Task` table contains additional enumerators for task parameters.
+
+The `AI.Task.AltitudeType` enum defines altitude reference types. The `RADIO` value indicates altitude above ground level (AGL). The `BARO` value indicates altitude above mean sea level (MSL).
 
 ```lua
 AI.Task.AltitudeType = {
-    RADIO = "RADIO",          -- Above Ground Level
-    BARO = "BARO"             -- Above Mean Sea Level
+    RADIO = "RADIO",
+    BARO = "BARO"
 }
+```
 
+The `AI.Task.TurnMethod` enum defines waypoint turn methods.
+
+```lua
 AI.Task.TurnMethod = {
     FLY_OVER_POINT = "Fly Over Point",
     FIN_POINT = "Fin Point"
 }
+```
 
+The `AI.Task.VehicleFormation` enum defines ground vehicle formations.
+
+```lua
 AI.Task.VehicleFormation = {
     VEE = "Vee",
     ECHELON_RIGHT = "EchelonR",
@@ -5099,7 +5192,11 @@ AI.Task.VehicleFormation = {
     CONE = "Cone",
     DIAMOND = "Diamond"
 }
+```
 
+The `AI.Task.WaypointType` enum defines waypoint types.
+
+```lua
 AI.Task.WaypointType = {
     TAKEOFF = "TakeOff",
     TAKEOFF_PARKING = "TakeOffParking",
@@ -5162,7 +5259,7 @@ Hooks are callback functions that the server invokes when specific events occur.
 nil hook.onMissionLoadBegin()
 ```
 
-Fires when the server begins loading a mission. Use this to prepare for mission loading, reset state, or log mission changes.
+The `onMissionLoadBegin` hook fires when the server begins loading a mission. Use this hook to prepare for mission loading, reset state, or log mission changes.
 
 ```lua
 function myHooks.onMissionLoadBegin()
@@ -5177,11 +5274,11 @@ end
 nil hook.onMissionLoadProgress(number progress, string message)
 ```
 
-Fires periodically during mission loading with progress updates.
+The `onMissionLoadProgress` hook fires periodically during mission loading with progress updates.
 
 **Parameters:**
-- `progress` (number): Loading progress as a fraction (0.0 to 1.0).
-- `message` (string): Description of current loading stage.
+- `progress` (number): The loading progress as a fraction from 0.0 to 1.0.
+- `message` (string): A description of the current loading stage.
 
 ##### onMissionLoadEnd
 
@@ -5189,7 +5286,7 @@ Fires periodically during mission loading with progress updates.
 nil hook.onMissionLoadEnd()
 ```
 
-Fires when a server finishes loading a mission. The mission is now ready to run but may not have started yet.
+The `onMissionLoadEnd` hook fires when a server finishes loading a mission. The mission is now ready to run but may not have started yet.
 
 ```lua
 function myHooks.onMissionLoadEnd()
@@ -5206,7 +5303,7 @@ end
 nil hook.onSimulationStart()
 ```
 
-Fires when the simulation begins running. This occurs after mission loading completes and the 3D world becomes active.
+The `onSimulationStart` hook fires when the simulation begins running. This occurs after mission loading completes and the 3D world becomes active.
 
 ##### onSimulationStop
 
@@ -5214,7 +5311,7 @@ Fires when the simulation begins running. This occurs after mission loading comp
 nil hook.onSimulationStop()
 ```
 
-Fires when exiting the simulation. This occurs when transitioning from the 3D game world back to the UI.
+The `onSimulationStop` hook fires when exiting the simulation. This occurs when transitioning from the 3D game world back to the UI.
 
 ##### onSimulationPause
 
@@ -5222,7 +5319,7 @@ Fires when exiting the simulation. This occurs when transitioning from the 3D ga
 nil hook.onSimulationPause()
 ```
 
-Fires when the mission is paused. Only relevant for single-player or when the server admin pauses.
+The `onSimulationPause` hook fires when the mission is paused. This hook is only relevant for single-player or when the server admin pauses.
 
 ##### onSimulationResume
 
@@ -5230,7 +5327,7 @@ Fires when the mission is paused. Only relevant for single-player or when the se
 nil hook.onSimulationResume()
 ```
 
-Fires when the mission resumes after being paused.
+The `onSimulationResume` hook fires when the mission resumes after being paused.
 
 ##### onSimulationFrame
 
@@ -5238,9 +5335,7 @@ Fires when the mission resumes after being paused.
 nil hook.onSimulationFrame()
 ```
 
-Fires every simulation frame. Use sparingly as this can impact performance.
-
-**Gotchas:** This runs very frequently. Avoid expensive operations and do not use for anything that can be done with scheduled functions or events instead.
+The `onSimulationFrame` hook fires every simulation frame. This hook runs very frequently and should be used sparingly as it can impact performance. Avoid expensive operations and do not use this hook for anything that can be done with scheduled functions or events instead.
 
 #### Player Connection Hooks
 
@@ -5250,20 +5345,15 @@ Fires every simulation frame. Use sparingly as this can impact performance.
 boolean, string hook.onPlayerTryConnect(string addr, string ucid, string name, number playerId)
 ```
 
-Fires when a player initially attempts to connect to the server. Can be used to allow or deny access before the player fully connects.
+The `onPlayerTryConnect` hook fires when a player initially attempts to connect to the server. This hook can allow or deny access before the player fully connects. If any value is returned from this hook, other callbacks for this event are ignored; only return a value when you want to make a definitive allow or deny decision.
 
 **Parameters:**
 - `addr` (string): The player's IP address.
-- `ucid` (string): The player's unique DCS identifier (persistent across sessions).
+- `ucid` (string): The player's unique DCS identifier, which persists across sessions.
 - `name` (string): The player's display name.
 - `playerId` (number): The ID the player would have if connection succeeds.
 
-**Returns:**
-- Return `true` to force allow the player.
-- Return `false, "reason"` to reject the player with a message.
-- Return nothing to allow other hooks to decide.
-
-**Gotchas:** If any value is returned, other callbacks for this event are ignored. Only return a value when you want to make a definitive allow/deny decision.
+**Returns:** Return `true` to force allow the player, return `false` along with a reason string to reject the player with a message, or return nothing to allow other hooks to decide.
 
 ```lua
 local bannedPlayers = {
@@ -5284,10 +5374,10 @@ end
 nil hook.onPlayerConnect(number id)
 ```
 
-Fires when a player successfully connects to the server. The player has passed any connection checks and is now connected but may still be loading.
+The `onPlayerConnect` hook fires when a player successfully connects to the server. The player has passed any connection checks and is now connected but may still be loading the mission.
 
 **Parameters:**
-- `id` (number): Unique player identifier for this session.
+- `id` (number): The unique player identifier for this session.
 
 ```lua
 local clients = {}
@@ -5308,7 +5398,7 @@ end
 nil hook.onPlayerDisconnect(number id)
 ```
 
-Fires when a player disconnects from the server.
+The `onPlayerDisconnect` hook fires when a player disconnects from the server.
 
 **Parameters:**
 - `id` (number): The disconnecting player's ID.
@@ -5329,7 +5419,7 @@ end
 nil hook.onPlayerStart(number id)
 ```
 
-Fires when a player has fully loaded into the simulation and can select a slot. This occurs after `onPlayerConnect` once the player finishes loading.
+The `onPlayerStart` hook fires when a player has fully loaded into the simulation and can select a slot. This hook fires after `onPlayerConnect` once the player finishes loading.
 
 **Parameters:**
 - `id` (number): The player's ID.
@@ -5348,7 +5438,7 @@ end
 nil hook.onPlayerStop(number id)
 ```
 
-Fires when a player leaves the simulation (returns to spectators or disconnects).
+The `onPlayerStop` hook fires when a player leaves the simulation, whether by returning to spectators or disconnecting.
 
 **Parameters:**
 - `id` (number): The player's ID.
@@ -5359,7 +5449,7 @@ Fires when a player leaves the simulation (returns to spectators or disconnects)
 nil hook.onPlayerChangeSlot(number playerId)
 ```
 
-Fires when a player successfully moves into a new slot. This only fires for successful slot changes; rejected requests (like denied RIO requests) do not trigger this hook.
+The `onPlayerChangeSlot` hook fires when a player successfully moves into a new slot. This hook only fires for successful slot changes; rejected requests such as denied RIO requests do not trigger this hook.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
@@ -5380,17 +5470,14 @@ end
 boolean hook.onPlayerTryChangeSlot(number playerId, number side, number slotId)
 ```
 
-Fires when a player attempts to change slots. Can allow or deny the change.
+The `onPlayerTryChangeSlot` hook fires when a player attempts to change slots. This hook can allow or deny the change.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
-- `side` (number): Target coalition (0=spectators, 1=red, 2=blue).
-- `slotId` (number): Target slot ID.
+- `side` (number): The target coalition, where 0 is spectators, 1 is red, and 2 is blue.
+- `slotId` (number): The target slot ID.
 
-**Returns:**
-- Return `true` to allow the slot change.
-- Return `false` to deny the slot change.
-- Return nothing to allow other hooks to decide.
+**Returns:** Return `true` to allow the slot change, return `false` to deny the slot change, or return nothing to allow other hooks to decide.
 
 #### Chat Hooks
 
@@ -5400,17 +5487,14 @@ Fires when a player attempts to change slots. Can allow or deny the change.
 string hook.onPlayerTrySendChat(number playerId, string message, boolean toAll)
 ```
 
-Fires when a player attempts to send a chat message. Can modify or block the message.
+The `onPlayerTrySendChat` hook fires when a player attempts to send a chat message. This hook can modify or block the message.
 
 **Parameters:**
 - `playerId` (number): The player sending the message.
 - `message` (string): The message content.
-- `toAll` (boolean): True if sending to all, false if coalition-only.
+- `toAll` (boolean): True if sending to all players, or false if sending to the coalition only.
 
-**Returns:**
-- Return a modified string to change the message.
-- Return `""` (empty string) to block the message.
-- Return nothing to allow the original message.
+**Returns:** Return a modified string to change the message, return an empty string to block the message, or return nothing to allow the original message.
 
 ```lua
 -- Simple profanity filter
@@ -5434,7 +5518,7 @@ end
 nil hook.onGameEvent(table eventData)
 ```
 
-Fires for various game events like kills, crashes, and takeoffs. The event data structure varies by event type.
+The `onGameEvent` hook fires for various game events such as kills, crashes, and takeoffs. The event data structure varies by event type.
 
 ### net Singleton
 
@@ -5446,11 +5530,11 @@ The `net` singleton provides network-related functions for player management, ch
 nil net.send_chat(string message, boolean all)
 ```
 
-Sends a chat message to the server.
+The `net.send_chat` function sends a chat message to the server.
 
 **Parameters:**
 - `message` (string): The message to send.
-- `all` (boolean): True to send to all players, false for coalition only.
+- `all` (boolean): True to send to all players, or false for coalition only.
 
 ```lua
 net.send_chat("Server message: Mission restart in 5 minutes", true)
@@ -5462,10 +5546,10 @@ net.send_chat("Server message: Mission restart in 5 minutes", true)
 nil net.send_chat_to(number playerId, string message)
 ```
 
-Sends a private chat message to a specific player.
+The `net.send_chat_to` function sends a private chat message to a specific player.
 
 **Parameters:**
-- `playerId` (number): Target player's ID.
+- `playerId` (number): The target player's ID.
 - `message` (string): The message to send.
 
 ```lua
@@ -5480,9 +5564,9 @@ end
 table net.get_player_list()
 ```
 
-Returns a table of player IDs currently connected to the server.
+The `net.get_player_list` function returns a table of player IDs currently connected to the server.
 
-**Returns:** Array of player ID numbers.
+**Returns:** An array of player ID numbers.
 
 ```lua
 local players = net.get_player_list()
@@ -5498,11 +5582,11 @@ end
 table net.get_player_info(number playerId, string attribute)
 ```
 
-Returns information about a player. If an attribute is specified, returns only that value; otherwise returns a table of all attributes.
+The `net.get_player_info` function returns information about a player. If an attribute is specified, the function returns only that value; otherwise the function returns a table of all attributes. The `ipaddr` and `ucid` attributes are only available in the server hook environment, not from mission scripts.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
-- `attribute` (string): Optional. Specific attribute to return.
+- `attribute` (string): Optional. The specific attribute to return.
 
 **Attributes:**
 - `'id'`: Player ID number
@@ -5513,18 +5597,14 @@ Returns information about a player. If an attribute is specified, returns only t
 - `'ipaddr'`: IP address (server only)
 - `'ucid'`: Unique Client Identifier (server only)
 
-**Returns:** Attribute value or table of all attributes.
+**Returns:** The attribute value if an attribute was specified, or a table of all attributes otherwise.
 
 ```lua
--- Get single attribute
 local playerName = net.get_player_info(playerId, 'name')
 
--- Get all attributes
 local info = net.get_player_info(playerId)
 env.info("Player: " .. info.name .. " Ping: " .. info.ping .. "ms")
 ```
-
-**Gotchas:** The `ipaddr` and `ucid` attributes are only available in the server hook environment, not from mission scripts.
 
 #### net.get_my_player_id
 
@@ -5532,9 +5612,9 @@ env.info("Player: " .. info.name .. " Ping: " .. info.ping .. "ms")
 number net.get_my_player_id()
 ```
 
-Returns the local player's ID. On a server, returns the server's player ID.
+The `net.get_my_player_id` function returns the local player's ID. On a server, this function returns the server's player ID.
 
-**Returns:** Player ID number.
+**Returns:** The player ID as a number.
 
 #### net.get_server_id
 
@@ -5542,9 +5622,9 @@ Returns the local player's ID. On a server, returns the server's player ID.
 number net.get_server_id()
 ```
 
-Returns the server host's player ID.
+The `net.get_server_id` function returns the server host's player ID.
 
-**Returns:** Server player ID number.
+**Returns:** The server player ID as a number.
 
 #### net.kick
 
@@ -5552,11 +5632,11 @@ Returns the server host's player ID.
 nil net.kick(number playerId, string message)
 ```
 
-Kicks a player from the server.
+The `net.kick` function kicks a player from the server.
 
 **Parameters:**
 - `playerId` (number): The player to kick.
-- `message` (string): Reason shown to the kicked player.
+- `message` (string): The reason shown to the kicked player.
 
 ```lua
 net.kick(playerId, "AFK timeout")
@@ -5568,12 +5648,12 @@ net.kick(playerId, "AFK timeout")
 number, number net.get_slot(number playerId)
 ```
 
-Returns the slot information for a player.
+The `net.get_slot` function returns the slot information for a player.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
 
-**Returns:** side (coalition), slotId.
+**Returns:** Two numbers representing the side (coalition) and slotId.
 
 ```lua
 local side, slotId = net.get_slot(playerId)
@@ -5588,14 +5668,14 @@ end
 boolean net.force_player_slot(number playerId, number sideId, number slotId)
 ```
 
-Forces a player into a specific slot.
+The `net.force_player_slot` function forces a player into a specific slot.
 
 **Parameters:**
 - `playerId` (number): The player to move.
-- `sideId` (number): Target coalition (0=spectators, 1=red, 2=blue).
-- `slotId` (number): Target slot ID.
+- `sideId` (number): The target coalition, where 0 is spectators, 1 is red, and 2 is blue.
+- `slotId` (number): The target slot ID.
 
-**Returns:** True if successful.
+**Returns:** True if the operation was successful.
 
 ```lua
 -- Move player to spectators
@@ -5608,13 +5688,13 @@ net.force_player_slot(playerId, 0, 0)
 number net.get_stat(number playerId, number statId)
 ```
 
-Returns a statistic for a player.
+The `net.get_stat` function returns a statistic for a player.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
-- `statId` (number): Statistic type ID.
+- `statId` (number): The statistic type ID.
 
-**Returns:** Statistic value.
+**Returns:** The statistic value as a number.
 
 #### net.get_name
 
@@ -5622,12 +5702,12 @@ Returns a statistic for a player.
 string net.get_name(number playerId)
 ```
 
-Returns a player's name.
+The `net.get_name` function returns a player's name.
 
 **Parameters:**
 - `playerId` (number): The player's ID.
 
-**Returns:** Player name string.
+**Returns:** The player name as a string.
 
 #### net.lua2json
 
@@ -5635,12 +5715,12 @@ Returns a player's name.
 string net.lua2json(table data)
 ```
 
-Converts a Lua table to a JSON string.
+The `net.lua2json` function converts a Lua table to a JSON string.
 
 **Parameters:**
-- `data` (table): Lua table to convert.
+- `data` (table): The Lua table to convert.
 
-**Returns:** JSON string representation.
+**Returns:** The JSON string representation of the table.
 
 ```lua
 local data = {name = "Test", value = 42}
@@ -5654,12 +5734,12 @@ local json = net.lua2json(data)
 table net.json2lua(string json)
 ```
 
-Converts a JSON string to a Lua table.
+The `net.json2lua` function converts a JSON string to a Lua table.
 
 **Parameters:**
-- `json` (string): JSON string to parse.
+- `json` (string): The JSON string to parse.
 
-**Returns:** Lua table.
+**Returns:** The parsed data as a Lua table.
 
 ```lua
 local json = '{"name":"Test","value":42}'
@@ -5673,21 +5753,20 @@ local data = net.json2lua(json)
 string net.dostring_in(string state, string luaCode)
 ```
 
-Executes Lua code in a specific game environment. This allows cross-environment communication.
+The `net.dostring_in` function executes Lua code in a specific game environment. This function allows cross-environment communication. The executed code runs as a string, so you must return string values; use `tostring()` for numbers.
 
 **Parameters:**
-- `state` (string): Target Lua environment.
-- `luaCode` (string): Lua code to execute.
+- `state` (string): The target Lua environment.
+- `luaCode` (string): The Lua code to execute.
 
 **States:**
 - `'config'`: Configuration state ($INSTALL_DIR/Config/main.cfg environment)
 - `'mission'`: Mission scripting environment
 - `'export'`: Export API environment ($WRITE_DIR/Scripts/Export.lua)
 
-**Returns:** String result from the executed code.
+**Returns:** The string result from the executed code.
 
 ```lua
--- Execute code in the mission environment from a hook
 local result = net.dostring_in('mission', [[
     local count = 0
     for _, group in pairs(coalition.getGroups(2)) do
@@ -5698,18 +5777,16 @@ local result = net.dostring_in('mission', [[
 env.info("Blue has " .. result .. " groups")
 ```
 
-**Gotchas:** The executed code runs as a string, so you must return string values. Use `tostring()` for numbers.
-
 #### net.log
 
 ```lua
 nil net.log(string message)
 ```
 
-Writes a message to the DCS log file.
+The `net.log` function writes a message to the DCS log file.
 
 **Parameters:**
-- `message` (string): Message to log.
+- `message` (string): The message to log.
 
 ```lua
 net.log("Server hook initialized")
@@ -5717,7 +5794,7 @@ net.log("Server hook initialized")
 
 ### DCS Singleton (Server Context)
 
-In the server hook environment, a `DCS` singleton provides additional server-specific functions.
+In the server hook environment, the `DCS` singleton provides additional server-specific functions.
 
 #### DCS.getMissionName
 
@@ -5725,9 +5802,9 @@ In the server hook environment, a `DCS` singleton provides additional server-spe
 string DCS.getMissionName()
 ```
 
-Returns the name of the currently loaded mission.
+The `DCS.getMissionName` function returns the name of the currently loaded mission.
 
-**Returns:** Mission name string.
+**Returns:** The mission name as a string.
 
 ```lua
 function myHooks.onMissionLoadEnd()
@@ -5742,9 +5819,9 @@ end
 string DCS.getMissionFilename()
 ```
 
-Returns the filename of the currently loaded mission.
+The `DCS.getMissionFilename` function returns the filename of the currently loaded mission.
 
-**Returns:** Mission filename string.
+**Returns:** The mission filename as a string.
 
 #### DCS.getMissionResult
 
@@ -5752,12 +5829,12 @@ Returns the filename of the currently loaded mission.
 table DCS.getMissionResult(number side)
 ```
 
-Returns mission results for a coalition.
+The `DCS.getMissionResult` function returns mission results for a coalition.
 
 **Parameters:**
-- `side` (number): Coalition (1=red, 2=blue).
+- `side` (number): The coalition, where 1 is red and 2 is blue.
 
-**Returns:** Table of mission result data.
+**Returns:** A table of mission result data.
 
 #### DCS.getUnitProperty
 
@@ -5765,13 +5842,13 @@ Returns mission results for a coalition.
 any DCS.getUnitProperty(number unitId, number propertyId)
 ```
 
-Returns a property of a unit by ID.
+The `DCS.getUnitProperty` function returns a property of a unit by ID.
 
 **Parameters:**
-- `unitId` (number): Unit ID.
-- `propertyId` (number): Property type ID.
+- `unitId` (number): The unit ID.
+- `propertyId` (number): The property type ID.
 
-**Returns:** Property value.
+**Returns:** The property value.
 
 #### DCS.setUserCallbacks
 
@@ -5779,10 +5856,10 @@ Returns a property of a unit by ID.
 nil DCS.setUserCallbacks(table callbacks)
 ```
 
-Registers a table of callback functions to receive server hooks.
+The `DCS.setUserCallbacks` function registers a table of callback functions to receive server hooks.
 
 **Parameters:**
-- `callbacks` (table): Table with hook functions as members.
+- `callbacks` (table): A table with hook functions as members.
 
 ```lua
 local myHooks = {}
