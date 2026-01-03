@@ -241,18 +241,18 @@ For example, to get a unit and check its remaining fuel:
 
 ```lua
 -- Get a reference to a unit named "Eagle 1-1"
-local myUnit = Unit.getByName("Eagle 1-1")
+local eagle = Unit.getByName("Eagle 1-1")
 
 -- Check if the unit exists (it might have been destroyed)
-if myUnit then
+if eagle then
     -- Get the fuel level as a percentage (0.0 to 1.0)
-    local fuelPercent = myUnit:getFuel()
+    local fuelPercent = eagle:getFuel()
     -- Convert to percentage for display
     trigger.action.outText("Fuel: " .. math.floor(fuelPercent * 100) .. "%", 5)
 end
 ```
 
-Note the colon (`:`) when calling functions on objects: `myUnit:getFuel()`. This is Lua syntax for calling a function that belongs to an object. The singleton functions use a dot (`.`) instead: `timer.getTime()`.
+Note the colon (`:`) when calling functions on objects: `eagle:getFuel()`. This is Lua syntax for calling a function that belongs to an object. The singleton functions use a dot (`.`) instead: `timer.getTime()`.
 
 Common object types and some of their functions:
 
@@ -282,10 +282,10 @@ The event system notifies your scripts when things happen in the simulation. You
 
 ```lua
 -- Create a table to serve as our event handler
-local myHandler = {}
+local deathTracker = {}
 
 -- Define what happens when an event occurs
-function myHandler:onEvent(event)
+function deathTracker:onEvent(event)
     -- Check if this is a unit being destroyed
     if event.id == world.event.S_EVENT_DEAD then
         local deadUnit = event.initiator
@@ -296,7 +296,7 @@ function myHandler:onEvent(event)
 end
 
 -- Register our handler to receive events
-world.addEventHandler(myHandler)
+world.addEventHandler(deathTracker)
 ```
 
 Common events include:
@@ -1048,9 +1048,9 @@ The `world.addEventHandler` function registers an event handler to receive game 
 - `handler` (table): A table containing an `onEvent(self, event)` function.
 
 ```lua
-local myHandler = {}
+local deathLogger = {}
 
-function myHandler:onEvent(event)
+function deathLogger:onEvent(event)
     if event.id == world.event.S_EVENT_DEAD then
         local unit = event.initiator
         if unit then
@@ -1059,7 +1059,7 @@ function myHandler:onEvent(event)
     end
 end
 
-world.addEventHandler(myHandler)
+world.addEventHandler(deathLogger)
 ```
 
 ##### world.removeEventHandler
@@ -2404,9 +2404,9 @@ The `Group.getByName` function is a static function that returns a group by its 
 **Returns:** A Group object, or nil if the group is not found.
 
 ```lua
-local enemyGroup = Group.getByName("Enemy CAP")
-if enemyGroup and enemyGroup:isExist() then
-    local size = enemyGroup:getSize()
+local capFlight = Group.getByName("Enemy CAP")
+if capFlight and capFlight:isExist() then
+    local size = capFlight:getSize()
 end
 ```
 
@@ -3143,15 +3143,15 @@ The event system notifies your scripts when things happen in the simulation. You
 To receive events, create a handler table with an `onEvent` function and register it:
 
 ```lua
-local myHandler = {}
+local shotHandler = {}
 
-function myHandler:onEvent(event)
+function shotHandler:onEvent(event)
     if event.id == world.event.S_EVENT_SHOT then
         -- Handle shot event
     end
 end
 
-world.addEventHandler(myHandler)
+world.addEventHandler(shotHandler)
 ```
 
 All events contain at least:
