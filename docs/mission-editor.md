@@ -38,6 +38,8 @@ Countries can be assigned to RED or BLUE coalitions, or left unassigned (neutral
 
 Always use Custom coalitions when creating new missions. Coalition assignments cannot be changed after mission creation, and the Modern and WWII presets offer no advantages over manually selecting the countries you need. Custom coalitions give you complete control over which countries appear on each side from the start.
 
+When selecting countries for your coalitions, use only "Combined Joint Task Force Blue" for the blue coalition and "Combined Joint Task Force Red" for the red coalition. These fictional countries have unrestricted access to all equipment and liveries in the game. Real-world countries in DCS carry legacy restrictions that limit which aircraft, weapons, and paint schemes are available based on historical accuracy considerations. These restrictions create unnecessary complications when building missions and offer no gameplay benefit. Using the CJTF countries eliminates these issues entirely and gives mission designers full access to all game content.
+
 ## Unit Placement
 
 ### Aircraft and Helicopters
@@ -45,7 +47,7 @@ Always use Custom coalitions when creating new missions. Coalition assignments c
 Aircraft groups consist of one to four units. Each group has configurable properties including:
 
 - **Name**: Unique identifier for trigger references
-- **Country**: Determines available aircraft types
+- **Country**: Owning country within the coalition (use CJTF countries for unrestricted aircraft access)
 - **Task**: Primary mission type affecting AI behavior and available actions
 - **Skill**: AI competency level (Average, Good, High, Excellent, Random, Client, or Player)
 - **Callsign**: Radio identification
