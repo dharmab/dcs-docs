@@ -36,6 +36,8 @@ When creating a new mission, you first select the theater (map) and assign count
 
 Countries can be assigned to RED or BLUE coalitions, or left unassigned (neutral).
 
+Always use Custom coalitions when creating new missions. Coalition assignments cannot be changed after mission creation, and the Modern and WWII presets offer no advantages over manually selecting the countries you need. Custom coalitions give you complete control over which countries appear on each side from the start.
+
 ## Unit Placement
 
 ### Aircraft and Helicopters
