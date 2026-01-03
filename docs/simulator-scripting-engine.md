@@ -463,10 +463,6 @@ trigger.action.outText("Debug: reached this point in the code", 5)
 
 The number at the end (5) is how many seconds the message stays on screen.
 
-## Further Reading
-
-The DCS scripting engine has hundreds of functions covering nearly every aspect of the simulation. The Hoggit Wiki maintains community documentation with examples for most functions. Search for "hoggit wiki scripting" to find detailed reference material for specific functions and features.
-
 ## API Reference
 
 This section provides comprehensive documentation of all DCS scripting engine functions, classes, and data structures.
