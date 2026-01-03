@@ -157,7 +157,7 @@ This document provides comprehensive information about all aircraft in DCS World
 
 ### Background
 
-The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Warthog', entered USAF service in 1977. Designed specifically for close air support (CAS) and tank-killing missions, it features the massive GAU-8/A Avenger 30mm rotary cannon and exceptional survivability. The A-10A was the original single-seat variant.
+The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Warthog', entered USAF service in 1977. Designed specifically for close air support (CAS) and tank-killing missions, it features the massive GAU-8/A Avenger 30mm rotary cannon and exceptional survivability. The A-10A is the original single-seat variant.
 
 ### Tasks
 
@@ -468,7 +468,7 @@ The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Wartho
 
 ### Background
 
-The A-10C II represents the latest upgrade to the Warthog fleet, incorporating the AN/AAQ-28(V) LITENING targeting pod as standard equipment, enhanced defensive systems, and improved data-link capabilities for increased situational awareness.
+The A-10C II is the latest upgrade to the Warthog fleet, incorporating the AN/AAQ-28(V) LITENING targeting pod as standard equipment, enhanced defensive systems, and improved data-link capabilities for increased situational awareness.
 
 ### Tasks
 
@@ -1089,7 +1089,7 @@ The A-10C II represents the latest upgrade to the Warthog fleet, incorporating t
 
 ### Background
 
-The A-10C is an upgraded variant of the Thunderbolt II introduced in 2007, featuring precision engagement capabilities including GPS/laser-guided munitions, improved avionics, and glass cockpit displays while retaining the legendary GAU-8/A cannon.
+The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007, featuring precision engagement capabilities including GPS/laser-guided munitions, improved avionics, and glass cockpit displays while retaining the legendary GAU-8/A cannon.
 
 ### Tasks
 
@@ -1674,7 +1674,7 @@ The A-10C is an upgraded variant of the Thunderbolt II introduced in 2007, featu
 
 ### Background
 
-The Douglas A-20 Havoc (also known as the Boston in British service) was an American medium bomber used extensively during World War II, entering service in 1941. The G variant was the most numerous, armed with six .50 caliber machine guns in the nose for ground attack missions.
+The Douglas A-20 Havoc (also known as the Boston in British service) is an American medium bomber that was used extensively during World War II, entering service in 1941. The G variant is the most numerous, armed with six .50 caliber machine guns in the nose for ground attack missions.
 
 ### Tasks
 
@@ -1706,7 +1706,7 @@ The Douglas A-20 Havoc (also known as the Boston in British service) was an Amer
 
 ### Background
 
-The Beriev A-50 is a Soviet/Russian airborne early warning and control (AEW&C) aircraft based on the Il-76 transport, entering service in 1984. It serves as the Russian equivalent to the American E-3 Sentry AWACS.
+The Beriev A-50 is a Soviet/Russian airborne early warning and control (AEW&C) aircraft based on the Il-76 transport that entered service in 1984. It serves as the Russian equivalent to the American E-3 Sentry AWACS.
 
 ### Tasks
 
@@ -1732,7 +1732,7 @@ No pylons defined.
 
 ### Background
 
-The Grumman A-6 Intruder was an American carrier-based attack aircraft that served the U.S. Navy and Marine Corps from 1963 to 1997. Known for its all-weather precision strike capability, the A-6E variant featured upgraded avionics and TRAM (Target Recognition Attack Multi-sensor) systems.
+The Grumman A-6 Intruder is an American carrier-based attack aircraft that served the U.S. Navy and Marine Corps from 1963 to 1997. Known for its all-weather precision strike capability, the A-6E variant features upgraded avionics and TRAM (Target Recognition Attack Multi-sensor) systems.
 
 ### Tasks
 
@@ -2194,7 +2194,7 @@ The Grumman A-6 Intruder was an American carrier-based attack aircraft that serv
 
 ### Background
 
-The Saab 37 Viggen (Thunderbolt) was a Swedish single-seat, single-engine combat aircraft developed in the 1960s. The AJS37 variant served as a multirole fighter combining attack, reconnaissance, and fighter capabilities. It entered service in 1971 and remained operational until 2005.
+The Saab 37 Viggen (Thunderbolt) is a Swedish single-seat, single-engine combat aircraft developed in the 1960s. The AJS37 variant serves as a multirole fighter combining attack, reconnaissance, and fighter capabilities. It entered service in 1971 and remained operational until 2005.
 
 ### Tasks
 
@@ -2346,7 +2346,7 @@ The Saab 37 Viggen (Thunderbolt) was a Swedish single-seat, single-engine combat
 
 ### Background
 
-The Antonov An-26 is a Soviet-era twin-turboprop transport aircraft designed in 1969. The An-26B is a civil cargo variant capable of carrying up to 5,500 kg of freight. It features a distinctive rear cargo ramp for rapid loading and unloading.
+The Antonov An-26 is a Soviet-era twin-turboprop transport aircraft that first flew in 1969. The An-26B is a civil cargo variant capable of carrying up to 5,500 kg of freight. It features a distinctive rear cargo ramp for rapid loading and unloading.
 
 ### Tasks
 
@@ -2372,7 +2372,7 @@ No pylons defined.
 
 ### Background
 
-The Antonov An-30 is a Soviet aerial survey and reconnaissance aircraft based on the An-24 transport, entering service in 1974. The An-30M variant is equipped for meteorological research and cloud seeding operations.
+The Antonov An-30 is a Soviet aerial survey and reconnaissance aircraft based on the An-24 transport that entered service in 1974. The An-30M variant is equipped for meteorological research and cloud seeding operations.
 
 ### Tasks
 
@@ -2398,7 +2398,7 @@ No pylons defined.
 
 ### Background
 
-The McDonnell Douglas (now Boeing) AV-8B Harrier II is an American VSTOL (Vertical/Short Takeoff and Landing) ground-attack aircraft that entered service in 1985. The Night Attack variant features a forward-looking infrared sensor and night vision goggle compatibility for 24-hour operational capability.
+The McDonnell Douglas (now Boeing) AV-8B Harrier II is an American VSTOL (Vertical/Short Takeoff and Landing) ground-attack aircraft that entered service in 1985. The Night Attack variant features a forward-looking infrared sensor and night vision goggle compatibility for around-the-clock operational capability.
 
 ### Tasks
 
@@ -2741,7 +2741,7 @@ The McDonnell Douglas (now Boeing) AV-8B Harrier II is an American VSTOL (Vertic
 
 ### Background
 
-The Boeing B-17 Flying Fortress was a four-engine heavy bomber used primarily by the United States Army Air Forces during World War II. The B-17G, introduced in 1943, added a chin turret to improve frontal defense and became the most-produced variant with over 8,600 built.
+The Boeing B-17 Flying Fortress is a four-engine heavy bomber used primarily by the United States Army Air Forces during World War II. The B-17G, introduced in 1943, added a chin turret to improve frontal defense and became the most-produced variant with over 8,600 built.
 
 ### Tasks
 
@@ -2831,7 +2831,7 @@ The Rockwell B-1 Lancer is a supersonic variable-sweep wing strategic bomber tha
 
 ### Background
 
-The Boeing B-52 Stratofortress is an American long-range subsonic strategic bomber, with the B-52H variant entering service in 1961. The H model, the only variant still in service, features turbofan engines and has been continuously upgraded with modern avionics and precision munitions capability.
+The Boeing B-52 Stratofortress is an American long-range subsonic strategic bomber, with the B-52H variant entering service in 1961. The H model, the only variant still in service, features turbofan engines and is continuously upgraded with modern avionics and precision munitions capability.
 
 ### Tasks
 
@@ -2925,7 +2925,7 @@ The Boeing B-52 Stratofortress is an American long-range subsonic strategic bomb
 
 ### Background
 
-The Messerschmitt Bf 109 K-4 was the final production version of Germany's primary fighter in World War II, entering service in late 1944. It featured a powerful DB 605 engine, improved armament, and a pressurized cockpit for high-altitude operations.
+The Messerschmitt Bf 109 K-4 is the final production version of Germany's primary fighter in World War II, entering service in late 1944. It features a powerful DB 605 engine, improved armament, and a pressurized cockpit for high-altitude operations.
 
 ### Tasks
 
@@ -2969,7 +2969,7 @@ The Messerschmitt Bf 109 K-4 was the final production version of Germany's prima
 
 ### Background
 
-The CASA C-101 Aviojet is a Spanish-designed low-wing single-engine jet trainer and light attack aircraft that first flew in 1977. The C-101CC is an export variant with enhanced weapons capability, used by several air forces for training and light attack missions.
+The CASA C-101 Aviojet is a Spanish-designed low-wing single-engine jet trainer and light attack aircraft that first flew in 1977. The C-101CC is an export variant with enhanced weapons capability, in use by several air forces for training and light attack missions.
 
 ### Tasks
 
@@ -3090,7 +3090,7 @@ The CASA C-101 Aviojet is a Spanish-designed low-wing single-engine jet trainer 
 
 ### Background
 
-The C-101EB is the initial Spanish Air Force training variant of the CASA C-101 Aviojet, entering service in 1980. It serves as the primary jet trainer for the Spanish Air Force's aerobatic team, Patrulla Águila.
+The C-101EB is the initial Spanish Air Force training variant of the CASA C-101 Aviojet that entered service in 1980. It serves as the primary jet trainer for the Spanish Air Force's aerobatic team, Patrulla Águila.
 
 ### Tasks
 
@@ -3213,7 +3213,7 @@ No pylons defined.
 
 ### Background
 
-The Douglas C-47 Skytrain was the military transport version of the legendary DC-3 airliner, serving extensively during World War II. First delivered in 1941, it carried troops, cargo, and wounded personnel across every theater of the war and continued in service with various air forces for decades afterward.
+The Douglas C-47 Skytrain is the military transport version of the legendary DC-3 airliner that served extensively during World War II. First delivered in 1941, it carried troops, cargo, and wounded personnel across every theater of the war and continued in service with various air forces for decades afterward.
 
 ### Tasks
 
@@ -3297,7 +3297,7 @@ No pylons defined.
 
 ### Background
 
-The Boeing E-3 Sentry is an American AWACS aircraft based on the Boeing 707, entering NATO service in 1982. The rotating radome houses a powerful surveillance radar that can detect and track aircraft over land and water at great distances, providing command and control for air operations.
+The Boeing E-3 Sentry is an American AWACS aircraft based on the Boeing 707 that entered NATO service in 1982. The rotating radome houses a powerful surveillance radar that can detect and track aircraft over land and water at great distances, providing command and control for air operations.
 
 ### Tasks
 
@@ -3323,7 +3323,7 @@ No pylons defined.
 
 ### Background
 
-The Lockheed F-117 Nighthawk was the world's first operational stealth aircraft, entering service in 1983 but remaining classified until 1988. Its faceted design minimized radar cross-section, allowing it to penetrate heavily defended airspace. It was retired in 2008.
+The Lockheed F-117 Nighthawk is the world's first operational stealth aircraft, entering service in 1983 but remaining classified until 1988. Its faceted design minimizes radar cross-section, allowing it to penetrate heavily defended airspace. It was retired in 2008.
 
 ### Tasks
 
@@ -3359,7 +3359,7 @@ The Lockheed F-117 Nighthawk was the world's first operational stealth aircraft,
 
 ### Background
 
-The Grumman F-14A Tomcat was the U.S. Navy's premier air superiority fighter from 1974 to 2006. This early variant represents the GE F110-powered aircraft before digital upgrades, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability.
+The Grumman F-14A Tomcat is the U.S. Navy's premier air superiority fighter from the era of 1974 to 2006. This early variant represents the GE F110-powered aircraft before digital upgrades, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability.
 
 ### Tasks
 
@@ -3637,7 +3637,7 @@ The Grumman F-14A Tomcat was the U.S. Navy's premier air superiority fighter fro
 
 ### Background
 
-The F-14A-135-GR represents the late-production GE F110-powered Tomcat variant with enhanced avionics and improved reliability. It maintained the iconic variable-geometry wing design and carrier-based fighter capabilities.
+The F-14A-135-GR represents the late-production GE F110-powered Tomcat variant with enhanced avionics and improved reliability. It maintains the iconic variable-geometry wing design and carrier-based fighter capabilities.
 
 ### Tasks
 
@@ -3915,7 +3915,7 @@ The F-14A-135-GR represents the late-production GE F110-powered Tomcat variant w
 
 ### Background
 
-The F-14A was the initial production variant of the Tomcat with Pratt & Whitney TF30 engines, entering service in 1974. Despite engine reliability issues, it proved itself as an exceptional interceptor and fleet defense fighter.
+The F-14A is the initial production variant of the Tomcat with Pratt & Whitney TF30 engines, entering service in 1974. Despite engine reliability issues, it proved itself as an exceptional interceptor and fleet defense fighter.
 
 ### Tasks
 
@@ -4005,7 +4005,7 @@ The F-14A was the initial production variant of the Tomcat with Pratt & Whitney 
 
 ### Background
 
-The F-14B Tomcat combined the improved F110-GE-400 engines with upgraded avionics, entering service in 1988. It offered significantly improved thrust and reliability while retaining the aircraft's superb air combat capabilities.
+The F-14B Tomcat combines the improved F110-GE-400 engines with upgraded avionics, entering service in 1988. It offers significantly improved thrust and reliability while retaining the aircraft's superb air combat capabilities.
 
 ### Tasks
 
@@ -4413,7 +4413,7 @@ The McDonnell Douglas F-15C Eagle is a dedicated air superiority fighter that en
 
 ### Background
 
-The F-15E S4+ represents an upgraded Strike Eagle variant with modernized avionics, enhanced radar capabilities, and improved weapons systems integration for current operational requirements.
+The F-15E S4+ is an upgraded Strike Eagle variant with modernized avionics, enhanced radar capabilities, and improved weapons systems integration for current operational requirements.
 
 ### Tasks
 
@@ -4724,7 +4724,7 @@ The F-15E S4+ represents an upgraded Strike Eagle variant with modernized avioni
 
 ### Background
 
-The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15, entering service in 1988. It combines the Eagle's air-to-air prowess with precision ground attack capability, making it the USAF's primary long-range interdiction platform.
+The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15 that entered service in 1988. It combines the Eagle's air-to-air prowess with precision ground attack capability, making it the USAF's primary long-range interdiction platform.
 
 ### Tasks
 
@@ -5035,7 +5035,7 @@ The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15, entering
 
 ### Background
 
-The F-16A MLU (Mid-Life Update) represents European partner nations' upgraded F-16A/Bs, bringing early-model aircraft to Block 50/52 equivalent capability with modern radar, weapons systems, and avionics.
+The F-16A MLU (Mid-Life Update) is a European partner nations' upgrade of F-16A/Bs, bringing early-model aircraft to Block 50/52 equivalent capability with modern radar, weapons systems, and avionics.
 
 ### Tasks
 
@@ -5225,7 +5225,7 @@ The F-16A MLU (Mid-Life Update) represents European partner nations' upgraded F-
 
 ### Background
 
-The General Dynamics F-16A Fighting Falcon was the initial single-seat production variant entering service in 1979. A revolutionary lightweight fighter featuring fly-by-wire controls, it established the multi-role fighter concept that would dominate combat aviation.
+The General Dynamics F-16A Fighting Falcon is the initial single-seat production variant, entering service in 1979. A revolutionary lightweight fighter featuring fly-by-wire controls, it established the multi-role fighter concept that dominates combat aviation.
 
 ### Tasks
 
@@ -5379,7 +5379,7 @@ The General Dynamics F-16A Fighting Falcon was the initial single-seat productio
 
 ### Background
 
-The F-16C Block 50 is an advanced multi-role variant featuring the F110-GE-129 engine and capability for HARM targeting system (HTS) for the SEAD mission. It entered service in 1991.
+The F-16C Block 50 is an advanced multi-role variant featuring the F110-GE-129 engine and capability for HARM targeting system (HTS) for the SEAD mission, entering service in 1991.
 
 ### Tasks
 
@@ -6053,7 +6053,7 @@ The F-16CM Block 50 is the current USAF designation for upgraded Block 50 aircra
 
 ### Background
 
-The F-4E-45MC represents a modernized Phantom II variant with updated avionics and weapons systems, extending the aircraft's operational relevance for operators worldwide.
+The F-4E-45MC is a modernized Phantom II variant with updated avionics and weapons systems, extending the aircraft's operational relevance for operators worldwide.
 
 ### Tasks
 
@@ -6569,7 +6569,7 @@ The F-4E-45MC represents a modernized Phantom II variant with updated avionics a
 
 ### Background
 
-The McDonnell Douglas F-4E Phantom II was the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and featured leading-edge slats for improved maneuverability.
+The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and features leading-edge slats for improved maneuverability.
 
 ### Tasks
 
@@ -7187,7 +7187,7 @@ The North American F-86F Sabre Flaming Cliffs variant provides a simplified simu
 
 ### Background
 
-The North American F-86F Sabre was the definitive day-fighter variant of the legendary swept-wing jet, entering service in 1952. Famous for its Korean War service against the MiG-15, it achieved a favorable kill ratio and influenced fighter design for years to come.
+The North American F-86F Sabre is the definitive day-fighter variant of the legendary swept-wing jet, entering service in 1952. Famous for its Korean War service against the MiG-15, it achieved a favorable kill ratio and influenced fighter design for years to come.
 
 ### Tasks
 
@@ -7279,7 +7279,7 @@ The North American F-86F Sabre was the definitive day-fighter variant of the leg
 
 ### Background
 
-The McDonnell Douglas F/A-18A Hornet was the initial single-seat variant of the Navy's strike-fighter, entering service in 1983. It represented a new concept in carrier aviation: a true multi-role aircraft equally capable in air-to-air and air-to-ground missions.
+The McDonnell Douglas F/A-18A Hornet is the initial single-seat variant of the Navy's strike-fighter, entering service in 1983. It represents a new concept in carrier aviation: a true multi-role aircraft equally capable in air-to-air and air-to-ground missions.
 
 ### Tasks
 
@@ -7412,7 +7412,7 @@ The McDonnell Douglas F/A-18A Hornet was the initial single-seat variant of the 
 
 ### Background
 
-The F/A-18C Lot 20 represents the fully-upgraded late-production Hornet with all Block II improvements, including APG-73 radar, enhanced weapons compatibility, and night attack capability.
+The F/A-18C Lot 20 is the fully-upgraded late-production Hornet with all Block II improvements, including APG-73 radar, enhanced weapons compatibility, and night attack capability.
 
 ### Tasks
 
@@ -7667,7 +7667,7 @@ The F/A-18C Lot 20 represents the fully-upgraded late-production Hornet with all
 
 ### Background
 
-The F/A-18C Hornet introduced significant avionics upgrades including night attack capability, entering service in 1987. It served as the backbone of Navy and Marine Corps tactical aviation for decades.
+The F/A-18C Hornet introduced significant avionics upgrades including night attack capability, entering service in 1987. It serves as the backbone of Navy and Marine Corps tactical aviation.
 
 ### Tasks
 
@@ -7900,7 +7900,7 @@ The F/A-18C Hornet introduced significant avionics upgrades including night atta
 
 ### Background
 
-The Vought F4U-1D Corsair Mk.IV was the British Fleet Air Arm designation for the American carrier-based fighter-bomber. It served with distinction in the Pacific theater during World War II.
+The Vought F4U-1D Corsair Mk.IV is the British Fleet Air Arm designation for the American carrier-based fighter-bomber. It served with distinction in the Pacific theater during World War II.
 
 ### Tasks
 
@@ -7995,7 +7995,7 @@ The Vought F4U-1D Corsair Mk.IV was the British Fleet Air Arm designation for th
 
 ### Background
 
-The Vought F4U-1D Corsair was a World War II carrier-based fighter-bomber entering service in 1944. Its distinctive inverted gull wing and powerful R-2800 engine made it one of the most capable piston fighters of the war.
+The Vought F4U-1D Corsair is a World War II carrier-based fighter-bomber that entered service in 1944. Its distinctive inverted gull wing and powerful R-2800 engine make it one of the most capable piston fighters of the war.
 
 ### Tasks
 
@@ -8134,7 +8134,7 @@ The Falcon Assault Gyrocopter is a fictional armed autogyro designed for special
 
 ### Background
 
-The Focke-Wulf Fw 190 A-8 was a late-war German fighter variant entering service in 1944. Armed with four 20mm cannons and two machine guns, it excelled as both an interceptor and ground-attack aircraft.
+The Focke-Wulf Fw 190 A-8 is a late-war German fighter variant that entered service in 1944. Armed with four 20mm cannons and two machine guns, it excels as both an interceptor and ground-attack aircraft.
 
 ### Tasks
 
@@ -8196,7 +8196,7 @@ The Focke-Wulf Fw 190 A-8 was a late-war German fighter variant entering service
 
 ### Background
 
-The Focke-Wulf Fw 190 D-9 'Dora' was an advanced high-altitude variant featuring the Jumo 213 inline engine, entering service in late 1944. It offered improved performance at altitude compared to the radial-engine variants.
+The Focke-Wulf Fw 190 D-9 'Dora' is an advanced high-altitude variant featuring the Jumo 213 inline engine that entered service in late 1944. It offers improved performance at altitude compared to the radial-engine variants.
 
 ### Tasks
 
@@ -8407,7 +8407,7 @@ The BAE Systems Hawk is a British single-engine jet trainer and light combat air
 
 ### Background
 
-The Polikarpov I-16 was a Soviet fighter that became the world's first low-wing cantilever monoplane with retractable landing gear to enter service, in 1934. Despite becoming obsolete by 1941, it saw extensive combat in the early years of World War II.
+The Polikarpov I-16 is a Soviet fighter that became the world's first low-wing cantilever monoplane with retractable landing gear to enter service in 1934. Despite becoming obsolete by 1941, it saw extensive combat in the early years of World War II.
 
 ### Tasks
 
@@ -8501,7 +8501,7 @@ No pylons defined.
 
 ### Background
 
-The Ilyushin Il-78M is an aerial refueling tanker based on the Il-76 transport, entering service in 1987. Using the probe-and-drogue method, it can refuel multiple aircraft simultaneously and serves as Russia's primary tanker.
+The Ilyushin Il-78M is an aerial refueling tanker based on the Il-76 transport that entered service in 1987. Using the probe-and-drogue method, it can refuel multiple aircraft simultaneously and serves as Russia's primary tanker.
 
 ### Tasks
 
@@ -8954,7 +8954,7 @@ The CAC/PAC JF-17 Thunder is a lightweight, single-engine, multi-role combat air
 
 ### Background
 
-The Junkers Ju 88 was one of the most versatile German aircraft of World War II, serving as a bomber, dive bomber, night fighter, and reconnaissance aircraft. The A-4 variant, entering service in 1940, was the most-produced bomber version.
+The Junkers Ju 88 is one of the most versatile German aircraft of World War II, serving as a bomber, dive bomber, night fighter, and reconnaissance aircraft. The A-4 variant, entering service in 1940, is the most-produced bomber version.
 
 ### Tasks
 
@@ -9735,7 +9735,7 @@ The Mikoyan-Gurevich MiG-15bis Flaming Cliffs variant provides a simplified simu
 
 ### Background
 
-The Mikoyan-Gurevich MiG-15bis was an improved Soviet jet fighter that became famous during the Korean War. Entering service in 1950, it shocked Western observers with its performance and influenced fighter design for years.
+The Mikoyan-Gurevich MiG-15bis is an improved Soviet jet fighter that became famous during the Korean War. Entering service in 1950, it shocked Western observers with its performance and influenced fighter design for years.
 
 ### Tasks
 
@@ -9783,7 +9783,7 @@ The Mikoyan-Gurevich MiG-15bis was an improved Soviet jet fighter that became fa
 
 ### Background
 
-The Mikoyan-Gurevich MiG-19P was a Soviet second-generation jet fighter and the world's first mass-produced supersonic aircraft. Entering service in 1955, the P variant featured radar intercept capability.
+The Mikoyan-Gurevich MiG-19P is a Soviet second-generation jet fighter and the world's first mass-produced supersonic aircraft. Entering service in 1955, the P variant features radar intercept capability.
 
 ### Tasks
 
@@ -9859,7 +9859,7 @@ The Mikoyan-Gurevich MiG-19P was a Soviet second-generation jet fighter and the 
 
 ### Background
 
-The Mikoyan-Gurevich MiG-21bis was the ultimate Soviet production variant of the iconic MiG-21, entering service in 1972. With improved engine, avionics, and weapons capability, it served as a frontline fighter worldwide.
+The Mikoyan-Gurevich MiG-21bis is the ultimate Soviet production variant of the iconic MiG-21, entering service in 1972. With improved engine, avionics, and weapons capability, it serves as a frontline fighter worldwide.
 
 ### Tasks
 
@@ -10006,7 +10006,7 @@ The Mikoyan-Gurevich MiG-21bis was the ultimate Soviet production variant of the
 
 ### Background
 
-The Mikoyan-Gurevich MiG-23MLD was the final and most capable Soviet variant of the variable-geometry 'Flogger', entering service in 1984. It featured improved dogfighting capability and advanced avionics.
+The Mikoyan-Gurevich MiG-23MLD is the final and most capable Soviet variant of the variable-geometry 'Flogger', entering service in 1984. It features improved dogfighting capability and advanced avionics.
 
 ### Tasks
 
@@ -10124,7 +10124,7 @@ The Mikoyan-Gurevich MiG-23MLD was the final and most capable Soviet variant of 
 
 ### Background
 
-The Mikoyan-Gurevich MiG-25PD was an improved interceptor variant of the legendary Foxbat, entering service in 1978. Featuring look-down/shoot-down radar capability, it addressed earlier limitations.
+The Mikoyan-Gurevich MiG-25PD is an improved interceptor variant of the legendary Foxbat that entered service in 1978. Featuring look-down/shoot-down radar capability, it addresses earlier limitations.
 
 ### Tasks
 
@@ -10260,7 +10260,7 @@ The MiG-25RBT is a reconnaissance-bomber variant of the Foxbat, capable of high-
 
 ### Background
 
-The Mikoyan MiG-27K was an advanced Soviet ground-attack variant based on the MiG-23, entering service in 1975. Nicknamed 'Kayak', it featured enhanced precision attack systems.
+The Mikoyan MiG-27K is an advanced Soviet ground-attack variant based on the MiG-23 that entered service in 1975. Nicknamed 'Kayak', it features enhanced precision attack systems.
 
 ### Tasks
 
@@ -10390,7 +10390,7 @@ The Mikoyan MiG-27K was an advanced Soviet ground-attack variant based on the Mi
 
 ### Background
 
-The Mikoyan MiG-29A 'Fulcrum' was the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combined excellent maneuverability with advanced weapons systems.
+The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combines excellent maneuverability with advanced weapons systems.
 
 ### Tasks
 
@@ -10578,7 +10578,7 @@ The Mikoyan MiG-29A 'Fulcrum' was the initial production variant of the Soviet f
 
 ### Background
 
-The Mikoyan MiG-29A 'Fulcrum' was the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combined excellent maneuverability with advanced weapons systems.
+The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combines excellent maneuverability with advanced weapons systems.
 
 ### Tasks
 
@@ -11027,7 +11027,7 @@ The Dassault Mirage 2000-5 is a multirole upgrade of the Mirage 2000, featuring 
 
 ### Background
 
-The Dassault Mirage F1AD was the ground attack variant exported to Libya, entering service in 1978. It featured enhanced air-to-ground capability while retaining fighter performance.
+The Dassault Mirage F1AD is the ground attack variant exported to Libya, entering service in 1978. It features enhanced air-to-ground capability while retaining fighter performance.
 
 ### Tasks
 
@@ -11231,7 +11231,7 @@ The Dassault Mirage F1AD was the ground attack variant exported to Libya, enteri
 
 ### Background
 
-The Dassault Mirage F1AZ was the South African Air Force's ground attack variant, entering service in 1975. It saw extensive combat during the South African Border War.
+The Dassault Mirage F1AZ is the South African Air Force's ground attack variant, entering service in 1975. It saw extensive combat during the South African Border War.
 
 ### Tasks
 
@@ -11433,7 +11433,7 @@ The Dassault Mirage F1AZ was the South African Air Force's ground attack variant
 
 ### Background
 
-The Dassault Mirage F1B was the two-seat trainer variant of the Mirage F1, entering French service in 1980. It retained full combat capability while providing operational conversion training.
+The Dassault Mirage F1B is the two-seat trainer variant of the Mirage F1, entering French service in 1980. It retains full combat capability while providing operational conversion training.
 
 ### Tasks
 
@@ -11645,7 +11645,7 @@ The Dassault Mirage F1B was the two-seat trainer variant of the Mirage F1, enter
 
 ### Background
 
-The Dassault Mirage F1BD was the two-seat trainer variant exported to Libya, combining training capability with operational ground attack systems.
+The Dassault Mirage F1BD is the two-seat trainer variant exported to Libya, combining training capability with operational ground attack systems.
 
 ### Tasks
 
@@ -11886,7 +11886,7 @@ The Dassault Mirage F1BD was the two-seat trainer variant exported to Libya, com
 
 ### Background
 
-The Dassault Mirage F1BE was the two-seat trainer variant for Spain, entering service in 1975. It provided conversion training for Spanish Mirage F1 pilots.
+The Dassault Mirage F1BE is the two-seat trainer variant for Spain, entering service in 1975. It provides conversion training for Spanish Mirage F1 pilots.
 
 ### Tasks
 
@@ -12177,7 +12177,7 @@ The Dassault Mirage F1BE was the two-seat trainer variant for Spain, entering se
 
 ### Background
 
-The Dassault Mirage F1BQ was the two-seat trainer variant exported to Iraq, serving alongside single-seat variants during the Iran-Iraq War.
+The Dassault Mirage F1BQ is the two-seat trainer variant exported to Iraq that served alongside single-seat variants during the Iran-Iraq War.
 
 ### Tasks
 
@@ -12418,7 +12418,7 @@ The Dassault Mirage F1BQ was the two-seat trainer variant exported to Iraq, serv
 
 ### Background
 
-The Dassault Mirage F1C-200 was an improved French Air Force variant with a fixed refueling probe, extending operational range for overseas deployments.
+The Dassault Mirage F1C-200 is an improved French Air Force variant with a fixed refueling probe, extending operational range for overseas deployments.
 
 ### Tasks
 
@@ -12634,7 +12634,7 @@ The Dassault Mirage F1C-200 was an improved French Air Force variant with a fixe
 
 ### Background
 
-The Dassault Mirage F1C was the initial production air defense variant for the French Air Force, entering service in 1973. It served as France's primary interceptor until replaced by the Mirage 2000.
+The Dassault Mirage F1C is the initial production air defense variant for the French Air Force, entering service in 1973. It served as France's primary interceptor until replaced by the Mirage 2000.
 
 ### Tasks
 
@@ -12846,7 +12846,7 @@ The Dassault Mirage F1C was the initial production air defense variant for the F
 
 ### Background
 
-The Dassault Mirage F1CE was the export variant for Spain, entering service in 1975. It served as the Spanish Air Force's primary interceptor for decades.
+The Dassault Mirage F1CE is the export variant for Spain, entering service in 1975. It served as the Spanish Air Force's primary interceptor for decades.
 
 ### Tasks
 
@@ -13137,7 +13137,7 @@ The Dassault Mirage F1CE was the export variant for Spain, entering service in 1
 
 ### Background
 
-The Dassault Mirage F1CG was the export variant for Greece, entering Hellenic Air Force service in 1975. It provided air defense capability alongside F-4 Phantoms.
+The Dassault Mirage F1CG is the export variant for Greece, entering Hellenic Air Force service in 1975. It provides air defense capability alongside F-4 Phantoms.
 
 ### Tasks
 
@@ -13361,7 +13361,7 @@ The Dassault Mirage F1CG was the export variant for Greece, entering Hellenic Ai
 
 ### Background
 
-The Dassault Mirage F1CH was the export variant for Morocco, entering service in 1978. It has seen combat action in the Western Sahara conflict.
+The Dassault Mirage F1CH is the export variant for Morocco, entering service in 1978. It has seen combat action in the Western Sahara conflict.
 
 ### Tasks
 
@@ -13577,7 +13577,7 @@ The Dassault Mirage F1CH was the export variant for Morocco, entering service in
 
 ### Background
 
-The Dassault Mirage F1CJ was the export variant for Jordan, entering Royal Jordanian Air Force service in 1981.
+The Dassault Mirage F1CJ is the export variant for Jordan, entering Royal Jordanian Air Force service in 1981.
 
 ### Tasks
 
@@ -13793,7 +13793,7 @@ The Dassault Mirage F1CJ was the export variant for Jordan, entering Royal Jorda
 
 ### Background
 
-The Dassault Mirage F1CK was the export variant for Kuwait, entering service in 1977. It served until replaced by F/A-18 Hornets.
+The Dassault Mirage F1CK is the export variant for Kuwait, entering service in 1977. It served until replaced by F/A-18 Hornets.
 
 ### Tasks
 
@@ -14009,7 +14009,7 @@ The Dassault Mirage F1CK was the export variant for Kuwait, entering service in 
 
 ### Background
 
-The Dassault Mirage F1CR was the dedicated reconnaissance variant for the French Air Force, entering service in 1983. It carried internal cameras and external sensor pods.
+The Dassault Mirage F1CR is the dedicated reconnaissance variant for the French Air Force, entering service in 1983. It carries internal cameras and external sensor pods.
 
 ### Tasks
 
@@ -14227,7 +14227,7 @@ The Dassault Mirage F1CR was the dedicated reconnaissance variant for the French
 
 ### Background
 
-The Dassault Mirage F1CT was a conversion of French F1C interceptors to the ground attack role, extending the aircraft's service life with enhanced strike capability.
+The Dassault Mirage F1CT is a conversion of French F1C interceptors to the ground attack role, extending the aircraft's service life with enhanced strike capability.
 
 ### Tasks
 
@@ -14445,7 +14445,7 @@ The Dassault Mirage F1CT was a conversion of French F1C interceptors to the grou
 
 ### Background
 
-The Dassault Mirage F1CZ was the export air defense variant for South Africa, entering service in 1975. It achieved multiple aerial victories during the South African Border War.
+The Dassault Mirage F1CZ is the export air defense variant for South Africa, entering service in 1975. It achieved multiple aerial victories during the South African Border War.
 
 ### Tasks
 
@@ -14661,7 +14661,7 @@ The Dassault Mirage F1CZ was the export air defense variant for South Africa, en
 
 ### Background
 
-The Dassault Mirage F1DDA was the two-seat training variant for Qatar, providing operational conversion capability.
+The Dassault Mirage F1DDA is the two-seat training variant for Qatar, providing operational conversion capability.
 
 ### Tasks
 
@@ -14892,7 +14892,7 @@ The Dassault Mirage F1DDA was the two-seat training variant for Qatar, providing
 
 ### Background
 
-The Dassault Mirage F1ED was the export ground attack variant for Libya, featuring enhanced air-to-ground systems.
+The Dassault Mirage F1ED is the export ground attack variant for Libya, featuring enhanced air-to-ground systems.
 
 ### Tasks
 
@@ -15133,7 +15133,7 @@ The Dassault Mirage F1ED was the export ground attack variant for Libya, featuri
 
 ### Background
 
-The Dassault Mirage F1EDA was an improved ground attack variant for Libya with additional weapons capability.
+The Dassault Mirage F1EDA is an improved ground attack variant for Libya with additional weapons capability.
 
 ### Tasks
 
@@ -15364,7 +15364,7 @@ The Dassault Mirage F1EDA was an improved ground attack variant for Libya with a
 
 ### Background
 
-The Dassault Mirage F1EE was the multi-role export variant for Spain, combining air defense and ground attack capabilities.
+The Dassault Mirage F1EE is the multi-role export variant for Spain, combining air defense and ground attack capabilities.
 
 ### Tasks
 
@@ -15657,7 +15657,7 @@ The Dassault Mirage F1EE was the multi-role export variant for Spain, combining 
 
 ### Background
 
-The Dassault Mirage F1EH was the multi-role export variant for Morocco, entering service in the 1970s.
+The Dassault Mirage F1EH is the multi-role export variant for Morocco, entering service in the 1970s.
 
 ### Tasks
 
@@ -15873,7 +15873,7 @@ The Dassault Mirage F1EH was the multi-role export variant for Morocco, entering
 
 ### Background
 
-The Dassault Mirage F1EQ was the multi-role export variant for Iraq, seeing extensive combat during the Iran-Iraq War. It carried Exocet anti-ship missiles in attacks on tankers.
+The Dassault Mirage F1EQ is the multi-role export variant for Iraq that saw extensive combat during the Iran-Iraq War. It carried Exocet anti-ship missiles in attacks on tankers.
 
 ### Tasks
 
@@ -16114,7 +16114,7 @@ The Dassault Mirage F1EQ was the multi-role export variant for Iraq, seeing exte
 
 ### Background
 
-The Dassault Mirage F1JA was the export variant for Ecuador, entering service in 1979. It saw combat during the Cenepa War with Peru.
+The Dassault Mirage F1JA is the export variant for Ecuador, entering service in 1979. It saw combat during the Cenepa War with Peru.
 
 ### Tasks
 
@@ -16310,7 +16310,7 @@ The Dassault Mirage F1JA was the export variant for Ecuador, entering service in
 
 ### Background
 
-The Dassault Mirage F1M was a modernized Spanish variant, designated C.14 in Spanish service. This variant represents early production aircraft (serials 1-25 and 32-51) upgraded with improved avionics and weapons systems.
+The Dassault Mirage F1M is a modernized Spanish variant, designated C.14 in Spanish service. This variant represents early production aircraft (serials 1-25 and 32-51) upgraded with improved avionics and weapons systems.
 
 ### Tasks
 
@@ -16601,7 +16601,7 @@ The Dassault Mirage F1M was a modernized Spanish variant, designated C.14 in Spa
 
 ### Background
 
-The Dassault Mirage F1M C.14 (serials 52-73) represents later Spanish production aircraft with the modernization package, serving until the type's retirement in 2013.
+The Dassault Mirage F1M C.14 (serials 52-73) represents later Spanish production aircraft with the modernization package that served until the type's retirement in 2013.
 
 ### Tasks
 
@@ -16874,7 +16874,7 @@ The Dassault Mirage F1M C.14 (serials 52-73) represents later Spanish production
 
 ### Background
 
-The de Havilland Mosquito FB Mk. VI was the most-produced fighter-bomber variant of the legendary 'Wooden Wonder', entering RAF service in 1943. Its combination of speed, range, and firepower made it one of the most versatile Allied aircraft.
+The de Havilland Mosquito FB Mk. VI is the most-produced fighter-bomber variant of the legendary 'Wooden Wonder', entering RAF service in 1943. Its combination of speed, range, and firepower makes it one of the most versatile Allied aircraft.
 
 ### Tasks
 
@@ -16980,7 +16980,7 @@ The de Havilland Mosquito FB Mk. VI was the most-produced fighter-bomber variant
 
 ### Background
 
-The General Atomics MQ-1A Predator was the original armed reconnaissance variant of the Predator UAV series, entering service in the early 2000s. It pioneered the use of armed drones for precision strike missions.
+The General Atomics MQ-1A Predator is the original armed reconnaissance variant of the Predator UAV series, entering service in the early 2000s. It pioneered the use of armed drones for precision strike missions.
 
 ### Tasks
 
@@ -17068,7 +17068,7 @@ The General Atomics MQ-9 Reaper is an American unmanned aerial vehicle capable o
 
 ### Background
 
-The Republic P-47D-30 (Early) Thunderbolt represented initial production of the -30 block with the bubble canopy, entering service in 1944. It offered improved visibility over earlier razorback variants.
+The Republic P-47D-30 (Early) Thunderbolt represents initial production of the -30 block with the bubble canopy, entering service in 1944. It offers improved visibility over earlier razorback variants.
 
 ### Tasks
 
@@ -17132,7 +17132,7 @@ The Republic P-47D-30 (Early) Thunderbolt represented initial production of the 
 
 ### Background
 
-The Republic P-47D Thunderbolt was the definitive production variant of the legendary 'Jug', entering service in 1944. Its rugged construction, eight .50 caliber machine guns, and ability to carry significant ordnance made it an exceptional fighter-bomber.
+The Republic P-47D Thunderbolt is the definitive production variant of the legendary 'Jug', entering service in 1944. Its rugged construction, eight .50 caliber machine guns, and ability to carry significant ordnance make it an exceptional fighter-bomber.
 
 ### Tasks
 
@@ -17210,7 +17210,7 @@ The Republic P-47D Thunderbolt was the definitive production variant of the lege
 
 ### Background
 
-The P-47D-40 was a late-production Thunderbolt variant featuring the bubble canopy for improved visibility and additional underwing pylons for increased ordnance capacity.
+The P-47D-40 is a late-production Thunderbolt variant featuring the bubble canopy for improved visibility and additional underwing pylons for increased ordnance capacity.
 
 ### Tasks
 
@@ -17298,7 +17298,7 @@ The P-47D-40 was a late-production Thunderbolt variant featuring the bubble cano
 
 ### Background
 
-The North American P-51D-25-NA Mustang was a production block manufactured at the Inglewood, California plant. It featured the iconic bubble canopy and six .50 caliber machine guns.
+The North American P-51D-25-NA Mustang is a production block manufactured at the Inglewood, California plant. It features the iconic bubble canopy and six .50 caliber machine guns.
 
 ### Tasks
 
@@ -17382,7 +17382,7 @@ The North American P-51D-25-NA Mustang was a production block manufactured at th
 
 ### Background
 
-The North American P-51D-30-NA Mustang was a later production block with minor improvements, representing the definitive wartime Mustang configuration.
+The North American P-51D-30-NA Mustang is a later production block with minor improvements, representing the definitive wartime Mustang configuration.
 
 ### Tasks
 
@@ -17535,7 +17535,7 @@ The QF-4E is a retired F-4E Phantom II converted to serve as a full-scale aerial
 
 ### Background
 
-The S-3B Viking in the tanker configuration provided organic aerial refueling capability to carrier air wings using the buddy store system.
+The S-3B Viking in the tanker configuration provides organic aerial refueling capability to carrier air wings using the buddy store system.
 
 ### Tasks
 
@@ -17561,7 +17561,7 @@ No pylons defined.
 
 ### Background
 
-The Lockheed S-3B Viking was a carrier-based anti-submarine warfare aircraft that served the U.S. Navy from 1974 to 2009. Later repurposed for tanking and surface surveillance, it was nicknamed the 'War Hoover' for its engine sound.
+The Lockheed S-3B Viking is a carrier-based anti-submarine warfare aircraft that served the U.S. Navy from 1974 to 2009. Later repurposed for tanking and surface surveillance, it is nicknamed the 'War Hoover' for its engine sound.
 
 ### Tasks
 
@@ -17606,7 +17606,7 @@ The Lockheed S-3B Viking was a carrier-based anti-submarine warfare aircraft tha
 
 ### Background
 
-The Supermarine Spitfire LF Mk. IX CW was a clipped-wing variant optimized for low-altitude operations, featuring reduced wingspan for improved roll rate against V-1 flying bombs and low-level threats.
+The Supermarine Spitfire LF Mk. IX CW is a clipped-wing variant optimized for low-altitude operations, featuring reduced wingspan for improved roll rate against V-1 flying bombs and low-level threats.
 
 ### Tasks
 
@@ -17662,7 +17662,7 @@ The Supermarine Spitfire LF Mk. IX CW was a clipped-wing variant optimized for l
 
 ### Background
 
-The Supermarine Spitfire LF Mk. IX was a low-altitude optimized variant of Britain's iconic fighter, entering service in 1943. The Merlin 66 engine was optimized for performance below 20,000 feet.
+The Supermarine Spitfire LF Mk. IX is a low-altitude optimized variant of Britain's iconic fighter, entering service in 1943. The Merlin 66 engine is optimized for performance below 20,000 feet.
 
 ### Tasks
 
@@ -17718,7 +17718,7 @@ The Supermarine Spitfire LF Mk. IX was a low-altitude optimized variant of Brita
 
 ### Background
 
-The Sukhoi Su-17M4 'Fitter-K' was the final Soviet production variant of the variable-geometry attack aircraft, entering service in 1981. It featured improved navigation and weapons systems.
+The Sukhoi Su-17M4 'Fitter-K' is the final Soviet production variant of the variable-geometry attack aircraft, entering service in 1981. It features improved navigation and weapons systems.
 
 ### Tasks
 
@@ -19205,7 +19205,7 @@ The Su-25TM (export designation Su-39) is the most advanced Frogfoot variant, fe
 
 ### Background
 
-The Sukhoi Su-27 'Flanker' is a Soviet-designed twin-engine supermaneuverability fighter that entered service in 1985. Its exceptional range, payload, and agility made it one of the world's premier air superiority fighters.
+The Sukhoi Su-27 'Flanker' is a Soviet-designed twin-engine supermaneuverability fighter that entered service in 1985. Its exceptional range, payload, and agility make it one of the world's premier air superiority fighters.
 
 ### Tasks
 
@@ -20338,7 +20338,7 @@ No pylons defined.
 
 ### Background
 
-The Panavia Tornado GR4 was the upgraded strike variant of the RAF's Tornado, featuring precision-guided weapons capability and advanced targeting systems. It served until 2019.
+The Panavia Tornado GR4 is the upgraded strike variant of the RAF's Tornado, featuring precision-guided weapons capability and advanced targeting systems. It served until 2019.
 
 ### Tasks
 
