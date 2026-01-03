@@ -52,7 +52,7 @@ A Lua table that maps resource keys to filenames of embedded assets. Keys follow
 
 #### Embedded Assets
 
-Audio, image, and script files are stored directly in the `l10n/DEFAULT` directory. When referenced from Lua scripts, paths may include virtual directories (e.g., `AUDIO/ELT.ogg`) that DCS maps to the actual file locations at runtime.
+Audio, image, and script files are stored directly in the `l10n/DEFAULT` directory. When referenced from Lua scripts, paths may include virtual directories (e.g., `AUDIO/ELT.ogg`) that DCS maps to the actual file locations at runtime. <!-- TODO: MISSING - Document the complete mapping of virtual directory paths to actual file locations within the MIZ archive -->
 
 Common asset types include:
 
@@ -69,3 +69,5 @@ When repacking a MIZ file, ensure that:
 1. All files are at the correct directory level (mission, theatre, warehouses, and options at root level)
 2. The l10n directory structure is preserved
 3. No additional compression metadata is added that could confuse DCS
+
+<!-- TODO: QA - Verify specific compression settings required when repacking MIZ files (compression level, method, store vs deflate) -->

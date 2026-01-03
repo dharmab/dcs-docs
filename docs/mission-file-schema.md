@@ -76,7 +76,7 @@ Named navigation waypoints available to units in this coalition.
 | `properties` | table | Additional waypoint properties |
 | `x` | number | X coordinate |
 | `y` | number | Y coordinate |
-| `callsign` | number | Numeric callsign (unsure of purpose) |
+| `callsign` | number | Numeric callsign (unsure of purpose) | <!-- TODO: QA - Verify the purpose of the numeric callsign field in nav_points -->
 
 ### coalition.[side].country
 
@@ -175,9 +175,9 @@ Aircraft system failure configuration for each possible failure mode.
 | `id` | string | Failure identifier (e.g., "Failure_Ctrl_Aileron") |
 | `enable` | boolean | Whether failure is enabled |
 | `prob` | number | Probability (0-100) |
-| `hh` | number | Hours component of delay (unsure) |
+| `hh` | number | Hours component of delay (unsure) | <!-- TODO: QA - Verify what the hh field represents in failure configuration -->
 | `mm` | number | Minutes component of delay |
-| `mmint` | number | Interval in minutes (unsure) |
+| `mmint` | number | Interval in minutes (unsure) | <!-- TODO: QA - Verify what the mmint field represents in failure configuration -->
 
 ---
 
@@ -193,7 +193,7 @@ Mission-enforced difficulty settings that override player preferences.
 | `easyFlight` | boolean | Simplified flight model |
 | `easyRadar` | boolean | Simplified radar |
 | `easyCommunication` | boolean | Simplified radio communication |
-| `radio` | boolean | (Unsure - radio assistance) |
+| `radio` | boolean | (Unsure - radio assistance) | <!-- TODO: QA - Verify what the radio forced option controls -->
 | `geffect` | string | G-force effects ("realistic", etc.) |
 | `externalViews` | boolean | Allow external camera views |
 | `userMarks` | boolean | Allow player map markers |
@@ -468,7 +468,7 @@ Groups are containers for one or more units that share a common route and task.
 | `visible` | boolean | Visible on map |
 | `hidden` | boolean | Hidden from enemy |
 | `uncontrollable` | boolean | Cannot be controlled |
-| `taskSelected` | boolean | (Unsure) |
+| `taskSelected` | boolean | (Unsure) | <!-- TODO: QA - Verify what the taskSelected field does for ground vehicle groups -->
 | `start_time` | number | Spawn time offset |
 
 ### Static Object Group
@@ -564,7 +564,7 @@ Groups are containers for one or more units that share a common route and task.
 | `y` | number | Position Y |
 | `heading` | number | Heading (radians) |
 | `livery_id` | string | Livery/skin name |
-| `rate` | string | (Unsure - possibly spawn rate) |
+| `rate` | string | (Unsure - possibly spawn rate) | <!-- TODO: QA - Verify what the rate field means for static objects -->
 
 ---
 

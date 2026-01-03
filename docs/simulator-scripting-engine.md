@@ -1186,7 +1186,7 @@ Group coalition.addGroup(number countryId, number groupCategory, table groupData
 
 The `coalition.addGroup` function dynamically spawns a group into the mission. This function is one of the most powerful scripting functions, enabling dynamic spawning of any unit type.
 
-You must add a delay before accessing the group's controller after spawning, because issuing tasks immediately can crash the game. If a group or unit name matches an existing object, the game destroys the existing object. You cannot spawn aircraft with skill "Client" but can use "Player" in single-player, which destroys the current player aircraft. Spawn FARPs with `groupCategory = -1`.
+You must add a delay before accessing the group's controller after spawning, because issuing tasks immediately can crash the game. <!-- TODO: VERIFY - Confirm 1-second delay is still required after coalition.addGroup in current DCS versions --> If a group or unit name matches an existing object, the game destroys the existing object. You cannot spawn aircraft with skill "Client" but can use "Player" in single-player, which destroys the current player aircraft. Spawn FARPs with `groupCategory = -1`.
 
 **Parameters:**
 - `countryId` (number): The country ID from the `country.id` enum.
@@ -1224,7 +1224,7 @@ groupData = {
 }
 ```
 
-The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the East-West position), and `y` (the North-South position using Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number).
+The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the East-West position), and `y` (the North-South position using Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number). <!-- TODO: MISSING - Document the complete callsign table format for dynamically spawned aircraft including all valid name_index values -->
 
 The optional fields are `groupId` (a custom group ID that is auto-generated if omitted), `start_time` (spawn delay in seconds where 0 means immediate), `lateActivation` (whether to require a trigger to activate), `hidden` (whether to hide from the F10 map), `hiddenOnMFD` (whether to hide from aircraft MFDs), `route` (waypoints and tasks), and `uncontrolled` (for aircraft, whether to spawn inactive).
 
@@ -2283,7 +2283,7 @@ The `unit:getLife0` method returns the unit's initial (maximum) hit points.
 number unit:getFuel()
 ```
 
-The `unit:getFuel` method returns the unit's fuel level as a fraction of internal fuel capacity. Ground vehicles and ships always return 1. Aircraft with external tanks can return values above 1.0.
+The `unit:getFuel` method returns the unit's fuel level as a fraction of internal fuel capacity. Ground vehicles and ships always return 1. Aircraft with external tanks can return values above 1.0. <!-- TODO: QA - Verify behavior of getFuel() with external tanks across various aircraft types -->
 
 **Returns:** The fuel fraction as a number from 0.0 to 1.0 or higher. Values above 1.0 indicate external tanks are present.
 
@@ -3171,6 +3171,7 @@ world.event = {
     S_EVENT_BASE_CAPTURED = 10,
     S_EVENT_MISSION_START = 11,
     S_EVENT_MISSION_END = 12,
+    -- Event ID 13 is not used/documented <!-- TODO: MISSING - Document event ID 13 which is missing from the enum -->
     S_EVENT_REFUELING_STOP = 14,
     S_EVENT_BIRTH = 15,
     S_EVENT_HUMAN_FAILURE = 16,
@@ -3436,7 +3437,7 @@ The `initiator` field contains the Unit object representing the aircraft that la
 
 ##### S_EVENT_RUNWAY_TAKEOFF
 
-The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
+The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff. <!-- TODO: QA - Verify which maps have 3D runway issues that cause bounce events -->
 
 **Event Table:**
 ```lua
@@ -3452,7 +3453,7 @@ The `initiator` field contains the Unit object representing the aircraft. The `p
 
 ##### S_EVENT_RUNWAY_TOUCH
 
-The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
+The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown. <!-- TODO: QA - Verify which maps have 3D runway issues that cause multiple touchdown events -->
 
 **Event Table:**
 ```lua
@@ -3993,7 +3994,7 @@ AI.Task.OrbitPattern = {
 }
 ```
 
-The "Anchored" pattern is also valid but is not included in the `AI.Task.OrbitPattern` enum.
+The "Anchored" pattern is also valid but is not included in the `AI.Task.OrbitPattern` enum. <!-- TODO: MISSING - Document the Anchored orbit pattern parameters in more detail -->
 
 ```lua
 local orbit = {
@@ -4029,7 +4030,7 @@ local attack = {
 }
 ```
 
-The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a weapon flags bitmask. The `expend` field specifies how much ordnance to use per pass. The `direction` field specifies the attack azimuth in radians. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
+The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a weapon flags bitmask. <!-- TODO: MISSING - Document the weapon flags bitmask values used in attack tasks --> The `expend` field specifies how much ordnance to use per pass. The `direction` field specifies the attack azimuth in radians. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
 
 **WeaponExpend Enum:**
 ```lua
@@ -5961,3 +5962,6 @@ net.log("[MyHooks] Server hooks registered")
 ```
 
 This script demonstrates the key patterns for server scripting: tracking player state across connection/disconnection, moderating chat, logging events, and responding to mission lifecycle changes.
+
+<!-- TODO: MISSING - Document Export.lua scripting environment for external application integration -->
+<!-- TODO: MISSING - Document interaction between mission scripts and server hooks, including shared state and synchronization -->
