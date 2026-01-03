@@ -475,7 +475,11 @@ This section provides comprehensive documentation of all DCS scripting engine fu
 
 #### Coordinate Systems
 
-DCS World uses a right-handed coordinate system where the origin varies by map. All positions are measured in meters.
+DCS World simulates a flat earth model using a Transverse Mercator projection for each theater. Each map has its own projection origin point, and the simulation uses a Cartesian coordinate system measured in meters from that origin. This approach trades global accuracy for local precision, which is appropriate for the scale of combat operations depicted in the simulation.
+
+The terrain engine does not provide a one-to-one representation of real-world geography. Maps are composites assembled from multiple time periods and may include features that have been added, removed, or modified to improve gameplay or engine performance. Features like buildings, roads, and vegetation do not necessarily match their real-world counterparts in location, appearance, or presence. Scripts that rely on real-world geographic data should account for these discrepancies.
+
+The native coordinate system uses X, Y, and Z axes measured in meters. The `coord` singleton provides conversion functions between this native system and real-world coordinate systems including latitude/longitude (geodetic coordinates) and MGRS (Military Grid Reference System, based on UTM). These conversions allow scripts to work with familiar geographic coordinates while the engine operates in its internal Cartesian space.
 
 **Vec2** represents a 2D point on the map surface:
 
