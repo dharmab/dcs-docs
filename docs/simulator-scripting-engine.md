@@ -6,93 +6,6 @@ The Simulator Scripting Engine (SSE) provides mission designers with programmati
 
 The SSE exposes the games's internal data and state through Lua, a lightweight programming language designed for embedding in applications. Scripts can read information about the game world and modify it. Scripts can do things like dynamically spawn units based on player actions or game state, execute conditions and event handlers more complex than can be done through Triggers alone, and add custom menus and submenus to the F10 radio menu.
 
-## Adding Scripts to Missions
-
-Scripts can be embedded in missions through several mechanisms in the Mission Editor:
-
-### Initialization Script
-
-The initialization script runs as the mission loads, before any units spawn or triggers evaluate. It is the earliest point at which scripting code executes. Access this through the Triggers panel by selecting the initialization slot.
-
-Use the initialization script to set up global variables, define functions that will be used later, or configure settings that need to be in place before the mission begins.
-
-### Trigger Actions
-
-The trigger system provides two actions for running scripts:
-
-**Do Script** embeds Lua code directly in the mission file. You type or paste your code into a text box, and it becomes part of the mission data. This approach has significant drawbacks: the text box has size limitations, no syntax highlighting, and the code becomes embedded inside the mission's Lua data structure where external tools cannot easily work with it.
-
-**Do Script File** references a separate Lua file. When you select a file, the Mission Editor copies it into the mission archive. This approach is strongly preferred for new missions because it keeps your code in standalone `.lua` files. Code editors provide syntax highlighting, autocompletion, and error detection. Language servers can analyze your code for problems. Autoformatters like StyLua can keep your code consistently styled. AI coding assistants can read and modify your scripts. None of these tools can easily help you with code embedded via Do Script.
-
-New missions should use Do Script File exclusively. Reserve Do Script only for trivial one-liners where creating a separate file would be overkill.
-
-Both actions execute the script when their trigger conditions become true. The code runs once per trigger activation.
-
-### Group Actions
-
-Scripts can be attached to individual groups through waypoint actions and triggered actions. These scripts run in the context of that specific group.
-
-Within a group action script, a special variable written as `...` (three dots) refers to the group the script is attached to. You can use this to write generic scripts that work with any group:
-
-```lua
--- Within a group action, ... refers to the current group
-local thisGroup = ...
-local groupName = thisGroup:getName()
-trigger.action.outText("Group " .. groupName .. " is doing something", 10)
-```
-
-This feature lets you write one script and attach it to multiple groups without having to change the group name in the code each time.
-
-### Group Spawn Condition
-
-Each group can have a spawn condition script that runs during mission loading. This script must return either `true` or `false` to determine whether the group spawns into the mission.
-
-```lua
--- 50% chance to spawn this group
-return math.random() < 0.5
-```
-
-If the script returns `true`, the group spawns normally. If it returns `false`, the group does not appear in the mission at all.
-
-### LUA Predicate Condition
-
-Triggers can use the LUA PREDICATE condition type to evaluate custom Lua code. The script must return `true` or `false`. This enables complex conditions that the built-in trigger conditions cannot express:
-
-```lua
--- Check if a group named 'reinforcements' exists
-if Group.getByName('reinforcements') then
-    return true
-else
-    return false
-end
-```
-
-One important limitation: the built-in trigger conditions (like GROUP ALIVE) only recognize groups placed in the Mission Editor. If you spawn groups dynamically through scripting, you must use LUA PREDICATE conditions to check their state.
-
-## Script Execution Order
-
-Understanding when scripts execute is critical when scripts depend on each other. For example, if script B uses a function defined in script A, script A must run first.
-
-The execution order is:
-
-1. **Initialization Script** - Runs first as the mission loads
-2. **Group Spawn Conditions** - Evaluate during mission loading
-3. **MISSION START Triggers** - Execute at mission start
-4. **Waypoint 1 Scripts** - Execute as groups spawn at their first waypoints
-5. **TIME LESS Triggers** - Triggers that are already true at mission start
-6. **TIME MORE Triggers** - Triggers that become true after time elapses
-7. **Waypoint 2+ Scripts** - Execute as groups reach subsequent waypoints
-
-Within a single trigger, conditions and actions evaluate top to bottom in the order they appear in the editor. If trigger A is above trigger B in the trigger list and both execute at the same time, trigger A runs first.
-
-This ordering allows a single trigger to load multiple dependent scripts in sequence:
-
-```
-Once > Time More than 3 > Do Script File(A.lua) AND Do Script File(B.lua) AND Do Script File(C.lua)
-```
-
-If script C depends on B and B depends on A, this trigger correctly loads them in order because actions execute left to right.
-
 ## Lua Basics
 
 This section covers just enough Lua to start writing mission scripts. Lua is a small language that you can learn as you go; most of its features are intuitive once you see them in action.
@@ -102,7 +15,7 @@ This section covers just enough Lua to start writing mission scripts. Lua is a s
 Variables store values. Use `local` to declare a variable, which limits its visibility to the current scope. Variables without `local` become global and can accidentally interfere with other scripts.
 
 ```lua
-local playerName = "Viper 1-1"     -- a string (text)
+local callsign = "Viper 1-1"        -- a string (text)
 local altitude = 25000              -- a number
 local isAlive = true                -- a boolean (true or false)
 local target = nil                  -- nil means "no value" or "nothing"
@@ -423,6 +336,97 @@ timer.scheduleFunction(showTimeMessage, nil, timer.getTime() + 10)
 ```
 
 The scheduled function can return a number to reschedule itself at that mission time, or return nothing (nil) to stop running.
+
+## Adding Scripts to Missions
+
+Scripts can be embedded in missions through several mechanisms in the Mission Editor:
+
+<!-- TODO: This section needs improvement. Add:
+     1. Specific UI location (where exactly is the initialization slot in the Triggers panel?)
+     2. Step-by-step instructions for adding an initialization script -->
+
+### Initialization Script
+
+The initialization script runs as the mission loads, before any units spawn or triggers evaluate. It is the earliest point at which scripting code executes. Access this through the Triggers panel by selecting the initialization slot.
+
+Use the initialization script to set up global variables, define functions that will be used later, or configure settings that need to be in place before the mission begins.
+
+### Trigger Actions
+
+The trigger system provides two actions for running scripts:
+
+**Do Script** embeds Lua code directly in the mission file. You type or paste your code into a text box, and it becomes part of the mission data. This approach has significant drawbacks: the text box has size limitations, no syntax highlighting, and the code becomes embedded inside the mission's Lua data structure where external tools cannot easily work with it.
+
+**Do Script File** references a separate Lua file. When you select a file, the Mission Editor copies it into the mission archive. This approach is strongly preferred for new missions because it keeps your code in standalone `.lua` files. Code editors provide syntax highlighting, autocompletion, and error detection. Language servers can analyze your code for problems. Autoformatters like StyLua can keep your code consistently styled. AI coding assistants can read and modify your scripts. None of these tools can easily help you with code embedded via Do Script.
+
+New missions should use Do Script File exclusively. Reserve Do Script only for trivial one-liners where creating a separate file would be overkill.
+
+Both actions execute the script when their trigger conditions become true. The code runs once per trigger activation. Triggers may activate either once or repeatedly depending on how they are configured in the Mission Editor.
+
+### Group Actions
+
+Scripts can be attached to individual groups through waypoint actions and triggered actions. These scripts run in the context of that specific group.
+
+Within a group action script, a special variable written as `...` (three dots) refers to the group the script is attached to. You can use this to write generic scripts that work with any group:
+
+```lua
+-- Within a group action, ... refers to the current group
+local thisGroup = ...
+local groupName = thisGroup:getName()
+trigger.action.outText("Group " .. groupName .. " is doing something", 10)
+```
+
+This feature lets you write one script and attach it to multiple groups without having to change the group name in the code each time.
+
+### Group Spawn Condition
+
+Each group can have a spawn condition script that runs during mission loading. This script must return either `true` or `false` to determine whether the group spawns into the mission.
+
+```lua
+-- 50% chance to spawn this group
+return math.random() < 0.5
+```
+
+If the script returns `true`, the group spawns normally. If it returns `false`, the group does not appear in the mission at all.
+
+### LUA Predicate Condition
+
+Triggers can use the LUA PREDICATE condition type to evaluate custom Lua code. The script must return `true` or `false`. This enables complex conditions that the built-in trigger conditions cannot express:
+
+```lua
+-- Check if a group named 'reinforcements' exists
+if Group.getByName('reinforcements') then
+    return true
+else
+    return false
+end
+```
+
+One important limitation: the built-in trigger conditions (like GROUP ALIVE) only recognize groups placed in the Mission Editor. If you spawn groups dynamically through scripting, you must use LUA PREDICATE conditions to check their state.
+
+## Script Execution Order
+
+Understanding when scripts execute is critical when scripts depend on each other. For example, if script B uses a function defined in script A, script A must run first.
+
+The execution order is:
+
+1. **Initialization Script** - Runs first as the mission loads
+2. **Group Spawn Conditions** - Evaluate during mission loading
+3. **MISSION START Triggers** - Execute at mission start
+4. **Waypoint 1 Scripts** - Execute as groups spawn at their first waypoints
+5. **TIME LESS Triggers** - Triggers that are already true at mission start
+6. **TIME MORE Triggers** - Triggers that become true after time elapses
+7. **Waypoint 2+ Scripts** - Execute as groups reach subsequent waypoints
+
+Within a single trigger, conditions and actions evaluate top to bottom in the order they appear in the editor. If trigger A is above trigger B in the trigger list and both execute at the same time, trigger A runs first.
+
+This ordering allows a single trigger to load multiple dependent scripts in sequence:
+
+```
+Once > Time More than 3 > Do Script File(A.lua) AND Do Script File(B.lua) AND Do Script File(C.lua)
+```
+
+If script C depends on B and B depends on A, this trigger correctly loads them in order because actions execute left to right.
 
 ## MIZ File Storage
 
