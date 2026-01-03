@@ -213,6 +213,16 @@ end
 
 This pattern appears constantly in DCS scripting because functions like `getByName` return `nil` when objects do not exist.
 
+### Standard Library Availability
+
+The SSE provides access to the Lua standard library, including common modules like `math`, `string`, and `table`. However, the `io`, `lfs` (LuaFileSystem), and `os` libraries are disabled by default. This restriction exists because missions downloaded from multiplayer servers execute automatically, and filesystem or operating system access would allow malicious missions to read, write, or delete files on your computer or execute arbitrary commands.
+
+Users who want to enable `io`, `lfs`, and `os` for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions. Commenting out or deleting the sanitization lines restores access to these libraries. This process is commonly called "desanitizing" the scripting environment.
+
+Desanitization carries significant security risks. Any mission you load, including missions from multiplayer servers, will gain the ability to access your filesystem. A malicious mission could read sensitive files, install malware, or delete data. Only desanitize if you understand these risks and only play missions from trusted sources.
+
+Additionally, DCS updates typically overwrite `Scripts/MissionScripting.lua`, which resets any desanitization changes. After each DCS update, you must re-apply your modifications if you want to continue using `io`, `lfs`, and `os`.
+
 ## Scripting Concepts
 
 ### Singletons
