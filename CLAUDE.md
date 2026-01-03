@@ -8,6 +8,15 @@ This repository contains documentation for AI agents to use as context when gene
 - `data/` - Outputs from dataminers. These can be more accurately trusted since they are regularly updated with new simulator versions.
 - `docs/` - Generated markdown documentation. All documentation output should be placed here.
 
+## Available Documentation
+
+The `docs/` directory contains the following documentation:
+
+- `miz-file-format.md` - The .miz archive format, including the structure of contained files (mission, theatre, warehouses, options, l10n resources)
+- `mission-file-schema.md` - Complete schema reference for the `mission` Lua table, documenting all top-level keys and nested structures
+- `mission-editor.md` - Guide to the DCS World Mission Editor GUI, including unit placement, waypoints, tasking, and triggers
+- `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
+
 ## Trust Hierarchy
 
 When information conflicts between sources:
@@ -18,6 +27,8 @@ When information conflicts between sources:
 ## Terminology
 
 - **SSE** - Simulator Scripting Engine, the Lua scripting API for DCS World missions
+- **MIZ** - The mission file format, a ZIP archive containing Lua tables and embedded resources
+- **ME** - Mission Editor, the graphical interface for creating missions
 
 ## Generating Documentation
 
