@@ -202,6 +202,8 @@ Weather generated from atmospheric pressure systems:
 
 Dynamic weather creates evolving wind and cloud conditions based on pressure system interactions.
 
+**Note:** The Cyclone/Anticyclone baric system settings are part of the legacy non-dynamic weather system and should not be used in new missions. New missions should use weather presets instead.
+
 ## Mission Goals
 
 Goals define victory, draw, and failure conditions using a point-based system:

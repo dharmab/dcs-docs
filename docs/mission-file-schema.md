@@ -421,7 +421,9 @@ Number representing ground turbulence intensity (meters/second).
 | `enable_dust` | boolean | Dust storms enabled |
 | `dust_density` | number | Dust density |
 | `qnh` | number | QNH pressure (mmHg) |
-| `cyclones` | table | Cyclone/storm definitions |
+| `cyclones` | table | Cyclone/storm definitions (legacy); should be an empty table `{}` in new missions |
+
+**Note:** The `cyclones` field is part of the legacy non-dynamic weather system and should not be used in new missions. New missions should use weather presets instead and leave `cyclones` as an empty table.
 
 ---
 
