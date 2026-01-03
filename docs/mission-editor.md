@@ -67,14 +67,69 @@ Static objects are non-moving scenery elements including buildings, fortificatio
 
 ## Route Planning
 
-Routes consist of waypoints that define unit movement paths. Each waypoint can specify:
+Routes define the movement paths for unit groups using a series of waypoints. Each waypoint represents a position on the map with associated properties that control how the unit navigates to and behaves at that location. Actions can be attached to waypoints to script AI behavior at specific points along the route.
 
-- **Type**: Turning point, Fly over point, Takeoff (runway/ramp/ground), Landing, LandingReFuAr
-- **Altitude**: MSL (Mean Sea Level) or AGL (Above Ground Level)
-- **Speed**: Desired ground speed
-- **ETA**: Estimated time of arrival
+### Waypoint Management
 
-Speed and ETA values can be locked or unlocked. When one is locked, the editor calculates the other automatically based on distance. Routes must have at least one waypoint with a locked ETA as a time reference.
+The waypoint control panel provides three mode buttons for route editing:
+
+- **ADD**: Left-clicking on the map adds a new waypoint to the route (default mode when opening group properties)
+- **EDIT**: Select existing waypoints on the map to modify their properties
+- **DEL**: Delete the selected waypoint from the route
+
+Each waypoint can be assigned a unique name that appears on the map next to its marker. The waypoint selector allows cycling through waypoints using arrow buttons or by clicking directly on the map.
+
+### Waypoint Types
+
+#### Aircraft Waypoints
+
+**Turning Point** is the most common waypoint type and results in the aircraft performing a lead turn ahead of the actual waypoint location to complete the turn on course for the following waypoint. This produces smooth, efficient navigation but means the aircraft passes near rather than directly over the waypoint coordinates.
+
+**Fly Over Point** works like a turning point but requires the aircraft to pass directly over the waypoint location before beginning its turn to the next waypoint. This results in a course correction after the waypoint but guarantees the aircraft crosses the exact position specified.
+
+**Takeoff from Runway** is only available for waypoint 1 and spawns the aircraft on the runway threshold with all systems running and ready for immediate takeoff. The waypoint automatically snaps to the nearest airfield or FARP.
+
+**Takeoff from Ramp** is only available for waypoint 1 and spawns the aircraft on the parking apron with systems shut down. AI aircraft will perform a cold start sequence before taxiing to the runway. The waypoint snaps to the nearest parking area.
+
+**Takeoff from Parking Hot** is only available for waypoint 1 and spawns the aircraft on the parking apron with all systems already running. This saves time compared to the cold start sequence while still requiring the aircraft to taxi to the runway.
+
+**Takeoff from Ground** and **Takeoff from Ground Hot** are only available for waypoint 1 and allow helicopters and VTOL aircraft to spawn at arbitrary ground locations rather than at airfields. The "hot" variant has systems already running.
+
+**Landing** is only available for the final waypoint in the route and causes the aircraft to land at the nearest airfield or FARP. The waypoint automatically snaps to a valid landing location.
+
+**LandingReFuAr** can be placed at any waypoint other than waypoint 1 and causes the aircraft to land, refuel, and rearm before continuing along its route. This enables designing missions where aircraft fly multiple sorties without despawning.
+
+#### Ground Unit Waypoints
+
+Ground units navigate using simpler waypoint types that control their relationship with the road network:
+
+**On Road** waypoints cause the unit to follow the road network to reach the destination. The AI pathfinding system calculates a route using available roads.
+
+**Off Road** waypoints cause the unit to move directly toward the destination, ignoring roads and crossing terrain in a straight line.
+
+**Rank** waypoints control formation positioning for units within the group.
+
+#### Naval Unit Waypoints
+
+Ships use standard turning point waypoints and navigate directly between positions on the water, subject to water depth constraints.
+
+### Speed and ETA System
+
+Each waypoint has a speed setting (the desired ground speed when traveling toward that waypoint) and an ETA setting (the estimated time of arrival at that waypoint). Both values have lock checkboxes that control whether the mission designer specifies the value manually or allows the editor to calculate it automatically.
+
+The fundamental rule is that every route must have at least one waypoint with a locked ETA to serve as a time reference. The initial waypoint's ETA lock controls the group's spawn time in the mission. Locking the ETA for later waypoints creates timing constraints that the AI attempts to meet by adjusting its speed.
+
+When speed is locked and ETA is unlocked, the AI maintains the specified speed and the editor calculates when the aircraft will arrive. When ETA is locked and speed is unlocked, the AI adjusts its speed to arrive at the designated time and the editor calculates the required speed. When both are unlocked for intermediate waypoints, the editor calculates both values based on the constraints of surrounding locked waypoints.
+
+Invalid route configurations occur when the editor cannot find a valid solution for the lock settings. When this happens, the speed and ETA checkboxes are framed in red to indicate an error. Common causes include locking incompatible combinations (such as locking speed for all waypoints while also locking ETA for start and end) or specifying ETAs that require speeds outside the aircraft's flight envelope.
+
+### Altitude Settings
+
+Aircraft waypoints include altitude configuration with two reference systems:
+
+**MSL (Mean Sea Level)** sets the altitude as a constant height above sea level. The aircraft maintains level flight at the specified altitude regardless of terrain below. This is appropriate for high-altitude cruise flight but can result in terrain collisions if the MSL altitude is set below the terrain elevation along the route.
+
+**AGL (Above Ground Level)** sets the altitude as a height above the terrain directly below the aircraft. This creates terrain-following flight where the aircraft climbs and descends to maintain a consistent clearance above the ground. AGL altitude is appropriate for low-level flight through varied terrain.
 
 ## Trigger System
 
@@ -225,23 +280,55 @@ Warehouses can be linked in supply chains with configurable supply speed, period
 
 ## AI Task Planning
 
+Mission building involves two fundamental approaches to controlling AI behavior. The simple approach relies on placing units and routes with minimal configuration, allowing the AI to behave according to its default programming based on unit type and proximity to enemies. The advanced approach uses the Advanced Actions Panel to manually configure specific tasks, enroute tasks, commands, and options for precise control over AI behavior.
+
+Actions are set for entire groups rather than individual units within a group. The group leader determines when actions activate based on reaching waypoints or satisfying trigger conditions. Understanding the four categories of actions is essential for effective AI scripting.
+
 ### Action Types
 
-**Perform Task**: Primary combat actions executed sequentially (Attack Group, Orbit, FAC, etc.)
+**Perform Task** actions are primary combat engagements, targeting operations, and maneuvering behaviors. When a Perform Task is set, the AI executes a specific combat function such as orbiting at a location, attacking a designated target, or acting as a forward air controller. Tasks have the highest execution priority and are generally used to set the primary group action for each waypoint. The AI performs multiple tasks sequentially according to their order or priority setting. Task execution ends either automatically (for example, when all designated targets are destroyed) or according to stop conditions set by the mission designer.
 
-**Start Enroute Task**: Background actions active for the route duration, executed when conditions arise (Search Then Engage, etc.)
+**Start Enroute Task** actions are similar to Perform Tasks in that they involve targeting or engagement, but they remain active for the duration of the group's route rather than executing once at a waypoint. Enroute Tasks handle "pop-up" situations where the AI should respond to targets of opportunity as they are detected along the route. The key distinction is that Perform Tasks involve known, pre-set targets while Enroute Tasks allow uncertainty in target type or location. Multiple Enroute Tasks can be active simultaneously, but only one executes at a time based on priority when conditions for several are true. Perform Tasks always take priority over concurrent Enroute Tasks unless manually overridden.
 
-**Perform Command**: Instantaneous actions (Set Frequency, Set Callsign, etc.)
+**Perform Command** actions are instantaneous group actions executed immediately upon activation. Examples include changing the group's radio frequency or switching navigation lights. Commands do not involve sustained behavior; they simply apply a change and complete.
 
-**Set Option**: Rules and limitations for the group (Formation, ROE, Weapon Usage, etc.)
+**Set Option** actions establish rules and limitations for the group that persist for the mission duration or until changed. Options control behaviors such as formation, radar usage, weapons release authority, and reaction to threats. They use a variable-value format such as setting Formation to Trail or Radar Use to Never.
 
 ### Action Priority
 
-Tasks have higher priority than Enroute Tasks by default. Triggered tasks have higher priority than waypoint tasks. When multiple Enroute Tasks are active, the one with the lowest priority number (0 = highest) executes first.
+The priority system determines which action the AI executes when multiple actions are available. Priority is expressed as a whole number starting with 0 as the highest priority. When conditions for multiple tasks are satisfied, the AI selects the one with the lowest priority number.
+
+Perform Tasks always take precedence over Enroute Tasks by default. An Enroute Task can be interrupted by a Perform Task and resumed after the task completes. Triggered tasks (set through the trigger menu rather than at waypoints) have higher priority than waypoint tasks.
+
+### Action Activation
+
+Waypoint-based actions activate when the group leader reaches the associated waypoint. Actions are then performed sequentially based on their order in the action list or their priority settings. Actions can also be activated independently of waypoints through the trigger menu, in which case they execute when the trigger conditions are met rather than at a specific route position.
 
 ### Start/Stop Conditions
 
-Actions can have start conditions (time, flag state, probability, Lua predicate) and stop conditions (time, flag state, duration, last waypoint).
+All actions support conditions that control when they begin and end. Start conditions include mission time (the action activates at a specific time), flag state (the action activates when a flag is true or false), activation probability (a percentage chance the action activates), and Lua predicates (custom scripting logic). Stop conditions include duration time limits, mission time limits, flag states, and reaching the last waypoint. If no stop conditions are set for an Enroute Task, it remains active for the duration of the group's existence in the mission.
+
+### Aircraft Tasks
+
+Aircraft groups have the most extensive task options. The group-level task setting (Nothing, AFAC, Anti-ship Strike, AWACS, CAP, CAS, Escort, Fighter Sweep, Ground Attack, Intercept, Pinpoint Strike, Reconnaissance, Refueling, Runway Attack, SEAD, Transport) serves as a filter that determines which actions are available in the Advanced Actions Panel and which default payload packages are offered.
+
+Common Perform Tasks for aircraft include Orbit (hold position in a pattern), Attack Group and Attack Unit (engage specified targets), Bombing and Carpet Bombing (attack ground targets), Escort and Follow (accompany another group), Ground Escort (protect ground units), FAC - Assign Group (act as forward air controller for a unit), Land (land at a location), and Refueling (refuel from a tanker).
+
+Common Enroute Tasks for aircraft include the Search Then Engage variants (automatically engage detected targets matching criteria), AWACS (provide early warning and control), Tanker (refuel requesting aircraft), and FAC/FAC - Engage Group (forward air controller operations along the route).
+
+### Ground Unit Tasks
+
+Ground units have a more limited but still useful set of tasks. Perform Tasks include Hold (stop movement and hold position), Fire at Point (engage a map location), FAC - Assign Group (designate targets as a forward air controller), and Go to Waypoint (proceed to a specific waypoint out of sequence).
+
+Enroute Tasks for ground units include FAC and FAC - Engage Group for forward air controller operations during movement.
+
+### Naval Unit Tasks
+
+Naval units support Perform Tasks including Fire at Point and Attack Group for engaging surface and land targets. The command and option structure is similar to aircraft groups.
+
+### Further Reference
+
+The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See the [Simulator Scripting Engine](simulator-scripting-engine.md) AI Control section for detailed documentation of task definitions, parameters, and the programmatic API for controlling AI behavior.
 
 ## Briefing Creation
 
