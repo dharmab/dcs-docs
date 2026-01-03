@@ -15,6 +15,10 @@ When information conflicts between sources:
 1. **Most trusted:** `data/` - Datamined information from current simulator versions
 2. **Less trusted:** `pdf/` - Legacy PDF manuals that may contain outdated information
 
+## Terminology
+
+- **SSE** - Simulator Scripting Engine, the Lua scripting API for DCS World missions
+
 ## Generating Documentation
 
 When creating new documentation:

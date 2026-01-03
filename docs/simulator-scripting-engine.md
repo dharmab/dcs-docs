@@ -3399,7 +3399,7 @@ Fires when an aircraft takes off from an airbase, FARP, or ship. Fires several s
 }
 ```
 
-**Gotchas:** As of DCS 2.9.6, this event fires after the aircraft has departed the immediate vicinity. Use `S_EVENT_RUNWAY_TAKEOFF` for the moment of liftoff.
+**Gotchas:**  This event fires after the aircraft has been airborne for a short period of time. Use `S_EVENT_RUNWAY_TAKEOFF` if you need to detect the exact moment of liftoff.
 
 ##### S_EVENT_LAND
 
@@ -3416,7 +3416,7 @@ Fires when an aircraft lands at an airbase, FARP, or ship and sufficiently slows
 }
 ```
 
-**Gotchas:** As of DCS 2.9.6, this event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
+**Gotchas:** This event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
 
 ##### S_EVENT_RUNWAY_TAKEOFF
 
