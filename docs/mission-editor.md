@@ -49,7 +49,7 @@ Aircraft groups consist of one to four units. Each group has configurable proper
 - **Name**: Unique identifier for trigger references
 - **Country**: Owning country within the coalition (use CJTF countries for unrestricted aircraft access)
 - **Task**: Primary mission type affecting AI behavior and available actions
-- **Skill**: AI competency level (Average, Good, High, Excellent, Random, Client, or Player)
+- **Skill**: AI competency level (Average, Good, High, Excellent, Random) or player slot designation (Client or Player). The Client skill marks the aircraft as an available selectable player slot in both singleplayer and multiplayer. The Player skill marks the aircraft as the sole and default slot available in a singleplayer mission.
 - **Callsign**: Radio identification
 - **Hidden on Map/Planner**: Visibility on F10 map and mission planner
 - **Late Activation**: Group spawns only when triggered
