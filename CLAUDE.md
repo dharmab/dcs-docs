@@ -33,8 +33,10 @@ The `docs/` directory contains the following documentation:
   - `ww2-planes.md` - World War II era fixed-wing aircraft with pylons, loadouts, and capabilities
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 - `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):
+  - `artillery-battery.md` - Creating artillery batteries with continuous fire for visual spectacle and SEAD/DEAD gameplay
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
+  - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
 
