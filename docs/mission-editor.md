@@ -328,7 +328,7 @@ Naval units support Perform Tasks including Fire at Point and Attack Group for e
 
 ### Further Reference
 
-The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See the [Simulator Scripting Engine](simulator-scripting-engine.md) AI Control section for detailed documentation of task definitions, parameters, and the programmatic API for controlling AI behavior.
+The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See the [Simulator Scripting Engine](scripting/simulator-scripting-engine.md) AI Control section for detailed documentation of task definitions, parameters, and the programmatic API for controlling AI behavior.
 
 ## Briefing Creation
 
@@ -377,7 +377,7 @@ Additional mission options include:
 
 ### MIZ Files
 
-Mission file format stored as a ZIP archive containing mission data and resources. See [MIZ File Format](miz-file-format.md) for complete documentation of the archive structure and contents.
+Mission file format stored as a ZIP archive containing mission data and resources. See [MIZ File Format](mission/miz-file-format.md) for complete documentation of the archive structure and contents.
 
 ### TRK Files (Track Recordings)
 

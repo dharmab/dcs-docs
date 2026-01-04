@@ -12,10 +12,17 @@ This repository contains documentation for AI agents to use as context when gene
 
 The `docs/` directory contains the following documentation:
 
-- `miz-file-format.md` - The .miz archive format, including the structure of contained files (mission, theatre, warehouses, options, l10n resources)
-- `mission-file-schema.md` - Complete schema reference for the `mission` Lua table, documenting all top-level keys and nested structures
+- `mission/` - Mission file format documentation:
+  - `miz-file-format.md` - The .miz archive format, including the structure of contained files (mission, theatre, warehouses, options, l10n resources)
+  - `mission-file-schema.md` - Complete schema reference for the `mission` Lua table, documenting all top-level keys and nested structures
 - `mission-editor.md` - Guide to the DCS World Mission Editor GUI, including unit placement, waypoints, tasking, and triggers
-- `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
+- `scripting/` - Scripting and automation documentation:
+  - `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
+- `units/` - Unit and equipment reference documentation:
+  - `ground.md` - Ground units including vehicles, armor, artillery, air defense systems, and infantry
+  - `sea.md` - Naval units including carriers, destroyers, submarines, and civilian vessels
+  - `planes.md` - Fixed-wing aircraft with pylons, loadouts, and capabilities
+  - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 
 ## Trust Hierarchy
 
