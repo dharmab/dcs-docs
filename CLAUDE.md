@@ -34,6 +34,7 @@ The `docs/` directory contains the following documentation:
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 - `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
+  - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
 
 ## Terminology
 
