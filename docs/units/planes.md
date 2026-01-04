@@ -159,7 +159,11 @@ This document provides comprehensive information about all aircraft in DCS World
 
 ### Background
 
-The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Warthog', entered USAF service in 1977. Designed specifically for close air support (CAS) and tank-killing missions, it features the massive GAU-8/A Avenger 30mm rotary cannon and exceptional survivability. The A-10A is the original single-seat variant.
+The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the "Warthog," entered USAF service in 1977. Designed specifically for close air support and tank-killing missions against Soviet armored formations in Central Europe, the A-10 was built around the massive GAU-8/A Avenger 30mm rotary cannon—the most powerful aircraft gun ever flown. The seven-barrel weapon fires depleted uranium armor-piercing rounds capable of destroying tanks from above, where their armor is thinnest.
+
+The A-10 was designed for survivability in the low-altitude, high-threat environment over a modern battlefield. The aircraft features redundant flight control systems, self-sealing fuel tanks, a titanium "bathtub" protecting the cockpit, and the ability to fly with one engine, half a tail, and significant airframe damage. Pilots have returned A-10s to base with holes large enough to see through the wings.
+
+The A-10A first saw combat during Operation Desert Storm in 1991, where Warthogs flew 8,100 sorties and destroyed over 1,000 tanks, 2,000 military vehicles, and 1,200 artillery pieces. The aircraft proved devastating against Iraqi ground forces during the "Highway of Death" retreat from Kuwait. A-10s subsequently deployed to the Balkans, Afghanistan, and Iraq, providing close air support that ground troops consistently praised. Despite multiple attempts by the Air Force to retire the type, the A-10 remains in service due to its unmatched effectiveness in the CAS role. The A-10A is the original single-seat variant with analog cockpit instrumentation.
 
 ### Tasks
 
@@ -472,7 +476,11 @@ The Fairchild Republic A-10 Thunderbolt II, affectionately nicknamed the 'Wartho
 
 ### Background
 
-The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007, featuring precision engagement capabilities including GPS/laser-guided munitions, improved avionics, and glass cockpit displays while retaining the legendary GAU-8/A cannon. The "A-10C II" is a simulator-created aircraft based on a subset of upgrades applied to real-world A-10Cs, including laser-guided Maverick missiles, APKWS rockets, Scorpion helmet-mounted display, and ARC-210 radio system.
+The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007 under the Precision Engagement program, representing a comprehensive modernization of the venerable Warthog. The C-model introduced digital glass cockpit displays replacing analog instruments, GPS/INS navigation, the ability to employ precision-guided munitions including JDAM GPS bombs and laser-guided weapons, improved communications, and a digital stores management system. The legendary GAU-8/A cannon remains the aircraft's signature weapon.
+
+The A-10C II in DCS represents a simulator-created aircraft based on a subset of later upgrades applied to real-world A-10Cs. These include the AGM-65E2/L laser-guided Maverick missile, APKWS (Advanced Precision Kill Weapon System) laser-guided rockets, Scorpion HMCS helmet-mounted cueing system, and ARC-210 radio system with SATCOM capability. These enhancements transformed the Warthog from a predominantly unguided-munitions platform into a precision strike aircraft while retaining its traditional close air support strengths.
+
+A-10Cs have deployed extensively to Afghanistan and Iraq, where their precision engagement capabilities proved valuable for counterinsurgency operations requiring careful target discrimination to minimize civilian casualties. The aircraft's ability to loiter for hours, communicate directly with ground forces, and deliver weapons ranging from the cannon to GPS-guided bombs makes it the most requested close air support platform among ground troops. Despite periodic attempts to retire the fleet, the A-10C remains in active service and continues receiving upgrades.
 
 ### Tasks
 
@@ -1095,7 +1103,11 @@ The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2
 
 ### Background
 
-The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007, featuring precision engagement capabilities including GPS/laser-guided munitions, improved avionics, and glass cockpit displays while retaining the legendary GAU-8/A cannon.
+The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007 under the Precision Engagement program. The C-model modernized the Warthog with digital glass cockpit displays, GPS/INS navigation, and the ability to employ precision-guided munitions including JDAM GPS bombs and laser-guided weapons. The upgrade transformed the A-10 from a predominantly visual, unguided-weapons platform into a precision strike aircraft capable of all-weather operations.
+
+The A-10C retained everything that made the original Warthog effective—the devastating GAU-8/A cannon, exceptional survivability, and outstanding loiter time—while adding modern targeting and weapons capabilities. Pilots gained situational awareness through multifunction displays, moving maps, and integrated sensors. The ability to self-designate targets with targeting pods and deliver GPS-guided weapons expanded the aircraft's operational envelope significantly.
+
+A-10Cs deployed extensively to Afghanistan and Iraq during the Global War on Terror, providing close air support in counterinsurgency environments where precision was essential to avoid civilian casualties. The aircraft's long loiter time and ability to operate at low altitude made it ideal for supporting troops in contact. In DCS, the A-10C represents the Precision Engagement variant as initially fielded, superseded by the A-10C II which adds additional upgrades.
 
 ### Tasks
 
@@ -1680,7 +1692,11 @@ The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2
 
 ### Background
 
-The Douglas A-20 Havoc (also known as the Boston in British service) is an American medium bomber that was used extensively during World War II, entering service in 1941. The G variant is the most numerous, armed with six .50 caliber machine guns in the nose for ground attack missions.
+The Douglas A-20 Havoc (known as the Boston in British and Commonwealth service) was one of the most successful American attack bombers of World War II. First flying in 1938, the Havoc entered service in 1941 and quickly proved itself as a versatile platform for low-level attack, medium bombing, and night fighter roles. Over 7,400 A-20s were built, with significant numbers supplied to the Soviet Union under Lend-Lease, where the type was highly regarded by Soviet aircrews.
+
+The A-20G was the most numerous variant, with nearly 2,900 produced. It replaced the glazed bombardier nose of earlier models with a solid nose housing six forward-firing .50 caliber M2 machine guns, optimizing the aircraft for strafing and low-level attack missions. The A-20G could carry up to 4,000 pounds of bombs internally and was also fitted with underwing bomb racks for additional ordnance.
+
+A-20s served in every theater of World War II. In the Pacific, Fifth Air Force A-20s conducted devastating low-level attacks on Japanese shipping, airfields, and ground installations. In Europe, Ninth Air Force Havocs struck bridges, rail yards, and troop concentrations in support of the Normandy invasion and subsequent ground campaign. Soviet A-20s attacked German armor, supply lines, and defensive positions on the Eastern Front. The aircraft's speed, firepower, and survivability made it a favorite among crews despite occasionally suffering heavy losses to concentrated anti-aircraft fire during low-level raids.
 
 ### Tasks
 
@@ -1712,7 +1728,11 @@ The Douglas A-20 Havoc (also known as the Boston in British service) is an Ameri
 
 ### Background
 
-The Beriev A-50 is a Soviet/Russian airborne early warning and control (AEW&C) aircraft based on the Il-76 transport that entered service in 1984. It serves as the Russian equivalent to the American E-3 Sentry AWACS.
+The Beriev A-50 (NATO reporting name "Mainstay") is a Soviet/Russian airborne early warning and control aircraft based on the Ilyushin Il-76 heavy transport airframe. Entering service in 1984, the A-50 was developed to replace the aging Tupolev Tu-126 Moss and provide the Soviet Union with an AWACS capability comparable to the American E-3 Sentry. The most distinctive feature is the large Shmel (Bumblebee) rotating radome mounted above the rear fuselage, housing a pulse-Doppler radar capable of detecting aircraft at ranges exceeding 300 kilometers.
+
+The A-50 serves as an airborne command post for coordinating fighter intercepts and directing ground-based air defense systems. The aircraft can track multiple targets simultaneously while filtering out ground clutter to detect low-flying aircraft and cruise missiles. A crew of 15 operates the radar, communications, and battle management systems. The A-50U upgrade program, beginning in the 2000s, introduced modernized radar and digital processing equipment.
+
+A-50s have deployed operationally to support Russian military operations in Syria and during the ongoing conflict in Ukraine. The aircraft provides wide-area surveillance and coordinates fighter aircraft operations beyond the range of ground-based radar. Ukraine has claimed to have damaged or destroyed several A-50s during the war, highlighting the high-value nature of these limited airborne early warning assets. Russia operates approximately a dozen A-50s, with the type expected to remain in service until replaced by the A-100 Premier.
 
 ### Tasks
 
@@ -1738,7 +1758,11 @@ No pylons defined.
 
 ### Background
 
-The Grumman A-6 Intruder is an American carrier-based attack aircraft that served the U.S. Navy and Marine Corps from 1963 to 1997. Known for its all-weather precision strike capability, the A-6E variant features upgraded avionics and TRAM (Target Recognition Attack Multi-sensor) systems.
+The Grumman A-6 Intruder was the U.S. Navy and Marine Corps' premier carrier-based all-weather attack aircraft from 1963 to 1997. Designed from the outset for precision strike in conditions that would ground other aircraft, the Intruder featured an advanced Digital Integrated Attack Navigation Equipment (DIANE) system that allowed accurate weapons delivery at night and in poor weather—capabilities unmatched by any other tactical aircraft of its era.
+
+The A-6 saw extensive combat during the Vietnam War, where Intruders conducted the most demanding missions against heavily defended targets in North Vietnam. A-6s struck bridges, power plants, and supply lines during Rolling Thunder and Linebacker campaigns, often flying when other aircraft could not due to weather. The aircraft's ability to deliver heavy bomb loads accurately at night made it invaluable for interdicting the Ho Chi Minh Trail. Intruder crews suffered significant losses to North Vietnamese SAMs and AAA, but their contribution to the air campaign was substantial.
+
+The A-6E variant, introduced in 1970, featured upgraded avionics and the TRAM (Target Recognition Attack Multi-sensor) turret under the nose, providing FLIR and laser designation capability for precision-guided munitions. A-6Es served in every subsequent U.S. naval operation, including strikes on Libya in 1986 and extensive operations during Desert Storm in 1991. During the Gulf War, Intruders delivered laser-guided bombs, HARM anti-radiation missiles, and conventional ordnance against Iraqi targets. The A-6 was retired in 1997, with its mission partially assumed by the F/A-18 Hornet and later the F/A-18E/F Super Hornet.
 
 ### Tasks
 
@@ -2200,7 +2224,11 @@ The Grumman A-6 Intruder is an American carrier-based attack aircraft that serve
 
 ### Background
 
-The Saab 37 Viggen (Thunderbolt) is a Swedish single-seat, single-engine combat aircraft developed in the 1960s. The AJS37 variant serves as a multirole fighter combining attack, reconnaissance, and fighter capabilities. It entered service in 1971 and remained operational until 2005.
+The Saab 37 Viggen (Thunderbolt) was Sweden's primary combat aircraft from its introduction in 1971 until replacement by the Gripen in the early 2000s. Developed to meet Swedish requirements for a versatile aircraft capable of operating from dispersed highway bases during a potential Soviet invasion, the Viggen featured a distinctive double-delta wing configuration with canards, powerful afterburning turbofan, and thrust reverser for short-field operations. The aircraft could land on 500-meter runway segments and be serviced by conscript ground crews in minutes.
+
+The AJS37 variant represents the final evolution of the Viggen family, combining the attack capability of the AJ37, reconnaissance systems of the SF/SH37, and fighter role of the JA37 into a single multirole platform. This upgrade program, completed in the 1990s, extended the Viggen's service life and maximized capability as the Gripen entered service. The AJS37 carries Swedish-designed weapons including the Rb-04E and Rb-15F anti-ship missiles, BK-90 Mjölner cluster bomb dispensers, and Rb-75 (Maverick) air-to-surface missiles.
+
+The Viggen never saw combat, reflecting Sweden's successful Cold War neutrality. However, Swedish Viggens regularly intercepted Soviet aircraft over the Baltic Sea and played a crucial role in Swedish air defense planning. The aircraft's ability to operate from dispersed highway strips throughout Sweden would have made it extremely difficult for an attacker to eliminate Swedish airpower. The Viggen was retired from Swedish service in 2005 after over 30 years of operations. In DCS, the AJS37 is a high-fidelity player module featuring authentic Swedish avionics and weapons systems.
 
 ### Tasks
 
@@ -2352,7 +2380,11 @@ The Saab 37 Viggen (Thunderbolt) is a Swedish single-seat, single-engine combat 
 
 ### Background
 
-The Antonov An-26 is a Soviet-era twin-turboprop transport aircraft that first flew in 1969. The An-26B is a civil cargo variant capable of carrying up to 5,500 kg of freight. It features a distinctive rear cargo ramp for rapid loading and unloading.
+The Antonov An-26 (NATO reporting name "Curl") is a Soviet-designed twin-turboprop light tactical transport that first flew in 1969 and entered service in 1970. Developed from the earlier An-24 passenger aircraft, the An-26 introduced a redesigned rear fuselage with an integral cargo ramp that could be lowered in flight for airdrop operations or on the ground for rapid loading and unloading. The aircraft can carry up to 5,500 kg of cargo or 38 paratroops.
+
+The An-26 became the standard tactical transport for Soviet forces and Warsaw Pact nations, with over 1,400 built. The type has seen extensive military service in conflicts across Africa, Asia, and the Middle East. Afghan An-26s flew supply missions during the civil wars that followed the Soviet withdrawal. Iraqi An-26s served during the Iran-Iraq War and Gulf War. The aircraft has operated with both government and rebel forces in numerous African conflicts.
+
+The An-26B variant optimized the design for cargo operations, with improved cargo handling equipment and increased payload capacity. The type remains in widespread military and civilian service across the former Soviet Union, Africa, and Asia, valued for its ability to operate from short, unprepared airstrips. The robust landing gear and high wing configuration allow operations from austere fields that would damage more delicate transport aircraft.
 
 ### Tasks
 
@@ -2378,7 +2410,11 @@ No pylons defined.
 
 ### Background
 
-The Antonov An-30 is a Soviet aerial survey and reconnaissance aircraft based on the An-24 transport that entered service in 1974. The An-30M variant is equipped for meteorological research and cloud seeding operations.
+The Antonov An-30 (NATO reporting name "Clank") is a Soviet aerial survey and reconnaissance aircraft based on the An-24 transport. First flying in 1974, the An-30 was designed for cartographic, aerial photography, and survey missions, featuring a extensively glazed nose section and camera bays in the fuselage. The aircraft can carry multiple survey cameras, side-looking radar, and other remote sensing equipment.
+
+The An-30 found military application as a reconnaissance platform and played a notable role in arms control verification. Under the Open Skies Treaty, An-30s conducted observation flights over NATO territory, providing transparency and confidence-building between former Cold War adversaries. The aircraft's camera systems and flight characteristics made it well-suited for treaty-mandated observation missions.
+
+The An-30M variant was modified for meteorological research and weather modification operations, equipped with cloud seeding dispensers for precipitation enhancement and fog dispersal. The type has been used to attempt to ensure clear weather for major public events in Russia and other countries. Various An-30 variants remain in limited service for survey, environmental monitoring, and reconnaissance missions.
 
 ### Tasks
 
@@ -2404,7 +2440,11 @@ No pylons defined.
 
 ### Background
 
-The McDonnell Douglas (now Boeing) AV-8B Harrier II is an American VSTOL (Vertical/Short Takeoff and Landing) ground-attack aircraft that entered service in 1985. The Night Attack variant features a forward-looking infrared sensor and night vision goggle compatibility for around-the-clock operational capability.
+The McDonnell Douglas (now Boeing) AV-8B Harrier II is the U.S. Marine Corps' primary fixed-wing close air support aircraft, entering service in 1985. The Harrier II is a significantly improved development of the British Hawker Siddeley Harrier, featuring a larger composite wing, redesigned fuselage with improved lift, and enhanced engine performance. The aircraft's VSTOL (Vertical/Short Takeoff and Landing) capability using thrust vectoring allows operations from amphibious assault ships, forward operating bases, and austere strips that would be inaccessible to conventional jets.
+
+The AV-8B saw combat during Operation Desert Storm in 1991, where Marine Harriers flew close air support missions from both shore bases and amphibious ships. The aircraft conducted strike missions against Iraqi targets despite suffering losses to ground fire—five Harriers were shot down during the conflict. Harriers subsequently deployed to Somalia, Bosnia, Kosovo, Afghanistan, and Iraq, consistently providing Marines with organic close air support regardless of the availability of conventional airfields.
+
+The Night Attack variant represented in DCS features the ASB-19(V)2 Angle Rate Bombing System, a forward-looking infrared sensor mounted on the nose, and cockpit compatibility with night vision goggles. These enhancements enable effective operations after dark, a significant improvement over early Harrier variants limited to daylight operations. The AV-8B continues to serve with the Marine Corps while the F-35B Lightning II gradually replaces it. In DCS, the AV-8B N/A is a high-fidelity player module featuring authentic VSTOL flight dynamics and systems simulation.
 
 ### Tasks
 
@@ -2747,7 +2787,11 @@ The McDonnell Douglas (now Boeing) AV-8B Harrier II is an American VSTOL (Vertic
 
 ### Background
 
-The Boeing B-17 Flying Fortress is a four-engine heavy bomber used primarily by the United States Army Air Forces during World War II. The B-17G, introduced in 1943, added a chin turret to improve frontal defense and became the most-produced variant with over 8,600 built.
+The Boeing B-17 Flying Fortress is among the most iconic aircraft of World War II, serving as the primary American heavy bomber in the European Theater. First flying in 1935 and entering service in 1938, the B-17 was designed for the strategic bombing role and became famous for its ability to sustain tremendous battle damage while returning crews safely home. The aircraft's defensive armament of up to thirteen .50 caliber machine guns earned it the "Flying Fortress" name.
+
+The B-17G, introduced in 1943, was the definitive production variant with over 8,600 built. The G-model added a chin turret with twin .50 caliber guns to counter the Luftwaffe's head-on attacks that had proven deadly against earlier variants. Other improvements included a staggered waist gun arrangement, enclosed waist positions, and an improved tail turret.
+
+B-17s of the Eighth Air Force flew the daylight precision bombing campaign against Germany, striking industrial targets, transportation infrastructure, and oil production facilities. The bombing raids exacted a fearsome toll—at the campaign's peak, loss rates sometimes exceeded 10% per mission, and over 4,700 B-17s were lost in combat. Crews endured fighter attacks, intense flak barrages, and the extreme cold of high altitude over Europe. Despite the losses, B-17 formations pressed the attack, contributing significantly to the destruction of German war production and the ultimate Allied victory.
 
 ### Tasks
 
@@ -2775,7 +2819,11 @@ The Boeing B-17 Flying Fortress is a four-engine heavy bomber used primarily by 
 
 ### Background
 
-The Rockwell B-1 Lancer is a supersonic variable-sweep wing strategic bomber that entered USAF service in 1986. Originally designed for nuclear strike missions, it was later converted to a conventional-only role. The B-1B features a blended wing-body design and internal weapons bays capable of carrying up to 75,000 lbs of ordnance.
+The Rockwell B-1 Lancer is a supersonic variable-sweep wing strategic bomber that entered USAF service in 1986. Originally conceived in the 1970s as a high-speed, high-altitude nuclear penetrator to replace the B-52, the program was cancelled by President Carter before being revived under President Reagan as the B-1B, modified for low-altitude terrain-following penetration. The aircraft features a blended wing-body design optimizing lift and fuel efficiency, variable-geometry wings that sweep from 15 to 67.5 degrees, and three internal weapons bays capable of carrying up to 75,000 pounds of ordnance.
+
+Following the end of the Cold War and the START treaty limitations on nuclear delivery systems, the B-1B was converted to a conventional-only role during the 1990s. This transformation proved fortuitous—the "Bone" became one of the most-tasked aircraft of the post-Cold War era. During the Kosovo campaign in 1999, B-1Bs flew less than 2% of strike sorties but delivered over 20% of the ordnance.
+
+The B-1B has seen extensive combat in Afghanistan, Iraq, and Syria, providing close air support with JDAM GPS-guided bombs and other precision munitions. The aircraft's speed, payload capacity, and long loiter time make it invaluable for responding quickly to troops in contact. A single B-1B can carry more precision weapons than a flight of fighters and remain on station for hours. The fleet is currently being retired as part of the transition to the B-21 Raider, with the last B-1Bs expected to leave service by 2036.
 
 ### Tasks
 
@@ -2837,7 +2885,11 @@ The Rockwell B-1 Lancer is a supersonic variable-sweep wing strategic bomber tha
 
 ### Background
 
-The Boeing B-52 Stratofortress is an American long-range subsonic strategic bomber, with the B-52H variant entering service in 1961. The H model, the only variant still in service, features turbofan engines and is continuously upgraded with modern avionics and precision munitions capability.
+The Boeing B-52 Stratofortress is one of the most remarkable aircraft in military history, with a service life that will ultimately span nearly a century. The B-52H variant, entering service in 1961, is the only version remaining in USAF inventory and is expected to continue flying into the 2050s. The H-model introduced TF33 turbofan engines replacing the earlier J57 turbojets, providing greater fuel efficiency and range, and was originally designed to carry the AGM-28 Hound Dog cruise missile for nuclear strike missions.
+
+The B-52 first saw combat during the Vietnam War in Operation Arc Light, where B-52Ds and B-52Gs flew devastating conventional bombing raids against targets in South Vietnam, Cambodia, Laos, and North Vietnam. During the Linebacker II campaign in December 1972, B-52s struck targets in Hanoi and Haiphong, suffering 15 aircraft lost to SAMs over 11 nights of intense operations but ultimately contributing to North Vietnam's return to negotiations.
+
+The B-52H underwent multiple modernization programs that transformed it from a high-altitude nuclear bomber into a precision conventional strike platform. During Desert Storm in 1991, B-52Gs launched AGM-86C cruise missiles in the opening hours of the air campaign—the longest combat mission in history at that time, launching from Louisiana. In Afghanistan and Iraq, B-52Hs provide close air support with JDAM precision bombs, loitering for hours with massive ordnance loads. The aircraft is currently being upgraded with new engines, radar, and weapons capability to remain effective for decades to come.
 
 ### Tasks
 
@@ -2931,7 +2983,11 @@ The Boeing B-52 Stratofortress is an American long-range subsonic strategic bomb
 
 ### Background
 
-The Messerschmitt Bf 109 K-4 is the final production version of Germany's primary fighter in World War II, entering service in late 1944. It features a powerful DB 605 engine, improved armament, and a pressurized cockpit for high-altitude operations.
+The Messerschmitt Bf 109 K-4 was the ultimate production variant of Germany's primary single-seat fighter, entering Luftwaffe service in October 1944. The K-4 represented the pinnacle of Bf 109 development, featuring a Daimler-Benz DB 605 engine with MW 50 methanol-water injection boosting output to 2,000 horsepower for short periods, improved armament with a 30mm MK 108 cannon firing through the propeller hub, and a pressurized cockpit for high-altitude combat. The K-series cleaned up the accumulated production variations of earlier models and standardized manufacturing.
+
+The Bf 109 was the backbone of the Luftwaffe fighter force throughout World War II, with over 34,000 produced in all variants—more than any other fighter in history. The aircraft saw combat from the Spanish Civil War through the fall of Berlin, fighting in every theater from the Arctic to Africa. Bf 109 pilots accumulated the highest individual victory scores ever recorded, with over 100 pilots claiming more than 100 aerial victories each—a feat enabled by the continuous combat of the Eastern Front.
+
+By the time the K-4 entered service, Allied air superiority was overwhelming, and the remaining Luftwaffe fighters faced hopeless odds against waves of American and British bombers escorted by long-range P-51 Mustangs and P-47 Thunderbolts. Fuel shortages, pilot attrition, and constant Allied attacks on airfields further degraded German capabilities. Despite the K-4's excellent performance, it came too late and in too few numbers to affect the outcome of the air war. The variant remains among the finest propeller fighters ever built.
 
 ### Tasks
 
@@ -2975,7 +3031,11 @@ The Messerschmitt Bf 109 K-4 is the final production version of Germany's primar
 
 ### Background
 
-The CASA C-101 Aviojet is a Spanish-designed low-wing single-engine jet trainer and light attack aircraft that first flew in 1977. The C-101CC is an export variant with enhanced weapons capability, in use by several air forces for training and light attack missions.
+The CASA C-101 Aviojet is a Spanish-designed single-engine jet trainer and light attack aircraft that first flew in 1977 and entered service in 1980. Developed by CASA (now part of Airbus Defence and Space) to replace the Hispano HA-200 Saeta, the C-101 was designed from the outset with both training and light combat capability. The aircraft features a high-mounted wing, tandem seating with stepped cockpits for instructor visibility, and competitive performance for its class.
+
+The C-101CC is an export attack variant with enhanced weapons capability, featuring additional hardpoints and compatibility with a wider range of munitions including the Sea Eagle anti-ship missile. Chile operates the C-101CC as the A-36 Halcón, using the type for both training and light attack roles. The Honduran Air Force also operates the CC variant. The Chilean aircraft have seen active use in border patrol and counter-insurgency support roles, demonstrating the type's operational utility beyond pure training.
+
+The C-101 represents one of Spain's most successful indigenous aircraft programs, with over 140 built for domestic and export customers. The type's economical operation, robust construction, and dual-role capability make it attractive for nations requiring cost-effective jet training with secondary combat capability. In DCS, the C-101 is a high-fidelity player module offering authentic flight dynamics and systems simulation.
 
 ### Tasks
 
@@ -3096,7 +3156,11 @@ The CASA C-101 Aviojet is a Spanish-designed low-wing single-engine jet trainer 
 
 ### Background
 
-The C-101EB is the initial Spanish Air Force training variant of the CASA C-101 Aviojet that entered service in 1980. It serves as the primary jet trainer for the Spanish Air Force's aerobatic team, Patrulla Águila.
+The C-101EB is the initial Spanish Air Force training variant of the CASA C-101 Aviojet, entering service in 1980 as Spain's primary advanced jet trainer. The EB designation indicates basic training configuration without the weapons capability of later variants, though the aircraft retains provisions for training stores. The Spanish Air Force operates approximately 80 C-101EBs for advanced training of fighter pilots before transition to front-line combat aircraft.
+
+The C-101EB is best known as the mount of Patrulla Águila (Eagle Patrol), the Spanish Air Force's official aerobatic demonstration team. Since 1985, Patrulla Águila has flown seven C-101s in precision formation aerobatics at airshows across Europe and around the world, showcasing both Spanish aviation industry products and Air Force skill. The team's aircraft are modified with smoke generation systems for dramatic display effects.
+
+The C-101EB provides an economical and effective platform for transitioning pilots from basic turboprop trainers to high-performance combat jets. The aircraft's docile handling characteristics, good visibility, and performance envelope appropriate for advanced training make it well-suited for the demanding curriculum that prepares pilots for F/A-18 Hornet and Eurofighter Typhoon operations. In DCS, the C-101EB is flyable as part of the C-101 module.
 
 ### Tasks
 
@@ -3129,7 +3193,11 @@ The C-101EB is the initial Spanish Air Force training variant of the CASA C-101 
 
 ### Background
 
-The Lockheed C-130 Hercules is a four-engine turboprop military transport aircraft that first flew in 1954. One of the most versatile and longest-produced military aircraft in history, it serves in tactical airlift, gunship, tanker, and special operations roles worldwide.
+The Lockheed C-130 Hercules is arguably the most successful military transport aircraft ever built. First flying in 1954 and entering service in 1956, the C-130 has remained in continuous production for over 60 years and serves with more than 70 nations worldwide. The aircraft's design—four turboprop engines, high wing, rear loading ramp, and robust landing gear—proved so fundamentally sound that successive modernizations have kept the type relevant through seven decades of technological change.
+
+The C-130 has served in every conceivable role: tactical airlift, aerial refueling, gunship (AC-130), special operations, search and rescue, firefighting, weather reconnaissance, electronic warfare, and Antarctic resupply. During the Vietnam War, C-130s flew countless missions into contested airfields, while AC-130 gunships provided devastating fire support at night. Hercules transports have delivered humanitarian aid to disaster zones, dropped paratroopers into combat, and extracted refugees from crisis areas on every continent.
+
+The aircraft's ability to operate from short, unprepared airstrips distinguishes it from larger strategic transports. C-130s routinely land on dirt strips, ice runways in Antarctica, and forward operating bases that would be inaccessible to jet transports. Over 2,500 C-130s have been built in all variants, with production continuing as the upgraded C-130J Super Hercules. The Hercules has earned its reputation as the workhorse of tactical airlift.
 
 ### Tasks
 
@@ -3155,7 +3223,11 @@ No pylons defined.
 
 ### Background
 
-The C-130J-30 is the stretched variant of the modernized C-130J Super Hercules, featuring a 15-foot fuselage extension for increased cargo capacity. Entering service in 1999, it incorporates digital avionics, new propellers, and more efficient engines.
+The C-130J-30 is the stretched variant of the modernized C-130J Super Hercules, entering service in 1999 as a comprehensive upgrade of the legendary Hercules tactical transport. The J-model introduced Rolls-Royce AE 2100D3 turboprops with six-blade composite propellers, digital avionics with glass cockpit displays, and reduced crew requirements—from five to three personnel. The -30 designation indicates the 15-foot fuselage stretch that increases cargo capacity by approximately 30%, allowing transport of larger vehicles and palletized loads.
+
+The C-130J represented a generational leap in Hercules capability despite maintaining external similarity to earlier variants. The new engines and propellers provide 40% greater range, 40% higher cruise altitude, 21% faster climb, and 15% shorter takeoff distance compared to the C-130H. The improved performance proves particularly valuable in hot-and-high conditions where legacy Hercules variants struggled with payload limitations.
+
+The C-130J-30 has been adopted by numerous air forces seeking extended cargo capacity while retaining the Hercules' legendary ability to operate from austere airstrips. The stretched variant is particularly suited for oversize loads and is the basis for the MC-130J Commando II special operations transport and KC-130J tanker variants. The type has deployed extensively to Afghanistan, Iraq, and other theaters, demonstrating improved performance in demanding operational environments. Production continues with the Super Hercules family expected to remain in service for decades.
 
 ### Tasks
 
@@ -3193,7 +3265,11 @@ The C-130J-30 is the stretched variant of the modernized C-130J Super Hercules, 
 
 ### Background
 
-The Boeing C-17 Globemaster III is an American strategic and tactical airlift aircraft that entered service in 1995. Capable of transporting heavy equipment, troops, and humanitarian supplies to austere airfields worldwide, it combines the payload capacity of the C-5 with the short-field performance of the C-130.
+The Boeing C-17 Globemaster III is the backbone of American strategic airlift capability, entering Air Force service in 1995. The aircraft was designed to combine the intercontinental range and payload capacity of the C-5 Galaxy with the ability to land on short, austere runways previously limited to the smaller C-130 Hercules. This revolutionary capability enables direct delivery of outsize cargo—including M1 Abrams tanks, helicopters, and field hospitals—to forward operating locations that strategic transports could never reach before.
+
+The C-17 can carry up to 170,900 pounds of cargo, transport 102 paratroopers, or accommodate 36 litter patients with attendants for aeromedical evacuation. The aircraft's externally blown flap system and thrust reversers enable landings on runways as short as 3,500 feet—remarkable for an aircraft of its size. The three-person crew operates a digital glass cockpit with advanced automation that reduces workload during challenging approach and landing operations.
+
+The C-17 has proven invaluable in every major U.S. military operation since its introduction. During operations in Afghanistan, Globemasters flew directly into Kabul and Bagram airfields, delivering heavy equipment that would otherwise require weeks of overland transport. The type has supported humanitarian relief operations worldwide, from earthquake response to refugee evacuation. The C-17 was also the aircraft used to evacuate over 120,000 people from Kabul during the August 2021 withdrawal from Afghanistan. Production ended in 2015 after 279 aircraft, with the fleet expected to serve until at least 2040.
 
 ### Tasks
 
@@ -3219,7 +3295,11 @@ No pylons defined.
 
 ### Background
 
-The Douglas C-47 Skytrain is the military transport version of the legendary DC-3 airliner that served extensively during World War II. First delivered in 1941, it carried troops, cargo, and wounded personnel across every theater of the war and continued in service with various air forces for decades afterward.
+The Douglas C-47 Skytrain (known as the Dakota in British and Commonwealth service) is the military transport version of the legendary DC-3 airliner, often credited as the aircraft that made commercial aviation viable. The C-47 first delivered to the U.S. Army Air Forces in 1941 and went on to serve in every theater of World War II, carrying troops, cargo, towing gliders, and evacuating wounded personnel. General Dwight Eisenhower later named it one of the four most important tools of Allied victory, alongside the Jeep, bulldozer, and landing craft.
+
+During World War II, C-47s dropped paratroopers over Normandy on D-Day, supplied the besieged forces at Bastogne during the Battle of the Bulge, and flew "the Hump" over the Himalayas to supply China. The Berlin Airlift of 1948-1949 saw C-47s among the aircraft delivering supplies to the blockaded city. The aircraft served in Korea and Vietnam, where AC-47 "Spooky" gunships provided devastating fire support with side-mounted miniguns.
+
+Over 10,000 C-47s were built during the war, and the design proved so durable and versatile that examples continued flying military missions into the 21st century. Many air forces operated the type for decades after World War II, and the DC-3/C-47 family remains in limited civilian service today—over 80 years after the design first flew. The aircraft's impact on both military and commercial aviation is immeasurable.
 
 ### Tasks
 
@@ -3247,7 +3327,11 @@ No pylons defined.
 
 ### Background
 
-The Christen Eagle II is a two-seat aerobatic biplane designed by Frank Christensen in 1977. Popular as both a kit-built aircraft and factory-complete aerobatic trainer, it offers outstanding aerobatic performance for pilots seeking unlimited competition capability.
+The Christen Eagle II is a two-seat aerobatic biplane designed by Frank Christensen in 1977 and produced by Christen Industries (later Aviat Aircraft). The aircraft was designed from the outset for unlimited aerobatic competition while remaining buildable as a homebuilt kit, making world-class aerobatic performance accessible to dedicated amateur builders. The design draws inspiration from classic biplanes like the Pitts Special while incorporating modern construction techniques and materials.
+
+The Eagle II features a welded steel tube fuselage, wooden wings covered in fabric, and a 200-horsepower Lycoming AEIO-360 engine rated for sustained inverted flight. The aircraft is fully capable of unlimited category aerobatic competition and has been flown successfully in national and international championships. The two-seat configuration makes it valuable for aerobatic training, allowing experienced pilots to teach advanced maneuvers with a student in the front cockpit.
+
+Over 350 Eagle IIs have been completed since the kit became available, with building time typically spanning several years due to the complexity of construction. The aircraft represents the pursuit of aviation excellence by dedicated enthusiasts who invest thousands of hours in building and perfecting their machines. In DCS, the Christen Eagle II provides a different flying experience from military aircraft, emphasizing pure stick-and-rudder skill and the joy of aerobatic flight.
 
 ### Tasks
 
@@ -3277,7 +3361,11 @@ The Christen Eagle II is a two-seat aerobatic biplane designed by Frank Christen
 
 ### Background
 
-The Northrop Grumman E-2D Advanced Hawkeye is the latest variant of the E-2 airborne early warning aircraft, featuring a completely redesigned radar system with electronic scanning capability. First deployed in 2014, it provides carrier battle groups with extended detection range and improved tracking.
+The Northrop Grumman E-2D Advanced Hawkeye is the latest and most capable variant of the E-2 airborne early warning aircraft, entering U.S. Navy service in 2014. The E-2 lineage began in 1964 with the E-2A, making the Hawkeye family one of the longest-serving carrier aircraft in naval aviation history. The distinctive 24-foot diameter rotodome houses the aircraft's radar antenna and has become an iconic silhouette on carrier flight decks worldwide.
+
+The E-2D features a completely redesigned AN/APY-9 radar system with electronic scanning capability (AESA), replacing the mechanically scanned radar of earlier variants. The new radar provides dramatically improved detection range, sensitivity, and resistance to jamming while enabling simultaneous tracking of surface and air targets. The system can detect small, low-flying cruise missiles and stealth aircraft that would be invisible to older radars. Two new engines provide improved performance, and aerial refueling capability extends time on station.
+
+The Advanced Hawkeye serves as the "eyes" of the carrier strike group, detecting threats beyond the range of ship-based radars and coordinating defensive and offensive air operations. The five-person crew includes three mission systems operators who control and direct air intercepts, manage the air picture, and coordinate with other assets. The E-2D integrates with the Naval Integrated Fire Control-Counter Air system, enabling cooperative engagement where data from the Hawkeye's radar can guide weapons launched by ships or aircraft that cannot see the target themselves.
 
 ### Tasks
 
@@ -3303,7 +3391,11 @@ No pylons defined.
 
 ### Background
 
-The Boeing E-3 Sentry is an American AWACS aircraft based on the Boeing 707 that entered NATO service in 1982. The rotating radome houses a powerful surveillance radar that can detect and track aircraft over land and water at great distances, providing command and control for air operations.
+The Boeing E-3 Sentry is the primary airborne warning and control system (AWACS) aircraft for the United States Air Force and NATO, entering service in 1977 for the USAF and 1982 for NATO. Based on the Boeing 707 commercial airliner airframe, the E-3 is distinguished by the 30-foot diameter rotating radome mounted above the rear fuselage, housing an AN/APY-1 or AN/APY-2 surveillance radar capable of detecting aircraft at ranges exceeding 250 miles.
+
+The E-3 serves as an airborne command post, providing comprehensive air surveillance and controlling friendly aircraft for air superiority, air defense, and offensive air operations. A crew of four flight crew and up to 19 mission specialists operates the radar and communications systems, maintaining the tactical air picture and directing fighters toward hostile aircraft. The AWACS can track hundreds of targets simultaneously while distinguishing between enemy, friendly, and neutral aircraft.
+
+E-3s have deployed to virtually every major U.S. and NATO air operation since entering service. During Desert Storm in 1991, AWACS aircraft controlled all coalition air operations, directing aircraft toward Iraqi targets and preventing friendly fire incidents through positive identification of all aircraft in the theater. E-3s supported operations in the Balkans, Afghanistan, and Iraq, and routinely participate in air policing missions along NATO's borders. The aircraft has been upgraded multiple times and will continue serving until replaced by the E-7 Wedgetail beginning in the late 2020s.
 
 ### Tasks
 
@@ -3329,7 +3421,11 @@ No pylons defined.
 
 ### Background
 
-The Lockheed F-117 Nighthawk is the world's first operational stealth aircraft, entering service in 1983 but remaining classified until 1988. Its faceted design minimizes radar cross-section, allowing it to penetrate heavily defended airspace. It was retired in 2008.
+The Lockheed F-117 Nighthawk was the world's first operational stealth aircraft, developed in utmost secrecy during the late 1970s and entering service in 1983 while remaining classified until 1988. The distinctive faceted design, created because computer limitations of the era could only calculate radar cross-section for flat surfaces, minimized radar reflection to an unprecedented degree. Despite the "F" fighter designation, the F-117 was strictly an attack aircraft with no air-to-air capability, carrying precision-guided bombs in an internal weapons bay.
+
+The F-117 made its combat debut during Operation Just Cause in Panama in 1989. Its defining moment came during Operation Desert Storm in 1991, when Nighthawks struck the opening blows of the air campaign, hitting critical command and control facilities in downtown Baghdad while Iraqi air defenses remained unaware of their presence. F-117s flew only 2% of coalition sorties but struck 40% of strategic targets, demonstrating the revolutionary impact of stealth technology on air warfare.
+
+The aircraft served in every major U.S. air campaign through the 1990s and 2000s, including Bosnia, Kosovo, Afghanistan, and Iraq. On March 27, 1999, an F-117 was shot down over Serbia—the only combat loss—when a skilled Serbian air defense commander used creative tactics and a modified SA-3 system to detect and engage the aircraft. The F-117 was retired in 2008 as the F-22 Raptor entered service, though some aircraft are maintained in flyable storage and occasionally appear in training exercises.
 
 ### Tasks
 
@@ -3367,7 +3463,11 @@ The Lockheed F-117 Nighthawk is the world's first operational stealth aircraft, 
 
 ### Background
 
-The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A-135-GR (Early) represents an early TF30-powered aircraft before digital upgrades.
+The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing supersonic fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 until its retirement in 2006. Development began in 1968 after the cancellation of the troubled F-111B program, with the first flight occurring in December 1970. The F-14A entered fleet service with VF-1 and VF-2 aboard USS Enterprise in September 1974, representing a quantum leap in naval aviation capability.
+
+The Tomcat's revolutionary AWG-9 weapons control system could simultaneously track 24 targets and guide AIM-54 Phoenix missiles against six of them at ranges exceeding 100 nautical miles—an unmatched capability during the Cold War. The variable-sweep wings, controlled automatically by a central air data computer, optimized performance across the flight envelope from carrier approach speeds to Mach 2.4 intercepts. The F-14A-135-GR (Early) represents an early production TF30-P-414A-powered aircraft with analog avionics, before the introduction of digital improvements.
+
+The F-14's combat debut came in August 1981 during the Gulf of Sidra incident, when VF-41 Tomcats from USS Nimitz shot down two Libyan Su-22 Fitters in a brief engagement that demonstrated both the aircraft's capability and American resolve. Tomcats subsequently flew combat air patrols during the 1983 Lebanon intervention and participated in Operation El Dorado Canyon strikes against Libya in 1986. During Operation Desert Storm in 1991, F-14s flew defensive counter-air missions and achieved one air-to-air kill against an Iraqi Mi-8 helicopter. The Tomcat evolved into a potent strike platform in the 1990s through the addition of LANTIRN targeting pods, and "Bombcat" F-14s conducted precision strikes during operations over Bosnia, Kosovo, Afghanistan, and Iraq. Iran remains the only export customer, having received 79 F-14As before the 1979 revolution; these aircraft saw extensive combat during the Iran-Iraq War, with Iranian pilots claiming numerous kills against Iraqi fighters.
 
 ### Tasks
 
@@ -3647,7 +3747,9 @@ The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that serve
 
 ### Background
 
-The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A-135-GR represents a late-production TF30-powered variant with enhanced avionics and improved reliability.
+The F-14A-135-GR represents a late-production F-14A Tomcat incorporating reliability improvements and enhanced avionics developed through operational experience. While still powered by the TF30-P-414A engines that proved problematic in earlier aircraft—particularly susceptible to compressor stalls during aggressive maneuvering—later production blocks addressed many maintenance issues and incorporated digital upgrades to the weapons control system. The -135-GR designation reflects production block improvements that enhanced the aircraft's combat effectiveness while maintaining compatibility with the full range of Tomcat weapons including the AIM-54 Phoenix, AIM-7 Sparrow, and AIM-9 Sidewinder missiles.
+
+Late-production F-14As served throughout the 1980s and 1990s, participating in all major U.S. Navy operations of the era. These aircraft flew combat air patrols during tensions with Libya, deployed for operations in Lebanon and the Persian Gulf, and conducted defensive counter-air missions during Desert Storm. Many were subsequently upgraded with the LANTIRN precision targeting system, enabling them to deliver laser-guided bombs with the same accuracy as dedicated strike aircraft. The improved F-14A remained in frontline service until progressively replaced by F-14B and F-14D variants, with the last A-models retiring in the early 2000s as the Tomcat community consolidated around the more capable variants before the type's final retirement in 2006.
 
 ### Tasks
 
@@ -3927,7 +4029,9 @@ The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that serve
 
 ### Background
 
-The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14A is the initial production variant with Pratt & Whitney TF30 engines. Despite engine reliability issues, it proved itself as an exceptional interceptor.
+The Grumman F-14A Tomcat was the initial production variant of the U.S. Navy's legendary fleet defense fighter, powered by two Pratt & Whitney TF30-P-412A afterburning turbofans. The F-14A entered service in 1974, replacing the F-4 Phantom II in the air superiority role aboard American aircraft carriers. Despite the TF30's notorious susceptibility to compressor stalls during aggressive maneuvering—a characteristic that claimed several aircraft and crews over the years—the F-14A proved itself an exceptional interceptor platform.
+
+The AWG-9 weapons control system and AIM-54 Phoenix missile combination gave the Tomcat unprecedented capability against Soviet maritime patrol and bomber aircraft threatening the fleet. Early F-14As established the type's reputation during two Gulf of Sidra confrontations with Libya (1981 and 1989) that resulted in four Libyan aircraft shot down. F-14As participated in operations over Lebanon, Libya, and the Persian Gulf throughout the 1980s. The variant saw its largest combat deployment during Operation Desert Storm in 1991, where Tomcats flew thousands of combat air patrol sorties protecting coalition assets.
 
 ### Tasks
 
@@ -4017,7 +4121,9 @@ The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that serve
 
 ### Background
 
-The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that served as the U.S. Navy's primary air superiority fighter and fleet defense interceptor from 1974 to 2006, featuring the AWG-9 radar and AIM-54 Phoenix long-range missile capability. The F-14B combines improved F110-GE-400 engines with upgraded avionics, entering service in 1988, offering significantly improved thrust and reliability.
+The F-14B represented a major improvement over the F-14A through the installation of General Electric F110-GE-400 afterburning turbofans, replacing the troublesome TF30 engines that had plagued the earlier variant. The re-engined Tomcat entered service in 1988 and offered dramatically improved thrust, reliability, and handling characteristics. The F110 engines produced 27,000 pounds of thrust in afterburner compared to the TF30's 20,900 pounds, virtually eliminating the compressor stall problems while providing a higher thrust-to-weight ratio that transformed the aircraft's dogfighting capability.
+
+The F-14B program comprised both new-build aircraft and conversions of existing F-14A airframes. The B-model retained the analog AWG-9 weapons control system of the A-model while incorporating digital avionics improvements and compatibility with later weapons including the AIM-54C Phoenix. F-14Bs participated in Operations Desert Storm and Southern Watch during the 1990s, and the variant was among the first to receive LANTIRN targeting pod integration for precision strike missions. "Bombcat" F-14Bs conducted strike operations during NATO interventions in Bosnia and Kosovo, and later over Afghanistan during Operation Enduring Freedom. The F-14B served until the Tomcat's retirement in 2006, with squadrons VF-11 "Red Rippers," VF-32 "Swordsmen," VF-103 "Jolly Rogers," and VF-143 "Pukin' Dogs" among those operating the variant.
 
 ### Tasks
 
@@ -4295,7 +4401,9 @@ The Grumman F-14 Tomcat is a twin-engine, variable-sweep wing fighter that serve
 
 ### Background
 
-The McDonnell Douglas F-15C Eagle is a dedicated air superiority fighter that entered service in 1979 as an improved version of the F-15A. With over 100 aerial victories and zero combat losses, it remains one of history's most successful fighters.
+The McDonnell Douglas F-15C Eagle is a dedicated air superiority fighter that entered U.S. Air Force service in 1979 as an improved version of the F-15A. The C-model featured increased internal fuel capacity, provisions for conformal fuel tanks, and an upgraded APG-63 radar with improved electronic counter-countermeasures. Powered by two Pratt & Whitney F100-PW-220 afterburning turbofans, the F-15C could exceed Mach 2.5 and was designed from the outset around the dictum "not a pound for air-to-ground"—a pure fighter uncompromised by multirole requirements.
+
+The F-15's combat record is without parallel in modern aviation history. Israeli F-15s achieved over 50 kills against Syrian aircraft during the 1982 Lebanon War without a single loss. During Operation Desert Storm in 1991, USAF F-15Cs shot down 34 Iraqi aircraft—including MiG-29s, MiG-25s, MiG-23s, and Mirage F1s—accounting for the majority of coalition air-to-air victories. The F-15C recorded kills during Operations Northern Watch and Southern Watch enforcing no-fly zones over Iraq throughout the 1990s, and Saudi F-15Cs shot down two Iraqi F-1 Mirages during the Gulf War. With over 100 confirmed aerial victories and zero air-to-air combat losses in any operator's service, the F-15C remains one of the most successful fighter aircraft ever built. The platform has undergone continuous modernization including the APG-63(V)3 active electronically scanned array radar and remains a frontline USAF fighter.
 
 ### Tasks
 
@@ -4425,7 +4533,9 @@ The McDonnell Douglas F-15C Eagle is a dedicated air superiority fighter that en
 
 ### Background
 
-The F-15E S4+ is an upgraded Strike Eagle variant with modernized avionics, enhanced radar capabilities, and improved weapons systems integration for current operational requirements.
+The F-15E Strike Eagle is a dual-role fighter optimized for deep interdiction strikes while retaining the air superiority capability of the F-15 lineage. The type entered USAF service in 1988, featuring a tandem cockpit with a Weapon Systems Officer, conformal fuel tanks for extended range, and the APG-70 synthetic aperture radar for ground mapping and targeting. The S4+ designation represents a modernized Strike Eagle with enhanced avionics including improved radar capabilities, updated mission computers, and expanded weapons systems integration for precision-guided munitions.
+
+The F-15E saw its combat debut during Operation Desert Storm in 1991, where Strike Eagles conducted night deep-interdiction missions against Iraqi Scud missile launchers, airfields, and command facilities using LANTIRN targeting pods and laser-guided bombs. One F-15E crew achieved an air-to-air kill against an Iraqi helicopter using a GBU-10 laser-guided bomb. The type has participated in every major American combat operation since—Bosnia, Kosovo, Afghanistan, Iraq, Libya, and Syria—establishing itself as the USAF's premier strike platform. During Operation Iraqi Freedom, F-15Es flew the highest sortie rate of any fighter type in theater. The Strike Eagle's combination of range, payload capacity, precision strike capability, and fighter performance makes it uniquely suited for complex strike missions in contested airspace, a role it continues to fill as upgrades ensure the platform remains viable into the 2030s.
 
 ### Tasks
 
@@ -4736,7 +4846,9 @@ The F-15E S4+ is an upgraded Strike Eagle variant with modernized avionics, enha
 
 ### Background
 
-The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15 that entered service in 1988. It combines the Eagle's air-to-air prowess with precision ground attack capability, making it the USAF's primary long-range interdiction platform.
+The Boeing F-15E Strike Eagle is a dual-role fighter developed from the F-15 air superiority platform, designed to conduct deep interdiction strikes in any weather conditions while retaining formidable air-to-air capability. The type entered USAF service in 1988, featuring a tandem cockpit arrangement with a Weapon Systems Officer in the rear seat, conformal fuel tanks integrated along the fuselage, and strengthened structure for increased payload capacity. The APG-70 radar provided both air-to-air combat modes and high-resolution ground mapping for navigation and targeting.
+
+The F-15E's combat debut came during Operation Desert Storm in 1991, where Strike Eagles flew demanding night missions hunting Iraqi Scud missile launchers in the western desert using LANTIRN navigation and targeting pods. The type conducted precision strikes against airfields, command bunkers, and Republican Guard positions throughout the campaign. Since Desert Storm, the Strike Eagle has participated in virtually every U.S. combat operation: enforcing no-fly zones over Iraq, striking Serb forces in Bosnia and Kosovo, supporting ground operations in Afghanistan during Operation Enduring Freedom, and flying high-intensity strike missions during Operation Iraqi Freedom. The F-15E remains in frontline USAF service as the primary long-range precision strike platform, continuously upgraded with improved avionics and weapons capabilities.
 
 ### Tasks
 
@@ -5049,7 +5161,9 @@ The Boeing F-15E Strike Eagle is a dual-role fighter based on the F-15 that ente
 
 ### Background
 
-The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16A MLU (Mid-Life Update) is a European partner nations' upgrade bringing early-model aircraft to Block 50/52 equivalent capability.
+The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that revolutionized tactical aviation when it entered USAF service in 1979. The design emerged from the Lightweight Fighter program, featuring the first production fly-by-wire flight control system, a reclined ejection seat under a bubble canopy for enhanced pilot visibility, and a side-stick controller mounted on the armrest rather than the traditional center stick. These innovations, combined with a high thrust-to-weight ratio from the Pratt & Whitney F100 engine, created an extraordinarily maneuverable aircraft that became the Western world's most numerous fighter.
+
+The F-16A MLU (Mid-Life Update) represents a comprehensive modernization program undertaken by the European Participating Air Forces (Belgium, Denmark, the Netherlands, Norway, and Portugal) to extend the service life and capability of their early-production F-16A/B aircraft. The MLU upgrade brought these 1980s-era jets to approximate Block 50/52 capability through installation of the APG-66(V)2 radar with improved processing, expanded memory computers, GPS navigation, an improved data modem for Link-16, color cockpit displays, night vision goggle compatibility, and the ability to employ modern weapons including the AIM-120 AMRAAM. MLU F-16s have participated in NATO combat operations including those over the Balkans and Libya, providing a cost-effective means of maintaining potent combat capability from existing airframes.
 
 ### Tasks
 
@@ -5241,7 +5355,9 @@ The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter t
 
 ### Background
 
-The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16A is the initial single-seat production variant.
+The F-16A represents the initial single-seat production variant of the Fighting Falcon, entering USAF service in 1979. Early production F-16As equipped with the Pratt & Whitney F100-PW-200 engine and APG-66 pulse-Doppler radar provided a quantum leap in air combat capability over the F-104 Starfighters they replaced in many NATO air forces. The type offered unprecedented maneuverability through its fly-by-wire flight controls, relaxed static stability design, and exceptional thrust-to-weight ratio.
+
+The F-16A first saw combat with the Israeli Air Force, which achieved spectacular success during the 1981 Osirak reactor strike and the 1982 Lebanon War, where Israeli F-16s downed numerous Syrian aircraft including MiG-21s and MiG-23s. Pakistani F-16As engaged Soviet and Afghan aircraft during the Afghan-Soviet War, claiming multiple kills over the border region. The F-16A established the Fighting Falcon's reputation as one of the most effective fighters of its generation and served as the foundation for the extensive F-16 family that would eventually number over 4,600 aircraft across more than 25 nations, making it the most numerous Western fighter aircraft since the F-86 Sabre.
 
 ### Tasks
 
@@ -5397,7 +5513,9 @@ The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter t
 
 ### Background
 
-The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16C Block 50 is an advanced variant featuring the F110-GE-129 engine and HARM targeting system (HTS) for the SEAD mission, entering service in 1991.
+The F-16C Block 50 represents a major evolution of the Fighting Falcon optimized for the Suppression of Enemy Air Defenses (SEAD) mission. Entering service in 1991, the Block 50 is powered by the General Electric F110-GE-129 engine producing 29,000 pounds of thrust in afterburner—a significant improvement over earlier powerplants. The variant introduced the HARM Targeting System (HTS) pod, enabling F-16C Block 50s to detect, classify, and engage enemy radar systems with AGM-88 HARM anti-radiation missiles, making them formidable "Wild Weasel" platforms.
+
+Block 50 F-16Cs saw their combat debut during Operation Allied Force in 1999, flying SEAD missions to suppress Serbian air defenses during the Kosovo campaign. The variant subsequently deployed extensively for Operations Enduring Freedom and Iraqi Freedom, where Block 50s conducted both SEAD and precision strike missions using the expanding arsenal of GPS-guided weapons. The combination of advanced avionics, powerful engine, and specialized SEAD capability made the Block 50 one of the most tactically significant F-16 variants, filling the Wild Weasel role previously performed by specialized F-4G Phantom II aircraft.
 
 ### Tasks
 
@@ -5613,7 +5731,9 @@ The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter t
 
 ### Background
 
-The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16C Block 52D is an export variant with conformal fuel tanks and the F100-PW-229 engine, providing extended range.
+The F-16C Block 52D represents an advanced export variant of the Fighting Falcon designed for extended-range strike missions. The Block 52D is powered by the Pratt & Whitney F100-PW-229 engine producing approximately 29,000 pounds of thrust in afterburner, and features provisions for conformal fuel tanks (CFTs) mounted along the upper fuselage that significantly extend combat radius without occupying wing pylons. This configuration makes the Block 52D particularly suited for long-range interdiction and strike missions.
+
+Block 52D aircraft have been exported to several allied nations including Israel, Greece, Poland, and Turkey. Israeli F-16I "Sufa" (Storm) variants, which are based on the Block 52D with indigenous modifications, have conducted numerous strike missions including long-range operations in Syria and Sudan. Greek and Turkish Block 52+ aircraft regularly participate in NATO exercises and air policing missions. The Block 52D's combination of modern avionics, precision strike capability, and extended range makes it one of the most capable F-16 variants in service worldwide.
 
 ### Tasks
 
@@ -5840,7 +5960,9 @@ The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter t
 
 ### Background
 
-The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter that entered service in 1979, featuring fly-by-wire flight controls and a revolutionary design that established the lightweight multi-role fighter concept. The F-16CM Block 50 is the current USAF designation for upgraded Block 50 aircraft, featuring the APG-68(V)9 radar and advanced targeting systems.
+The F-16CM Block 50 represents the current USAF configuration for modernized Block 50 Fighting Falcons, incorporating the Common Configuration Implementation Program (CCIP) upgrades that standardized avionics and software across the F-16 fleet. The "M" suffix denotes CCIP-modified aircraft featuring the APG-68(V)9 radar with improved resolution and tracking capability, color multifunction displays, Link-16 datalink integration, Joint Helmet Mounted Cueing System (JHMCS) compatibility, and the ability to employ the full range of modern precision-guided munitions including JDAM, JSOW, and the AIM-9X Sidewinder.
+
+The Block 50 remains the USAF's primary SEAD platform, equipped with the HARM Targeting System (HTS) pod for detecting and engaging enemy radar systems with AGM-88 HARM missiles. F-16CM Block 50s have deployed continuously since the early 2000s, flying combat missions during Operations Iraqi Freedom and Enduring Freedom, and participating in operations over Libya and Syria. The combination of proven reliability, continuous modernization, and combat-proven capability ensures the F-16CM Block 50 will remain a frontline USAF fighter well into the 2030s, even as F-35A Lightning IIs enter service in greater numbers.
 
 ### Tasks
 
@@ -6077,7 +6199,9 @@ The General Dynamics F-16 Fighting Falcon is a single-engine multirole fighter t
 
 ### Background
 
-The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and features leading-edge slats for improved maneuverability.
+The McDonnell Douglas F-4E Phantom II is the definitive variant of the legendary Phantom II, addressing the critical deficiency of earlier models that lacked an internal gun. The F-4E entered USAF service in 1967, featuring an M61A1 Vulcan 20mm rotary cannon in a redesigned nose, a more powerful J79-GE-17 engine, and leading-edge slats added from 1972 onward that significantly improved maneuverability in air combat. Over 1,400 F-4Es were built, making it the most numerous Phantom variant.
+
+The F-4E saw extensive combat during the latter years of the Vietnam War, where the addition of the internal cannon proved invaluable in dogfights against North Vietnamese MiGs. F-4Es conducted Operation Linebacker strikes in 1972, delivering precision-guided munitions against bridges and infrastructure while also engaging in fierce air-to-air combat. Israeli F-4Es (locally designated "Kurnass") achieved significant success during the 1973 Yom Kippur War and subsequent conflicts. The type served as the backbone of numerous NATO and allied air forces throughout the 1970s and 1980s. During Operation Desert Storm in 1991, USAF F-4G "Wild Weasel" variants (based on the F-4E) conducted critical SEAD missions against Iraqi air defenses. The F-4E-45MC designation indicates a specific production block with enhanced capabilities. Though retired from USAF service in 1996, the F-4E continues to operate with several air forces including Turkey and Greece.
 
 ### Tasks
 
@@ -6595,7 +6719,9 @@ The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the lege
 
 ### Background
 
-The McDonnell Douglas F-4E Phantom II is the definitive USAF variant of the legendary Phantom, entering service in 1967. It added an internal M61 cannon and features leading-edge slats for improved maneuverability.
+The F-4E Phantom II represents the definitive gun-armed variant of McDonnell Douglas's legendary fighter-bomber. The F-4E entered USAF service in 1967 with an internal M61A1 Vulcan 20mm cannon—addressing the critical deficiency that had plagued earlier Phantoms in Vietnam air combat—along with improved engines and, later, leading-edge slats for better low-speed handling. The type served as the backbone of USAF tactical aviation throughout the late 1960s and 1970s, performing both air superiority and strike missions.
+
+F-4Es flew extensively during the Vietnam War's final years, participating in Operation Linebacker I and II strikes against North Vietnam in 1972. The type achieved numerous MiG kills and delivered the first laser-guided bombs in combat. Export F-4Es served with Israel, Iran, Germany, Japan, Turkey, Greece, and South Korea, among others. Israeli F-4Es fought in multiple Arab-Israeli conflicts, while Iranian F-4Es engaged Iraqi aircraft during the Iran-Iraq War. USAF F-4Es remained in service through Desert Storm in 1991, when the specialized F-4G Wild Weasel variant flew critical SEAD missions, before the type's retirement from American service in 1996.
 
 ### Tasks
 
@@ -6841,7 +6967,11 @@ The Northrop F-5E Tiger II Flaming Cliffs variant provides a simplified simulati
 
 ### Background
 
-The F-5E-3 is an advanced variant of the Tiger II with improved avionics and weapons capability, continuing the F-5's tradition as an effective and affordable tactical fighter.
+The F-5E-3 represents a later production block of the Northrop F-5E Tiger II, incorporating improvements developed through operational feedback and continuing production refinements. Like all F-5Es, the aircraft features the J85-GE-21 engines, leading-edge root extensions, and improved fire control radar that distinguished the Tiger II from the earlier F-5A Freedom Fighter. The -3 designation indicates production block improvements that enhanced reliability and maintainability while retaining the F-5's hallmark characteristics of simplicity and low operating costs.
+
+The F-5E achieved remarkable success in the aggressor role, where its small size and good thrust-to-weight ratio provided excellent simulation of Soviet MiG-21 tactics. The U.S. Navy's TOPGUN school and the USAF's aggressor squadrons operated F-5Es to provide American fighter pilots with realistic dissimilar air combat training—experience that proved invaluable during actual air-to-air engagements. The type's ability to replicate the visual signature and flight envelope of Soviet fighters made it an ideal training adversary for nearly two decades.
+
+Export F-5Es saw extensive combat worldwide. Iranian F-5Es engaged Iraqi aircraft during the Iran-Iraq War, claiming multiple kills before attrition and spare parts shortages reduced availability. South Vietnamese F-5Es fought during the final years of the Vietnam War, with several captured examples later operated by the victorious North Vietnamese air force. The type has seen combat in numerous other conflicts across Africa, Latin America, and the Middle East. While many operators have transitioned to fourth-generation fighters, upgraded F-5s remain in service with nations valuing their reliability and economical operation. In DCS, the F-5E-3 is a high-fidelity player module offering an authentic early-generation jet fighter experience.
 
 ### Tasks
 
@@ -6983,7 +7113,9 @@ The F-5E-3 is an advanced variant of the Tiger II with improved avionics and wea
 
 ### Background
 
-The Northrop F-5E Tiger II is a lightweight tactical fighter that entered service in 1972. Known for its simplicity, reliability, and low operating costs, it has served numerous air forces worldwide and remains in service today.
+The Northrop F-5E Tiger II is a lightweight tactical fighter that entered U.S. service in 1972 as an improved version of the earlier F-5A Freedom Fighter, developed specifically for export to allied nations under the International Fighter Aircraft program. The E-model features more powerful J85-GE-21 engines, leading-edge root extensions (LERX) for improved maneuverability, an improved fire control radar, and provisions for AIM-9 Sidewinder missiles. The aircraft's simplicity, reliability, and remarkably low operating costs made it attractive to nations that could not afford or maintain more sophisticated fighters.
+
+The F-5E achieved significant export success, serving with over 30 air forces across Asia, South America, the Middle East, and Africa. The type saw combat in numerous conflicts: Iranian F-5Es fought during the Iran-Iraq War, South Vietnamese F-5s flew during the final years of that conflict, Ethiopian and Somali F-5s clashed during the Ogaden War, and the type has seen action in the Yemeni Civil War. The U.S. Navy and Air Force operated F-5Es as "aggressor" aircraft to simulate Soviet MiG-21s in dissimilar air combat training, a role the type filled for decades. The Tiger II's excellent thrust-to-weight ratio and small size made it a challenging opponent in within-visual-range combat despite its relatively simple avionics. While largely superseded by F-16s and other fourth-generation fighters in most air forces, upgraded F-5s continue operating with numerous nations, and the design influenced later Northrop developments including the F-20 Tigershark and elements of the F/A-18.
 
 ### Tasks
 
@@ -7221,7 +7353,9 @@ The North American F-86F Sabre Flaming Cliffs variant provides a simplified simu
 
 ### Background
 
-The North American F-86F Sabre is the definitive day-fighter variant of the legendary swept-wing jet, entering service in 1952. Famous for its Korean War service against the MiG-15, it achieved a favorable kill ratio and influenced fighter design for years to come.
+The North American F-86F Sabre is the definitive day-fighter variant of America's first swept-wing jet fighter, entering service in 1952 as an improved version optimized for air combat. The F-model introduced the "6-3" wing with extended leading edges and no slats, improving high-speed performance and increasing fuel capacity at the cost of some low-speed handling. Powered by the J47-GE-27 engine producing 5,910 pounds of thrust, the F-86F could exceed the speed of sound in a shallow dive and proved highly maneuverable in the transonic regime.
+
+The F-86 Sabre became legendary during the Korean War, where it engaged Soviet-built MiG-15s in history's first jet-versus-jet combat over "MiG Alley." American claims of a 10:1 kill ratio have been revised downward by later analysis, but the Sabre nonetheless achieved air superiority over Korea despite the MiG-15's superior climb rate and high-altitude performance. The F-86's advantage lay in its superior pilot training, better gun sight, and more forgiving handling characteristics. Following Korea, the Sabre was exported to numerous Allied air forces; Pakistani and Indian F-86s clashed during the Indo-Pakistani wars of 1965 and 1971. The F-86 influenced an entire generation of fighter design and established swept-wing jets as the future of air combat. Over 9,800 Sabres were built, and the type remained in frontline service with some nations into the 1980s.
 
 ### Tasks
 
@@ -7315,7 +7449,9 @@ The North American F-86F Sabre is the definitive day-fighter variant of the lege
 
 ### Background
 
-The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18A is the initial single-seat production variant.
+The McDonnell Douglas F/A-18A Hornet is a twin-engine carrier-capable multirole fighter that represents a fundamental shift in naval aviation philosophy—the first American aircraft designed from the outset as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18A entered U.S. Navy and Marine Corps service in 1983, replacing both the F-4 Phantom II in the fighter role and the A-7 Corsair II in the attack role, a consolidation that simplified carrier air wing logistics and training while reducing the number of aircraft types required.
+
+The Hornet's digital fly-by-wire flight controls and advanced avionics, including the APG-65 radar with excellent look-down/shoot-down capability, provided a quantum leap in capability over previous naval aircraft. The F/A-18A first saw combat during Operation El Dorado Canyon in 1986, when Marine Hornets provided fighter escort and SEAD support for strikes against Libya. During Operation Desert Storm in 1991, F/A-18s flew both air-to-air and strike missions, with two Hornets achieving air-to-air kills against Iraqi MiG-21s while carrying full bomb loads—dramatically demonstrating the type's multirole capability. The F/A-18A served with distinction until progressively replaced by improved C and E/F variants, with the Blue Angels flight demonstration squadron continuing to operate the A-model until 2020.
 
 ### Tasks
 
@@ -7450,7 +7586,9 @@ The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole f
 
 ### Background
 
-The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18C Lot 20 is the fully-upgraded late-production variant with APG-73 radar, enhanced weapons compatibility, and night attack capability.
+The F/A-18C Lot 20 represents the fully mature production standard of the single-seat Hornet, incorporating all improvements developed throughout the C-model's production run from 1987 through the early 2000s. Lot 20 aircraft feature the APG-73 radar with improved processing speed and expanded modes, full night attack capability including compatibility with night vision devices, the AAS-38 NITE Hawk FLIR targeting pod, and the ability to employ the complete range of precision-guided munitions including JDAM GPS-guided bombs, JSOW standoff weapons, and the AIM-120 AMRAAM.
+
+The F/A-18C served as the backbone of U.S. Navy and Marine Corps tactical aviation from the late 1980s through the 2010s. C-models flew extensively during Operation Desert Storm in 1991, where they conducted both air-to-air combat patrol and precision strike missions. Marine F/A-18Cs provided close air support during the ground campaign, while Navy Hornets struck Iraqi infrastructure and military targets. The type subsequently saw action during operations in Bosnia and Kosovo, and flew thousands of combat sorties during Operations Enduring Freedom and Iraqi Freedom. F/A-18Cs remained in frontline Navy service until progressively replaced by F/A-18E/F Super Hornets and F-35C Lightning IIs, with the last Navy C-model squadrons transitioning in the late 2010s.
 
 ### Tasks
 
@@ -7707,7 +7845,9 @@ The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole f
 
 ### Background
 
-The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole fighter that entered service in 1983, designed as a true strike-fighter equally capable in air-to-air and air-to-ground missions. The F/A-18C introduced significant avionics upgrades including night attack capability, entering service in 1987.
+The F/A-18C Hornet is the upgraded single-seat production variant of the Hornet, entering U.S. Navy and Marine Corps service in 1987 with significant improvements over the original A-model. The C-model introduced night attack capability through integration of the AAS-38 FLIR targeting system and compatibility with night vision goggles, the ability to carry the AIM-120 AMRAAM beyond-visual-range missile, improved mission computers, and an upgraded APG-65 radar (later replaced by the APG-73 in production). These enhancements dramatically expanded the Hornet's operational flexibility.
+
+The F/A-18C proved its combat worth across three decades of operations. During Desert Storm in 1991, Hornets flew both fighter escort and strike missions, with two Navy F/A-18Cs famously shooting down Iraqi MiG-21s while en route to deliver bombs on their primary targets. The type subsequently flew combat missions during operations in the Balkans, Afghanistan, Iraq, and Syria. Marine F/A-18Cs were particularly heavily employed, flying close air support missions in direct support of ground forces. Though progressively replaced by the larger F/A-18E/F Super Hornet and the F-35 Lightning II, the F/A-18C remains in Marine Corps service, where it continues to provide valuable tactical aviation capability.
 
 ### Tasks
 
@@ -7940,7 +8080,9 @@ The McDonnell Douglas F/A-18 Hornet is a twin-engine carrier-capable multirole f
 
 ### Background
 
-The Vought F4U-1D Corsair Mk.IV is the British Fleet Air Arm designation for the American carrier-based fighter-bomber. It served with distinction in the Pacific theater during World War II.
+The Vought F4U-1D Corsair Mk.IV is the British Fleet Air Arm designation for the F4U-1D variant of the legendary American fighter-bomber, operated by Royal Navy squadrons from 1944 until after the war. The Fleet Air Arm was the second-largest operator of the Corsair after the U.S. Navy and Marine Corps, ultimately receiving nearly 2,000 aircraft. British modifications included clipping eight inches from each wingtip to fit the lower hangar decks of British carriers—a change that actually improved roll rate slightly.
+
+British Corsairs saw extensive combat in both the Pacific and European theaters. In the Pacific, FAA Corsairs participated in strikes against Japanese oil refineries at Palembang, Sumatra in January 1945—among the most complex carrier operations of the war. They also flew combat missions over the Japanese home islands as part of the British Pacific Fleet in 1945. In European waters, FAA Corsairs conducted strikes against the German battleship Tirpitz in Norwegian fjords. The Corsair Mk.IV specifically corresponded to the F4U-1D with its improved engine cowling for better visibility, upgraded R-2800-8W engine with water injection, and provisions for carrying bombs and rockets for ground attack missions. British pilots appreciated the Corsair's range, speed, and firepower, though carrier landings in the type remained challenging due to the long nose that obscured the deck during approach.
 
 ### Tasks
 
@@ -8035,7 +8177,11 @@ The Vought F4U-1D Corsair Mk.IV is the British Fleet Air Arm designation for the
 
 ### Background
 
-The Vought F4U-1D Corsair is a World War II carrier-based fighter-bomber that entered service in 1944. Its distinctive inverted gull wing and powerful R-2800 engine make it one of the most capable piston fighters of the war.
+The Vought F4U Corsair is one of the most formidable piston-engine fighters ever built, combining exceptional performance with heavy firepower to dominate the Pacific Theater in the final years of World War II. The aircraft's distinctive inverted gull wing was designed to provide ground clearance for the massive 13-foot propeller driven by the Pratt & Whitney R-2800 Double Wasp engine—the most powerful engine fitted to a single-seat fighter at the time of its introduction. The F4U-1D variant entered service in 1944, incorporating features for the fighter-bomber role including centerline and wing hardpoints for bombs and rockets.
+
+Initial carrier qualification problems led to the Corsair being declared unsuitable for carrier operations and assigned to Marine Corps land-based squadrons, where it quickly earned a fearsome reputation. The "Bent-Wing Bird" achieved an 11:1 kill ratio against Japanese aircraft while also proving devastatingly effective in the ground attack role. Marine and Navy Corsairs flew close air support missions across the Pacific island-hopping campaign, using rockets, bombs, and their six .50 caliber machine guns to suppress Japanese positions.
+
+By late 1944, improved carrier landing techniques and modifications to the aircraft enabled successful carrier operations, and Corsairs increasingly flew from fleet carriers in addition to land bases. The F4U-1D added pylons capable of carrying up to 2,000 pounds of bombs or eight HVAR rockets, making it a potent fighter-bomber. The Corsair remained in production until 1953—the last piston fighter manufactured in the United States—and saw extensive combat in the Korean War, where Marine and Navy Corsairs flew close air support missions throughout the conflict. French Corsairs later fought in Indochina and during the Suez Crisis. The Corsair's combination of speed, range, firepower, and ruggedness made it one of the most successful naval fighters in history.
 
 ### Tasks
 
@@ -8130,7 +8276,9 @@ The Vought F4U-1D Corsair is a World War II carrier-based fighter-bomber that en
 
 ### Background
 
-The Falcon Assault Gyrocopter is a fictional armed autogyro designed for special operations and light attack missions, featuring modern avionics and weapons capability in an unconventional airframe.
+The Shaanxi Baoji Lie Ying (Hunting Eagle/Falcon) is a Chinese armed autogyro developed by Shaanxi Baoji Special Vehicles Manufacturing Company for the People's Liberation Army and People's Armed Police. First produced in August 2014, the two-seat gyrocopter was publicly showcased during the 70th anniversary military parade in Beijing in 2019. The aircraft has a maximum gross weight of approximately 560 kg and a range of around 400 km, with very short takeoff and landing capability that allows operation from unprepared surfaces.
+
+The Falcon is designed for special forces operations, border patrol, reconnaissance, and light attack missions. Its small size provides low radar and thermal signatures, while its simple design allows easy transportation and concealment. The armed configuration carries four HJ-12 anti-tank guided missiles on underwing pylons, along with a small sensor turret for targeting and reconnaissance. Chinese state media has documented the aircraft performing military exercises in Tibet, suggesting potential deployment along the disputed Sino-Indian border where its ability to operate from high-altitude forward positions would be advantageous. The People's Armed Police has also employed the type for surveillance missions along China's borders.
 
 ### Tasks
 
@@ -8174,7 +8322,11 @@ The Falcon Assault Gyrocopter is a fictional armed autogyro designed for special
 
 ### Background
 
-The Focke-Wulf Fw 190 A-8 is a late-war German fighter variant that entered service in 1944. Armed with four 20mm cannons and two machine guns, it excels as both an interceptor and ground-attack aircraft.
+The Focke-Wulf Fw 190 was one of the finest fighters of World War II, introducing a radial-engine alternative to the inline-powered Bf 109 that proved superior in many respects. Designed by Kurt Tank, the Fw 190 first flew in 1939 and entered service in 1941, immediately demonstrating superiority over the Spitfire Mk V and causing considerable alarm in RAF Fighter Command. The A-8 variant, entering production in early 1944, was the most-produced Fw 190 model and represented the ultimate development of the radial-engine series.
+
+The Fw 190 A-8 featured the BMW 801D-2 radial engine with a water-methanol injection system for emergency power boost. Armament was formidable: four 20mm MG 151/20 cannons (two in the wing roots and two in the outer wings) plus two 13mm MG 131 machine guns above the engine, giving the aircraft devastating firepower against both bombers and fighters. The A-8 was designed specifically to counter the American heavy bomber offensive, and many were configured as Sturmbock (battering ram) attackers with additional armor protection for pressing attacks through defensive fire.
+
+Fw 190 A-8s fought on both the Eastern and Western Fronts in the war's final year. In the Defense of the Reich campaign, A-8 pilots made head-on attacks against B-17 and B-24 formations, accepting heavy losses to bring down the bombers. The aircraft also excelled in the fighter-bomber role, attacking Allied ground forces during the Normandy campaign and Battle of the Bulge. On New Year's Day 1945, Operation Bodenplatte saw massed Fw 190 attacks on Allied airfields, destroying hundreds of aircraft on the ground. The A-8 remained in production until war's end, with over 6,500 built of this variant alone.
 
 ### Tasks
 
@@ -8236,7 +8388,11 @@ The Focke-Wulf Fw 190 A-8 is a late-war German fighter variant that entered serv
 
 ### Background
 
-The Focke-Wulf Fw 190 D-9 'Dora' is an advanced high-altitude variant featuring the Jumo 213 inline engine that entered service in late 1944. It offers improved performance at altitude compared to the radial-engine variants.
+The Focke-Wulf Fw 190 D-9, affectionately nicknamed "Dora-9" by its pilots, represented a radical evolution of the Fw 190 designed to counter high-altitude Allied fighters and bombers. Entering service in late 1944, the D-9 replaced the characteristic BMW 801 radial engine with a liquid-cooled Junkers Jumo 213A inline engine, dramatically improving performance at altitude where the radial-engine variants had struggled. The longer nose required a lengthened tail section for balance, giving the Dora a distinctive elongated appearance compared to earlier Fw 190s.
+
+The D-9 restored German parity with the latest Allied fighters at high altitude, matching or exceeding the P-51D Mustang and Spitfire Mk XIV in performance. Armed with two 20mm MG 151/20 cannons and two 13mm MG 131 machine guns, the aircraft retained sufficient firepower for the fighter role while being lighter and more maneuverable than the heavily-armed A-8. Many experienced pilots considered the D-9 the finest piston-engine fighter they flew, combining excellent speed, climb rate, roll rate, and dive performance.
+
+The Dora arrived too late and in too few numbers to significantly affect the war's outcome. Approximately 700 were built before the war's end, with production hampered by Allied bombing and material shortages. D-9 pilots flew escort for Me 262 jets during takeoff and landing when the jets were most vulnerable, and engaged in desperate defensive battles against overwhelming Allied numbers. Several elite units operated the D-9, including JG 26 and JG 54, whose pilots scored notable successes despite the hopeless strategic situation. The D-9 was intended as an interim type pending the Ta 152, but the war ended before the successor could reach significant service.
 
 ### Tasks
 
@@ -8290,7 +8446,11 @@ The Focke-Wulf Fw 190 D-9 'Dora' is an advanced high-altitude variant featuring 
 
 ### Background
 
-The Xian H-6J is a Chinese anti-ship strike variant of the H-6 bomber (itself based on the Soviet Tu-16). It carries YJ-12 supersonic anti-ship missiles and represents China's maritime strike capability.
+The Xian H-6 is a Chinese license-built derivative of the Soviet Tu-16 Badger medium bomber, which first flew in 1952 and entered Soviet service in 1954. China acquired Tu-16 production rights in 1959 and began domestic manufacture at Xian Aircraft Corporation, with the type entering PLAAF service in 1968. Unlike the Soviet Union, which retired the Tu-16 in the 1990s, China has continuously upgraded and produced new H-6 variants, transforming the venerable airframe into a modern cruise missile carrier that remains central to Chinese power projection.
+
+The H-6J is a People's Liberation Army Navy (PLAN) anti-ship strike variant optimized for maritime operations against carrier battle groups and surface combatants. The variant features upgraded avionics, a new fire control system, and the ability to carry six YJ-12 supersonic anti-ship missiles on underwing pylons—three per side. The YJ-12 is a high-speed sea-skimming missile with a range exceeding 400 kilometers and a terminal speed of Mach 3+, presenting significant challenges for shipborne air defenses. The H-6J entered service around 2018 and operates from naval aviation bases along China's coast.
+
+The H-6 family represents an unusual case of a 1950s design remaining operationally relevant into the 21st century through continuous modernization. Beyond the anti-ship role, other variants include the H-6K strategic cruise missile carrier (capable of launching CJ-20 land-attack missiles), the H-6N with aerial refueling capability and a recessed fuselage for hypersonic weapons, and the H-6U tanker. These aircraft provide China with the ability to threaten targets throughout the Western Pacific and constitute a key component of Chinese anti-access/area-denial strategy.
 
 ### Tasks
 
@@ -8383,7 +8543,9 @@ The Xian H-6J is a Chinese anti-ship strike variant of the H-6 bomber (itself ba
 
 ### Background
 
-The BAE Systems Hawk is a British single-engine jet trainer and light combat aircraft that first flew in 1974. Used by the Royal Air Force Red Arrows, it serves numerous air forces worldwide for advanced training and light attack missions.
+The BAE Systems Hawk is a British tandem-seat advanced jet trainer and light combat aircraft that first flew in 1974, becoming one of the most successful trainer aircraft in the Western world. Designed as an advanced flying training platform and a capable light attack aircraft, the Hawk features an Adour turbofan engine, excellent handling characteristics, and the ability to carry a meaningful weapons load on underwing hardpoints. The RAF operates the Hawk in both the training role and as the mount for the famous Red Arrows aerobatic display team.
+
+The Hawk has been exported to over 20 nations, with license production in India (as the HAL Hawk) and manufacturing partnerships for the T-45 Goshawk carrier training variant used by the U.S. Navy. Combat-capable variants have seen action in several conflicts: Indonesian Hawks were reportedly used during operations in East Timor, Saudi and Zimbabwean Hawks have flown combat missions, and Kuwait's Hawks were destroyed during the Iraqi invasion in 1990. More advanced derivatives like the Hawk 100 and 200 series feature improved avionics, HOTAS controls, and compatibility with modern guided weapons, blurring the line between trainer and light combat aircraft. The latest Hawk Advanced Jet Trainer features a glass cockpit and advanced training systems. The Hawk's combination of economical operation, forgiving handling, and genuine combat capability has made it the advanced trainer of choice for numerous air forces transitioning pilots to fast jets.
 
 ### Tasks
 
@@ -8447,7 +8609,11 @@ The BAE Systems Hawk is a British single-engine jet trainer and light combat air
 
 ### Background
 
-The Polikarpov I-16 is a Soviet fighter that became the world's first low-wing cantilever monoplane with retractable landing gear to enter service in 1934. Despite becoming obsolete by 1941, it saw extensive combat in the early years of World War II.
+The Polikarpov I-16 was a revolutionary Soviet fighter that became the world's first low-wing cantilever monoplane with retractable landing gear to enter operational military service. First flying in 1933 and entering service in 1934, the I-16 (nicknamed "Ishak" or "Donkey" by Soviet pilots, and "Rata" or "Rat" by Spanish Nationalists) represented a quantum leap in fighter design, though its advanced features came with handling challenges that made it demanding to fly. The stubby, barrel-shaped fuselage and short wingspan gave the aircraft exceptional maneuverability but also made it unstable, requiring constant pilot attention.
+
+The I-16 saw its combat debut during the Spanish Civil War from 1936, where Soviet volunteer pilots flew the type against German and Italian aircraft supporting Franco's Nationalists. The I-16 initially outperformed the Heinkel He 51 and Fiat CR.32 biplanes it faced, though the arrival of the Bf 109B began to challenge its superiority. The type also fought in the Sino-Japanese War, the Battles of Khalkhin Gol against Japan in 1939, and the Winter War against Finland. Soviet pilots at Khalkhin Gol pioneered the use of RS-82 air-to-air rockets from I-16s.
+
+When Germany invaded the Soviet Union in June 1941, the I-16 equipped a significant portion of Soviet fighter aviation. Though thoroughly obsolete against the Bf 109E and Bf 109F, thousands of I-16s fought desperately during the first months of Operation Barbarossa, suffering devastating losses to superior German aircraft. Despite the carnage, I-16 pilots occasionally scored victories and flew ramming attacks (tarans) when out of ammunition. The type continued serving in secondary roles through 1943 before final retirement. Over 10,000 I-16s were built, making it one of the most-produced fighters of the prewar era.
 
 ### Tasks
 
@@ -8515,7 +8681,11 @@ The Polikarpov I-16 is a Soviet fighter that became the world's first low-wing c
 
 ### Background
 
-The Ilyushin Il-76MD is a Soviet/Russian heavy military transport aircraft that entered service in 1974. Capable of operating from unprepared airstrips, it serves as a strategic airlifter and platform for specialized variants including tankers and AWACS.
+The Ilyushin Il-76 (NATO reporting name "Candid") is a Soviet four-engine heavy military transport aircraft that has served as the backbone of Soviet and Russian strategic airlift capability since entering service in 1974. Designed to operate from unprepared airstrips in remote regions of the Soviet Union, the Il-76 features a high wing, T-tail configuration, and multi-wheel landing gear capable of handling rough surfaces. The aircraft can carry up to 50 tons of cargo, including armored vehicles, helicopters, and palletized supplies, or airdrop paratroopers and equipment.
+
+The Il-76MD variant introduced improved D-30KP-2 engines, extended range, and enhanced cargo handling equipment. The type has proven remarkably versatile, serving as the platform for numerous specialized variants including the A-50 AWACS, Il-78 tanker, and various test and research aircraft. Over 900 Il-76s of all variants have been produced, with the type serving air forces across the former Soviet Union, Middle East, Asia, and Africa.
+
+The Il-76 has seen extensive operational use in both military and humanitarian roles. Soviet Il-76s airlifted supplies and equipment during the Soviet-Afghan War, often operating into airfields under mujahideen fire. The aircraft delivered humanitarian aid during famines, earthquakes, and conflicts worldwide. Russian Il-76s supported operations in Chechnya, Syria, and Ukraine, with several aircraft lost to ground fire or accidents in combat zones. The Il-76MD-90A represents the latest production variant with new avionics, upgraded PS-90A engines, and modernized systems, ensuring the type will remain in service for decades. The aircraft's combination of payload capacity, rough-field capability, and reliability has made it essential for operators requiring heavy airlift capability to austere destinations.
 
 ### Tasks
 
@@ -8541,7 +8711,11 @@ No pylons defined.
 
 ### Background
 
-The Ilyushin Il-78M is an aerial refueling tanker based on the Il-76 transport that entered service in 1987. Using the probe-and-drogue method, it can refuel multiple aircraft simultaneously and serves as Russia's primary tanker.
+The Ilyushin Il-78 (NATO reporting name "Midas") is an aerial refueling tanker derived from the Il-76MD transport, providing the Soviet and Russian air forces with their first purpose-built tanker aircraft. Entering service in 1987, the Il-78 was developed to support long-range bomber operations and extend the reach of tactical aviation. The aircraft features three UPAZ-1A probe-and-drogue refueling pods—two mounted on wing pylons and one on the rear fuselage—allowing it to refuel multiple aircraft simultaneously.
+
+The Il-78M is the improved production variant with increased fuel capacity through the installation of additional tanks in the cargo hold. In this configuration, the aircraft can transfer up to 85,000 kilograms of fuel, though the cargo hold tanks are removable to restore transport capability if required. The type supports the full range of Russian combat aircraft including Tu-160 and Tu-95MS strategic bombers, Su-27/30/34/35 fighters and fighter-bombers, and Tu-22M3 theater bombers. This capability proves essential for Russian power projection operations.
+
+The Il-78M has supported Russian military operations in Syria since 2015, enabling strike aircraft to maintain sustained operations from bases in Russia when necessary and extending mission duration for aircraft operating from Khmeimim Air Base. The tanker fleet has also supported strategic aviation patrols near NATO airspace and provided refueling during long-range deployments. Russia operates approximately 15 Il-78/78M aircraft, with the upgraded Il-78M-90A entering production to modernize the fleet. India, Pakistan, and China have also acquired Il-78 tankers, recognizing the type's importance for extending the operational reach of their tactical aviation.
 
 ### Tasks
 
@@ -8567,7 +8741,9 @@ No pylons defined.
 
 ### Background
 
-The Shenyang J-11A is a Chinese-built version of the Russian Su-27SK, produced under license beginning in 1998. It serves as a heavy air superiority fighter in the PLAAF.
+The Shenyang J-11A is a Chinese-produced version of the Russian Su-27SK heavy air superiority fighter, manufactured under license beginning in 1998 at the Shenyang Aircraft Corporation. The program originated from a 1996 agreement for China to assemble 200 Su-27SK aircraft using Russian-supplied kits, with gradual localization of components. Early J-11As were essentially identical to exported Su-27SKs, powered by AL-31F engines and equipped with the N001E radar, compatible with Russian R-27 and R-73 missiles.
+
+Russia terminated the license agreement in 2006 after producing approximately 105 aircraft, reportedly due to concerns about Chinese reverse-engineering and indigenous development of improved variants without license payments. China subsequently developed the J-11B with domestic avionics, radar, and WS-10 engines, followed by further variants including the carrier-capable J-15. The J-11 family has become central to PLAAF air superiority capability, filling the heavy fighter role alongside imported Su-30MKK/MK2 and domestically developed J-16 aircraft. While the J-11A specifically has seen limited development compared to later variants, its production established Chinese capability to manufacture fourth-generation heavy fighters, enabling the subsequent indigenous programs that now form the backbone of Chinese tactical aviation. The original J-11As remain in PLAAF service, though they have been supplemented by more advanced domestically-produced variants.
 
 ### Tasks
 
@@ -8794,7 +8970,9 @@ The Shenyang J-11A is a Chinese-built version of the Russian Su-27SK, produced u
 
 ### Background
 
-The CAC/PAC JF-17 Thunder is a lightweight, single-engine, multi-role combat aircraft developed jointly by Pakistan and China. Entering Pakistani service in 2007, it serves as an affordable, capable fourth-generation fighter.
+The CAC/PAC JF-17 Thunder (known as FC-1 Xiaolong in China) is a lightweight, single-engine, multirole combat aircraft developed jointly by Pakistan Aeronautical Complex and Chengdu Aircraft Corporation. Entering Pakistani service in 2007, the JF-17 was designed to replace Pakistan's aging fleet of F-7 (Chinese MiG-21) and Mirage III/5 fighters with an affordable, capable fourth-generation aircraft. The type features the KLJ-7 pulse-Doppler radar (or advanced AESA radar in Block 3), fly-by-wire flight controls, a glass cockpit, and compatibility with a wide range of Chinese and Western munitions including PL-12 BVR missiles, C-802 anti-ship missiles, and precision-guided bombs.
+
+The JF-17 achieved its first combat kill on February 27, 2019, when Pakistani aircraft engaged Indian Air Force jets during the Kashmir aerial confrontation following the Balakot strike. Pakistan claimed a JF-17 shot down an Indian MiG-21, though details remain disputed. The aircraft has been ordered by Myanmar, Nigeria, and Argentina (pending), validating the type's export potential as an affordable alternative to more expensive Western fighters. Pakistan has produced over 100 JF-17s in multiple blocks, with successive upgrades adding inflight refueling capability, improved avionics, and enhanced weapons integration. The Block 3 variant introduces an AESA radar, holographic wide-angle HUD, and helmet-mounted display, bringing the aircraft to 4.5-generation capability. The JF-17 program demonstrates successful South-South defense cooperation and provides smaller air forces with genuine multirole capability at a fraction of Western fighter costs.
 
 ### Tasks
 
@@ -8994,7 +9172,9 @@ The CAC/PAC JF-17 Thunder is a lightweight, single-engine, multi-role combat air
 
 ### Background
 
-The Junkers Ju 88 is one of the most versatile German aircraft of World War II, serving as a bomber, dive bomber, night fighter, and reconnaissance aircraft. The A-4 variant, entering service in 1940, is the most-produced bomber version.
+The Junkers Ju 88 was the most versatile German aircraft of World War II, serving as a level bomber, dive bomber, night fighter, heavy fighter, torpedo bomber, and reconnaissance platform. First flying in 1936 and entering service in 1939, the Ju 88 was designed as a Schnellbomber (fast bomber) capable of outrunning contemporary fighters, though this requirement was later de-emphasized in favor of heavier bomb loads. The A-4 variant represented the definitive bomber version, featuring improved defensive armament, upgraded Jumo 211J engines producing 1,340 horsepower each, and increased fuel capacity. Over 9,000 Ju 88s of all variants were produced during the war.
+
+The Ju 88 saw action on every front where German forces fought. During the Battle of Britain in 1940, Ju 88s formed a key component of the Luftwaffe's bombing campaign, suffering lighter losses than the slower He 111 and Do 17 bombers. On the Eastern Front, the type proved effective in both level bombing and anti-shipping roles, attacking Soviet convoys and naval bases. In the Mediterranean, Ju 88s participated in the siege of Malta and anti-shipping operations that devastated Allied convoys. The aircraft's speed and maneuverability made it effective in the dive-bombing role, though it was eventually superseded by dedicated attackers in that mission. Later variants served as night fighters (the Ju 88C and G series with radar), where they achieved considerable success against RAF Bomber Command. The Ju 88's versatility meant it remained in frontline service until the end of the war, testament to the soundness of its basic design.
 
 ### Tasks
 
@@ -9052,7 +9232,9 @@ The Junkers Ju 88 is one of the most versatile German aircraft of World War II, 
 
 ### Background
 
-The Lockheed KC-130 is the tanker variant of the C-130 Hercules, providing tactical aerial refueling for Marine Corps and allied aircraft. Using probe-and-drogue refueling, it can also serve as a transport.
+The Lockheed KC-130 is the tanker variant of the legendary C-130 Hercules, providing tactical aerial refueling support for U.S. Marine Corps aviation and allied aircraft. First entering service in the late 1950s, the KC-130 was developed to meet the Marines' requirement for an organic tanker capability that could operate from austere airfields close to the front lines. Unlike the USAF's large dedicated tanker fleet, the KC-130 was designed to be expeditionary, supporting Marines wherever they operated while retaining full cargo and transport capabilities. The aircraft uses the probe-and-drogue refueling system with wing-mounted refueling pods.
+
+The KC-130 has participated in every major U.S. military operation since Vietnam, where it provided critical refueling support for tactical aircraft over Southeast Asia. During Operation Desert Storm in 1991, KC-130s flew thousands of refueling missions supporting Marine AV-8B Harriers, F/A-18 Hornets, and helicopter assets. The type has seen continuous action in Operations Enduring Freedom and Iraqi Freedom, refueling both fixed-wing and rotary-wing aircraft. Beyond refueling, KC-130s regularly perform cargo and troop transport, medical evacuation, and aerial delivery missions. The Marines have operated progressively upgraded variants—from the KC-130F through the current KC-130J Super Hercules—incorporating turboprop engine improvements, glass cockpits, and enhanced cargo handling systems. The KC-130's ability to land on short, unprepared strips and perform both tanking and transport duties makes it uniquely suited to expeditionary operations, providing Marines with organic aerial refueling independent of Air Force support.
 
 ### Tasks
 
@@ -9078,7 +9260,9 @@ No pylons defined.
 
 ### Background
 
-The Boeing KC-135 Stratotanker is a military aerial refueling aircraft that has served the USAF since 1957. Based on the Boeing 367-80 prototype (also the basis for the 707), it uses the flying boom refueling method.
+The Boeing KC-135 Stratotanker is the backbone of the United States Air Force's aerial refueling capability and one of the longest-serving aircraft in military aviation history. First flying in 1956 and entering service in 1957, the KC-135 was developed from the Boeing 367-80 prototype that also gave rise to the 707 commercial airliner. The aircraft was designed specifically to support Strategic Air Command's nuclear-armed bomber force during the Cold War, enabling B-52s to maintain continuous airborne alert and reach targets anywhere in the world. The KC-135 uses the flying boom refueling method, allowing rapid fuel transfer rates to receivers equipped with boom receptacles.
+
+The KC-135 fleet has been indispensable in every American military operation since the Vietnam War. During the Southeast Asian conflict, Stratotankers flew thousands of missions from bases in Thailand and Okinawa, enabling the air campaign over North Vietnam. Operation Desert Storm in 1991 demonstrated the type's importance to modern air warfare, with KC-135s flying over 18,000 sorties and transferring more than 800 million pounds of fuel. The aircraft has supported operations in the Balkans, Afghanistan, Iraq, and Syria, remaining the most numerous tanker in the USAF inventory. Most KC-135As have been upgraded to KC-135R standard with CFM56 turbofan engines, dramatically improving fuel efficiency and reducing noise. The re-engined aircraft can offload significantly more fuel while burning less themselves. Despite their advanced age—with many airframes exceeding 60 years of service—KC-135s continue to form the core of USAF aerial refueling capability, gradually being supplemented by the newer KC-46 Pegasus.
 
 ### Tasks
 
@@ -9104,7 +9288,9 @@ No pylons defined.
 
 ### Background
 
-The KC-135R MPRS (Multi-Point Refueling System) is an upgraded Stratotanker variant capable of both boom and probe-and-drogue refueling, providing flexibility to refuel both USAF and Navy/Marine/allied aircraft.
+The KC-135R MPRS (Multi-Point Refueling System) is an upgraded Stratotanker variant that addresses a fundamental compatibility problem in coalition air operations: different refueling systems used by different air forces. Standard KC-135s use the flying boom method preferred by the USAF, while U.S. Navy, Marine Corps, and most allied aircraft use the probe-and-drogue system. The MPRS modification adds wing-mounted hose-and-drogue refueling pods while retaining the centerline boom, allowing a single tanker to service any receiver aircraft regardless of refueling system.
+
+This dual capability proved invaluable during coalition operations beginning with Desert Storm in 1991, where American tankers needed to support aircraft from numerous allied nations using probe-and-drogue systems. The MPRS configuration allows KC-135Rs to refuel USAF F-15s and F-16s via boom while simultaneously trailing drogues for Navy F/A-18s, RAF Tornados, or French Mirages. During Operations Enduring Freedom and Iraqi Freedom, MPRS-equipped tankers provided this critical flexibility throughout countless coalition strike packages. The wing-mounted pods can be removed when not required, reverting the aircraft to standard boom-only configuration. While the USAF has transitioned some tanking requirements to the newer KC-46A Pegasus and KC-10 Extender (which also features boom and drogue capability), the MPRS-modified KC-135Rs continue to serve as vital force multipliers in joint and coalition operations worldwide.
 
 ### Tasks
 
@@ -9130,7 +9316,9 @@ No pylons defined.
 
 ### Background
 
-The KJ-2000 is a Chinese airborne early warning and control (AEW&C) aircraft based on the Il-76MD transport. Featuring a distinctive fixed AESA radar array, it entered service in 2007 as China's first operational AWACS platform.
+The KJ-2000 is China's first indigenous airborne early warning and control (AEW&C) aircraft, representing a major milestone in the People's Liberation Army Air Force's development of network-centric warfare capabilities. Based on the Ilyushin Il-76MD transport airframe, the KJ-2000 features a distinctive fixed phased-array radar mounted in a non-rotating dome atop the fuselage. Unlike Western AWACS aircraft such as the E-3 Sentry, which use rotating radomes to achieve 360-degree coverage, the KJ-2000's three-sided AESA radar provides full spherical coverage without mechanical rotation, offering faster target updates and greater reliability.
+
+The aircraft's development followed a circuitous path reflecting the challenges of technology acquisition. China initially attempted to purchase the Israeli Phalcon AEW&C system in the late 1990s, but U.S. pressure forced cancellation of that deal in 2000. Chinese engineers then developed an indigenous system, reportedly incorporating lessons from the failed Phalcon project. The KJ-2000 entered service around 2007, with a small number of aircraft providing the PLAAF with genuine AEW&C capability for the first time. The system can detect and track aerial targets at ranges exceeding 400 kilometers and coordinate large-scale air operations including fighter intercepts and strike missions. The KJ-2000's electronic systems have reportedly undergone continuous upgrades since initial deployment. While the type exists in limited numbers due to the small pool of available Il-76 airframes, it has been complemented by the KJ-500, a more numerous AEW&C platform based on the Y-9 transport. Together these aircraft provide China with comprehensive airborne early warning coverage essential for modern air defense and offensive operations.
 
 ### Tasks
 
@@ -9156,7 +9344,9 @@ No pylons defined.
 
 ### Background
 
-The Aero L-39 Albatros is a Czechoslovak high-performance jet trainer that first flew in 1968. The L-39C is the standard training variant, widely exported and known for its reliability and low operating costs.
+The Aero L-39 Albatros is a Czechoslovak jet trainer that became the most widely used training aircraft in the world, with over 2,900 built and operators in more than 30 countries. The L-39C is the standard training variant, first flying in 1968 and entering service in 1971 as the replacement for the earlier L-29 Delfin. Designed for both basic and advanced pilot training, the aircraft features tandem seating, a single Progress AI-25TL turbofan engine, and tricycle landing gear with an arrestor hook capability for carrier landing training.
+
+The L-39 served as the primary jet trainer for the Soviet Union and all Warsaw Pact nations, producing generations of military pilots throughout the Eastern Bloc. The type's combination of docile handling, excellent visibility, and reasonable performance made it ideal for transitioning pilots from piston trainers to frontline jets. Armed variants (L-39ZA and ZO) added underwing hardpoints for light attack and weapons training missions. Following the end of the Cold War, many L-39s entered the civilian market, where their jet performance, two-seat configuration, and relatively low operating costs made them popular with wealthy private owners and air racing enthusiasts. Several nations continue using L-39s for light attack and counter-insurgency missions, where their ability to deliver rockets and bombs at low cost fills a useful niche. The Albatros design was succeeded by the L-159 ALCA and eventually the L-39NG, which features modern avionics while retaining the proven airframe concept.
 
 ### Tasks
 
@@ -9222,7 +9412,9 @@ The Aero L-39 Albatros is a Czechoslovak high-performance jet trainer that first
 
 ### Background
 
-The L-39ZA is the armed light attack variant of the Albatros, featuring four underwing hardpoints for weapons delivery training and light combat missions.
+The Aero L-39ZA Albatros is the armed light attack and weapons training variant of the highly successful Czechoslovak jet trainer, first flying in 1968 with armed variants entering production in 1975. The "ZA" designation indicates "Zbrojní-Afghanský" (armed-Afghan configuration), developed primarily for export customers requiring a simple, affordable aircraft capable of both training and light combat missions. The L-39ZA features four underwing hardpoints for weapons carriage and a reinforced airframe compared to the basic training variant.
+
+The L-39ZA has seen extensive combat use across multiple conflicts. Afghan Air Force L-39s fought during the Soviet-Afghan War and subsequent civil war throughout the 1980s and 1990s. Iraqi L-39ZAs participated in the Iran-Iraq War and were destroyed in large numbers during Desert Storm in 1991. Ethiopian L-39s flew combat missions during the Eritrean War of Independence and the subsequent Ethiopia-Eritrea border conflict. The type has also seen action in Libya, Syria, and numerous African conflicts. While limited in payload capacity compared to dedicated attack aircraft, the L-39ZA's low operating costs, simple maintenance requirements, and adequate performance have made it popular with air forces that cannot afford more sophisticated platforms. Over 2,900 L-39s of all variants were built, making it one of the most widely used jet trainers in history.
 
 ### Tasks
 
@@ -9330,7 +9522,9 @@ The L-39ZA is the armed light attack variant of the Albatros, featuring four und
 
 ### Background
 
-The Dassault Mirage 2000C is a French multirole fighter that entered service in 1984. Featuring a delta wing design and advanced fly-by-wire controls, it serves as France's primary air defense fighter.
+The Dassault Mirage 2000C is the air defense variant of France's fourth-generation delta-wing fighter, entering Armée de l'Air service in 1984. The Mirage 2000 was developed as a successor to the earlier Mirage III and 5 series, incorporating significant advances including a fly-by-wire flight control system, relaxed static stability for improved agility, and the RDM (Radar Doppler Multifunction) or later RDI (Radar Doppler à Impulsions) pulse-Doppler radar. The aircraft's delta wing configuration combined with leading-edge slats provides excellent instantaneous turn rates and high-altitude performance.
+
+The Mirage 2000C has seen extensive combat operations. French aircraft flew combat air patrol missions during Operation Desert Storm in 1991 and subsequently participated in operations over Bosnia (Opérations Crécerelle and Salamandre) and Kosovo in the 1990s. Mirage 2000s supported French operations in Africa, including Chad and Libya (Operation Harmattan in 2011), and flew air defense sorties over Syria and Iraq as part of Operation Chammal against ISIS. Export operators have also employed the type in combat: Greek Mirage 2000s have engaged in aerial encounters with Turkish aircraft over the Aegean Sea, and Indian Air Force Mirage 2000s struck targets in Pakistan during the 1999 Kargil conflict and the 2019 Balakot airstrikes. The Mirage 2000 family has been exported to eight countries and over 600 aircraft have been produced. While France has begun replacing its Mirage 2000 fleet with the Dassault Rafale, the type remains in frontline service with multiple air forces worldwide.
 
 ### Tasks
 
@@ -9504,7 +9698,9 @@ The Dassault Mirage 2000C is a French multirole fighter that entered service in 
 
 ### Background
 
-The MB-339A/PAN is the specialized variant used by the Italian Air Force's Frecce Tricolori aerobatic demonstration team, featuring a distinctive paint scheme and smoke generators.
+The Aermacchi MB-339A/PAN is the specialized aerobatic demonstration variant of the MB-339 advanced jet trainer, purpose-configured for Italy's Frecce Tricolori (Tricolor Arrows) national aerobatic team based at Rivolto Air Base. The "PAN" designation stands for "Pattuglia Acrobatica Nazionale" (National Aerobatic Patrol). The Frecce Tricolori transitioned to the MB-339 in 1982 after previously flying the Fiat G.91PAN, and the team has operated the type for over four decades.
+
+The MB-339A/PAN differs from standard training variants primarily in its smoke generation system and specialized paint scheme. The aircraft carries colored oil tanks that inject dye into the engine exhaust to produce the green, white, and red smoke trails representing the Italian flag during displays. The Frecce Tricolori is one of the world's premier military aerobatic teams, famous for performing as a ten-aircraft formation—the largest of any national team. Their signature maneuvers include the "Scintilla" (Sparkle) bomb burst and the heart-piercing arrow maneuver. The team performs throughout Europe and has appeared at major international airshows worldwide. The MB-339 platform provides the reliability, maneuverability, and docile handling characteristics essential for close-formation aerobatic flying.
 
 ### Tasks
 
@@ -9566,7 +9762,9 @@ The MB-339A/PAN is the specialized variant used by the Italian Air Force's Frecc
 
 ### Background
 
-The Aermacchi MB-339 is an Italian military jet trainer and light attack aircraft that first flew in 1976. The MB-339A is the standard training variant, known for its agility and used by the Frecce Tricolori aerobatic team.
+The Aermacchi MB-339A is an Italian advanced jet trainer and light attack aircraft that first flew in 1976 and entered Italian Air Force service in 1979. Developed as a successor to the earlier MB-326, the MB-339 features a redesigned forward fuselage with a raised rear cockpit for improved instructor visibility, upgraded Rolls-Royce Viper engine, and improved avionics. The aircraft serves primarily in the advanced pilot training role but retains significant light attack capability through six underwing hardpoints.
+
+The MB-339 has been exported to over a dozen countries and seen combat in several conflicts. Argentine Navy MB-339As flew ground attack missions during the 1982 Falklands War, with one notably attacking British warships in San Carlos Water and damaging HMS Argonaut with cannon fire. Eritrean MB-339s flew combat sorties during the Ethiopia-Eritrea War in the late 1990s. The Royal New Zealand Air Force operated armed MB-339CBs until 2001, and Peru, Nigeria, Malaysia, and the UAE have all operated the type. The Italian Air Force uses the MB-339A for advanced training at Lecce and operates the specialized MB-339A/PAN variant with its Frecce Tricolori aerobatic demonstration team. Italy also developed the MB-339CD variant with a glass cockpit and enhanced avionics for export customers. Over 200 MB-339s have been produced, making it one of the more successful Western jet trainers.
 
 ### Tasks
 
@@ -9779,7 +9977,9 @@ The Mikoyan-Gurevich MiG-15bis Flaming Cliffs variant provides a simplified simu
 
 ### Background
 
-The Mikoyan-Gurevich MiG-15bis is an improved Soviet jet fighter that became famous during the Korean War. Entering service in 1950, it shocked Western observers with its performance and influenced fighter design for years.
+The Mikoyan-Gurevich MiG-15bis is the definitive production variant of the Soviet Union's first successful swept-wing jet fighter, entering service in 1950 with the improved Klimov VK-1 engine producing 5,950 pounds of thrust. The MiG-15 shocked Western observers when it appeared over Korea in November 1950, demonstrating performance that outclassed straight-winged F-80 Shooting Stars and F-84 Thunderjets and proved equal or superior to the F-86 Sabre in many respects.
+
+During the Korean War, MiG-15s flown by Soviet, Chinese, and North Korean pilots contested UN air superiority over "MiG Alley" in northwestern Korea. The aircraft's heavy armament of one 37mm and two 23mm cannons made it devastatingly effective against B-29 bombers, forcing the USAF to switch to night bombing operations. Intense dogfights between MiG-15s and F-86 Sabres became legendary, producing the first jet-versus-jet aces on both sides. Over 13,000 MiG-15s were built in the Soviet Union, with thousands more produced under license in Poland, Czechoslovakia, and China (as the J-2). The type equipped dozens of air forces and saw combat in numerous post-Korean conflicts including the Middle East wars. The MiG-15's success established Soviet aviation as a peer competitor to the West and influenced fighter design for a generation.
 
 ### Tasks
 
@@ -9827,7 +10027,9 @@ The Mikoyan-Gurevich MiG-15bis is an improved Soviet jet fighter that became fam
 
 ### Background
 
-The Mikoyan-Gurevich MiG-19P is a Soviet second-generation jet fighter and the world's first mass-produced supersonic aircraft. Entering service in 1955, the P variant features radar intercept capability.
+The Mikoyan-Gurevich MiG-19P (NATO reporting name "Farmer-B") is a radar-equipped all-weather interceptor variant of the world's first mass-produced supersonic fighter. The MiG-19 entered Soviet service in 1955, representing a significant technological leap as the first Soviet aircraft capable of sustained supersonic flight in level flight. The P (Perekhvatchik - interceptor) variant added the RP-5 Izumrud radar in the nose intake splitter, enabling limited all-weather intercept capability.
+
+The MiG-19 and its variants served extensively with Soviet Frontal Aviation and PVO air defense forces throughout the late 1950s and 1960s. Export MiG-19s saw combat in various conflicts: Chinese-built J-6s (the most numerous variant, with over 3,000 produced) engaged American aircraft over Vietnam, claiming several kills against F-4 Phantoms and other types. Pakistani F-6s (J-6 export designation) fought Indian aircraft during the 1965 and 1971 wars. Egyptian and Syrian MiG-19s participated in the 1967 and 1973 Arab-Israeli conflicts. The aircraft's twin-engine configuration provided excellent climb rate and acceleration, while its three heavy cannons (one 37mm and two 30mm on some variants) delivered devastating firepower. Though quickly superseded by the MiG-21 in Soviet service, the MiG-19/J-6 remained in frontline service with some operators into the 1990s.
 
 ### Tasks
 
@@ -9903,7 +10105,9 @@ The Mikoyan-Gurevich MiG-19P is a Soviet second-generation jet fighter and the w
 
 ### Background
 
-The Mikoyan-Gurevich MiG-21bis is the ultimate Soviet production variant of the iconic MiG-21, entering service in 1972. With improved engine, avionics, and weapons capability, it serves as a frontline fighter worldwide.
+The Mikoyan-Gurevich MiG-21bis (NATO reporting name "Fishbed-L/N") represents the ultimate Soviet production variant of the legendary MiG-21, entering service in 1972 and continuing in production until 1985. The "bis" (meaning "encore" or "second") designation indicates a thoroughly modernized aircraft featuring the powerful Tumansky R-25-300 afterburning turbojet producing 16,500 pounds of thrust, the improved Sapfir-21 radar, and capability for fourth-generation R-60 (AA-8 Aphid) infrared missiles.
+
+The MiG-21 family remains the most-produced supersonic aircraft in history, with over 11,000 built in the Soviet Union plus thousands more manufactured under license in India, Czechoslovakia, and China (as the J-7/F-7). The type has seen more aerial combat than any other supersonic fighter, participating in virtually every major conflict since the 1960s. North Vietnamese MiG-21s achieved significant success against American aircraft during the Vietnam War, shooting down numerous F-4 Phantoms, F-105 Thunderchiefs, and other types. Indian MiG-21s fought Pakistani fighters in the 1971 and 1999 wars. Egyptian and Syrian MiG-21s engaged Israeli aircraft in 1967, 1973, and during the 1982 Lebanon War. Iraqi MiG-21s fought Iranian aircraft during the Iran-Iraq War and confronted coalition forces during Desert Storm. The MiG-21bis, with its improved performance and weapons capability, remains in active service with numerous air forces worldwide, a testament to the type's fundamental soundness and adaptability.
 
 ### Tasks
 
@@ -10050,7 +10254,9 @@ The Mikoyan-Gurevich MiG-21bis is the ultimate Soviet production variant of the 
 
 ### Background
 
-The Mikoyan-Gurevich MiG-23MLD is the final and most capable Soviet variant of the variable-geometry 'Flogger', entering service in 1984. It features improved dogfighting capability and advanced avionics.
+The Mikoyan-Gurevich MiG-23MLD, NATO reporting name "Flogger-K," represents the ultimate development of the Soviet Union's third-generation variable-geometry fighter. Entering service in 1984, the MLD incorporated lessons learned from combat in the Middle East and Afghanistan, featuring improved leading-edge root extensions (LERX) for enhanced maneuverability, upgraded Sapfir-23MLA radar with better look-down capability, and compatibility with the R-24 (AA-7 Apex) medium-range missile. The variable-geometry wings sweep from 16 to 72 degrees, allowing both efficient cruise and improved low-speed handling.
+
+The MiG-23 family saw extensive combat, though often in the hands of operators with inferior training against Western-equipped adversaries. Syrian MiG-23s engaged Israeli F-15s and F-16s over Lebanon during the 1982 Bekaa Valley campaign with poor results, while Libyan Floggers clashed with U.S. Navy aircraft on multiple occasions—two Libyan MiG-23s were shot down by F-14s in 1989. Iraqi MiG-23s served during the Iran-Iraq War and Desert Storm, and Cuban MiG-23s shot down two civilian aircraft in 1996. Soviet MiG-23s flew ground attack missions in Afghanistan. The MLD variant addressed earlier criticism of the MiG-23's inferior dogfighting capability, though it remained less agile than contemporary Western fighters. Despite its mixed combat record, the MiG-23 was produced in large numbers (over 5,000 built) and exported widely, serving as the primary Soviet tactical fighter between the MiG-21 and MiG-29 generations. Several nations continue operating modernized MiG-23s.
 
 ### Tasks
 
@@ -10168,7 +10374,9 @@ The Mikoyan-Gurevich MiG-23MLD is the final and most capable Soviet variant of t
 
 ### Background
 
-The Mikoyan-Gurevich MiG-25PD is an improved interceptor variant of the legendary Foxbat that entered service in 1978. Featuring look-down/shoot-down radar capability, it addresses earlier limitations.
+The Mikoyan-Gurevich MiG-25PD, NATO reporting name "Foxbat-E," is an improved interceptor variant of the legendary Mach 3-capable interceptor developed in response to the perceived threat of the American XB-70 Valkyrie bomber and SR-71 reconnaissance aircraft. The PD variant entered service in 1978 following the defection of Viktor Belenko to Japan in 1976, which exposed the original MiG-25's limitations to Western intelligence. The PD introduced the Sapfir-25 radar with genuine look-down/shoot-down capability, infrared search and track (IRST) system, and compatibility with the R-40 (AA-6 Acrid) and R-60 (AA-8 Aphid) missiles. The aircraft remains capable of speeds exceeding Mach 2.8 in sustained flight.
+
+The MiG-25 earned legendary status for its raw performance, though its capabilities were often misunderstood. The aircraft was designed as a high-speed, high-altitude interceptor optimized for straight-line dash rather than air combat maneuvering. Iraqi MiG-25s achieved notable successes during the Gulf War era, with one scoring a kill against a U.S. Navy F/A-18C in 1991. Syrian and Libyan MiG-25s also saw combat, though generally with less success against Western fighters. The reconnaissance variants (MiG-25RB series) proved particularly valuable, conducting overflights that could not be intercepted by contemporary fighters. The MiG-25's steel construction (necessitated by thermal limits rather than combat requirements) made it heavy and limited its agility, but its speed and altitude capability remain impressive even by modern standards. The type was eventually succeeded by the more capable MiG-31.
 
 ### Tasks
 
@@ -10218,7 +10426,9 @@ The Mikoyan-Gurevich MiG-25PD is an improved interceptor variant of the legendar
 
 ### Background
 
-The MiG-25RBT is a reconnaissance-bomber variant of the Foxbat, capable of high-altitude reconnaissance and precision strike missions at extreme speeds.
+The Mikoyan-Gurevich MiG-25RBT, NATO reporting name "Foxbat-B," is a reconnaissance-bomber variant of the high-speed interceptor, designed to exploit the aircraft's exceptional speed and altitude performance for strategic reconnaissance and strike missions. The RBT designation indicates an upgraded electronic intelligence (ELINT) capability compared to earlier reconnaissance Foxbats, while retaining the ability to carry up to 4,000 kg of bombs on underwing hardpoints. The aircraft can conduct reconnaissance sorties at altitudes exceeding 65,000 feet and speeds above Mach 2.5, where it remains effectively invulnerable to most fighters and surface-to-air missile systems.
+
+The reconnaissance Foxbats proved to be among the most valuable variants of the MiG-25 family. During the Cold War, Soviet MiG-25Rs conducted surveillance flights along NATO borders and over the Middle East, flying too fast and too high to be intercepted. Israeli F-15s repeatedly failed to intercept Syrian and Egyptian MiG-25s conducting reconnaissance over the Sinai and Israel in the 1970s. Iraqi MiG-25RBs conducted reconnaissance missions throughout the Iran-Iraq War and into the Gulf War era. The strike capability, while secondary to the reconnaissance mission, allowed the aircraft to deliver significant bomb loads at extremely high speeds—essentially conducting ballistic-trajectory bombing runs that were nearly impossible to defend against. The type remains in limited service with a few nations, valued for missions where nothing else can operate with similar impunity.
 
 ### Tasks
 
@@ -10304,7 +10514,9 @@ The MiG-25RBT is a reconnaissance-bomber variant of the Foxbat, capable of high-
 
 ### Background
 
-The Mikoyan MiG-27K is an advanced Soviet ground-attack variant based on the MiG-23 that entered service in 1975. Nicknamed 'Kayak', it features enhanced precision attack systems.
+The Mikoyan MiG-27K, NATO reporting name "Flogger-J2," represents the ultimate development of the MiG-23/27 strike aircraft family, optimized for precision ground attack with advanced targeting systems. Entering Soviet service in 1977, the K variant (sometimes nicknamed "Kayak" in Western sources) featured the Kaira-23 laser/TV targeting system housed in a distinctive chisel-shaped nose, enabling delivery of laser-guided bombs (KAB-500L) and electro-optical guided missiles (Kh-29T) with accuracy far superior to earlier variants. The aircraft retained the variable-geometry wing of the MiG-23 family but replaced the air-to-air radar with attack avionics, and the two-position engine nozzle was simplified for ground attack operations.
+
+The MiG-27 family served as the Soviet Air Forces' primary tactical attack aircraft during the late Cold War period. MiG-27s flew extensive combat missions during the Soviet-Afghan War, delivering both guided and unguided ordnance against mujahideen positions and supply routes. The precision capability of the MiG-27K proved particularly valuable for attacking point targets in mountainous terrain. Indian Air Force MiG-27s saw combat during the Kargil War (1999), where the type flew strike missions against Pakistani positions at high altitudes in the Himalayas, earning respect for its payload capacity and rugged construction. The MiG-27 was retired from Russian service in the 1990s as part of post-Cold War drawdowns, but Indian and Sri Lankan MiG-27s continued operating into the 2010s. The type demonstrated that the variable-geometry concept, while complex, could be adapted effectively for dedicated strike aircraft.
 
 ### Tasks
 
@@ -10436,7 +10648,9 @@ The Mikoyan MiG-27K is an advanced Soviet ground-attack variant based on the MiG
 
 ### Background
 
-The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combines excellent maneuverability with advanced weapons systems.
+The Mikoyan MiG-29A (NATO reporting name "Fulcrum-A") is the initial production variant of the Soviet fourth-generation lightweight fighter, developed as a tactical counterpart to the larger Su-27 in a high-low force mix analogous to the American F-15/F-16 relationship. The MiG-29 entered Soviet Air Force service in 1983, featuring the N019 Rubin look-down/shoot-down radar, an innovative helmet-mounted sight for off-boresight missile cueing, and exceptional close-combat maneuverability enabled by its aerodynamic design and powerful RD-33 turbofan engines.
+
+The MiG-29 was designed specifically to counter the F-16 and F/A-18 in air combat, and early demonstrations shocked Western observers with the aircraft's agility, including its ability to perform the "Pugachev's Cobra" maneuver. The type's combat record has been mixed, reflecting the circumstances of its various operators. Iraqi MiG-29s achieved limited success during Desert Storm before being overwhelmed by coalition air superiority. Serbian MiG-29s were shot down during NATO's Operation Allied Force in 1999. More recently, MiG-29s have seen combat during the Eritrean-Ethiopian War, Syrian Civil War, and the conflict in Ukraine. Over 1,600 MiG-29s have been built, and the type serves with air forces across the former Soviet Union, Eastern Europe, Middle East, Africa, and Asia.
 
 ### Tasks
 
@@ -10626,7 +10840,9 @@ The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fo
 
 ### Background
 
-The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fourth-generation lightweight fighter, entering service in 1983. It combines excellent maneuverability with advanced weapons systems.
+The Mikoyan MiG-29A (NATO reporting name: Fulcrum-A) is the initial production variant of the Soviet fourth-generation lightweight tactical fighter, entering Soviet Air Force service in 1983. The MiG-29 was designed as a counterpart to American F-16 and F/A-18 fighters, intended primarily for air superiority missions over the battlefield while the larger Su-27 handled long-range interception duties. The aircraft features exceptional maneuverability enabled by its blended wing-body design, twin RD-33 turbofan engines, and leading-edge root extensions (LERX) that generate powerful vortices at high angles of attack. Its distinctive feature is the combination of the N019 (NATO: Slot Back) pulse-Doppler radar with the IRST (Infrared Search and Track) sensor, allowing passive target detection.
+
+The MiG-29 has seen extensive combat around the world. Iraqi MiG-29s engaged coalition aircraft during Desert Storm in 1991, though they suffered heavily against superior Western fighters and tactics. Yugoslav Fulcrums flew during the 1999 Kosovo War, with several shot down by NATO aircraft. Eritrean MiG-29s fought against Ethiopian Su-27s in one of the few encounters between Russian-designed fourth-generation fighters. Most significantly, Ukrainian MiG-29s have fought extensively against Russian forces since 2022, upgraded to carry Western weapons including AIM-120 AMRAAM and HARM missiles. The MiG-29 has been widely exported to over 25 countries, with operators including Germany (inherited from East Germany), Poland, India, and numerous nations in Africa and the Middle East. While showing its age against contemporary Western fighters, the MiG-29 remains a formidable dogfighter within visual range.
 
 ### Tasks
 
@@ -10730,7 +10946,9 @@ The Mikoyan MiG-29A 'Fulcrum' is the initial production variant of the Soviet fo
 
 ### Background
 
-The MiG-29G is the German designation for ex-East German MiG-29s upgraded to NATO standards after German reunification, featuring Western-compatible systems.
+The Mikoyan MiG-29G is the German Luftwaffe designation for ex-East German MiG-29 Fulcrums upgraded to NATO standards following German reunification in 1990. The upgrade program, conducted after Germany inherited 24 MiG-29s from the NVA (East German Air Force), modified the aircraft for Western-compatible identification friend-or-foe (IFF) systems, NATO-standard radio communications, and Western navigation equipment. The airframe and Soviet weapons systems remained largely unchanged, allowing the aircraft to continue carrying R-73 (AA-11 Archer) and R-27 (AA-10 Alamo) missiles.
+
+The integration of MiG-29s into the Luftwaffe provided NATO with unprecedented opportunity to evaluate the aircraft that had been one of the most feared Soviet fighters. German MiG-29s regularly participated in multinational exercises, where Western pilots learned firsthand about the Fulcrum's exceptional agility, helmet-mounted sight, and high-off-boresight missile capability. The type proved superior to F-16s and F-15s in close-in dogfights during training engagements, validating NATO concerns about the aircraft's capabilities. However, the MiG-29's limited range, poor radar reliability, and high maintenance requirements were also confirmed. Germany sold its remaining MiG-29s to Poland in 2003-2004, concluding one of the most valuable intelligence opportunities of the post-Cold War era. The insights gained from operating the MiG-29G directly influenced Western tactics and fourth-generation fighter development.
 
 ### Tasks
 
@@ -10834,7 +11052,9 @@ The MiG-29G is the German designation for ex-East German MiG-29s upgraded to NAT
 
 ### Background
 
-The MiG-29S 'Fulcrum-C' is an improved variant with enhanced radar, increased fuel capacity, and compatibility with precision-guided munitions, entering service in 1991.
+The Mikoyan MiG-29S, NATO reporting name "Fulcrum-C," is an improved variant of the Soviet fourth-generation lightweight fighter that entered service in 1991, representing efforts to address the original MiG-29's shortcomings while the more advanced MiG-29M remained in development. The S variant introduced the N019M radar with improved look-down/shoot-down capability and expanded memory, a dorsal fuel tank increasing internal capacity by 10%, provisions for a removable air refueling probe, and compatibility with the R-77 (AA-12 Adder) active radar-guided missile providing genuine beyond-visual-range capability independent of continuous illumination.
+
+The MiG-29S entered service as the Soviet Union collapsed, limiting production numbers and export opportunities. The variant has seen combat in several conflicts: Russian MiG-29s operated during the Chechen Wars, and export MiG-29s have been employed by numerous operators in regional conflicts. Serbian MiG-29s engaged NATO aircraft during Operation Allied Force (1999), with several shot down by F-15s and F-16s. Syrian MiG-29s have operated during that nation's civil war. The MiG-29S laid the groundwork for further development including the SMT upgrade and eventually the entirely redesigned MiG-35. Despite the original MiG-29's reputation for limited range and reliability issues, the airframe's outstanding aerodynamic design and thrust-to-weight ratio have ensured continued development and service of upgraded variants with numerous air forces worldwide.
 
 ### Tasks
 
@@ -10939,7 +11159,9 @@ The MiG-29S 'Fulcrum-C' is an improved variant with enhanced radar, increased fu
 
 ### Background
 
-The Mikoyan MiG-31 'Foxhound' is a supersonic interceptor designed to replace the MiG-25, entering service in 1981. Featuring the world's first electronically-scanned phased array radar for a fighter, it can engage multiple targets simultaneously.
+The Mikoyan MiG-31, NATO reporting name "Foxhound," is a supersonic interceptor designed to defend the vast Soviet homeland against cruise missiles and low-flying aircraft that could evade the MiG-25. Entering service in 1981, the MiG-31 introduced revolutionary capabilities including the Zaslon ("Shield") radar—the world's first electronically scanned phased array radar on a production fighter—capable of tracking 10 targets and engaging four simultaneously. The two-seat aircraft can exceed Mach 2.8 and features data-link capability allowing a flight of four MiG-31s to coordinate surveillance across a 900 km front.
+
+The MiG-31 has served as the backbone of Russian aerospace defense for over four decades. The type was designed specifically to counter the B-1B Lancer and cruise missile threats, capable of detecting and engaging low-flying targets that would escape ground-based radars. While the MiG-31 has not seen extensive air-to-air combat, the type has been employed in strike operations during the Russo-Ukrainian War, delivering Kh-47M2 Kinzhal ("Dagger") hypersonic missiles against Ukrainian targets—a role far removed from its original interceptor mission. The aircraft's speed and altitude capability make it an effective launch platform for such weapons. Upgraded variants including the MiG-31BM feature improved avionics, R-33S and R-37M long-range missiles, and precision strike capability. No direct replacement has been developed, and Russia continues to rely on upgraded MiG-31s for the long-range intercept mission. The type's unique combination of speed, radar capability, and endurance remains unmatched by any other interceptor in service.
 
 ### Tasks
 
@@ -10997,7 +11219,9 @@ The Mikoyan MiG-31 'Foxhound' is a supersonic interceptor designed to replace th
 
 ### Background
 
-The Dassault Mirage 2000-5 is a multirole upgrade of the Mirage 2000, featuring the RDY multi-mode radar and compatibility with MICA missiles. It serves as an effective air superiority and strike platform.
+The Dassault Mirage 2000-5 is a comprehensive multirole upgrade of the delta-winged Mirage 2000 series, first flying in 1990 and entering service in 1997. The -5 variant features the Thomson-CSF RDY multi-mode pulse-Doppler radar with look-down/shoot-down capability and track-while-scan for multiple targets, glass cockpit displays, compatibility with the advanced MICA (Missile d'Interception, de Combat et d'Autodéfense) active-radar and infrared-guided missiles, and improved electronic warfare systems.
+
+The Mirage 2000-5 has achieved notable export success, equipping the air forces of Taiwan (Mirage 2000-5EI), Qatar, Greece, the United Arab Emirates, and Peru, among others. The type provides these nations with a capable fourth-generation multirole platform suited for both air defense and precision strike missions. French Mirage 2000-5s have participated in various operations including NATO air policing missions and interventions in Africa. The Mirage 2000-5 and its export derivatives remain in active service as capable, cost-effective fighters, representing the culmination of Dassault's delta-wing fighter development that began with the Mirage III in the 1960s.
 
 ### Tasks
 
@@ -11075,7 +11299,9 @@ The Dassault Mirage 2000-5 is a multirole upgrade of the Mirage 2000, featuring 
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1AD is the ground attack variant exported to Libya, entering service in 1978. It features enhanced air-to-ground capability while retaining fighter performance.
+The Dassault Mirage F1AD is the ground attack variant of the Mirage F1 exported to Libya, entering Libyan Arab Republic Air Force service in 1978 as part of a substantial French arms deal during the Gaddafi era. The AD (Attack Défense) designation indicates enhanced air-to-ground capability while retaining fighter performance, including compatibility with a range of French and Libyan-procured weapons. Libya received approximately 16 F1ADs along with other Mirage F1 variants.
+
+Libyan Mirage F1s saw extensive combat during the long-running Chad-Libya conflict (1978-1987), flying strike and reconnaissance missions in support of Libyan ground forces and Chadian rebel groups. The aircraft also clashed with U.S. Navy fighters during several Gulf of Sidra incidents, though these engagements primarily involved Libyan MiG-23s and Su-22s rather than Mirages. During the 2011 Libyan Civil War, some Mirage F1s were operated by forces loyal to Gaddafi until air superiority was established by NATO. At least two Libyan Mirage F1s defected to Malta early in the conflict with their pilots refusing to bomb protesters. The surviving Libyan F1 fleet's operational status following the 2011 conflict remains unclear amid the ongoing instability in the country.
 
 ### Tasks
 
@@ -11279,7 +11505,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1AZ is the South African Air Force's ground attack variant, entering service in 1975. It saw extensive combat during the South African Border War.
+The Dassault Mirage F1AZ was the South African Air Force's dedicated ground attack variant of the Mirage F1, entering service in 1975 as one of the most capable combat aircraft on the African continent. The "AZ" designation indicates Attack (A) variant for South Africa (Z for Zuid-Afrika in Afrikaans). Unlike the French Mirage F1C interceptor, the F1AZ was optimized for ground attack with simplified radar, ground-mapping capability, and hardpoints for a comprehensive range of air-to-ground ordnance. The aircraft served alongside the F1CZ interceptor variant in SAAF service.
+
+The F1AZ saw extensive combat during the South African Border War (1966-1990), conducting strike missions against SWAPO and FAPLA forces in Angola and Namibia. SAAF Mirages flew thousands of combat sorties, attacking guerrilla camps, logistics bases, and Cuban and Angolan conventional forces. During Operation Moduler (1987-1988), one of the largest conventional battles in Africa since World War II, F1AZs provided close air support to South African ground forces engaging Cuban and Angolan armor near Cuito Cuanavale. The aircraft delivered locally-developed cluster bombs and conventional ordnance with considerable effectiveness. South African pilots encountered Cuban MiG-23 Floggers and Angolan MiG-21s during these operations, with engagements occurring on both sides.
+
+Following South Africa's transition to majority rule, the Mirage F1 fleet was retained initially before being replaced by the Gripen in the 2000s. Several F1AZs were sold to private aggressor companies in the United States, where they continue flying in contracted adversary training roles. The F1AZ's combat history in the Bush War represents some of the most intensive Mirage F1 operations outside the Middle East.
 
 ### Tasks
 
@@ -11481,7 +11711,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1B is the two-seat trainer variant, entering French service in 1980. It retains full combat capability while providing operational conversion training.
+The Dassault Mirage F1B is the two-seat operational trainer variant of the Mirage F1 developed for the French Air Force (Armée de l'Air), entering service in 1980. The "B" designation indicates biplace (two-seat) configuration. The F1B was designed to provide conversion training for pilots transitioning from other types to the Mirage F1C/CT while retaining full combat capability. The addition of the second cockpit required removal of some internal fuel capacity, partially offset by the ability to carry external tanks.
+
+The F1B proved valuable not only for pilot training but also for weapons instruction, with the rear-seat position allowing instructors to monitor student weapons employment and mission execution. French Air Force F1Bs participated in combat operations when required, including deployments to Africa in support of French intervention operations. The two-seat configuration also proved useful for ferrying the aircraft over long distances, with one pilot able to rest while the other maintained control.
+
+The French Mirage F1 fleet saw extensive use in African interventions and the 1991 Gulf War before the type was progressively replaced by the Mirage 2000 and Rafale. The F1B served alongside single-seat variants until the type's retirement from French service in 2014. Some F1Bs were subsequently sold to private aggressor companies, where they continue flying in contracted adversary roles. The F1B's combination of training utility and combat capability made it an essential component of French Mirage F1 operations.
 
 ### Tasks
 
@@ -11693,7 +11927,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BD is the two-seat trainer variant exported to Libya, combining training capability with operational ground attack systems.
+The Dassault Mirage F1BD is the two-seat operational trainer variant of the Mirage F1 exported to Libya during the 1970s. The "BD" designation indicates the two-seat trainer configuration (B for biplace) delivered to Libya (D for Libyan customer code in the Dassault export system). Libya acquired both single-seat F1AD attack aircraft and two-seat F1BD trainers as part of a comprehensive military equipment relationship with France during the Gaddafi era. The aircraft entered Libyan Arab Air Force service in the late 1970s, providing conversion training for pilots transitioning to the Mirage F1 while retaining full combat capability.
+
+Libyan Mirage F1s saw combat during various conflicts in Chad during the 1980s, supporting Libyan-backed factions in the Chadian civil war. The aircraft flew strike missions against Chadian forces and their French-supported allies, though Libyan air operations were often hampered by maintenance difficulties and combat losses. French Jaguars and later Mirage F1s on the opposing side engaged in the same conflict, creating the unusual situation of French-built aircraft fighting each other over African soil. Libya also used its Mirage F1s during clashes with U.S. Navy aircraft over the Gulf of Sidra, though the MiG-23 was more commonly encountered in those engagements.
+
+The Libyan Mirage F1 fleet declined significantly over decades due to maintenance issues, international sanctions, and attrition during various conflicts. During the 2011 Libyan Civil War and NATO intervention, the remaining Mirages saw limited use before the fall of the Gaddafi regime. The F1BD's history reflects the complex international arms trade of the Cold War era and the challenges of maintaining sophisticated Western aircraft under sanctions regimes.
 
 ### Tasks
 
@@ -11934,7 +12172,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BE is the two-seat trainer variant for Spain, entering service in 1980. It provides conversion training for Spanish Mirage F1 pilots.
+The Dassault Mirage F1BE is the two-seat operational trainer variant of the Mirage F1 fighter developed for the Spanish Air Force (Ejército del Aire). Spain acquired the Mirage F1 as its primary interceptor during the 1970s, and the BE designation indicates a training aircraft (B for biplace/two-seat, E for España). Entering service in 1980, the F1BE provided conversion training for Spanish pilots transitioning to the single-seat F1CE and F1EE combat variants. The aircraft retained full combat capability despite the addition of the second cockpit, allowing it to serve as both a trainer and a reserve combat aircraft.
+
+The Spanish Mirage F1 fleet saw extensive service during the Cold War, providing air defense over the Iberian Peninsula and participating in NATO exercises. Spanish F1s benefited from upgrades over their service life, including compatibility with French Magic missiles and various Spanish-procured weapons. The two-seat variants proved valuable not only for pilot training but also for weapons system instruction, with the rear cockpit position allowing instructors to monitor student weapons employment.
+
+Spain retired its Mirage F1 fleet in the 2000s as the Eurofighter Typhoon entered service. The aircraft had served honorably for over two decades, providing Spain with a capable and reliable interceptor and ground attack platform. In DCS, the Mirage F1BE is part of the comprehensive Mirage F1 module, offering the two-seat configuration for training scenarios and cooperative gameplay while retaining the full weapons capability of the single-seat variants.
 
 ### Tasks
 
@@ -12225,7 +12467,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1BQ is the two-seat trainer variant exported to Iraq that served alongside single-seat variants during the Iran-Iraq War.
+The Dassault Mirage F1BQ is the two-seat operational trainer variant of the Mirage F1 exported to Iraq, serving as the training platform for one of the largest and most combat-experienced Mirage F1 fleets outside of France. Iraq acquired over 100 Mirage F1s throughout the 1980s, including F1EQ single-seat attack aircraft and F1BQ two-seat trainers, making the Mirage a cornerstone of Iraqi Air Force capability during the Iran-Iraq War (1980-1988). The "BQ" designation indicates the two-seat trainer (B) for Iraq (Q for the Iraqi customer code).
+
+The F1BQ saw considerable combat during the Iran-Iraq War, with the two-seat configuration sometimes used for weapons training sorties against actual targets when operational demands required every available aircraft. Iraqi Mirage F1s achieved significant success in the anti-shipping role, most infamously during the "Tanker War" phase of the Iran-Iraq conflict when Mirages armed with Exocet missiles attacked Iranian oil tankers and shipping. The May 1987 attack on USS Stark, which killed 37 American sailors, was conducted by an Iraqi Mirage F1EQ firing Exocet missiles—though the incident was attributed to targeting error rather than intent.
+
+Iraqi Mirage F1s were largely destroyed or captured during Operation Desert Storm in 1991. Many aircraft fled to Iran to escape coalition air attacks, where they were impounded and never returned. Others were destroyed on the ground or in the air by coalition fighters. The remaining Mirages saw minimal use during the 2003 Iraq War and were subsequently destroyed or captured. The F1BQ's combat history reflects the intense aerial warfare of the Iran-Iraq conflict, one of the largest air campaigns since World War II.
 
 ### Tasks
 
@@ -12466,7 +12712,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1C-200 is an improved French Air Force variant with a fixed refueling probe, extending operational range for overseas deployments.
+The Dassault Mirage F1C-200 is the improved air defense variant for the French Air Force (Armée de l'Air), distinguished by a fixed retractable refueling probe mounted on the lower-right side of the nose. The -200 suffix indicates this refueling capability, which significantly extended operational range for overseas deployments and force projection missions. The F1C first entered French service in 1973 as a replacement for the Mirage IIIC, with the C-200 variant following to support France's global commitments. The aircraft features the Cyrano IV radar, Super 530F semi-active radar homing missiles, and R550 Magic infrared missiles for its primary air defense role.
+
+The Mirage F1C-200's extended range made it the preferred variant for French expeditionary operations. French Mirages deployed to Djibouti, Chad, and other African nations during various interventions in the 1970s and 1980s, where the refueling capability allowed rapid reinforcement from French bases. F1Cs provided air defense during Operation Manta (1983-1984) in Chad against Libyan incursions, and Mirage F1s engaged in the brief air-to-air combat during Operation Épervier in 1987 when a French F1C shot down a Libyan Tu-22 bomber with a Super 530F missile. The French Air Force ultimately acquired approximately 80 F1C-200s alongside earlier F1C variants. The type was gradually replaced by the Mirage 2000C in the air defense role during the 1990s, with remaining airframes converted to F1CT ground attack configuration or retired.
 
 ### Tasks
 
@@ -12682,7 +12930,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1C is the initial production air defense variant for the French Air Force. It served as France's primary interceptor until replaced by the Mirage 2000.
+The Dassault Mirage F1C is the initial production air defense variant of the Mirage F1 for the French Air Force (Armée de l'Air), entering service in 1973 to replace the Mirage IIIC in the interception role. Unlike the delta-winged Mirage III, the F1 employed a conventional swept wing with leading-edge slats and trailing-edge flaps, providing significantly improved takeoff and landing performance, better low-speed handling, and increased payload capacity. The F1C was equipped with the Cyrano IV monopulse radar, capable of tracking targets at low altitude, and could carry the Super 530F medium-range semi-active radar-homing missile along with Magic infrared missiles for close combat.
+
+The Mirage F1C served as France's primary interceptor throughout the late Cold War period, defending French airspace and deploying to overseas territories. The type saw combat during French interventions in Africa, including operations in Chad against Libyan forces. Approximately 83 F1Cs were built for French service, with production eventually transitioning to the improved F1C-200 with fixed refueling probe. As the Mirage 2000 entered service in the mid-1980s, F1Cs were progressively withdrawn from the air defense role, with many converted to F1CT ground attack configuration for extended service life. The Mirage F1 family proved highly successful in export, with over 700 aircraft sold to 14 nations, making it one of the most commercially successful French combat aircraft.
 
 ### Tasks
 
@@ -12894,7 +13144,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CE is the export variant for Spain, entering service in 1975. It served as the Spanish Air Force's primary interceptor for decades.
+The Dassault Mirage F1CE is the single-seat interceptor variant of the Mirage F1 exported to Spain, entering service with the Ejército del Aire (Spanish Air Force) in 1975. The "CE" designation indicates the interceptor configuration (C for Chasseur/fighter) for Spain (E for España). Spain acquired approximately 45 F1CEs along with two-seat F1BE trainers and later F1EE multirole variants, making the Mirage F1 the backbone of Spanish air defense during the late Cold War period. The F1CE was equipped with the Cyrano IV radar and could carry Super 530 and Magic air-to-air missiles.
+
+The Spanish Mirage F1 fleet provided NATO with air defense coverage over the Iberian Peninsula and western Mediterranean, replacing earlier fighters and significantly upgrading Spanish combat capability. The F1CE participated in numerous NATO exercises, training alongside allied air forces and developing interoperability with larger alliance members. Spanish pilots gained valuable experience operating the Mirage F1, which would later translate to operations with more advanced fighters.
+
+Spain upgraded its Mirage F1 fleet over time and eventually transitioned to the EF-18 Hornet and Eurofighter Typhoon for air defense duties. The F1CE and other Spanish Mirages were retired in the 2000s, with some aircraft sold to private aggressor companies where they continue flying. In DCS, the Mirage F1CE is one of the core variants in the comprehensive Mirage F1 module, representing the interceptor role with its radar and medium-range missile capability.
 
 ### Tasks
 
@@ -13185,7 +13439,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CG is the export variant for Greece, entering Hellenic Air Force service in 1975. It provides air defense capability alongside F-4 Phantoms.
+The Dassault Mirage F1CG is the export interceptor variant of the Mirage F1 acquired by the Hellenic Air Force (Polemikí Aeroporía), entering service in 1975. The "CG" designation indicates the interceptor configuration (C for Chasseur) for Greece (G for Greece). Greece acquired 40 Mirage F1CGs to provide air defense capability, operating alongside F-4E Phantoms and later F-16s. The aircraft served primarily in the interceptor role, defending Greek airspace during a period of ongoing tension with Turkey.
+
+The Hellenic Air Force Mirage F1CGs flew countless scrambles and air defense sorties over the Aegean Sea, responding to frequent incursions by Turkish aircraft into disputed airspace. The long-standing Greek-Turkish rivalry made the Aegean one of the most active air defense environments in NATO, with pilots regularly engaging in simulated dogfights and provocative maneuvers. Greek Mirage F1 pilots gained extensive experience in air combat maneuvering against Turkish F-104 Starfighters, F-4 Phantoms, and later F-16s. While no actual air-to-air kills resulted from these encounters, the constant state of readiness provided excellent training.
+
+Greece operated its Mirage F1CG fleet for over two decades before transitioning to more modern fighters. The aircraft were eventually retired as the Hellenic Air Force consolidated around the F-16 and Mirage 2000. Some Greek Mirages were sold to secondary operators. The F1CG's service history reflects the unique defense challenges Greece faces and the importance of maintaining a credible air defense capability in a region characterized by persistent tensions.
 
 ### Tasks
 
@@ -13409,7 +13667,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CH is the export variant for Morocco, entering service in 1978. It has seen combat action in the Western Sahara conflict.
+The Dassault Mirage F1CH is the export variant of the Mirage F1 acquired by the Royal Moroccan Air Force (Force Aérienne Royale Marocaine), entering service in 1978. The "CH" designation indicates the Moroccan export customer code in the Dassault system. Morocco acquired approximately 50 Mirage F1s in various configurations including F1CH interceptors and F1EH multirole variants, making the country one of the larger Mirage F1 operators. The aircraft provided Morocco with a significant capability upgrade over previous fighters and established the F1 as the backbone of Moroccan air defense for three decades.
+
+The F1CH saw extensive combat during the Western Sahara conflict, a territorial dispute that has continued since 1975 between Morocco and the Polisario Front independence movement. Moroccan Mirages flew air defense, ground attack, and reconnaissance missions in support of ground forces operating in the disputed territory. The vast, desolate terrain of the Western Sahara presented unique operational challenges, with long distances between bases and harsh environmental conditions affecting aircraft operations. Moroccan F1s also provided air defense over the "berm"—the extensive sand wall Morocco constructed to control the territory.
+
+Morocco upgraded its Mirage F1 fleet over time, improving avionics and weapons compatibility to extend service life. The Royal Moroccan Air Force eventually transitioned to the F-16 as its primary fighter, with the last Mirage F1s serving into the 2010s. Some Moroccan Mirages found second lives with private aggressor companies, continuing to fly in training roles. The F1CH's long service history demonstrates the aircraft's durability and the wisdom of Morocco's investment in a robust, proven fighter design.
 
 ### Tasks
 
@@ -13625,7 +13887,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CJ is the export variant for Jordan, entering Royal Jordanian Air Force service in 1981.
+The Dassault Mirage F1CJ is the export interceptor variant of the Mirage F1 acquired by the Royal Jordanian Air Force, entering service in 1981. The "CJ" designation indicates the interceptor configuration for Jordan. The RJAF acquired 17 F1CJs as part of a broader effort to modernize Jordanian air defenses during a period of regional instability. Equipped with the Cyrano IV radar, the aircraft provided Jordan with a credible air defense capability against potential threats from neighboring states.
+
+The Jordanian Mirage F1s operated during one of the most turbulent periods in Middle Eastern history, though Jordan successfully avoided direct military conflict with its neighbors during this era. The aircraft provided air defense coverage during the Iran-Iraq War (1980-1988), when fighting occasionally spilled close to Jordanian borders. The F1CJs also served during the First Gulf War (1990-1991), when Jordan maintained a delicate neutrality despite Iraqi aircraft occasionally violating Jordanian airspace en route to sanctuary in Iran. While the Jordanian F1s never engaged in air combat, they provided essential peacetime air sovereignty patrols for over two decades. Jordan retired its Mirage F1 fleet in the early 2000s as the RJAF transitioned to F-16 Fighting Falcons as its primary air defense platform.
 
 ### Tasks
 
@@ -13841,7 +14105,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CK is the export variant for Kuwait, entering service in 1977. It served until replaced by F/A-18 Hornets.
+The Dassault Mirage F1CK is the export interceptor variant of the Mirage F1 acquired by the Kuwait Air Force, entering service in 1977. The "CK" designation indicates the interceptor configuration (C for Chasseur) for Kuwait (K for Kuwait). Kuwait acquired approximately 30 Mirage F1s including both CK interceptors and BK two-seat trainers, providing the small Gulf state with a modern air defense capability during a period of significant regional instability including the Iranian Revolution and Iran-Iraq War.
+
+The Kuwaiti Mirage F1CK fleet's fate was sealed by the Iraqi invasion of Kuwait on August 2, 1990. When Iraqi forces swept into Kuwait, the small air force had little warning. Some Kuwaiti pilots managed to escape to Saudi Arabia with their aircraft, but many Mirage F1s were destroyed on the ground or captured intact by Iraqi forces. The captured Kuwaiti Mirages were reportedly incorporated into the Iraqi Air Force inventory, creating the ironic situation of French-built Kuwaiti aircraft potentially facing French-built Iraqi aircraft that had been attacking coalition forces. The destruction and capture of the Kuwaiti Mirage F1 fleet represented a complete loss of the nation's air defense capability.
+
+Following Kuwait's liberation in Operation Desert Storm, the country rebuilt its air force with American F/A-18 Hornets rather than returning to French aircraft. The Mirage F1CK's brief history demonstrates both the vulnerability of small nations to larger neighbors and the consequences of inadequate early warning. Kuwait has since invested heavily in its defense capabilities and maintains close security ties with the United States to prevent a repeat of the 1990 invasion.
 
 ### Tasks
 
@@ -14057,7 +14325,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CR is the dedicated reconnaissance variant for the French Air Force, entering service in 1983. It carries internal cameras and external sensor pods.
+The Dassault Mirage F1CR is the dedicated tactical reconnaissance variant for the French Air Force (Armée de l'Air), entering service in 1983 as a replacement for the aging Mirage IIIR. The CR (Reconnaissance de Combat) model features an internal camera bay in the nose with space for various sensor packages including optical cameras, infrared linescanners, and the Raphael SLAR (side-looking airborne radar) pod. Unlike pure reconnaissance aircraft, the F1CR retained full combat capability including air-to-air missiles and air-to-ground ordnance, enabling it to defend itself or switch to strike missions as needed.
+
+The Mirage F1CR became one of the most operationally active French combat aircraft of its era. The type flew reconnaissance missions during Operation Daguet (Desert Storm, 1991), providing critical pre-strike and battle damage assessment imagery. F1CRs subsequently deployed for operations over the former Yugoslavia, conducting reconnaissance during the Bosnia and Kosovo conflicts. The aircraft also saw extensive service during French interventions in Africa, including operations in Chad, Ivory Coast, Central African Republic, and Mali. The F1CR's combination of speed, range, and sensor capability made it invaluable for gathering intelligence in contested airspace. France operated 64 F1CRs, which were finally retired in 2014 as the Rafale assumed the tactical reconnaissance role. The variant's extensive combat record established the template for modern tactical reconnaissance operations with multirole-capable platforms.
 
 ### Tasks
 
@@ -14275,7 +14545,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CT is a conversion of French F1C interceptors to the ground attack role, extending the aircraft's service life with enhanced strike capability.
+The Dassault Mirage F1CT (Conversion Tir) is a ground attack conversion of French Air Force F1C interceptors, developed in the early 1990s to extend the aircraft's service life after the Mirage 2000 assumed the air defense mission. The conversion removed the Super 530F missile capability but added a laser designator for precision-guided munitions, GPS navigation, upgraded cockpit displays, and compatibility with the Apache/SCALP standoff dispensers. The program converted 55 F1Cs to CT standard beginning in 1992.
+
+The Mirage F1CT saw significant combat during French military operations in Africa and the Middle East. The type flew strike missions during Operation Daguet (the French contribution to Desert Storm in 1991), though these were with unconverted F1CRs rather than CTs. F1CTs subsequently participated in operations over Bosnia, Kosovo, and numerous African interventions including Opération Serval in Mali (2013), where they flew close air support and strike missions against Islamist militants. The aircraft also deployed to N'Djamena, Chad, for operations against Libyan-supported rebels. The F1CT was finally retired from French service in 2014, replaced in the strike role by the Rafale and upgraded Mirage 2000D. The conversion program demonstrated the adaptability of the Mirage F1 design and provided France with valuable strike capability during the transition to newer aircraft.
 
 ### Tasks
 
@@ -14493,7 +14765,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1CZ is the export air defense variant for South Africa, entering service in 1975. It achieved multiple aerial victories during the South African Border War.
+The Dassault Mirage F1CZ is the air superiority variant of the Mirage F1 acquired by the South African Air Force, entering service in 1975. The "CZ" designation indicates the interceptor configuration (C for Chasseur) for South Africa (Z for Zuid-Afrika). Unlike the ground attack-optimized F1AZ, the F1CZ was equipped with the Cyrano IV-1 radar and optimized for the air defense role, though it retained significant ground attack capability. The SAAF acquired 16 F1CZs alongside 32 F1AZ attack variants, providing a balanced fighter force capable of both air superiority and ground attack missions.
+
+The F1CZ achieved combat success during the South African Border War, claiming multiple aerial victories over Angolan and Cuban aircraft. On November 6, 1981, a SAAF F1CZ shot down an Angolan Air Force MiG-21MF with a V3B Kukri infrared missile—one of the first Mirage F1 air-to-air kills ever achieved. F1CZs subsequently scored additional victories over MiG-21s and MiG-23s during the protracted conflict in Angola. These engagements provided valuable combat experience and validated both the aircraft and South African-developed weapons like the Kukri and later V3C Darter missiles. The F1CZ's performance against Soviet-built fighters demonstrated the type's air combat capability when flown by well-trained pilots.
+
+The SAAF retired its Mirage F1 fleet following the end of apartheid and the Border War, eventually replacing them with the SAAB Gripen. Some F1CZs were sold abroad, including to private aggressor companies in the United States where they continue flying in adversary training roles. The F1CZ's combat record during the Border War represents one of the most successful chapters in Mirage F1 history, with confirmed aerial victories against contemporary Soviet fighters.
 
 ### Tasks
 
@@ -14709,7 +14985,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1DDA is the two-seat training variant for Qatar, providing operational conversion capability.
+The Dassault Mirage F1DDA is the two-seat operational trainer variant of the Mirage F1 exported to Qatar, forming part of the small but capable Qatar Emiri Air Force fighter fleet during the 1980s and 1990s. The "DDA" designation indicates the two-seat trainer configuration for Qatar in the Dassault export nomenclature. Qatar acquired both single-seat F1EDA attack aircraft and two-seat F1DDA trainers, providing the Gulf state with a modern air defense and ground attack capability during a period of regional instability including the Iran-Iraq War and subsequent Gulf conflicts.
+
+The Qatari Mirage F1 fleet served primarily in a defensive role, providing air defense over the small but strategically important emirate. Qatar's geographic position—sharing a border with Saudi Arabia and lying close to Iran across the Persian Gulf—gave its air force a sensitive mission protecting the nation's hydrocarbon wealth. The F1DDA provided conversion training for Qatari pilots while maintaining combat readiness as a reserve asset.
+
+Qatar's Mirage F1s were eventually replaced by the Mirage 2000-5, a more advanced delta-wing design offering significantly improved avionics and weapons capability. Qatar subsequently acquired additional fighters including the F-15 and Rafale, building one of the most modern air forces in the Gulf region. The F1DDA's service represented an early chapter in Qatar's development of independent air power capability, establishing the foundation for the highly capable force that exists today.
 
 ### Tasks
 
@@ -14940,7 +15220,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1ED is the export interceptor variant for Libya.
+The Dassault Mirage F1ED is the single-seat export interceptor variant of the Mirage F1 acquired by the Libyan Arab Air Force during the 1970s. The "ED" designation indicates the export configuration (E for Export) delivered to Libya (D for the Libyan customer code). Libya acquired both F1ED interceptors and F1AD attack variants, along with two-seat F1BD trainers, assembling one of the larger Mirage F1 fleets in Africa and the Middle East. The aircraft provided Libya with a modern air defense capability during the Gaddafi era.
+
+Libyan Mirage F1s saw action during various conflicts, most notably the interventions in Chad during the 1980s. The aircraft flew both air defense and ground attack missions, though Libyan air operations were often hampered by maintenance difficulties and pilot quality issues. Libya also clashed with U.S. Navy forces during incidents over the Gulf of Sidra, though MiG-23s were more commonly involved in these confrontations. The Mirage F1 fleet suffered from international sanctions that restricted access to spare parts and technical support following the Lockerbie bombing and other Libyan-sponsored terrorism.
+
+By the time of the 2011 Libyan Civil War and subsequent NATO intervention, the Libyan Air Force had deteriorated significantly, with the Mirage F1 fleet barely operational. Several pilots defected to Malta with their aircraft rather than fly against the rebellion. The remaining Mirages saw minimal use before the fall of the Gaddafi regime. The F1ED's service history reflects both the ambitious arms acquisitions of the Gaddafi era and the inevitable decline that comes from operating sophisticated aircraft under international isolation.
 
 ### Tasks
 
@@ -15181,7 +15465,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EDA is the multi-role export variant for Qatar.
+The Dassault Mirage F1EDA is the single-seat multirole export variant of the Mirage F1 acquired by the Qatar Emiri Air Force. The "EDA" designation indicates the export multirole configuration for Qatar in the Dassault nomenclature. Qatar acquired both F1EDA attack aircraft and F1DDA two-seat trainers during the 1980s, providing the small but wealthy Gulf state with a capable air defense and ground attack platform during a period of significant regional instability including the Iran-Iraq War and later Gulf conflicts.
+
+The Qatari Mirage F1 fleet served primarily in a defensive role, providing air sovereignty over Qatar's territory and offshore oil and gas installations. The aircraft participated in training exercises with allied Gulf states and benefited from Qatar's ability to maintain the fleet properly despite its small size. The F1EDA's multirole capability allowed Qatar to maintain a flexible air force without requiring multiple specialized aircraft types.
+
+Qatar eventually replaced its Mirage F1 fleet with the more advanced Mirage 2000-5, recognizing the need for a more capable aircraft as threats in the region evolved. The nation has since acquired additional advanced fighters including the F-15 and Rafale, building one of the most modern air forces in the Gulf relative to its size. The F1EDA's service represented an important step in Qatar's development of independent military capability, establishing the foundation for the robust air power the nation possesses today.
 
 ### Tasks
 
@@ -15412,7 +15700,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EE is the multi-role export variant for Spain, combining air defense and ground attack capabilities.
+The Dassault Mirage F1EE is the multirole export variant of the Mirage F1 acquired by the Spanish Air Force, complementing the earlier F1CE interceptors with enhanced ground attack capability. The "EE" designation indicates the export multirole configuration (E for Export) for Spain (E for España). Spain acquired the F1EE in the early 1980s to provide a dedicated attack capability while retaining the air defense proficiency of the earlier F1CE variant. The F1EE featured an improved nav-attack system, additional weapons stations, and compatibility with a wider range of air-to-ground ordnance including laser-guided bombs when paired with targeting pods.
+
+The Spanish Mirage F1EE fleet provided the Ejército del Aire with a capable multirole platform during the 1980s and 1990s. The aircraft participated in numerous NATO exercises, training for both air defense and ground attack missions. Spanish F1EEs also conducted maritime patrol and anti-shipping training, reflecting Spain's significant coastal defense responsibilities. The multirole configuration allowed Spanish air wings to maintain fewer aircraft types while covering a broader range of missions.
+
+Spain modernized its Mirage F1 fleet over time, incorporating improved avionics and weapons systems. The F1EE served alongside F1CE interceptors, F1BE trainers, and later upgraded variants until Spain's transition to the EF-18 Hornet and eventually Eurofighter Typhoon. The last Spanish Mirages retired in the 2000s. In DCS, the Mirage F1EE represents the multirole configuration of the type, offering both air-to-air capability with radar-guided missiles and comprehensive air-to-ground options including precision-guided munitions.
 
 ### Tasks
 
@@ -15705,7 +15997,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EH is the multi-role export variant for Morocco, entering service in the 1970s.
+The Dassault Mirage F1EH is the multirole export variant of the Mirage F1 acquired by the Royal Moroccan Air Force, complementing the F1CH interceptors with enhanced ground attack capability. The "EH" designation indicates the export multirole configuration (E for Export) for Morocco (H for the Moroccan customer code). Morocco acquired F1EH aircraft in addition to the earlier F1CH interceptors, building one of the larger Mirage F1 fleets in Africa. The multirole variant featured improved nav-attack systems and compatibility with a wider range of air-to-ground ordnance while retaining significant air-to-air capability.
+
+The Moroccan Mirage F1 fleet saw extensive use during the Western Sahara conflict, with F1EH aircraft conducting ground attack missions against Polisario Front forces. The aircraft delivered conventional bombs, rockets, and cluster munitions against guerrilla camps and logistics points across the vast desert territory. Moroccan pilots gained considerable combat experience during the decades-long conflict, developing tactics for operating in the harsh Saharan environment. The F1EH also participated in air defense duties, protecting Moroccan airspace and the defensive berm that divides the Western Sahara.
+
+Morocco upgraded and maintained its Mirage F1 fleet over decades of service, eventually transitioning to the F-16 Block 52+ as its primary fighter in the 2010s. Several Moroccan Mirages were sold to private aggressor companies, continuing to fly in contracted adversary training roles. The F1EH's service in the Western Sahara conflict represents one of the longest sustained combat operations in Mirage F1 history, demonstrating the aircraft's durability in challenging conditions.
 
 ### Tasks
 
@@ -15921,7 +16217,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1EQ is the multi-role export variant for Iraq that saw extensive combat during the Iran-Iraq War. It carried Exocet anti-ship missiles in attacks on tankers.
+The Dassault Mirage F1EQ is the multirole export variant delivered to the Iraqi Air Force, representing one of the most combat-experienced versions of the Mirage F1 family. Iraq ordered approximately 100 Mirage F1s in various sub-variants (EQ-1 through EQ-6) beginning in 1981, making it one of the largest export customers. The EQ variants were progressively improved, with later versions featuring compatibility with the AM.39 Exocet anti-ship missile, laser-guided bombs, and enhanced electronic warfare equipment.
+
+Iraqi Mirage F1EQs saw extensive and intensive combat during the Iran-Iraq War (1980-1988), particularly during the "Tanker War" phase when Iraq targeted Iranian oil exports and shipping in the Persian Gulf. Mirage F1s armed with Exocet missiles struck numerous tankers and warships, most infamously the attack on USS Stark in May 1987 that killed 37 American sailors—an incident Iraq claimed was accidental. The F1EQs also engaged in air combat against Iranian F-4s, F-5s, and F-14s, with claims on both sides disputed. During Operation Desert Storm (1991), many Iraqi Mirages were destroyed on the ground or fled to Iran to escape destruction; Iran subsequently kept these aircraft. The Iraqi Mirage F1 experience demonstrated both the effectiveness of the Exocet-armed maritime strike capability and the vulnerability of third-world air forces to coalition air campaigns.
 
 ### Tasks
 
@@ -16162,7 +16460,11 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1JA is the export variant for Ecuador, entering service in 1979. It saw combat during the Cenepa War with Peru.
+The Dassault Mirage F1JA is the export variant of the Mirage F1 acquired by the Ecuadorian Air Force (Fuerza Aérea Ecuatoriana), entering service in 1979. The "JA" designation indicates the Ecuadorian export configuration in the Dassault nomenclature. Ecuador acquired the Mirage F1 as its primary air superiority fighter, providing a significant capability advantage over Peru's fighters at the time of acquisition. The aircraft replaced earlier subsonic jets and gave Ecuador a credible air defense capability for the first time.
+
+The Ecuadorian Mirage F1JA saw combat during the Cenepa War with Peru in 1995, a brief but intense border conflict in a disputed Amazonian region. Ecuadorian F1JAs flew combat air patrol and ground attack missions during the conflict, claiming air-to-air engagements with Peruvian aircraft though the exact results remain disputed by both sides. Ecuador claims its Mirages shot down Peruvian aircraft including a Su-22 Fitter, while Peru disputes these claims. Regardless of specific outcomes, the Mirage F1JA contributed to Ecuador's successful defense of its territorial claims during the conflict, and the war ultimately led to a peace treaty favorable to Ecuador.
+
+The Cenepa War represented one of the last conventional air combats in Latin America and one of the few instances where Mirage F1s engaged in air-to-air combat outside of Africa and the Middle East. Ecuador eventually replaced its Mirage F1 fleet with the Kfir, and later sought more modern fighters. The F1JA's service demonstrated the aircraft's capability in the challenging conditions of Andean and Amazonian operations and its effectiveness in the hands of motivated pilots.
 
 ### Tasks
 
@@ -16358,7 +16660,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1M is a modernized Spanish variant, designated C.14 in Spanish service. This variant represents early production aircraft (serials 1-25 and 32-51) upgraded with improved avionics and weapons systems.
+The Dassault Mirage F1M is the modernized multirole variant of the Mirage F1 developed for the Spanish Air Force (Ejército del Aire), designated C.14 in Spanish service. Spain was one of the largest Mirage F1 export customers, acquiring 73 aircraft in three variants: 45 F1CEs (interceptors), 22 F1EEs (multirole), and 6 F1BEs (trainers). The F1M designation denotes aircraft that underwent an extensive modernization program in the 1990s to extend their service lives and enhance combat capability. This variant (C.14 serials 1-25 and 32-51) represents former F1CE interceptors upgraded to the multirole F1M standard.
+
+The Spanish Mirage F1 fleet saw operational deployment during NATO operations in the Balkans, where Spanish aircraft contributed to peacekeeping missions over Bosnia and Kosovo. The F1M modernization added compatibility with Western weapons including the AIM-9 Sidewinder family and improved navigation and weapons delivery systems. The upgrade program transformed the single-role interceptors into capable multirole platforms that could perform both air defense and ground attack missions. The early-serial F1Ms served alongside their later-production counterparts until the Spanish Air Force retired its entire Mirage F1 fleet in 2013, ending over three decades of service. Many retired Spanish F1s were subsequently sold to private aggressor companies for contracted adversary training with various air forces.
 
 ### Tasks
 
@@ -16649,7 +16953,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The Dassault Mirage F1 is a French single-engine fighter aircraft that entered service in 1973, designed for air defense, interception, and ground attack roles. The F1M C.14 (serials 52-73) represents later Spanish production aircraft with the modernization package that served until the type's retirement in 2013.
+The Dassault Mirage F1M (C.14 serials 52-73) represents the later production Spanish Mirage F1EE multirole aircraft upgraded to the modernized F1M standard. Unlike the earlier serials (1-25 and 32-51) which were originally delivered as F1CE interceptors, these later aircraft were originally F1EE multirole fighters that already possessed ground attack capability from delivery. The F1EE was Spain's second batch of Mirage F1s, acquired specifically to provide the Spanish Air Force with dedicated strike capability alongside its existing interceptor fleet.
+
+The modernization to F1M standard brought these later-production aircraft to parity with their upgraded F1CE counterparts, incorporating improved avionics, navigation systems, and expanded weapons compatibility. Spanish Mirage F1s of both production batches participated in NATO peacekeeping operations over the Balkans in the 1990s, contributing to Operations Deny Flight and Allied Force. The type served as Spain's primary air defense fighter until the introduction of the EF-18 Hornet, after which the Mirage F1 fleet transitioned to primarily ground attack and training roles. The Spanish Air Force retired its entire Mirage F1 fleet in June 2013 during a ceremony at Ala 14 in Albacete, marking the end of 38 years of Mirage F1 operations in Spain. Several airframes were preserved for museum display, while others entered the private market for use in adversary training contracts.
 
 ### Tasks
 
@@ -16922,7 +17228,9 @@ The Dassault Mirage F1 is a French single-engine fighter aircraft that entered s
 
 ### Background
 
-The de Havilland Mosquito FB Mk. VI is the most-produced fighter-bomber variant of the legendary 'Wooden Wonder', entering RAF service in 1943. Its combination of speed, range, and firepower makes it one of the most versatile Allied aircraft.
+The de Havilland Mosquito FB Mk. VI is the most-produced fighter-bomber variant of the legendary "Wooden Wonder," entering RAF service in 1943. The FB.VI combined the nose armament of the fighter variants—four 20mm Hispano cannons and four .303 Browning machine guns—with the ability to carry two 250 lb or 500 lb bombs internally and additional ordnance on underwing racks. This devastating combination of firepower and bomb load made the FB.VI one of the most effective ground attack aircraft of World War II. Over 2,700 FB.VIs were built, more than any other Mosquito variant.
+
+The FB.VI conducted some of the most daring precision raids of the war. RAF Mosquitos attacked Gestapo headquarters buildings across occupied Europe, including the famous raids on Amiens Prison (Operation Jericho, February 1944), the Gestapo headquarters in Copenhagen (Operation Carthage, March 1945), and The Hague. Coastal Command FB.VIs hunted German shipping in the North Sea and Norwegian fjords, often at mast height, using rockets and cannon fire to devastating effect. The aircraft's speed—often exceeding 380 mph at low level—made it nearly immune to interception by German fighters. FB.VIs also conducted night intruder operations over occupied Europe, hunting German night fighters and disrupting Luftwaffe operations. The Mosquito's wooden construction, initially viewed with skepticism, proved to be an advantage: it was lighter than metal, required fewer strategic materials, and gave the aircraft a smaller radar signature. The Mosquito remained in RAF service until 1955.
 
 ### Tasks
 
@@ -17028,7 +17336,11 @@ The de Havilland Mosquito FB Mk. VI is the most-produced fighter-bomber variant 
 
 ### Background
 
-The General Atomics MQ-1A Predator is the original armed reconnaissance variant of the Predator UAV series, entering service in the early 2000s. It pioneered the use of armed drones for precision strike missions.
+The General Atomics MQ-1 Predator revolutionized military aviation by proving that unmanned aircraft could conduct both persistent surveillance and precision strike missions, fundamentally changing how nations wage war. Originally developed as the RQ-1 reconnaissance platform, the Predator first flew in 1994 and saw initial operational deployment over Bosnia in 1995. The aircraft's ability to loiter for 24+ hours, transmitting real-time video to operators thousands of miles away, proved invaluable for intelligence gathering and targeting.
+
+The transformation to the armed MQ-1A configuration came after the 9/11 attacks, when the urgent need to strike fleeting terrorist targets drove the integration of AGM-114 Hellfire missiles. In October 2001, an armed Predator conducted one of history's first UAV combat strikes. The type became central to the campaign against al-Qaeda and Taliban leadership in Afghanistan and Pakistan, with Predators providing both the surveillance to locate targets and the weapons to engage them. The ability to watch a target for hours before striking enabled unprecedented precision in identifying high-value individuals.
+
+The MQ-1 established the doctrine, tactics, and legal frameworks for armed drone operations that continue to evolve today. CIA and USAF Predators conducted thousands of strikes across multiple theaters including Afghanistan, Pakistan, Yemen, and Somalia. The psychological impact of persistent drone presence—the constant buzz overhead that enemies could never escape—proved a significant factor beyond the kinetic effects. The MQ-1 was retired from USAF service in 2018, replaced by the larger and more capable MQ-9 Reaper, but its legacy shaped the future of unmanned combat aviation.
 
 ### Tasks
 
@@ -17064,7 +17376,11 @@ The General Atomics MQ-1A Predator is the original armed reconnaissance variant 
 
 ### Background
 
-The General Atomics MQ-9 Reaper is an American unmanned aerial vehicle capable of remotely-controlled or autonomous flight. Entering service in 2007, it serves in armed reconnaissance and precision strike roles.
+The General Atomics MQ-9 Reaper is a hunter-killer unmanned aerial vehicle that dramatically expanded the strike capability pioneered by its predecessor, the MQ-1 Predator. Entering USAF service in 2007, the Reaper was designed from the outset as a weapons platform rather than a surveillance aircraft adapted for strike. The aircraft is significantly larger and more powerful than the Predator, with a turboprop engine providing speeds up to 300 mph and the ability to carry 3,750 pounds of ordnance—fifteen times the Predator's payload. Standard armament includes GBU-12 and GBU-38 precision bombs alongside AGM-114 Hellfire missiles.
+
+The MQ-9's combination of endurance (27+ hours), payload, and sensors makes it the premier platform for persistent armed overwatch. The aircraft carries the Multi-Spectral Targeting System (MTS-B), providing electro-optical, infrared, and laser designation capability, plus synthetic aperture radar for all-weather operations. Crews operating from bases in Nevada, New York, and elsewhere can monitor battlefields in real-time, prosecute time-sensitive targets, and provide close air support to ground forces thousands of miles away.
+
+Reapers have flown extensively in Afghanistan, Iraq, Syria, Yemen, Somalia, and Libya, conducting strikes against terrorist leadership, weapons caches, and insurgent fighters. The type has become controversial due to questions about civilian casualties and the legal and ethical implications of remote-control warfare. Despite these debates, the MQ-9 has proven so effective that multiple allied nations including the UK, France, Italy, and the Netherlands have acquired the platform. The Reaper continues to evolve, with upgrades including extended wings for even greater endurance, new sensors, and integration of additional weapons. The type will remain central to American and allied counterterrorism operations for the foreseeable future.
 
 ### Tasks
 
@@ -17116,7 +17432,9 @@ The General Atomics MQ-9 Reaper is an American unmanned aerial vehicle capable o
 
 ### Background
 
-The Republic P-47D-30 (Early) Thunderbolt represents initial production of the -30 block with the bubble canopy, entering service in 1944. It offers improved visibility over earlier razorback variants.
+The Republic P-47D-30 Thunderbolt represents initial production of the -30 block, one of the most important variants of the legendary "Jug." The -30 block introduced the bubble canopy that replaced the earlier "razorback" high-spine fuselage, dramatically improving pilot visibility in all directions. Entering service in 1944, this variant retained the massive Pratt & Whitney R-2800-59 Double Wasp radial engine producing 2,000 horsepower, giving the Thunderbolt exceptional high-altitude performance and dive speed. The Early sub-variant indicates aircraft from initial -30 production runs.
+
+The P-47D was the most-produced variant of the Thunderbolt, with over 12,600 built out of roughly 15,600 total P-47s manufactured. The type served primarily in the European and Mediterranean Theaters, where its rugged construction, eight .50 caliber machine guns, and ability to absorb tremendous battle damage made it invaluable for both air combat and ground attack. P-47s claimed over 3,750 aerial victories in Europe while also destroying thousands of locomotives, tanks, and vehicles during strafing attacks. The Thunderbolt's ability to carry bombs and rockets made it one of the most effective fighter-bombers of the war, and its pilots developed tactics for low-level attacks that proved devastating to German ground forces during the Normandy campaign and subsequent breakout. The P-47 served with numerous Allied air forces including the RAF, Free French, Soviet, and Brazilian forces.
 
 ### Tasks
 
@@ -17180,7 +17498,9 @@ The Republic P-47D-30 (Early) Thunderbolt represents initial production of the -
 
 ### Background
 
-The Republic P-47D Thunderbolt is the definitive production variant of the legendary 'Jug', entering service in 1944. Its rugged construction, eight .50 caliber machine guns, and ability to carry significant ordnance make it an exceptional fighter-bomber.
+The Republic P-47D-30 Thunderbolt is the definitive production variant of the legendary "Jug," representing the fully mature bubble-canopy configuration that would define the Thunderbolt's iconic silhouette. Powered by the Pratt & Whitney R-2800-59 Double Wasp producing 2,000 horsepower with water injection, the P-47D-30 could reach speeds over 430 mph at altitude while carrying up to 2,500 pounds of external ordnance. The aircraft's massive size—it was the largest and heaviest single-engine fighter of the war—housed self-sealing fuel tanks, armor plating, and the turbo-supercharger that gave it outstanding high-altitude performance.
+
+In combat, the P-47D proved extraordinarily versatile. While initially deployed as a high-altitude escort fighter, the Thunderbolt truly excelled in the ground attack role. Its eight .50 caliber M2 Browning machine guns could devastate soft targets and light armor, while underwing pylons carried bombs and rockets for attacking fortified positions, bridges, and armored vehicles. P-47 pilots developed the "dive-bomb" and strafing tactics that would become standard for fighter-bomber operations. The type's legendary toughness allowed pilots to bring badly damaged aircraft home—stories abound of P-47s returning with cylinders shot off their engines or massive holes in their airframes. The Thunderbolt remained in service with various air forces well into the 1950s, and its ground attack doctrine directly influenced the development of postwar close air support tactics.
 
 ### Tasks
 
@@ -17258,7 +17578,9 @@ The Republic P-47D Thunderbolt is the definitive production variant of the legen
 
 ### Background
 
-The P-47D-40 is a late-production Thunderbolt variant featuring the bubble canopy for improved visibility and additional underwing pylons for increased ordnance capacity.
+The Republic P-47D-40 Thunderbolt represents the ultimate production variant of the D-model series, incorporating all lessons learned from combat operations in Europe and the Pacific. This late-production variant featured the bubble canopy, additional underwing pylons for rockets, and provisions for the K-14 gyroscopic gunsight that dramatically improved gunnery accuracy. The -40 block could carry ten HVAR rockets in addition to bombs, making it one of the most heavily armed fighter-bombers of the war.
+
+The P-47D-40 entered service in the final months of World War II and saw action primarily in the Pacific Theater, where its long range (extended by drop tanks) and heavy armament made it valuable for striking Japanese positions on bypassed islands and supporting amphibious operations. The type's rocket armament proved particularly effective against Japanese bunkers and fortified positions. Following the war, the P-47D-40 served with numerous air forces as American military aid, seeing combat during the Greek Civil War and with Latin American air forces. The Thunderbolt's combination of range, payload, and ruggedness made it an effective counter-insurgency and ground attack platform well into the 1950s, and the last operational P-47s were not retired until 1966 by some South American nations.
 
 ### Tasks
 
@@ -17346,7 +17668,9 @@ The P-47D-40 is a late-production Thunderbolt variant featuring the bubble canop
 
 ### Background
 
-The North American P-51D-25-NA Mustang is a production block manufactured at the Inglewood, California plant. It features the iconic bubble canopy and six .50 caliber machine guns.
+The North American P-51D Mustang is widely considered the finest propeller-driven fighter of World War II, combining exceptional range, speed, and combat capability that made it the definitive American fighter of the conflict's final years. The D-model, entering service in mid-1944, introduced the distinctive bubble canopy providing dramatically improved visibility, a redesigned wing with six .50 caliber M2 Browning machine guns, and the Packard V-1650-7 (license-built Rolls-Royce Merlin 66) engine producing 1,490 horsepower. The P-51D-25-NA designation indicates production at North American's Inglewood, California plant.
+
+The P-51D's combination of range and performance revolutionized the air war over Europe. Earlier fighters could not escort bombers beyond the German border, but Mustangs could accompany B-17s and B-24s all the way to Berlin and back, breaking the Luftwaffe's ability to defend the Reich. P-51s claimed more aerial victories than any other American fighter in the European Theater, with numerous pilots becoming aces in the type. The Mustang also served in the Pacific and China-Burma-India theaters. Following World War II, P-51s flew ground attack missions during the Korean War until replaced by jets, and Mustangs continued serving in numerous air forces worldwide through the 1980s. Over 15,000 P-51s were built, and the type remains iconic in the warbird and air racing communities today.
 
 ### Tasks
 
@@ -17430,7 +17754,9 @@ The North American P-51D-25-NA Mustang is a production block manufactured at the
 
 ### Background
 
-The North American P-51D-30-NA Mustang is a later production block with minor improvements, representing the definitive wartime Mustang configuration.
+The North American P-51D-30-NA Mustang is a late-production block incorporating refinements developed from extensive combat experience over Europe. The -30 block featured improved rocket launcher pylons that could carry six HVAR rockets in addition to the standard underwing bomb and drop tank stations, enhancing the aircraft's ground attack capability. Like all D-models, it was powered by the Packard V-1650-7 Merlin engine and armed with six .50 caliber M2 Browning machine guns with increased ammunition capacity compared to earlier production blocks.
+
+By the time the -30 block entered production in late 1944, the P-51D had established itself as the premier American fighter of the war. Mustang groups were achieving impressive kill ratios while protecting the heavy bombers on their deepest penetrations into German airspace, and the type was increasingly being used for ground attack missions as the Luftwaffe's fighter force was ground down. The P-51D-30 saw extensive service in both Europe and the Pacific, where its exceptional range allowed it to escort B-29 Superfortresses on missions from Iwo Jima to the Japanese home islands—a round trip of over 1,500 miles. Following the war, P-51Ds equipped numerous Allied air forces and saw combat in Korea, where they flew ground attack missions until replaced by jets. The Mustang remained in active service with various nations through the 1980s, and today the P-51D is the most numerous warbird type still flying.
 
 ### Tasks
 
@@ -17514,7 +17840,9 @@ The North American P-51D-30-NA Mustang is a later production block with minor im
 
 ### Background
 
-The QF-4E is a retired F-4E Phantom II converted to serve as a full-scale aerial target drone. It represents the final chapter of the Phantom's long service history.
+The QF-4E is a retired F-4E Phantom II converted by BAE Systems at Mojave, California into a Full-Scale Aerial Target (FSAT) drone for use in weapons testing and training. The conversion program began in 1997 as a means of utilizing the large inventory of retired F-4E airframes while providing realistic target presentations for air-to-air and surface-to-air missile testing. QF-4Es can be flown either unmanned via remote control or with a safety pilot on board during low-risk portions of test missions.
+
+The QF-4 program represented the final operational role for the legendary Phantom II in U.S. military service. These unmanned targets were operated primarily by the 82nd Aerial Targets Squadron at Tyndall Air Force Base, Florida and the 53rd Weapons Evaluation Group at Holloman Air Force Base, New Mexico. The aircraft provided invaluable service in validating missile systems including the AIM-9X Sidewinder and AIM-120 AMRAAM against maneuvering targets that closely replicated actual fighter aircraft radar and infrared signatures. The QF-4 program officially ended on December 21, 2016, when the last QF-4E was expended as a target at Holloman AFB, marking the end of 53 years of Phantom operations in U.S. service. The type was succeeded by the QF-16 Full-Scale Aerial Target converted from retired F-16 Fighting Falcons.
 
 ### Tasks
 
@@ -17583,7 +17911,11 @@ The QF-4E is a retired F-4E Phantom II converted to serve as a full-scale aerial
 
 ### Background
 
-The S-3B Viking in the tanker configuration provides organic aerial refueling capability to carrier air wings using the buddy store system.
+The Lockheed S-3B Viking in tanker configuration represents the aircraft's final operational role before retirement, providing organic aerial refueling capability to carrier air wings. As the Viking's original anti-submarine warfare mission diminished following the end of the Cold War, the Navy repurposed the aircraft for tanking duty using the D-704 buddy store refueling pod. This configuration allowed the S-3B to transfer fuel to other carrier aircraft during cyclic operations, extending strike range and providing emergency refueling for aircraft low on fuel during recovery.
+
+The Viking tanker proved particularly valuable during combat operations in Afghanistan and Iraq, where it supported extended air operations from carriers in the Arabian Sea and Persian Gulf. The aircraft's ability to launch and recover from the carrier while providing significant fuel offload made it essential for sustained power projection. Each carrier air wing typically maintained several Vikings configured for the tanking role, and the type was often the first aircraft launched and last recovered during flight operations.
+
+The S-3B tanker role was gradually assumed by F/A-18E/F Super Hornets configured with buddy stores following the Viking's 2009 retirement. The loss of the dedicated tanker platform reduced carrier air wing range and flexibility, contributing to the Navy's ongoing interest in unmanned tanker aircraft such as the MQ-25 Stingray. The Viking's tanker service demonstrated how aircraft can find new purpose as their original missions evolve or disappear.
 
 ### Tasks
 
@@ -17609,7 +17941,11 @@ No pylons defined.
 
 ### Background
 
-The Lockheed S-3B Viking is a carrier-based anti-submarine warfare aircraft that served the U.S. Navy from 1974 to 2009. Later repurposed for tanking and surface surveillance, it is nicknamed the 'War Hoover' for its engine sound.
+The Lockheed S-3 Viking was the U.S. Navy's carrier-based anti-submarine warfare (ASW) aircraft from 1974 to 2009, designed to detect and destroy Soviet submarines threatening carrier battle groups. The aircraft featured a capacious fuselage housing sophisticated ASW sensors including MAD (Magnetic Anomaly Detector), sonobuoy processors, and FLIR, along with an internal weapons bay for torpedoes and depth charges. The twin TF34 turbofan engines—the same powerplant used on the A-10 Warthog—gave the Viking its distinctive quiet "hoovering" sound that earned it the nickname "War Hoover."
+
+The S-3B variant, introduced in 1987, added the APS-137 inverse synthetic aperture radar for improved surface search capability, AGM-84 Harpoon anti-ship missile compatibility, and upgraded acoustic processing. This enabled the Viking to perform anti-surface warfare (ASuW) missions in addition to ASW, tracking and attacking surface vessels with Harpoon missiles. Vikings flew combat missions during Operation Desert Storm in 1991, conducting surface surveillance and attacking Iraqi naval vessels in the Persian Gulf.
+
+Following the collapse of the Soviet Union and the diminished submarine threat, the Viking's ASW mission declined in importance. The Navy increasingly employed S-3Bs for tanking and surface surveillance duties, with the dedicated ASW equipment often removed. The type was retired in 2009, with its missions distributed among other platforms—tanking to F/A-18E/F buddy stores, ASW to helicopters and P-8A Poseidon, and surveillance to other assets. Several Vikings continue flying in NASA research and test roles. The aircraft's career illustrated how changing threats can transform an aircraft's role even as its basic capabilities remain relevant.
 
 ### Tasks
 
@@ -17654,7 +17990,9 @@ The Lockheed S-3B Viking is a carrier-based anti-submarine warfare aircraft that
 
 ### Background
 
-The Supermarine Spitfire LF Mk. IX CW is a clipped-wing variant optimized for low-altitude operations, featuring reduced wingspan for improved roll rate against V-1 flying bombs and low-level threats.
+The Supermarine Spitfire LF Mk. IX CW is a clipped-wing variant of Britain's iconic fighter, optimized for low-altitude operations where maneuverability and roll rate mattered more than high-altitude performance. The "CW" designation indicates clipped wings—the standard elliptical wingtips were replaced with squared-off tips reducing wingspan from 36 feet 10 inches to approximately 32 feet 2 inches. This modification improved roll rate and dive speed at the cost of some climb performance and high-altitude capability. The LF (Low-altitude Fighter) designation indicates the Rolls-Royce Merlin 66 engine with a supercharger optimized for peak performance below 20,000 feet.
+
+This configuration proved particularly valuable for anti-V-1 flying bomb operations in 1944, where Spitfires needed to intercept the fast-moving cruise missiles at low altitude. The clipped-wing Mk. IX could reach speeds of over 400 mph in a shallow dive, fast enough to catch V-1s, while its improved roll rate helped pilots maneuver into firing position or tip the flying bombs off course using their wingtips. The same characteristics made the aircraft effective for tactical reconnaissance and ground attack missions over occupied Europe, where engagements typically occurred at medium and low altitudes. Clipped-wing Spitfires served with numerous RAF squadrons during the final years of the war, operating from bases in England and the Continent as Allied forces advanced into Germany.
 
 ### Tasks
 
@@ -17710,7 +18048,9 @@ The Supermarine Spitfire LF Mk. IX CW is a clipped-wing variant optimized for lo
 
 ### Background
 
-The Supermarine Spitfire LF Mk. IX is a low-altitude optimized variant of Britain's iconic fighter, entering service in 1943. The Merlin 66 engine is optimized for performance below 20,000 feet.
+The Supermarine Spitfire LF Mk. IX is the low-altitude optimized variant of what many consider the finest British fighter of World War II. Entering service in 1943, the Mk. IX was developed as an emergency response to the appearance of the Focke-Wulf Fw 190, which had outclassed the earlier Mk. V. By mounting the more powerful Rolls-Royce Merlin 61-series engine with two-stage supercharging in the Mk. V airframe, Supermarine created an aircraft that could compete with and defeat the Fw 190 at all altitudes. The LF (Low-altitude Fighter) variant used the Merlin 66 engine optimized for peak performance below 20,000 feet, producing 1,720 horsepower at lower altitudes.
+
+The Mk. IX became the most numerous Spitfire variant, with over 5,600 produced. It served in every theater where the RAF operated, from the skies over Britain to North Africa, Italy, and the Far East. The aircraft retained the Spitfire's legendary agility while adding substantially more power and improved high-altitude performance. Armed with two 20mm Hispano cannons and four .303 Browning machine guns (or two cannons and two .50 caliber Brownings in some versions), the Mk. IX was a formidable gun platform. As the war progressed, Spitfires increasingly took on ground attack roles, carrying bombs under the wings and fuselage. The type served with numerous Allied air forces beyond the RAF, including the USAAF, Soviet VVS, Free French, and various Commonwealth nations. The Spitfire remained in RAF service until 1954 and continued flying with smaller air forces into the 1960s.
 
 ### Tasks
 
@@ -17766,7 +18106,9 @@ The Supermarine Spitfire LF Mk. IX is a low-altitude optimized variant of Britai
 
 ### Background
 
-The Sukhoi Su-17M4 'Fitter-K' is the final Soviet production variant of the variable-geometry attack aircraft, entering service in 1981. It features improved navigation and weapons systems.
+The Sukhoi Su-17M4, NATO reporting name "Fitter-K," is the final and most capable Soviet production variant of the variable-geometry wing attack aircraft family. Entering service in 1981, the M4 incorporated significant avionics upgrades including the PrNK-54 navigation/attack system with improved terrain-following capability, a new head-up display, and compatibility with television-guided munitions. The variable-geometry wings, which could sweep from 30 to 63 degrees, gave the aircraft excellent low-level penetration characteristics while maintaining acceptable takeoff and landing performance.
+
+The Su-17 family saw extensive combat across multiple conflicts. Soviet Su-17s flew ground attack missions throughout the Afghanistan War (1979-1989), striking mujahideen positions in the mountains and valleys. Export versions designated Su-20 and Su-22 served with numerous Soviet client states and saw action in the Iran-Iraq War (where Iraqi Fitters struck Iranian oil facilities and military installations), the Yom Kippur War (1973, with Syria), and the Libyan-Chadian conflict. The type proved effective as a bomb truck capable of delivering large quantities of unguided ordnance, though losses to ground fire and enemy fighters were significant when operating without adequate air cover. Following the Soviet collapse, Su-17s remained in service with several successor states and export customers. The type has seen recent combat in the Syrian Civil War, where Syrian Air Force Su-22s continue flying strike missions. The M4 variant represented the peak of the Fitter family's development before being superseded by the Su-24 and later Su-34 in the strike role.
 
 ### Tasks
 
@@ -17988,7 +18330,9 @@ The Sukhoi Su-17M4 'Fitter-K' is the final Soviet production variant of the vari
 
 ### Background
 
-The Sukhoi Su-24M 'Fencer-D' is a Soviet supersonic all-weather attack aircraft that entered service in 1983. Featuring advanced navigation and targeting systems, it remains Russia's primary tactical bomber.
+The Sukhoi Su-24M, NATO reporting name "Fencer-D," is an upgraded variant of the Soviet Union's first purpose-built supersonic interdictor-strike aircraft. Entering service in 1983, the M-model introduced substantial improvements including the PNS-24M "Tigr" attack-navigation system, compatibility with precision-guided munitions including laser and TV-guided bombs, and an inflight refueling probe. The two-seat, side-by-side cockpit configuration allows effective crew coordination during low-level penetration missions. Variable-geometry wings sweep from 16 to 69 degrees, enabling both efficient high-altitude cruise and stable low-level flight.
+
+The Su-24 was conceived as the Soviet equivalent to the F-111, designed to penetrate NATO air defenses at low altitude in all weather conditions and deliver nuclear or conventional ordnance. The Su-24M saw its first combat during the Soviet-Afghan War, where it flew strike missions from Soviet territory. The type subsequently participated in both Chechen conflicts, where Su-24s delivered guided munitions against separatist positions. Russian Su-24s have been heavily employed in Syria since 2015, conducting thousands of strike sorties against opposition forces. The aircraft gained international attention when a Turkish F-16 shot down a Russian Su-24M near the Syrian-Turkish border in November 2015. Ukrainian and Russian Su-24s have both seen extensive combat in the ongoing Russo-Ukrainian War, flying strike and SEAD missions. Despite being superseded by the Su-34 in Russian service, the Su-24M remains operational with Russia and several export customers including Algeria, Syria, Libya, and former Soviet states.
 
 ### Tasks
 
@@ -18212,7 +18556,9 @@ The Sukhoi Su-24M 'Fencer-D' is a Soviet supersonic all-weather attack aircraft 
 
 ### Background
 
-The Su-24MR 'Fencer-E' is the tactical reconnaissance variant of the Su-24, equipped with cameras, infrared sensors, and side-looking radar for battlefield surveillance.
+The Sukhoi Su-24MR, NATO reporting name "Fencer-E," is the dedicated tactical reconnaissance variant of the Su-24 strike aircraft. Entering service in the 1980s, the MR model retains the basic airframe and variable-geometry wing of the bomber variants but replaces offensive armament capability with a comprehensive sensor suite. Equipment includes the AP-402M panoramic camera system, infrared linescan sensors, the Shtik side-looking airborne radar (SLAR), and the Tangazh and Efir ELINT pods for electronic intelligence gathering. The aircraft can carry the Shpil-2 laser reconnaissance pod for target designation and battle damage assessment.
+
+The Su-24MR serves as the primary tactical reconnaissance asset for Russian tactical aviation, providing real-time intelligence to ground commanders. The type has operated in every conflict involving Russian forces since its introduction, including Afghanistan, both Chechen wars, Georgia (2008), and Syria. In Syria, Su-24MRs have conducted extensive reconnaissance sorties to identify targets for strike aircraft and assess the effects of Russian air operations. The reconnaissance Fencer has also been involved in provocative encounters with NATO forces, including multiple instances of Russian Su-24MRs conducting mock attack runs against NATO warships in the Baltic and Black Seas. Despite the development of newer reconnaissance systems including drones, the Su-24MR's ability to penetrate at high speed and low altitude while gathering multiple types of intelligence simultaneously keeps it relevant in Russian service.
 
 ### Tasks
 
@@ -18261,7 +18607,9 @@ The Su-24MR 'Fencer-E' is the tactical reconnaissance variant of the Su-24, equi
 
 ### Background
 
-The Sukhoi Su-25 'Frogfoot' is a Soviet-designed single-seat, twin-engine close air support aircraft, entering service in 1981. Often compared to the A-10, it emphasizes survivability and weapons delivery capability.
+The Sukhoi Su-25 (NATO reporting name "Frogfoot") is a single-seat, twin-engine close air support and ground attack aircraft developed to provide Soviet ground forces with dedicated battlefield air interdiction capability. The Su-25 entered service in 1981, featuring extensive armor protection for the pilot and critical systems, redundant flight controls, and self-sealing fuel tanks—design priorities that invite comparison with the American A-10 Thunderbolt II, though the Su-25 is smaller and optimized more for survivability than loiter time.
+
+The Su-25 received its combat baptism during the Soviet-Afghan War (1979-1989), where the type flew thousands of sorties in support of Soviet ground forces. Operating from high-altitude airfields in harsh mountain terrain, Su-25s proved highly effective but also suffered significant losses to Mujahideen surface-to-air missiles, particularly the FIM-92 Stinger. Lessons learned drove improvements in countermeasures and survivability features. The type subsequently saw combat during the Chechen Wars, the 2008 Russo-Georgian War, the Syrian Civil War, and extensively during the conflict in Ukraine beginning in 2014. Export Su-25s have served in numerous regional conflicts across Africa and the former Soviet Union. Approximately 1,000 Su-25s were built, and the type remains in frontline service with Russia and numerous export customers, with upgraded variants continuing development.
 
 ### Tasks
 
@@ -18578,7 +18926,9 @@ The Sukhoi Su-25 'Frogfoot' is a Soviet-designed single-seat, twin-engine close 
 
 ### Background
 
-The Su-25T is an advanced anti-tank variant of the Frogfoot, featuring the Shkval TV-guided weapons system and compatibility with precision-guided munitions.
+The Sukhoi Su-25T (sometimes designated Su-34 in early development, not to be confused with the later strike aircraft) is a dedicated anti-tank and precision strike variant of the Frogfoot developed in the late 1980s. The "T" designation reflects the Shkval electro-optical targeting system mounted in a distinctive nose fairing, enabling the aircraft to acquire, track, and engage armored vehicles with laser-guided and TV-guided weapons at extended standoff ranges. The Su-25T also introduced the Vikhr (AT-16 Scallion) laser beam-riding missile, specifically designed to destroy NATO main battle tanks beyond the range of their air defense systems.
+
+Development of the Su-25T began after Soviet experience in Afghanistan demonstrated the need for precision strike capability to reduce exposure to ground fire. The prototype first flew in 1984, and limited production began in 1990 just as the Soviet Union collapsed. This timing meant the Su-25T was never produced in large numbers, with only about a dozen aircraft completed before production ended. The type did see combat during the Second Chechen War, where its precision weapons proved effective against fortified positions and vehicles. Russia continued development with the further improved Su-25TM (also designated Su-39), which added more advanced avionics and expanded weapons compatibility. While the Su-25T remains in limited Russian service, its precision strike concepts influenced the development of the Su-34 strike aircraft that would eventually assume the deep interdiction role.
 
 ### Tasks
 
@@ -18921,7 +19271,9 @@ The Su-25T is an advanced anti-tank variant of the Frogfoot, featuring the Shkva
 
 ### Background
 
-The Su-25TM (export designation Su-39) is the most advanced Frogfoot variant, featuring upgraded avionics, enhanced weapons capability, and improved survivability systems.
+The Sukhoi Su-25TM (NATO reporting name: Frogfoot), also marketed for export as the Su-39, represents the most advanced production variant of the Soviet close air support aircraft. Development began in the late 1980s as the Su-25T (Tankovy, meaning "anti-tank"), with the TM variant (Tankovoy Modernizirovanniy, "modernized anti-tank") incorporating additional improvements to avionics and weapons systems. The first Su-25T prototype flew in 1984, with the improved TM variant following in the early 1990s.
+
+The Su-25TM features the Shkval-M television/laser targeting system in an enlarged nose housing, enabling precision engagement with laser-guided missiles and bombs. The aircraft can carry the Vikhr (AT-16 Scalpel) laser-beam-riding anti-tank missile specifically designed for the type, as well as the Kh-25ML and Kh-29 precision-guided missiles. Survivability improvements include the Irtysh electronic countermeasures suite, missile approach warning system, and additional armor protection. The aircraft also gained the ability to carry the Kh-31 and Kh-35 anti-ship missiles, expanding its role beyond pure battlefield interdiction. Despite its capabilities, only a small number of Su-25TMs were produced due to the post-Soviet economic collapse, with Russia operating approximately 8-10 aircraft. The Su-39 export variant was offered to several countries but achieved no sales, with most operators preferring the simpler and less expensive basic Su-25 variants.
 
 ### Tasks
 
@@ -19253,7 +19605,9 @@ The Su-25TM (export designation Su-39) is the most advanced Frogfoot variant, fe
 
 ### Background
 
-The Sukhoi Su-27 'Flanker' is a Soviet-designed twin-engine supermaneuverability fighter that entered service in 1985. Its exceptional range, payload, and agility make it one of the world's premier air superiority fighters.
+The Sukhoi Su-27 (NATO reporting name "Flanker-B") is a Soviet-designed twin-engine air superiority fighter that represents the pinnacle of fourth-generation Soviet aviation technology. Developed to counter the American F-15 Eagle, the Su-27 entered service in 1985 after a protracted development program that produced one of the most capable fighters of its era. The aircraft's aerodynamic design enables exceptional maneuverability including the ability to perform "supermaneuvers" such as the Pugachev's Cobra and Kulbit, while its enormous internal fuel capacity provides combat radius exceeding that of any Western contemporary.
+
+The Su-27 family has become the foundation of Russian tactical aviation, spawning numerous variants including the carrier-capable Su-33, the two-seat multirole Su-30, the dedicated strike Su-34, and the highly-evolved Su-35. The original Su-27 and its derivatives have been exported to China (which developed its own versions including the J-11), India, Vietnam, Indonesia, and numerous other nations. The type has seen limited combat, with Ethiopian Su-27s claiming Eritrean MiG-29s during the 1998-2000 border war. Russian Su-27s have operated during conflicts in Georgia, Syria, and Ukraine. The Su-27's combination of range, radar capability, and agility established it as the backbone of Russian air defense, a role it continues to fill alongside more advanced derivatives.
 
 ### Tasks
 
@@ -19511,7 +19865,9 @@ The Sukhoi Su-27 'Flanker' is a Soviet-designed twin-engine supermaneuverability
 
 ### Background
 
-The Sukhoi Su-30 is a twin-seat multi-role fighter derived from the Su-27, featuring enhanced air-to-ground capability and canard foreplanes for improved maneuverability.
+The Sukhoi Su-30 (NATO reporting name "Flanker-C") is a twin-seat multirole fighter derived from the Su-27, developed initially as a long-range interceptor with command and control capability before evolving into one of the most successful Russian export fighters. The basic Su-30 design features tandem seating with the rear crew member able to manage tactical coordination and weapons employment, significantly enhanced air-to-ground capability compared to the air superiority-focused Su-27, and inflight refueling capability for extended range operations. Advanced variants like the Su-30MKI and Su-30SM add canard foreplanes and thrust-vectoring engines for exceptional agility.
+
+The Su-30 family has become the most commercially successful Russian combat aircraft since the end of the Cold War, with significant variants tailored for different export customers. India operates the Su-30MKI, which features Israeli and French avionics integrated with the Russian airframe; China fields the Su-30MKK and MK2; Malaysia, Algeria, Venezuela, and numerous other nations have purchased Su-30 variants. The type has seen combat in multiple conflicts: Indian Su-30MKIs participated in the 2019 aerial engagement with Pakistan following the Balakot strike, Ethiopian Su-30s operated during border conflicts, and Russian Su-30SMs have flown combat missions in Syria. The Su-30's combination of range, payload, and multirole flexibility has made it the backbone of numerous air forces, and production continues with ongoing modernization programs.
 
 ### Tasks
 
@@ -19741,7 +20097,9 @@ The Sukhoi Su-30 is a twin-seat multi-role fighter derived from the Su-27, featu
 
 ### Background
 
-The Sukhoi Su-33 'Flanker-D' is the carrier-based variant of the Su-27, featuring folding wings, canards, and reinforced landing gear for carrier operations. It entered service in 1998 with the Russian Navy.
+The Sukhoi Su-33 (NATO reporting name "Flanker-D") is the carrier-based variant of the Su-27 air superiority fighter, developed for operation from the Soviet Navy's heavy aircraft-carrying cruisers. The Su-33 entered service in 1998 with the Russian Naval Aviation, featuring folding wings and horizontal stabilizers for carrier storage, strengthened landing gear and arrestor hook for ski-jump takeoff and arrested landing operations, canard foreplanes for improved low-speed handling, and increased thrust engines to compensate for higher operating weights.
+
+The Su-33 operates exclusively from Russia's sole aircraft carrier, Admiral Kuznetsov. The type saw its combat debut during the Russian intervention in Syria beginning in 2016, when Su-33s flew strike missions from the Admiral Kuznetsov while the carrier operated in the eastern Mediterranean. The deployment was marked by the loss of two aircraft to landing accidents, highlighting the challenges of operating high-performance fighters from a ski-jump carrier without catapults. Only 24 Su-33s were built due to the collapse of the Soviet Union and subsequent economic difficulties, and no export sales materialized. China evaluated the type before developing its own carrier fighter, the J-15 "Flying Shark," which incorporates significant Su-33 technology. The Su-33 remains Russia's only operational carrier-based fixed-wing combat aircraft, though its eventual replacement by the MiG-29K has been discussed.
 
 ### Tasks
 
@@ -20057,7 +20415,9 @@ The Sukhoi Su-33 'Flanker-D' is the carrier-based variant of the Su-27, featurin
 
 ### Background
 
-The Sukhoi Su-34 'Fullback' is a Russian twin-seat fighter-bomber that entered service in 2014. Featuring a side-by-side cockpit and exceptional range, it serves as Russia's primary tactical strike aircraft.
+The Sukhoi Su-34, NATO reporting name "Fullback," is a Russian twin-seat strike fighter designed to replace the Su-24 Fencer in the tactical bomber role. The aircraft features a distinctive side-by-side cockpit configuration with a pressurized cabin that allows crew members to stand and move during long missions, along with an armored bathtub protecting the crew from ground fire. The Su-34 entered Russian service in 2014 after an extended development that began in the late Soviet era, offering significantly greater payload capacity, range, and precision strike capability compared to the Su-24 it replaces.
+
+The Su-34 has seen extensive combat employment in Syria since 2015, where it has become one of Russia's primary strike platforms, delivering both unguided munitions and precision-guided weapons including KAB-series guided bombs and Kh-series air-to-surface missiles. The type can also carry anti-ship missiles and is capable of conducting SEAD operations with anti-radiation missiles. The Su-34 has been heavily employed during Russia's invasion of Ukraine beginning in 2022, where it has conducted numerous strike missions while also suffering significant combat losses to Ukrainian air defenses, including ground-based missiles and friendly fire incidents. Despite these losses, the Su-34 remains central to Russian tactical air operations. The aircraft's combination of precision strike capability, range exceeding 1,000 km on internal fuel, and defensive systems makes it Russia's most capable tactical strike platform, though its high cost has limited production numbers.
 
 ### Tasks
 
@@ -20360,7 +20720,11 @@ The Sukhoi Su-34 'Fullback' is a Russian twin-seat fighter-bomber that entered s
 
 ### Background
 
-The North American TF-51D is a two-seat trainer variant of the legendary Mustang, used for transition training and reconnaissance. Today it serves primarily in the warbird community.
+The North American TF-51D is a two-seat trainer variant of the legendary P-51D Mustang, created by converting standard single-seat fighters to dual-control configuration. The modification removed the fuselage fuel tank behind the pilot and installed a second cockpit with full flight controls, allowing experienced instructors to train new pilots on the demanding Mustang before solo flight. The USAAF used TF-51Ds during the final years of World War II and throughout the immediate postwar period for transition training as pilots moved from trainers to front-line fighters.
+
+The Mustang's performance characteristics made transition training essential. The P-51D's power, speed, and handling differed significantly from the training aircraft new pilots had flown, and the addition of an instructor's cockpit reduced accidents during initial familiarization. The TF-51D retained combat capability and could carry weapons, though it was primarily used for training purposes. Some TF-51Ds were employed for reconnaissance and liaison duties where the second seat accommodated observers or passengers.
+
+Today, surviving TF-51Ds are prized warbirds, offering the rare opportunity to experience Mustang flight without requiring solo proficiency in the type. The two-seat configuration makes the aircraft valuable for orientation flights, allowing passengers to experience the sensations of World War II fighter aviation from the back seat while a qualified pilot handles the demanding aircraft. Several TF-51Ds participate in airshows, commemorative flights, and warbird training programs, keeping the Mustang legacy alive for new generations. In DCS World, the TF-51D provides a free, flyable introduction to piston-engine warbird simulation without requiring the full P-51D module.
 
 ### Tasks
 
@@ -20386,7 +20750,9 @@ No pylons defined.
 
 ### Background
 
-The Panavia Tornado GR4 is the upgraded strike variant of the RAF's Tornado, featuring precision-guided weapons capability and advanced targeting systems. It served until 2019.
+The Panavia Tornado GR4 is the upgraded strike variant of the Royal Air Force's Tornado IDS, representing the culmination of a mid-life update program that transformed the original GR1 into a precision strike platform. Entering service in 1998, the GR4 introduced GPS navigation, compatibility with precision-guided munitions including Paveway laser-guided bombs and Storm Shadow cruise missiles, FLIR targeting pods, and improved cockpit displays. The variable-geometry wings inherited from the IDS design allowed efficient high-altitude cruise with wings swept back and excellent low-level handling with wings extended forward.
+
+The Tornado GR4 saw extensive combat over its service life. RAF Tornados participated in Operation Desert Storm (1991) in the original GR1 configuration, flying dangerous low-level airfield denial missions with JP233 runway cratering munitions—eight aircraft were lost during the conflict. GR4s subsequently flew combat missions during Operation Allied Force over Kosovo (1999), Operation Telic in Iraq (2003), Operation Ellamy over Libya (2011), and Operation Shader against ISIS in Iraq and Syria (2014-2019). The GR4 delivered Storm Shadow cruise missiles during multiple campaigns, demonstrating its evolution from low-level penetrator to standoff strike platform. The type was retired from RAF service in 2019, replaced by the Eurofighter Typhoon in the strike role. The Tornado's contribution to RAF capabilities over four decades established precedents for European collaborative aircraft programs that continue today.
 
 ### Tasks
 
@@ -20491,7 +20857,9 @@ The Panavia Tornado GR4 is the upgraded strike variant of the RAF's Tornado, fea
 
 ### Background
 
-The Panavia Tornado IDS (Interdictor/Strike) is the ground attack variant of the multinational European combat aircraft, entering service in 1979. It features variable-geometry wings optimized for low-level penetration.
+The Panavia Tornado IDS (Interdictor/Strike) is the ground attack variant of the first major multinational European combat aircraft program, developed jointly by the United Kingdom, West Germany, and Italy. The aircraft entered service in 1979, designed around a requirement for high-speed, low-level penetration of Warsaw Pact air defenses to deliver nuclear or conventional weapons against second-echelon forces. The variable-geometry wing, sweeping from 25 to 67 degrees, enables both efficient long-range cruise and stable flight at the extremely low altitudes and high speeds that characterized the aircraft's intended mission profile. The twin RB199 turbofan engines provide excellent acceleration and allow sustained supersonic flight.
+
+The Tornado IDS saw its combat debut during Operation Desert Storm (1991), where RAF, Italian, and Saudi aircraft flew strike missions against Iraqi targets. The RAF's low-level airfield denial missions proved costly, with several aircraft lost to anti-aircraft fire, leading to a shift toward medium-altitude precision bombing. The Tornado was subsequently employed in Operation Allied Force over Kosovo (1999), where German Tornados flew their first combat missions since World War II. Italian and RAF Tornados participated in Operation Odyssey Dawn over Libya (2011). The IDS variant served with Germany, Italy, and Saudi Arabia in addition to the UK, with the German and Italian air forces continuing to operate the type into the 2020s. The ECR (Electronic Combat/Reconnaissance) variant developed for Germany added a dedicated SEAD capability. The Tornado program established the model for European collaborative defense projects that would follow, including Eurofighter and eventually GCAP.
 
 ### Tasks
 
@@ -20591,7 +20959,11 @@ The Panavia Tornado IDS (Interdictor/Strike) is the ground attack variant of the
 
 ### Background
 
-The Tupolev Tu-142 is a Soviet/Russian maritime reconnaissance and anti-submarine warfare aircraft based on the Tu-95 bomber. Entering service in 1972, it provides long-range patrol capability for the Russian Navy.
+The Tupolev Tu-142 (NATO reporting name "Bear-F/J") is a Soviet/Russian maritime reconnaissance and anti-submarine warfare aircraft derived from the Tu-95 strategic bomber, representing one of the most capable long-range maritime patrol platforms ever built. Entering Soviet Naval Aviation service in 1972, the Tu-142 was developed to counter the growing threat posed by American submarine-launched ballistic missiles, which required the Soviet Union to find and track US Navy nuclear submarines across the vast reaches of the Atlantic and Pacific oceans. The aircraft featured a lengthened fuselage, strengthened undercarriage for operations from dispersed airfields, and extensive mission equipment including MAD (Magnetic Anomaly Detector), sonobuoy dispensers, and search radar.
+
+The Tu-142 can remain airborne for 10+ hours without refueling, allowing it to patrol enormous ocean areas searching for submarine signatures. The aircraft drops patterns of sonobuoys to detect submarine acoustic emissions, then localizes contacts using its MAD boom extended from the tail. Once a submarine is located, the Tu-142 can attack with torpedoes and depth charges carried in internal weapons bays, or pass targeting data to surface ships and submarines. The Tu-142M variant added improved sensors and the capability to launch Kh-35 anti-ship missiles for surface attack missions.
+
+Soviet and Russian Tu-142s have maintained a constant presence over the Atlantic and Pacific for five decades, routinely shadowing NATO naval forces and probing air defense responses. The aircraft regularly intercept American carrier battle groups and operate near the GIUK gap monitoring submarine activity. Indian Naval Aviation also operates Tu-142s, using them for maritime patrol over the Indian Ocean. Despite their age, Tu-142s remain in Russian service and continue flying patrol missions, their distinctive contra-rotating propeller drone announcing their presence to NATO interceptors. The type will likely serve until replaced by newer patrol aircraft in the 2030s.
 
 ### Tasks
 
@@ -20619,7 +20991,9 @@ The Tupolev Tu-142 is a Soviet/Russian maritime reconnaissance and anti-submarin
 
 ### Background
 
-The Tupolev Tu-160 'Blackjack' is a supersonic variable-sweep wing strategic bomber, the largest and heaviest combat aircraft ever built. Entering service in 1987, it carries cruise missiles for nuclear and conventional strike.
+The Tupolev Tu-160, NATO reporting name "Blackjack," is a supersonic variable-sweep wing strategic bomber, the largest and heaviest combat aircraft ever built. Entering Soviet service in 1987, the Tu-160 was designed to penetrate NATO air defenses at high subsonic speeds and high altitude, or at supersonic speeds at low level, to deliver nuclear cruise missiles or free-fall bombs against strategic targets. The aircraft features four NK-32 afterburning turbofan engines (the most powerful engines ever fitted to a combat aircraft), variable-geometry wings sweeping from 20 to 65 degrees, and two internal weapons bays capable of carrying rotary launchers for Kh-55 (AS-15 Kent) cruise missiles.
+
+Only 35 Tu-160s were built before Soviet collapse disrupted production, with 19 aircraft stationed in Ukraine and the remainder in Russia. Ukraine inherited the largest fleet but ultimately destroyed most of its aircraft under American pressure as part of denuclearization agreements, transferring 8 to Russia in payment for energy debts. Russia resumed Tu-160 production in the 2010s with the modernized Tu-160M variant featuring upgraded avionics and engines. The type has seen combat employment launching Kh-555 and Kh-101 cruise missiles against targets in Syria beginning in 2015, and has been heavily used during Russia's invasion of Ukraine to launch cruise missile strikes against Ukrainian infrastructure. The Tu-160 represents Russia's premier strategic aviation asset and airborne component of the nuclear triad, expected to remain in service alongside the planned PAK DA stealth bomber.
 
 ### Tasks
 
@@ -20651,7 +21025,9 @@ The Tupolev Tu-160 'Blackjack' is a supersonic variable-sweep wing strategic bom
 
 ### Background
 
-The Tupolev Tu-22M3 'Backfire-C' is a supersonic, variable-sweep wing, long-range strategic and maritime strike bomber. The M3 variant entered service in 1983 with improved engines and avionics.
+The Tupolev Tu-22M3, NATO reporting name "Backfire-C," is a supersonic, variable-sweep wing, long-range strategic and maritime strike bomber that represented a generational leap over earlier Tu-22 designs. The M3 variant entered Soviet service in 1983 featuring NK-25 engines providing 30% more thrust, a redesigned nose with improved radar, a fixed inflight refueling probe (later removed under SALT II treaty provisions), and wedge-style air intakes. The aircraft was designed for both nuclear strike missions against NATO targets in Europe and anti-ship strikes against carrier battle groups using the massive Kh-22 (AS-4 Kitchen) supersonic cruise missile.
+
+The Tu-22M3 saw its combat debut during the Soviet-Afghan War, flying conventional bombing missions from Soviet territory against mujahideen positions. The type has subsequently been employed extensively in recent conflicts: Russian Tu-22M3s launched strikes during the 2008 Georgia War and have conducted numerous bombing raids during the Syrian Civil War since 2015. The aircraft has been used extensively in Russia's invasion of Ukraine, delivering both cruise missiles and free-fall bombs against Ukrainian targets. Several Tu-22M3s have been reported lost to Ukrainian air defenses and long-range strikes on Russian airbases. Despite its age, the Tu-22M3 remains Russia's primary theater-range bomber, capable of delivering over 20 tons of ordnance. Modernization to M3M standard has added precision-guided munition capability and updated avionics. The type is expected to continue serving alongside the Tu-160 as part of Russian Long-Range Aviation.
 
 ### Tasks
 
@@ -20701,7 +21077,9 @@ The Tupolev Tu-22M3 'Backfire-C' is a supersonic, variable-sweep wing, long-rang
 
 ### Background
 
-The Tupolev Tu-95MS 'Bear-H' is a modernized strategic bomber variant equipped to carry Kh-55 cruise missiles. Despite its 1950s origins, it remains in service as a nuclear deterrent platform.
+The Tupolev Tu-95MS, NATO reporting name "Bear-H," is a modernized strategic bomber variant of the venerable Tu-95 turboprop aircraft, specifically redesigned in the 1980s to serve as a cruise missile carrier. Despite the basic airframe dating to the 1950s, the MS represents a substantially different aircraft from earlier Tu-95 variants, featuring a new fuselage, updated avionics, and an internal rotary launcher for six Kh-55 (AS-15 Kent) nuclear cruise missiles plus capacity for additional missiles on underwing pylons. The four Kuznetsov NK-12 contra-rotating turboprop engines remain the most powerful turboprops ever built, giving the Tu-95 its distinctive and extremely loud sound signature.
+
+The Tu-95MS continues serving as a key component of Russia's nuclear triad, providing an airborne cruise missile launch capability. The aircraft has seen combat employment in Syria since 2015, launching Kh-101 and Kh-555 conventional cruise missiles against opposition targets from standoff ranges over the Caspian Sea and eastern Mediterranean. The type has been extensively used during Russia's invasion of Ukraine, launching cruise missile strikes against Ukrainian infrastructure from launch points over Russian territory and international waters. The Tu-95MS demonstrates that platform age is less relevant than weapons capability—the aircraft serves essentially as a missile truck, launching precision weapons from beyond the range of air defenses. Upgraded variants feature compatibility with the Kh-101/102 stealthy cruise missiles and improved electronics. The Tu-95MS is expected to remain in Russian service into the 2040s, potentially achieving a service life of nearly a century for the basic design.
 
 ### Tasks
 
@@ -20777,7 +21155,11 @@ The Tupolev Tu-95MS 'Bear-H' is a modernized strategic bomber variant equipped t
 
 ### Background
 
-The Chengdu Wing Loong I is a Chinese medium-altitude long-endurance UAV used for reconnaissance and precision strike missions. Similar in concept to the MQ-1 Predator, it has been widely exported.
+The Chengdu Wing Loong (Pterodactyl) I is a Chinese medium-altitude long-endurance unmanned aerial vehicle developed for reconnaissance and precision strike missions, closely resembling the American MQ-1 Predator in both appearance and capability. First flying around 2007 and entering People's Liberation Army service in 2009, the Wing Loong I represented China's entry into the armed reconnaissance drone market. The aircraft features a pusher-propeller configuration, V-tail, and underwing hardpoints for weapons including the AR-1 air-to-ground missile (similar to the AGM-114 Hellfire) and various guided bombs.
+
+China has aggressively exported the Wing Loong I, providing armed drones to nations that face difficulties acquiring American or Israeli systems. Operators include the United Arab Emirates, Saudi Arabia, Kazakhstan, Egypt, Pakistan, and several African nations. This export success has made China a major player in the armed drone market and provided combat experience through customer operations. UAE Wing Loong Is have reportedly been used in Libya and Yemen, while Egyptian aircraft have operated in the Sinai against insurgent targets.
+
+The Wing Loong program has expanded significantly since the I-model's introduction. The Wing Loong II is a larger, more capable successor similar to the MQ-9 Reaper, while the Wing Loong-10 represents an even more advanced development. China's ability to provide armed drones without the export restrictions that limit American sales has made these aircraft attractive to customers seeking precision strike capability. The proliferation of Chinese armed drones has significantly altered the military balance in several regional conflicts, demonstrating how unmanned aircraft technology has spread beyond its American origins.
 
 ### Tasks
 
@@ -20813,7 +21195,9 @@ The Chengdu Wing Loong I is a Chinese medium-altitude long-endurance UAV used fo
 
 ### Background
 
-The Yakovlev Yak-40 is a Soviet regional jet transport that first flew in 1966. Designed for short runways and harsh conditions, it served as a short-haul airliner and VIP transport throughout the Soviet bloc.
+The Yakovlev Yak-40, NATO reporting name "Codling," is a Soviet regional jet transport that first flew in 1966, designed specifically to operate from short, unpaved runways in remote areas of the Soviet Union. The three-engine configuration (unusual for an aircraft of its size) provided redundancy and excellent takeoff performance, while the robust landing gear and high-mounted engines allowed operations from rough strips that would ground Western regional aircraft. The type entered Aeroflot service in 1968, becoming one of the first regional jets produced in significant numbers and the first Soviet aircraft to receive Western type certification (from Italy).
+
+Over 1,000 Yak-40s were built, serving with Aeroflot and numerous Soviet bloc airlines as well as VIP transports for government and military officials. The aircraft's ability to operate from austere airfields made it valuable for connecting remote Soviet cities to the air transport network. Several variants were developed including cargo, VIP, and medevac configurations. Western operators including airlines in Germany, Italy, and Laos also flew the type. Following the Soviet collapse, many Yak-40s continued in civilian service across the former USSR, while others served as government transports for newly independent states. A small number have been converted for military calibration and transport duties. The Yak-40 remains one of the most successful Soviet-era regional aircraft designs, demonstrating that jet-powered regional transport was viable decades before the type became common in the West.
 
 ### Tasks
 
@@ -20839,7 +21223,9 @@ No pylons defined.
 
 ### Background
 
-The Yakovlev Yak-52 is a Soviet primary trainer aircraft that first flew in 1976. Its aerobatic capability and rugged construction have made it popular for civilian aerobatic training and air racing.
+The Yakovlev Yak-52 is a Soviet primary trainer aircraft that first flew in 1976, developed as an improved version of the earlier Yak-50 aerobatic aircraft with the addition of a second seat for training. The aircraft features an all-metal construction with retractable tricycle landing gear, powered by a Vedeneyev M-14P nine-cylinder radial engine producing 360 horsepower. The combination of responsive controls, robust construction, and fully aerobatic capability made it ideal for training military pilots in basic flight and aerobatic maneuvers.
+
+The Yak-52 was produced primarily in Romania under license, with over 1,800 aircraft built. The type served as the primary trainer for Warsaw Pact air forces and DOSAAF (the Soviet paramilitary aviation organization that provided initial pilot training). Following the Cold War, hundreds of Yak-52s entered the Western civilian market, where their aerobatic capability, relatively low cost, and reasonable operating expenses made them popular with private owners, aerobatic training schools, and air racing enthusiasts. The type remains widely flown on the airshow circuit and in formation flying teams. The Yak-52's combination of radial engine charm, tandem seating, and genuine aerobatic performance has earned it a devoted following among vintage and warbird enthusiasts, even though it technically dates from the 1970s rather than the World War II era.
 
 ### Tasks
 
