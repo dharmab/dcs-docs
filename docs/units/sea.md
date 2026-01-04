@@ -2,10 +2,6 @@
 
 This document describes the naval units available in DCS World, organized by vessel class. Each entry includes the DCS display name, type ID for mission files, operational role, and real-world background.
 
-## Data Location
-
-Ship definitions are located in `_G/db/Units/Ships/Ship/*.lua`. Each file defines a Lua table with fields including `DisplayName`, `type`, `tags`, `Categories`, physical dimensions, sensors, and weapon systems.
-
 ## Ship Classifications
 
 Naval vessels are classified by size, armament, and intended role. These classifications evolved over centuries and continue to adapt as technology changes warfare at sea. While modern navies sometimes blur these distinctions, the traditional hierarchy provides useful context for understanding a fleet's composition and capabilities.

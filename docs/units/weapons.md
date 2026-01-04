@@ -5,7 +5,6 @@ This document provides comprehensive information about weapons in DCS World, inc
 ## Table of Contents
 
 - [Overview](#overview)
-- [Data Locations](#data-locations)
 - [Air-to-Air Missiles](#air-to-air-missiles)
   - [AIM-9 Sidewinder Family](#aim-9-sidewinder-family)
   - [AIM-7 Sparrow Family](#aim-7-sparrow-family)
@@ -47,15 +46,6 @@ This document provides comprehensive information about weapons in DCS World, inc
 ## Overview
 
 DCS World models hundreds of weapons across several categories. The datamine contains detailed specifications for each weapon including range, speed, guidance characteristics, and warhead data. This documentation organizes weapons by type and provides both historical context and technical specifications.
-
-## Data Locations
-
-| Category | Location | Description |
-|----------|----------|-------------|
-| Missiles | `_G/rockets/*.lua` | Air-to-air and air-to-ground missiles |
-| Bombs | `_G/bombs/*.lua` | Guided and unguided bombs |
-| Warheads | `_G/warheads/*.lua` | Warhead specifications |
-| Unguided Rockets | `_G/weapons_table/weapons/nurs/*.lua` | Unguided rocket pods |
 
 ## Air-to-Air Missiles
 
