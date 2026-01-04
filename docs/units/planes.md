@@ -7415,7 +7415,7 @@ The Hornet's digital fly-by-wire flight controls and advanced avionics, includin
 
 **Playable:** Yes
 
-**Deprecated:** Yes — superseded by F/A-18C
+**Deprecated:** No
 
 ### Background
 
@@ -7674,7 +7674,7 @@ The F/A-18C served as the backbone of U.S. Navy and Marine Corps tactical aviati
 
 **Playable:** No
 
-**Supersedes:** F/A-18A, F/A-18C Lot 20
+**Deprecated:** Yes — superseded by F/A-18C Lot 20
 
 ### Background
 
