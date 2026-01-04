@@ -117,5 +117,5 @@ timer.setFunctionTime(funcId, timer.getTime() + 90)
 
 ## See Also
 
-- [Scripting Concepts](../../concepts.md) - Time value conventions
+- [Data Types](../../simulator-scripting-engine.md#data-types) - Time value conventions
 - [events](../events/events.md) - Event-driven programming alternative

@@ -18,7 +18,6 @@ The `docs/` directory contains the following documentation:
 - `mission-editor.md` - Guide to the DCS World Mission Editor GUI, including unit placement, waypoints, tasking, and triggers
 - `scripting/` - Scripting and automation documentation:
   - `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
-  - `concepts.md` - Fundamental concepts (coordinate systems, time values, angles)
   - `lua-basics.md` - Lua language basics for DCS scripting
   - `reference/` - API reference documentation:
     - `singletons/` - Global namespace objects (world, trigger, coalition, timer, env, coord, land, atmosphere, mission-commands)

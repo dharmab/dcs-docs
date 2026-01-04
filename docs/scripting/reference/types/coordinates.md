@@ -54,5 +54,5 @@ The heading calculation returns radians where 0 represents North. The pitch calc
 
 ## See Also
 
-- [Scripting Concepts](../../concepts.md) - Coordinate system explanation
+- [Data Types](../../simulator-scripting-engine.md#data-types) - Coordinate system explanation
 - [coord](../singletons/coord.md) - Coordinate conversion functions

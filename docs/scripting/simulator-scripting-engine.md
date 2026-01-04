@@ -20,6 +20,33 @@ Desanitization carries significant security risks. Any mission you load, includi
 
 Additionally, DCS updates typically overwrite `Scripts/MissionScripting.lua`, which resets any desanitization changes. After each DCS update, you must re-apply your modifications if you want to continue using `io`, `lfs`, and `os`.
 
+## Data Types
+
+### Coordinate Systems
+
+DCS World simulates a flat earth model using a Transverse Mercator projection for each theater. Each map has its own projection origin point, and the simulation uses a Cartesian coordinate system measured in meters from that origin. This approach trades global accuracy for local precision, which is appropriate for the scale of combat operations depicted in the simulation.
+
+The terrain engine does not provide a one-to-one representation of real-world geography. Maps are composites assembled from multiple time periods and may include features that have been added, removed, or modified to improve gameplay or engine performance. Features like buildings, roads, and vegetation do not necessarily match their real-world counterparts in location, appearance, or presence. Scripts that rely on real-world geographic data should account for these discrepancies.
+
+The native coordinate system uses X, Y, and Z axes measured in meters. The [coord](reference/singletons/coord.md) singleton provides conversion functions between this native system and real-world coordinate systems including latitude/longitude (geodetic coordinates) and MGRS (Military Grid Reference System, based on UTM). These conversions allow scripts to work with familiar geographic coordinates while the engine operates in its internal Cartesian space.
+
+Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the North-South position. In Vec3, `y` is altitude while `z` is North-South. This difference is a common source of confusion when converting between the two formats. See [Coordinate Types](reference/types/coordinates.md) for formal type definitions.
+
+### Time Values
+
+The DCS scripting engine measures mission time in seconds as a floating-point number with millisecond precision. The [timer](reference/singletons/timer.md) singleton provides time-related functions. The `timer.getTime()` function returns mission time, which is the number of seconds since the mission started and pauses when the game is paused. The `timer.getAbsTime()` function returns absolute time, which is the number of seconds since midnight of the mission date. The `timer.getTime0()` function returns the mission start time expressed as absolute time.
+
+### Distance and Angles
+
+All distances in the DCS scripting engine are measured in meters. All angles are measured in radians unless otherwise noted. To convert between degrees and radians:
+
+```lua
+local radians = degrees * math.pi / 180
+local degrees = radians * 180 / math.pi
+```
+
+Headings use true north as 0 and increase clockwise: East is π/2, South is π, and West is 3π/2.
+
 ## Scripting Concepts
 
 ### Singletons
@@ -268,7 +295,7 @@ The number at the end (5) is how many seconds the message stays on screen.
 
 ## API Reference
 
-The reference documentation is organized into the [reference/](reference/) directory. See also [Scripting Concepts](concepts.md) for an overview of coordinate systems, time values, and other fundamentals.
+The reference documentation is organized into the [reference/](reference/) directory.
 
 ### Types and Enums
 
