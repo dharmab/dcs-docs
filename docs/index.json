@@ -217,9 +217,5 @@
     "mission-editor.md",
     "scripting/lua-basics.md",
     "scripting/simulator-scripting-engine.md"
-  ],
-  "source_priority": [
-    "data/",
-    "pdf/"
   ]
 }

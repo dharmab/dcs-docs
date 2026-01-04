@@ -13,11 +13,9 @@ This repository contains documentation for AI agents and developers working with
 
 **Novice mission designers** learning to create scenarios. The tutorial documents explain concepts progressively without assuming prior programming experience.
 
-**Developers** building integrations, parsers, or scripting frameworks for DCS World.
-
 ## Getting Started
 
-### For Mission Designers
+### For Mission Creators
 
 Start with these documents in order:
 
@@ -33,13 +31,6 @@ Reference documentation follows consistent patterns:
 - API methods include signatures, parameters, return types, and examples
 - Cross-references via "See Also" sections connect related concepts
 - Categorical organization under `docs/scripting/reference/` aids discovery
-
-### For Developers
-
-Key reference materials:
-- [MIZ File Format](docs/mission/miz-file-format.md) - Mission archive structure
-- [Mission File Schema](docs/mission/mission-file-schema.md) - Mission Lua table specification
-- [Unit Reference](docs/units/) - Equipment specifications and capabilities
 
 ## Repository Structure
 
@@ -65,16 +56,4 @@ docs/
     ├── sea.md                # Naval units
     ├── planes.md             # Fixed-wing aircraft
     └── weapons.md            # Weapons systems
-
-data/                         # Datamined source data
-pdf/                          # Legacy PDF manuals
 ```
-
-## Source Data
-
-Documentation is compiled from multiple sources with different trust levels:
-
-1. **Datamined data** (`data/`) - Extracted from current simulator versions, most reliable
-2. **PDF manuals** (`pdf/`) - Official but potentially outdated documentation
-
-When sources conflict, prefer datamined data over PDF content.

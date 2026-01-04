@@ -4,8 +4,6 @@ This repository contains documentation for AI agents to use as context when gene
 
 ## Directory Structure
 
-- `pdf/` - PDF manuals for older versions of DCS World. These should be only partially trusted as the simulator has changed significantly since these were created.
-- `data/` - Outputs from dataminers. These can be more accurately trusted since they are regularly updated with new simulator versions.
 - `docs/` - Generated markdown documentation. All documentation output should be placed here.
 
 ## Available Documentation
@@ -33,13 +31,6 @@ The `docs/` directory contains the following documentation:
   - `planes.md` - Fixed-wing aircraft with pylons, loadouts, and capabilities
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 
-## Trust Hierarchy
-
-When information conflicts between sources:
-
-1. **Most trusted:** `data/` - Datamined information from current simulator versions
-2. **Less trusted:** `pdf/` - Legacy PDF manuals that may contain outdated information
-
 ## Terminology
 
 - **SSE** - Simulator Scripting Engine, the Lua scripting API for DCS World missions
@@ -51,6 +42,4 @@ When information conflicts between sources:
 When creating new documentation:
 
 1. Place all generated markdown files in the `docs/` directory
-2. Cross-reference datamined data in `data/` for accuracy
-3. Use PDF manuals in `pdf/` as supplementary context, but verify against datamined sources when possible
-4. Note any discrepancies between sources in the documentation
+2. Cross-reference external sources such as the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy

@@ -74,12 +74,3 @@ The [units/](units/) directory contains equipment and capability data:
 | [units/sea.md](units/sea.md) | Ships, carriers, submarines |
 | [units/planes.md](units/planes.md) | Fixed-wing aircraft with pylons and loadouts |
 | [units/weapons.md](units/weapons.md) | Missiles, bombs, rockets |
-
-## Source Data
-
-This documentation is compiled from multiple sources:
-
-- **Datamined data** (`data/` directory) - Current information extracted from the simulator
-- **PDF manuals** (`pdf/` directory) - Official documentation for older DCS versions
-
-When sources conflict, trust datamined sources over PDF manuals, as PDFs may contain outdated information.
