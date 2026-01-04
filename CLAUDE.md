@@ -33,6 +33,7 @@ The `docs/` directory contains the following documentation:
   - `ww2-planes.md` - World War II era fixed-wing aircraft with pylons, loadouts, and capabilities
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 - `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):
+  - `air-intercept-script.md` - Dynamic air intercept script that spawns enemy interceptors from red airfields when players enter defense zones, with scaled response and customizable aircraft/loadouts
   - `artillery-battery.md` - Creating artillery batteries with continuous fire for visual spectacle and SEAD/DEAD gameplay
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
