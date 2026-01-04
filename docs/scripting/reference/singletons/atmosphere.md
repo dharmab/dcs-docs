@@ -55,4 +55,4 @@ local pressureHPa = pressure / 100
 
 ## See Also
 
-- [Data Types](data-types.md) - Vec3 coordinate system
+- [Coordinate Types](../types/coordinates.md) - Vec3 coordinate system

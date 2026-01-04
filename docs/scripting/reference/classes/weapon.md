@@ -69,4 +69,4 @@ The `weapon:getTarget` method returns the weapon's target.
 - [object](object.md) - Base class methods
 - [coalition-object](coalition-object.md) - Coalition and country methods
 - [unit](unit.md) - Unit class (weapon launcher)
-- [events](events.md) - S_EVENT_SHOT and weapon-related events
+- [events](../events/events.md) - S_EVENT_SHOT and weapon-related events

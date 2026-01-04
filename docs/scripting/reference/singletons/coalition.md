@@ -245,8 +245,8 @@ The `coalition.getCountryCoalition` function returns which coalition a country b
 
 ## See Also
 
-- [Data Types](data-types.md) - Coalition and country identifiers
-- [group](group.md) - Group objects and categories
-- [static-object](static-object.md) - Static object class
-- [airbase](airbase.md) - Airbase objects
-- [unit](unit.md) - Unit objects
+- [Coalition Enums](../enums/coalition.md) - Coalition and country identifiers
+- [group](../classes/group.md) - Group objects and categories
+- [static-object](../classes/static-object.md) - Static object class
+- [airbase](../classes/airbase.md) - Airbase objects
+- [unit](../classes/unit.md) - Unit objects

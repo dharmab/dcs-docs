@@ -107,4 +107,4 @@ Changes the laser code.
 ## See Also
 
 - [unit](unit.md) - Unit class (source object for spots)
-- [Data Types](data-types.md) - Vec3 coordinate system
+- [Coordinate Types](../types/coordinates.md) - Vec3 coordinate system

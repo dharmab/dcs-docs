@@ -160,5 +160,5 @@ The `airbase:getWarehouse` method returns the airbase's warehouse (logistics) ob
 
 - [object](object.md) - Base class methods
 - [coalition-object](coalition-object.md) - Coalition and country methods
-- [coalition](coalition.md) - Airbase queries by coalition
-- [world](world.md) - World airbase queries
+- [coalition](../singletons/coalition.md) - Airbase queries by coalition
+- [world](../singletons/world.md) - World airbase queries

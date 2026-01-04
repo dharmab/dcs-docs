@@ -164,5 +164,5 @@ The `missionCommands.removeItemForGroup` function removes a group-specific menu 
 ## See Also
 
 - [coalition](coalition.md) - Coalition identifiers
-- [group](group.md) - Group objects and IDs
+- [group](../classes/group.md) - Group objects and IDs
 - [trigger](trigger.md) - Message display functions

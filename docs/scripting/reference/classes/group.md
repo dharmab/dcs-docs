@@ -202,5 +202,5 @@ The `group:enableEmission` method enables or disables radar and radio emissions 
 
 - [unit](unit.md) - Unit class
 - [controller](controller.md) - AI control interface
-- [coalition](coalition.md) - Group spawning and queries
-- [mission-commands](mission-commands.md) - Group-specific menu commands
+- [coalition](../singletons/coalition.md) - Group spawning and queries
+- [mission-commands](../singletons/mission-commands.md) - Group-specific menu commands

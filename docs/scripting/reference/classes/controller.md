@@ -211,4 +211,6 @@ controller:knowTarget(enemy, true, true)
 
 - [unit](unit.md) - Unit class (has getController method)
 - [group](group.md) - Group class (has getController method)
-- [ai-control](ai-control.md) - Tasks, commands, and options reference
+- [AI Tasks](../ai/tasks.md) - Task definitions
+- [AI Commands](../ai/commands.md) - Command definitions
+- [AI Options](../ai/options.md) - Option definitions

@@ -199,4 +199,4 @@ end
 - [unit](unit.md) - Unit class (extends Object and CoalitionObject)
 - [static-object](static-object.md) - Static object class (extends Object and CoalitionObject)
 - [weapon](weapon.md) - Weapon class (extends Object and CoalitionObject)
-- [Data Types](data-types.md) - Vec3 and Position3 coordinate systems
+- [Coordinate Types](../types/coordinates.md) - Vec3 and Position3 coordinate systems

@@ -41,4 +41,4 @@ local countryId = unit:getCountry()
 - [static-object](static-object.md) - Static object class (extends CoalitionObject)
 - [weapon](weapon.md) - Weapon class (extends CoalitionObject)
 - [airbase](airbase.md) - Airbase class (extends CoalitionObject)
-- [Data Types](data-types.md) - Coalition and country identifiers
+- [Coalition Enums](../enums/coalition.md) - Coalition and country identifiers

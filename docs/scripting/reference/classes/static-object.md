@@ -33,4 +33,4 @@ The `staticObject:getLife` method returns the object's current hit points.
 
 - [object](object.md) - Base class methods
 - [coalition-object](coalition-object.md) - Coalition and country methods
-- [coalition](coalition.md) - Static object spawning and queries
+- [coalition](../singletons/coalition.md) - Static object spawning and queries

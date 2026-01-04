@@ -1,6 +1,6 @@
-# Data Types and Conventions
+# Scripting Concepts
 
-This document describes the fundamental data types and conventions used throughout the DCS World Simulator Scripting Engine.
+This document describes fundamental concepts used throughout the DCS World Simulator Scripting Engine.
 
 ## Coordinate Systems
 
@@ -10,51 +10,7 @@ The terrain engine does not provide a one-to-one representation of real-world ge
 
 The native coordinate system uses X, Y, and Z axes measured in meters. The `coord` singleton provides conversion functions between this native system and real-world coordinate systems including latitude/longitude (geodetic coordinates) and MGRS (Military Grid Reference System, based on UTM). These conversions allow scripts to work with familiar geographic coordinates while the engine operates in its internal Cartesian space.
 
-**Vec2** represents a 2D point on the map surface:
-
-```lua
-Vec2 = {
-    x = number,
-    y = number
-}
-```
-
-The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the North-South position, where positive values indicate positions to the North.
-
-**Vec3** represents a 3D point in world space:
-
-```lua
-Vec3 = {
-    x = number,
-    y = number,
-    z = number
-}
-```
-
-The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the altitude, where positive values indicate positions above sea level. The `z` field contains the North-South position, where positive values indicate positions to the North.
-
 Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the North-South position. In Vec3, `y` is altitude while `z` is North-South. This difference is a common source of confusion when converting between the two formats.
-
-**Position3** represents both position and orientation in 3D space:
-
-```lua
-Position3 = {
-    p = Vec3,
-    x = Vec3,
-    y = Vec3,
-    z = Vec3
-}
-```
-
-The `p` field contains the world position as a Vec3. The `x` field contains the forward unit vector, pointing out of the object's nose. The `y` field contains the up unit vector, pointing out of the object's top. The `z` field contains the right unit vector, pointing out of the object's right side. These orientation vectors form an orthonormal basis. You can calculate heading and pitch from a Position3 value:
-
-```lua
-local pos = unit:getPosition()
-local heading = math.atan2(pos.x.z, pos.x.x)
-local pitch = math.asin(pos.x.y)
-```
-
-The heading calculation returns radians where 0 represents North. The pitch calculation returns radians where positive values indicate the nose is pointing up.
 
 ## Time Values
 
@@ -71,22 +27,8 @@ local degrees = radians * 180 / math.pi
 
 Headings use true north as 0 and increase clockwise: East is π/2, South is π, and West is 3π/2.
 
-## Country and Coalition
-
-Countries are identified by numeric IDs from the `country.id` enum. The game determines coalition membership based on the country. The three coalitions are represented by the `coalition.side` enum:
-
-```lua
-coalition.side = {
-    NEUTRAL = 0,
-    RED = 1,
-    BLUE = 2
-}
-```
-
-Some functions such as `markupToAll` accept a coalition value of -1, which represents "all coalitions."
-
 ## See Also
 
-- [coord](coord.md) - Coordinate conversion functions
-- [timer](timer.md) - Time-related functions
-- [coalition](coalition.md) - Coalition management functions
+- [Coordinate Types](reference/types/coordinates.md) - Vec2, Vec3, and Position3 type definitions
+- [coord](reference/singletons/coord.md) - Coordinate conversion functions
+- [timer](reference/singletons/timer.md) - Time-related functions

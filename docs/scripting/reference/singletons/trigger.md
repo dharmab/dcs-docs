@@ -258,7 +258,7 @@ end
 
 ## See Also
 
-- [Data Types](data-types.md) - Vec3 and coordinate systems
+- [Coordinate Types](../types/coordinates.md) - Vec3 and coordinate systems
 - [coalition](coalition.md) - Coalition identifiers
-- [group](group.md) - Group objects and IDs
-- [unit](unit.md) - Unit objects and IDs
+- [group](../classes/group.md) - Group objects and IDs
+- [unit](../classes/unit.md) - Unit objects and IDs

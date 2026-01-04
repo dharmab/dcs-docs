@@ -695,7 +695,7 @@ The `initiator` field contains the Unit object that received the weapon. The `we
 
 ## See Also
 
-- [world](world.md) - Event handler registration
-- [unit](unit.md) - Unit class (common initiator)
-- [weapon](weapon.md) - Weapon class (in shot events)
-- [airbase](airbase.md) - Airbase class (in flight events)
+- [world](../singletons/world.md) - Event handler registration
+- [unit](../classes/unit.md) - Unit class (common initiator)
+- [weapon](../classes/weapon.md) - Weapon class (in shot events)
+- [airbase](../classes/airbase.md) - Airbase class (in flight events)

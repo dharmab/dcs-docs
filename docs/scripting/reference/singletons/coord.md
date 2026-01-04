@@ -79,5 +79,5 @@ The `coord.MGRStoLL` function converts MGRS coordinates to Latitude/Longitude.
 
 ## See Also
 
-- [Data Types](data-types.md) - Vec2, Vec3, and coordinate systems
+- [Coordinate Types](../types/coordinates.md) - Vec2, Vec3, and coordinate systems
 - [land](land.md) - Terrain height queries

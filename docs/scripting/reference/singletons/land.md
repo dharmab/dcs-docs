@@ -172,5 +172,5 @@ end
 
 ## See Also
 
-- [Data Types](data-types.md) - Vec2 and Vec3 coordinate systems
+- [Coordinate Types](../types/coordinates.md) - Vec2 and Vec3 coordinate systems
 - [coord](coord.md) - Coordinate conversion functions

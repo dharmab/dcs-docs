@@ -253,4 +253,4 @@ unit:enableEmission(false)
 - [coalition-object](coalition-object.md) - Coalition and country methods
 - [group](group.md) - Group class
 - [controller](controller.md) - AI control interface
-- [events](events.md) - Unit-related events
+- [events](../events/events.md) - Unit-related events

@@ -268,51 +268,60 @@ The number at the end (5) is how many seconds the message stays on screen.
 
 ## API Reference
 
-The reference documentation is organized into individual files in the [reference/](reference/) directory:
+The reference documentation is organized into the [reference/](reference/) directory. See also [Scripting Concepts](concepts.md) for an overview of coordinate systems, time values, and other fundamentals.
 
-### Data Types
+### Types and Enums
 
 | Reference | Description |
 |-----------|-------------|
-| [Data Types](reference/data-types.md) | Vec2, Vec3, Position3, time values, angles, coalition and country enums |
+| [Coordinate Types](reference/types/coordinates.md) | Vec2, Vec3, Position3 type definitions |
+| [Coalition Enums](reference/enums/coalition.md) | Coalition and country identifiers |
+| [AI Enums](reference/enums/ai.md) | AI skill levels, task enums, and beacon types |
 
 ### Singletons
 
 | Singleton | Description |
 |-----------|-------------|
-| [timer](reference/timer.md) | Mission time and scheduled functions |
-| [env](reference/env.md) | Logging, environment info, and mission data access |
-| [trigger](reference/trigger.md) | Trigger zones and trigger-style actions (messages, smoke, explosions) |
-| [world](reference/world.md) | Event handlers, object searches, and world queries |
-| [coalition](reference/coalition.md) | Coalition-specific operations, group spawning, and queries |
-| [missionCommands](reference/mission-commands.md) | F10 radio menu manipulation |
-| [coord](reference/coord.md) | Coordinate conversions (lat/long, MGRS, game coordinates) |
-| [land](reference/land.md) | Terrain queries (height, surface type, line of sight, pathfinding) |
-| [atmosphere](reference/atmosphere.md) | Weather conditions (wind, temperature, pressure) |
+| [timer](reference/singletons/timer.md) | Mission time and scheduled functions |
+| [env](reference/singletons/env.md) | Logging, environment info, and mission data access |
+| [trigger](reference/singletons/trigger.md) | Trigger zones and trigger-style actions (messages, smoke, explosions) |
+| [world](reference/singletons/world.md) | Event handlers, object searches, and world queries |
+| [coalition](reference/singletons/coalition.md) | Coalition-specific operations, group spawning, and queries |
+| [missionCommands](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
+| [coord](reference/singletons/coord.md) | Coordinate conversions (lat/long, MGRS, game coordinates) |
+| [land](reference/singletons/land.md) | Terrain queries (height, surface type, line of sight, pathfinding) |
+| [atmosphere](reference/singletons/atmosphere.md) | Weather conditions (wind, temperature, pressure) |
 
 ### Classes
 
 | Class | Description |
 |-------|-------------|
-| [Object](reference/object.md) | Base class for all game objects |
-| [CoalitionObject](reference/coalition-object.md) | Extends Object with coalition and country information |
-| [Unit](reference/unit.md) | Aircraft, vehicles, ships, and structures |
-| [Group](reference/group.md) | Collections of units |
-| [Airbase](reference/airbase.md) | Airports, FARPs, and carriers |
-| [StaticObject](reference/static-object.md) | Non-moving objects (buildings, cargo, decorations) |
-| [Weapon](reference/weapon.md) | Weapons in flight (missiles, bombs, rockets) |
-| [Controller](reference/controller.md) | AI control interface for issuing tasks and commands |
-| [Spot](reference/spot.md) | Laser and infrared designator spots |
+| [Object](reference/classes/object.md) | Base class for all game objects |
+| [CoalitionObject](reference/classes/coalition-object.md) | Extends Object with coalition and country information |
+| [Unit](reference/classes/unit.md) | Aircraft, vehicles, ships, and structures |
+| [Group](reference/classes/group.md) | Collections of units |
+| [Airbase](reference/classes/airbase.md) | Airports, FARPs, and carriers |
+| [StaticObject](reference/classes/static-object.md) | Non-moving objects (buildings, cargo, decorations) |
+| [Weapon](reference/classes/weapon.md) | Weapons in flight (missiles, bombs, rockets) |
+| [Controller](reference/classes/controller.md) | AI control interface for issuing tasks and commands |
+| [Spot](reference/classes/spot.md) | Laser and infrared designator spots |
 
-### Events and AI
+### Events
 
 | Reference | Description |
 |-----------|-------------|
-| [Events](reference/events.md) | Event system overview and all event types |
-| [AI Control](reference/ai-control.md) | Tasks, commands, options, and AI behavior enums |
+| [Events](reference/events/events.md) | Event system overview and all event types |
+
+### AI Control
+
+| Reference | Description |
+|-----------|-------------|
+| [AI Tasks](reference/ai/tasks.md) | Main tasks, en-route tasks, and task wrappers |
+| [AI Commands](reference/ai/commands.md) | Instant AI commands (frequency, beacons, etc.) |
+| [AI Options](reference/ai/options.md) | Air, ground, and naval behavior options |
 
 ### Server Development
 
 | Reference | Description |
 |-----------|-------------|
-| [Server Hooks](reference/server-hooks.md) | Server-side scripting API (lfs, Sim, log, net, Export, callbacks) |
+| [Server Hooks](reference/hooks/server-hooks.md) | Server-side scripting API (lfs, Sim, log, net, Export, callbacks) |

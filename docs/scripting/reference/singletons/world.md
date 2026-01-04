@@ -1,6 +1,6 @@
 # world
 
-The world singleton provides event handling and object searching capabilities. See the [Events](events.md) documentation for event handling details.
+The world singleton provides event handling and object searching capabilities. See the [Events](../events/events.md) documentation for event handling details.
 
 ## world.addEventHandler
 
@@ -146,7 +146,7 @@ The `world.getMarkPanels` function returns all map markers currently visible.
 
 ## See Also
 
-- [events](events.md) - Event system and event types
-- [object](object.md) - Object categories and base class
+- [events](../events/events.md) - Event system and event types
+- [object](../classes/object.md) - Object categories and base class
 - [coalition](coalition.md) - Coalition-specific object queries
-- [airbase](airbase.md) - Airbase objects
+- [airbase](../classes/airbase.md) - Airbase objects
