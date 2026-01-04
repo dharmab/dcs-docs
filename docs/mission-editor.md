@@ -328,7 +328,7 @@ Naval units support Perform Tasks including Fire at Point and Attack Group for e
 
 ### Further Reference
 
-The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See the [Simulator Scripting Engine](scripting/simulator-scripting-engine.md) AI Control section for detailed documentation of task definitions, parameters, and the programmatic API for controlling AI behavior.
+The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See [AI Control](scripting/reference/ai-control.md) for detailed documentation of task definitions, parameters, and the programmatic API for controlling AI behavior.
 
 ## Briefing Creation
 
