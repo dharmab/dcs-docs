@@ -980,6 +980,223 @@ Early Warning:
   └── P-19 radar (offset 5+ km)
 ```
 
+> **Gameplay Note:** The outer layer (SA-5, SA-10 at long range) is often excluded from missions. DCS lacks the strategic assets (B-52s, cruise missiles, dedicated SEAD packages) and operational scale needed to realistically counter these systems. Very long-range SAMs tend to create frustrating gameplay where players are engaged before they can meaningfully respond. For enjoyable SEAD/DEAD missions, consider starting with the middle layer as your longest-range threat.
+>
+> Cold War-era systems (SA-2, SA-3, SA-5, SA-6, SA-8) often provide more engaging gameplay than modern systems, even in contemporary settings. Their longer radar scan times, slower missile performance, and exploitable limitations give players more opportunities for tactical maneuvering and counterplay. Many real-world conflicts still feature these legacy systems, so their inclusion remains plausible.
+
+### Basic IADS Script
+
+The following script implements emission control for a layered IADS. Early warning radars stay on continuously to detect threats. Search radars pulse at medium intervals when the EWR detects hostiles in the general area. Track radars activate only when targets enter effective engagement range.
+
+**Group naming convention:** The script expects groups to be named with prefixes:
+- `EWR-` for early warning radars (e.g., `EWR-North`, `EWR-South`)
+- `SAM-Search-` for search radar groups (e.g., `SAM-Search-SA10`, `SAM-Search-Hawk`)
+- `SAM-Track-` for tracking/engagement groups (e.g., `SAM-Track-SA10`, `SAM-Track-SA11`)
+
+```lua
+-- IADS Configuration
+local IADS = {
+    -- Group name prefixes
+    ewrPrefix = "EWR-",
+    searchPrefix = "SAM-Search-",
+    trackPrefix = "SAM-Track-",
+    
+    -- Detection ranges (meters)
+    searchActivationRange = 80000,  -- 80 km - activate search radars
+    trackActivationRange = 40000,   -- 40 km - activate track radars
+    
+    -- Timing (seconds)
+    updateInterval = 10,            -- How often to check threats
+    searchPulseOn = 15,             -- Search radar on duration
+    searchPulseOff = 45,            -- Search radar off duration
+    
+    -- State tracking
+    ewrGroups = {},
+    searchGroups = {},
+    trackGroups = {},
+    searchRadarsOn = false,
+    trackRadarsOn = false,
+    lastSearchPulse = 0,
+}
+
+-- Initialize IADS groups
+function IADS:init()
+    -- Find all groups matching our prefixes
+    for _, coalitionId in pairs({coalition.side.RED, coalition.side.BLUE}) do
+        local groups = coalition.getGroups(coalitionId, Group.Category.GROUND)
+        for _, group in ipairs(groups or {}) do
+            if group:isExist() then
+                local name = group:getName()
+                if string.find(name, self.ewrPrefix) == 1 then
+                    table.insert(self.ewrGroups, group)
+                elseif string.find(name, self.searchPrefix) == 1 then
+                    table.insert(self.searchGroups, group)
+                elseif string.find(name, self.trackPrefix) == 1 then
+                    table.insert(self.trackGroups, group)
+                end
+            end
+        end
+    end
+    
+    env.info(string.format("IADS initialized: %d EWR, %d Search, %d Track groups",
+        #self.ewrGroups, #self.searchGroups, #self.trackGroups))
+    
+    -- EWRs always on
+    self:setGroupsEmission(self.ewrGroups, true)
+    
+    -- SAMs start cold
+    self:setGroupsEmission(self.searchGroups, false)
+    self:setGroupsEmission(self.trackGroups, false)
+    
+    -- Set all SAMs to RED alert state (ready to fire when radar on)
+    self:setGroupsAlarmState(self.searchGroups, AI.Option.Ground.val.ALARM_STATE.RED)
+    self:setGroupsAlarmState(self.trackGroups, AI.Option.Ground.val.ALARM_STATE.RED)
+end
+
+-- Enable/disable emissions for a list of groups
+function IADS:setGroupsEmission(groups, enable)
+    for _, group in ipairs(groups) do
+        if group:isExist() then
+            group:enableEmission(enable)
+        end
+    end
+end
+
+-- Set alarm state for a list of groups
+function IADS:setGroupsAlarmState(groups, state)
+    for _, group in ipairs(groups) do
+        if group:isExist() then
+            local controller = group:getController()
+            controller:setOption(AI.Option.Ground.id.ALARM_STATE, state)
+        end
+    end
+end
+
+-- Get closest hostile distance from EWR detections
+function IADS:getClosestHostileRange()
+    local closestRange = math.huge
+    
+    for _, ewrGroup in ipairs(self.ewrGroups) do
+        if ewrGroup:isExist() then
+            local controller = ewrGroup:getController()
+            local targets = controller:getDetectedTargets(Controller.Detection.RADAR)
+            
+            for _, target in ipairs(targets or {}) do
+                if target.object and target.object:isExist() then
+                    -- Check if target is hostile (different coalition)
+                    local targetCoalition = target.object:getCoalition()
+                    local ewrCoalition = ewrGroup:getCoalition()
+                    
+                    if targetCoalition ~= ewrCoalition and targetCoalition ~= coalition.side.NEUTRAL then
+                        -- Calculate distance from EWR to target
+                        local ewrPos = ewrGroup:getUnit(1):getPoint()
+                        local targetPos = target.object:getPoint()
+                        local dx = targetPos.x - ewrPos.x
+                        local dz = targetPos.z - ewrPos.z
+                        local range = math.sqrt(dx * dx + dz * dz)
+                        
+                        if range < closestRange then
+                            closestRange = range
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    return closestRange
+end
+
+-- Main IADS update loop
+function IADS:update(_, time)
+    local closestHostile = self:getClosestHostileRange()
+    
+    -- Track radar control - activate when hostiles in engagement range
+    if closestHostile <= self.trackActivationRange then
+        if not self.trackRadarsOn then
+            env.info("IADS: Track radars ACTIVE - hostile within " .. 
+                math.floor(closestHostile / 1000) .. " km")
+            self:setGroupsEmission(self.trackGroups, true)
+            self.trackRadarsOn = true
+        end
+    else
+        if self.trackRadarsOn then
+            env.info("IADS: Track radars OFF - no immediate threat")
+            self:setGroupsEmission(self.trackGroups, false)
+            self.trackRadarsOn = false
+        end
+    end
+    
+    -- Search radar control - pulse when hostiles detected at medium range
+    if closestHostile <= self.searchActivationRange then
+        -- Hostiles in area - use pulsing pattern
+        local timeSinceLastPulse = time - self.lastSearchPulse
+        
+        if self.searchRadarsOn then
+            -- Currently on, check if time to turn off
+            if timeSinceLastPulse >= self.searchPulseOn then
+                env.info("IADS: Search radars pulsing OFF")
+                self:setGroupsEmission(self.searchGroups, false)
+                self.searchRadarsOn = false
+                self.lastSearchPulse = time
+            end
+        else
+            -- Currently off, check if time to turn on
+            if timeSinceLastPulse >= self.searchPulseOff then
+                env.info("IADS: Search radars pulsing ON - hostile at " .. 
+                    math.floor(closestHostile / 1000) .. " km")
+                self:setGroupsEmission(self.searchGroups, true)
+                self.searchRadarsOn = true
+                self.lastSearchPulse = time
+            end
+        end
+    else
+        -- No hostiles detected - ensure search radars are off
+        if self.searchRadarsOn then
+            env.info("IADS: Search radars OFF - area clear")
+            self:setGroupsEmission(self.searchGroups, false)
+            self.searchRadarsOn = false
+        end
+    end
+    
+    -- Reschedule next update
+    return time + self.updateInterval
+end
+
+-- Start the IADS
+IADS:init()
+timer.scheduleFunction(function(_, time) return IADS:update(_, time) end, nil, timer.getTime() + 5)
+```
+
+**How it works:**
+
+1. **EWR groups** (prefixed `EWR-`) remain active throughout the mission, providing continuous surveillance.
+
+2. **Search radar groups** (prefixed `SAM-Search-`) pulse on/off when EWRs detect hostiles within 80 km. The default pattern is 15 seconds on, 45 seconds off. This reduces exposure to SEAD aircraft while maintaining situational awareness.
+
+3. **Track radar groups** (prefixed `SAM-Track-`) activate when hostiles enter 40 km, providing fire control for engagements.
+
+**Example group setup:**
+
+| Group Name | Units | Role |
+|------------|-------|------|
+| `EWR-North` | 1L13 EWR | Always-on early warning |
+| `EWR-South` | 55G6 EWR | Always-on early warning |
+| `SAM-Search-SA10` | Big Bird (64N6E) | Pulsing search radar |
+| `SAM-Track-SA10` | Clam Shell, Flap Lid, TELs | Engagement group |
+| `SAM-Search-Hawk` | AN/MPQ-50 | Pulsing search radar |
+| `SAM-Track-Hawk` | AN/MPQ-46, Launchers | Engagement group |
+
+**Customization options:**
+
+- Adjust `searchActivationRange` and `trackActivationRange` for different threat levels
+- Modify `searchPulseOn` and `searchPulseOff` to change radar exposure time
+- Add ARM evasion by enabling `EVASION_OF_ARM` option on track groups:
+
+```lua
+controller:setOption(AI.Option.Ground.id.EVASION_OF_ARM, true)
+```
+
 ---
 
 ## Skill Levels
