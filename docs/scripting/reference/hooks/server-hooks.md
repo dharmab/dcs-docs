@@ -1742,3 +1742,9 @@ log.set_output('hooks-debug', '', log.ALL, log.FULL)
 ```
 
 Use `print()` for quick debugging; output appears in `dcs.log`.
+
+## See Also
+
+- [Simulator Scripting Engine](../../simulator-scripting-engine.md) - Mission scripting (different API from server hooks)
+- [Events](../events/events.md) - Mission scripting events (not available in hooks)
+- [Coalition](../enums/coalition.md) - Coalition enumeration values

@@ -2,6 +2,19 @@
 
 The Simulator Scripting Engine (SSE) provides mission designers with programmatic access to the DCS World simulation. Through Lua scripting, mission builders can monitor and control nearly every aspect of a running mission, from spawning units dynamically to tracking combat statistics to creating sophisticated campaign logic that would be impossible with the Mission Editor's trigger system alone.
 
+## Contents
+
+- [Overview](#overview)
+- [Scripting Environments](#scripting-environments)
+- [Lua Basics](#lua-basics)
+- [Data Types](#data-types)
+- [Scripting Concepts](#scripting-concepts)
+- [Adding Scripts to Missions](#adding-scripts-to-missions)
+- [Script Execution Order](#script-execution-order)
+- [MIZ File Storage](#miz-file-storage)
+- [Debugging](#debugging)
+- [API Reference](#api-reference)
+
 ## Overview
 
 The SSE exposes the games's internal data and state through Lua, a lightweight programming language designed for embedding in applications. Scripts can read information about the game world and modify it. Scripts can do things like dynamically spawn units based on player actions or game state, execute conditions and event handlers more complex than can be done through Triggers alone, and add custom menus and submenus to the F10 radio menu.

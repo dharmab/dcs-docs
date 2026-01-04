@@ -1,0 +1,225 @@
+{
+  "version": "1.0",
+  "description": "DCS World mission design and scripting documentation",
+  "files": [
+    {
+      "path": "mission-editor.md",
+      "type": "tutorial",
+      "audience": "beginner",
+      "description": "Mission Editor GUI guide for creating scenarios"
+    },
+    {
+      "path": "scripting/lua-basics.md",
+      "type": "tutorial",
+      "audience": "beginner",
+      "description": "Lua programming fundamentals for DCS scripting"
+    },
+    {
+      "path": "scripting/simulator-scripting-engine.md",
+      "type": "tutorial",
+      "audience": "beginner",
+      "description": "Simulator Scripting Engine API overview"
+    },
+    {
+      "path": "mission/miz-file-format.md",
+      "type": "reference",
+      "audience": "developer",
+      "description": "MIZ archive file format specification"
+    },
+    {
+      "path": "mission/mission-file-schema.md",
+      "type": "reference",
+      "audience": "developer",
+      "description": "Mission Lua table schema reference"
+    },
+    {
+      "path": "scripting/reference/singletons/env.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "env singleton - logging and environment"
+    },
+    {
+      "path": "scripting/reference/singletons/timer.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "timer singleton - time and scheduling"
+    },
+    {
+      "path": "scripting/reference/singletons/world.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "world singleton - events and object search"
+    },
+    {
+      "path": "scripting/reference/singletons/coalition.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "coalition singleton - coalition operations"
+    },
+    {
+      "path": "scripting/reference/singletons/trigger.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "trigger singleton - zones and actions"
+    },
+    {
+      "path": "scripting/reference/singletons/coord.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "coord singleton - coordinate conversions"
+    },
+    {
+      "path": "scripting/reference/singletons/land.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "land singleton - terrain queries"
+    },
+    {
+      "path": "scripting/reference/singletons/atmosphere.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "atmosphere singleton - weather"
+    },
+    {
+      "path": "scripting/reference/singletons/mission-commands.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "missionCommands singleton - F10 radio menu"
+    },
+    {
+      "path": "scripting/reference/classes/unit.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Unit class - aircraft, vehicles, ships"
+    },
+    {
+      "path": "scripting/reference/classes/group.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Group class - unit collections"
+    },
+    {
+      "path": "scripting/reference/classes/object.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Object class - base type for game objects"
+    },
+    {
+      "path": "scripting/reference/classes/coalition-object.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "CoalitionObject class - objects with side"
+    },
+    {
+      "path": "scripting/reference/classes/static-object.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "StaticObject class - scenery objects"
+    },
+    {
+      "path": "scripting/reference/classes/airbase.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Airbase class - airports, FARPs, carriers"
+    },
+    {
+      "path": "scripting/reference/classes/weapon.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Weapon class - projectiles and munitions"
+    },
+    {
+      "path": "scripting/reference/classes/controller.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Controller class - AI behavior control"
+    },
+    {
+      "path": "scripting/reference/classes/spot.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Spot class - laser/IR designators"
+    },
+    {
+      "path": "scripting/reference/events/events.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Event system and event types"
+    },
+    {
+      "path": "scripting/reference/ai/tasks.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "AI task definitions"
+    },
+    {
+      "path": "scripting/reference/ai/commands.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "AI command definitions"
+    },
+    {
+      "path": "scripting/reference/ai/options.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "AI behavior options"
+    },
+    {
+      "path": "scripting/reference/enums/coalition.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Coalition enumeration values"
+    },
+    {
+      "path": "scripting/reference/enums/ai.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "AI-related enumerations"
+    },
+    {
+      "path": "scripting/reference/types/coordinates.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Vec2, Vec3, Position3 type definitions"
+    },
+    {
+      "path": "scripting/reference/hooks/server-hooks.md",
+      "type": "api-reference",
+      "audience": "developer",
+      "description": "Server-side scripting hooks"
+    },
+    {
+      "path": "units/ground.md",
+      "type": "data-reference",
+      "audience": "developer",
+      "description": "Ground unit specifications"
+    },
+    {
+      "path": "units/sea.md",
+      "type": "data-reference",
+      "audience": "developer",
+      "description": "Naval unit specifications"
+    },
+    {
+      "path": "units/planes.md",
+      "type": "data-reference",
+      "audience": "developer",
+      "description": "Fixed-wing aircraft specifications"
+    },
+    {
+      "path": "units/weapons.md",
+      "type": "data-reference",
+      "audience": "developer",
+      "description": "Weapon system specifications"
+    }
+  ],
+  "learning_path": [
+    "mission-editor.md",
+    "scripting/lua-basics.md",
+    "scripting/simulator-scripting-engine.md"
+  ],
+  "source_priority": [
+    "data/",
+    "pdf/"
+  ]
+}
