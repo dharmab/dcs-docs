@@ -36,6 +36,7 @@ The `docs/` directory contains the following documentation:
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
+  - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
 
 ## Terminology
 
