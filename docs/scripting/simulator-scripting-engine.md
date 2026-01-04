@@ -6,19 +6,31 @@ The Simulator Scripting Engine (SSE) provides mission designers with programmati
 
 The SSE exposes the games's internal data and state through Lua, a lightweight programming language designed for embedding in applications. Scripts can read information about the game world and modify it. Scripts can do things like dynamically spawn units based on player actions or game state, execute conditions and event handlers more complex than can be done through Triggers alone, and add custom menus and submenus to the F10 radio menu.
 
+## Scripting Environments
+
+DCS World provides two distinct Lua scripting environments that serve different purposes and have different capabilities.
+
+**Mission scripting** runs inside the simulation as part of a `.miz` mission file. Mission scripts can control units, respond to events, spawn groups, display messages, and manipulate the game world. This document focuses primarily on mission scripting. Mission scripts run in a sandboxed environment with restricted access to the filesystem and operating system for security reasons, since missions downloaded from multiplayer servers execute automatically.
+
+**Server hooks** run outside the simulation in a separate Lua state that persists across mission changes. Server hooks can manage player connections, moderate chat, control mission rotation, and access server administration functions. Unlike mission scripts, server hooks have full access to filesystem and operating system functions. See [Server Hooks](reference/hooks/server-hooks.md) for documentation on server-side scripting.
+
+These two environments cannot directly share variables or call each other's functions. They use different APIs and have different security models. When reading this documentation, be aware of which environment a feature applies to.
+
 ## Lua Basics
 
 For an introduction to the Lua programming language, including variables, tables, control structures, loops, functions, and other fundamentals, see [Lua Basics for DCS Scripting](lua-basics.md).
 
 ### Standard Library Availability
 
-The SSE provides access to the Lua standard library, including common modules like `math`, `string`, and `table`. However, the `io`, `lfs` (LuaFileSystem), and `os` libraries are disabled by default. This restriction exists because missions downloaded from multiplayer servers execute automatically, and filesystem or operating system access would allow malicious missions to read, write, or delete files on your computer or execute arbitrary commands.
+Mission scripts have access to the Lua standard library, including common modules like `math`, `string`, and `table`. However, the `io`, `lfs` (LuaFileSystem), and `os` libraries are disabled by default in mission scripting. This restriction exists because missions downloaded from multiplayer servers execute automatically, and filesystem or operating system access would allow malicious missions to read, write, or delete files on your computer or execute arbitrary commands.
 
-Users who want to enable `io`, `lfs`, and `os` for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions. Commenting out or deleting the sanitization lines restores access to these libraries. This process is commonly called "desanitizing" the scripting environment.
+Server hooks operate in a different environment with full access to `io`, `lfs`, `os`, and `debug`. See [Server Hooks](reference/hooks/server-hooks.md) for details on server-side scripting capabilities.
+
+Users who want to enable `io`, `lfs`, and `os` in mission scripts for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions. Commenting out or deleting the sanitization lines restores access to these libraries. This process is commonly called "desanitizing" the scripting environment.
 
 Desanitization carries significant security risks. Any mission you load, including missions from multiplayer servers, will gain the ability to access your filesystem. A malicious mission could read sensitive files, install malware, or delete data. Only desanitize if you understand these risks and only play missions from trusted sources.
 
-Additionally, DCS updates typically overwrite `Scripts/MissionScripting.lua`, which resets any desanitization changes. After each DCS update, you must re-apply your modifications if you want to continue using `io`, `lfs`, and `os`.
+Additionally, DCS updates typically overwrite `Scripts/MissionScripting.lua`, which resets any desanitization changes. After each DCS update, you must re-apply your modifications if you want to continue using `io`, `lfs`, and `os` in mission scripts.
 
 ## Data Types
 
