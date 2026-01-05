@@ -2,6 +2,8 @@
 
 Federal Republic of Erusea during the Early Continental War.
 
+Inspired by Western European nations, particularly France, Germany, and Italy, with a mix of European and Soviet equipment.
+
 ## Aircraft
 
 - Tu-95MS

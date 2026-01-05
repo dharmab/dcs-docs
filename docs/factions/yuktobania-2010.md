@@ -2,6 +2,8 @@
 
 Union of Yuktobanian Republics during the Circum-Pacific War.
 
+Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
+
 ## Aircraft
 
 <!-- TODO: Add aircraft list -->

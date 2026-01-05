@@ -2,6 +2,8 @@
 
 Free Erusea insurgent forces during the Late Continental War.
 
+Inspired by Western European nations, particularly France, Germany, and Italy, with a mix of European and Soviet equipment.
+
 ## Aircraft
 
 - F-14A

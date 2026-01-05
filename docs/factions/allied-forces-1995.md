@@ -2,6 +2,8 @@
 
 Allied Forces coalition during the Belkan War.
 
+A multinational coalition inspired by NATO, primarily using American equipment.
+
 ## Aircraft
 
 <!-- TODO: Add aircraft list -->
