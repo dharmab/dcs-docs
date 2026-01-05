@@ -23,6 +23,8 @@ Start with these documents in order:
 2. [Lua Basics](docs/scripting/lua-basics.md) - Essential programming concepts for scripting
 3. [Simulator Scripting Engine](docs/scripting/simulator-scripting-engine.md) - Programmatic mission control
 
+The [recipes](docs/recipes/) directory contains step-by-step guides for common mission setup tasks like configuring AWACS, tankers, carrier groups, and SAM sites.
+
 ### For AI Agents
 
 The documentation index at [docs/index.json](docs/index.json) provides a structured manifest of all files with metadata including type, audience, and description.
@@ -51,9 +53,29 @@ docs/
 │       ├── enums/            # Enumerations
 │       ├── types/            # Type definitions
 │       └── hooks/            # Server-side scripting
-└── units/                    # Unit specifications
-    ├── ground.md             # Ground vehicles and air defense
-    ├── sea.md                # Naval units
-    ├── planes.md             # Fixed-wing aircraft
-    └── weapons.md            # Weapons systems
+├── units/                    # Unit specifications
+│   ├── ground.md             # Ground vehicles and air defense
+│   ├── helicopters.md        # Rotary-wing aircraft
+│   ├── sea.md                # Naval units
+│   ├── planes.md             # Fixed-wing aircraft
+│   ├── ww2-planes.md         # WWII-era aircraft
+│   └── weapons.md            # Weapons systems
+├── recipes/                  # Step-by-step mission setup guides
+│   ├── air-intercept-script.md
+│   ├── artillery-battery.md
+│   ├── awacs-setup.md
+│   ├── csg-setup.md
+│   ├── ground-firefight.md
+│   ├── player-slots.md
+│   ├── sam-site-setup.md
+│   └── tanker-setup.md
+└── factions/                 # Fictional faction unit lists (Strangereal)
+    ├── allied-forces-1995.md
+    ├── belka-1995.md
+    ├── erusea-2004.md
+    ├── erusea-2005.md
+    ├── isaf-2004.md
+    ├── isaf-2005.md
+    ├── osea-2010.md
+    └── yuktobania-2010.md
 ```
