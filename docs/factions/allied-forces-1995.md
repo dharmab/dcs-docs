@@ -6,12 +6,24 @@ A multinational coalition inspired by NATO, primarily using American equipment.
 
 ## Aircraft
 
-<!-- TODO: Add aircraft list -->
+### Fighters
+
+- F-15C
+- F-16C_50
+- Mirage 2000-5
 
 ## Helicopters
 
-<!-- TODO: Add helicopter list -->
+- CH-47D
+- UH-1H
+- SA342M
 
 ## Ground Units
 
-<!-- TODO: Add ground unit list -->
+- M-1 Abrams
+- M-60
+- leopard-2A4
+- M-2 Bradley
+- LAV-25
+- Hummer
+- Gepard
