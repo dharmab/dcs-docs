@@ -4,12 +4,30 @@ Federal Republic of Erusea during the Early Continental War.
 
 ## Aircraft
 
-<!-- TODO: Add aircraft list -->
+- Tu-95MS
+- F-5E
+- F-5E-3
+- MiG-21Bis
+- A-10A
+- Mirage 2000-5
+- MiG-29A
+- MiG-29S
+- F-16A (uncommon ace aircraft)
 
 ## Helicopters
 
-<!-- TODO: Add helicopter list -->
+- CH-47D
+- Mi-24P
+- Mi-24V
+- Ka-50
 
 ## Ground Units
 
-<!-- TODO: Add ground unit list -->
+- Leclerc
+- Marder
+- Ural-375
+- BRDM-2
+- Ural-375 ZU-23
+- Gepard
+- Roland ADS
+- SAU Akatsia
