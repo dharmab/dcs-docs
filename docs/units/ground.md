@@ -283,11 +283,24 @@ These vehicles automatically refuel nearby ground units when positioned close to
 
 ### Ammunition Carriers
 
-These vehicles automatically reload nearby units when positioned close to them:
+Ammunition resupply is provided by cargo trucks with the `warehouse` attribute. When positioned near units, these vehicles automatically reload nearby units. Most cargo trucks have this capability, including:
 
-| Name | Type ID | Description |
-|------|---------|-------------|
-| Ammo M30 Cargo Carrier | `M30_CC` | WWII-era American ammunition carrier based on the M3 halftrack chassis |
+| Name | Type ID | Origin |
+|------|---------|--------|
+| Truck Ural-4320 | `Ural-375` | Soviet/Russian |
+| Truck M939 Heavy | `M 818` | USA |
+| Truck KAMAZ 43101 | `KAMAZ Truck` | Soviet/Russian |
+| Truck GAZ-66 | `GAZ-66` | Soviet/Russian |
+| Truck GAZ-3308 | `GAZ-3308` | Russia |
+| Truck KrAZ-6322 6x6 | `KrAZ6322` | Ukraine |
+| Truck M1083 MTV | `CHAP_M1083` | USA |
+| Truck ZIL-135 | `ZIL-135` | Soviet/Russian |
+| Truck Ural-4320-31 Arm'd | `Ural-4320-31` | Russia |
+| Truck Ural-4320T | `Ural-4320T` | Russia |
+| Truck Bedford | `Bedford_MWD` | UK |
+| Truck Opel Blitz | `Blitz_36-6700A` | Germany |
+| Truck GMC CCKW-353 | `CCKW_353` | USA |
+| Truck Type 94 | `Type_94_Truck` | Japan |
 
 ## Air Defence
 
