@@ -12,4 +12,9 @@ Union of Yuktobanian Republics during the Circum-Pacific War.
 
 ## Ground Units
 
-<!-- TODO: Add ground unit list -->
+- T-80B
+- BMP-2
+- Ural-375
+- BRDM-2
+- ZSU-23-4 Shilka
+- Strela-10M3
