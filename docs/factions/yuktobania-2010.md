@@ -6,11 +6,30 @@ Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
 
 ## Aircraft
 
-<!-- TODO: Add aircraft list -->
+- MiG-21Bis
+- MiG-29A
+- MiG-31
+- Su-27
+- Su-34
+- F-4E
+- F-5E
+- F-14A
+- F-14B
+- F-15C
+- F-15E
+- F-16C bl.50
+- F/A-18C
+- A-6E
+- A-10A
+- Tornado GR4
+- Tornado IDS
+- B-1B
+- B-52H
 
 ## Helicopters
 
-<!-- TODO: Add helicopter list -->
+- AH-64D BLK.II
+- CH-47F
 
 ## Ground Units
 
