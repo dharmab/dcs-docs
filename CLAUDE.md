@@ -40,6 +40,15 @@ The `docs/` directory contains the following documentation:
   - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
+- `factions/` - Faction unit lists for mission generation (Strangereal setting):
+  - `isaf-2004.md` - ISAF during the Early Continental War
+  - `erusea-2004.md` - Erusea during the Early Continental War
+  - `isaf-2005.md` - ISAF during the Late Continental War
+  - `erusea-2005.md` - Free Erusea during the Late Continental War
+  - `osea-2010.md` - Osea during the Circum-Pacific War
+  - `yuktobania-2010.md` - Yuktobania during the Circum-Pacific War
+  - `belka-1995.md` - Belka during the Belkan War
+  - `allied-forces-1995.md` - Allied Forces during the Belkan War
 
 ## Terminology
 
