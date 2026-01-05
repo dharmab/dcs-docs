@@ -19,7 +19,7 @@ Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
 - F-15E
 - F-16C bl.50
 - F/A-18C
-- A-6E
+- A6E
 - A-10A
 - Tornado GR4
 - Tornado IDS
@@ -28,8 +28,8 @@ Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
 
 ## Helicopters
 
-- AH-64D BLK.II
-- CH-47F
+- AH-64D_BLK_II
+- CH-47Fbl1
 
 ## Ground Units
 

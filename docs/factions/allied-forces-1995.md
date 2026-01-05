@@ -6,8 +6,6 @@ A multinational coalition inspired by NATO, primarily using American equipment.
 
 ## Aircraft
 
-### Fighters
-
 - F-15C
 - F-16C_50
 - Mirage 2000-5

@@ -14,7 +14,7 @@ Inspired by Western European nations, particularly France, Germany, and Italy, w
 - Tornado IDS
 - F-15C
 - F-15E
-- AV-8B N/A
+- AV8BNA
 - MiG-29A
 - MiG-29S
 - Su-27 (uncommon ace aircraft)
