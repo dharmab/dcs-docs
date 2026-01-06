@@ -463,7 +463,7 @@ The `initiator` field contains the Unit object representing the aircraft that la
 
 ### S_EVENT_BIRTH
 
-The `S_EVENT_BIRTH` event fires when any unit spawns into the mission.
+The `S_EVENT_BIRTH` event fires when any unit spawns into the mission. This is the preferred event for tracking player respawns and slot-ins for aircraft and helicopters, as `S_EVENT_PLAYER_ENTER_UNIT` only fires for Combined Arms ground vehicles.
 
 **Event Table:**
 ```lua
@@ -477,7 +477,7 @@ The `S_EVENT_BIRTH` event fires when any unit spawns into the mission.
 The `initiator` field contains the Unit object that was spawned.
 
 ```lua
--- Set up player menus when they spawn
+-- Set up player menus when they spawn or respawn
 function handler:onEvent(event)
     if event.id == world.event.S_EVENT_BIRTH then
         local unit = event.initiator
@@ -490,7 +490,9 @@ end
 
 ### S_EVENT_PLAYER_ENTER_UNIT
 
-The `S_EVENT_PLAYER_ENTER_UNIT` event fires when a player takes control of a unit. This event correctly fires for Combined Arms units.
+The `S_EVENT_PLAYER_ENTER_UNIT` event fires when a player takes control of a Combined Arms ground vehicle. This event **only** fires for Combined Arms units and does **not** fire when players enter aircraft or helicopters.
+
+To track players entering aircraft or helicopters (respawns, slot-ins), use `S_EVENT_BIRTH` instead.
 
 **Event Table:**
 ```lua
@@ -504,11 +506,12 @@ The `S_EVENT_PLAYER_ENTER_UNIT` event fires when a player takes control of a uni
 The `initiator` field contains the Unit object that the player is now controlling.
 
 ```lua
+-- Track Combined Arms vehicle control
 function handler:onEvent(event)
     if event.id == world.event.S_EVENT_PLAYER_ENTER_UNIT then
         local unit = event.initiator
         local playerName = unit:getPlayerName()
-        env.info(playerName .. " entered " .. unit:getName())
+        env.info(playerName .. " took control of Combined Arms unit " .. unit:getName())
     end
 end
 ```
