@@ -43,6 +43,7 @@ The `docs/` directory contains the following documentation:
   - `convoy-route.md` - Creating ground vehicle convoys with road-following waypoints, looping routes, and escort compositions
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
+  - `weather-time.md` - Configuring weather (clouds, fog, dust, visibility), date, and time settings using static weather with cloud presets
 - `wisdom.md` - General mission design tips and best practices covering performance, player experience, AI behavior, and common pitfalls
 - `factions/` - Faction unit lists for mission generation (Strangereal setting):
   - `isaf-2004.md` - ISAF during the Early Continental War

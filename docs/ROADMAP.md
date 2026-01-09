@@ -59,7 +59,7 @@ Create new recipes covering both Lua file editing and SSE scripting approaches w
 - [x] `docs/recipes/air-to-air-setup.md` - AI fighter configuration including CAP, sweep, intercept, and escort
 - [x] `docs/recipes/jtac-setup.md` - Forward air controller placement and laser codes
 - [x] `docs/recipes/convoy-route.md` - Ground unit routes and waypoints
-- [ ] `docs/recipes/weather-time.md` - Season, cloud layers, visibility settings
+- [x] `docs/recipes/weather-time.md` - Season, cloud layers, visibility settings
 - [ ] `docs/recipes/trigger-patterns.md` - Common trigger patterns (zone entry, unit destruction, time-based)
 
 ## Phase 5: Route and Waypoint Patterns
