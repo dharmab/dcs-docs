@@ -20,11 +20,13 @@ Lines 749-788 compute road connectivity in a synchronous loop. For maps with man
 
 **Resolution:** Extracted the connectivity computation into a separate `connectivityChunkProcessor` function that tracks state (`connectivityIIndex`, `connectivityJIndex`, `connectivitySegments`, `connectivitySegmentCount`) across scheduled chunks. The processor yields after hitting the sample or time limit, then resumes from where it left off.
 
-### [ ] Unused variable
+### [x] Unused variable (2026-01-09)
 
 Line 249: `prevHeight` is assigned but never used in `detectBoundsFromOrigin()`.
 
 **Fix:** Remove the unused variable.
+
+**Resolution:** Removed the `prevHeight` declaration and its assignment inside the loop.
 
 ### [ ] Verbose control flow pattern
 

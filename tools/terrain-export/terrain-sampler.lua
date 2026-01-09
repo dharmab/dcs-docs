@@ -245,7 +245,6 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
     for _, dir in ipairs(directions) do
         local lastValid = 0
         local flatCount = 0
-        local prevHeight = nil
         local reason = "maxDistance"
         for step = 1, math.floor(maxDistance / stepSize) do
             local x = origin.x + dir.dx * step * stepSize
@@ -260,7 +259,6 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
             else
                 flatCount = 0
                 lastValid = step
-                prevHeight = h
             end
         end
         local dist = lastValid * stepSize
