@@ -33,3 +33,11 @@ Inspired by Western European nations, particularly France, Germany, and Italy, w
 - Gepard
 - Roland ADS
 - SAU Akatsia
+
+## Naval Units
+
+- Stennis
+- TICONDEROG
+- USS_Arleigh_Burke_IIa
+- PERRY
+- KILO

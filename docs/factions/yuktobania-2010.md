@@ -39,3 +39,16 @@ Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
 - BRDM-2
 - ZSU-23-4 Shilka
 - Strela-10M3
+
+## Naval Units
+
+- KUZNECOW
+- CV_1143_5
+- PIOTR
+- MOSCOW
+- NEUSTRASH
+- REZKY
+- MOLNIYA
+- ALBATROS
+- KILO
+- IMPROVED_KILO

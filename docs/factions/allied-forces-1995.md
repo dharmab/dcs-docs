@@ -25,3 +25,10 @@ A multinational coalition inspired by NATO, primarily using American equipment.
 - LAV-25
 - Hummer
 - Gepard
+
+## Naval Units
+
+- Stennis
+- TICONDEROG
+- USS_Arleigh_Burke_IIa
+- PERRY

@@ -33,3 +33,9 @@ Inspired by Germany, with advanced military technology and a mix of Western and 
 - ZSU-23-4 Shilka
 - Roland ADS
 - MLRS
+
+## Naval Units
+
+- Stennis
+- TICONDEROG
+- PERRY

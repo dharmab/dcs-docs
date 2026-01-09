@@ -41,14 +41,14 @@ Expand faction files to include naval units for carrier operations and naval sce
 
 ### Files to Modify
 
-- [ ] `docs/factions/isaf-2004.md` - Add Naval Units section
-- [ ] `docs/factions/erusea-2004.md` - Add Naval Units section
-- [ ] `docs/factions/isaf-2005.md` - Add Naval Units section
-- [ ] `docs/factions/erusea-2005.md` - Add Naval Units section
-- [ ] `docs/factions/osea-2010.md` - Add Naval Units section
-- [ ] `docs/factions/yuktobania-2010.md` - Add Naval Units section
-- [ ] `docs/factions/belka-1995.md` - Add Naval Units section
-- [ ] `docs/factions/allied-forces-1995.md` - Add Naval Units section
+- [x] `docs/factions/isaf-2004.md` - Add Naval Units section
+- [x] `docs/factions/erusea-2004.md` - Add Naval Units section
+- [x] `docs/factions/isaf-2005.md` - Add Naval Units section
+- [x] `docs/factions/erusea-2005.md` - Add Naval Units section
+- [x] `docs/factions/osea-2010.md` - Add Naval Units section
+- [x] `docs/factions/yuktobania-2010.md` - Add Naval Units section
+- [x] `docs/factions/belka-1995.md` - Add Naval Units section
+- [x] `docs/factions/allied-forces-1995.md` - Add Naval Units section
 
 ## Phase 4: Additional Recipes
 
