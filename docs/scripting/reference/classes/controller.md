@@ -21,7 +21,7 @@ Controller.Detection = {
 nil controller:setTask(table task)
 ```
 
-The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, add a delay before setting tasks to avoid crashes.
+The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, delay task assignment by at least 2 seconds using `timer.scheduleFunction()` before calling `setTask`. This is separate from confirming the group exists—even after a group is accessible, its controller may not be ready for immediate task assignment. Calling `setTask` immediately after spawning can fail silently.
 
 **Parameters:**
 - `task` (table): The task definition table.

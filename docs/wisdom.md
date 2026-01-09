@@ -70,6 +70,10 @@ Certain parking slots on specific maps are broken and cause aircraft to fail to 
 
 **Vehicle Movement Heading Bug:** DCS does not reliably command vehicles to move when their target waypoint heading exactly matches their current heading. If a vehicle is facing north and you assign a waypoint requiring it to face north, it may not move. The workaround is to offset waypoint headings by a small amount—typically negative one degree—to ensure the vehicle recognizes that movement is required.
 
+### Coordinate System Quirks
+
+**Unit Offset X/Y Reversal:** When calculating unit positions as offsets from a group center using heading-based rotation, the X and Y coordinates appear to be reversed relative to expected mathematical conventions. Transformation code must apply backward rotation (using `PI - heading` rather than `heading`) to place units correctly. This affects mission generators and scripts that programmatically position units in formations.
+
 ### Scripting Engine Hazards
 
 **Destroyed Unit References Crash Scripts:** Accessing properties of destroyed units can crash the scripting engine. Always validate that a unit exists and is alive before calling methods on it. Use `unit:isExist()` checks and guard against nil returns from functions like `Unit.getByName()`.
@@ -97,6 +101,8 @@ Several DCS features can cause the game to crash under specific circumstances. T
 **Quad Zones Have Limited Support:** Circular trigger zones work reliably for most operations, including scenery removal. Quad (rectangular) zones may load without errors but misbehave in certain contexts. Prefer circular zones when reliability is critical.
 
 **NavMesh Range Cap:** The pathfinding system (NavMesh) has difficulty with threat ranges exceeding 400 kilometers. Scripts that calculate threat areas or pathfinding avoidance zones should cap maximum threat range values at 400 km to avoid calculation failures or performance issues.
+
+**Drawing Polygon Point Restrictions:** The DCS drawing API restricts zone polygons to exactly 1, 4, 8, or 16 points. Polygons with other point counts will fail or fall back to single-point rendering. Scripts generating dynamic zone visualizations must validate point counts before creating polygon drawings.
 
 ### Multiplayer-Specific Issues
 

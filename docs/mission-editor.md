@@ -57,6 +57,8 @@ Always use Custom coalitions when creating new missions. Coalition assignments c
 
 When selecting countries for your coalitions, use only "Combined Joint Task Force Blue" for the blue coalition and "Combined Joint Task Force Red" for the red coalition. These fictional countries have unrestricted access to all equipment and liveries in the game. Real-world countries in DCS carry legacy restrictions that limit which aircraft, weapons, and paint schemes are available based on historical accuracy considerations. These restrictions create unnecessary complications when building missions and offer no gameplay benefit. Using the CJTF countries eliminates these issues entirely and gives mission designers full access to all game content.
 
+GPS navigation has two restrictions. First, GPS only functions in missions set after March 28, 1994, when the real-world GPS constellation became fully operational. Second, DCS limits GPS functionality to coalitions that include the United States. If players need GPS capability in their aircraft, ensure your mission date is after March 1994 and that your coalition includes the USA or uses CJTF countries.
+
 ## Unit Placement
 
 ### Aircraft and Helicopters
