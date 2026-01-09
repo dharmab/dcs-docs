@@ -12,11 +12,13 @@ Improvements to be addressed over multiple sessions.
 
 **Resolution:** Modified `sampleGrid()` to cache detected bounds in `self.state.detectedBounds`. Updated `sampleRoads()` to use cached bounds first, falling back to dynamic detection or predefined bounds if unavailable.
 
-### [ ] Blocking road connectivity phase
+### [x] Blocking road connectivity phase (2026-01-09)
 
 Lines 749-788 compute road connectivity in a synchronous loop. For maps with many road points, this could cause DCS to freeze or timeout.
 
 **Fix:** Convert to chunked processing like the sampling phases, using `timer.scheduleFunction` to yield between batches.
+
+**Resolution:** Extracted the connectivity computation into a separate `connectivityChunkProcessor` function that tracks state (`connectivityIIndex`, `connectivityJIndex`, `connectivitySegments`, `connectivitySegmentCount`) across scheduled chunks. The processor yields after hitting the sample or time limit, then resumes from where it left off.
 
 ### [ ] Unused variable
 

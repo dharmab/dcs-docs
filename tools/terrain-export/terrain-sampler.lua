@@ -5,7 +5,7 @@
 -- =============================================================================
 
 TerrainSampler = {}
-TerrainSampler.VERSION = "1.1.1-debug"
+TerrainSampler.VERSION = "1.2.0-debug"
 
 
 -- =============================================================================
@@ -742,7 +742,7 @@ function TerrainSampler:sampleRoads(callback)
             xIndex = xIndex + 1
         end
 
-        -- Done
+        -- Done with road point sampling
         self.state.roadXIndex = xIndex
         self.state.roadZIndex = zIndex
         self.state.roadPointCount = gridPointsChecked
@@ -750,7 +750,7 @@ function TerrainSampler:sampleRoads(callback)
         self.state.roadPoints = roadPoints
         self.state.roadSamplingDone = true
 
-        -- Connectivity phase (blocking, but much less data)
+        -- Start connectivity phase (chunked)
         self:log("Found " .. tostring(#roadPoints) .. " road sample points")
         self:showMessage("Found " .. tostring(#roadPoints) .. " road points. Building connectivity...", 10)
 
@@ -763,52 +763,100 @@ function TerrainSampler:sampleRoads(callback)
             return
         end
 
-        local segmentCount = 0
-        local segmentChecks = 0
-        local maxSegments = self.config.maxRoadSegments or 10000
+        -- Initialize connectivity phase state
+        self.state.connectivityIIndex = 1
+        self.state.connectivityJIndex = 2
+        self.state.connectivitySegments = {}
+        self.state.connectivitySegmentCount = 0
+        self.state.connectivityMaxSegments = self.config.maxRoadSegments or 10000
 
-        for i = 1, #roadPoints do
-            local p1 = roadPoints[i]
-            for j = i + 1, math.min(i + 8, #roadPoints) do
-                local p2 = roadPoints[j]
-                local directDist = math.sqrt((p1.x - p2.x) ^ 2 + (p1.z - p2.z) ^ 2)
-                if directDist < self.config.maxRoadSearchDistance then
-                    segmentChecks = segmentChecks + 1
-                    local path = nil
-                    local okPath, errPath = pcall(function()
-                        path = land.findPathOnRoads("roads", p1.x, p1.z, p2.x, p2.z)
-                    end)
-                    if okPath and path and #path > 0 then
-                        table.insert(roadSegments, {
-                            from = { x = p1.x, z = p1.z },
-                            to = { x = p2.x, z = p2.z },
-                            pathLength = #path,
-                            directDistance = directDist,
-                        })
-                        segmentCount = segmentCount + 1
-                    elseif not okPath then
-                        self:logWarning("land.findPathOnRoads failed for segment from (" ..
-                            tostring(p1.x) ..
-                            "," ..
-                            tostring(p1.z) ..
-                            ") to (" .. tostring(p2.x) .. "," .. tostring(p2.z) .. ") | Error: " .. tostring(errPath))
+        local function connectivityChunkProcessor()
+            local startTime = os.clock()
+            local maxChecks = self.config.maxSamplesPerChunk or 250
+            local maxTime = self.config.maxChunkTime or 0.05
+
+            local iIndex = self.state.connectivityIIndex
+            local jIndex = self.state.connectivityJIndex
+            local segments = self.state.connectivitySegments
+            local segmentCount = self.state.connectivitySegmentCount
+            local maxSegments = self.state.connectivityMaxSegments
+            local roadPoints = self.state.roadPoints
+            local checksThisChunk = 0
+
+            while iIndex <= #roadPoints do
+                local p1 = roadPoints[iIndex]
+                local jEnd = math.min(iIndex + 8, #roadPoints)
+
+                while jIndex <= jEnd do
+                    local p2 = roadPoints[jIndex]
+                    local directDist = math.sqrt((p1.x - p2.x) ^ 2 + (p1.z - p2.z) ^ 2)
+
+                    if directDist < self.config.maxRoadSearchDistance then
+                        checksThisChunk = checksThisChunk + 1
+                        local path = nil
+                        local okPath, errPath = pcall(function()
+                            path = land.findPathOnRoads("roads", p1.x, p1.z, p2.x, p2.z)
+                        end)
+                        if okPath and path and #path > 0 then
+                            table.insert(segments, {
+                                from = { x = p1.x, z = p1.z },
+                                to = { x = p2.x, z = p2.z },
+                                pathLength = #path,
+                                directDistance = directDist,
+                            })
+                            segmentCount = segmentCount + 1
+                        elseif not okPath then
+                            self:logWarning("land.findPathOnRoads failed for segment from (" ..
+                                tostring(p1.x) ..
+                                "," ..
+                                tostring(p1.z) ..
+                                ") to (" .. tostring(p2.x) .. "," .. tostring(p2.z) .. ") | Error: " .. tostring(errPath))
+                        end
+                    end
+
+                    jIndex = jIndex + 1
+
+                    -- Check if we should yield
+                    if checksThisChunk >= maxChecks or (os.clock() - startTime) > maxTime then
+                        self.state.connectivityIIndex = iIndex
+                        self.state.connectivityJIndex = jIndex
+                        self.state.connectivitySegments = segments
+                        self.state.connectivitySegmentCount = segmentCount
+                        timer.scheduleFunction(connectivityChunkProcessor, {}, timer.getTime() + 0.1)
+                        return
+                    end
+
+                    -- Check segment limit
+                    if segmentCount >= maxSegments then
+                        break
                     end
                 end
+
+                -- Check segment limit for outer loop
+                if segmentCount >= maxSegments then
+                    break
+                end
+
+                -- Progress update
+                if iIndex % 50 == 0 then
+                    self:showProgress("Road connectivity: " ..
+                        tostring(segmentCount) .. " segments from " .. tostring(iIndex) .. " points checked")
+                end
+
+                iIndex = iIndex + 1
+                jIndex = iIndex + 1
             end
-            if segmentCount >= maxSegments then
-                break
-            end
-            if i % 50 == 0 then
-                self:showProgress("Road connectivity: " ..
-                    tostring(segmentCount) .. " segments from " .. tostring(i) .. " points checked")
-            end
+
+            -- Done with connectivity
+            self.state.connectivitySegmentCount = segmentCount
+            self.state.roadPointCount = #roadPoints
+            self:endPhase("Road Network Sampling",
+                tostring(#roadPoints) .. " points, " .. tostring(segmentCount) .. " segments")
+
+            if callback then callback({ points = roadPoints, segments = segments }) end
         end
 
-        self.state.roadPointCount = #roadPoints
-        self:endPhase("Road Network Sampling",
-            tostring(#roadPoints) .. " points, " .. tostring(segmentCount) .. " segments")
-
-        if callback then callback({ points = roadPoints, segments = roadSegments }) end
+        timer.scheduleFunction(connectivityChunkProcessor, {}, timer.getTime() + 0.1)
     end
 
     timer.scheduleFunction(roadChunkSampler, {}, timer.getTime() + 0.1)
