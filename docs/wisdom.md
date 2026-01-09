@@ -4,6 +4,10 @@ This document collects general mission-making tips and best practices that don't
 
 ## Performance Considerations
 
+The scripting engine is unreliable immediately after a mission starts while game assets are still loading. Mission scripts should be delayed by at least 5 seconds after mission start, and possibly longer for players on slower machines.
+
+Too many blocking script calls can cause DCS to freeze or stutter. For large amounts of work, chunk the work into small batches and periodically release control back to the game. A callback execution model similar to the Node.js event loop can be a useful design pattern for this.
+
 Keep total unit counts under 1000. Above this threshold, the scripting engine becomes unreliable, and somewhere before 2000 units it fails entirely—scripts may not execute at all. For large-scale battles, spawn units dynamically as players approach rather than placing everything at mission start.
 
 Ground unit AI pathfinding is expensive regardless of terrain. Whether units are on roads or cross-country, in open fields or urban areas, any movement commands consume significant resources. Limit pathfinding to a small number of groups, and keep their routes simple.

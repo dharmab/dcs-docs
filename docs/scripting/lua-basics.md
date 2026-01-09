@@ -2,6 +2,8 @@
 
 This document covers just enough Lua to start writing DCS World scripts. Lua is a small language that you can learn as you go; most of its features are intuitive once you see them in action.
 
+DCS uses Lua 5.1. Features from newer versions of the language are not available.
+
 ## Variables and Basic Types
 
 Variables store values. Use `local` to declare a variable, which limits its visibility to the current scope. Variables without `local` become global and can accidentally interfere with other scripts.
