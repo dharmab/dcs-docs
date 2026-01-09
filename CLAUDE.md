@@ -39,6 +39,7 @@ The `docs/` directory contains the following documentation:
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
   - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
+  - `jtac-setup.md` - Configuring AI JTACs and FACs for Close Air Support with laser designation, smoke marking, and radio communication
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
 - `wisdom.md` - General mission design tips and best practices covering performance, player experience, AI behavior, and common pitfalls
