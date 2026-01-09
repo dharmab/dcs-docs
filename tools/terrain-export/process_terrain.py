@@ -53,7 +53,7 @@ class MetadataDict(TypedDict):
     version: str
 
 
-class TerrainPointDict(TypedDict):
+class TerrainPointDict(TypedDict, total=False):
     """A single terrain sample point."""
 
     x: float
@@ -62,6 +62,8 @@ class TerrainPointDict(TypedDict):
     surface: int
     lat: float
     lon: float
+    resolution: float  # Sample resolution in meters (for adaptive sampling)
+    level: int  # Refinement level: 0 = coarse, 1 = refined
 
 
 class RoadPointDict(TypedDict):
@@ -335,7 +337,7 @@ class TerrainProcessor:
     REQUIRED_BOUNDS_KEYS = ("minX", "maxX", "minZ", "maxZ")
 
     # Version compatibility - processor expects this major.minor version
-    EXPECTED_VERSION = (1, 2)  # major, minor
+    EXPECTED_VERSION = (1, 3)  # major, minor
 
     json_path: Path
     data: TerrainExportDict
@@ -462,30 +464,55 @@ class TerrainProcessor:
             )
 
     def _build_grid(self) -> GridDict:
-        """Convert terrain samples to a 2D grid for spatial analysis."""
+        """Convert multi-resolution terrain samples to a 2D grid.
+
+        Builds the grid at the finest resolution present in the samples.
+        Coarser samples fill multiple cells, while finer-resolution samples
+        take precedence when overlapping.
+        """
         terrain = self.data["terrain"]
         bounds = self.data["metadata"]["bounds"]
-        resolution = self.data["metadata"]["gridResolution"]
 
-        # Calculate grid dimensions
-        nx = int((bounds["maxX"] - bounds["minX"]) / resolution) + 1
-        nz = int((bounds["maxZ"] - bounds["minZ"]) / resolution) + 1
+        # Determine the finest resolution from samples
+        resolutions = {point["resolution"] for point in terrain}
+        finest_resolution = min(resolutions)
+
+        # Calculate grid dimensions at finest resolution
+        nx = int((bounds["maxX"] - bounds["minX"]) / finest_resolution) + 1
+        nz = int((bounds["maxZ"] - bounds["minZ"]) / finest_resolution) + 1
 
         # Initialize grids
         elevation = np.full((nx, nz), np.nan)
         surface = np.zeros((nx, nz), dtype=np.int32)
         lat_grid = np.full((nx, nz), np.nan)
         lon_grid = np.full((nx, nz), np.nan)
+        # Track source resolution per cell to prefer finer samples
+        source_resolution = np.full((nx, nz), np.inf)
 
         for point in terrain:
-            ix = int((point["x"] - bounds["minX"]) / resolution)
-            iz = int((point["z"] - bounds["minZ"]) / resolution)
+            point_res = point["resolution"]
+            base_ix = int((point["x"] - bounds["minX"]) / finest_resolution)
+            base_iz = int((point["z"] - bounds["minZ"]) / finest_resolution)
 
-            if 0 <= ix < nx and 0 <= iz < nz:
-                elevation[ix, iz] = point["height"]
-                surface[ix, iz] = point["surface"]
-                lat_grid[ix, iz] = point["lat"]
-                lon_grid[ix, iz] = point["lon"]
+            # Calculate how many grid cells this sample covers
+            cells_per_sample = max(1, int(point_res / finest_resolution))
+
+            for dx in range(cells_per_sample):
+                for dz in range(cells_per_sample):
+                    ix = base_ix + dx
+                    iz = base_iz + dz
+
+                    # Only overwrite if in bounds and this sample is finer resolution
+                    if (
+                        0 <= ix < nx
+                        and 0 <= iz < nz
+                        and point_res < source_resolution[ix, iz]
+                    ):
+                        elevation[ix, iz] = point["height"]
+                        surface[ix, iz] = point["surface"]
+                        lat_grid[ix, iz] = point["lat"]
+                        lon_grid[ix, iz] = point["lon"]
+                        source_resolution[ix, iz] = point_res
 
         return {
             "elevation": elevation,
@@ -493,7 +520,7 @@ class TerrainProcessor:
             "lat": lat_grid,
             "lon": lon_grid,
             "bounds": bounds,
-            "resolution": resolution,
+            "resolution": finest_resolution,
             "shape": (nx, nz),
         }
 

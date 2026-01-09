@@ -5,7 +5,7 @@
 -- =============================================================================
 
 TerrainSampler = {}
-TerrainSampler.VERSION = "1.2.0-debug"
+TerrainSampler.VERSION = "1.3.0"
 
 
 -- =============================================================================
@@ -55,6 +55,15 @@ TerrainSampler.config = {
     -- Road sampling thresholds
     roadProximityFactor = 0.75,           -- Maximum distance to road as fraction of grid resolution
     roadNeighborCount = 8,                -- Number of neighboring road points to check for connectivity
+
+    -- Adaptive sampling configuration
+    adaptiveSampling = true,              -- Enable multi-pass adaptive resolution sampling
+    coarseResolution = 10000,             -- Coarse pass resolution in meters (10km)
+    refinedResolution = 2500,             -- Refined pass resolution in meters (2.5km)
+    elevationVarianceThreshold = 200,     -- Minimum elevation variance (meters) to trigger refinement
+    roadDensityThreshold = 3,             -- Minimum road points per cell to trigger refinement
+    gradientThreshold = 0.05,             -- Minimum elevation gradient to neighbors (rise/run)
+    interestScoreThreshold = 2,           -- Minimum score to mark cell for refinement
 
     -- Chunked sampling/throttling for DCS scripting safety
     maxSamplesPerChunk = 250, -- Maximum samples per scheduled chunk
@@ -130,6 +139,14 @@ TerrainSampler.state = {
     airbaseCount = 0,
     startTime = nil,
     phaseStartTime = nil,
+
+    -- Adaptive sampling state
+    coarseCells = {},       -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
+    coarseNx = 0,           -- Number of coarse cells in X
+    coarseNz = 0,           -- Number of coarse cells in Z
+    cellsToRefine = {},     -- List of {ix, iz} cells marked for refinement
+    roadDensityGrid = {},   -- 2D table: [ix][iz] = road_count
+    refinedSamples = {},    -- Samples from refinement pass
 }
 
 -- =============================================================================
@@ -217,6 +234,287 @@ function TerrainSampler:getBounds()
         minZ = -500000,
         maxZ = 500000,
     }
+end
+
+-- =============================================================================
+-- ADAPTIVE SAMPLING HELPERS
+-- =============================================================================
+
+--- Update cell statistics for adaptive sampling
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+-- @param height Elevation at sample point
+function TerrainSampler:updateCellStats(ix, iz, height)
+    if not self.state.coarseCells[ix] then
+        self.state.coarseCells[ix] = {}
+    end
+    if not self.state.coarseCells[ix][iz] then
+        self.state.coarseCells[ix][iz] = {
+            min = height,
+            max = height,
+            sum = height,
+            sumSq = height * height,
+            count = 1
+        }
+    else
+        local cell = self.state.coarseCells[ix][iz]
+        cell.min = math.min(cell.min, height)
+        cell.max = math.max(cell.max, height)
+        cell.sum = cell.sum + height
+        cell.sumSq = cell.sumSq + height * height
+        cell.count = cell.count + 1
+    end
+end
+
+--- Get elevation variance for a cell
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+-- @return Variance in meters^2, or 0 if insufficient data
+function TerrainSampler:getCellVariance(ix, iz)
+    local cell = self.state.coarseCells[ix] and self.state.coarseCells[ix][iz]
+    if not cell or cell.count < 2 then return 0 end
+    local mean = cell.sum / cell.count
+    return (cell.sumSq / cell.count) - (mean * mean)
+end
+
+--- Get mean elevation for a cell
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+-- @return Mean elevation in meters, or nil if no data
+function TerrainSampler:getCellMean(ix, iz)
+    local cell = self.state.coarseCells[ix] and self.state.coarseCells[ix][iz]
+    if not cell or cell.count == 0 then return nil end
+    return cell.sum / cell.count
+end
+
+--- Increment road density counter for a cell
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+function TerrainSampler:incrementRoadDensity(ix, iz)
+    if not self.state.roadDensityGrid[ix] then
+        self.state.roadDensityGrid[ix] = {}
+    end
+    self.state.roadDensityGrid[ix][iz] = (self.state.roadDensityGrid[ix][iz] or 0) + 1
+end
+
+--- Get road density for a cell
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+-- @return Number of road points in cell
+function TerrainSampler:getRoadDensity(ix, iz)
+    return (self.state.roadDensityGrid[ix] and self.state.roadDensityGrid[ix][iz]) or 0
+end
+
+--- Convert world coordinates to coarse cell indices
+-- @param x World X coordinate
+-- @param z World Z coordinate
+-- @param bounds Terrain bounds {minX, maxX, minZ, maxZ}
+-- @return ix, iz (0-based cell indices)
+function TerrainSampler:worldToCoarseCell(x, z, bounds)
+    local resolution = self.config.coarseResolution
+    local ix = math.floor((x - bounds.minX) / resolution)
+    local iz = math.floor((z - bounds.minZ) / resolution)
+    return ix, iz
+end
+
+--- Compute interest score for a cell to determine if it needs refinement
+-- @param ix Cell X index (0-based)
+-- @param iz Cell Z index (0-based)
+-- @return Interest score (higher = more interesting)
+function TerrainSampler:computeInterestScore(ix, iz)
+    local score = 0
+
+    -- Factor 1: Internal elevation variance
+    local variance = self:getCellVariance(ix, iz)
+    local varianceThresholdSq = self.config.elevationVarianceThreshold ^ 2
+    if variance > varianceThresholdSq then
+        score = score + 2
+    elseif variance > varianceThresholdSq / 4 then
+        score = score + 1
+    end
+
+    -- Factor 2: Gradient to neighbors (detect terrain boundaries)
+    local myMean = self:getCellMean(ix, iz)
+    if myMean then
+        local neighbors = {
+            {ix - 1, iz}, {ix + 1, iz},
+            {ix, iz - 1}, {ix, iz + 1}
+        }
+        for _, neighbor in ipairs(neighbors) do
+            local nix, niz = neighbor[1], neighbor[2]
+            local neighborMean = self:getCellMean(nix, niz)
+            if neighborMean then
+                local gradient = math.abs(myMean - neighborMean) / self.config.coarseResolution
+                if gradient > self.config.gradientThreshold then
+                    score = score + 1
+                end
+            end
+        end
+    end
+
+    -- Factor 3: Road density
+    local roadCount = self:getRoadDensity(ix, iz)
+    if roadCount >= self.config.roadDensityThreshold then
+        score = score + 1
+    end
+
+    return score
+end
+
+--- Analyze all coarse cells and mark interesting ones for refinement
+-- Should be called after both terrain and road sampling are complete
+function TerrainSampler:analyzeInterest()
+    self:startPhase("Interest Analysis")
+    self.state.cellsToRefine = {}
+
+    local nx = self.state.coarseNx or 0
+    local nz = self.state.coarseNz or 0
+
+    if nx == 0 or nz == 0 then
+        self:logWarning("No coarse grid dimensions available for interest analysis")
+        self:endPhase("Interest Analysis", "0 cells marked (no grid)")
+        return
+    end
+
+    local interestingCount = 0
+    local totalCells = nx * nz
+    local scoreThreshold = self.config.interestScoreThreshold
+
+    -- Collect cells that exceed the interest score threshold
+    for ix = 0, nx - 1 do
+        for iz = 0, nz - 1 do
+            local score = self:computeInterestScore(ix, iz)
+            if score >= scoreThreshold then
+                table.insert(self.state.cellsToRefine, {ix = ix, iz = iz})
+                interestingCount = interestingCount + 1
+            end
+        end
+    end
+
+    self:log("Interest analysis: " .. tostring(interestingCount) .. " of " .. tostring(totalCells) ..
+        " cells marked for refinement (score >= " .. tostring(scoreThreshold) .. ")")
+    self:endPhase("Interest Analysis", tostring(interestingCount) .. " cells marked for refinement")
+end
+
+--- Sample refined terrain points within marked cells
+-- @param callback Function to call with refined samples when complete
+function TerrainSampler:sampleRefinedCells(callback)
+    self:startPhase("Refined Terrain Sampling")
+
+    local cellsToRefine = self.state.cellsToRefine or {}
+    local bounds = self.state.detectedBounds
+
+    if #cellsToRefine == 0 then
+        self:log("No cells to refine")
+        self:endPhase("Refined Terrain Sampling", "0 refined samples (no cells)")
+        if callback then callback({}) end
+        return
+    end
+
+    if not bounds then
+        self:logWarning("No bounds available for refined sampling")
+        self:endPhase("Refined Terrain Sampling", "0 refined samples (no bounds)")
+        if callback then callback({}) end
+        return
+    end
+
+    local coarseRes = self.config.coarseResolution
+    local refinedRes = self.config.refinedResolution
+    local samplesPerCell = math.floor(coarseRes / refinedRes)
+
+    self:log("Refining " .. tostring(#cellsToRefine) .. " cells at " ..
+        tostring(refinedRes) .. "m resolution (" .. tostring(samplesPerCell) ..
+        "x" .. tostring(samplesPerCell) .. " samples per cell)")
+
+    -- Calculate total samples expected
+    local totalRefinedSamples = #cellsToRefine * samplesPerCell * samplesPerCell
+    self:showMessage("Sampling " .. tostring(totalRefinedSamples) ..
+        " refined points in " .. tostring(#cellsToRefine) .. " interesting cells...", 15)
+
+    -- Chunked stateful refinement sampling
+    self.state.refinedSamples = {}
+    self.state.refinedCount = 0
+    self.state.refinedLastProgressUpdate = 0
+    self.state.refinedCellIndex = 1
+    self.state.refinedSubX = 0
+    self.state.refinedSubZ = 0
+    self.state.refinedTotalSamples = totalRefinedSamples
+    self.state.refinedSamplesPerCell = samplesPerCell
+
+    local function refinedChunkSampler()
+        local startTime = os.clock()
+        local samplesThisChunk = 0
+        local maxSamples = self.config.maxSamplesPerChunk or 250
+        local maxTime = self.config.maxChunkTime or 0.05
+
+        local cellIndex = self.state.refinedCellIndex
+        local subX = self.state.refinedSubX
+        local subZ = self.state.refinedSubZ
+        local samplesPerCell = self.state.refinedSamplesPerCell
+        local totalSamples = self.state.refinedTotalSamples
+        local count = self.state.refinedCount
+        local lastProgressUpdate = self.state.refinedLastProgressUpdate
+        local samples = self.state.refinedSamples
+
+        while cellIndex <= #cellsToRefine do
+            local cell = cellsToRefine[cellIndex]
+            -- Calculate cell bounds in world coordinates
+            local cellMinX = bounds.minX + cell.ix * coarseRes
+            local cellMinZ = bounds.minZ + cell.iz * coarseRes
+
+            while subX < samplesPerCell do
+                while subZ < samplesPerCell do
+                    local xCoord = cellMinX + subX * refinedRes + refinedRes / 2
+                    local zCoord = cellMinZ + subZ * refinedRes + refinedRes / 2
+
+                    local sample = self:sampleTerrainPoint(xCoord, zCoord)
+                    if sample then
+                        sample.resolution = refinedRes
+                        sample.level = 1  -- Refined level
+                        table.insert(samples, sample)
+                        count = count + 1
+
+                        -- Progress updates
+                        if count - lastProgressUpdate >= self.config.gridProgressInterval then
+                            local percent = math.floor((count / totalSamples) * 100)
+                            self:showProgress("Refined: " ..
+                                tostring(count) .. "/" .. tostring(totalSamples) ..
+                                " (" .. tostring(percent) .. "%)")
+                            lastProgressUpdate = count
+                        end
+                    end
+
+                    samplesThisChunk = samplesThisChunk + 1
+                    subZ = subZ + 1
+
+                    if samplesThisChunk >= maxSamples or (os.clock() - startTime) > maxTime then
+                        self.state.refinedCellIndex = cellIndex
+                        self.state.refinedSubX = subX
+                        self.state.refinedSubZ = subZ
+                        self.state.refinedCount = count
+                        self.state.refinedLastProgressUpdate = lastProgressUpdate
+                        self.state.refinedSamples = samples
+                        timer.scheduleFunction(refinedChunkSampler, {}, timer.getTime() + 0.1)
+                        return
+                    end
+                end
+                subZ = 0
+                subX = subX + 1
+            end
+            subX = 0
+            cellIndex = cellIndex + 1
+        end
+
+        -- Done
+        self.state.refinedCount = count
+        self.state.refinedSamples = samples
+        self:endPhase("Refined Terrain Sampling", tostring(count) .. " refined samples collected")
+        if callback then
+            callback(self.state.refinedSamples)
+        end
+    end
+
+    timer.scheduleFunction(refinedChunkSampler, {}, timer.getTime() + 0.1)
 end
 
 -- =============================================================================
@@ -461,11 +759,30 @@ function TerrainSampler:sampleGrid(callback)
     end
     -- Cache bounds for reuse by other phases (e.g., road sampling)
     self.state.detectedBounds = bounds
-    local resolution = self.config.gridResolution
+
+    -- Use coarse resolution for adaptive sampling, otherwise use standard grid resolution
+    local resolution
+    if self.config.adaptiveSampling then
+        resolution = self.config.coarseResolution
+        self:log("Adaptive sampling enabled, using coarse resolution: " .. tostring(resolution) .. "m")
+        -- Initialize coarse cell tracking
+        self.state.coarseCells = {}
+        self.state.cellsToRefine = {}
+        self.state.roadDensityGrid = {}
+        self.state.refinedSamples = {}
+    else
+        resolution = self.config.gridResolution
+    end
 
     local totalX = math.floor((bounds.maxX - bounds.minX) / resolution) + 1
     local totalZ = math.floor((bounds.maxZ - bounds.minZ) / resolution) + 1
     local totalSamples = totalX * totalZ
+
+    -- Store coarse grid dimensions for adaptive sampling
+    if self.config.adaptiveSampling then
+        self.state.coarseNx = totalX
+        self.state.coarseNz = totalZ
+    end
 
     self:log("Grid dimensions: " ..
         tostring(totalX) .. " x " .. tostring(totalZ) .. " = " .. tostring(totalSamples) .. " samples")
@@ -511,6 +828,15 @@ function TerrainSampler:sampleGrid(callback)
 
                 local sample = self:sampleTerrainPoint(xCoord, zCoord)
                 if sample then
+                    -- Add resolution and level for adaptive sampling support
+                    sample.resolution = resolution
+                    sample.level = 0  -- Coarse level
+
+                    -- Update cell statistics for adaptive sampling
+                    if self.config.adaptiveSampling and sample.height then
+                        self:updateCellStats(xIndex, zIndex, sample.height)
+                    end
+
                     table.insert(samples, sample)
                     count = count + 1
 
@@ -735,6 +1061,14 @@ function TerrainSampler:sampleRoads(callback)
                 local roadPoint = self:sampleRoadPoint(xCoord, zCoord, resolution)
                 if roadPoint then
                     table.insert(roadPoints, roadPoint)
+
+                    -- Track road density for adaptive sampling
+                    if self.config.adaptiveSampling and self.state.detectedBounds then
+                        local coarseIx, coarseIz = self:worldToCoarseCell(
+                            roadPoint.x, roadPoint.z, self.state.detectedBounds
+                        )
+                        self:incrementRoadDensity(coarseIx, coarseIz)
+                    end
                 end
 
                 -- Progress updates
@@ -1069,18 +1403,31 @@ function TerrainSampler:export()
         sampler:showMessage("Building export data structure...", 10)
         sampler:log("Building export data structure...")
 
+        -- Determine grid resolution for metadata (finest resolution used)
+        local gridResolution
+        if sampler.config.adaptiveSampling then
+            gridResolution = sampler.config.refinedResolution
+        else
+            gridResolution = sampler.config.gridResolution
+        end
+
         local exportData = {
             metadata = {
                 version = sampler.VERSION,
                 theatre = theatre,
                 exportTime = os.date("!%Y-%m-%dT%H:%M:%SZ"),
-                gridResolution = sampler.config.gridResolution,
+                gridResolution = gridResolution,
                 bounds = bounds,
                 stats = {
                     terrainSamples = sampler.state.sampleCount or 0,
                     roadPoints = sampler.state.roadPointCount or 0,
                     airbases = sampler.state.airbaseCount or 0,
                 },
+                -- Adaptive sampling metadata
+                adaptiveSampling = sampler.config.adaptiveSampling,
+                coarseResolution = sampler.config.adaptiveSampling and sampler.config.coarseResolution or nil,
+                refinedResolution = sampler.config.adaptiveSampling and sampler.config.refinedResolution or nil,
+                refinedCells = sampler.config.adaptiveSampling and #(sampler.state.cellsToRefine or {}) or nil,
             },
             terrain = gridSamples,
             roads = roadData,
@@ -1197,16 +1544,45 @@ function TerrainSampler:export()
     end
 
     -- Callback chain for chunked sampling
-    sampler:showMessage("Phase 1/3: Terrain sampling...", 10)
-    sampler:sampleGrid(function(gridSamples)
-        sampler:showMessage("Phase 2/3: Road network sampling...", 10)
-        sampler:sampleRoads(function(roadData)
-            sampler:showMessage("Phase 3/3: Airbase collection...", 10)
-            sampler:collectAirbases(function(airbases)
-                finalizeExport(gridSamples, roadData, airbases)
+    if sampler.config.adaptiveSampling then
+        -- Adaptive sampling: 5 phases
+        sampler:showMessage("Phase 1/5: Coarse terrain sampling...", 10)
+        sampler:sampleGrid(function(coarseSamples)
+            sampler:showMessage("Phase 2/5: Road network sampling...", 10)
+            sampler:sampleRoads(function(roadData)
+                sampler:showMessage("Phase 3/5: Interest analysis...", 10)
+                sampler:analyzeInterest()
+                sampler:showMessage("Phase 4/5: Refined terrain sampling...", 10)
+                sampler:sampleRefinedCells(function(refinedSamples)
+                    -- Merge coarse and refined samples
+                    local allSamples = {}
+                    for _, sample in ipairs(coarseSamples) do
+                        table.insert(allSamples, sample)
+                    end
+                    for _, sample in ipairs(refinedSamples) do
+                        table.insert(allSamples, sample)
+                    end
+                    sampler.state.sampleCount = #allSamples
+                    sampler:showMessage("Phase 5/5: Airbase collection...", 10)
+                    sampler:collectAirbases(function(airbases)
+                        finalizeExport(allSamples, roadData, airbases)
+                    end)
+                end)
             end)
         end)
-    end)
+    else
+        -- Standard sampling: 3 phases
+        sampler:showMessage("Phase 1/3: Terrain sampling...", 10)
+        sampler:sampleGrid(function(gridSamples)
+            sampler:showMessage("Phase 2/3: Road network sampling...", 10)
+            sampler:sampleRoads(function(roadData)
+                sampler:showMessage("Phase 3/3: Airbase collection...", 10)
+                sampler:collectAirbases(function(airbases)
+                    finalizeExport(gridSamples, roadData, airbases)
+                end)
+            end)
+        end)
+    end
 end
 
 -- =============================================================================
