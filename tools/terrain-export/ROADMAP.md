@@ -75,7 +75,7 @@ No validation of the JSON structure before processing. Malformed exports or vers
 
 **Resolution:** Added `_validate_data()` method to `TerrainProcessor` that checks for required top-level keys (`metadata`, `terrain`, `roads`, `airbases`), required metadata keys (`theatre`, `exportTime`, `gridResolution`, `bounds`), and required bounds keys (`minX`, `maxX`, `minZ`, `maxZ`). Also validates that `terrain` and `airbases` are lists, and that `roads` contains `points` and `segments` keys. Errors are collected and raised as a `TerrainExportError` with clear messages.
 
-### [ ] Missing type annotations
+### [x] Missing type annotations (2026-01-09)
 
 Several variables lack type hints:
 - `data` field in function parameters
@@ -83,6 +83,8 @@ Several variables lack type hints:
 - Dict value types in several places
 
 **Fix:** Add comprehensive type annotations throughout the module.
+
+**Resolution:** Added TypedDict definitions for all JSON data structures (`BoundsDict`, `MetadataDict`, `TerrainPointDict`, `RoadPointDict`, `RoadEndpointDict`, `RoadsDict`, `ParkingSpotDict`, `RunwayDict`, `AirbaseDict`, `TerrainExportDict`, `GridDict`). Added instance variable type annotations to `TerrainProcessor` and `MarkdownGenerator` classes. Updated `_load_data()` and `_build_grid()` return types. Updated `Airbase` dataclass to use typed parking and runway lists. Added explicit return type to `main()` function.
 
 ### [ ] Connectivity computation efficiency
 

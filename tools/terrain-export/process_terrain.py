@@ -20,12 +20,131 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, TypedDict
 
 import numpy as np
 from matplotlib.path import Path as PolygonPath
+from numpy.typing import NDArray
 from scipy import ndimage
 from scipy.spatial import ConvexHull
 from sklearn.cluster import DBSCAN
+
+
+# Type definitions for JSON data structures
+class BoundsDict(TypedDict):
+    """Map coordinate bounds."""
+
+    minX: float
+    maxX: float
+    minZ: float
+    maxZ: float
+
+
+class MetadataDict(TypedDict):
+    """Terrain export metadata."""
+
+    theatre: str
+    exportTime: str
+    gridResolution: float
+    bounds: BoundsDict
+    version: str
+
+
+class TerrainPointDict(TypedDict):
+    """A single terrain sample point."""
+
+    x: float
+    z: float
+    height: float
+    surface: int
+    lat: float
+    lon: float
+
+
+class RoadPointDict(TypedDict):
+    """A road network point."""
+
+    x: float
+    z: float
+    lat: float
+    lon: float
+
+
+class RoadEndpointDict(TypedDict):
+    """A road segment endpoint."""
+
+    x: float
+    z: float
+
+
+class RoadSegmentDict(TypedDict):
+    """A road segment connecting two points."""
+
+    from_: RoadEndpointDict
+    to: RoadEndpointDict
+
+
+class RoadsDict(TypedDict):
+    """Road network data."""
+
+    points: list[RoadPointDict]
+    segments: list[dict[str, RoadEndpointDict]]
+
+
+class ParkingSpotDict(TypedDict, total=False):
+    """Airport parking spot data."""
+
+    Term_Index: int
+    Term_Type: int
+    x: float
+    z: float
+    fDistToRW: float
+
+
+class RunwayDict(TypedDict, total=False):
+    """Airport runway data."""
+
+    heading: float
+    length: float
+    width: float
+    x: float
+    z: float
+
+
+class AirbaseDict(TypedDict, total=False):
+    """Raw airbase data from JSON export."""
+
+    name: str
+    callsign: str
+    x: float
+    z: float
+    height: float
+    lat: float
+    lon: float
+    category: int
+    parking: list[ParkingSpotDict]
+    runways: list[RunwayDict]
+
+
+class TerrainExportDict(TypedDict):
+    """Complete terrain export JSON structure."""
+
+    metadata: MetadataDict
+    terrain: list[TerrainPointDict]
+    roads: RoadsDict
+    airbases: list[AirbaseDict]
+
+
+class GridDict(TypedDict):
+    """Processed terrain grid data."""
+
+    elevation: NDArray[np.floating[Any]]
+    surface: NDArray[np.int32]
+    lat: NDArray[np.floating[Any]]
+    lon: NDArray[np.floating[Any]]
+    bounds: BoundsDict
+    resolution: float
+    shape: tuple[int, int]
 
 
 @dataclass
@@ -75,8 +194,8 @@ class Airbase:
     lat: float
     lon: float
     category: int
-    parking: list[dict]
-    runways: list[dict]
+    parking: list[ParkingSpotDict]
+    runways: list[RunwayDict]
 
 
 class TerrainExportError(Exception):
@@ -106,13 +225,17 @@ class TerrainProcessor:
     REQUIRED_METADATA_KEYS = ("theatre", "exportTime", "gridResolution", "bounds")
     REQUIRED_BOUNDS_KEYS = ("minX", "maxX", "minZ", "maxZ")
 
-    def __init__(self, json_path: Path):
+    json_path: Path
+    data: TerrainExportDict
+    grid: GridDict
+
+    def __init__(self, json_path: Path) -> None:
         self.json_path = json_path
         self.data = self._load_data()
         self._validate_data()
         self.grid = self._build_grid()
 
-    def _load_data(self) -> dict:
+    def _load_data(self) -> TerrainExportDict:
         with open(self.json_path) as f:
             return json.load(f)
 
@@ -174,7 +297,7 @@ class TerrainProcessor:
             error_msg += "\n".join(f"  - {e}" for e in errors)
             raise TerrainExportError(error_msg)
 
-    def _build_grid(self) -> dict:
+    def _build_grid(self) -> GridDict:
         """Convert terrain samples to a 2D grid for spatial analysis."""
         terrain = self.data["terrain"]
         bounds = self.data["metadata"]["bounds"]
@@ -558,13 +681,16 @@ class MarkdownGenerator:
     """Generates markdown documentation from processed terrain data."""
 
     # Category names for airbases
-    CATEGORY_NAMES = {
+    CATEGORY_NAMES: dict[int, str] = {
         0: "Airdrome",
         1: "Helipad",
         2: "Ship",
     }
 
-    def __init__(self, processor: TerrainProcessor):
+    processor: TerrainProcessor
+    metadata: MetadataDict
+
+    def __init__(self, processor: TerrainProcessor) -> None:
         self.processor = processor
         self.metadata = processor.data["metadata"]
 
@@ -694,7 +820,7 @@ and {height_km:.0f} km north-south.
                 lines.append("")
 
                 # Group by Term_Type
-                by_type: dict[int, list[dict]] = defaultdict(list)
+                by_type: dict[int, list[ParkingSpotDict]] = defaultdict(list)
                 for spot in ab.parking:
                     term_type = spot.get("Term_Type", -1)
                     by_type[term_type].append(spot)
@@ -847,7 +973,7 @@ Lat/Lon values are provided for human reference but mission scripting
 should use game coordinates."""
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(
         description="Process DCS terrain exports into markdown documentation"
     )
