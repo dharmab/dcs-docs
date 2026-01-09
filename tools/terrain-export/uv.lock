@@ -155,6 +155,32 @@ wheels = [
 ]
 
 [[package]]
+name = "mgrs"
+version = "1.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/13/66/8225a1f06f425c43a93f7899377fa809354eaa12353fafdbad4e99e10107/mgrs-1.5.1.tar.gz", hash = "sha256:dd346317781ce3a3b354c15a1c1733def3f7c8be76c7665dc289e52b8b0529e9", size = 32054, upload-time = "2026-01-08T02:46:24.852Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e6/53/e03fc5209c80ccc675a1744a1452b6a643a5bc3e080132c1f51810d6bd57/mgrs-1.5.1-cp314-cp314-macosx_10_15_x86_64.whl", hash = "sha256:a2472a45643ff021323b0d8ab290a7085b41023a3bc9819e4c07a3bfc3c258cd", size = 58121, upload-time = "2026-01-08T02:45:50.515Z" },
+    { url = "https://files.pythonhosted.org/packages/b8/90/b0cbe3c0d9da13cdb3fbb66ed48215e99f392a36232ba2349d9657cabcbc/mgrs-1.5.1-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:12ff89e25f6949e99511dd2541b7af077a6aef770dd7fd70b27461b93fb6aa47", size = 57147, upload-time = "2026-01-08T02:45:51.626Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/f8/e95b354963bc0448d6686540363cada41f9826c3d16ae8db48335f470e6e/mgrs-1.5.1-cp314-cp314-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a8a551f3d72c3b0d6837936657646ee61805225c29b6f8b9e8271db5738305ed", size = 88573, upload-time = "2026-01-08T02:45:52.619Z" },
+    { url = "https://files.pythonhosted.org/packages/38/42/db93076f3a9a5dfa10d74e453a1c078efa02e09c7fa2ed1d57703ae2ffd2/mgrs-1.5.1-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:84271de9f2f45888e1696d93e5e027fa36a4a466089bb63e0f22e1681ad2c6ea", size = 87811, upload-time = "2026-01-08T02:45:53.869Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/02/55d014edf720ccd169b211eec35885e569661a2d29ac84d2b052b5e74aa4/mgrs-1.5.1-cp314-cp314-musllinux_1_2_aarch64.whl", hash = "sha256:a3123fe7858f71cc7a60f98831cd05372273b751ccf5b031e0acd51b39c65ef1", size = 86304, upload-time = "2026-01-08T02:45:55.509Z" },
+    { url = "https://files.pythonhosted.org/packages/51/e8/2aa47b64663560ccd9a2b9f06146e2f663cf3622e28012049568685492d2/mgrs-1.5.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:039a1378673bcea7b1c403629f96cbb00a35deea628ac775edd111ff56a7d6da", size = 87545, upload-time = "2026-01-08T02:45:56.557Z" },
+    { url = "https://files.pythonhosted.org/packages/af/45/dd8b71ddfc757937c958651e883b9b0d84e9b6f2e177535e815da23bd029/mgrs-1.5.1-cp314-cp314-win32.whl", hash = "sha256:edde4525e680a82ff6b653461cda77924e6e8ef5f829e2e4e9a95bb219315f14", size = 58421, upload-time = "2026-01-08T02:45:57.592Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/ab/45936a432e4bf38e5f16e8621f1beae9370141789bd5f6e54fbdbc611d82/mgrs-1.5.1-cp314-cp314-win_amd64.whl", hash = "sha256:089ed8a34b0a2740eea65afd6949ce0409c1966f7c1ed285bbc0915edc48e088", size = 60598, upload-time = "2026-01-08T02:45:58.581Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/72/161479e57e7b6473a0607bc668caaa88183a588972559b31953bc680dd0b/mgrs-1.5.1-cp314-cp314-win_arm64.whl", hash = "sha256:213ffdfedfa7acdb51f66abab13ba35a57956a04edbbfe058263b2f25caee9a9", size = 56965, upload-time = "2026-01-08T02:45:59.718Z" },
+    { url = "https://files.pythonhosted.org/packages/22/f7/53e6da638ccc8e0773e40f7de04833cf2f1f8a22a08ee71c99dd74ccbe4e/mgrs-1.5.1-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:08c726e0d6759f584ce01cb56514148b278fdb95523d5ef7d9bae6944e879326", size = 58128, upload-time = "2026-01-08T02:46:00.836Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/17/d70712366fd31189b87ecad9b5aabe75f03701049afd0571ab15ec9c8a96/mgrs-1.5.1-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:d97236766d049f2dd79bb90f24ef349b1b35bd5b1dbe384bce1e16a10183498c", size = 57144, upload-time = "2026-01-08T02:46:02.304Z" },
+    { url = "https://files.pythonhosted.org/packages/02/c3/75b09c8b3d670a771cb5ee8045d32ee64323ac7be520aee2adecc843e44f/mgrs-1.5.1-cp314-cp314t-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:cdb2fd8175a8eddbbc9c3cde3ee147b3d2c5f37809d2579d7230a15801b19591", size = 88579, upload-time = "2026-01-08T02:46:03.503Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/52/74234206e13c0133cb25ed563f23559f0f9f0baedaea98a13d7b84fa1b4d/mgrs-1.5.1-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:3dc0a9ae23c142d1c90d0b07352d6434a7abf0a046e2f401c368e6e13a19e0a2", size = 87815, upload-time = "2026-01-08T02:46:04.566Z" },
+    { url = "https://files.pythonhosted.org/packages/54/e3/7ebf3405940e11b524acae6247cf370f2c0bc335d9eb0f5321178c03810c/mgrs-1.5.1-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:eb82be9f4fe0b96d588b82a01d711624faf4ddb71d678619387706a45fc9ad5c", size = 86310, upload-time = "2026-01-08T02:46:05.715Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/19/f0a3bbae491ffde6ea440f1ae5b4d09e3a16cd3365f4dec48d68b8711017/mgrs-1.5.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:6c45dc6328b1be87a5d1c28aff10a1838ea8827a75ee9ed32d754fa2be772f29", size = 87549, upload-time = "2026-01-08T02:46:06.731Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/36/cd6297fd4a8feac5126b758701930501568e9a791c88af2292f1487f3a27/mgrs-1.5.1-cp314-cp314t-win32.whl", hash = "sha256:31483fabc190a2fd97bc73f7110b28e2659962487ec7fa169f28d7190e1994a1", size = 58428, upload-time = "2026-01-08T02:46:07.716Z" },
+    { url = "https://files.pythonhosted.org/packages/f7/06/70d6159720e7af9c7fd5699b8ca7d82f26148451ca4a880d55f75a33fbd0/mgrs-1.5.1-cp314-cp314t-win_amd64.whl", hash = "sha256:d3c1b4f74322059d3255e31918de3c9722ec8979370aec450cf927925045ca08", size = 60605, upload-time = "2026-01-08T02:46:08.769Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/59/9bb1d061393b93ef2114187a21878709b9776a35d28385417ab73d449063/mgrs-1.5.1-cp314-cp314t-win_arm64.whl", hash = "sha256:dce78662243e2d13d10a2388593d25a9bcc135fecf35f909a39f19c94b42998d", size = 56973, upload-time = "2026-01-08T02:46:09.772Z" },
+]
+
+[[package]]
 name = "numpy"
 version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -354,6 +380,7 @@ source = { editable = "." }
 dependencies = [
     { name = "luadata" },
     { name = "matplotlib" },
+    { name = "mgrs" },
     { name = "numpy" },
     { name = "scikit-learn" },
     { name = "scipy" },
@@ -370,6 +397,7 @@ dev = [
 requires-dist = [
     { name = "luadata", specifier = ">=1.0.5" },
     { name = "matplotlib" },
+    { name = "mgrs", specifier = ">=1.4.0" },
     { name = "numpy" },
     { name = "scikit-learn" },
     { name = "scipy" },

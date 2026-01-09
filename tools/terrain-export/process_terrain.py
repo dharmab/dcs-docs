@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, TypedDict
 
+import mgrs
 import numpy as np
 import semver
 from matplotlib.path import Path as PolygonPath
@@ -714,6 +715,7 @@ class TerrainProcessor:
         ).fit(coords)
 
         settlements = []
+        mgrs_converter = mgrs.MGRS()
 
         for cluster_id in set(clustering.labels_):
             if cluster_id == -1:  # Skip noise
@@ -741,7 +743,9 @@ class TerrainProcessor:
             lat = road_points[original_idx]["lat"]
             lon = road_points[original_idx]["lon"]
 
-            name = f"S-{len(settlements) + 1:03d}"
+            # Generate name from MGRS grid location (1km precision)
+            mgrs_string = mgrs_converter.toMGRS(lat, lon, MGRSPrecision=2)
+            name = mgrs_string
 
             settlements.append(
                 Settlement(
@@ -1085,9 +1089,10 @@ and {height_km:.0f} km north-south.
 
         lines = ["## Settlements", ""]
         lines.append("Settlements are detected from road network density clustering.")
+        lines.append("Each settlement is named after its MGRS grid location.")
         lines.append("")
-        lines.append("| ID | Center (x, z) | Lat/Lon | Road Density |")
-        lines.append("|----|---------------|---------|--------------|")
+        lines.append("| MGRS | Center (x, z) | Lat/Lon | Road Density |")
+        lines.append("|------|---------------|---------|--------------|")
 
         for s in sorted(settlements, key=lambda x: -x.road_density):
             lines.append(
