@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from matplotlib.path import Path as PolygonPath
 from scipy import ndimage
 from scipy.spatial import ConvexHull
 from sklearn.cluster import DBSCAN
@@ -404,13 +405,18 @@ class TerrainProcessor:
             return []
 
         def region_for_point(x: float, z: float) -> str | None:
-            """Find which region contains a point (simple bounding box check)."""
+            """Find which region contains a point using polygon containment."""
             for region in regions:
-                if not region.vertices:
+                if not region.vertices or len(region.vertices) < 3:
                     continue
+                # Quick bounding box check first as optimization
                 xs = [v[0] for v in region.vertices]
                 zs = [v[1] for v in region.vertices]
-                if min(xs) <= x <= max(xs) and min(zs) <= z <= max(zs):
+                if not (min(xs) <= x <= max(xs) and min(zs) <= z <= max(zs)):
+                    continue
+                # Proper polygon containment test
+                polygon = PolygonPath(region.vertices)
+                if polygon.contains_point((x, z)):
                     return region.name
             return None
 

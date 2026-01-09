@@ -59,11 +59,13 @@ The script version is defined (`TerrainSampler.VERSION`) but not included in the
 
 ## Python Processor (process_terrain.py)
 
-### [ ] Incorrect polygon containment test
+### [x] Incorrect polygon containment test (2026-01-09)
 
 The `region_for_point()` function (lines 406-415) uses bounding box checks instead of proper point-in-polygon tests. Points within the bounding box but outside the actual convex hull are incorrectly classified.
 
 **Fix:** Use `matplotlib.path.Path.contains_point()` or implement a ray-casting algorithm for proper polygon containment.
+
+**Resolution:** Added matplotlib as a dependency and replaced the bounding box check with `matplotlib.path.Path.contains_point()`. The bounding box check is retained as a fast-path optimization before the polygon test.
 
 ### [ ] Missing input validation
 
