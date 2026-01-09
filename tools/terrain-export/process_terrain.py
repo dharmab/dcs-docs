@@ -3,7 +3,7 @@
 DCS Terrain Data Processor
 
 Reads raw terrain JSON exports from DCS and generates:
-1. Classified terrain regions (mountain, hill, plain, valley)
+1. Classified terrain regions (mountain, hill, flat, valley)
 2. Water body identification (sea vs lake)
 3. Settlement detection from road density
 4. Road connectivity graph
@@ -157,7 +157,7 @@ class Region:
     """A classified terrain region."""
 
     name: str
-    classification: str  # mountain, hill, plain, valley
+    classification: str  # mountain, hill, flat, valley
     vertices: list[tuple[float, float]]  # (x, z) polygon
     center: tuple[float, float]
     area_km2: float
@@ -314,11 +314,15 @@ class TerrainExportError(Exception):
 class TerrainProcessor:
     """Processes raw DCS terrain data into structured regions."""
 
-    # Elevation thresholds (meters)
-    MOUNTAIN_THRESHOLD = 2000
-    HILL_THRESHOLD = 500
-    HIGH_RELIEF_THRESHOLD = 500
-    LOW_RELIEF_THRESHOLD = 100
+    # Slope thresholds (degrees) for terrain classification
+    FLAT_SLOPE_THRESHOLD = 5  # Below 5° = flat terrain
+    STEEP_SLOPE_THRESHOLD = 15  # Above 15° = steep (mountain candidate)
+
+    # Prominence threshold for mountain vs hill (relative to local relief)
+    MOUNTAIN_PROMINENCE_FRACTION = 0.3  # Peak must rise 30% of local relief range
+
+    # Valley detection threshold (relative to local relief)
+    VALLEY_DEPTH_FRACTION = 0.15  # Valley if below local_avg by 15% of local relief
 
     # Minimum region size (grid cells)
     MIN_REGION_CELLS = 10
@@ -534,39 +538,45 @@ class TerrainProcessor:
         # Use Gaussian smoothing to reduce noise
         smoothed = ndimage.gaussian_filter(np.nan_to_num(elevation, nan=0), sigma=2)
 
-        # Compute local relief (max - min in neighborhood)
-        relief = ndimage.maximum_filter(smoothed, size=5) - ndimage.minimum_filter(
-            smoothed, size=5
-        )
+        # Compute slope (degrees) from elevation gradients
+        dy, dx = np.gradient(smoothed, resolution)
+        slope_radians = np.arctan(np.sqrt(dx**2 + dy**2))
+        slope_degrees = np.degrees(slope_radians)
+
+        # Compute local prominence (how much higher than surrounding minimum)
+        local_min = ndimage.minimum_filter(smoothed, size=7)
+        local_max = ndimage.maximum_filter(smoothed, size=7)
+        local_range = local_max - local_min
+        prominence = smoothed - local_min
 
         # Compute local average for valley detection
         local_avg = ndimage.uniform_filter(smoothed, size=7)
 
-        # Classification masks
-        # Mountains: high elevation OR high relief at moderate elevation
-        mountain_mask = (smoothed > self.MOUNTAIN_THRESHOLD) | (
-            (smoothed > self.HILL_THRESHOLD) & (relief > self.HIGH_RELIEF_THRESHOLD)
+        # Classification masks based on slope and prominence
+        # Flat: low slope regardless of elevation
+        flat_mask = slope_degrees < self.FLAT_SLOPE_THRESHOLD
+
+        # Mountains: steep slope AND high prominence relative to local relief
+        mountain_mask = (slope_degrees >= self.STEEP_SLOPE_THRESHOLD) & (
+            prominence > local_range * self.MOUNTAIN_PROMINENCE_FRACTION
         )
 
-        # Hills: moderate elevation, not already mountain
-        hill_mask = (smoothed > self.HILL_THRESHOLD) & ~mountain_mask
+        # Hills: moderate slope, not flat or mountain
+        hill_mask = ~flat_mask & ~mountain_mask
 
-        # Plains: low elevation, low relief
-        plain_mask = (smoothed <= self.HILL_THRESHOLD) & (
-            relief < self.LOW_RELIEF_THRESHOLD
-        )
+        # Valleys: below local average by a fraction of local relief, in non-flat areas
+        valley_threshold = local_avg - (local_range * self.VALLEY_DEPTH_FRACTION)
+        valley_mask = ~flat_mask & (smoothed < valley_threshold)
 
-        # Valleys: lower than surroundings, not plain/mountain
-        valley_mask = (
-            ~mountain_mask & ~hill_mask & ~plain_mask & (smoothed < local_avg - 50)
-        )
+        # Hills exclude valleys
+        hill_mask = hill_mask & ~valley_mask
 
         regions = []
 
         for classification, mask in [
             ("mountain", mountain_mask),
             ("hill", hill_mask),
-            ("plain", plain_mask),
+            ("flat", flat_mask),
             ("valley", valley_mask),
         ]:
             # Find connected components
@@ -945,7 +955,7 @@ and {height_km:.0f} km north-south.
 - Airports/FARPs: {len(airbases)}
 - Mountain regions: {class_counts.get("mountain", 0)}
 - Hill regions: {class_counts.get("hill", 0)}
-- Plain regions: {class_counts.get("plain", 0)}
+- Flat regions: {class_counts.get("flat", 0)}
 - Valley regions: {class_counts.get("valley", 0)}
 - Water bodies: {len(water_bodies)}
 - Detected settlements: {len(settlements)}
@@ -1051,7 +1061,7 @@ and {height_km:.0f} km north-south.
         for r in regions:
             by_class[r.classification].append(r)
 
-        for classification in ["mountain", "hill", "plain", "valley"]:
+        for classification in ["mountain", "hill", "flat", "valley"]:
             class_regions = by_class.get(classification, [])
             if not class_regions:
                 continue

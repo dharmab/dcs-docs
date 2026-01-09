@@ -131,7 +131,7 @@ The generated markdown includes:
 
 - **Overview**: Map bounds, terrain summary statistics
 - **Airports**: Full parking spot data with Term_Index, Term_Type, positions
-- **Terrain Regions**: Mountain, hill, plain, valley regions with polygon vertices
+- **Terrain Regions**: Mountain, hill, flat, valley regions with polygon vertices
 - **Water Bodies**: Seas, lakes, reservoirs with boundaries
 - **Settlements**: Detected from road density clustering
 - **Connectivity**: Which regions connect via roads
@@ -166,11 +166,11 @@ The Python processor reads the JSON and turns raw samples into higher-level feat
 
 **Building the grid:** The multi-resolution samples get combined into a 2D elevation grid at the finest resolution. When samples overlap, the finer-resolution sample wins.
 
-**Terrain classification:** The processor uses a sliding window to compute *local relief* (the difference between the highest and lowest points in a small neighborhood) and *local average elevation*. These features feed into simple threshold rules:
-- Mountains: very high elevation, or moderate elevation with high relief
-- Hills: moderate elevation, not already classified as mountain
-- Plains: low elevation with low relief
-- Valleys: lower than surrounding terrain, not fitting other categories
+**Terrain classification:** The processor computes *slope* (steepness from elevation gradients) and *prominence* (how much a point rises above the local minimum). These features feed into classification rules that work consistently regardless of absolute elevation:
+- Flat: low slope (less than 5°), regardless of elevation
+- Mountains: steep slope (15°+) with high prominence relative to local relief
+- Hills: moderate slope, not flat or mountain
+- Valleys: below local average by a fraction of local relief, in non-flat areas
 
 **Finding regions:** After classification, the code uses *connected component labeling* (a standard image-processing algorithm) to group adjacent cells of the same type into distinct regions. Each region gets a convex hull polygon that approximates its boundary.
 
