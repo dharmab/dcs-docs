@@ -2,6 +2,8 @@
 
 The `mission` file is a Lua table containing the complete mission definition. This document describes every top-level key and their nested structures.
 
+> **Important:** When programmatically generating mission files, all top-level keys listed below must be present, even if empty. DCS will fail to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use empty tables `{}` for unused sections rather than omitting them entirely.
+
 ## Top-Level Keys
 
 | Key | Type | Description |

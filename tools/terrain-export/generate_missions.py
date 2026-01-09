@@ -11,358 +11,334 @@ from __future__ import annotations
 import zipfile
 from pathlib import Path
 
-# Theatre names as used in DCS (theatre file content) and display names
+import luadata
+
+
+def load_terrain_sampler_script() -> str:
+    """Load the terrain sampler Lua script from disk."""
+    script_path = Path(__file__).parent / "terrain-sampler.lua"
+    return script_path.read_text(encoding="utf-8")
+
+# Theatre names as used in DCS
 THEATRES = [
-    ("Caucasus", "Caucasus"),
-    ("Syria", "Syria"),
-    ("Nevada", "Nevada"),
-    ("PersianGulf", "PersianGulf"),
-    ("MarianaIslands", "MarianaIslands"),
-    ("Falklands", "Falklands"),
-    ("Sinai", "Sinai"),
-    ("Kola", "Kola"),
-    ("Afghanistan", "Afghanistan"),
+    "Caucasus",
+    "Syria",
+    "Nevada",
+    "PersianGulf",
+    "MarianaIslands",
+    "Falklands",
+    "Sinai",
+    "Kola",
+    "Afghanistan",
 ]
 
 
-def generate_mission_lua(theatre: str) -> str:
-    """Generate the mission Lua file content."""
-    # The script uses dofile to load the terrain sampler from the Scripts folder.
-    # This requires desanitized MissionScripting.lua (which is already required
-    # for the terrain sampler to write files anyway).
-    script_content = 'dofile(lfs.writedir() .. "Scripts/terrain-sampler.lua")'
-
-    return f'''mission =
-{{
-    ["trig"] =
-    {{
-        ["actions"] =
-        {{
-            [1] = "a]do script({script_content}); ",
-        }}, -- end of ["actions"]
-        ["events"] =
-        {{
-        }}, -- end of ["events"]
-        ["custom"] =
-        {{
-        }}, -- end of ["custom"]
-        ["func"] =
-        {{
-        }}, -- end of ["func"]
-        ["flag"] =
-        {{
-            [1] = true,
-        }}, -- end of ["flag"]
-        ["conditions"] =
-        {{
-            [1] = "return(c_time_after(5) )",
-        }}, -- end of ["conditions"]
-        ["customStartup"] =
-        {{
-        }}, -- end of ["customStartup"]
-        ["funcStartup"] =
-        {{
-        }}, -- end of ["funcStartup"]
-        ["activePart"] =
-        {{
-            [1] =
-            {{
-                [1] = 1,
-            }}, -- end of [1]
-        }}, -- end of ["activePart"]
-    }}, -- end of ["trig"]
-    ["requiredModules"] =
-    {{
-    }}, -- end of ["requiredModules"]
-    ["date"] =
-    {{
-        ["Day"] = 1,
-        ["Year"] = 2020,
-        ["Month"] = 6,
-    }}, -- end of ["date"]
-    ["coalitions"] =
-    {{
-        ["neutrals"] =
-        {{
-        }}, -- end of ["neutrals"]
-        ["blue"] =
-        {{
-        }}, -- end of ["blue"]
-        ["red"] =
-        {{
-        }}, -- end of ["red"]
-    }}, -- end of ["coalitions"]
-    ["maxDictId"] = 0,
-    ["descriptionNeutralsTask"] = "",
-    ["groundControl"] =
-    {{
-        ["isPilotControlVehicles"] = false,
-        ["roles"] =
-        {{
-            ["artillery_commander"] =
-            {{
-                ["neutrals"] = 0,
-                ["blue"] = 0,
-                ["red"] = 0,
-            }}, -- end of ["artillery_commander"]
-            ["instructor"] =
-            {{
-                ["neutrals"] = 0,
-                ["blue"] = 0,
-                ["red"] = 0,
-            }}, -- end of ["instructor"]
-            ["observer"] =
-            {{
-                ["neutrals"] = 0,
-                ["blue"] = 0,
-                ["red"] = 0,
-            }}, -- end of ["observer"]
-            ["forward_observer"] =
-            {{
-                ["neutrals"] = 0,
-                ["blue"] = 0,
-                ["red"] = 0,
-            }}, -- end of ["forward_observer"]
-        }}, -- end of ["roles"]
-    }}, -- end of ["groundControl"]
-    ["descriptionText"] = "Terrain export mission for {theatre}.",
-    ["pictureFileNameN"] =
-    {{
-    }}, -- end of ["pictureFileNameN"]
-    ["descriptionBlueTask"] = "",
-    ["descriptionRedTask"] = "",
-    ["pictureFileNameR"] =
-    {{
-    }}, -- end of ["pictureFileNameR"]
-    ["sortie"] = "Terrain Export - {theatre}",
-    ["version"] = 22,
-    ["trigrules"] =
-    {{
-        [1] =
-        {{
-            ["rules"] =
-            {{
-                [1] =
-                {{
-                    ["flag"] = 0,
-                    ["coalitionlist"] = "red",
-                    ["KeyDict_text"] = "",
-                    ["predicate"] = "c_time_after",
-                    ["zone"] = "",
-                    ["unitType"] = "",
-                    ["seconds"] = 5,
-                    ["meters"] = 1000,
-                    ["KeyDict_zone"] = "",
-                    ["readonly"] = false,
-                    ["text"] = "",
-                    ["unitObject"] = "",
-                    ["KeyDict_unitObject"] = "",
-                    ["target"] = "",
-                    ["KeyDict_target"] = "",
-                }}, -- end of [1]
-            }}, -- end of ["rules"]
-            ["comment"] = "Run terrain sampler",
-            ["eventlist"] = "",
-            ["predicate"] = "triggerOnce",
-            ["actions"] =
-            {{
-                [1] =
-                {{
-                    ["text"] = "",
-                    ["KeyDict_text"] = "",
-                    ["predicate"] = "a]do script",
-                    ["KeyDict_file"] = "",
-                    ["ai_task"] =
-                    {{
-                    }}, -- end of ["ai_task"]
-                    ["file"] = "Scripts/terrain-sampler.lua",
-                }}, -- end of [1]
-            }}, -- end of ["actions"]
-        }}, -- end of [1]
-    }}, -- end of ["trigrules"]
-    ["theatre"] = "{theatre}",
-    ["triggers"] =
-    {{
-        ["zones"] =
-        {{
-        }}, -- end of ["zones"]
-    }}, -- end of ["triggers"]
-    ["map"] =
-    {{
-        ["centerY"] = 0,
-        ["zoom"] = 1000000,
-        ["centerX"] = 0,
-    }}, -- end of ["map"]
-    ["coalition"] =
-    {{
-        ["neutrals"] =
-        {{
-            ["bullseye"] =
-            {{
-                ["y"] = 0,
-                ["x"] = 0,
-            }}, -- end of ["bullseye"]
-            ["nav_points"] =
-            {{
-            }}, -- end of ["nav_points"]
-            ["name"] = "neutrals",
-            ["country"] =
-            {{
-            }}, -- end of ["country"]
-        }}, -- end of ["neutrals"]
-        ["blue"] =
-        {{
-            ["bullseye"] =
-            {{
-                ["y"] = 0,
-                ["x"] = 0,
-            }}, -- end of ["bullseye"]
-            ["nav_points"] =
-            {{
-            }}, -- end of ["nav_points"]
-            ["name"] = "blue",
-            ["country"] =
-            {{
-            }}, -- end of ["country"]
-        }}, -- end of ["blue"]
-        ["red"] =
-        {{
-            ["bullseye"] =
-            {{
-                ["y"] = 0,
-                ["x"] = 0,
-            }}, -- end of ["bullseye"]
-            ["nav_points"] =
-            {{
-            }}, -- end of ["nav_points"]
-            ["name"] = "red",
-            ["country"] =
-            {{
-            }}, -- end of ["country"]
-        }}, -- end of ["red"]
-    }}, -- end of ["coalition"]
-    ["currentKey"] = 0,
-    ["start_time"] = 43200,
-    ["forcedOptions"] =
-    {{
-    }}, -- end of ["forcedOptions"]
-    ["failures"] =
-    {{
-    }}, -- end of ["failures"]
-}} -- end of mission
-'''
+def serialize_lua(name: str, data: dict | list) -> str:
+    """Serialize a Python dict/list to a Lua table assignment."""
+    content = luadata.serialize(data, encoding="utf-8", indent="\t")
+    return f"{name} =\n{content}\n"
 
 
-def generate_options_lua() -> str:
-    """Generate minimal options Lua file."""
-    return '''options =
-{
-    ["playerName"] = "Player",
-    ["miscellaneous"] =
-    {
-        ["allow_ownship_export"] = true,
-        ["headmove"] = false,
-        ["TrackIR_external_views"] = true,
-        ["f11_free_camera"] = true,
-        ["f10_awacs"] = true,
-        ["Coordinate_Display"] = "Lat Long Decimal",
-        ["accidental_failures"] = false,
-        ["autologin"] = true,
-        ["show_pilot_body"] = false,
-        ["collect_stat"] = false,
-        ["chat_window_at_start"] = true,
-        ["synchronize_controls"] = false,
-        ["backup"] = false,
-        ["f5_nearest_ac"] = true,
-    }, -- end of ["miscellaneous"]
-    ["difficulty"] =
-    {
-        ["fuel"] = false,
-        ["labels"] = 0,
-        ["easyRadar"] = false,
-        ["miniHUD"] = false,
-        ["optionsView"] = "optview_all",
-        ["setGlobal"] = true,
-        ["avionicsLanguage"] = "native",
-        ["cockpitVisualRM"] = false,
-        ["map"] = true,
-        ["spectatorExternalViews"] = true,
-        ["userSnapView"] = true,
-        ["iconsTheme"] = "nato",
-        ["weapons"] = false,
-        ["padlock"] = false,
-        ["birds"] = 0,
-        ["permitCrash"] = true,
-        ["immortal"] = false,
-        ["cockpitStatusBarAllowed"] = false,
-        ["wakeTurbulence"] = false,
-        ["easyFlight"] = false,
-        ["hideStick"] = false,
-        ["radio"] = false,
-        ["geffect"] = "realistic",
-        ["easyCommunication"] = true,
-        ["tips"] = true,
-        ["autoTrimmer"] = false,
-        ["externalViews"] = true,
-        ["RBDAI"] = true,
-        ["controlsIndicator"] = true,
-        ["units"] = "imperial",
-        ["unrestrictedSATNAV"] = false,
-    }, -- end of ["difficulty"]
-    ["VR"] =
-    {
-    }, -- end of ["VR"]
-    ["graphics"] =
-    {
-    }, -- end of ["graphics"]
-} -- end of options
-'''
+def build_mission_data(theatre: str, script_content: str) -> dict:
+    """Build the mission data structure for a given theatre."""
+    return {
+        "trig": {
+            "actions": {},
+            "events": {},
+            "custom": {},
+            "func": {},
+            "flag": {},
+            "conditions": {},
+            "customStartup": {},
+            "funcStartup": {},
+            "activePart": {},
+        },
+        "result": {
+            "total": 0,
+            "offline": {
+                "conditions": {},
+                "actions": {},
+                "func": {},
+            },
+            "blue": {
+                "conditions": {},
+                "actions": {},
+                "func": {},
+            },
+            "red": {
+                "conditions": {},
+                "actions": {},
+                "func": {},
+            },
+        },
+        "goals": {},
+        "weather": {
+            "atmosphere_type": 0,
+            "groundTurbulence": 0,
+            "enable_fog": False,
+            "wind": {
+                "atGround": {
+                    "speed": 0,
+                    "dir": 0,
+                },
+                "at2000": {
+                    "speed": 0,
+                    "dir": 0,
+                },
+                "at8000": {
+                    "speed": 0,
+                    "dir": 0,
+                },
+            },
+            "season": {
+                "temperature": 20,
+            },
+            "type_weather": 0,
+            "qnh": 760,
+            "cyclones": {},
+            "name": "Summer, clean sky",
+            "fog": {
+                "thickness": 0,
+                "visibility": 0,
+            },
+            "visibility": {
+                "distance": 80000,
+            },
+            "clouds": {
+                "thickness": 200,
+                "density": 0,
+                "preset": "Preset1",
+                "base": 2500,
+                "iprecptns": 0,
+            },
+        },
+        "requiredModules": {},
+        "date": {
+            "Day": 1,
+            "Year": 2020,
+            "Month": 6,
+        },
+        "coalitions": {
+            "neutrals": {},
+            "blue": {},
+            "red": {},
+        },
+        "maxDictId": 0,
+        "descriptionNeutralsTask": "",
+        "groundControl": {
+            "isPilotControlVehicles": False,
+            "roles": {
+                "artillery_commander": {
+                    "neutrals": 0,
+                    "blue": 0,
+                    "red": 0,
+                },
+                "instructor": {
+                    "neutrals": 0,
+                    "blue": 0,
+                    "red": 0,
+                },
+                "observer": {
+                    "neutrals": 0,
+                    "blue": 0,
+                    "red": 0,
+                },
+                "forward_observer": {
+                    "neutrals": 0,
+                    "blue": 0,
+                    "red": 0,
+                },
+            },
+        },
+        "descriptionText": f"Terrain export mission for {theatre}.",
+        "pictureFileNameN": {},
+        "descriptionBlueTask": "",
+        "descriptionRedTask": "",
+        "pictureFileNameR": {},
+        "sortie": f"Terrain Export - {theatre}",
+        "version": 22,
+        "trigrules": {
+            1: {
+                "rules": {
+                    1: {
+                        "flag": 0,
+                        "coalitionlist": "red",
+                        "KeyDict_text": "",
+                        "predicate": "c_time_after",
+                        "zone": "",
+                        "unitType": "",
+                        "seconds": 30,
+                        "meters": 1000,
+                        "KeyDict_zone": "",
+                        "readonly": False,
+                        "text": "",
+                        "unitObject": "",
+                        "KeyDict_unitObject": "",
+                        "target": "",
+                        "KeyDict_target": "",
+                    },
+                },
+                "comment": "Run terrain sampler",
+                "eventlist": "",
+                "predicate": "triggerOnce",
+                "actions": {
+                    1: {
+                        "text": script_content,
+                        "KeyDict_text": "",
+                        "predicate": "a_do_script",
+                        "KeyDict_file": "",
+                        "ai_task": {},
+                        "file": "",
+                    },
+                },
+            },
+        },
+        "theatre": theatre,
+        "triggers": {
+            "zones": {},
+        },
+        "map": {
+            "centerY": 0,
+            "zoom": 1000000,
+            "centerX": 0,
+        },
+        "coalition": {
+            "neutrals": {
+                "bullseye": {
+                    "y": 0,
+                    "x": 0,
+                },
+                "nav_points": {},
+                "name": "neutrals",
+                "country": {},
+            },
+            "blue": {
+                "bullseye": {
+                    "y": 0,
+                    "x": 0,
+                },
+                "nav_points": {},
+                "name": "blue",
+                "country": {},
+            },
+            "red": {
+                "bullseye": {
+                    "y": 0,
+                    "x": 0,
+                },
+                "nav_points": {},
+                "name": "red",
+                "country": {},
+            },
+        },
+        "currentKey": 0,
+        "start_time": 43200,
+        "forcedOptions": {},
+        "failures": {},
+    }
 
 
-def generate_warehouses_lua() -> str:
-    """Generate minimal warehouses Lua file."""
-    return '''warehouses =
-{
-} -- end of warehouses
-'''
+def build_options_data() -> dict:
+    """Build minimal options data structure."""
+    return {
+        "playerName": "Player",
+        "miscellaneous": {
+            "allow_ownship_export": True,
+            "headmove": False,
+            "TrackIR_external_views": True,
+            "f11_free_camera": True,
+            "f10_awacs": True,
+            "Coordinate_Display": "Lat Long Decimal",
+            "accidental_failures": False,
+            "autologin": True,
+            "show_pilot_body": False,
+            "collect_stat": False,
+            "chat_window_at_start": True,
+            "synchronize_controls": False,
+            "backup": False,
+            "f5_nearest_ac": True,
+        },
+        "difficulty": {
+            "fuel": False,
+            "labels": 0,
+            "easyRadar": False,
+            "miniHUD": False,
+            "optionsView": "optview_all",
+            "setGlobal": True,
+            "avionicsLanguage": "native",
+            "cockpitVisualRM": False,
+            "map": True,
+            "spectatorExternalViews": True,
+            "userSnapView": True,
+            "iconsTheme": "nato",
+            "weapons": False,
+            "padlock": False,
+            "birds": 0,
+            "permitCrash": True,
+            "immortal": False,
+            "cockpitStatusBarAllowed": False,
+            "wakeTurbulence": False,
+            "easyFlight": False,
+            "hideStick": False,
+            "radio": False,
+            "geffect": "realistic",
+            "easyCommunication": True,
+            "tips": True,
+            "autoTrimmer": False,
+            "externalViews": True,
+            "RBDAI": True,
+            "controlsIndicator": True,
+            "units": "imperial",
+            "unrestrictedSATNAV": False,
+        },
+        "VR": {},
+        "graphics": {},
+    }
 
 
-def generate_dictionary() -> str:
-    """Generate localization dictionary."""
-    return '''dictionary =
-{
-} -- end of dictionary
-'''
+def build_warehouses_data() -> dict:
+    """Build minimal warehouses data structure."""
+    return {}
 
 
-def generate_map_resource() -> str:
-    """Generate map resource file."""
-    return '''mapResource =
-{
-} -- end of mapResource
-'''
+def build_dictionary_data() -> dict:
+    """Build localization dictionary data structure."""
+    return {}
 
 
-def create_miz(output_dir: Path, theatre_id: str, theatre_display: str) -> Path:
+def build_map_resource_data() -> dict:
+    """Build map resource data structure."""
+    return {}
+
+
+def create_miz(output_dir: Path, theatre: str, script_content: str) -> Path:
     """Create a MIZ file for the given theatre."""
-    miz_path = output_dir / f"{theatre_id.lower()}-terrain-export.miz"
+    miz_path = output_dir / f"{theatre.lower()}-terrain-export.miz"
 
     with zipfile.ZipFile(miz_path, "w", zipfile.ZIP_DEFLATED) as zf:
         # Main mission file
-        zf.writestr("mission", generate_mission_lua(theatre_id))
+        zf.writestr(
+            "mission", serialize_lua("mission", build_mission_data(theatre, script_content))
+        )
 
         # Theatre identifier
-        zf.writestr("theatre", theatre_id)
+        zf.writestr("theatre", theatre)
 
         # Options
-        zf.writestr("options", generate_options_lua())
+        zf.writestr("options", serialize_lua("options", build_options_data()))
 
         # Warehouses
-        zf.writestr("warehouses", generate_warehouses_lua())
+        zf.writestr("warehouses", serialize_lua("warehouses", build_warehouses_data()))
 
         # Localization
-        zf.writestr("l10n/DEFAULT/dictionary", generate_dictionary())
-        zf.writestr("l10n/DEFAULT/mapResource", generate_map_resource())
+        zf.writestr(
+            "l10n/DEFAULT/dictionary",
+            serialize_lua("dictionary", build_dictionary_data()),
+        )
+        zf.writestr(
+            "l10n/DEFAULT/mapResource",
+            serialize_lua("mapResource", build_map_resource_data()),
+        )
 
     return miz_path
 
@@ -372,18 +348,21 @@ def main() -> int:
     output_dir = Path(__file__).parent / "missions"
     output_dir.mkdir(exist_ok=True)
 
+    # Load the terrain sampler script once
+    script_content = load_terrain_sampler_script()
+    print(f"Loaded terrain-sampler.lua ({len(script_content)} bytes)")
+
     print(f"Generating MIZ files in {output_dir}/")
 
-    for theatre_id, theatre_display in THEATRES:
-        miz_path = create_miz(output_dir, theatre_id, theatre_display)
+    for theatre in THEATRES:
+        miz_path = create_miz(output_dir, theatre, script_content)
         print(f"  Created: {miz_path.name}")
 
     print(f"\nGenerated {len(THEATRES)} mission files.")
     print("\nTo use:")
-    print("1. Copy terrain-sampler.lua to Saved Games/DCS/Scripts/")
-    print("2. Open any generated .miz file in DCS")
-    print("3. Run the mission and wait for export completion")
-    print("4. Find JSON output in Saved Games/DCS/TerrainExport/")
+    print("1. Open any generated .miz file in DCS")
+    print("2. Run the mission and wait for export completion")
+    print("3. Find JSON output in Saved Games/DCS/TerrainExport/")
 
     return 0
 

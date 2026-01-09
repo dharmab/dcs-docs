@@ -12,6 +12,15 @@ wheels = [
 ]
 
 [[package]]
+name = "luadata"
+version = "1.0.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ec/e5/28449a81d76660d42058d095dad77c88e046423277c803b2bf35fd457e06/luadata-1.0.5.tar.gz", hash = "sha256:7cffdfe889fd42b9de44c786c3cfd6591d35ff66ccf1812d0cbd2a3bbc6ddaf0", size = 7112, upload-time = "2021-04-08T15:10:43.739Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/15/d8db71cf0af4577e4f86d9d7dc230fb6cb5cd354a26ff524651521b8e8fb/luadata-1.0.5-py3-none-any.whl", hash = "sha256:e0ff43e65fb7dada87cdfc0e5b0f089de2e1080f6857f866b377a485c0694edf", size = 9190, upload-time = "2021-04-08T15:10:42.637Z" },
+]
+
+[[package]]
 name = "numpy"
 version = "2.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -128,6 +137,7 @@ name = "terrain-export"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "luadata" },
     { name = "numpy" },
     { name = "scikit-learn" },
     { name = "scipy" },
@@ -141,6 +151,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "luadata", specifier = ">=1.0.5" },
     { name = "numpy" },
     { name = "scikit-learn" },
     { name = "scipy" },

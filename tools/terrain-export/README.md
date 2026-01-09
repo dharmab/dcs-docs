@@ -6,7 +6,7 @@ Exports terrain and airport data from DCS World for use as LLM context in missio
 
 This tool consists of two parts:
 
-1. **Lua script** (`terrain-sampler.lua`) - Runs inside DCS to export raw terrain data
+1. **Mission files** (`missions/*.miz`) - Pre-built missions with embedded Lua script that exports terrain data
 2. **Python script** (`process_terrain.py`) - Processes the export into markdown documentation
 
 ## Part A: DCS Export (Windows machine with DCS installed)
@@ -60,13 +60,13 @@ If you regularly play multiplayer missions from untrusted sources, keeping the f
 
 ### Running the Export
 
-1. Copy `terrain-sampler.lua` to `Saved Games/DCS/Scripts/`
+1. Copy the appropriate `.miz` file from `missions/` to your DCS Missions folder
 
-2. Copy the appropriate `.miz` file from `missions/` to your DCS Missions folder
+2. Open DCS World and load the mission (e.g., `caucasus-terrain-export.miz`)
 
-3. Open DCS World and load the mission (e.g., `caucasus-terrain-export.miz`)
+3. Run the mission (can be single player)
 
-4. Run the mission (can be single player)
+4. The terrain export script will automatically run 30 seconds after mission start
 
 5. Wait for the "Terrain export complete!" message (may take 1-2 minutes for large maps)
 
@@ -91,11 +91,13 @@ Pre-generated export missions are provided in the `missions/` directory:
 - `kola-terrain-export.miz`
 - `afghanistan-terrain-export.miz`
 
-To regenerate the missions (e.g., after modifying the trigger):
+To regenerate the missions (e.g., after modifying the terrain sampler script):
 
 ```bash
-python generate_missions.py
+uv run python generate_missions.py
 ```
+
+The terrain sampler Lua script (`terrain-sampler.lua`) is embedded directly into each mission file during generation.
 
 ### Export Contents
 

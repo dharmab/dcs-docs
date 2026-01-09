@@ -192,17 +192,18 @@ function TerrainSampler:sampleGrid()
     self:log("Expected samples: " .. totalSamples .. " (" .. totalX .. " x " .. totalZ .. ")")
 
     local count = 0
-    for x = bounds.minX, bounds.maxX, resolution do
-        for z = bounds.minZ, bounds.maxZ, resolution do
-            local height = land.getHeight({x = x, y = z})
-            local surfaceType = land.getSurfaceType({x = x, y = z})
+    for xCoord = bounds.minX, bounds.maxX, resolution do
+        for zCoord = bounds.minZ, bounds.maxZ, resolution do
+            local point = {x = xCoord, y = zCoord}
+            local height = land.getHeight(point)
+            local surfaceType = land.getSurfaceType(point)
 
-            -- Convert to lat/lon for human reference
-            local lat, lon, alt = coord.LOtoLL(x, height, z)
+            -- Convert to lat/lon for human reference (x, y, z where y is altitude)
+            local lat, lon, alt = coord.LOtoLL(xCoord, height, zCoord)
 
             table.insert(samples, {
-                x = x,
-                z = z,
+                x = xCoord,
+                z = zCoord,
                 height = height,
                 surface = surfaceType,
                 lat = lat,
@@ -457,15 +458,11 @@ end
 -- INITIALIZATION
 -- =============================================================================
 
--- Schedule export after mission loads (5 second delay)
-timer.scheduleFunction(function()
-    local status, err = pcall(function()
-        TerrainSampler:export()
-    end)
-    if not status then
-        env.error("[TerrainSampler] Export failed: " .. tostring(err))
-        trigger.action.outText("ERROR: Terrain export failed - " .. tostring(err), 30)
-    end
-end, nil, timer.getTime() + 5)
-
-env.info("[TerrainSampler] Scheduled terrain export in 5 seconds")
+-- Run export immediately (mission trigger handles timing)
+local status, err = pcall(function()
+    TerrainSampler:export()
+end)
+if not status then
+    env.error("[TerrainSampler] Export failed: " .. tostring(err))
+    trigger.action.outText("ERROR: Terrain export failed - " .. tostring(err), 30)
+end
