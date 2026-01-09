@@ -2,6 +2,8 @@
 
 The world singleton provides event handling and object searching capabilities. See the [Events](../events/events.md) documentation for event handling details.
 
+Functions that accept search volumes with coordinate parameters (such as `searchObjects` and `removeJunk`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+
 ## world.addEventHandler
 
 ```lua

@@ -2,6 +2,8 @@
 
 The AI control system allows scripts to direct AI behavior through tasks, commands, and options. These are issued through the Controller object obtained from groups or units.
 
+Tasks that accept coordinate parameters (such as `Orbit`, `Bombing`, `CarpetBombing`, `FireAtPoint`, `Land`, and `EngageTargetsInZone`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When constructing tasks with dynamically calculated positions, validate that coordinates remain within reasonable bounds before issuing the task.
+
 ## Overview
 
 AI behavior is controlled through three mechanisms:

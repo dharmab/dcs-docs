@@ -52,6 +52,12 @@ local pitch = math.asin(pos.x.y)
 
 The heading calculation returns radians where 0 represents North. The pitch calculation returns radians where positive values indicate the nose is pointing up.
 
+## Map Bounds
+
+Many SSE functions that accept Vec2 or Vec3 parameters may fail or return undefined results if the coordinates fall outside the current map's boundaries. Each theater has different dimensions, and coordinates valid on one map may be invalid on another.
+
+When working with dynamically calculated positions, validate that coordinates remain within reasonable bounds before passing them to functions like `land.getHeight()`, `atmosphere.getWind()`, or coordinate conversion functions. Consider wrapping calls to these functions in `pcall()` when the input coordinates are not guaranteed to be within bounds.
+
 ## See Also
 
 - [Data Types](../../simulator-scripting-engine.md#data-types) - Coordinate system explanation

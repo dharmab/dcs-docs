@@ -2,6 +2,8 @@
 
 The Spot class represents a laser or infrared designator spot. You create spots dynamically through static functions.
 
+Functions that accept target point parameters (such as `createLaser`, `createInfraRed`, and `setPoint`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+
 The `Spot.Category` enum defines the spot categories:
 
 ```lua

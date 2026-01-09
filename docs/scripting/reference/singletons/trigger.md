@@ -2,6 +2,8 @@
 
 The trigger singleton provides access to trigger zones, user flags, and trigger-style actions like messages, smoke, and explosions. The singleton is divided into two sub-tables: `trigger.action` for actions and `trigger.misc` for utilities.
 
+Functions that accept position parameters (such as `smoke`, `explosion`, `illuminationBomb`, and `signalFlare`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+
 ## trigger.action.outText
 
 ```lua

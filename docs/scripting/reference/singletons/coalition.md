@@ -2,6 +2,8 @@
 
 The coalition singleton provides functions to query and spawn groups and static objects.
 
+Functions that accept coordinate parameters for spawning (such as `addGroup`, `addStaticObject`, and `addRefPoint`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+
 ## coalition.addGroup
 
 ```lua
