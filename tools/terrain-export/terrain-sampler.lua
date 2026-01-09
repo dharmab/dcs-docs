@@ -382,6 +382,8 @@ function TerrainSampler:sampleGrid(callback)
     else
         bounds = self:getBounds()
     end
+    -- Cache bounds for reuse by other phases (e.g., road sampling)
+    self.state.detectedBounds = bounds
     local resolution = self.config.gridResolution
 
     local totalX = math.floor((bounds.maxX - bounds.minX) / resolution) + 1
@@ -554,7 +556,22 @@ end
 function TerrainSampler:sampleRoads(callback)
     self:startPhase("Road Network Sampling")
 
-    local bounds = self:getBounds()
+    -- Use cached bounds from terrain sampling phase, or detect/fetch if not available
+    local bounds = self.state.detectedBounds
+    if not bounds then
+        if self.config.detectBounds then
+            self:log("No cached bounds available, detecting bounds for road sampling...")
+            bounds = self:detectBoundsFromOrigin(
+                self.config.detectStepSize,
+                self.config.detectMaxDistance,
+                self.config.detectFlatThreshold,
+                self.config.detectMinArea
+            )
+        end
+        if not bounds then
+            bounds = self:getBounds()
+        end
+    end
     local resolution = self.config.roadGridResolution
     local roadPoints = {}
     local roadSegments = {}
