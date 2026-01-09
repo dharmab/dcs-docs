@@ -47,11 +47,13 @@ Several constants are embedded in the code:
 
 **Resolution:** Added three new config options: `roadProximityFactor` (0.75), `roadNeighborCount` (8), and `connectivityProgressInterval` (50). Updated `sampleRoadPoint()` and `connectivityChunkProcessor()` to use these config values instead of hardcoded numbers.
 
-### [ ] Include script version in JSON output
+### [x] Include script version in JSON output (2026-01-09)
 
 The script version is defined (`TerrainSampler.VERSION`) but not included in the export.
 
 **Fix:** Add version to the metadata section of the JSON output.
+
+**Resolution:** Added `version = sampler.VERSION` to the metadata table in `finalizeExport()`, placing it as the first field in the metadata section.
 
 ---
 

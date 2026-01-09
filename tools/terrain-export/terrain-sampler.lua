@@ -1071,6 +1071,7 @@ function TerrainSampler:export()
 
         local exportData = {
             metadata = {
+                version = sampler.VERSION,
                 theatre = theatre,
                 exportTime = os.date("!%Y-%m-%dT%H:%M:%SZ"),
                 gridResolution = sampler.config.gridResolution,
