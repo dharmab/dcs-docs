@@ -357,6 +357,80 @@ end
 -- TERRAIN SAMPLING
 -- =============================================================================
 
+-- Samples a single terrain point and returns the sample data, or nil if sampling fails.
+-- Handles all validation and error logging internally.
+function TerrainSampler:sampleTerrainPoint(xCoord, zCoord)
+    -- Validate land API
+    if not land or type(land) ~= "table" then
+        self:logError("land API is not available at sampleGrid, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+    if type(land.getHeight) ~= "function" then
+        self:logError("land.getHeight is not available at sampleGrid, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+    if type(land.getSurfaceType) ~= "function" then
+        self:logError("land.getSurfaceType is not available at sampleGrid, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+
+    -- Validate coordinates
+    if type(xCoord) ~= "number" or type(zCoord) ~= "number" then
+        self:logWarning("Invalid coordinates at sampleGrid: x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord) .. ". Skipping sample.")
+        return nil
+    end
+
+    -- Get terrain data
+    local height, surfaceType
+    local ok, err = pcall(function()
+        height = land.getHeight({ x = xCoord, y = zCoord })
+        surfaceType = land.getSurfaceType({ x = xCoord, y = zCoord })
+    end)
+    if not ok or type(height) ~= "number" then
+        self:logError("Error calling land.getHeight or land.getSurfaceType at queryPoint: {x=" ..
+            tostring(xCoord) ..
+            ", y=" .. tostring(zCoord) .. "} | Error: " .. tostring(err) .. ". Skipping sample.")
+        return nil
+    end
+
+    -- Convert to lat/lon
+    local lat, lon, alt = nil, nil, nil
+    if coord and type(coord.LOtoLL) == "function" then
+        local okLL, errLL = pcall(function()
+            lat, lon, alt = coord.LOtoLL(xCoord, height, zCoord)
+        end)
+        if not okLL then
+            self:logWarning("coord.LOtoLL failed at x=" ..
+                tostring(xCoord) ..
+                ", y=" ..
+                tostring(height) .. ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errLL) ..
+                " | Args: x=" ..
+                tostring(xCoord) .. ", y=" .. tostring(height) .. ", z=" .. tostring(zCoord) ..
+                " | Types: x=" ..
+                type(xCoord) ..
+                ", y=" .. type(height) .. ", z=" .. type(zCoord) .. ". Skipping lat/lon for this sample.")
+            lat, lon, alt = nil, nil, nil
+        end
+    else
+        self:logWarning(
+            "coord or coord.LOtoLL not available at sampleGrid, skipping lat/lon for sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+    end
+
+    return {
+        x = xCoord,
+        z = zCoord,
+        height = height,
+        surface = surfaceType,
+        lat = lat,
+        lon = lon,
+    }
+end
+
 function TerrainSampler:sampleGrid(callback)
     self:startPhase("Terrain Grid Sampling")
 
@@ -430,77 +504,9 @@ function TerrainSampler:sampleGrid(callback)
             while zIndex < totalZ do
                 local zCoord = bounds.minZ + zIndex * resolution
 
-
-                repeat
-                    -- Defensive: Check land and its methods
-                    if not land or type(land) ~= "table" then
-                        self:logError("land API is not available at sampleGrid, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-                    if type(land.getHeight) ~= "function" then
-                        self:logError("land.getHeight is not available at sampleGrid, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-                    if type(land.getSurfaceType) ~= "function" then
-                        self:logError("land.getSurfaceType is not available at sampleGrid, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-
-                    -- Defensive: Validate coordinates
-                    if type(xCoord) ~= "number" or type(zCoord) ~= "number" then
-                        self:logWarning("Invalid coordinates at sampleGrid: x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord) .. ". Skipping sample.")
-                        break
-                    end
-
-                    local height, surfaceType
-                    local ok, err = pcall(function()
-                        height = land.getHeight({ x = xCoord, y = zCoord })
-                        surfaceType = land.getSurfaceType({ x = xCoord, y = zCoord })
-                    end)
-                    if not ok or type(height) ~= "number" then
-                        self:logError("Error calling land.getHeight or land.getSurfaceType at queryPoint: {x=" ..
-                            tostring(xCoord) ..
-                            ", y=" .. tostring(zCoord) .. "} | Error: " .. tostring(err) .. ". Skipping sample.")
-                        break
-                    end
-
-                    -- Defensive: Check coord and coord.LOtoLL
-                    local lat, lon, alt = nil, nil, nil
-                    if coord and type(coord.LOtoLL) == "function" then
-                        local okLL, errLL = pcall(function()
-                            lat, lon, alt = coord.LOtoLL(xCoord, height, zCoord)
-                        end)
-                        if not okLL then
-                            self:logWarning("coord.LOtoLL failed at x=" ..
-                                tostring(xCoord) ..
-                                ", y=" ..
-                                tostring(height) .. ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errLL) ..
-                                " | Args: x=" ..
-                                tostring(xCoord) .. ", y=" .. tostring(height) .. ", z=" .. tostring(zCoord) ..
-                                " | Types: x=" ..
-                                type(xCoord) ..
-                                ", y=" .. type(height) .. ", z=" .. type(zCoord) .. ". Skipping lat/lon for this sample.")
-                            lat, lon, alt = nil, nil, nil
-                        end
-                    else
-                        self:logWarning(
-                            "coord or coord.LOtoLL not available at sampleGrid, skipping lat/lon for sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                    end
-
-                    table.insert(samples, {
-                        x = xCoord,
-                        z = zCoord,
-                        height = height,
-                        surface = surfaceType,
-                        lat = lat,
-                        lon = lon,
-                    })
-
+                local sample = self:sampleTerrainPoint(xCoord, zCoord)
+                if sample then
+                    table.insert(samples, sample)
                     count = count + 1
 
                     -- Progress updates
@@ -510,7 +516,7 @@ function TerrainSampler:sampleGrid(callback)
                             tostring(count) .. "/" .. tostring(totalSamples) .. " (" .. tostring(percent) .. "%)")
                         lastProgressUpdate = count
                     end
-                until true
+                end
 
                 samplesThisChunk = samplesThisChunk + 1
                 zIndex = zIndex + 1
@@ -550,6 +556,98 @@ end
 -- =============================================================================
 -- ROAD SAMPLING
 -- =============================================================================
+
+-- Samples a road point near the given coordinates and returns the point data, or nil if no road is found.
+-- Handles all validation and error logging internally.
+function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
+    -- Validate land API
+    if not land or type(land) ~= "table" then
+        self:logError("land API is not available at sampleRoads, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+    if type(land.getClosestPointOnRoads) ~= "function" then
+        self:logError(
+            "land.getClosestPointOnRoads is not available at sampleRoads, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+    if type(land.getHeight) ~= "function" then
+        self:logError("land.getHeight is not available at sampleRoads, skipping sample at x=" ..
+            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        return nil
+    end
+
+    -- Find closest road point
+    local roadX, roadZ = nil, nil
+    local okRoad, errRoad = pcall(function()
+        roadX, roadZ = land.getClosestPointOnRoads("roads", xCoord, zCoord)
+    end)
+    if not okRoad then
+        self:logWarning("land.getClosestPointOnRoads failed at x=" ..
+            tostring(xCoord) ..
+            ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errRoad) .. ". Skipping sample.")
+        return nil
+    end
+
+    if not roadX or not roadZ then
+        return nil
+    end
+
+    local dist = math.sqrt((roadX - xCoord) ^ 2 + (roadZ - zCoord) ^ 2)
+
+    -- Only include if reasonably close to our sample point
+    if dist >= resolution * 0.75 then
+        return nil
+    end
+
+    -- Get height at road point
+    local height = nil
+    local okHeight, errHeight = pcall(function()
+        height = land.getHeight({ x = roadX, y = roadZ })
+    end)
+    if not okHeight or type(height) ~= "number" then
+        self:logWarning("land.getHeight failed for road point at x=" ..
+            tostring(roadX) ..
+            ", z=" ..
+            tostring(roadZ) .. " | Error: " .. tostring(errHeight) .. ". Skipping sample.")
+        return nil
+    end
+
+    -- Convert to lat/lon
+    local lat, lon = nil, nil
+    if coord and type(coord.LOtoLL) == "function" then
+        local okLL, errLL = pcall(function()
+            lat, lon = coord.LOtoLL(roadX, height, roadZ)
+        end)
+        if not okLL then
+            self:logWarning("coord.LOtoLL failed for road point at x=" ..
+                tostring(roadX) ..
+                ", y=" ..
+                tostring(height) ..
+                ", z=" .. tostring(roadZ) .. " | Error: " .. tostring(errLL) ..
+                " | Args: x=" ..
+                tostring(roadX) .. ", y=" .. tostring(height) .. ", z=" .. tostring(roadZ) ..
+                " | Types: x=" ..
+                type(roadX) ..
+                ", y=" ..
+                type(height) .. ", z=" .. type(roadZ) .. ". Skipping lat/lon for this sample.")
+            lat, lon = nil, nil
+        end
+    else
+        self:logWarning(
+            "coord or coord.LOtoLL not available at sampleRoads, skipping lat/lon for sample at x=" ..
+            tostring(roadX) .. ", z=" .. tostring(roadZ))
+    end
+
+    return {
+        x = roadX,
+        z = roadZ,
+        height = height,
+        lat = lat,
+        lon = lon,
+    }
+end
 
 function TerrainSampler:sampleRoads(callback)
     self:startPhase("Road Network Sampling")
@@ -629,88 +727,10 @@ function TerrainSampler:sampleRoads(callback)
                 local zCoord = bounds.minZ + zIndex * resolution
                 gridPointsChecked = gridPointsChecked + 1
 
-                repeat
-                    -- Defensive: Check land and its methods
-                    if not land or type(land) ~= "table" then
-                        self:logError("land API is not available at sampleRoads, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-                    if type(land.getClosestPointOnRoads) ~= "function" then
-                        self:logError(
-                            "land.getClosestPointOnRoads is not available at sampleRoads, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-                    if type(land.getHeight) ~= "function" then
-                        self:logError("land.getHeight is not available at sampleRoads, skipping sample at x=" ..
-                            tostring(xCoord) .. ", z=" .. tostring(zCoord))
-                        break
-                    end
-
-                    local roadX, roadZ = nil, nil
-                    local okRoad, errRoad = pcall(function()
-                        roadX, roadZ = land.getClosestPointOnRoads("roads", xCoord, zCoord)
-                    end)
-                    if not okRoad then
-                        self:logWarning("land.getClosestPointOnRoads failed at x=" ..
-                            tostring(xCoord) ..
-                            ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errRoad) .. ". Skipping sample.")
-                        break
-                    end
-
-                    if roadX and roadZ then
-                        local dist = math.sqrt((roadX - xCoord) ^ 2 + (roadZ - zCoord) ^ 2)
-
-                        -- Only include if reasonably close to our sample point
-                        if dist < resolution * 0.75 then
-                            local height = nil
-                            local okHeight, errHeight = pcall(function()
-                                height = land.getHeight({ x = roadX, y = roadZ })
-                            end)
-                            if not okHeight or type(height) ~= "number" then
-                                self:logWarning("land.getHeight failed for road point at x=" ..
-                                    tostring(roadX) ..
-                                    ", z=" ..
-                                    tostring(roadZ) .. " | Error: " .. tostring(errHeight) .. ". Skipping sample.")
-                                break
-                            end
-
-                            local lat, lon = nil, nil
-                            if coord and type(coord.LOtoLL) == "function" then
-                                local okLL, errLL = pcall(function()
-                                    lat, lon = coord.LOtoLL(roadX, height, roadZ)
-                                end)
-                                if not okLL then
-                                    self:logWarning("coord.LOtoLL failed for road point at x=" ..
-                                        tostring(roadX) ..
-                                        ", y=" ..
-                                        tostring(height) ..
-                                        ", z=" .. tostring(roadZ) .. " | Error: " .. tostring(errLL) ..
-                                        " | Args: x=" ..
-                                        tostring(roadX) .. ", y=" .. tostring(height) .. ", z=" .. tostring(roadZ) ..
-                                        " | Types: x=" ..
-                                        type(roadX) ..
-                                        ", y=" ..
-                                        type(height) .. ", z=" .. type(roadZ) .. ". Skipping lat/lon for this sample.")
-                                    lat, lon = nil, nil
-                                end
-                            else
-                                self:logWarning(
-                                    "coord or coord.LOtoLL not available at sampleRoads, skipping lat/lon for sample at x=" ..
-                                    tostring(roadX) .. ", z=" .. tostring(roadZ))
-                            end
-
-                            table.insert(roadPoints, {
-                                x = roadX,
-                                z = roadZ,
-                                height = height,
-                                lat = lat,
-                                lon = lon,
-                            })
-                        end
-                    end
-                until true
+                local roadPoint = self:sampleRoadPoint(xCoord, zCoord, resolution)
+                if roadPoint then
+                    table.insert(roadPoints, roadPoint)
+                end
 
                 -- Progress updates
                 if gridPointsChecked - lastProgressUpdate >= self.config.roadProgressInterval then

@@ -28,11 +28,13 @@ Line 249: `prevHeight` is assigned but never used in `detectBoundsFromOrigin()`.
 
 **Resolution:** Removed the `prevHeight` declaration and its assignment inside the loop.
 
-### [ ] Verbose control flow pattern
+### [x] Verbose control flow pattern (2026-01-09)
 
 The `repeat...until true` pattern (lines 434, 617, etc.) is used as a break-from-block substitute.
 
 **Fix:** Extract the sampling logic into separate helper functions that return early instead of using the repeat/break pattern.
+
+**Resolution:** Extracted the terrain sampling logic into `sampleTerrainPoint()` and road sampling logic into `sampleRoadPoint()`. Both helper functions handle validation and error logging internally, returning the sample data or nil on failure. The main loop code now simply calls the helper and checks for a non-nil result.
 
 ### [ ] Magic numbers
 
