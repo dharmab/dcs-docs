@@ -1,6 +1,6 @@
 # Erusea (2004)
 
-Federal Republic of Erusea during the Early Continental War.
+Federal Republic of Erusea during the early part of the Continental War.
 
 Inspired by Western European nations, particularly France, Germany, and Italy, with a mix of European and Soviet equipment.
 
