@@ -33,7 +33,7 @@ Create standard frequency allocation reference for AI to auto-configure radio pr
 
 ### Files
 
-- [ ] `docs/mission/radio-frequencies.md`
+- [x] `docs/recipes/comm-plan.md` - Standardized communications plan with frequency allocations
 
 ## Phase 3: Faction Naval Units
 
@@ -56,7 +56,7 @@ Create new recipes covering both Lua file editing and SSE scripting approaches w
 
 ### Files
 
-- [ ] `docs/recipes/cap-setup.md` - AI fighter patrol configuration with tasking and ROE
+- [x] `docs/recipes/air-to-air-setup.md` - AI fighter configuration including CAP, sweep, intercept, and escort
 - [ ] `docs/recipes/jtac-setup.md` - Forward air controller placement and laser codes
 - [ ] `docs/recipes/convoy-route.md` - Ground unit routes and waypoints
 - [ ] `docs/recipes/weather-time.md` - Season, cloud layers, visibility settings
