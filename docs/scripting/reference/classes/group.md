@@ -198,6 +198,38 @@ The `group:enableEmission` method enables or disables radar and radio emissions 
 **Parameters:**
 - `enable` (boolean): Set to true to enable emissions, or false to disable.
 
+## Spawning Notes
+
+**Spawn Operations Are Asynchronous:** When spawning groups via `coalition.addGroup()`, the spawn operation is asynchronous. The function returns immediately, but the group may not be accessible for a brief period afterward. Do not attempt to access or manipulate a newly spawned group in the same script block that spawned it. Use `timer.scheduleFunction()` to defer follow-up operations by at least one second:
+
+```lua
+local groupData = {
+    -- group definition
+}
+coalition.addGroup(country.id.USA, Group.Category.AIRPLANE, groupData)
+
+-- WRONG: Group may not exist yet
+local group = Group.getByName(groupData.name)
+
+-- CORRECT: Wait for spawn to complete
+timer.scheduleFunction(function()
+    local group = Group.getByName(groupData.name)
+    if group then
+        local controller = group:getController()
+        controller:setTask(someTask)
+    end
+end, nil, timer.getTime() + 1)
+```
+
+**Generic Crash Model Objects:** When units are destroyed, DCS creates "GENERIC_CRASH_MODEL" objects representing the wreckage. Scripts that iterate over all objects in the world or track object counts should filter out objects with this type name to avoid counting destroyed units as living objects:
+
+```lua
+local function isValidUnit(object)
+    local typeName = object:getTypeName()
+    return typeName ~= "GENERIC_CRASH_MODEL"
+end
+```
+
 ## See Also
 
 - [unit](unit.md) - Unit class

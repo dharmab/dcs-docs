@@ -308,6 +308,8 @@ Ammunition resupply is provided by cargo trucks with the `warehouse` attribute. 
 
 Anti-aircraft artillery remains a significant threat to low-flying aircraft and helicopters despite the proliferation of guided missiles. While lacking the range and accuracy of SAMs, AAA provides high-volume fire that requires no lock-on or guidance, making it effective against maneuvering targets and resistant to electronic countermeasures. The psychological impact of heavy AAA fire should not be underestimated—even experienced pilots will alter tactics to avoid the streams of tracer fire from concentrated anti-aircraft positions.
 
+**Scripting Note:** Radar-guided AAA units (such as the ZSU-23-4 Shilka) do not expose a maximum firing height parameter in their DCS unit definitions. When scripts need to estimate AAA engagement envelopes or create threat zone calculations, use the weapon's vertical range (slant range capability) as a substitute for the missing parameter.
+
 #### Modern AAA
 
 **ZU-23-2** - The Soviet ZU-23-2 twin 23mm autocannon entered service in 1960 and remains one of the world's most widely deployed anti-aircraft weapons. The air-cooled, gas-operated guns can fire 2,000 rounds per minute combined, engaging aircraft at slant ranges up to 2,500 meters. The system's simplicity, reliability, and effectiveness have made it ubiquitous—from Soviet motor rifle divisions to Afghan mujahideen, Syrian rebels, and technicals across Africa and the Middle East. The weapon is commonly mounted on trucks for mobility or emplaced in fixed positions for point defense.

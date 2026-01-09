@@ -24,6 +24,41 @@ All events contain at least:
 
 Many events include `initiator`, which is typically the Unit that caused the event. Always nil-check `initiator` as it may be nil in some edge cases (especially in multiplayer).
 
+## Event Handler Pitfalls
+
+Event handlers have several known issues that scripts must handle defensively.
+
+**Group Access May Fail:** Within event handlers, calling `unit:getGroup()` or `Group.getByName()` for a unit's group sometimes returns nil even when the group should exist. This appears to be a timing or caching issue in the DCS scripting engine. Always check for nil before accessing group methods:
+
+```lua
+function handler:onEvent(event)
+    if event.id == world.event.S_EVENT_DEAD then
+        local unit = event.initiator
+        if unit then
+            local group = unit:getGroup()
+            if group then
+                -- Safe to access group methods
+                local remaining = group:getSize()
+            end
+        end
+    end
+end
+```
+
+**Destroyed Unit Properties Crash Scripts:** Accessing properties of units that have been destroyed can crash the scripting engine. Within death-related events (`S_EVENT_DEAD`, `S_EVENT_CRASH`, `S_EVENT_UNIT_LOST`), the `initiator` unit may already be partially destroyed. Use `unit:isExist()` checks and wrap property access in protected calls when working with potentially destroyed units.
+
+```lua
+function handler:onEvent(event)
+    if event.id == world.event.S_EVENT_DEAD then
+        local unit = event.initiator
+        if unit and unit:isExist() then
+            -- Safe to access unit properties
+            local name = unit:getName()
+        end
+    end
+end
+```
+
 **Event ID Enum:**
 ```lua
 world.event = {

@@ -4,6 +4,8 @@ The AI control system allows scripts to direct AI behavior through tasks, comman
 
 Tasks that accept coordinate parameters (such as `Orbit`, `Bombing`, `CarpetBombing`, `FireAtPoint`, `Land`, and `EngageTargetsInZone`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When constructing tasks with dynamically calculated positions, validate that coordinates remain within reasonable bounds before issuing the task.
 
+Some aircraft have hardcoded role restrictions that prevent certain task assignments. The S-3B Viking, for example, is coded as an anti-ship aircraft and cannot execute OCA/Aircraft (Offensive Counter Air - Aircraft) tasks. If you need an S-3B to engage aircraft, use the AntiShipStrike task as a fallback—though this is a workaround rather than correct behavior.
+
 ## Overview
 
 AI behavior is controlled through three mechanisms:
