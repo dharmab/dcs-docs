@@ -1,0 +1,35 @@
+[project]
+name = "clsid-export"
+version = "0.1.0"
+description = "Generate CLSID lookup table from DCS Lua datamine"
+requires-python = ">=3.14"
+dependencies = [
+    "luadata>=1.0.5",
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "ty",
+]
+
+[project.scripts]
+generate-clsid-lookup = "generate_clsid_lookup:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["generate_clsid_lookup.py"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.environment]
+python-version = "3.14"
