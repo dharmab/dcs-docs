@@ -67,11 +67,13 @@ The `region_for_point()` function (lines 406-415) uses bounding box checks inste
 
 **Resolution:** Added matplotlib as a dependency and replaced the bounding box check with `matplotlib.path.Path.contains_point()`. The bounding box check is retained as a fast-path optimization before the polygon test.
 
-### [ ] Missing input validation
+### [x] Missing input validation (2026-01-09)
 
 No validation of the JSON structure before processing. Malformed exports or version mismatches cause confusing errors.
 
 **Fix:** Add a schema check or key presence validation with clear error messages. Check for required fields: `metadata`, `terrain`, `roads`, `airbases`.
+
+**Resolution:** Added `_validate_data()` method to `TerrainProcessor` that checks for required top-level keys (`metadata`, `terrain`, `roads`, `airbases`), required metadata keys (`theatre`, `exportTime`, `gridResolution`, `bounds`), and required bounds keys (`minX`, `maxX`, `minZ`, `maxZ`). Also validates that `terrain` and `airbases` are lists, and that `roads` contains `points` and `segments` keys. Errors are collected and raised as a `TerrainExportError` with clear messages.
 
 ### [ ] Missing type annotations
 

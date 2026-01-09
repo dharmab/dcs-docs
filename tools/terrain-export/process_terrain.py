@@ -79,6 +79,12 @@ class Airbase:
     runways: list[dict]
 
 
+class TerrainExportError(Exception):
+    """Error raised when terrain export validation fails."""
+
+    pass
+
+
 class TerrainProcessor:
     """Processes raw DCS terrain data into structured regions."""
 
@@ -95,14 +101,78 @@ class TerrainProcessor:
     SEA_MIN_AREA = 100
     LAKE_MIN_AREA = 10
 
+    # Required fields for validation
+    REQUIRED_TOP_LEVEL_KEYS = ("metadata", "terrain", "roads", "airbases")
+    REQUIRED_METADATA_KEYS = ("theatre", "exportTime", "gridResolution", "bounds")
+    REQUIRED_BOUNDS_KEYS = ("minX", "maxX", "minZ", "maxZ")
+
     def __init__(self, json_path: Path):
         self.json_path = json_path
         self.data = self._load_data()
+        self._validate_data()
         self.grid = self._build_grid()
 
     def _load_data(self) -> dict:
         with open(self.json_path) as f:
             return json.load(f)
+
+    def _validate_data(self) -> None:
+        """Validate that the JSON export has the required structure.
+
+        Raises:
+            TerrainExportError: If required fields are missing or malformed.
+        """
+        errors: list[str] = []
+
+        # Check top-level keys
+        for key in self.REQUIRED_TOP_LEVEL_KEYS:
+            if key not in self.data:
+                errors.append(f"Missing required top-level key: '{key}'")
+
+        if "metadata" not in self.data:
+            errors.append("Cannot validate metadata: 'metadata' key is missing")
+        else:
+            metadata = self.data["metadata"]
+            if not isinstance(metadata, dict):
+                errors.append("'metadata' must be a dictionary")
+            else:
+                # Check metadata keys
+                for key in self.REQUIRED_METADATA_KEYS:
+                    if key not in metadata:
+                        errors.append(f"Missing required metadata key: '{key}'")
+
+                # Check bounds structure
+                if "bounds" in metadata:
+                    bounds = metadata["bounds"]
+                    if not isinstance(bounds, dict):
+                        errors.append("'metadata.bounds' must be a dictionary")
+                    else:
+                        for key in self.REQUIRED_BOUNDS_KEYS:
+                            if key not in bounds:
+                                errors.append(
+                                    f"Missing required bounds key: '{key}'"
+                                )
+
+        # Check terrain is a list
+        if "terrain" in self.data and not isinstance(self.data["terrain"], list):
+            errors.append("'terrain' must be a list of sample points")
+
+        # Check roads structure
+        if "roads" in self.data:
+            roads = self.data["roads"]
+            if not isinstance(roads, dict):
+                errors.append("'roads' must be a dictionary")
+            elif "points" not in roads or "segments" not in roads:
+                errors.append("'roads' must contain 'points' and 'segments' keys")
+
+        # Check airbases is a list
+        if "airbases" in self.data and not isinstance(self.data["airbases"], list):
+            errors.append("'airbases' must be a list")
+
+        if errors:
+            error_msg = f"Invalid terrain export from {self.json_path}:\n"
+            error_msg += "\n".join(f"  - {e}" for e in errors)
+            raise TerrainExportError(error_msg)
 
     def _build_grid(self) -> dict:
         """Convert terrain samples to a 2D grid for spatial analysis."""
@@ -794,7 +864,11 @@ def main():
 
     # Process terrain data
     print(f"Loading: {args.input_json}")
-    processor = TerrainProcessor(args.input_json)
+    try:
+        processor = TerrainProcessor(args.input_json)
+    except TerrainExportError as e:
+        print(f"Error: {e}")
+        return 1
 
     print("Classifying terrain...")
     generator = MarkdownGenerator(processor)
