@@ -6,6 +6,7 @@ This repository contains documentation for AI agents and developers working with
 > - Official DCS World simulator manuals and documentation
 > - The [Hoggit Wiki](https://wiki.hoggitworld.com/)
 > - [Quaggles' DCS Lua Datamine](https://github.com/Quaggles/dcs-lua-datamine)
+> - [RocketmanAL's SEAD Reference Guide](https://www.digitalcombatsimulator.com/en/files/3332084/)
 
 ## Who This Is For
 
