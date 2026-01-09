@@ -41,6 +41,8 @@ Inspired by Western European nations, particularly France, Germany, and Italy, w
 
 ## Naval Units
 
+- Stennis
+- TICONDEROG
+- USS_Arleigh_Burke_IIa
 - PERRY
 - KILO
-- IMPROVED_KILO
