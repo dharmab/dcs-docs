@@ -138,49 +138,59 @@ The generated markdown includes:
 
 ## How This Works
 
-The terrain exporter is a two-stage pipeline that extracts geographic data from DCS World and transforms it into readable documentation.
+This tool works in two stages: first, a script running inside DCS World collects raw terrain data; then, a Python program processes that data into useful geographic features like mountain ranges, valleys, and settlements.
 
-Other flight simulators and games expose map features through discoverable APIs—Arma 3, for example, provides functions to query settlement locations, named areas, and points of interest. DCS World's scripting API is more limited. You can query airbases (via `world.getAirbases`), find nearby road points and compute paths along the road network (via `land.getClosestPointOnRoads` and `land.findPathOnRoads`), and sample terrain elevation and surface type at any coordinate. But there's no way to enumerate cities, towns, or named settlements; no API to list geographic regions or terrain features; and no method to discover "what significant locations exist on this map." This limitation is why we need a pipeline that samples the terrain exhaustively and then infers higher-level features (settlements, terrain regions, connectivity) through post-processing.
+### Why This Is Necessary
 
-### Stage 1: Data Extraction (Lua inside DCS)
+Some games give you direct access to their map data—you can ask "what cities are on this map?" and get a list back. DCS World doesn't work that way. The game knows where airports are, can tell you the elevation and surface type (land, water, road, or runway) at any point, and can find roads nearby, but it has no built-in way to say "here are all the interesting locations on this map."
 
-DCS World is a flight simulator with detailed 3D terrain data, but there's no direct way to export this data. The workaround is to run a Lua script *inside* DCS that queries the game's APIs and writes the results to a file.
+So we have to figure it out ourselves. We sample thousands of elevation measurements across the map, then use algorithms to detect patterns: clusters of roads probably mean a town exists there, a region of steep terrain is probably a mountain range, and so on.
 
-When you load one of the export missions, the embedded Lua script wakes up 30 seconds after the mission starts and begins sampling the terrain. Think of it like dropping a virtual surveyor onto the map who methodically measures the elevation and surface type at thousands of points arranged in a grid pattern.
+### Stage 1: Data Extraction (Inside DCS)
 
-The script uses **adaptive resolution sampling** to balance detail against export time:
+DCS World stores detailed terrain data internally, but there's no "export" button. The workaround is to run a script *inside* the game that queries terrain data point-by-point and saves the results.
 
-1. First, it samples the entire map at coarse resolution (5km between points).
-2. It analyzes each coarse cell to identify "interesting" areas—places with high elevation variance, steep gradients between neighboring cells, or lots of road points.
-3. Areas that score high on the interest metric get resampled at medium resolution (2.5km), and the most interesting areas get a fine pass (1km).
+When you load an export mission, an embedded script starts sampling the terrain after 30 seconds. Imagine dropping a surveyor onto the map who measures the ground elevation and surface type (land, water, or road) at thousands of locations arranged in a grid.
 
-This is similar to how image compression works: flat, boring areas get fewer samples while complex terrain gets more detail.
+**Adaptive resolution** makes this efficient. Flat, featureless terrain doesn't need many measurements—a sample every 5 kilometers is enough. But mountainous areas with rapidly changing elevation need finer detail. The script works in three passes:
 
-The script also queries the game's road network API to find road points and trace connections between them, and it collects data about all the airports including runway dimensions and parking spots.
+1. Sample the entire map at coarse spacing (5km apart)
+2. Find "interesting" areas where elevation changes rapidly between neighboring samples, then resample those at 2.5km spacing
+3. The most complex areas get a final pass at 1km spacing
 
-Everything gets serialized to JSON and written to a file in the DCS saved games folder.
+This is the same principle behind image and video compression: spend more data on complex regions, less on simple ones.
+
+The script also traces the road network and collects airport information (runway dimensions, parking spots). All this data gets saved as JSON—a structured text format that other programs can easily read.
 
 ### Stage 2: Processing (Python)
 
-The Python processor reads the JSON and turns raw samples into higher-level features. This involves several image-processing and clustering techniques:
+The Python script reads the JSON file and transforms raw numbers into geographic features.
 
-**Building the grid:** The multi-resolution samples get combined into a 2D elevation grid at the finest resolution. When samples overlap, the finer-resolution sample wins.
+**Building the elevation map:** The samples from different resolution passes get combined into a single grid. When multiple samples cover the same area, the finer-resolution measurement takes priority.
 
-**Terrain classification:** The processor computes *slope* (steepness from elevation gradients) and *prominence* (how much a point rises above the local minimum). These features feed into classification rules that work consistently regardless of absolute elevation:
-- Flat: low slope (less than 5°), regardless of elevation
-- Mountains: steep slope (15°+) with high prominence relative to local relief
-- Hills: moderate slope, not flat or mountain
-- Valleys: below local average by a fraction of local relief, in non-flat areas
+**Classifying terrain:** The script calculates two properties for each grid cell:
 
-**Finding regions:** After classification, the code uses *connected component labeling* (a standard image-processing algorithm) to group adjacent cells of the same type into distinct regions. Each region gets a convex hull polygon that approximates its boundary.
+- *Slope* measures steepness—how quickly elevation changes as you move horizontally. A flat parking lot has near-zero slope; a cliff face has very high slope. This is calculated from the *gradient*, which is the rate of elevation change in each direction.
 
-**Water body detection:** Similar logic identifies connected areas of water surface type. Bodies touching the map edge and covering a large area are labeled "sea"; smaller interior bodies become "lakes" or "reservoirs."
+- *Prominence* measures how much a point rises above its surroundings. A 500-meter hill in flat Kansas has high prominence; a 500-meter bump in the Rockies might have low prominence because everything around it is also high.
 
-**Settlement detection:** The processor runs DBSCAN clustering on the road point coordinates. DBSCAN groups points that are close together into clusters without needing to specify the number of clusters in advance—it just looks for dense neighborhoods. Clusters with enough road points become "settlements," named after their MGRS grid location.
+These properties determine terrain type:
+- Flat terrain has low slope (under 5°) regardless of absolute elevation—a high plateau is still "flat"
+- Mountains have steep slopes (15°+) and high prominence
+- Hills have moderate slope but aren't extreme enough to be mountains
+- Valleys sit below the local average elevation in non-flat areas
 
-**Connectivity analysis:** Road segments are checked to see which terrain regions they connect. A spatial index (a grid of buckets) makes this efficient—instead of checking every segment against every region, the code only checks against regions whose bounding boxes overlap the relevant grid cell.
+**Finding distinct regions:** After classifying each grid cell, the code groups adjacent cells of the same type into regions. This uses *connected component labeling*, an algorithm that works like a flood-fill in image editing—start at one cell, spread to all neighbors of the same type, and mark them as one region. Each region gets a *convex hull* boundary, which is the smallest polygon that completely contains all the region's points (imagine stretching a rubber band around a set of pushpins).
 
-The final output is a markdown document with tables and summaries ready for an AI model to use when generating missions.
+**Detecting water bodies:** Water surfaces get grouped the same way. Large bodies touching the map edge are labeled "sea"; smaller interior bodies become "lakes."
+
+**Finding settlements:** Real cities and towns don't exist in DCS's data, so we infer them from road density. The script uses *DBSCAN* (Density-Based Spatial Clustering of Applications with Noise), a clustering algorithm that finds groups of points packed closely together. Unlike some clustering methods, DBSCAN doesn't require you to specify how many clusters to find—it discovers them automatically by looking for dense neighborhoods. Clusters with enough road points are marked as settlements.
+
+Settlement names come from their *MGRS grid location*. MGRS (Military Grid Reference System) divides the world into labeled grid squares; instead of inventing fake city names, each settlement is named after its grid coordinates.
+
+**Analyzing connectivity:** The script checks which terrain regions roads connect. A *spatial index* makes this fast. Without an index, you'd have to check every road segment against every region—millions of comparisons. The spatial index divides the map into a grid of buckets; each road segment and region gets assigned to buckets based on its *bounding box* (the smallest rectangle that contains it). When checking connectivity, you only compare items that share a bucket.
+
+The final output is a markdown document describing the map's geography in a format ready for AI-assisted mission generation.
 
 ## Supported Theatres
 
