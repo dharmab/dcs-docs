@@ -167,7 +167,7 @@ def build_mission_data(theatre: str, script_content: str) -> dict:
                         "predicate": "c_time_after",
                         "zone": "",
                         "unitType": "",
-                        "seconds": 1,
+                        "seconds": 5,
                         "meters": 1000,
                         "KeyDict_zone": "",
                         "readonly": False,
