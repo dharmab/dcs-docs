@@ -34,12 +34,14 @@ The `docs/` directory contains the following documentation:
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 - `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):
   - `air-intercept-script.md` - Dynamic air intercept script that spawns enemy interceptors from red airfields when players enter defense zones, with scaled response and customizable aircraft/loadouts
+  - `air-to-air-setup.md` - Configuring AI fighter aircraft for Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort roles with proper tasking and AI options
   - `artillery-battery.md` - Creating artillery batteries with continuous fire for visual spectacle and SEAD/DEAD gameplay
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
   - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
+- `wisdom.md` - General mission design tips and best practices covering performance, player experience, AI behavior, and common pitfalls
 - `factions/` - Faction unit lists for mission generation (Strangereal setting):
   - `isaf-2004.md` - ISAF during the Early Continental War
   - `erusea-2004.md` - Erusea during the Early Continental War

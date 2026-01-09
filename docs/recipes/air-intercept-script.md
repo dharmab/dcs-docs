@@ -2,6 +2,8 @@
 
 This recipe describes how to create a dynamic air intercept script that spawns enemy aircraft from red airfields in response to blue aircraft entering a defense zone. The script scales the response to the number of trespassing aircraft and supports customizable interceptor types, loadouts, and spawn limits.
 
+For static pre-placed AI fighters configured in the mission file (CAP, Fighter Sweep, Escort), see [AI Air-to-Air Fighter Configuration](air-to-air-setup.md). This recipe focuses on scripted dynamic spawning where interceptors are created at runtime in response to player actions.
+
 ## Overview
 
 The air intercept system provides:
@@ -828,6 +830,7 @@ end
 
 ## See Also
 
+- [AI Air-to-Air Fighter Configuration](air-to-air-setup.md) - Static mission file configuration for CAP, Sweep, Escort
 - [coalition](../scripting/reference/singletons/coalition.md) - Dynamic group spawning
 - [timer](../scripting/reference/singletons/timer.md) - Scheduled function execution
 - [events](../scripting/reference/events/events.md) - Event handling for death tracking
