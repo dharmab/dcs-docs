@@ -136,6 +136,52 @@ The generated markdown includes:
 - **Settlements**: Detected from road density clustering
 - **Connectivity**: Which regions connect via roads
 
+## How This Works
+
+The terrain exporter is a two-stage pipeline that extracts geographic data from DCS World and transforms it into readable documentation.
+
+Other flight simulators and games expose map features through discoverable APIs—Arma 3, for example, provides functions to query settlement locations, named areas, and points of interest. DCS World's scripting API is more limited. You can query airbases (via `world.getAirbases`), find nearby road points and compute paths along the road network (via `land.getClosestPointOnRoads` and `land.findPathOnRoads`), and sample terrain elevation and surface type at any coordinate. But there's no way to enumerate cities, towns, or named settlements; no API to list geographic regions or terrain features; and no method to discover "what significant locations exist on this map." This limitation is why we need a pipeline that samples the terrain exhaustively and then infers higher-level features (settlements, terrain regions, connectivity) through post-processing.
+
+### Stage 1: Data Extraction (Lua inside DCS)
+
+DCS World is a flight simulator with detailed 3D terrain data, but there's no direct way to export this data. The workaround is to run a Lua script *inside* DCS that queries the game's APIs and writes the results to a file.
+
+When you load one of the export missions, the embedded Lua script wakes up 30 seconds after the mission starts and begins sampling the terrain. Think of it like dropping a virtual surveyor onto the map who methodically measures the elevation and surface type at thousands of points arranged in a grid pattern.
+
+The script uses **adaptive resolution sampling** to balance detail against export time:
+
+1. First, it samples the entire map at coarse resolution (5km between points).
+2. It analyzes each coarse cell to identify "interesting" areas—places with high elevation variance, steep gradients between neighboring cells, or lots of road points.
+3. Areas that score high on the interest metric get resampled at medium resolution (2.5km), and the most interesting areas get a fine pass (1km).
+
+This is similar to how image compression works: flat, boring areas get fewer samples while complex terrain gets more detail.
+
+The script also queries the game's road network API to find road points and trace connections between them, and it collects data about all the airports including runway dimensions and parking spots.
+
+Everything gets serialized to JSON and written to a file in the DCS saved games folder.
+
+### Stage 2: Processing (Python)
+
+The Python processor reads the JSON and turns raw samples into higher-level features. This involves several image-processing and clustering techniques:
+
+**Building the grid:** The multi-resolution samples get combined into a 2D elevation grid at the finest resolution. When samples overlap, the finer-resolution sample wins.
+
+**Terrain classification:** The processor uses a sliding window to compute *local relief* (the difference between the highest and lowest points in a small neighborhood) and *local average elevation*. These features feed into simple threshold rules:
+- Mountains: very high elevation, or moderate elevation with high relief
+- Hills: moderate elevation, not already classified as mountain
+- Plains: low elevation with low relief
+- Valleys: lower than surrounding terrain, not fitting other categories
+
+**Finding regions:** After classification, the code uses *connected component labeling* (a standard image-processing algorithm) to group adjacent cells of the same type into distinct regions. Each region gets a convex hull polygon that approximates its boundary.
+
+**Water body detection:** Similar logic identifies connected areas of water surface type. Bodies touching the map edge and covering a large area are labeled "sea"; smaller interior bodies become "lakes" or "reservoirs."
+
+**Settlement detection:** The processor runs DBSCAN clustering on the road point coordinates. DBSCAN groups points that are close together into clusters without needing to specify the number of clusters in advance—it just looks for dense neighborhoods. Clusters with enough road points become "settlements," named after their MGRS grid location.
+
+**Connectivity analysis:** Road segments are checked to see which terrain regions they connect. A spatial index (a grid of buckets) makes this efficient—instead of checking every segment against every region, the code only checks against regions whose bounding boxes overlap the relevant grid cell.
+
+The final output is a markdown document with tables and summaries ready for an AI model to use when generating missions.
+
 ## Supported Theatres
 
 The Lua script has predefined bounds for:
