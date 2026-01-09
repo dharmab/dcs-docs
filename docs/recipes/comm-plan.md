@@ -49,24 +49,26 @@ This document defines a standardized frequency allocation for DCS World missions
 | GCI UHF | 255.3 | Primary GCI frequency |
 | GCI VHF | 124.1 VHF | VHF alternate |
 | GCI FM | 32.1 FM | FM alternate |
+| In-Game AWACS | 255.5 | DCS AI AWACS (fallback when SkyEye or human GCI unavailable) |
 | **JTAC** |||
 | JTAC 1 | 32.3 FM | Forward air controller |
 | JTAC 2 | 32.5 FM | Forward air controller |
 | JTAC 3 | 32.7 FM | Forward air controller |
 | JTAC 4 | 32.9 FM | Forward air controller |
 | **Reserved** |||
-| Guard | 243.0 | Emergency frequency (standard) |
+| Military Guard | 243.0 | Military emergency frequency |
+| Civil Guard | 121.5 VHF | International emergency frequency |
 | Aux Reserved | 265.0-284.9 | Compatible with F-4E aux radio |
 
 ## Design Rationale
 
 The frequency plan uses whole and half MHz values for easy memorization and radio tuning. Frequencies are grouped by function with gaps between groups to allow expansion.
 
-The 260-284 MHz range is used for fighter flight tactical frequencies because it falls within the F-4E's auxiliary radio range (265.0-284.9 MHz), allowing Phantom crews to monitor their flight frequency on the aux radio while using the primary for other communications.
+ATC frequencies are grouped in the 254 MHz range. Strike and GCI frequencies use the 255 MHz range. Fighter flight tactical frequencies use the 260-263 MHz range. Tanker frequencies use the 270 MHz range. The 265.0-284.9 MHz range is reserved for future expansion.
 
 FM frequencies (30-88 MHz) are allocated for A-10 and helicopter flights. These aircraft have three radios including FM capability, so using FM for internal flight comms leaves their UHF radio free for strike coordination, JTAC, and package-level traffic. Aircraft with only UHF radios cannot monitor FM, so mixed packages should coordinate on UHF frequencies.
 
-All operational frequencies avoid the 243.0 MHz guard frequency and stay well within the 225-400 MHz UHF band supported by all military aircraft in DCS. The 250-252 MHz range is avoided because it is heavily used by airfield ATC frequencies on the Syria, Caucasus, Nevada, and other maps.
+All operational frequencies avoid the guard frequencies (243.0 MHz military, 121.5 MHz civil) and stay well within the 225-400 MHz UHF band supported by all military aircraft in DCS. The 250-252 MHz range is avoided because it is heavily used by airfield ATC frequencies on the Syria, Caucasus, Nevada, and other maps.
 
 ## Aircraft Radio Compatibility
 
