@@ -8,7 +8,7 @@ The scripting engine is unreliable immediately after a mission starts while game
 
 Too many blocking script calls can cause DCS to freeze or stutter. For large amounts of work, chunk the work into small batches and periodically release control back to the game. A callback execution model similar to the Node.js event loop can be a useful design pattern for this.
 
-Keep total unit counts under 1000. Above this threshold, the scripting engine becomes unreliable, and somewhere before 2000 units it fails entirely—scripts may not execute at all. For large-scale battles, spawn units dynamically as players approach rather than placing everything at mission start.
+Keep total unit counts under 1000.[^unit-limits] Above this threshold, the scripting engine becomes unreliable, and somewhere before 2000 units it fails entirely—scripts may not execute at all. For large-scale battles, spawn units dynamically as players approach rather than placing everything at mission start.
 
 Ground unit AI pathfinding is expensive regardless of terrain. Whether units are on roads or cross-country, in open fields or urban areas, any movement commands consume significant resources. Limit pathfinding to a small number of groups, and keep their routes simple.
 
@@ -36,11 +36,11 @@ Design missions for a focused set of similar aircraft rather than trying to acco
 
 Configure radio presets for all player aircraft and document a communications plan in the briefing. Players should not have to manually tune frequencies in the cockpit to coordinate with their flight or contact support assets. At minimum, provide a strike-wide common frequency for package coordination and dedicated interflight frequencies so wingmen within each flight can communicate without cluttering the main channel. Include tanker and JTAC frequencies as appropriate. A clear frequency card in the briefing transforms a chaotic radio environment into organized communication.
 
-Avoid relying on DCS's built-in ATC and AWACS—both are poorly implemented and frustrating to use. For AWACS functionality, external tools like SkyEye provide a far superior experience with realistic GCI calls and proper brevity. For ATC, players generally coordinate landing order themselves over common frequencies or simply use the airfield visually.
+Avoid relying on DCS's built-in ATC and AWACS—both are poorly implemented and frustrating to use. For AWACS functionality, external tools like SkyEye[^skyeye] provide a far superior experience with realistic GCI calls and proper brevity. For ATC, players generally coordinate landing order themselves over common frequencies or simply use the airfield visually.
 
 ## AI Behavior
 
-DCS AI aircraft are notoriously poor at fuel management. They fly at inefficient throttle settings and often run dry long before completing their assigned routes. A practical workaround is to give AI aircraft partial fuel loads for realistic weight and performance, then enable the unlimited fuel option. This lets them behave as if fuel-limited during combat maneuvering without unexpectedly flaming out mid-mission.
+DCS AI aircraft are notoriously poor at fuel management. They fly at inefficient throttle settings and often run dry long before completing their assigned routes. A practical workaround is to give AI aircraft partial fuel loads for realistic weight and performance, then use the [`SetUnlimitedFuel`](scripting/reference/ai/commands.md#setunlimitedfuel) command to prevent them from flaming out mid-mission.
 
 AI pilots set to Ace skill are highly consistent, which paradoxically makes them feel robotic and predictable after a few engagements. Mixing skill levels among enemy flights—or randomizing skills—introduces variety that makes combat feel less formulaic. Stick to the upper skill tiers, though. Lower skill levels introduce erratic behavior where AI will inexplicably stop maneuvering or make suicidal decisions mid-fight, breaking immersion rather than providing an easier challenge.
 
@@ -52,9 +52,9 @@ DCS World has accumulated various quirks, bugs, and undocumented behaviors over 
 
 Certain parking slots on specific maps are broken and cause aircraft to fail to spawn, get stuck, or collide with terrain.
 
-**Nevatim Airfield (Sinai):** Only parking slots 55-66 work reliably. All other ramp starts frequently fail due to persistent bugs in the airfield definition. This issue has been reported on the DCS forums and remains unresolved as of recent patches.
+**Nevatim Airfield (Sinai):** Only parking slots 55-66 work reliably. All other ramp starts frequently fail due to persistent bugs in the airfield definition.[^nevatim-bugs]
 
-**Ramon Airbase (Sinai):** Parking slots 1-6, 13-18, and 61 are broken. Aircraft spawning in these slots will fail or behave erratically. Filter these slots when programmatically selecting spawn locations.
+**Ramon Airbase (Sinai):** Parking slots 1-6, 13-18, and 61 are broken. Aircraft spawning in these slots will fail or behave erratically.[^ramon-bugs] Filter these slots when programmatically selecting spawn locations.
 
 **Kerman Airfield (Persian Gulf):** This is the highest-elevation airfield in the Persian Gulf map at approximately 5,700 feet MSL. When spawning aircraft in flight, remember that altitude values are referenced to mean sea level. An aircraft spawned at "2000 meters altitude" will be below ground level at Kerman. Always account for terrain elevation when calculating in-flight spawn altitudes on this map.
 
@@ -76,21 +76,21 @@ Certain parking slots on specific maps are broken and cause aircraft to fail to 
 
 ### Scripting Engine Hazards
 
-**Destroyed Unit References Crash Scripts:** Accessing properties of destroyed units can crash the scripting engine. Always validate that a unit exists and is alive before calling methods on it. Use `unit:isExist()` checks and guard against nil returns from functions like `Unit.getByName()`.
+**Destroyed Unit References Crash Scripts:** Accessing properties of destroyed units can crash the scripting engine. Always validate that a unit exists and is alive before calling methods on it. Use [`unit:isExist()`](scripting/reference/classes/object.md#objectisexist) checks and guard against nil returns from functions like [`Unit.getByName()`](scripting/reference/classes/unit.md#unitgetbyname).
 
 **Group Access Fails in Event Handlers:** Within event handlers, calling `Group.getByName()` for a unit's group sometimes returns nil even when the group should exist. This appears to be a timing or caching issue. Scripts must handle this gracefully with nil checks rather than assuming the group lookup will succeed.
 
 **Generic Crash Model Objects:** When units are destroyed, DCS creates "GENERIC_CRASH_MODEL" objects representing the wreckage. Scripts that track objects in the world—such as those monitoring unit counts or iterating over all objects—should filter out these crash models to avoid counting destroyed units as living objects.
 
-**Spawn Confirmation Is Asynchronous:** When spawning groups via the scripting API, the spawn operation is asynchronous. The function returns immediately, but the group may not be accessible for a brief period afterward. Do not attempt to access or manipulate a newly spawned group in the same script block that spawned it; use `timer.scheduleFunction()` to defer follow-up operations by at least one second.
+**Spawn Confirmation Is Asynchronous:** When spawning groups via the scripting API, the spawn operation is asynchronous. The function returns immediately, but the group may not be accessible for a brief period afterward. Do not attempt to access or manipulate a newly spawned group in the same script block that spawned it; use [`timer.scheduleFunction()`](scripting/reference/singletons/timer.md#timerschedulefunction) to defer follow-up operations by at least one second.
 
 ### Engine Crashes
 
 Several DCS features can cause the game to crash under specific circumstances. These crashes may occur during mission execution and can disrupt multiplayer servers.
 
-**Static Object Destruction:** In some DCS versions, destroying static objects via scripting could cause the game to crash. The CTLD mod includes a toggle (`ctld.staticBugWorkaround`) to work around this issue. If you experience crashes when destroying statics, check whether this workaround is applicable to your DCS version.
+**Static Object Destruction:** In some DCS versions, destroying static objects via scripting can cause the game to crash. Scripts that destroy static objects should handle this defensively, and mission designers should test static destruction thoroughly before deploying to multiplayer servers.
 
-**Sling-Loading Instability:** Helicopter sling-loading operations can cause crashes in some configurations. Missions using CTLD or similar mods sometimes disable sling-loading entirely and use hover-based crate loading instead to avoid stability issues.
+**Sling-Loading Instability:** Helicopter sling-loading operations can cause crashes in some configurations, particularly in multiplayer. Scripts that use sling-loading should consider offering a simulated alternative (hover-based loading without physics) for stability.
 
 **F-16C Datalink on Dedicated Servers:** Missions containing F-16C Block 50 aircraft using datalink have caused crashes on dedicated servers. The workaround is to re-save the mission in the DCS Mission Editor after any changes; this appears to resolve whatever data corruption causes the crash.
 
@@ -106,9 +106,7 @@ Several DCS features can cause the game to crash under specific circumstances. T
 
 ### Multiplayer-Specific Issues
 
-**Scenery Removal Is Unreliable in Multiplayer:** The "SCENERY REMOVE OBJECTS ZONE" trigger action does not work reliably in multiplayer sessions. Static objects removed via this trigger may remain visible or collidable for some clients. Using FARPs to clear areas or avoiding dynamic scenery removal improves reliability.
-
-**Messages Cannot Target Individual Units:** The DCS messaging system can display messages to coalitions or to all players, but cannot display messages to individual units or specific players. There is no `trigger.action.outTextForUnit()` function. Design mission messaging around coalition-wide announcements rather than per-player notifications.
+**Scenery Removal Is Unreliable in Multiplayer:** The "SCENERY REMOVE OBJECTS ZONE" trigger action does not work reliably in multiplayer sessions.[^scenery-removal] Static objects removed via this trigger may remain visible or collidable for some clients. Using FARPs to clear areas or avoiding dynamic scenery removal improves reliability.
 
 ### Task and Mission Assignment Limitations
 
@@ -116,3 +114,14 @@ Several DCS features can cause the game to crash under specific circumstances. T
 
 **Radar-Guided AAA Lacks Max Firing Height:** Radar-guided anti-aircraft artillery units (like the Shilka) do not expose a maximum firing height parameter in their unit definitions. When scripts need to estimate AAA engagement envelopes, use the weapon's vertical range as a substitute for the missing parameter.
 
+## References
+
+[^unit-limits]: Community discussions suggest 800-1,000 units is a practical ceiling for mission stability. See [Maximum units for a mission?](https://forum.dcs.world/topic/132003-maximum-units-for-a-mission/) on the DCS Forums.
+
+[^skyeye]: SkyEye is a self-hostable AI-powered GCI bot that provides realistic AWACS functionality using modern voice recognition and proper brevity. See the [SkyEye GitHub repository](https://github.com/dharmab/skyeye) and the [DCS Forums announcement thread](https://forum.dcs.world/topic/345389-skyeye-ai-powered-gci-bot-talk-to-your-awacs-over-srs/).
+
+[^nevatim-bugs]: Multiple bug reports document Nevatim parking issues: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).
+
+[^ramon-bugs]: Ramon Airbase issues are documented in [Ramon Airbase taxiways and parking spots](https://forum.dcs.world/topic/343531-ramon-airbase-taxiways-and-parking-spots/) and [Sticky Tarmac at Ramon Airbase](https://forum.dcs.world/topic/364031-sticky-tarmac-at-ramon-airbase/).
+
+[^scenery-removal]: Multiple bug reports confirm this issue: [Scenery Remove Objects Zone (not working in multiplayer)](https://forum.dcs.world/topic/199108-scenery-remove-objects-zone-not-working-in-multiplayer/), [SCENERY REMOVE OBJECTS ZONE and dedicated server](https://forum.dcs.world/topic/266304-scenery-remove-objects-zone-and-dedicated-server/), and [Scenery remove in area action does not work for clients](https://forum.dcs.world/topic/188083-reportedscenery-remove-in-area-action-does-not-work-for-clients).
