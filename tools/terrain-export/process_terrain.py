@@ -322,6 +322,10 @@ class TerrainProcessor:
     SEA_MIN_AREA = 100
     LAKE_MIN_AREA = 10
 
+    # DBSCAN clustering parameters for settlement detection
+    SETTLEMENT_CLUSTER_RADIUS = 10000  # eps: max distance between points (meters)
+    SETTLEMENT_MIN_SAMPLES = 5  # min_samples: minimum points to form a cluster
+
     # Required fields for validation
     REQUIRED_TOP_LEVEL_KEYS = ("metadata", "terrain", "roads", "airbases")
     REQUIRED_METADATA_KEYS = ("theatre", "exportTime", "gridResolution", "bounds")
@@ -647,7 +651,10 @@ class TerrainProcessor:
         coords = np.array([[p["x"], p["z"]] for p in road_points])
 
         # Cluster road points using DBSCAN
-        clustering = DBSCAN(eps=10000, min_samples=5).fit(coords)  # 10km radius
+        clustering = DBSCAN(
+            eps=self.SETTLEMENT_CLUSTER_RADIUS,
+            min_samples=self.SETTLEMENT_MIN_SAMPLES,
+        ).fit(coords)
 
         settlements = []
 
@@ -970,8 +977,8 @@ and {height_km:.0f} km north-south.
                 "|------|---------------|---------|------------|---------------|"
             )
 
-            # Sort by area, largest first, limit to top 20
-            for r in sorted(class_regions, key=lambda x: -x.area_km2)[:20]:
+            # Sort by area, largest first
+            for r in sorted(class_regions, key=lambda x: -x.area_km2):
                 lines.append(
                     f"| {r.name} | "
                     f"({r.center[0]:,.0f}, {r.center[1]:,.0f}) | "
@@ -980,9 +987,9 @@ and {height_km:.0f} km north-south.
                     f"{r.avg_elevation:,.0f}m |"
                 )
 
-            # Add vertices for largest regions
+            # Add vertices for each region
             lines.append("")
-            for r in sorted(class_regions, key=lambda x: -x.area_km2)[:5]:
+            for r in sorted(class_regions, key=lambda x: -x.area_km2):
                 if r.vertices:
                     vertex_str = ", ".join(
                         f"({v[0]:.0f}, {v[1]:.0f})" for v in r.vertices[:12]
@@ -1002,7 +1009,7 @@ and {height_km:.0f} km north-south.
         lines.append("| Name | Type | Center (x, z) | Lat/Lon | Area (km2) |")
         lines.append("|------|------|---------------|---------|------------|")
 
-        for wb in sorted(water_bodies, key=lambda x: -x.area_km2)[:15]:
+        for wb in sorted(water_bodies, key=lambda x: -x.area_km2):
             lines.append(
                 f"| {wb.name} | {wb.body_type} | "
                 f"({wb.center[0]:,.0f}, {wb.center[1]:,.0f}) | "
@@ -1025,7 +1032,7 @@ and {height_km:.0f} km north-south.
         lines.append("| ID | Center (x, z) | Lat/Lon | Road Density |")
         lines.append("|----|---------------|---------|--------------|")
 
-        for s in sorted(settlements, key=lambda x: -x.road_density)[:20]:
+        for s in sorted(settlements, key=lambda x: -x.road_density):
             lines.append(
                 f"| {s.name} | "
                 f"({s.center[0]:,.0f}, {s.center[1]:,.0f}) | "
@@ -1047,7 +1054,7 @@ and {height_km:.0f} km north-south.
         lines.append("| Region A | Region B | Connection Strength |")
         lines.append("|----------|----------|---------------------|")
 
-        for a, b, strength in sorted(connectivity, key=lambda x: -x[2])[:30]:
+        for a, b, strength in sorted(connectivity, key=lambda x: -x[2]):
             lines.append(f"| {a} | {b} | {strength:.0f} |")
 
         return "\n".join(lines)

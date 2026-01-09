@@ -94,15 +94,17 @@ The `compute_connectivity()` function iterates through all road segments and che
 
 **Resolution:** Added `RegionIndex` class that implements grid-based spatial bucketing. The index divides the map into 50km cells and precomputes which regions overlap each cell. Point lookups only check regions in the relevant cell, reducing average-case complexity from O(regions) to O(regions_per_cell). The `Region` dataclass now includes a `bounding_box()` method. Updated `compute_connectivity()` to build a `RegionIndex` once and use it for all point lookups.
 
-### [ ] Magic limit numbers
+### [x] Magic limit numbers (2026-01-09)
 
-Various limits are hardcoded:
+Various limits were hardcoded:
 - Top 20 regions (line 673)
 - Top 15 water bodies (line 704)
 - Top 30 connections (line 749)
 - DBSCAN parameters (line 354: `eps=10000, min_samples=5`)
 
 **Fix:** Move these to class constants with descriptive names, or make them configurable via command-line arguments.
+
+**Resolution:** The DBSCAN clustering parameters (`eps=10000, min_samples=5`) were moved to class constants `SETTLEMENT_CLUSTER_RADIUS` and `SETTLEMENT_MIN_SAMPLES` in `TerrainProcessor`. The arbitrary output limits (top 20/15/30) were removed entirely since the existing quality filters (`MIN_REGION_CELLS`, minimum water body area, DBSCAN clustering) already ensure only significant features are included.
 
 ### [ ] Version compatibility checks
 
