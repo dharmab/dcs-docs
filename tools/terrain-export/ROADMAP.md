@@ -106,11 +106,13 @@ Various limits were hardcoded:
 
 **Resolution:** The DBSCAN clustering parameters (`eps=10000, min_samples=5`) were moved to class constants `SETTLEMENT_CLUSTER_RADIUS` and `SETTLEMENT_MIN_SAMPLES` in `TerrainProcessor`. The arbitrary output limits (top 20/15/30) were removed entirely since the existing quality filters (`MIN_REGION_CELLS`, minimum water body area, DBSCAN clustering) already ensure only significant features are included.
 
-### [ ] Version compatibility checks
+### [x] Version compatibility checks (2026-01-09)
 
 No validation that the JSON export version matches what the processor expects.
 
 **Fix:** Check the script version in the JSON metadata against expected version(s). Warn or fail if there's a mismatch.
+
+**Resolution:** Added `EXPECTED_VERSION` constant (major, minor tuple) and `_check_version_compatibility()` method to `TerrainProcessor`. Uses the `semver` library to parse version strings. Major version mismatch raises `TerrainExportError`. Minor version differences emit warnings to stderr. Missing or unparseable versions also emit warnings but allow processing to continue.
 
 ---
 

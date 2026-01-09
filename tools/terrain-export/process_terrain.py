@@ -17,12 +17,14 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, TypedDict
 
 import numpy as np
+import semver
 from matplotlib.path import Path as PolygonPath
 from numpy.typing import NDArray
 from scipy import ndimage
@@ -331,6 +333,9 @@ class TerrainProcessor:
     REQUIRED_METADATA_KEYS = ("theatre", "exportTime", "gridResolution", "bounds")
     REQUIRED_BOUNDS_KEYS = ("minX", "maxX", "minZ", "maxZ")
 
+    # Version compatibility - processor expects this major.minor version
+    EXPECTED_VERSION = (1, 2)  # major, minor
+
     json_path: Path
     data: TerrainExportDict
     grid: GridDict
@@ -339,6 +344,7 @@ class TerrainProcessor:
         self.json_path = json_path
         self.data = self._load_data()
         self._validate_data()
+        self._check_version_compatibility()
         self.grid = self._build_grid()
 
     def _load_data(self) -> TerrainExportDict:
@@ -402,6 +408,57 @@ class TerrainProcessor:
             error_msg = f"Invalid terrain export from {self.json_path}:\n"
             error_msg += "\n".join(f"  - {e}" for e in errors)
             raise TerrainExportError(error_msg)
+
+    def _check_version_compatibility(self) -> None:
+        """Check that the JSON export version is compatible with this processor.
+
+        Raises:
+            TerrainExportError: If major version doesn't match.
+
+        Prints a warning to stderr if minor version differs from expected.
+        """
+        version_str = self.data["metadata"].get("version")
+        if not version_str:
+            print(
+                "Warning: No version found in export metadata. "
+                "Processing may fail if format has changed.",
+                file=sys.stderr,
+            )
+            return
+
+        try:
+            version = semver.Version.parse(version_str)
+        except ValueError:
+            print(
+                f"Warning: Cannot parse version '{version_str}'. "
+                "Skipping version compatibility check.",
+                file=sys.stderr,
+            )
+            return
+
+        expected_major, expected_minor = self.EXPECTED_VERSION
+
+        if version.major != expected_major:
+            raise TerrainExportError(
+                f"Incompatible export version: {version_str}. "
+                f"This processor requires major version {expected_major}.x.x. "
+                "The export format may have breaking changes."
+            )
+
+        if version.minor > expected_minor:
+            print(
+                f"Warning: Export version {version_str} is newer than "
+                f"expected {expected_major}.{expected_minor}.x. "
+                "Some features may not be processed.",
+                file=sys.stderr,
+            )
+        elif version.minor < expected_minor:
+            print(
+                f"Warning: Export version {version_str} is older than "
+                f"expected {expected_major}.{expected_minor}.x. "
+                "Some features may be missing from the export.",
+                file=sys.stderr,
+            )
 
     def _build_grid(self) -> GridDict:
         """Convert terrain samples to a 2D grid for spatial analysis."""
