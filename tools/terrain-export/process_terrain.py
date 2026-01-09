@@ -159,6 +159,14 @@ class Region:
     avg_elevation: float
     lat_lon_center: tuple[float, float]
 
+    def bounding_box(self) -> tuple[float, float, float, float]:
+        """Return (min_x, max_x, min_z, max_z) bounding box."""
+        if not self.vertices:
+            return (0, 0, 0, 0)
+        xs = [v[0] for v in self.vertices]
+        zs = [v[1] for v in self.vertices]
+        return (min(xs), max(xs), min(zs), max(zs))
+
 
 @dataclass
 class WaterBody:
@@ -196,6 +204,100 @@ class Airbase:
     category: int
     parking: list[ParkingSpotDict]
     runways: list[RunwayDict]
+
+
+class RegionIndex:
+    """Spatial index for fast region lookups using grid-based bucketing.
+
+    Divides the map into a grid of cells and precomputes which regions
+    potentially overlap each cell. Point lookups only check regions in
+    the relevant cell instead of all regions.
+    """
+
+    # Default cell size in meters (50km provides good balance)
+    DEFAULT_CELL_SIZE = 50000
+
+    def __init__(
+        self,
+        regions: list[Region],
+        bounds: BoundsDict,
+        cell_size: float = DEFAULT_CELL_SIZE,
+    ) -> None:
+        self.regions = regions
+        self.bounds = bounds
+        self.cell_size = cell_size
+
+        # Calculate grid dimensions
+        self.min_x = bounds["minX"]
+        self.min_z = bounds["minZ"]
+        self.nx = int(math.ceil((bounds["maxX"] - self.min_x) / cell_size)) + 1
+        self.nz = int(math.ceil((bounds["maxZ"] - self.min_z) / cell_size)) + 1
+
+        # Build the index: cell -> list of (region, polygon_path)
+        self._index: dict[tuple[int, int], list[tuple[Region, PolygonPath]]] = (
+            defaultdict(list)
+        )
+        self._build_index()
+
+    def _cell_for_point(self, x: float, z: float) -> tuple[int, int]:
+        """Return the grid cell indices for a point."""
+        ix = int((x - self.min_x) / self.cell_size)
+        iz = int((z - self.min_z) / self.cell_size)
+        # Clamp to valid range
+        ix = max(0, min(ix, self.nx - 1))
+        iz = max(0, min(iz, self.nz - 1))
+        return (ix, iz)
+
+    def _cells_for_bbox(
+        self, min_x: float, max_x: float, min_z: float, max_z: float
+    ) -> list[tuple[int, int]]:
+        """Return all grid cells that overlap a bounding box."""
+        ix_min = max(0, int((min_x - self.min_x) / self.cell_size))
+        ix_max = min(self.nx - 1, int((max_x - self.min_x) / self.cell_size))
+        iz_min = max(0, int((min_z - self.min_z) / self.cell_size))
+        iz_max = min(self.nz - 1, int((max_z - self.min_z) / self.cell_size))
+
+        cells = []
+        for ix in range(ix_min, ix_max + 1):
+            for iz in range(iz_min, iz_max + 1):
+                cells.append((ix, iz))
+        return cells
+
+    def _build_index(self) -> None:
+        """Build the spatial index by assigning regions to grid cells."""
+        for region in self.regions:
+            if not region.vertices or len(region.vertices) < 3:
+                continue
+
+            # Create polygon path once per region
+            polygon = PolygonPath(region.vertices)
+
+            # Get bounding box and find overlapping cells
+            min_x, max_x, min_z, max_z = region.bounding_box()
+            cells = self._cells_for_bbox(min_x, max_x, min_z, max_z)
+
+            # Add region to each overlapping cell
+            for cell in cells:
+                self._index[cell].append((region, polygon))
+
+    def region_for_point(self, x: float, z: float) -> str | None:
+        """Find which region contains a point.
+
+        Returns the region name or None if the point is not in any region.
+        """
+        cell = self._cell_for_point(x, z)
+        candidates = self._index.get(cell, [])
+
+        for region, polygon in candidates:
+            # Quick bounding box check
+            min_x, max_x, min_z, max_z = region.bounding_box()
+            if not (min_x <= x <= max_x and min_z <= z <= max_z):
+                continue
+            # Proper polygon containment test
+            if polygon.contains_point((x, z)):
+                return region.name
+
+        return None
 
 
 class TerrainExportError(Exception):
@@ -591,33 +693,30 @@ class TerrainProcessor:
     def compute_connectivity(
         self, regions: list[Region]
     ) -> list[tuple[str, str, float]]:
-        """Compute road connectivity between regions."""
+        """Compute road connectivity between regions.
+
+        Uses a spatial index for efficient region lookups, reducing
+        complexity from O(segments * regions) to approximately
+        O(segments * regions_per_cell).
+        """
         road_segments = self.data["roads"]["segments"]
 
         if not road_segments or not regions:
             return []
 
-        def region_for_point(x: float, z: float) -> str | None:
-            """Find which region contains a point using polygon containment."""
-            for region in regions:
-                if not region.vertices or len(region.vertices) < 3:
-                    continue
-                # Quick bounding box check first as optimization
-                xs = [v[0] for v in region.vertices]
-                zs = [v[1] for v in region.vertices]
-                if not (min(xs) <= x <= max(xs) and min(zs) <= z <= max(zs)):
-                    continue
-                # Proper polygon containment test
-                polygon = PolygonPath(region.vertices)
-                if polygon.contains_point((x, z)):
-                    return region.name
-            return None
+        # Build spatial index for fast region lookups
+        bounds = self.data["metadata"]["bounds"]
+        region_index = RegionIndex(regions, bounds)
 
         connections: dict[tuple[str, str], float] = defaultdict(float)
 
         for segment in road_segments:
-            from_region = region_for_point(segment["from"]["x"], segment["from"]["z"])
-            to_region = region_for_point(segment["to"]["x"], segment["to"]["z"])
+            from_region = region_index.region_for_point(
+                segment["from"]["x"], segment["from"]["z"]
+            )
+            to_region = region_index.region_for_point(
+                segment["to"]["x"], segment["to"]["z"]
+            )
 
             if from_region and to_region and from_region != to_region:
                 sorted_pair = sorted([from_region, to_region])

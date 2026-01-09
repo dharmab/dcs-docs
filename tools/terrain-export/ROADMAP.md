@@ -86,11 +86,13 @@ Several variables lack type hints:
 
 **Resolution:** Added TypedDict definitions for all JSON data structures (`BoundsDict`, `MetadataDict`, `TerrainPointDict`, `RoadPointDict`, `RoadEndpointDict`, `RoadsDict`, `ParkingSpotDict`, `RunwayDict`, `AirbaseDict`, `TerrainExportDict`, `GridDict`). Added instance variable type annotations to `TerrainProcessor` and `MarkdownGenerator` classes. Updated `_load_data()` and `_build_grid()` return types. Updated `Airbase` dataclass to use typed parking and runway lists. Added explicit return type to `main()` function.
 
-### [ ] Connectivity computation efficiency
+### [x] Connectivity computation efficiency (2026-01-09)
 
-The `compute_connectivity()` function (lines 397-428) iterates through all road segments and checks against all regions for each segment. O(segments * regions) complexity.
+The `compute_connectivity()` function iterates through all road segments and checks against all regions for each segment. O(segments * regions) complexity.
 
 **Fix:** Build a spatial index (grid-based bucketing or R-tree) for regions and use it to quickly look up which region contains a point.
+
+**Resolution:** Added `RegionIndex` class that implements grid-based spatial bucketing. The index divides the map into 50km cells and precomputes which regions overlap each cell. Point lookups only check regions in the relevant cell, reducing average-case complexity from O(regions) to O(regions_per_cell). The `Region` dataclass now includes a `bounding_box()` method. Updated `compute_connectivity()` to build a `RegionIndex` once and use it for all point lookups.
 
 ### [ ] Magic limit numbers
 
