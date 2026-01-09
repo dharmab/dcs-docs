@@ -48,8 +48,13 @@ TerrainSampler.config = {
     detectMinArea = 200000,      -- minimum area (meters) to always include (e.g. 200km)
 
     -- Progress update intervals
-    gridProgressInterval = 2500, -- Show progress every N terrain samples
-    roadProgressInterval = 100,  -- Show progress every N road points
+    gridProgressInterval = 2500,          -- Show progress every N terrain samples
+    roadProgressInterval = 100,           -- Show progress every N road points
+    connectivityProgressInterval = 50,    -- Show progress every N road points checked for connectivity
+
+    -- Road sampling thresholds
+    roadProximityFactor = 0.75,           -- Maximum distance to road as fraction of grid resolution
+    roadNeighborCount = 8,                -- Number of neighboring road points to check for connectivity
 
     -- Chunked sampling/throttling for DCS scripting safety
     maxSamplesPerChunk = 250, -- Maximum samples per scheduled chunk
@@ -597,7 +602,7 @@ function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
     local dist = math.sqrt((roadX - xCoord) ^ 2 + (roadZ - zCoord) ^ 2)
 
     -- Only include if reasonably close to our sample point
-    if dist >= resolution * 0.75 then
+    if dist >= resolution * self.config.roadProximityFactor then
         return nil
     end
 
@@ -803,7 +808,7 @@ function TerrainSampler:sampleRoads(callback)
 
             while iIndex <= #roadPoints do
                 local p1 = roadPoints[iIndex]
-                local jEnd = math.min(iIndex + 8, #roadPoints)
+                local jEnd = math.min(iIndex + self.config.roadNeighborCount, #roadPoints)
 
                 while jIndex <= jEnd do
                     local p2 = roadPoints[jIndex]
@@ -856,7 +861,7 @@ function TerrainSampler:sampleRoads(callback)
                 end
 
                 -- Progress update
-                if iIndex % 50 == 0 then
+                if iIndex % self.config.connectivityProgressInterval == 0 then
                     self:showProgress("Road connectivity: " ..
                         tostring(segmentCount) .. " segments from " .. tostring(iIndex) .. " points checked")
                 end

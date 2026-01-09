@@ -36,7 +36,7 @@ The `repeat...until true` pattern (lines 434, 617, etc.) is used as a break-from
 
 **Resolution:** Extracted the terrain sampling logic into `sampleTerrainPoint()` and road sampling logic into `sampleRoadPoint()`. Both helper functions handle validation and error logging internally, returning the sample data or nil on failure. The main loop code now simply calls the helper and checks for a non-nil result.
 
-### [ ] Magic numbers
+### [x] Magic numbers (2026-01-09)
 
 Several constants are embedded in the code:
 - `0.75` distance factor on line 651
@@ -44,6 +44,8 @@ Several constants are embedded in the code:
 - Various other threshold values
 
 **Fix:** Move these to the config table with descriptive names.
+
+**Resolution:** Added three new config options: `roadProximityFactor` (0.75), `roadNeighborCount` (8), and `connectivityProgressInterval` (50). Updated `sampleRoadPoint()` and `connectivityChunkProcessor()` to use these config values instead of hardcoded numbers.
 
 ### [ ] Include script version in JSON output
 
