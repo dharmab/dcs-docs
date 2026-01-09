@@ -58,12 +58,14 @@ TerrainSampler.config = {
 
     -- Adaptive sampling configuration
     adaptiveSampling = true,              -- Enable multi-pass adaptive resolution sampling
-    coarseResolution = 10000,             -- Coarse pass resolution in meters (10km)
-    refinedResolution = 2500,             -- Refined pass resolution in meters (2.5km)
+    coarseResolution = 5000,              -- Coarse pass resolution in meters (5km)
+    mediumResolution = 2500,              -- Medium pass resolution in meters (2.5km)
+    fineResolution = 1000,                -- Fine pass resolution in meters (1km)
     elevationVarianceThreshold = 200,     -- Minimum elevation variance (meters) to trigger refinement
     roadDensityThreshold = 3,             -- Minimum road points per cell to trigger refinement
     gradientThreshold = 0.05,             -- Minimum elevation gradient to neighbors (rise/run)
-    interestScoreThreshold = 2,           -- Minimum score to mark cell for refinement
+    mediumScoreThreshold = 2,             -- Minimum score for medium refinement
+    fineScoreThreshold = 4,               -- Minimum score for fine refinement
 
     -- Chunked sampling/throttling for DCS scripting safety
     maxSamplesPerChunk = 250, -- Maximum samples per scheduled chunk
@@ -144,9 +146,11 @@ TerrainSampler.state = {
     coarseCells = {},       -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
     coarseNx = 0,           -- Number of coarse cells in X
     coarseNz = 0,           -- Number of coarse cells in Z
-    cellsToRefine = {},     -- List of {ix, iz} cells marked for refinement
+    mediumCells = {},       -- List of {ix, iz} cells for medium refinement (level 1)
+    fineCells = {},         -- List of {ix, iz} cells for fine refinement (level 2)
     roadDensityGrid = {},   -- 2D table: [ix][iz] = road_count
-    refinedSamples = {},    -- Samples from refinement pass
+    mediumSamples = {},     -- Samples from medium refinement pass
+    fineSamples = {},       -- Samples from fine refinement pass
 }
 
 -- =============================================================================
@@ -361,11 +365,15 @@ function TerrainSampler:computeInterestScore(ix, iz)
     return score
 end
 
---- Analyze all coarse cells and mark interesting ones for refinement
+--- Analyze all coarse cells and categorize by refinement level
 -- Should be called after both terrain and road sampling are complete
+-- Cells are categorized into:
+--   medium (level 1): score >= mediumScoreThreshold
+--   fine (level 2): score >= fineScoreThreshold
 function TerrainSampler:analyzeInterest()
     self:startPhase("Interest Analysis")
-    self.state.cellsToRefine = {}
+    self.state.mediumCells = {}
+    self.state.fineCells = {}
 
     local nx = self.state.coarseNx or 0
     local nz = self.state.coarseNz or 0
@@ -376,145 +384,139 @@ function TerrainSampler:analyzeInterest()
         return
     end
 
-    local interestingCount = 0
+    local mediumCount = 0
+    local fineCount = 0
     local totalCells = nx * nz
-    local scoreThreshold = self.config.interestScoreThreshold
+    local mediumThreshold = self.config.mediumScoreThreshold
+    local fineThreshold = self.config.fineScoreThreshold
 
-    -- Collect cells that exceed the interest score threshold
+    -- Categorize cells by interest score
     for ix = 0, nx - 1 do
         for iz = 0, nz - 1 do
             local score = self:computeInterestScore(ix, iz)
-            if score >= scoreThreshold then
-                table.insert(self.state.cellsToRefine, {ix = ix, iz = iz})
-                interestingCount = interestingCount + 1
+            if score >= fineThreshold then
+                -- Highest interest: gets finest resolution
+                table.insert(self.state.fineCells, {ix = ix, iz = iz})
+                fineCount = fineCount + 1
+            elseif score >= mediumThreshold then
+                -- Medium interest: gets medium resolution
+                table.insert(self.state.mediumCells, {ix = ix, iz = iz})
+                mediumCount = mediumCount + 1
             end
         end
     end
 
-    self:log("Interest analysis: " .. tostring(interestingCount) .. " of " .. tostring(totalCells) ..
-        " cells marked for refinement (score >= " .. tostring(scoreThreshold) .. ")")
-    self:endPhase("Interest Analysis", tostring(interestingCount) .. " cells marked for refinement")
+    self:log("Interest analysis: " .. tostring(totalCells) .. " total cells")
+    self:log("  Medium refinement (score >= " .. tostring(mediumThreshold) .. "): " .. tostring(mediumCount))
+    self:log("  Fine refinement (score >= " .. tostring(fineThreshold) .. "): " .. tostring(fineCount))
+    self:endPhase("Interest Analysis", tostring(mediumCount) .. " medium, " .. tostring(fineCount) .. " fine")
 end
 
---- Sample refined terrain points within marked cells
--- @param callback Function to call with refined samples when complete
-function TerrainSampler:sampleRefinedCells(callback)
-    self:startPhase("Refined Terrain Sampling")
+--- Sample terrain points at a specific resolution within marked cells
+-- @param cells List of {ix, iz} cells to sample
+-- @param targetRes Target resolution in meters
+-- @param level Refinement level (1 = medium, 2 = fine)
+-- @param phaseName Name for progress display
+-- @param callback Function to call with samples when complete
+function TerrainSampler:sampleCellsAtResolution(cells, targetRes, level, phaseName, callback)
+    self:startPhase(phaseName)
 
-    local cellsToRefine = self.state.cellsToRefine or {}
     local bounds = self.state.detectedBounds
 
-    if #cellsToRefine == 0 then
-        self:log("No cells to refine")
-        self:endPhase("Refined Terrain Sampling", "0 refined samples (no cells)")
+    if #cells == 0 then
+        self:log("No cells to sample for " .. phaseName)
+        self:endPhase(phaseName, "0 samples (no cells)")
         if callback then callback({}) end
         return
     end
 
     if not bounds then
-        self:logWarning("No bounds available for refined sampling")
-        self:endPhase("Refined Terrain Sampling", "0 refined samples (no bounds)")
+        self:logWarning("No bounds available for " .. phaseName)
+        self:endPhase(phaseName, "0 samples (no bounds)")
         if callback then callback({}) end
         return
     end
 
     local coarseRes = self.config.coarseResolution
-    local refinedRes = self.config.refinedResolution
-    local samplesPerCell = math.floor(coarseRes / refinedRes)
+    local samplesPerCell = math.floor(coarseRes / targetRes)
 
-    self:log("Refining " .. tostring(#cellsToRefine) .. " cells at " ..
-        tostring(refinedRes) .. "m resolution (" .. tostring(samplesPerCell) ..
+    self:log("Sampling " .. tostring(#cells) .. " cells at " ..
+        tostring(targetRes) .. "m resolution (" .. tostring(samplesPerCell) ..
         "x" .. tostring(samplesPerCell) .. " samples per cell)")
 
     -- Calculate total samples expected
-    local totalRefinedSamples = #cellsToRefine * samplesPerCell * samplesPerCell
-    self:showMessage("Sampling " .. tostring(totalRefinedSamples) ..
-        " refined points in " .. tostring(#cellsToRefine) .. " interesting cells...", 15)
+    local totalSamples = #cells * samplesPerCell * samplesPerCell
+    self:showMessage("Sampling " .. tostring(totalSamples) ..
+        " points in " .. tostring(#cells) .. " cells at " ..
+        tostring(targetRes / 1000) .. "km...", 15)
 
-    -- Chunked stateful refinement sampling
-    self.state.refinedSamples = {}
-    self.state.refinedCount = 0
-    self.state.refinedLastProgressUpdate = 0
-    self.state.refinedCellIndex = 1
-    self.state.refinedSubX = 0
-    self.state.refinedSubZ = 0
-    self.state.refinedTotalSamples = totalRefinedSamples
-    self.state.refinedSamplesPerCell = samplesPerCell
+    -- Chunked stateful sampling
+    local state = {
+        samples = {},
+        count = 0,
+        lastProgressUpdate = 0,
+        cellIndex = 1,
+        subX = 0,
+        subZ = 0,
+    }
 
-    local function refinedChunkSampler()
+    local function chunkSampler()
         local startTime = os.clock()
         local samplesThisChunk = 0
         local maxSamples = self.config.maxSamplesPerChunk or 250
         local maxTime = self.config.maxChunkTime or 0.05
 
-        local cellIndex = self.state.refinedCellIndex
-        local subX = self.state.refinedSubX
-        local subZ = self.state.refinedSubZ
-        local samplesPerCell = self.state.refinedSamplesPerCell
-        local totalSamples = self.state.refinedTotalSamples
-        local count = self.state.refinedCount
-        local lastProgressUpdate = self.state.refinedLastProgressUpdate
-        local samples = self.state.refinedSamples
-
-        while cellIndex <= #cellsToRefine do
-            local cell = cellsToRefine[cellIndex]
+        while state.cellIndex <= #cells do
+            local cell = cells[state.cellIndex]
             -- Calculate cell bounds in world coordinates
             local cellMinX = bounds.minX + cell.ix * coarseRes
             local cellMinZ = bounds.minZ + cell.iz * coarseRes
 
-            while subX < samplesPerCell do
-                while subZ < samplesPerCell do
-                    local xCoord = cellMinX + subX * refinedRes + refinedRes / 2
-                    local zCoord = cellMinZ + subZ * refinedRes + refinedRes / 2
+            while state.subX < samplesPerCell do
+                while state.subZ < samplesPerCell do
+                    local xCoord = cellMinX + state.subX * targetRes + targetRes / 2
+                    local zCoord = cellMinZ + state.subZ * targetRes + targetRes / 2
 
                     local sample = self:sampleTerrainPoint(xCoord, zCoord)
                     if sample then
-                        sample.resolution = refinedRes
-                        sample.level = 1  -- Refined level
-                        table.insert(samples, sample)
-                        count = count + 1
+                        sample.resolution = targetRes
+                        sample.level = level
+                        table.insert(state.samples, sample)
+                        state.count = state.count + 1
 
                         -- Progress updates
-                        if count - lastProgressUpdate >= self.config.gridProgressInterval then
-                            local percent = math.floor((count / totalSamples) * 100)
-                            self:showProgress("Refined: " ..
-                                tostring(count) .. "/" .. tostring(totalSamples) ..
+                        if state.count - state.lastProgressUpdate >= self.config.gridProgressInterval then
+                            local percent = math.floor((state.count / totalSamples) * 100)
+                            self:showProgress(phaseName .. ": " ..
+                                tostring(state.count) .. "/" .. tostring(totalSamples) ..
                                 " (" .. tostring(percent) .. "%)")
-                            lastProgressUpdate = count
+                            state.lastProgressUpdate = state.count
                         end
                     end
 
                     samplesThisChunk = samplesThisChunk + 1
-                    subZ = subZ + 1
+                    state.subZ = state.subZ + 1
 
                     if samplesThisChunk >= maxSamples or (os.clock() - startTime) > maxTime then
-                        self.state.refinedCellIndex = cellIndex
-                        self.state.refinedSubX = subX
-                        self.state.refinedSubZ = subZ
-                        self.state.refinedCount = count
-                        self.state.refinedLastProgressUpdate = lastProgressUpdate
-                        self.state.refinedSamples = samples
-                        timer.scheduleFunction(refinedChunkSampler, {}, timer.getTime() + 0.1)
+                        timer.scheduleFunction(chunkSampler, {}, timer.getTime() + 0.1)
                         return
                     end
                 end
-                subZ = 0
-                subX = subX + 1
+                state.subZ = 0
+                state.subX = state.subX + 1
             end
-            subX = 0
-            cellIndex = cellIndex + 1
+            state.subX = 0
+            state.cellIndex = state.cellIndex + 1
         end
 
         -- Done
-        self.state.refinedCount = count
-        self.state.refinedSamples = samples
-        self:endPhase("Refined Terrain Sampling", tostring(count) .. " refined samples collected")
+        self:endPhase(phaseName, tostring(state.count) .. " samples collected")
         if callback then
-            callback(self.state.refinedSamples)
+            callback(state.samples)
         end
     end
 
-    timer.scheduleFunction(refinedChunkSampler, {}, timer.getTime() + 0.1)
+    timer.scheduleFunction(chunkSampler, {}, timer.getTime() + 0.1)
 end
 
 -- =============================================================================
@@ -767,9 +769,11 @@ function TerrainSampler:sampleGrid(callback)
         self:log("Adaptive sampling enabled, using coarse resolution: " .. tostring(resolution) .. "m")
         -- Initialize coarse cell tracking
         self.state.coarseCells = {}
-        self.state.cellsToRefine = {}
+        self.state.mediumCells = {}
+        self.state.fineCells = {}
         self.state.roadDensityGrid = {}
-        self.state.refinedSamples = {}
+        self.state.mediumSamples = {}
+        self.state.fineSamples = {}
     else
         resolution = self.config.gridResolution
     end
@@ -1406,7 +1410,7 @@ function TerrainSampler:export()
         -- Determine grid resolution for metadata (finest resolution used)
         local gridResolution
         if sampler.config.adaptiveSampling then
-            gridResolution = sampler.config.refinedResolution
+            gridResolution = sampler.config.fineResolution
         else
             gridResolution = sampler.config.gridResolution
         end
@@ -1426,8 +1430,10 @@ function TerrainSampler:export()
                 -- Adaptive sampling metadata
                 adaptiveSampling = sampler.config.adaptiveSampling,
                 coarseResolution = sampler.config.adaptiveSampling and sampler.config.coarseResolution or nil,
-                refinedResolution = sampler.config.adaptiveSampling and sampler.config.refinedResolution or nil,
-                refinedCells = sampler.config.adaptiveSampling and #(sampler.state.cellsToRefine or {}) or nil,
+                mediumResolution = sampler.config.adaptiveSampling and sampler.config.mediumResolution or nil,
+                fineResolution = sampler.config.adaptiveSampling and sampler.config.fineResolution or nil,
+                mediumCells = sampler.config.adaptiveSampling and #(sampler.state.mediumCells or {}) or nil,
+                fineCells = sampler.config.adaptiveSampling and #(sampler.state.fineCells or {}) or nil,
             },
             terrain = gridSamples,
             roads = roadData,
@@ -1545,29 +1551,47 @@ function TerrainSampler:export()
 
     -- Callback chain for chunked sampling
     if sampler.config.adaptiveSampling then
-        -- Adaptive sampling: 5 phases
-        sampler:showMessage("Phase 1/5: Coarse terrain sampling...", 10)
+        -- Adaptive sampling: 6 phases (coarse, roads, analysis, medium, fine, airbases)
+        sampler:showMessage("Phase 1/6: Coarse terrain sampling (5km)...", 10)
         sampler:sampleGrid(function(coarseSamples)
-            sampler:showMessage("Phase 2/5: Road network sampling...", 10)
+            sampler:showMessage("Phase 2/6: Road network sampling...", 10)
             sampler:sampleRoads(function(roadData)
-                sampler:showMessage("Phase 3/5: Interest analysis...", 10)
+                sampler:showMessage("Phase 3/6: Interest analysis...", 10)
                 sampler:analyzeInterest()
-                sampler:showMessage("Phase 4/5: Refined terrain sampling...", 10)
-                sampler:sampleRefinedCells(function(refinedSamples)
-                    -- Merge coarse and refined samples
-                    local allSamples = {}
-                    for _, sample in ipairs(coarseSamples) do
-                        table.insert(allSamples, sample)
+                sampler:showMessage("Phase 4/6: Medium terrain sampling (2.5km)...", 10)
+                sampler:sampleCellsAtResolution(
+                    sampler.state.mediumCells,
+                    sampler.config.mediumResolution,
+                    1,
+                    "Medium Sampling",
+                    function(mediumSamples)
+                        sampler:showMessage("Phase 5/6: Fine terrain sampling (1km)...", 10)
+                        sampler:sampleCellsAtResolution(
+                            sampler.state.fineCells,
+                            sampler.config.fineResolution,
+                            2,
+                            "Fine Sampling",
+                            function(fineSamples)
+                                -- Merge all samples
+                                local allSamples = {}
+                                for _, sample in ipairs(coarseSamples) do
+                                    table.insert(allSamples, sample)
+                                end
+                                for _, sample in ipairs(mediumSamples) do
+                                    table.insert(allSamples, sample)
+                                end
+                                for _, sample in ipairs(fineSamples) do
+                                    table.insert(allSamples, sample)
+                                end
+                                sampler.state.sampleCount = #allSamples
+                                sampler:showMessage("Phase 6/6: Airbase collection...", 10)
+                                sampler:collectAirbases(function(airbases)
+                                    finalizeExport(allSamples, roadData, airbases)
+                                end)
+                            end
+                        )
                     end
-                    for _, sample in ipairs(refinedSamples) do
-                        table.insert(allSamples, sample)
-                    end
-                    sampler.state.sampleCount = #allSamples
-                    sampler:showMessage("Phase 5/5: Airbase collection...", 10)
-                    sampler:collectAirbases(function(airbases)
-                        finalizeExport(allSamples, roadData, airbases)
-                    end)
-                end)
+                )
             end)
         end)
     else
