@@ -1,6 +1,6 @@
 # Erusea (2005)
 
-Free Erusea insurgent forces during the Late Continental War.
+Federal Republic of Erusea during the later part of the Continental War.
 
 Inspired by Western European nations, particularly France, Germany, and Italy, with a mix of European and Soviet equipment.
 
