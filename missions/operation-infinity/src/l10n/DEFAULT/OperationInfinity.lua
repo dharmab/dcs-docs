@@ -10,27 +10,27 @@ OperationInfinity = {}
 -- =============================================================================
 
 OperationInfinity.config = {
-    coordinateDisplayInterval = 60,  -- Seconds between coordinate broadcasts
+    coordinateDisplayInterval = 60, -- Seconds between coordinate broadcasts
     maxSpawnedUnits = 800,
     debug = true,
 
     -- Battlefield zones by playtime
     battlefieldZones = {
         ["45"] = {
-            center = {x = -40000, y = 320000},
-            radius = 30000,        -- 30 km
+            center = { x = -40000, y = 320000 },
+            radius = 30000, -- 30 km
             name = "Anapa/Novorossiysk Area",
             description = "Close Air Support",
         },
         ["90"] = {
-            center = {x = -220000, y = 560000},
-            radius = 50000,        -- 50 km
+            center = { x = -220000, y = 560000 },
+            radius = 50000, -- 50 km
             name = "Sukhumi/Zugdidi Area",
             description = "Interdiction",
         },
         ["180"] = {
-            center = {x = -290000, y = 700000},
-            radius = 60000,        -- 60 km
+            center = { x = -290000, y = 700000 },
+            radius = 60000, -- 60 km
             name = "Kutaisi/Tbilisi Area",
             description = "Deep Strike",
         },
@@ -42,32 +42,32 @@ OperationInfinity.config = {
         sectorsMax = 5,
         platoonPairsMin = 2,
         platoonPairsMax = 3,
-        engagementDistance = 800,    -- Meters between opposing platoons
-        fireOffset = 50,             -- Meters offset for FireAtPoint
+        engagementDistance = 800, -- Meters between opposing platoons
+        fireOffset = 50,          -- Meters offset for FireAtPoint
     },
 
     -- Behind-lines targets
     behindLines = {
-        convoyCount = {2, 4},        -- Min/max convoys
-        artilleryCount = {1, 3},     -- Min/max artillery batteries
-        patrolCount = {3, 6},        -- Min/max patrol groups
+        convoyCount = { 2, 4 },  -- Min/max convoys
+        artilleryCount = { 1, 3 }, -- Min/max artillery batteries
+        patrolCount = { 3, 6 },  -- Min/max patrol groups
     },
 
     -- SAM site counts by difficulty
     samCounts = {
         Normal = {
-            SA2 = {0, 1},
-            SA3 = {1, 2},
-            SA6 = {1, 2},
-            SA8 = {2, 3},
-            EWR = {2, 3},
+            SA2 = { 0, 1 },
+            SA3 = { 1, 2 },
+            SA6 = { 1, 2 },
+            SA8 = { 2, 3 },
+            EWR = { 2, 3 },
         },
         Hard = {
-            SA10 = {1, 1},
-            SA11 = {1, 2},
-            SA6 = {1, 2},
-            SA15 = {2, 3},
-            EWR = {2, 4},
+            SA10 = { 1, 1 },
+            SA11 = { 1, 2 },
+            SA6 = { 1, 2 },
+            SA15 = { 2, 3 },
+            EWR = { 2, 4 },
         },
     },
 }
@@ -154,10 +154,10 @@ function OperationInfinity:setupMenu()
     )
 
     local difficulties = {
-        {key = "VeryEasy", label = "Very Easy (Training - no enemies shoot back)"},
-        {key = "Easy", label = "Easy (Light defenses, IR missiles only)"},
-        {key = "Normal", label = "Normal (IADS, semi-active radar missiles)"},
-        {key = "Hard", label = "Hard (Layered IADS, active radar missiles)"},
+        { key = "VeryEasy", label = "Very Easy (Training - no enemies shoot back)" },
+        { key = "Easy",     label = "Easy (Light defenses, IR missiles only)" },
+        { key = "Normal",   label = "Normal (IADS, semi-active radar missiles)" },
+        { key = "Hard",     label = "Hard (Layered IADS, active radar missiles)" },
     }
 
     for _, diff in ipairs(difficulties) do
@@ -175,9 +175,9 @@ function OperationInfinity:setupMenu()
     )
 
     local playtimes = {
-        {key = "45", label = "45 Minutes (CAS - targets near Krymsk)"},
-        {key = "90", label = "90 Minutes (Interdiction - central Caucasus)"},
-        {key = "180", label = "180 Minutes (Deep Strike - eastern Caucasus)"},
+        { key = "45",  label = "45 Minutes (CAS - targets near Krymsk)" },
+        { key = "90",  label = "90 Minutes (Interdiction - central Caucasus)" },
+        { key = "180", label = "180 Minutes (Deep Strike - eastern Caucasus)" },
     }
 
     for _, pt in ipairs(playtimes) do
@@ -254,7 +254,7 @@ function OperationInfinity:generateBattlefield()
         "Generating battlefield...", 15)
 
     self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
-             ", Playtime: " .. self.state.playtime)
+        ", Playtime: " .. self.state.playtime)
 
     -- Generate frontline sectors
     self:generateFrontlineSectors()
@@ -327,7 +327,7 @@ function OperationInfinity:generateSector(index)
     )
 
     self:log("Sector " .. index .. ": " .. numPairs .. " platoon pairs at (" ..
-             math.floor(sectorCenter.x) .. ", " .. math.floor(sectorCenter.y) .. ")")
+        math.floor(sectorCenter.x) .. ", " .. math.floor(sectorCenter.y) .. ")")
 
     -- Generate platoon pairs
     for j = 1, numPairs do
@@ -337,15 +337,15 @@ function OperationInfinity:generateSector(index)
     -- Generate SHORAD for this sector
     self:generateSectorSHORAD(sectorCenter, index)
 
-    return {center = sectorCenter, platoonPairs = numPairs}
+    return { center = sectorCenter, platoonPairs = numPairs }
 end
 
 function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIndex)
-    local offset = (pairIndex - 1) * 300  -- Spread pairs along front
+    local offset = (pairIndex - 1) * 300 -- Spread pairs along front
     local engageDist = self.config.frontline.engagementDistance
 
     -- Randomize the front line orientation slightly
-    local frontAngle = math.random() * 0.3 - 0.15  -- Small angle variation
+    local frontAngle = math.random() * 0.3 - 0.15 -- Small angle variation
 
     -- ISAF platoon position (south side)
     local isafPos = {
@@ -403,7 +403,7 @@ end
 function OperationInfinity:buildPlatoonUnits(template, center)
     local units = {}
     local unitIndex = 1
-    local spacing = 30  -- Meters between units
+    local spacing = 30 -- Meters between units
 
     for _, def in ipairs(template) do
         for c = 1, def.count do
@@ -486,7 +486,7 @@ function OperationInfinity:generateBehindLinesTargets()
     end
 
     self:log("Generated behind-lines targets: " .. numConvoys .. " convoys, " ..
-             numArtillery .. " artillery, " .. numPatrols .. " patrols")
+        numArtillery .. " artillery, " .. numPatrols .. " patrols")
 end
 
 function OperationInfinity:generateConvoy(index)
@@ -526,7 +526,7 @@ function OperationInfinity:generateArtilleryBattery(index)
     if targetSector then
         fireTarget = {
             x = targetSector.center.x + (math.random() - 0.5) * 500,
-            y = targetSector.center.y - 400,  -- Aim at ISAF side
+            y = targetSector.center.y - 400, -- Aim at ISAF side
             radius = 100,
             expendQty = 500,
         }
@@ -553,8 +553,8 @@ function OperationInfinity:generatePatrolGroup(index)
     )
 
     local units = {
-        {type = "BRDM-2", x = pos.x, y = pos.y, heading = math.random() * 2 * math.pi, skill = "Average"},
-        {type = "BRDM-2", x = pos.x + 30, y = pos.y + 30, heading = math.random() * 2 * math.pi, skill = "Average"},
+        { type = "BRDM-2", x = pos.x,      y = pos.y,      heading = math.random() * 2 * math.pi, skill = "Average" },
+        { type = "BRDM-2", x = pos.x + 30, y = pos.y + 30, heading = math.random() * 2 * math.pi, skill = "Average" },
     }
 
     Virtualization:registerGroup({
@@ -603,12 +603,12 @@ function OperationInfinity:generateSAMSite(samType, template, index)
     -- Position SAM sites within battlefield, with heavier ones further back
     local distanceMultiplier = 0.5
     if samType == "SA10" or samType == "SA11" then
-        distanceMultiplier = 0.7  -- Longer range SAMs further back
+        distanceMultiplier = 0.7 -- Longer range SAMs further back
     end
 
     local angle = math.random() * 2 * math.pi
     local distance = self.state.battlefield.radius * distanceMultiplier +
-                     math.random() * self.state.battlefield.radius * 0.3
+        math.random() * self.state.battlefield.radius * 0.3
 
     local pos = {
         x = self.state.battlefield.center.x + distance * math.cos(angle),
@@ -647,7 +647,7 @@ function OperationInfinity:buildSAMUnits(template, center)
                 type = def.type,
                 x = center.x + radius * math.cos(angle),
                 y = center.y + radius * math.sin(angle),
-                heading = angle + math.pi,  -- Face outward
+                heading = angle + math.pi, -- Face outward
                 skill = "Excellent",
             }
             unitIndex = unitIndex + 1
@@ -665,7 +665,7 @@ function OperationInfinity:generateEWRs()
         ewrCountRange = samCounts.EWR
     else
         -- Default for Easy difficulty
-        ewrCountRange = {1, 2}
+        ewrCountRange = { 1, 2 }
     end
 
     local samTemplates = UnitTemplates.SAMSites[self.state.difficulty]
@@ -675,7 +675,7 @@ function OperationInfinity:generateEWRs()
         ewrTemplate = samTemplates.EWR
     else
         -- Default EWR
-        ewrTemplate = {{type = "1L13 EWR", count = 1}}
+        ewrTemplate = { { type = "1L13 EWR", count = 1 } }
     end
 
     local count = self:randomInRange(ewrCountRange[1], ewrCountRange[2])
@@ -731,8 +731,8 @@ function OperationInfinity:formatCoordinates(pos)
     -- Convert to MGRS
     local mgrs = coord.LLtoMGRS(lat, lon)
     local mgrsStr = mgrs.UTMZone .. mgrs.MGRSDigraph .. " " ..
-                    string.format("%05d", math.floor(mgrs.Easting)) .. " " ..
-                    string.format("%05d", math.floor(mgrs.Northing))
+        string.format("%05d", math.floor(mgrs.Easting)) .. " " ..
+        string.format("%05d", math.floor(mgrs.Northing))
 
     -- Format Lat/Lon
     local latDir = lat >= 0 and "N" or "S"
@@ -842,8 +842,7 @@ function OperationInfinity:init()
 
     self:log("Initializing Operation Infinity...")
 
-    -- Seed random number generator
-    math.randomseed(os.time())
+    -- Random number generator seeding is not required in this environment
 
     -- Display initial hint
     timer.scheduleFunction(function()
@@ -867,7 +866,7 @@ function OperationInfinity:init()
     -- Start late joiner check loop
     timer.scheduleFunction(function(_, time)
         OperationInfinity:checkForNewPlayers()
-        return time + 10  -- Check every 10 seconds
+        return time + 10 -- Check every 10 seconds
     end, nil, timer.getTime() + 10)
 
     self.state.initialized = true
