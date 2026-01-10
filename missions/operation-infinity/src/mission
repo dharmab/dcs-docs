@@ -1086,6 +1086,34 @@ mission = {
                                                                 },
                                                             },
                                                         },
+                                                        [4] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
@@ -1213,6 +1241,34 @@ mission = {
                                                                 ["point2"] = {
                                                                     ["x"] = 10000,
                                                                     ["y"] = 355000,
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [6] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 6,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
                                                                 },
                                                             },
                                                         },
@@ -1346,6 +1402,34 @@ mission = {
                                                                 },
                                                             },
                                                         },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [6] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 6,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
@@ -1473,6 +1557,34 @@ mission = {
                                                                 ["point2"] = {
                                                                     ["x"] = 20000,
                                                                     ["y"] = 365000,
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [6] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 6,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
                                                                 },
                                                             },
                                                         },
