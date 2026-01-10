@@ -1624,7 +1624,7 @@ end
 
 function OperationInfinity:formatCoordinates(pos)
     -- Convert to Lat/Lon
-    local lat, lon, alt = coord.LOtoLL(pos.x, 0, pos.y)
+    local lat, lon, alt = coord.LOtoLL({x = pos.x, y = 0, z = pos.y})
 
     -- Convert to MGRS
     local mgrs = coord.LLtoMGRS(lat, lon)
