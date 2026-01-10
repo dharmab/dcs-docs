@@ -634,12 +634,19 @@ function OperationInfinity:generateBattlefield()
         end
     end
 
+    -- Build virtualization notice for longer missions
+    local virtNote = ""
+    if self.state.playtime == "90" or self.state.playtime == "180" then
+        virtNote = "\n\nNote: For performance, ground units are virtualized\n" ..
+            "and spawn when a player is within 100 nm."
+    end
+
     trigger.action.outTextForCoalition(coalition.side.BLUE,
         "=== OPERATION INFINITY ===\n" ..
         "Difficulty: " .. self.state.difficulty .. "\n" ..
         "Playtime: " .. self.state.playtime .. " minutes\n" ..
         "Target Area: " .. selected.region.name .. "\n\n" ..
-        "Generating battlefield...", 15)
+        "Generating battlefield..." .. virtNote, 15)
 
     self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
         ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
