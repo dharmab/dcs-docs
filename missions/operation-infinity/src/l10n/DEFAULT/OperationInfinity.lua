@@ -2386,12 +2386,11 @@ function OperationInfinity:activateSupportAircraft(regionKey)
 
             local orbitAltitude = aircraft.altitude + altOffset
 
-            -- Activate the group
-            group:activate()
-
-            -- Push orbit task to the group's controller
+            -- Enable the group's AI and push orbit task
+            -- Note: uncontrolled groups use setOnOff(), not activate()
             local controller = group:getController()
             if controller then
+                controller:setOnOff(true)
                 local orbitTask = {
                     id = "Orbit",
                     params = {
