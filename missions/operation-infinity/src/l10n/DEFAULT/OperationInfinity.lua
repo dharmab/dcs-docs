@@ -418,7 +418,7 @@ function OperationInfinity:addFEBAShape(sector, sectorIndex)
         )
     end
 
-    -- Draw arrows from each ISAF position pointing toward enemy (north)
+    -- Draw arrows from each ISAF position pointing toward enemy (east)
     local arrowLength = 400  -- meters
     for _, pos in ipairs(positions) do
         self.state.markerCounter = self.state.markerCounter + 1
@@ -426,8 +426,8 @@ function OperationInfinity:addFEBAShape(sector, sectorIndex)
         trigger.action.arrowToAll(
             coalition.side.BLUE,
             self.state.markerCounter,
-            {x = pos.x, y = land.getHeight(pos), z = pos.y},
             {x = arrowEnd.x, y = land.getHeight(arrowEnd), z = arrowEnd.y},
+            {x = pos.x, y = land.getHeight(pos), z = pos.y},
             lineColor,
             arrowFill,
             1,      -- dashed
