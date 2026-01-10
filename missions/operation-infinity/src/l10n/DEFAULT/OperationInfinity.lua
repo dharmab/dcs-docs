@@ -1490,13 +1490,35 @@ function OperationInfinity:generateSAMSite(samType, template, index)
         maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
     end
 
-    local angle = math.random() * 2 * math.pi
-    local distance = minDist + math.random() * (maxDist - minDist)
+    -- Try multiple random positions near the aerodrome until we find valid terrain
+    local pos = nil
+    local maxPositionAttempts = 5
 
-    local pos = {
-        x = aerodrome.x + distance * math.cos(angle),
-        y = aerodrome.y + distance * math.sin(angle),
-    }
+    for attempt = 1, maxPositionAttempts do
+        local angle = math.random() * 2 * math.pi
+        local distance = minDist + math.random() * (maxDist - minDist)
+
+        local initialPos = {
+            x = aerodrome.x + distance * math.cos(angle),
+            y = aerodrome.y + distance * math.sin(angle),
+        }
+
+        -- Validate terrain - SAM sites need flat, dry ground
+        local validPos, found = self:findValidPosition(initialPos, 3000, {
+            maxSlope = 10,
+            maxRoughness = 5,
+        })
+
+        if found then
+            pos = validPos
+            break
+        end
+    end
+
+    if not pos then
+        self:log("WARNING: Could not find valid terrain for " .. samType .. " near aerodrome - skipping")
+        return
+    end
 
     local units = self:buildSAMUnits(template, pos)
     local groupName = samType .. "-" .. index
@@ -1616,41 +1638,63 @@ function OperationInfinity:generateEWRs()
         -- Position EWRs at moderate distance from aerodrome
         local minDist = 10000  -- 10 km minimum
         local maxDist = 40000  -- 40 km max
-        local angle = math.random() * 2 * math.pi
-        local distance = minDist + math.random() * (maxDist - minDist)
 
-        local pos = {
-            x = aerodrome.x + distance * math.cos(angle),
-            y = aerodrome.y + distance * math.sin(angle),
-        }
+        -- Try multiple random positions near the aerodrome until we find valid terrain
+        local pos = nil
+        local maxPositionAttempts = 5
 
-        local units = {}
-        for _, def in ipairs(ewrTemplate) do
-            for c = 1, def.count do
-                units[#units + 1] = {
-                    type = def.type,
-                    x = pos.x + (c - 1) * 50,
-                    y = pos.y,
-                    heading = 0,
-                    skill = "Excellent",
-                }
+        for attempt = 1, maxPositionAttempts do
+            local angle = math.random() * 2 * math.pi
+            local distance = minDist + math.random() * (maxDist - minDist)
+
+            local initialPos = {
+                x = aerodrome.x + distance * math.cos(angle),
+                y = aerodrome.y + distance * math.sin(angle),
+            }
+
+            -- Validate terrain - EWRs need flat, dry ground
+            local validPos, found = self:findValidPosition(initialPos, 3000, {
+                maxSlope = 10,
+                maxRoughness = 5,
+            })
+
+            if found then
+                pos = validPos
+                break
             end
         end
 
-        local groupName = "EWR-" .. i
+        if not pos then
+            self:log("WARNING: Could not find valid terrain for EWR near aerodrome - skipping")
+        else
+            local units = {}
+            for _, def in ipairs(ewrTemplate) do
+                for c = 1, def.count do
+                    units[#units + 1] = {
+                        type = def.type,
+                        x = pos.x + (c - 1) * 50,
+                        y = pos.y,
+                        heading = 0,
+                        skill = "Excellent",
+                    }
+                end
+            end
 
-        -- EWRs are permanent groups
-        Virtualization:registerPermanentGroup({
-            name = groupName,
-            center = pos,
-            units = units,
-            countryId = country.id.CJTF_RED,
-            category = Group.Category.GROUND,
-        })
+            local groupName = "EWR-" .. i
 
-        IADS:registerEWR(groupName)
+            -- EWRs are permanent groups
+            Virtualization:registerPermanentGroup({
+                name = groupName,
+                center = pos,
+                units = units,
+                countryId = country.id.CJTF_RED,
+                category = Group.Category.GROUND,
+            })
 
-        self:log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+            IADS:registerEWR(groupName)
+
+            self:log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+        end
     end
 end
 
@@ -1693,13 +1737,36 @@ function OperationInfinity:generateEWRsBatched(onComplete)
 
             local minDist = 10000
             local maxDist = 40000
-            local angle = math.random() * 2 * math.pi
-            local distance = minDist + math.random() * (maxDist - minDist)
 
-            local pos = {
-                x = aerodrome.x + distance * math.cos(angle),
-                y = aerodrome.y + distance * math.sin(angle),
-            }
+            -- Try multiple random positions near the aerodrome until we find valid terrain
+            local pos = nil
+            local maxPositionAttempts = 5
+
+            for attempt = 1, maxPositionAttempts do
+                local angle = math.random() * 2 * math.pi
+                local distance = minDist + math.random() * (maxDist - minDist)
+
+                local initialPos = {
+                    x = aerodrome.x + distance * math.cos(angle),
+                    y = aerodrome.y + distance * math.sin(angle),
+                }
+
+                -- Validate terrain - EWRs need flat, dry ground
+                local validPos, found = OperationInfinity:findValidPosition(initialPos, 3000, {
+                    maxSlope = 10,
+                    maxRoughness = 5,
+                })
+
+                if found then
+                    pos = validPos
+                    break
+                end
+            end
+
+            if not pos then
+                OperationInfinity:log("WARNING: Could not find valid terrain for EWR near aerodrome - skipping")
+                return
+            end
 
             local units = {}
             for _, def in ipairs(ctx.template) do
