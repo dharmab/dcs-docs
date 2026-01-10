@@ -304,6 +304,71 @@ function OperationInfinity:addMarker(text, pos)
     )
 end
 
+function OperationInfinity:addFEBAShape(sector, sectorIndex)
+    local lineColor = {0.2, 0.4, 0.9, 1.0}
+    local arrowFill = {0.2, 0.4, 0.9, 0.5}
+    local positions = sector.isafPositions
+
+    if #positions < 1 then
+        self:log("No ISAF positions for sector " .. sectorIndex .. ", skipping FEBA shape")
+        return
+    end
+
+    -- Sort positions by x coordinate (west to east) for consistent line drawing
+    table.sort(positions, function(a, b) return a.x < b.x end)
+
+    -- Draw line segments connecting friendly positions along the front
+    for i = 1, #positions - 1 do
+        self.state.markerCounter = self.state.markerCounter + 1
+        local p1 = positions[i]
+        local p2 = positions[i + 1]
+        trigger.action.lineToAll(
+            coalition.side.BLUE,
+            self.state.markerCounter,
+            {x = p1.x, y = land.getHeight(p1), z = p1.y},
+            {x = p2.x, y = land.getHeight(p2), z = p2.y},
+            lineColor,
+            1,      -- dashed line
+            true,   -- readOnly
+            ""
+        )
+    end
+
+    -- Draw arrows from each ISAF position pointing toward enemy (north)
+    local arrowLength = 400  -- meters
+    for _, pos in ipairs(positions) do
+        self.state.markerCounter = self.state.markerCounter + 1
+        local arrowEnd = {x = pos.x, y = pos.y + arrowLength}
+        trigger.action.arrowToAll(
+            coalition.side.BLUE,
+            self.state.markerCounter,
+            {x = pos.x, y = land.getHeight(pos), z = pos.y},
+            {x = arrowEnd.x, y = land.getHeight(arrowEnd), z = arrowEnd.y},
+            lineColor,
+            arrowFill,
+            1,      -- dashed
+            true,   -- readOnly
+            ""
+        )
+    end
+
+    -- Add sector label south of the front line (behind friendly lines)
+    local centerPos = positions[math.ceil(#positions / 2)]
+    self.state.markerCounter = self.state.markerCounter + 1
+    trigger.action.textToAll(
+        coalition.side.BLUE,
+        self.state.markerCounter,
+        {x = centerPos.x, y = land.getHeight(centerPos), z = centerPos.y - 200},
+        lineColor,
+        {0, 0, 0, 0},  -- transparent background
+        12,
+        true,
+        "FEBA " .. sectorIndex
+    )
+
+    self:log("Added FEBA shape for sector " .. sectorIndex .. " with " .. #positions .. " positions")
+end
+
 -- Select a random region that matches the given playtime
 function OperationInfinity:selectRegionForPlaytime(playtime)
     local matchingRegions = {}
@@ -900,18 +965,26 @@ function OperationInfinity:generateSector(index)
         aerodrome.name .. " at (" .. math.floor(sectorCenter.x) .. ", " ..
         math.floor(sectorCenter.y) .. ")")
 
-    -- Generate platoon pairs
+    -- Create sector object with positions array for map drawing
+    local sector = {
+        center = sectorCenter,
+        platoonPairs = numPairs,
+        isafPositions = {},  -- Stores friendly platoon positions for FEBA visualization
+    }
+
+    -- Generate platoon pairs (appends positions to sector.isafPositions)
     for j = 1, numPairs do
-        self:generatePlatoonPair(sectorCenter, index, j)
+        self:generatePlatoonPair(sector, index, j)
     end
 
     -- Generate SHORAD for this sector
     self:generateSectorSHORAD(sectorCenter, index)
 
-    return { center = sectorCenter, platoonPairs = numPairs }
+    return sector
 end
 
-function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIndex)
+function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
+    local sectorCenter = sector.center
     local offset = (pairIndex - 1) * 300 -- Spread pairs along front
 
     -- Randomized engagement distance (300-1000m)
@@ -940,6 +1013,9 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
         self:log("Skipping ISAF platoon S" .. sectorIndex .. "-P" .. pairIndex .. " - no valid terrain")
         return
     end
+
+    -- Store ISAF position for FEBA visualization
+    table.insert(sector.isafPositions, isafPos)
 
     -- Find valid terrain for Erusea platoon
     local eruseaPos, eruseaValid = self:findValidPosition(eruseaPosInitial, 100)
@@ -1732,15 +1808,9 @@ end
 function OperationInfinity:generateMapMarkers()
     self:log("Generating map markers...")
 
-    -- Mark each frontline sector accurately (friendly intel)
+    -- Draw FEBA shapes (lines and arrows showing engagement axis)
     for i, sector in ipairs(self.state.battlefield.sectors) do
-        -- Offset slightly toward ISAF (south) side for clarity
-        local markerPos = {
-            x = sector.center.x,
-            y = sector.center.y - 200, -- 200m south of sector center
-        }
-        self:addMarker("FEBA SECTOR " .. i, markerPos)
-        self:log("Added FEBA marker for sector " .. i)
+        self:addFEBAShape(sector, i)
     end
 
     -- Mark target aerodromes with inaccuracy (1-3 km offset)
@@ -1767,15 +1837,12 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
     -- Build array of all markers to create
     local markerItems = {}
 
-    -- FEBA sector markers
+    -- FEBA sector shapes (lines and arrows showing engagement axis)
     for i, sector in ipairs(self.state.battlefield.sectors) do
         table.insert(markerItems, {
-            type = "sector",
-            label = "FEBA SECTOR " .. i,
-            pos = {
-                x = sector.center.x,
-                y = sector.center.y - 200,
-            },
+            type = "feba_shape",
+            sectorIndex = i,
+            sector = sector,
         })
     end
 
@@ -1796,8 +1863,12 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
     BatchScheduler:processArray({
         array = markerItems,
         callback = function(item)
-            OperationInfinity:addMarker(item.label, item.pos)
-            OperationInfinity:log("Added " .. item.type .. " marker: " .. item.label)
+            if item.type == "feba_shape" then
+                OperationInfinity:addFEBAShape(item.sector, item.sectorIndex)
+            else
+                OperationInfinity:addMarker(item.label, item.pos)
+                OperationInfinity:log("Added " .. item.type .. " marker: " .. item.label)
+            end
         end,
         onComplete = function()
             OperationInfinity:log("Map markers generated")
