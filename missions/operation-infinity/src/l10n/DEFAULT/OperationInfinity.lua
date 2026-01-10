@@ -1729,7 +1729,7 @@ function OperationInfinity:buildSAMUnits(template, center)
                 type = def.type,
                 x = center.x + radius * math.cos(angle),
                 y = center.y + radius * math.sin(angle),
-                heading = angle + math.pi, -- Face outward
+                heading = angle, -- Face outward
                 skill = "Excellent",
             }
             unitIndex = unitIndex + 1
