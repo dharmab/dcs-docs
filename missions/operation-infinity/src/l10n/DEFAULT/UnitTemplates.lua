@@ -13,7 +13,7 @@ UnitTemplates.ISAFPlatoon = {
     {type = "M-1 Abrams", count = 2},
     {type = "M-2 Bradley", count = 2},
     {type = "Vulcan", count = 1},
-    {type = "M30_CC", count = 1},
+    {type = "CHAP_M1083", count = 1},
 }
 
 -- =============================================================================
@@ -429,8 +429,8 @@ UnitTemplates.Substitutions = {
     ["SAU Msta"] = {"SAU Msta", "SAU Akatsia"},
     ["SAU Gvozdika"] = {"SAU Gvozdika", "SAU Akatsia"},
 
-    -- Command
-    ["M30_CC"] = {"M30_CC"},
+    -- Supply
+    ["CHAP_M1083"] = {"CHAP_M1083"},
 }
 
 -- =============================================================================
