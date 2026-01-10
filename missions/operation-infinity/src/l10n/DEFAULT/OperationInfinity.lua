@@ -190,7 +190,10 @@ OperationInfinity.config = {
         platoonPairsMax = 3,
         engagementDistanceMin = 300, -- Minimum meters between opposing platoons
         engagementDistanceMax = 1000, -- Maximum meters between opposing platoons
-        fireOffset = 50,              -- Meters offset for FireAtPoint
+        fireOffset = 300,             -- Meters offset for FireAtPoint (fire past enemies, not at them)
+        enemyPlatoonsMin = 2,         -- Min enemy platoons per friendly platoon
+        enemyPlatoonsMax = 3,         -- Max enemy platoons per friendly platoon
+        enemySpreadRadius = 150,      -- Meters to spread enemy platoons around engagement area
     },
 
     -- Behind-lines targets
@@ -949,6 +952,14 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
     local isafFacing = math.atan2(eruseaPos.y - isafPos.y, eruseaPos.x - isafPos.x)
     local eruseaFacing = math.atan2(isafPos.y - eruseaPos.y, isafPos.x - eruseaPos.x)
 
+    -- Calculate unit direction vector for fire offset (along engagement axis)
+    local dx = eruseaPos.x - isafPos.x
+    local dy = eruseaPos.y - isafPos.y
+    local dist = math.sqrt(dx * dx + dy * dy)
+    local dirX = dx / dist
+    local dirY = dy / dist
+    local fireOffset = self.config.frontline.fireOffset
+
     -- Select random formation for this pair
     local formation = self:getRandomFormationType()
 
@@ -958,6 +969,7 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
         formation = formation,
         facing = isafFacing,
     })
+    -- ISAF fires past Erusea (continue along engagement axis)
     Virtualization:registerGroup({
         name = "ISAF-S" .. sectorIndex .. "-P" .. pairIndex,
         center = isafPos,
@@ -967,38 +979,71 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
     }, {
         immortal = true,
         invisible = true,
+        holdFire = true,
         fireAtPoint = {
-            x = eruseaPos.x,
-            y = eruseaPos.y - self.config.frontline.fireOffset,
+            x = eruseaPos.x + dirX * fireOffset,
+            y = eruseaPos.y + dirY * fireOffset,
             radius = 50,
             expendQty = 200,
         },
     })
 
-    -- Build Erusea units with formation and facing
+    -- Build multiple Erusea platoons (2-3x for each ISAF platoon)
+    local numEruseaPlatoons = self:randomInRange(
+        self.config.frontline.enemyPlatoonsMin,
+        self.config.frontline.enemyPlatoonsMax
+    )
     local diff = self.state.difficulty
-    local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
-    local eruseaTemplate = self:randomizeTemplate(baseEruseaTemplate)
-    local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaPos, {
-        formation = formation,
-        facing = eruseaFacing,
-    })
-    Virtualization:registerGroup({
-        name = "Erusea-S" .. sectorIndex .. "-P" .. pairIndex,
-        center = eruseaPos,
-        units = eruseaUnits,
-        countryId = country.id.CJTF_RED,
-        category = Group.Category.GROUND,
-    }, {
-        immortal = false,
-        invisible = false,
-        fireAtPoint = {
-            x = isafPos.x,
-            y = isafPos.y + self.config.frontline.fireOffset,
-            radius = 50,
-            expendQty = 200,
-        },
-    })
+    local spreadRadius = self.config.frontline.enemySpreadRadius
+
+    for e = 1, numEruseaPlatoons do
+        -- Spread enemy platoons around the base position
+        local eruseaSpreadPos
+        if e == 1 then
+            eruseaSpreadPos = eruseaPos
+        else
+            -- Offset additional platoons to the sides and slightly back
+            local spreadAngle = (e - 1) * (math.pi / 3) -- 60 degree increments
+            eruseaSpreadPos = {
+                x = eruseaPos.x + spreadRadius * math.cos(spreadAngle),
+                y = eruseaPos.y + spreadRadius * 0.5 * math.sin(spreadAngle),
+            }
+            -- Validate terrain for spread position
+            local validSpreadPos, spreadValid = self:findValidPosition(eruseaSpreadPos, 50)
+            if spreadValid then
+                eruseaSpreadPos = validSpreadPos
+            else
+                eruseaSpreadPos = eruseaPos -- Fall back to base position
+            end
+        end
+
+        -- Calculate facing toward ISAF position
+        local eFacing = math.atan2(isafPos.y - eruseaSpreadPos.y, isafPos.x - eruseaSpreadPos.x)
+
+        local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
+        local eruseaTemplate = self:randomizeTemplate(baseEruseaTemplate)
+        local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaSpreadPos, {
+            formation = self:getRandomFormationType(),
+            facing = eFacing,
+        })
+        -- Erusea fires past ISAF (opposite direction along engagement axis)
+        Virtualization:registerGroup({
+            name = "Erusea-S" .. sectorIndex .. "-P" .. pairIndex .. "-" .. e,
+            center = eruseaSpreadPos,
+            units = eruseaUnits,
+            countryId = country.id.CJTF_RED,
+            category = Group.Category.GROUND,
+        }, {
+            immortal = false,
+            invisible = false,
+            fireAtPoint = {
+                x = isafPos.x - dirX * fireOffset,
+                y = isafPos.y - dirY * fireOffset,
+                radius = 50,
+                expendQty = 200,
+            },
+        })
+    end
 end
 
 function OperationInfinity:buildPlatoonUnits(template, center, options)

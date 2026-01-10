@@ -73,6 +73,7 @@ function Virtualization:registerGroup(groupData, options)
         options = {
             immortal = options.immortal or false,
             invisible = options.invisible or false,
+            holdFire = options.holdFire or false,
             task = options.task or nil,
             fireAtPoint = options.fireAtPoint or nil,
         },
@@ -99,6 +100,7 @@ function Virtualization:registerPermanentGroup(groupData, options)
         options = {
             immortal = options.immortal or false,
             invisible = options.invisible or false,
+            holdFire = options.holdFire or false,
             task = options.task or nil,
             fireAtPoint = options.fireAtPoint or nil,
         },
@@ -166,6 +168,25 @@ function Virtualization:buildGroupData(vGroup)
                 action = {
                     id = "SetInvisible",
                     params = {value = true},
+                },
+            },
+        }
+    end
+
+    if vGroup.options.holdFire then
+        -- ROE option 0 = AI.Option.Ground.id.ROE, value 4 = WEAPON_HOLD
+        tasks[#tasks + 1] = {
+            enabled = true,
+            auto = false,
+            id = "WrappedAction",
+            number = #tasks + 1,
+            params = {
+                action = {
+                    id = "Option",
+                    params = {
+                        name = 0,  -- AI.Option.Ground.id.ROE
+                        value = 4, -- AI.Option.Ground.val.ROE.WEAPON_HOLD
+                    },
                 },
             },
         }
