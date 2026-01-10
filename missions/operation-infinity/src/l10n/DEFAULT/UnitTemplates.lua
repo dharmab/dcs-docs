@@ -132,6 +132,28 @@ UnitTemplates.SAMSites = {
 }
 
 -- =============================================================================
+-- AIRBASE SHORAD BY DIFFICULTY
+-- Short-range air defense units positioned near enemy airbases
+-- to defend against low-level OCA strikes
+-- =============================================================================
+
+UnitTemplates.AirbaseSHORAD = {
+    VeryEasy = {},
+    Easy = {
+        {type = "Ural-375 ZU-23", count = 2},
+        {type = "Strela-1 9P31", count = 1},
+    },
+    Normal = {
+        {type = "ZSU-23-4 Shilka", count = 2},
+        {type = "Strela-10M3", count = 2},
+    },
+    Hard = {
+        {type = "Gepard", count = 2},
+        {type = "Strela-10M3", count = 2},
+    },
+}
+
+-- =============================================================================
 -- AAA BY DIFFICULTY
 -- =============================================================================
 

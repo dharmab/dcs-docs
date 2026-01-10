@@ -936,6 +936,17 @@ function OperationInfinity:generateBattlefield()
                 end,
             },
             {
+                name = "airbase_shorad",
+                fn = function(ctx, done)
+                    if OperationInfinity.state.difficulty ~= "VeryEasy" then
+                        progress("Deploying airbase defenses...")
+                        OperationInfinity:generateAirbaseSHORADBatched(done)
+                    else
+                        done()
+                    end
+                end,
+            },
+            {
                 name = "init_systems",
                 fn = function(ctx, done)
                     progress("Initializing combat systems...")
@@ -1963,6 +1974,113 @@ function OperationInfinity:generateEWRsBatched(onComplete)
             IADS:registerEWR(groupName)
 
             OperationInfinity:log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
+-- =============================================================================
+-- AIRBASE SHORAD GENERATION
+-- Short-range air defense units positioned near enemy airbases
+-- to defend against low-level OCA (Offensive Counter Air) strikes
+-- =============================================================================
+
+function OperationInfinity:generateAirbaseSHORAD()
+    local diff = self.state.difficulty
+    local shoradTemplate = UnitTemplates.AirbaseSHORAD[diff]
+
+    if not shoradTemplate or #shoradTemplate == 0 then
+        self:log("No airbase SHORAD template for difficulty: " .. diff)
+        return
+    end
+
+    local aerodromes = self.state.battlefield.targetAerodromes
+    self:log("Generating airbase SHORAD for " .. #aerodromes .. " aerodromes")
+
+    for _, aerodrome in ipairs(aerodromes) do
+        self:generateAirbaseSHORADSite(aerodrome, shoradTemplate)
+    end
+end
+
+function OperationInfinity:generateAirbaseSHORADSite(aerodrome, template)
+    -- Position SHORAD close to the airbase (1-3 km) to defend against low-level attacks
+    local minDist = 1000  -- 1 km minimum
+    local maxDist = 3000  -- 3 km maximum
+
+    -- Try multiple positions to find valid terrain
+    local pos = nil
+    local maxPositionAttempts = 5
+
+    for attempt = 1, maxPositionAttempts do
+        local angle = math.random() * 2 * math.pi
+        local distance = minDist + math.random() * (maxDist - minDist)
+
+        local initialPos = {
+            x = aerodrome.x + distance * math.cos(angle),
+            y = aerodrome.y + distance * math.sin(angle),
+        }
+
+        -- Validate terrain - SHORAD needs reasonably flat ground
+        local validPos, found = self:findValidPosition(initialPos, 500, {
+            maxSlope = 12,
+        })
+
+        if found then
+            pos = validPos
+            break
+        end
+    end
+
+    if not pos then
+        self:log("WARNING: Could not find valid terrain for SHORAD near " .. aerodrome.name .. " - skipping")
+        return
+    end
+
+    -- Apply template randomization and position in a defensive formation
+    local randomizedTemplate = self:randomizeTemplate(template)
+    local units = self:buildPlatoonUnits(randomizedTemplate, pos, {
+        formation = self.FormationType.WEDGE,
+        spacing = 40,
+    })
+
+    -- Create a unique name based on the aerodrome
+    local safeName = string.gsub(aerodrome.name, "[^%w]", "")
+    local groupName = "AirbaseSHORAD-" .. safeName
+
+    -- Register as permanent group (always spawned - needs to be active for airbase defense)
+    Virtualization:registerPermanentGroup({
+        name = groupName,
+        center = pos,
+        units = units,
+        countryId = country.id.CJTF_RED,
+        category = Group.Category.GROUND,
+    })
+
+    self:log("Generated airbase SHORAD for " .. aerodrome.name .. " at (" ..
+        math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+end
+
+-- Batched version of generateAirbaseSHORAD
+function OperationInfinity:generateAirbaseSHORADBatched(onComplete)
+    local diff = self.state.difficulty
+    local shoradTemplate = UnitTemplates.AirbaseSHORAD[diff]
+
+    if not shoradTemplate or #shoradTemplate == 0 then
+        self:log("No airbase SHORAD template for difficulty: " .. diff)
+        if onComplete then onComplete() end
+        return
+    end
+
+    local aerodromes = self.state.battlefield.targetAerodromes
+    self:log("Generating airbase SHORAD for " .. #aerodromes .. " aerodromes (batched)")
+
+    BatchScheduler:processArray({
+        array = aerodromes,
+        context = { template = shoradTemplate },
+        callback = function(aerodrome, _, ctx)
+            OperationInfinity:generateAirbaseSHORADSite(aerodrome, ctx.template)
         end,
         onComplete = function()
             if onComplete then onComplete() end
