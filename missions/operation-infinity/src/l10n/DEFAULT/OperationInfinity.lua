@@ -145,6 +145,9 @@ OperationInfinity.state = {
     -- Unit counters
     groupCounter = 3000,
     unitCounter = 3000,
+
+    -- Marker counter
+    markerCounter = 1000,
 }
 
 -- =============================================================================
@@ -178,6 +181,19 @@ function OperationInfinity:randomPointInRadius(center, radius)
         x = center.x + distance * math.cos(angle),
         y = center.y + distance * math.sin(angle),
     }
+end
+
+function OperationInfinity:addMarker(text, pos)
+    self.state.markerCounter = self.state.markerCounter + 1
+    local vec3 = {x = pos.x, y = land.getHeight(pos), z = pos.y}
+    trigger.action.markToCoalition(
+        self.state.markerCounter,
+        text,
+        vec3,
+        coalition.side.BLUE,
+        true,  -- readOnly (players cannot delete)
+        ""     -- no announcement message
+    )
 end
 
 -- Select a random region that matches the given playtime
@@ -676,6 +692,9 @@ function OperationInfinity:generateBattlefield()
 
     IADS:init()
     IADS:enable(self.state.difficulty)
+
+    -- Generate map markers for situational awareness
+    self:generateMapMarkers()
 
     -- Display coordinates after a short delay
     timer.scheduleFunction(function()
@@ -1304,6 +1323,41 @@ function OperationInfinity:startCoordinateLoop()
         end
         return time + OperationInfinity.config.coordinateDisplayInterval
     end, nil, timer.getTime() + self.config.coordinateDisplayInterval)
+end
+
+-- =============================================================================
+-- MAP MARKERS
+-- =============================================================================
+
+function OperationInfinity:generateMapMarkers()
+    self:log("Generating map markers...")
+
+    -- Mark each frontline sector accurately (friendly intel)
+    for i, sector in ipairs(self.state.battlefield.sectors) do
+        -- Offset slightly toward ISAF (south) side for clarity
+        local markerPos = {
+            x = sector.center.x,
+            y = sector.center.y - 200, -- 200m south of sector center
+        }
+        self:addMarker("FEBA SECTOR " .. i, markerPos)
+        self:log("Added FEBA marker for sector " .. i)
+    end
+
+    -- Mark target aerodromes with inaccuracy (1-3 km offset)
+    for _, aerodrome in ipairs(self.state.battlefield.targetAerodromes) do
+        -- Random offset between 1-3 km
+        local offsetDistance = 1000 + math.random() * 2000
+        local offsetAngle = math.random() * 2 * math.pi
+        local markerPos = {
+            x = aerodrome.x + offsetDistance * math.cos(offsetAngle),
+            y = aerodrome.y + offsetDistance * math.sin(offsetAngle),
+        }
+        self:addMarker("OBJ " .. string.upper(aerodrome.name), markerPos)
+        self:log("Added OBJ marker for " .. aerodrome.name .. " (offset: " ..
+            math.floor(offsetDistance) .. "m)")
+    end
+
+    self:log("Map markers generated")
 end
 
 -- =============================================================================
