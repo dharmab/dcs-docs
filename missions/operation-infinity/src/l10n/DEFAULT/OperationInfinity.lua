@@ -657,31 +657,42 @@ function OperationInfinity:generateBattlefield()
             "and spawn when a player is within 100 nm."
     end
 
-    trigger.action.outTextForCoalition(coalition.side.BLUE,
-        "=== OPERATION INFINITY ===\n" ..
-        "Difficulty: " .. self.state.difficulty .. "\n" ..
-        "Playtime: " .. self.state.playtime .. " minutes\n" ..
-        "Target Area: " .. selected.region.name .. "\n\n" ..
-        "Generating battlefield..." .. virtNote, 15)
-
     self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
         ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
 
+    -- Helper for progress messages
+    local function progress(msg)
+        trigger.action.outTextForCoalition(coalition.side.BLUE,
+            "=== OPERATION INFINITY ===\n" ..
+            "Difficulty: " .. self.state.difficulty .. "\n" ..
+            "Playtime: " .. self.state.playtime .. " minutes\n" ..
+            "Target Area: " .. selected.region.name .. "\n\n" ..
+            msg, 5)
+    end
+
+    progress("Generating frontline...")
+
     -- Generate frontline sectors
     self:generateFrontlineSectors()
+
+    progress("Deploying enemy forces...")
 
     -- Generate behind-lines targets
     self:generateBehindLinesTargets()
 
     -- Generate SAM sites (Normal/Hard)
     if self.state.difficulty == "Normal" or self.state.difficulty == "Hard" then
+        progress("Deploying air defenses...")
         self:generateAirDefenses()
     end
 
     -- Generate EWRs (Easy+)
     if self.state.difficulty ~= "VeryEasy" then
+        progress("Deploying radar networks...")
         self:generateEWRs()
     end
+
+    progress("Initializing combat systems...")
 
     -- Initialize other systems
     Virtualization:init()
@@ -693,8 +704,19 @@ function OperationInfinity:generateBattlefield()
     IADS:init()
     IADS:enable(self.state.difficulty)
 
+    progress("Generating map markers...")
+
     -- Generate map markers for situational awareness
     self:generateMapMarkers()
+
+    -- Display completion message
+    local completionMsg = "=== OPERATION INFINITY ===\n" ..
+        "Difficulty: " .. self.state.difficulty .. "\n" ..
+        "Playtime: " .. self.state.playtime .. " minutes\n" ..
+        "Target Area: " .. selected.region.name .. "\n\n" ..
+        "BATTLEFIELD READY\n\n" ..
+        "Good hunting, pilots!" .. virtNote
+    trigger.action.outTextForCoalition(coalition.side.BLUE, completionMsg, 15)
 
     -- Display coordinates after a short delay
     timer.scheduleFunction(function()
