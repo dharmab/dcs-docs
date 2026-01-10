@@ -480,22 +480,84 @@ function AirIntercept:checkAirfields()
         return timer.getTime() + self.config.checkInterval
     end
 
-    for _, airfield in ipairs(self.config.airfields) do
-        local intruders = self:getPlayersInZone(airfield)
-        local intruderCount = #intruders
-
-        if intruderCount > 0 then
-            local responseSize = self:calculateResponseSize(intruderCount)
-            local targetUnit = intruders[math.random(#intruders)]
-
-            self:log(airfield.name .. ": " .. intruderCount ..
-                     " intruders detected, response size: " .. responseSize)
-
-            self:spawnInterceptors(airfield, responseSize, targetUnit)
+    -- Cache player data ONCE per update cycle
+    local playerData = {}
+    local players = coalition.getPlayers(coalition.side.BLUE)
+    for _, player in ipairs(players) do
+        if player and player:isExist() then
+            local pos = player:getPoint()
+            table.insert(playerData, {
+                unit = player,
+                x = pos.x,
+                y = pos.z,
+                alt = pos.y,
+            })
         end
     end
 
+    if #playerData == 0 then
+        return timer.getTime() + self.config.checkInterval
+    end
+
+    -- Build spawn requests using cached player data (fast, no batching needed)
+    local spawnRequests = {}
+    for _, airfield in ipairs(self.config.airfields) do
+        local intruders = {}
+        for _, pData in ipairs(playerData) do
+            local dist = self:getDistance2D(pData, airfield.zoneCenter)
+            if dist < airfield.zoneRadius and pData.alt > 100 then
+                table.insert(intruders, pData)
+            end
+        end
+
+        if #intruders > 0 then
+            local responseSize = self:calculateResponseSize(#intruders)
+            local targetUnit = intruders[math.random(#intruders)].unit
+
+            self:log(airfield.name .. ": " .. #intruders ..
+                     " intruders detected, response size: " .. responseSize)
+
+            table.insert(spawnRequests, {
+                airfield = airfield,
+                responseSize = responseSize,
+                targetUnit = targetUnit,
+            })
+        end
+    end
+
+    -- Process spawn requests with time budgeting
+    if #spawnRequests > 0 then
+        self:processSpawnRequestsBatched(spawnRequests)
+    end
+
     return timer.getTime() + self.config.checkInterval
+end
+
+-- Process spawn requests with time budgeting
+function AirIntercept:processSpawnRequestsBatched(spawnRequests)
+    local startTime = os.clock() * 1000
+    local budgetMs = BatchScheduler.config.frameBudgetMs
+    local itemsProcessed = 0
+
+    for idx, req in ipairs(spawnRequests) do
+        self:spawnInterceptors(req.airfield, req.responseSize, req.targetUnit)
+        itemsProcessed = itemsProcessed + 1
+
+        local elapsed = (os.clock() * 1000) - startTime
+        if itemsProcessed >= 1 and elapsed >= budgetMs then
+            -- Schedule remaining spawn requests for next frame
+            local remaining = {}
+            for i = idx + 1, #spawnRequests do
+                table.insert(remaining, spawnRequests[i])
+            end
+            if #remaining > 0 then
+                timer.scheduleFunction(function()
+                    AirIntercept:processSpawnRequestsBatched(remaining)
+                end, nil, timer.getTime() + 0.001)
+            end
+            return
+        end
+    end
 end
 
 -- =============================================================================

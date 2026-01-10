@@ -3,6 +3,112 @@
 -- F10 menu, battlefield generation, and coordination display
 -- =============================================================================
 
+-- =============================================================================
+-- BATCH SCHEDULER
+-- Time-budgeted work processing to avoid triggering DCS Antifreeze
+-- =============================================================================
+
+BatchScheduler = {}
+
+BatchScheduler.config = {
+    frameBudgetMs = 1,  -- Max milliseconds per frame
+    minItems = 1,       -- Always process at least 1 item
+}
+
+function BatchScheduler:log(message)
+    env.info("[BatchScheduler] " .. message)
+end
+
+-- Process array items within time budget, yielding between frames
+-- params.array: Array of items to process
+-- params.callback: Function(item, index, context) called for each item
+-- params.onComplete: Function(context) called when all items processed
+-- params.context: Optional context object passed to callbacks
+function BatchScheduler:processArray(params)
+    local array = params.array
+    local callback = params.callback
+    local onComplete = params.onComplete
+    local context = params.context or {}
+    local index = 1
+    local total = #array
+
+    if total == 0 then
+        if onComplete then onComplete(context) end
+        return
+    end
+
+    local function processBatch()
+        local startTime = os.clock() * 1000  -- Current time in ms
+        local budgetMs = BatchScheduler.config.frameBudgetMs
+        local itemsProcessed = 0
+
+        while index <= total do
+            callback(array[index], index, context)
+            index = index + 1
+            itemsProcessed = itemsProcessed + 1
+
+            -- Check time budget (but always process at least minItems)
+            local elapsed = (os.clock() * 1000) - startTime
+            if itemsProcessed >= BatchScheduler.config.minItems and elapsed >= budgetMs then
+                break
+            end
+        end
+
+        if index <= total then
+            return timer.getTime() + 0.001  -- Next frame
+        else
+            if onComplete then onComplete(context) end
+            return nil
+        end
+    end
+
+    timer.scheduleFunction(processBatch, nil, timer.getTime() + 0.001)
+end
+
+-- Execute sequential async steps with callbacks
+-- params.steps: Array of {name = "step name", fn = function(context, done)}
+-- params.onComplete: Function(context) called when all steps complete
+-- params.onError: Function(err, stepName, context) called on error
+-- params.context: Optional context object passed to all steps
+function BatchScheduler:runSequence(params)
+    local steps = params.steps
+    local onComplete = params.onComplete
+    local onError = params.onError
+    local context = params.context or {}
+
+    local stepIndex = 1
+
+    local function runNextStep()
+        if stepIndex > #steps then
+            if onComplete then onComplete(context) end
+            return nil
+        end
+
+        local step = steps[stepIndex]
+        stepIndex = stepIndex + 1
+
+        local function done(err)
+            if err then
+                if onError then
+                    onError(err, step.name, context)
+                else
+                    BatchScheduler:log("Error in step " .. step.name .. ": " .. tostring(err))
+                end
+                return
+            end
+            timer.scheduleFunction(runNextStep, nil, timer.getTime() + 0.001)
+        end
+
+        step.fn(context, done)
+    end
+
+    timer.scheduleFunction(runNextStep, nil, timer.getTime() + 0.001)
+end
+
+-- =============================================================================
+-- OPERATION INFINITY
+-- =============================================================================
+
 OperationInfinity = {}
 
 -- =============================================================================
@@ -659,73 +765,106 @@ function OperationInfinity:generateBattlefield()
     self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
         ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
 
+    -- Store context for async generation
+    local genContext = {
+        selected = selected,
+        virtNote = virtNote,
+    }
+
     -- Helper for progress messages
     local function progress(msg)
         trigger.action.outTextForCoalition(coalition.side.BLUE,
             "=== OPERATION INFINITY ===\n" ..
-            "Difficulty: " .. self.state.difficulty .. "\n" ..
-            "Playtime: " .. self.state.playtime .. " minutes\n" ..
+            "Difficulty: " .. OperationInfinity.state.difficulty .. "\n" ..
+            "Playtime: " .. OperationInfinity.state.playtime .. " minutes\n" ..
             "Target Area: " .. selected.region.name .. "\n\n" ..
             msg, 5)
     end
 
-    progress("Generating frontline...")
+    -- Run generation as async sequence
+    BatchScheduler:runSequence({
+        context = genContext,
+        steps = {
+            {
+                name = "frontline",
+                fn = function(ctx, done)
+                    progress("Generating frontline...")
+                    OperationInfinity:generateFrontlineSectorsBatched(done)
+                end,
+            },
+            {
+                name = "behind_lines",
+                fn = function(ctx, done)
+                    progress("Deploying enemy forces...")
+                    OperationInfinity:generateBehindLinesTargetsBatched(done)
+                end,
+            },
+            {
+                name = "air_defenses",
+                fn = function(ctx, done)
+                    if OperationInfinity.state.difficulty == "Normal" or
+                       OperationInfinity.state.difficulty == "Hard" then
+                        progress("Deploying air defenses...")
+                        OperationInfinity:generateAirDefensesBatched(done)
+                    else
+                        done()
+                    end
+                end,
+            },
+            {
+                name = "ewrs",
+                fn = function(ctx, done)
+                    if OperationInfinity.state.difficulty ~= "VeryEasy" then
+                        progress("Deploying radar networks...")
+                        OperationInfinity:generateEWRsBatched(done)
+                    else
+                        done()
+                    end
+                end,
+            },
+            {
+                name = "init_systems",
+                fn = function(ctx, done)
+                    progress("Initializing combat systems...")
+                    Virtualization:init()
+                    Virtualization:spawnPermanentGroupsBatched(function()
+                        AirIntercept:init()
+                        AirIntercept:enable(OperationInfinity.state.difficulty)
+                        IADS:init()
+                        IADS:enable(OperationInfinity.state.difficulty)
+                        done()
+                    end)
+                end,
+            },
+            {
+                name = "markers",
+                fn = function(ctx, done)
+                    progress("Generating map markers...")
+                    OperationInfinity:generateMapMarkersBatched(done)
+                end,
+            },
+        },
+        onComplete = function(ctx)
+            -- Display completion message
+            local completionMsg = "=== OPERATION INFINITY ===\n" ..
+                "Difficulty: " .. OperationInfinity.state.difficulty .. "\n" ..
+                "Playtime: " .. OperationInfinity.state.playtime .. " minutes\n" ..
+                "Target Area: " .. ctx.selected.region.name .. "\n\n" ..
+                "BATTLEFIELD READY\n\n" ..
+                "Good hunting, pilots!" .. ctx.virtNote
+            trigger.action.outTextForCoalition(coalition.side.BLUE, completionMsg, 15)
 
-    -- Generate frontline sectors
-    self:generateFrontlineSectors()
+            -- Display coordinates after a short delay
+            timer.scheduleFunction(function()
+                OperationInfinity:displayCoordinates()
+            end, nil, timer.getTime() + 3)
 
-    progress("Deploying enemy forces...")
+            -- Add Mission Info menu for on-demand target info
+            OperationInfinity:setupMissionInfoMenu()
 
-    -- Generate behind-lines targets
-    self:generateBehindLinesTargets()
-
-    -- Generate SAM sites (Normal/Hard)
-    if self.state.difficulty == "Normal" or self.state.difficulty == "Hard" then
-        progress("Deploying air defenses...")
-        self:generateAirDefenses()
-    end
-
-    -- Generate EWRs (Easy+)
-    if self.state.difficulty ~= "VeryEasy" then
-        progress("Deploying radar networks...")
-        self:generateEWRs()
-    end
-
-    progress("Initializing combat systems...")
-
-    -- Initialize other systems
-    Virtualization:init()
-    Virtualization:spawnPermanentGroups()
-
-    AirIntercept:init()
-    AirIntercept:enable(self.state.difficulty)
-
-    IADS:init()
-    IADS:enable(self.state.difficulty)
-
-    progress("Generating map markers...")
-
-    -- Generate map markers for situational awareness
-    self:generateMapMarkers()
-
-    -- Display completion message
-    local completionMsg = "=== OPERATION INFINITY ===\n" ..
-        "Difficulty: " .. self.state.difficulty .. "\n" ..
-        "Playtime: " .. self.state.playtime .. " minutes\n" ..
-        "Target Area: " .. selected.region.name .. "\n\n" ..
-        "BATTLEFIELD READY\n\n" ..
-        "Good hunting, pilots!" .. virtNote
-    trigger.action.outTextForCoalition(coalition.side.BLUE, completionMsg, 15)
-
-    -- Display coordinates after a short delay
-    timer.scheduleFunction(function()
-        OperationInfinity:displayCoordinates()
-    end, nil, timer.getTime() + 3)
-
-    -- Add Mission Info menu for on-demand target info
-    self:setupMissionInfoMenu()
-
-    self:log("Battlefield generation complete")
+            OperationInfinity:log("Battlefield generation complete")
+        end,
+    })
 end
 
 -- =============================================================================
@@ -957,6 +1096,33 @@ function OperationInfinity:generateSectorSHORAD(sectorCenter, sectorIndex)
     })
 end
 
+-- Batched version of generateFrontlineSectors
+function OperationInfinity:generateFrontlineSectorsBatched(onComplete)
+    local numSectors = self:randomInRange(
+        self.config.frontline.sectorsMin,
+        self.config.frontline.sectorsMax
+    )
+
+    self:log("Generating " .. numSectors .. " frontline sectors (batched)")
+
+    -- Build array of sector indices to process
+    local sectorIndices = {}
+    for i = 1, numSectors do
+        table.insert(sectorIndices, i)
+    end
+
+    BatchScheduler:processArray({
+        array = sectorIndices,
+        callback = function(sectorIndex)
+            local sector = OperationInfinity:generateSector(sectorIndex)
+            table.insert(OperationInfinity.state.battlefield.sectors, sector)
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
 -- =============================================================================
 -- BEHIND-LINES TARGETS
 -- =============================================================================
@@ -1117,6 +1283,54 @@ function OperationInfinity:generatePatrolGroup(index)
     })
 end
 
+-- Batched version of generateBehindLinesTargets
+function OperationInfinity:generateBehindLinesTargetsBatched(onComplete)
+    -- Calculate all counts upfront
+    local numConvoys = self:randomInRange(
+        self.config.behindLines.convoyCount[1],
+        self.config.behindLines.convoyCount[2]
+    )
+    local numArtillery = self:randomInRange(
+        self.config.behindLines.artilleryCount[1],
+        self.config.behindLines.artilleryCount[2]
+    )
+    local numPatrols = self:randomInRange(
+        self.config.behindLines.patrolCount[1],
+        self.config.behindLines.patrolCount[2]
+    )
+
+    -- Build work items array
+    local workItems = {}
+    for i = 1, numConvoys do
+        table.insert(workItems, { type = "convoy", index = i })
+    end
+    for i = 1, numArtillery do
+        table.insert(workItems, { type = "artillery", index = i })
+    end
+    for i = 1, numPatrols do
+        table.insert(workItems, { type = "patrol", index = i })
+    end
+
+    self:log("Generating behind-lines targets (batched): " .. numConvoys .. " convoys, " ..
+        numArtillery .. " artillery, " .. numPatrols .. " patrols")
+
+    BatchScheduler:processArray({
+        array = workItems,
+        callback = function(item)
+            if item.type == "convoy" then
+                OperationInfinity:generateConvoy(item.index)
+            elseif item.type == "artillery" then
+                OperationInfinity:generateArtilleryBattery(item.index)
+            elseif item.type == "patrol" then
+                OperationInfinity:generatePatrolGroup(item.index)
+            end
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
 -- =============================================================================
 -- AIR DEFENSE GENERATION
 -- =============================================================================
@@ -1210,6 +1424,51 @@ function OperationInfinity:buildSAMUnits(template, center)
     return units
 end
 
+-- Batched version of generateAirDefenses
+function OperationInfinity:generateAirDefensesBatched(onComplete)
+    local samCounts = self.config.samCounts[self.state.difficulty]
+    if not samCounts then
+        if onComplete then onComplete() end
+        return
+    end
+
+    local samTemplates = UnitTemplates.SAMSites[self.state.difficulty]
+    if not samTemplates then
+        if onComplete then onComplete() end
+        return
+    end
+
+    self:log("Generating air defenses for difficulty: " .. self.state.difficulty .. " (batched)")
+
+    -- Build work items for all SAM sites
+    local workItems = {}
+    for samType, countRange in pairs(samCounts) do
+        if samType ~= "EWR" then
+            local template = samTemplates[samType]
+            if template then
+                local count = self:randomInRange(countRange[1], countRange[2])
+                for i = 1, count do
+                    table.insert(workItems, {
+                        samType = samType,
+                        template = template,
+                        index = i,
+                    })
+                end
+            end
+        end
+    end
+
+    BatchScheduler:processArray({
+        array = workItems,
+        callback = function(item)
+            OperationInfinity:generateSAMSite(item.samType, item.template, item.index)
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
 function OperationInfinity:generateEWRs()
     local samCounts = self.config.samCounts[self.state.difficulty]
     local ewrCountRange = nil
@@ -1277,6 +1536,86 @@ function OperationInfinity:generateEWRs()
 
         self:log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     end
+end
+
+-- Batched version of generateEWRs
+function OperationInfinity:generateEWRsBatched(onComplete)
+    local samCounts = self.config.samCounts[self.state.difficulty]
+    local ewrCountRange = nil
+
+    if samCounts and samCounts.EWR then
+        ewrCountRange = samCounts.EWR
+    else
+        ewrCountRange = { 1, 2 }
+    end
+
+    local samTemplates = UnitTemplates.SAMSites[self.state.difficulty]
+    local ewrTemplate = nil
+
+    if samTemplates and samTemplates.EWR then
+        ewrTemplate = samTemplates.EWR
+    else
+        ewrTemplate = { { type = "1L13 EWR", count = 1 } }
+    end
+
+    local count = self:randomInRange(ewrCountRange[1], ewrCountRange[2])
+
+    -- Build array of EWR indices
+    local ewrIndices = {}
+    for i = 1, count do
+        table.insert(ewrIndices, i)
+    end
+
+    self:log("Generating " .. count .. " EWRs (batched)")
+
+    BatchScheduler:processArray({
+        array = ewrIndices,
+        context = { template = ewrTemplate },
+        callback = function(i, _, ctx)
+            local aerodromes = OperationInfinity.state.battlefield.targetAerodromes
+            local aerodrome = aerodromes[math.random(#aerodromes)]
+
+            local minDist = 10000
+            local maxDist = 40000
+            local angle = math.random() * 2 * math.pi
+            local distance = minDist + math.random() * (maxDist - minDist)
+
+            local pos = {
+                x = aerodrome.x + distance * math.cos(angle),
+                y = aerodrome.y + distance * math.sin(angle),
+            }
+
+            local units = {}
+            for _, def in ipairs(ctx.template) do
+                for c = 1, def.count do
+                    units[#units + 1] = {
+                        type = def.type,
+                        x = pos.x + (c - 1) * 50,
+                        y = pos.y,
+                        heading = 0,
+                        skill = "Excellent",
+                    }
+                end
+            end
+
+            local groupName = "EWR-" .. i
+
+            Virtualization:registerPermanentGroup({
+                name = groupName,
+                center = pos,
+                units = units,
+                countryId = country.id.CJTF_RED,
+                category = Group.Category.GROUND,
+            })
+
+            IADS:registerEWR(groupName)
+
+            OperationInfinity:log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
 end
 
 -- =============================================================================
@@ -1379,6 +1718,52 @@ function OperationInfinity:generateMapMarkers()
     end
 
     self:log("Map markers generated")
+end
+
+-- Batched version of generateMapMarkers
+function OperationInfinity:generateMapMarkersBatched(onComplete)
+    self:log("Generating map markers (batched)...")
+
+    -- Build array of all markers to create
+    local markerItems = {}
+
+    -- FEBA sector markers
+    for i, sector in ipairs(self.state.battlefield.sectors) do
+        table.insert(markerItems, {
+            type = "sector",
+            label = "FEBA SECTOR " .. i,
+            pos = {
+                x = sector.center.x,
+                y = sector.center.y - 200,
+            },
+        })
+    end
+
+    -- Aerodrome objective markers
+    for _, aerodrome in ipairs(self.state.battlefield.targetAerodromes) do
+        local offsetDistance = 1000 + math.random() * 2000
+        local offsetAngle = math.random() * 2 * math.pi
+        table.insert(markerItems, {
+            type = "aerodrome",
+            label = "OBJ " .. string.upper(aerodrome.name),
+            pos = {
+                x = aerodrome.x + offsetDistance * math.cos(offsetAngle),
+                y = aerodrome.y + offsetDistance * math.sin(offsetAngle),
+            },
+        })
+    end
+
+    BatchScheduler:processArray({
+        array = markerItems,
+        callback = function(item)
+            OperationInfinity:addMarker(item.label, item.pos)
+            OperationInfinity:log("Added " .. item.type .. " marker: " .. item.label)
+        end,
+        onComplete = function()
+            OperationInfinity:log("Map markers generated")
+            if onComplete then onComplete() end
+        end,
+    })
 end
 
 -- =============================================================================

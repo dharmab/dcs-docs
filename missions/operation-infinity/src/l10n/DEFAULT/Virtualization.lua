@@ -96,6 +96,12 @@ function Virtualization:registerPermanentGroup(groupData, options)
         units = groupData.units,
         isSpawned = false,
         spawnedGroupName = nil,
+        options = {
+            immortal = options.immortal or false,
+            invisible = options.invisible or false,
+            task = options.task or nil,
+            fireAtPoint = options.fireAtPoint or nil,
+        },
     }
 
     table.insert(self.state.permanentGroups, pGroup)
@@ -290,6 +296,42 @@ function Virtualization:spawnPermanentGroups()
     end
 end
 
+-- Batched version of spawnPermanentGroups
+function Virtualization:spawnPermanentGroupsBatched(onComplete)
+    -- Filter to only unspawned permanent groups
+    local toSpawn = {}
+    for _, pGroup in ipairs(self.state.permanentGroups) do
+        if not pGroup.isSpawned then
+            table.insert(toSpawn, pGroup)
+        end
+    end
+
+    if #toSpawn == 0 then
+        if onComplete then onComplete() end
+        return
+    end
+
+    self:log("Spawning " .. #toSpawn .. " permanent groups (batched)")
+
+    BatchScheduler:processArray({
+        array = toSpawn,
+        callback = function(pGroup)
+            local groupData = Virtualization:buildGroupData(pGroup)
+            if groupData then
+                local group = coalition.addGroup(pGroup.countryId, pGroup.category, groupData)
+                if group then
+                    pGroup.isSpawned = true
+                    pGroup.spawnedGroupName = groupData.name
+                    Virtualization:log("Spawned permanent group: " .. groupData.name)
+                end
+            end
+        end,
+        onComplete = function()
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
 -- =============================================================================
 -- PLAYER PROXIMITY CHECKING
 -- =============================================================================
@@ -323,21 +365,152 @@ function Virtualization:update()
         return timer.getTime() + self.config.updateInterval
     end
 
-    for _, vGroup in ipairs(self.state.virtualGroups) do
-        local closestDist = self:getClosestPlayerDistance(vGroup)
-
-        if vGroup.isSpawned then
-            if closestDist > self.config.despawnDistance then
-                self:despawnGroup(vGroup)
-            end
-        else
-            if closestDist < self.config.spawnDistance then
-                self:spawnGroup(vGroup)
-            end
+    -- Cache player positions once per update cycle
+    local playerPositions = {}
+    for _, player in ipairs(players) do
+        if player and player:isExist() then
+            local pos = player:getPoint()
+            table.insert(playerPositions, { x = pos.x, y = pos.z })
         end
     end
 
+    if #playerPositions == 0 then
+        return timer.getTime() + self.config.updateInterval
+    end
+
+    -- Start batched processing of virtual groups
+    self:updateBatched(playerPositions)
+
     return timer.getTime() + self.config.updateInterval
+end
+
+-- Process virtual groups with time-budgeted batching
+function Virtualization:updateBatched(playerPositions)
+    local spawnQueue = {}
+    local despawnQueue = {}
+
+    -- Use time-budgeted processing for distance checks
+    local startTime = os.clock() * 1000
+    local budgetMs = BatchScheduler.config.frameBudgetMs
+    local itemsProcessed = 0
+
+    for _, vGroup in ipairs(self.state.virtualGroups) do
+        -- Calculate minimum distance to any player using cached positions
+        local minDist = math.huge
+        for _, pPos in ipairs(playerPositions) do
+            local dist = self:getDistance2D(pPos, vGroup.center)
+            if dist < minDist then
+                minDist = dist
+            end
+        end
+
+        -- Queue spawn/despawn decisions
+        if vGroup.isSpawned and minDist > self.config.despawnDistance then
+            table.insert(despawnQueue, vGroup)
+        elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
+            table.insert(spawnQueue, vGroup)
+        end
+
+        itemsProcessed = itemsProcessed + 1
+
+        -- Check time budget (but process at least 1 item)
+        local elapsed = (os.clock() * 1000) - startTime
+        if itemsProcessed >= 1 and elapsed >= budgetMs then
+            -- Schedule remaining groups for next frame
+            local remaining = {}
+            local foundCurrent = false
+            for _, g in ipairs(self.state.virtualGroups) do
+                if foundCurrent then
+                    table.insert(remaining, g)
+                elseif g == vGroup then
+                    foundCurrent = true
+                end
+            end
+            if #remaining > 0 then
+                timer.scheduleFunction(function()
+                    Virtualization:updateBatchedContinue(remaining, playerPositions, spawnQueue, despawnQueue)
+                end, nil, timer.getTime() + 0.001)
+                return
+            end
+            break
+        end
+    end
+
+    -- Process queues
+    self:processQueues(despawnQueue, spawnQueue)
+end
+
+-- Continue processing remaining virtual groups
+function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueue, despawnQueue)
+    local startTime = os.clock() * 1000
+    local budgetMs = BatchScheduler.config.frameBudgetMs
+    local itemsProcessed = 0
+
+    for idx, vGroup in ipairs(groups) do
+        local minDist = math.huge
+        for _, pPos in ipairs(playerPositions) do
+            local dist = self:getDistance2D(pPos, vGroup.center)
+            if dist < minDist then
+                minDist = dist
+            end
+        end
+
+        if vGroup.isSpawned and minDist > self.config.despawnDistance then
+            table.insert(despawnQueue, vGroup)
+        elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
+            table.insert(spawnQueue, vGroup)
+        end
+
+        itemsProcessed = itemsProcessed + 1
+
+        local elapsed = (os.clock() * 1000) - startTime
+        if itemsProcessed >= 1 and elapsed >= budgetMs then
+            local remaining = {}
+            for i = idx + 1, #groups do
+                table.insert(remaining, groups[i])
+            end
+            if #remaining > 0 then
+                timer.scheduleFunction(function()
+                    Virtualization:updateBatchedContinue(remaining, playerPositions, spawnQueue, despawnQueue)
+                end, nil, timer.getTime() + 0.001)
+                return
+            end
+            break
+        end
+    end
+
+    self:processQueues(despawnQueue, spawnQueue)
+end
+
+-- Process spawn and despawn queues with time budgeting
+function Virtualization:processQueues(despawnQueue, spawnQueue)
+    -- Process despawns first (frees resources)
+    if #despawnQueue > 0 then
+        BatchScheduler:processArray({
+            array = despawnQueue,
+            callback = function(vGroup)
+                Virtualization:despawnGroup(vGroup)
+            end,
+            onComplete = function()
+                -- Then process spawns
+                if #spawnQueue > 0 then
+                    BatchScheduler:processArray({
+                        array = spawnQueue,
+                        callback = function(vGroup)
+                            Virtualization:spawnGroup(vGroup)
+                        end,
+                    })
+                end
+            end,
+        })
+    elseif #spawnQueue > 0 then
+        BatchScheduler:processArray({
+            array = spawnQueue,
+            callback = function(vGroup)
+                Virtualization:spawnGroup(vGroup)
+            end,
+        })
+    end
 end
 
 -- =============================================================================

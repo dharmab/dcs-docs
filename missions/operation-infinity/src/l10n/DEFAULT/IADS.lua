@@ -212,6 +212,48 @@ function IADS:updateSAMSite(samSite)
     end
 end
 
+-- Version that uses pre-cached threat positions (more efficient)
+function IADS:updateSAMSiteCached(samSite, bluePositions)
+    local currentTime = timer.getTime()
+    local timeSinceChange = currentTime - samSite.lastStateChange
+
+    -- Calculate threat distance using cached positions
+    local threatDistance = math.huge
+    for _, threat in ipairs(bluePositions) do
+        if threat.alt > 50 then
+            local distance = self:getDistance2D(threat, samSite.center)
+            if distance < threatDistance then
+                threatDistance = distance
+            end
+        end
+    end
+
+    -- Same logic as updateSAMSite but with pre-computed distance
+    if threatDistance < self.config.samActivationRange then
+        if not samSite.radarActive then
+            self:setRadarState(samSite, true)
+            samSite.pulsePhase = "on"
+        else
+            if timeSinceChange > self.config.pulseOnDuration then
+                self:setRadarState(samSite, false)
+                samSite.pulsePhase = "off"
+            end
+        end
+    else
+        if samSite.radarActive then
+            if timeSinceChange > self.config.pulseOnDuration then
+                self:setRadarState(samSite, false)
+                samSite.pulsePhase = "off"
+            end
+        else
+            if samSite.pulsePhase == "off" and timeSinceChange > self.config.pulseOffDuration then
+                self:setRadarState(samSite, true)
+                samSite.pulsePhase = "on"
+            end
+        end
+    end
+end
+
 function IADS:updateEmissionControl()
     for _, samSite in ipairs(self.state.samSites) do
         self:updateSAMSite(samSite)
@@ -232,9 +274,71 @@ function IADS:update()
         return timer.getTime() + self.config.updateInterval
     end
 
-    self:updateEmissionControl()
+    -- Use batched emission control with cached positions
+    self:updateEmissionControlBatched()
 
     return timer.getTime() + self.config.updateInterval
+end
+
+-- Batched version with position caching
+function IADS:updateEmissionControlBatched()
+    -- Cache blue aircraft positions ONCE per update cycle
+    local bluePositions = self:getBlueAircraftPositions()
+
+    if #self.state.samSites == 0 then
+        return
+    end
+
+    -- Process SAM sites with time budgeting
+    local startTime = os.clock() * 1000
+    local budgetMs = BatchScheduler.config.frameBudgetMs
+    local itemsProcessed = 0
+
+    for idx, samSite in ipairs(self.state.samSites) do
+        self:updateSAMSiteCached(samSite, bluePositions)
+        itemsProcessed = itemsProcessed + 1
+
+        local elapsed = (os.clock() * 1000) - startTime
+        if itemsProcessed >= 1 and elapsed >= budgetMs then
+            -- Schedule remaining SAM sites for next frame
+            local remaining = {}
+            for i = idx + 1, #self.state.samSites do
+                table.insert(remaining, self.state.samSites[i])
+            end
+            if #remaining > 0 then
+                timer.scheduleFunction(function()
+                    IADS:updateEmissionControlBatchedContinue(remaining, bluePositions)
+                end, nil, timer.getTime() + 0.001)
+            end
+            return
+        end
+    end
+end
+
+-- Continue processing remaining SAM sites
+function IADS:updateEmissionControlBatchedContinue(samSites, bluePositions)
+    local startTime = os.clock() * 1000
+    local budgetMs = BatchScheduler.config.frameBudgetMs
+    local itemsProcessed = 0
+
+    for idx, samSite in ipairs(samSites) do
+        self:updateSAMSiteCached(samSite, bluePositions)
+        itemsProcessed = itemsProcessed + 1
+
+        local elapsed = (os.clock() * 1000) - startTime
+        if itemsProcessed >= 1 and elapsed >= budgetMs then
+            local remaining = {}
+            for i = idx + 1, #samSites do
+                table.insert(remaining, samSites[i])
+            end
+            if #remaining > 0 then
+                timer.scheduleFunction(function()
+                    IADS:updateEmissionControlBatchedContinue(remaining, bluePositions)
+                end, nil, timer.getTime() + 0.001)
+            end
+            return
+        end
+    end
 end
 
 -- =============================================================================
