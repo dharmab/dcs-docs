@@ -10,14 +10,16 @@ from __future__ import annotations
 
 import zipfile
 from pathlib import Path
+from typing import Any
 
-import luadata
+import luadata  # type: ignore
 
 
 def load_terrain_sampler_script() -> str:
     """Load the terrain sampler Lua script from disk."""
     script_path = Path(__file__).parent / "terrain-sampler.lua"
     return script_path.read_text(encoding="utf-8")
+
 
 # Theatre names as used in DCS
 THEATRES = [
@@ -33,13 +35,13 @@ THEATRES = [
 ]
 
 
-def serialize_lua(name: str, data: dict | list) -> str:
+def serialize_lua(name: str, data: dict[str, Any] | list[Any]) -> str:
     """Serialize a Python dict/list to a Lua table assignment."""
     content = luadata.serialize(data, encoding="utf-8", indent="\t")
     return f"{name} =\n{content}\n"
 
 
-def build_mission_data(theatre: str, script_content: str) -> dict:
+def build_mission_data(theatre: str, script_content: str) -> dict[str, Any]:
     """Build the mission data structure for a given theatre."""
     return {
         "trig": {
@@ -238,7 +240,7 @@ def build_mission_data(theatre: str, script_content: str) -> dict:
     }
 
 
-def build_options_data() -> dict:
+def build_options_data() -> dict[str, Any]:
     """Build minimal options data structure."""
     return {
         "playerName": "Player",
@@ -296,17 +298,17 @@ def build_options_data() -> dict:
     }
 
 
-def build_warehouses_data() -> dict:
+def build_warehouses_data() -> dict[str, Any]:
     """Build minimal warehouses data structure."""
     return {}
 
 
-def build_dictionary_data() -> dict:
+def build_dictionary_data() -> dict[str, Any]:
     """Build localization dictionary data structure."""
     return {}
 
 
-def build_map_resource_data() -> dict:
+def build_map_resource_data() -> dict[str, Any]:
     """Build map resource data structure."""
     return {}
 
@@ -318,7 +320,8 @@ def create_miz(output_dir: Path, theatre: str, script_content: str) -> Path:
     with zipfile.ZipFile(miz_path, "w", zipfile.ZIP_DEFLATED) as zf:
         # Main mission file
         zf.writestr(
-            "mission", serialize_lua("mission", build_mission_data(theatre, script_content))
+            "mission",
+            serialize_lua("mission", build_mission_data(theatre, script_content)),
         )
 
         # Theatre identifier

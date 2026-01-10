@@ -48,28 +48,28 @@ TerrainSampler.config = {
     detectMinArea = 200000,      -- minimum area (meters) to always include (e.g. 200km)
 
     -- Progress update intervals
-    gridProgressInterval = 2500,          -- Show progress every N terrain samples
-    roadProgressInterval = 100,           -- Show progress every N road points
-    connectivityProgressInterval = 50,    -- Show progress every N road points checked for connectivity
+    gridProgressInterval = 2500,       -- Show progress every N terrain samples
+    roadProgressInterval = 25,         -- Show progress every N road points (more frequent updates)
+    connectivityProgressInterval = 50, -- Show progress every N road points checked for connectivity
 
     -- Road sampling thresholds
-    roadProximityFactor = 0.75,           -- Maximum distance to road as fraction of grid resolution
-    roadNeighborCount = 8,                -- Number of neighboring road points to check for connectivity
+    roadProximityFactor = 0.75, -- Maximum distance to road as fraction of grid resolution
+    roadNeighborCount = 8,      -- Number of neighboring road points to check for connectivity
 
     -- Adaptive sampling configuration
-    adaptiveSampling = true,              -- Enable multi-pass adaptive resolution sampling
-    coarseResolution = 5000,              -- Coarse pass resolution in meters (5km)
-    mediumResolution = 2500,              -- Medium pass resolution in meters (2.5km)
-    fineResolution = 1000,                -- Fine pass resolution in meters (1km)
-    elevationVarianceThreshold = 200,     -- Minimum elevation variance (meters) to trigger refinement
-    roadDensityThreshold = 3,             -- Minimum road points per cell to trigger refinement
-    gradientThreshold = 0.05,             -- Minimum elevation gradient to neighbors (rise/run)
-    mediumScoreThreshold = 2,             -- Minimum score for medium refinement
-    fineScoreThreshold = 4,               -- Minimum score for fine refinement
+    adaptiveSampling = true,          -- Enable multi-pass adaptive resolution sampling
+    coarseResolution = 5000,          -- Coarse pass resolution in meters (5km)
+    mediumResolution = 2500,          -- Medium pass resolution in meters (2.5km)
+    fineResolution = 1000,            -- Fine pass resolution in meters (1km)
+    elevationVarianceThreshold = 200, -- Minimum elevation variance (meters) to trigger refinement
+    roadDensityThreshold = 3,         -- Minimum road points per cell to trigger refinement
+    gradientThreshold = 0.05,         -- Minimum elevation gradient to neighbors (rise/run)
+    mediumScoreThreshold = 2,         -- Minimum score for medium refinement
+    fineScoreThreshold = 4,           -- Minimum score for fine refinement
 
     -- Chunked sampling/throttling for DCS scripting safety
-    maxSamplesPerChunk = 250, -- Maximum samples per scheduled chunk
-    maxChunkTime = 0.05,      -- Maximum wall clock time (seconds) per chunk
+    maxSamplesPerChunk = 50, -- Reduced samples per scheduled chunk for safer throttling
+    maxChunkTime = 0.01,     -- Reduced wall clock time (seconds) per chunk
 
     -- Theatre-specific bounds (approximate, in game coordinates)
     -- x = East-West, z = North-South
@@ -143,14 +143,14 @@ TerrainSampler.state = {
     phaseStartTime = nil,
 
     -- Adaptive sampling state
-    coarseCells = {},       -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
-    coarseNx = 0,           -- Number of coarse cells in X
-    coarseNz = 0,           -- Number of coarse cells in Z
-    mediumCells = {},       -- List of {ix, iz} cells for medium refinement (level 1)
-    fineCells = {},         -- List of {ix, iz} cells for fine refinement (level 2)
-    roadDensityGrid = {},   -- 2D table: [ix][iz] = road_count
-    mediumSamples = {},     -- Samples from medium refinement pass
-    fineSamples = {},       -- Samples from fine refinement pass
+    coarseCells = {},     -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
+    coarseNx = 0,         -- Number of coarse cells in X
+    coarseNz = 0,         -- Number of coarse cells in Z
+    mediumCells = {},     -- List of {ix, iz} cells for medium refinement (level 1)
+    fineCells = {},       -- List of {ix, iz} cells for fine refinement (level 2)
+    roadDensityGrid = {}, -- 2D table: [ix][iz] = road_count
+    mediumSamples = {},   -- Samples from medium refinement pass
+    fineSamples = {},     -- Samples from fine refinement pass
 }
 
 -- =============================================================================
@@ -341,8 +341,8 @@ function TerrainSampler:computeInterestScore(ix, iz)
     local myMean = self:getCellMean(ix, iz)
     if myMean then
         local neighbors = {
-            {ix - 1, iz}, {ix + 1, iz},
-            {ix, iz - 1}, {ix, iz + 1}
+            { ix - 1, iz }, { ix + 1, iz },
+            { ix,     iz - 1 }, { ix, iz + 1 }
         }
         for _, neighbor in ipairs(neighbors) do
             local nix, niz = neighbor[1], neighbor[2]
@@ -396,11 +396,11 @@ function TerrainSampler:analyzeInterest()
             local score = self:computeInterestScore(ix, iz)
             if score >= fineThreshold then
                 -- Highest interest: gets finest resolution
-                table.insert(self.state.fineCells, {ix = ix, iz = iz})
+                table.insert(self.state.fineCells, { ix = ix, iz = iz })
                 fineCount = fineCount + 1
             elseif score >= mediumThreshold then
                 -- Medium interest: gets medium resolution
-                table.insert(self.state.mediumCells, {ix = ix, iz = iz})
+                table.insert(self.state.mediumCells, { ix = ix, iz = iz })
                 mediumCount = mediumCount + 1
             end
         end
@@ -834,7 +834,7 @@ function TerrainSampler:sampleGrid(callback)
                 if sample then
                     -- Add resolution and level for adaptive sampling support
                     sample.resolution = resolution
-                    sample.level = 0  -- Coarse level
+                    sample.level = 0 -- Coarse level
 
                     -- Update cell statistics for adaptive sampling
                     if self.config.adaptiveSampling and sample.height then

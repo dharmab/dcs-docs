@@ -162,7 +162,7 @@ class Region:
     center: tuple[float, float]
     area_km2: float
     avg_elevation: float
-    lat_lon_center: tuple[float, float]
+    xz_center: tuple[float, float]
 
     def bounding_box(self) -> tuple[float, float, float, float]:
         """Return (min_x, max_x, min_z, max_z) bounding box."""
@@ -182,7 +182,7 @@ class WaterBody:
     vertices: list[tuple[float, float]]
     center: tuple[float, float]
     area_km2: float
-    lat_lon_center: tuple[float, float]
+    xz_center: tuple[float, float]
 
 
 @dataclass
@@ -192,7 +192,7 @@ class Settlement:
     name: str
     center: tuple[float, float]
     road_density: float
-    lat_lon_center: tuple[float, float]
+    xz_center: tuple[float, float]
 
 
 @dataclass
@@ -204,9 +204,9 @@ class Airbase:
     x: float
     z: float
     height: float
-    lat: float
-    lon: float
     category: int
+    parking: list
+    runways: list
     parking: list[ParkingSpotDict]
     runways: list[RunwayDict]
 
@@ -391,9 +391,7 @@ class TerrainProcessor:
                     else:
                         for key in self.REQUIRED_BOUNDS_KEYS:
                             if key not in bounds:
-                                errors.append(
-                                    f"Missing required bounds key: '{key}'"
-                                )
+                                errors.append(f"Missing required bounds key: '{key}'")
 
         # Check terrain is a list
         if "terrain" in self.data and not isinstance(self.data["terrain"], list):
@@ -488,8 +486,8 @@ class TerrainProcessor:
         # Initialize grids
         elevation = np.full((nx, nz), np.nan)
         surface = np.zeros((nx, nz), dtype=np.int32)
-        lat_grid = np.full((nx, nz), np.nan)
-        lon_grid = np.full((nx, nz), np.nan)
+        x_grid = np.full((nx, nz), np.nan)
+        z_grid = np.full((nx, nz), np.nan)
         # Track source resolution per cell to prefer finer samples
         source_resolution = np.full((nx, nz), np.inf)
 
@@ -512,17 +510,22 @@ class TerrainProcessor:
                         and 0 <= iz < nz
                         and point_res < source_resolution[ix, iz]
                     ):
-                        elevation[ix, iz] = point["height"]
-                        surface[ix, iz] = point["surface"]
-                        lat_grid[ix, iz] = point["lat"]
-                        lon_grid[ix, iz] = point["lon"]
-                        source_resolution[ix, iz] = point_res
+                        try:
+                            elevation[ix, iz] = point["height"]
+                            surface[ix, iz] = point["surface"]
+                            x_grid[ix, iz] = point["x"]
+                            z_grid[ix, iz] = point["z"]
+                            source_resolution[ix, iz] = point_res
+                        except KeyError as e:
+                            print(
+                                f"Warning: Missing key {e} in point {point} at grid ({ix}, {iz}), skipping this cell."
+                            )
 
         return {
             "elevation": elevation,
             "surface": surface,
-            "lat": lat_grid,
-            "lon": lon_grid,
+            "x": x_grid,
+            "z": z_grid,
             "bounds": bounds,
             "resolution": finest_resolution,
             "shape": (nx, nz),
@@ -628,11 +631,11 @@ class TerrainProcessor:
                 elev_values = elevation[component_mask]
                 avg_elev = float(np.nanmean(elev_values))
 
-                # Get lat/lon center
-                lat_vals = self.grid["lat"][component_mask]
-                lon_vals = self.grid["lon"][component_mask]
-                lat_center = float(np.nanmean(lat_vals))
-                lon_center = float(np.nanmean(lon_vals))
+                # Get x/z center
+                x_vals = self.grid["x"][component_mask]
+                z_vals = self.grid["z"][component_mask]
+                x_center = float(np.nanmean(x_vals))
+                z_center = float(np.nanmean(z_vals))
 
                 # Generate name based on location
                 name = self._generate_region_name(
@@ -647,7 +650,7 @@ class TerrainProcessor:
                         center=(center_x, center_z),
                         area_km2=area_km2,
                         avg_elevation=avg_elev,
-                        lat_lon_center=(lat_center, lon_center),
+                        xz_center=(x_center, z_center),
                     )
                 )
 
@@ -714,11 +717,11 @@ class TerrainProcessor:
             except Exception:
                 vertices = []
 
-            # Lat/lon center
-            lat_vals = self.grid["lat"][component_mask]
-            lon_vals = self.grid["lon"][component_mask]
-            lat_center = float(np.nanmean(lat_vals))
-            lon_center = float(np.nanmean(lon_vals))
+            # x/z center
+            x_vals = self.grid["x"][component_mask]
+            z_vals = self.grid["z"][component_mask]
+            x_center = float(np.nanmean(x_vals))
+            z_center = float(np.nanmean(z_vals))
 
             name = self._generate_water_name(body_type, len(water_bodies))
 
@@ -729,7 +732,7 @@ class TerrainProcessor:
                     vertices=vertices,
                     center=(center_x, center_z),
                     area_km2=area_km2,
-                    lat_lon_center=(lat_center, lon_center),
+                    xz_center=(x_center, z_center),
                 )
             )
 
@@ -777,19 +780,18 @@ class TerrainProcessor:
             )
             nearest_idx = np.argmin(distances)
             original_idx = np.where(cluster_mask)[0][nearest_idx]
-            lat = road_points[original_idx]["lat"]
-            lon = road_points[original_idx]["lon"]
+            x = road_points[original_idx]["x"]
+            z = road_points[original_idx]["z"]
 
-            # Generate name from MGRS grid location (1km precision)
-            mgrs_string = mgrs_converter.toMGRS(lat, lon, MGRSPrecision=2)
-            name = mgrs_string
+            # Optionally generate name from grid location (if needed)
+            name = f"Settlement_{int(x)}_{int(z)}"
 
             settlements.append(
                 Settlement(
                     name=name,
                     center=(center_x, center_z),
                     road_density=density,
-                    lat_lon_center=(lat, lon),
+                    xz_center=(x, z),
                 )
             )
 
@@ -841,8 +843,6 @@ class TerrainProcessor:
                     x=ab["x"],
                     z=ab["z"],
                     height=ab["height"],
-                    lat=ab["lat"],
-                    lon=ab["lon"],
                     category=ab.get("category", -1),
                     parking=ab.get("parking", []),
                     runways=ab.get("runways", []),
@@ -978,8 +978,7 @@ and {height_km:.0f} km north-south.
             lines.append(f"\n### {ab.name}")
             lines.append("")
             pos = f"x: {ab.x:,.0f}, z: {ab.z:,.0f}"
-            latlon = f"{ab.lat:.4f}N, {ab.lon:.4f}E"
-            lines.append(f"- **Position:** {pos} ({latlon})")
+            lines.append(f"- **Position:** {pos}")
             lines.append(f"- **Elevation:** {ab.height:.0f}m MSL")
             lines.append(f"- **Category:** {category_name}")
             if ab.callsign:
@@ -1010,9 +1009,7 @@ and {height_km:.0f} km north-south.
                     width = rwy.get("width", 0)
                     x = rwy.get("x")
                     z = rwy.get("z")
-                    pos_str = (
-                        f"({x:,.0f}, {z:,.0f})" if x is not None else "N/A"
-                    )
+                    pos_str = f"({x:,.0f}, {z:,.0f})" if x is not None else "N/A"
                     lines.append(
                         f"| {heading_str} | {length:,.0f}m | {width:.0f}m | {pos_str} |"
                     )
@@ -1033,7 +1030,9 @@ and {height_km:.0f} km north-south.
                 lines.append(
                     "| Term_Index | Term_Type | Position (x, z) | Dist to RW |"
                 )
-                lines.append("|------------|-----------|-----------------|------------|")
+                lines.append(
+                    "|------------|-----------|-----------------|------------|"
+                )
 
                 sorted_spots = sorted(ab.parking, key=lambda s: s.get("Term_Index", 0))
                 for spot in sorted_spots:
@@ -1080,7 +1079,7 @@ and {height_km:.0f} km north-south.
                 lines.append(
                     f"| {r.name} | "
                     f"({r.center[0]:,.0f}, {r.center[1]:,.0f}) | "
-                    f"({r.lat_lon_center[0]:.4f}, {r.lat_lon_center[1]:.4f}) | "
+                    f"({r.xz_center[0]:.4f}, {r.xz_center[1]:.4f}) | "
                     f"{r.area_km2:,.1f} | "
                     f"{r.avg_elevation:,.0f}m |"
                 )
@@ -1111,7 +1110,7 @@ and {height_km:.0f} km north-south.
             lines.append(
                 f"| {wb.name} | {wb.body_type} | "
                 f"({wb.center[0]:,.0f}, {wb.center[1]:,.0f}) | "
-                f"({wb.lat_lon_center[0]:.4f}, {wb.lat_lon_center[1]:.4f}) | "
+                f"({wb.xz_center[0]:.4f}, {wb.xz_center[1]:.4f}) | "
                 f"{wb.area_km2:,.1f} |"
             )
 
@@ -1120,8 +1119,7 @@ and {height_km:.0f} km north-south.
     def _settlements(self, settlements: list[Settlement]) -> str:
         if not settlements:
             return (
-                "## Settlements\n\n"
-                "No settlements detected from road density analysis."
+                "## Settlements\n\nNo settlements detected from road density analysis."
             )
 
         lines = ["## Settlements", ""]
@@ -1135,15 +1133,13 @@ and {height_km:.0f} km north-south.
             lines.append(
                 f"| {s.name} | "
                 f"({s.center[0]:,.0f}, {s.center[1]:,.0f}) | "
-                f"({s.lat_lon_center[0]:.4f}, {s.lat_lon_center[1]:.4f}) | "
+                f"({s.xz_center[0]:.4f}, {s.xz_center[1]:.4f}) | "
                 f"{s.road_density:.1f} |"
             )
 
         return "\n".join(lines)
 
-    def _connectivity(
-        self, connectivity: list[tuple[str, str, float]]
-    ) -> str:
+    def _connectivity(self, connectivity: list[tuple[str, str, float]]) -> str:
         if not connectivity:
             return "## Road Connectivity\n\nNo inter-region road connections detected."
 
