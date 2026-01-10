@@ -14,6 +14,64 @@ OperationInfinity.config = {
     maxSpawnedUnits = 800,
     debug = true,
 
+    -- Terrain validation settings
+    terrain = {
+        defaultMaxSlope = 15,       -- Degrees
+        defaultMaxRoughness = 5,    -- Meters standard deviation
+        maxSearchAttempts = 10,     -- Attempts to find valid position
+        sampleRadius = 50,          -- Meters for slope sampling
+    },
+
+    -- Unit randomization settings
+    unitRandomization = {
+        countVariance = 0.3,        -- ±30% unit count variation
+        missingUnitChance = 0.1,    -- 10% chance each unit is "missing"
+        substitutionChance = 0.3,   -- 30% chance for unit type substitution
+    },
+
+    -- Terrain exclusion zones (mountain regions from terrain data)
+    -- These are areas with steep slopes where ground vehicles cannot operate
+    terrainExclusions = {
+        -- SouthWest Mountain 2 (center: -180030, 513939, avg elevation 1005m)
+        {
+            vertices = {
+                {x = -181000, y = 510000}, {x = -180000, y = 507000},
+                {x = -179000, y = 510000}, {x = -179000, y = 518000},
+                {x = -180000, y = 520000}, {x = -181000, y = 519000},
+            }
+        },
+        -- NorthWest Mountain 1 (center: -206556, 606667, avg elevation 1213m)
+        {
+            vertices = {
+                {x = -206000, y = 604000}, {x = -205000, y = 604000},
+                {x = -205000, y = 607000}, {x = -207000, y = 609000},
+                {x = -209000, y = 609000}, {x = -207000, y = 605000},
+            }
+        },
+        -- NorthWest Hill 70 - major Caucasus ridge (7577 km2, avg 2220m, steep slopes)
+        {
+            vertices = {
+                {x = -153000, y = 535000}, {x = -135000, y = 733000},
+                {x = -135000, y = 735000}, {x = -138000, y = 741000},
+                {x = -179000, y = 822000}, {x = -187000, y = 824000},
+                {x = -190000, y = 824000}, {x = -233000, y = 810000},
+                {x = -237000, y = 808000}, {x = -242000, y = 803000},
+                {x = -242000, y = 800000}, {x = -238000, y = 734000},
+            }
+        },
+        -- NorthWest Hill 75 (1780 km2, avg 2383m)
+        {
+            vertices = {
+                {x = -217000, y = 844000}, {x = -212000, y = 804000},
+                {x = -209000, y = 801000}, {x = -201000, y = 801000},
+                {x = -198000, y = 802000}, {x = -197000, y = 803000},
+                {x = -175000, y = 833000}, {x = -175000, y = 836000},
+                {x = -179000, y = 871000}, {x = -190000, y = 896000},
+                {x = -194000, y = 898000}, {x = -199000, y = 900000},
+            }
+        },
+    },
+
     -- Battlefield zones by playtime
     battlefieldZones = {
         ["45"] = {
@@ -42,8 +100,9 @@ OperationInfinity.config = {
         sectorsMax = 5,
         platoonPairsMin = 2,
         platoonPairsMax = 3,
-        engagementDistance = 800, -- Meters between opposing platoons
-        fireOffset = 50,          -- Meters offset for FireAtPoint
+        engagementDistanceMin = 300, -- Minimum meters between opposing platoons
+        engagementDistanceMax = 1000, -- Maximum meters between opposing platoons
+        fireOffset = 50,              -- Meters offset for FireAtPoint
     },
 
     -- Behind-lines targets
@@ -136,6 +195,342 @@ function OperationInfinity:randomPointInRadius(center, radius)
         x = center.x + distance * math.cos(angle),
         y = center.y + distance * math.sin(angle),
     }
+end
+
+-- =============================================================================
+-- TERRAIN VALIDATION
+-- =============================================================================
+
+-- Point-in-polygon test using ray casting algorithm
+function OperationInfinity:pointInPolygon(point, polygon)
+    local x, y = point.x, point.y
+    local inside = false
+    local n = #polygon
+
+    local j = n
+    for i = 1, n do
+        local xi, yi = polygon[i].x, polygon[i].y
+        local xj, yj = polygon[j].x, polygon[j].y
+
+        if ((yi > y) ~= (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi) + xi) then
+            inside = not inside
+        end
+        j = i
+    end
+
+    return inside
+end
+
+-- Check if position falls within any terrain exclusion zone
+function OperationInfinity:isInExclusionZone(pos)
+    for _, zone in ipairs(self.config.terrainExclusions) do
+        if self:pointInPolygon(pos, zone.vertices) then
+            return true
+        end
+    end
+    return false
+end
+
+-- Calculate maximum slope around a position by sampling 8 points
+function OperationInfinity:calculateMaxSlope(center, sampleRadius)
+    sampleRadius = sampleRadius or self.config.terrain.sampleRadius
+
+    local centerHeight = land.getHeight({x = center.x, y = center.y})
+    local maxSlope = 0
+
+    -- Sample 8 points around center
+    for i = 0, 7 do
+        local angle = i * (math.pi / 4)
+        local samplePos = {
+            x = center.x + sampleRadius * math.cos(angle),
+            y = center.y + sampleRadius * math.sin(angle)
+        }
+
+        local ok, sampleHeight = pcall(land.getHeight, samplePos)
+        if ok then
+            local heightDiff = math.abs(sampleHeight - centerHeight)
+            local slope = math.deg(math.atan(heightDiff / sampleRadius))
+            if slope > maxSlope then
+                maxSlope = slope
+            end
+        end
+    end
+
+    return maxSlope
+end
+
+-- Check if surface type is valid for ground units
+function OperationInfinity:isValidSurfaceType(pos)
+    local ok, surfaceType = pcall(land.getSurfaceType, {x = pos.x, y = pos.y})
+    if not ok then
+        return false
+    end
+
+    -- Accept LAND and ROAD, reject WATER, SHALLOW_WATER
+    return surfaceType == land.SurfaceType.LAND or surfaceType == land.SurfaceType.ROAD
+end
+
+-- Calculate terrain roughness using height variance
+function OperationInfinity:calculateTerrainRoughness(center, checkRadius)
+    checkRadius = checkRadius or self.config.terrain.sampleRadius
+
+    local heights = {}
+    local sum = 0
+
+    -- Sample a 5x5 grid
+    for dx = -2, 2 do
+        for dy = -2, 2 do
+            local samplePos = {
+                x = center.x + dx * (checkRadius / 2),
+                y = center.y + dy * (checkRadius / 2)
+            }
+            local ok, h = pcall(land.getHeight, samplePos)
+            if ok then
+                table.insert(heights, h)
+                sum = sum + h
+            end
+        end
+    end
+
+    if #heights < 5 then
+        return 999 -- Return high roughness if sampling failed
+    end
+
+    -- Calculate standard deviation
+    local mean = sum / #heights
+    local variance = 0
+    for _, h in ipairs(heights) do
+        variance = variance + (h - mean) ^ 2
+    end
+    variance = variance / #heights
+
+    return math.sqrt(variance)
+end
+
+-- Get distance to nearest road
+function OperationInfinity:getDistanceToNearestRoad(pos)
+    local ok, roadX, roadY = pcall(land.getClosestPointOnRoads, "roads", pos.x, pos.y)
+    if not ok or not roadX then
+        return 999999
+    end
+
+    local dx = roadX - pos.x
+    local dy = roadY - pos.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Combined terrain validation
+function OperationInfinity:isValidTerrainForUnits(center, options)
+    options = options or {}
+    local maxSlope = options.maxSlope or self.config.terrain.defaultMaxSlope
+    local maxRoughness = options.maxRoughness or self.config.terrain.defaultMaxRoughness
+    local maxRoadDistance = options.maxRoadDistance -- nil means no road requirement
+
+    -- Check exclusion zones first (fastest check)
+    if self:isInExclusionZone(center) then
+        return false, "in exclusion zone"
+    end
+
+    -- Check surface type
+    if not self:isValidSurfaceType(center) then
+        return false, "invalid surface type"
+    end
+
+    -- Check slope
+    local slope = self:calculateMaxSlope(center)
+    if slope > maxSlope then
+        return false, "slope too steep: " .. string.format("%.1f", slope) .. " degrees"
+    end
+
+    -- Check roughness
+    local roughness = self:calculateTerrainRoughness(center)
+    if roughness > maxRoughness then
+        return false, "terrain too rough: " .. string.format("%.1f", roughness) .. "m variance"
+    end
+
+    -- Check road proximity if required
+    if maxRoadDistance then
+        local roadDist = self:getDistanceToNearestRoad(center)
+        if roadDist > maxRoadDistance then
+            return false, "too far from road: " .. string.format("%.0f", roadDist) .. "m"
+        end
+    end
+
+    return true, nil
+end
+
+-- Find a valid position within radius, returns nil if none found
+function OperationInfinity:findValidPosition(center, radius, options, maxAttempts)
+    maxAttempts = maxAttempts or self.config.terrain.maxSearchAttempts
+    options = options or {}
+
+    -- First, check if center itself is valid
+    local valid, reason = self:isValidTerrainForUnits(center, options)
+    if valid then
+        return center, true
+    end
+
+    -- Try random positions
+    for attempt = 1, maxAttempts do
+        local testPos = self:randomPointInRadius(center, radius)
+        valid, reason = self:isValidTerrainForUnits(testPos, options)
+        if valid then
+            return testPos, true
+        end
+    end
+
+    -- Try with relaxed thresholds (50% higher limits)
+    local relaxedOptions = {
+        maxSlope = (options.maxSlope or self.config.terrain.defaultMaxSlope) * 1.5,
+        maxRoughness = (options.maxRoughness or self.config.terrain.defaultMaxRoughness) * 1.5,
+        maxRoadDistance = options.maxRoadDistance and (options.maxRoadDistance * 1.5) or nil,
+    }
+
+    for attempt = 1, math.floor(maxAttempts / 2) do
+        local testPos = self:randomPointInRadius(center, radius)
+        valid, reason = self:isValidTerrainForUnits(testPos, relaxedOptions)
+        if valid then
+            self:log("Used relaxed terrain thresholds for position near (" ..
+                math.floor(center.x) .. ", " .. math.floor(center.y) .. ")")
+            return testPos, true
+        end
+    end
+
+    -- Failed to find valid position
+    self:log("WARNING: Could not find valid terrain near (" ..
+        math.floor(center.x) .. ", " .. math.floor(center.y) .. ") - skipping spawn")
+    return nil, false
+end
+
+-- =============================================================================
+-- FORMATION GENERATORS
+-- =============================================================================
+
+-- Formation types
+OperationInfinity.FormationType = {
+    LINE = "LINE",
+    WEDGE = "WEDGE",
+    ECHELON_LEFT = "ECHELON_LEFT",
+    ECHELON_RIGHT = "ECHELON_RIGHT",
+}
+
+-- Get relative positions for a formation
+function OperationInfinity:getFormationPositions(unitCount, formationType, spacing)
+    spacing = spacing or 30
+    local positions = {}
+
+    if formationType == self.FormationType.LINE then
+        -- Units spread perpendicular to facing direction
+        local startOffset = -((unitCount - 1) * spacing) / 2
+        for i = 1, unitCount do
+            table.insert(positions, {
+                x = startOffset + (i - 1) * spacing,
+                y = 0,
+            })
+        end
+
+    elseif formationType == self.FormationType.WEDGE then
+        -- Arrow/vee shape with lead unit at front
+        table.insert(positions, {x = 0, y = 0}) -- Lead unit
+        for i = 2, unitCount do
+            local row = math.ceil((i - 1) / 2)
+            local side = ((i - 1) % 2 == 0) and 1 or -1
+            table.insert(positions, {
+                x = side * row * spacing,
+                y = -row * spacing,
+            })
+        end
+
+    elseif formationType == self.FormationType.ECHELON_LEFT then
+        for i = 1, unitCount do
+            table.insert(positions, {
+                x = -(i - 1) * spacing,
+                y = -(i - 1) * spacing * 0.7,
+            })
+        end
+
+    elseif formationType == self.FormationType.ECHELON_RIGHT then
+        for i = 1, unitCount do
+            table.insert(positions, {
+                x = (i - 1) * spacing,
+                y = -(i - 1) * spacing * 0.7,
+            })
+        end
+
+    else
+        -- Default to line if unknown
+        return self:getFormationPositions(unitCount, self.FormationType.LINE, spacing)
+    end
+
+    return positions
+end
+
+-- Rotate a relative position by heading
+function OperationInfinity:rotatePosition(relPos, heading)
+    local cos_h = math.cos(heading)
+    local sin_h = math.sin(heading)
+    return {
+        x = relPos.x * cos_h - relPos.y * sin_h,
+        y = relPos.x * sin_h + relPos.y * cos_h,
+    }
+end
+
+-- Get a random formation type
+function OperationInfinity:getRandomFormationType()
+    local types = {
+        self.FormationType.LINE,
+        self.FormationType.WEDGE,
+        self.FormationType.ECHELON_LEFT,
+        self.FormationType.ECHELON_RIGHT,
+    }
+    return types[math.random(#types)]
+end
+
+-- =============================================================================
+-- UNIT RANDOMIZATION
+-- =============================================================================
+
+-- Randomize a template by varying counts and potentially removing units
+-- Options:
+--   skipSubstitutions: boolean - if true, do not substitute unit types (keeps homogenous compositions)
+function OperationInfinity:randomizeTemplate(template, options)
+    options = options or {}
+    local variance = self.config.unitRandomization.countVariance
+    local missingChance = self.config.unitRandomization.missingUnitChance
+    local result = {}
+
+    for _, def in ipairs(template) do
+        -- Chance each unit definition is "missing" (casualties/detachments)
+        if math.random() > missingChance then
+            -- Vary count within ±variance of base
+            local baseCount = def.count
+            local minCount = math.max(1, math.floor(baseCount * (1 - variance)))
+            local maxCount = math.ceil(baseCount * (1 + variance))
+            local newCount = self:randomInRange(minCount, maxCount)
+
+            -- Apply unit type substitution (unless skipped for homogenous units like artillery)
+            local unitType = def.type
+            if not options.skipSubstitutions then
+                unitType = UnitTemplates:getSubstitute(def.type, self.config.unitRandomization.substitutionChance)
+            end
+
+            table.insert(result, {
+                type = unitType,
+                count = newCount,
+            })
+        end
+    end
+
+    -- Ensure at least one unit remains
+    if #result == 0 and #template > 0 then
+        local def = template[1]
+        table.insert(result, {
+            type = def.type,
+            count = 1,
+        })
+    end
+
+    return result
 end
 
 -- =============================================================================
@@ -342,25 +737,54 @@ end
 
 function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIndex)
     local offset = (pairIndex - 1) * 300 -- Spread pairs along front
-    local engageDist = self.config.frontline.engagementDistance
+
+    -- Randomized engagement distance (300-1000m)
+    local engageDist = self:randomInRange(
+        self.config.frontline.engagementDistanceMin,
+        self.config.frontline.engagementDistanceMax
+    )
 
     -- Randomize the front line orientation slightly
     local frontAngle = math.random() * 0.3 - 0.15 -- Small angle variation
 
-    -- ISAF platoon position (south side)
-    local isafPos = {
+    -- Initial positions
+    local isafPosInitial = {
         x = sectorCenter.x + offset * math.cos(frontAngle),
         y = sectorCenter.y - engageDist / 2,
     }
 
-    -- Erusea platoon position (north side)
-    local eruseaPos = {
+    local eruseaPosInitial = {
         x = sectorCenter.x + offset * math.cos(frontAngle),
         y = sectorCenter.y + engageDist / 2,
     }
 
-    -- Build ISAF units
-    local isafUnits = self:buildPlatoonUnits(UnitTemplates.ISAFPlatoon, isafPos)
+    -- Find valid terrain for ISAF platoon (100m search radius)
+    local isafPos, isafValid = self:findValidPosition(isafPosInitial, 100)
+    if not isafValid then
+        self:log("Skipping ISAF platoon S" .. sectorIndex .. "-P" .. pairIndex .. " - no valid terrain")
+        return
+    end
+
+    -- Find valid terrain for Erusea platoon
+    local eruseaPos, eruseaValid = self:findValidPosition(eruseaPosInitial, 100)
+    if not eruseaValid then
+        self:log("Skipping Erusea platoon S" .. sectorIndex .. "-P" .. pairIndex .. " - no valid terrain")
+        return
+    end
+
+    -- Calculate facing directions (toward each other)
+    local isafFacing = math.atan2(eruseaPos.y - isafPos.y, eruseaPos.x - isafPos.x)
+    local eruseaFacing = math.atan2(isafPos.y - eruseaPos.y, isafPos.x - eruseaPos.x)
+
+    -- Select random formation for this pair
+    local formation = self:getRandomFormationType()
+
+    -- Build ISAF units with formation and facing
+    local isafTemplate = self:randomizeTemplate(UnitTemplates.ISAFPlatoon)
+    local isafUnits = self:buildPlatoonUnits(isafTemplate, isafPos, {
+        formation = formation,
+        facing = isafFacing,
+    })
     Virtualization:registerGroup({
         name = "ISAF-S" .. sectorIndex .. "-P" .. pairIndex,
         center = isafPos,
@@ -378,10 +802,14 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
         },
     })
 
-    -- Build Erusea units
+    -- Build Erusea units with formation and facing
     local diff = self.state.difficulty
-    local eruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
-    local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaPos)
+    local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
+    local eruseaTemplate = self:randomizeTemplate(baseEruseaTemplate)
+    local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaPos, {
+        formation = formation,
+        facing = eruseaFacing,
+    })
     Virtualization:registerGroup({
         name = "Erusea-S" .. sectorIndex .. "-P" .. pairIndex,
         center = eruseaPos,
@@ -400,23 +828,48 @@ function OperationInfinity:generatePlatoonPair(sectorCenter, sectorIndex, pairIn
     })
 end
 
-function OperationInfinity:buildPlatoonUnits(template, center)
+function OperationInfinity:buildPlatoonUnits(template, center, options)
+    options = options or {}
+    local formation = options.formation or self:getRandomFormationType()
+    local facing = options.facing or (math.random() * 2 * math.pi)
+    local spacing = options.spacing or 30
+    local jitterMin = options.jitterMin or 10
+    local jitterMax = options.jitterMax or 15
+
+    -- Count total units
+    local totalUnits = 0
+    for _, def in ipairs(template) do
+        totalUnits = totalUnits + def.count
+    end
+
+    -- Get formation positions
+    local formationPositions = self:getFormationPositions(totalUnits, formation, spacing)
+
     local units = {}
     local unitIndex = 1
-    local spacing = 30 -- Meters between units
 
     for _, def in ipairs(template) do
         for c = 1, def.count do
-            local row = math.floor((unitIndex - 1) / 3)
-            local col = (unitIndex - 1) % 3
-            local offset_x = col * spacing
-            local offset_y = row * spacing
+            local formPos = formationPositions[unitIndex] or {x = 0, y = 0}
+
+            -- Rotate position to face the correct direction
+            local rotatedPos = self:rotatePosition(formPos, facing)
+
+            -- Add random jitter (10-15m, visible from aircraft altitude)
+            local jitterAmount = jitterMin + math.random() * (jitterMax - jitterMin)
+            local jitterAngle = math.random() * 2 * math.pi
+            local jitterX = jitterAmount * math.cos(jitterAngle)
+            local jitterY = jitterAmount * math.sin(jitterAngle)
+
+            -- Add heading variance (±10 degrees from facing)
+            local headingVariance = (math.random() - 0.5) * math.rad(20)
+            local unitHeading = facing + headingVariance
 
             units[#units + 1] = {
                 type = def.type,
-                x = center.x + offset_x,
-                y = center.y + offset_y,
-                heading = 0,
+                x = center.x + rotatedPos.x + jitterX,
+                y = center.y + rotatedPos.y + jitterY,
+                heading = unitHeading,
                 skill = "High",
             }
             unitIndex = unitIndex + 1
@@ -435,12 +888,24 @@ function OperationInfinity:generateSectorSHORAD(sectorCenter, sectorIndex)
     end
 
     -- Position SHORAD slightly behind Erusean lines
-    local shoradPos = {
+    local initialPos = {
         x = sectorCenter.x + (math.random() - 0.5) * 500,
         y = sectorCenter.y + 1000 + math.random() * 500,
     }
 
-    local units = self:buildPlatoonUnits(shoradTemplate, shoradPos)
+    -- Find valid terrain for SHORAD
+    local shoradPos, valid = self:findValidPosition(initialPos, 200)
+    if not valid then
+        self:log("Skipping SHORAD-S" .. sectorIndex .. " - no valid terrain")
+        return
+    end
+
+    -- Apply template randomization and random formation
+    local template = self:randomizeTemplate(shoradTemplate)
+    local units = self:buildPlatoonUnits(template, shoradPos, {
+        formation = self:getRandomFormationType(),
+    })
+
     Virtualization:registerGroup({
         name = "SHORAD-S" .. sectorIndex,
         center = shoradPos,
@@ -491,13 +956,28 @@ end
 
 function OperationInfinity:generateConvoy(index)
     -- Position convoys behind Erusean lines (north of battlefield center)
-    local pos = {
+    local initialPos = {
         x = self.state.battlefield.center.x + (math.random() - 0.5) * self.state.battlefield.radius,
         y = self.state.battlefield.center.y + self.state.battlefield.radius * 0.3 +
             math.random() * self.state.battlefield.radius * 0.5,
     }
 
-    local units = self:buildPlatoonUnits(UnitTemplates.LogisticsConvoy, pos)
+    -- Convoys should be near roads (within 100m)
+    local pos, valid = self:findValidPosition(initialPos, 200, {
+        maxRoadDistance = 100,
+    })
+    if not valid then
+        self:log("Skipping Convoy-" .. index .. " - no valid terrain near roads")
+        return
+    end
+
+    -- Apply template randomization and use LINE formation for convoy
+    local template = self:randomizeTemplate(UnitTemplates.LogisticsConvoy)
+    local units = self:buildPlatoonUnits(template, pos, {
+        formation = self.FormationType.LINE,
+        spacing = 20, -- Tighter spacing for convoy
+    })
+
     Virtualization:registerGroup({
         name = "Convoy-" .. index,
         center = pos,
@@ -512,17 +992,26 @@ end
 
 function OperationInfinity:generateArtilleryBattery(index)
     -- Position artillery further behind lines
-    local pos = {
+    local initialPos = {
         x = self.state.battlefield.center.x + (math.random() - 0.5) * self.state.battlefield.radius * 0.8,
         y = self.state.battlefield.center.y + self.state.battlefield.radius * 0.5 +
             math.random() * self.state.battlefield.radius * 0.3,
     }
 
-    local units = self:buildPlatoonUnits(UnitTemplates.ArtilleryBattery, pos)
+    -- Artillery needs flatter terrain (8 degree max slope)
+    local pos, valid = self:findValidPosition(initialPos, 300, {
+        maxSlope = 8,
+    })
+    if not valid then
+        self:log("Skipping Artillery-" .. index .. " - no valid flat terrain")
+        return
+    end
 
     -- Find a frontline position to fire at
     local targetSector = self.state.battlefield.sectors[math.random(#self.state.battlefield.sectors)]
     local fireTarget = nil
+    local facingDirection = math.random() * 2 * math.pi
+
     if targetSector then
         fireTarget = {
             x = targetSector.center.x + (math.random() - 0.5) * 500,
@@ -530,7 +1019,19 @@ function OperationInfinity:generateArtilleryBattery(index)
             radius = 100,
             expendQty = 500,
         }
+        -- Face toward the target
+        facingDirection = math.atan2(fireTarget.y - pos.y, fireTarget.x - pos.x)
     end
+
+    -- Artillery batteries are homogenous - no unit type substitution
+    local template = self:randomizeTemplate(UnitTemplates.ArtilleryBattery, {
+        skipSubstitutions = true,
+    })
+    local units = self:buildPlatoonUnits(template, pos, {
+        formation = self.FormationType.LINE,
+        facing = facingDirection,
+        spacing = 40, -- Wider spacing for artillery
+    })
 
     Virtualization:registerGroup({
         name = "Artillery-" .. index,
@@ -547,15 +1048,28 @@ end
 
 function OperationInfinity:generatePatrolGroup(index)
     -- Scatter patrol groups throughout the battlefield
-    local pos = self:randomPointInRadius(
+    local initialPos = self:randomPointInRadius(
         self.state.battlefield.center,
         self.state.battlefield.radius * 0.9
     )
 
-    local units = {
-        { type = "BRDM-2", x = pos.x,      y = pos.y,      heading = math.random() * 2 * math.pi, skill = "Average" },
-        { type = "BRDM-2", x = pos.x + 30, y = pos.y + 30, heading = math.random() * 2 * math.pi, skill = "Average" },
+    -- Find valid terrain for patrol
+    local pos, valid = self:findValidPosition(initialPos, 150)
+    if not valid then
+        self:log("Skipping Patrol-" .. index .. " - no valid terrain")
+        return
+    end
+
+    -- Use simple 2-vehicle patrol with random heading
+    local patrolHeading = math.random() * 2 * math.pi
+    local template = {
+        { type = "BRDM-2", count = 2 },
     }
+    local units = self:buildPlatoonUnits(template, pos, {
+        formation = self.FormationType.LINE,
+        facing = patrolHeading,
+        spacing = 25,
+    })
 
     Virtualization:registerGroup({
         name = "Patrol-" .. index,

@@ -394,8 +394,65 @@ UnitTemplates.ArtilleryBattery = {
 }
 
 -- =============================================================================
+-- UNIT SUBSTITUTIONS
+-- =============================================================================
+
+-- Equivalent unit types that can be swapped for variety
+UnitTemplates.Substitutions = {
+    -- Main Battle Tanks
+    ["Leclerc"] = {"Leclerc", "Leopard-2", "Challenger2"},
+    ["Leopard-2"] = {"Leopard-2", "Leclerc", "Challenger2"},
+    ["Challenger2"] = {"Challenger2", "Leclerc", "Leopard-2"},
+    ["M-1 Abrams"] = {"M-1 Abrams"},
+
+    -- IFVs
+    ["Marder"] = {"Marder", "BMP-3", "Warrior"},
+    ["BMP-3"] = {"BMP-3", "Marder", "Warrior"},
+    ["M-2 Bradley"] = {"M-2 Bradley"},
+
+    -- SHORAD/AAA
+    ["Gepard"] = {"Gepard", "ZSU-23-4 Shilka"},
+    ["ZSU-23-4 Shilka"] = {"ZSU-23-4 Shilka", "Gepard"},
+    ["Vulcan"] = {"Vulcan"},
+    ["2S6 Tunguska"] = {"2S6 Tunguska"},
+    ["Strela-10M3"] = {"Strela-10M3", "Strela-1 9P31"},
+    ["Strela-1 9P31"] = {"Strela-1 9P31", "Strela-10M3"},
+    ["Ural-375 ZU-23"] = {"Ural-375 ZU-23"},
+
+    -- Trucks/Logistics
+    ["Ural-375"] = {"Ural-375", "GAZ-66"},
+    ["GAZ-66"] = {"GAZ-66", "Ural-375"},
+    ["BRDM-2"] = {"BRDM-2"},
+
+    -- Artillery
+    ["SAU Akatsia"] = {"SAU Akatsia", "SAU Msta", "SAU Gvozdika"},
+    ["SAU Msta"] = {"SAU Msta", "SAU Akatsia"},
+    ["SAU Gvozdika"] = {"SAU Gvozdika", "SAU Akatsia"},
+
+    -- Command
+    ["M30_CC"] = {"M30_CC"},
+}
+
+-- =============================================================================
 -- UTILITY FUNCTIONS
 -- =============================================================================
+
+-- Get a substitute unit type (or original if no substitution)
+function UnitTemplates:getSubstitute(unitType, chance)
+    chance = chance or 0.3
+
+    -- Only substitute with given probability
+    if math.random() > chance then
+        return unitType
+    end
+
+    local alternatives = self.Substitutions[unitType]
+    if alternatives and #alternatives > 1 then
+        return alternatives[math.random(#alternatives)]
+    end
+
+    return unitType
+end
 
 function UnitTemplates:getRandomSkill(difficulty)
     local config = self.Fighters[difficulty]
