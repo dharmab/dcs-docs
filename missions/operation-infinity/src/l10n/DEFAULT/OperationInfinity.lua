@@ -10,7 +10,6 @@ OperationInfinity = {}
 -- =============================================================================
 
 OperationInfinity.config = {
-    coordinateDisplayInterval = 60, -- Seconds between coordinate broadcasts
     maxSpawnedUnits = 800,
     debug = true,
 
@@ -723,8 +722,8 @@ function OperationInfinity:generateBattlefield()
         OperationInfinity:displayCoordinates()
     end, nil, timer.getTime() + 3)
 
-    -- Start coordinate display loop
-    self:startCoordinateLoop()
+    -- Add Mission Info menu for on-demand target info
+    self:setupMissionInfoMenu()
 
     self:log("Battlefield generation complete")
 end
@@ -1338,13 +1337,13 @@ function OperationInfinity:displayCoordinates()
     trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 30)
 end
 
-function OperationInfinity:startCoordinateLoop()
-    timer.scheduleFunction(function(_, time)
-        if OperationInfinity.state.missionGenerated then
-            OperationInfinity:displayCoordinates()
-        end
-        return time + OperationInfinity.config.coordinateDisplayInterval
-    end, nil, timer.getTime() + self.config.coordinateDisplayInterval)
+function OperationInfinity:setupMissionInfoMenu()
+    missionCommands.addCommandForCoalition(
+        coalition.side.BLUE,
+        "Mission Info",
+        nil,
+        function() OperationInfinity:displayCoordinates() end
+    )
 end
 
 -- =============================================================================
