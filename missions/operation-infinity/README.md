@@ -86,11 +86,11 @@ The warehouse is configured for unlimited weapons.
 
 ## Mission Duration Options
 
-**45 Minutes (CAS):** Short transit, quick action.
+**45 Minutes (Western Caucasus):** Short transit, quick action.
 
-**90 Minutes (Interdiction):** Medium transit time.
+**90 Minutes (Central Caucasus):** Medium transit time.
 
-**180 Minutes (Deep Strike):** Long transit, tanker support recommended.
+**180 Minutes (Eastern Caucasus):** Long transit, tanker support recommended.
 
 ## Support Assets
 

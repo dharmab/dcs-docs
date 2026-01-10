@@ -163,12 +163,9 @@ OperationInfinity.config = {
             name = "Gudauta/Sukhumi Area",
             aerodromes = { "gudauta", "sukhumi" },
             playtimes = { "45", "90" },
-            -- Only good place to spawn ISAF is 4-10 miles NW of Gudauta in flat areas
+            -- Mountainous terrain unsuitable for frontline - use deep strike targets
             spawnConstraints = {
-                angleMin = math.pi * 0.5,   -- North
-                angleMax = math.pi,          -- West (NW quadrant)
-                minDistance = 6500,          -- ~4 miles
-                maxDistance = 16000,         -- ~10 miles
+                noFrontline = true,
             },
         },
         southwest_coast = {
@@ -786,9 +783,9 @@ function OperationInfinity:setupMenu()
     )
 
     local playtimes = {
-        { key = "45",  label = "45 Minutes (CAS - targets near Krymsk)" },
-        { key = "90",  label = "90 Minutes (Interdiction - central Caucasus)" },
-        { key = "180", label = "180 Minutes (Deep Strike - eastern Caucasus)" },
+        { key = "45",  label = "45 Minutes (Western Caucasus)" },
+        { key = "90",  label = "90 Minutes (Central Caucasus)" },
+        { key = "180", label = "180 Minutes (Eastern Caucasus)" },
     }
 
     for _, pt in ipairs(playtimes) do

@@ -190,9 +190,9 @@ F10 Other
 │   │   ├── Normal
 │   │   └── Hard
 │   └── Playtime
-│       ├── 45 Minutes (CAS)
-│       ├── 90 Minutes (Interdiction)
-│       └── 180 Minutes (Deep Strike)
+│       ├── 45 Minutes (Western Caucasus)
+│       ├── 90 Minutes (Central Caucasus)
+│       └── 180 Minutes (Eastern Caucasus)
 ```
 
 ## Late Joiner Support
