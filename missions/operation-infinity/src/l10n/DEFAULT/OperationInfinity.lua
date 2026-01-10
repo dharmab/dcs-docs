@@ -773,12 +773,7 @@ function OperationInfinity:generateBattlefield()
 
     -- Helper for progress messages
     local function progress(msg)
-        trigger.action.outTextForCoalition(coalition.side.BLUE,
-            "=== OPERATION INFINITY ===\n" ..
-            "Difficulty: " .. OperationInfinity.state.difficulty .. "\n" ..
-            "Playtime: " .. OperationInfinity.state.playtime .. " minutes\n" ..
-            "Target Area: " .. selected.region.name .. "\n\n" ..
-            msg, 5)
+        trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 5)
     end
 
     -- Run generation as async sequence
