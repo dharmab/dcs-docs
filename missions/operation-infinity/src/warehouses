@@ -2,7 +2,7 @@ warehouses = {
     ["airports"] = {
         -- Krymsk (BLUE - player spawn)
         [15] = {
-            ["coalitionName"] = "blue",
+            ["coalition"] = "blue",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -28,7 +28,7 @@ warehouses = {
         },
         -- Maykop-Khanskaya (RED)
         [16] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -36,7 +36,7 @@ warehouses = {
         },
         -- Sukhumi-Babushara (RED)
         [20] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -44,7 +44,7 @@ warehouses = {
         },
         -- Gudauta (RED)
         [21] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -52,7 +52,7 @@ warehouses = {
         },
         -- Senaki-Kolkhi (RED)
         [23] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -60,7 +60,7 @@ warehouses = {
         },
         -- Kobuleti (RED)
         [24] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -68,7 +68,7 @@ warehouses = {
         },
         -- Kutaisi (RED)
         [25] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -76,7 +76,7 @@ warehouses = {
         },
         -- Mozdok (RED)
         [28] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -84,7 +84,7 @@ warehouses = {
         },
         -- Tbilisi-Lochini (RED)
         [29] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
@@ -92,7 +92,7 @@ warehouses = {
         },
         -- Vaziani (RED)
         [31] = {
-            ["coalitionName"] = "red",
+            ["coalition"] = "red",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = true,
             ["unlimitedFuel"] = true,
