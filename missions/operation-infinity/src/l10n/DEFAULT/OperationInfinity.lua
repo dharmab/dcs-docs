@@ -234,6 +234,57 @@ OperationInfinity.config = {
         fuelTankCount = { 3, 6 },     -- Fuel storage
     },
 
+    -- Krymsk airfield position (player and support aircraft base)
+    krymsk = { x = -7000, y = 295000 },
+
+    -- Support aircraft racetrack positions by region
+    -- Distances in meters (1 nautical mile = 1852 meters)
+    supportRacetracks = {
+        -- Maykop: 15 miles south of Krymsk
+        northwest = {
+            x = -7000 - (15 * 1852),  -- 15nm south
+            y = 295000,
+            trackLength = 50000,      -- 50km racetrack
+            heading = 0,              -- East-West track
+        },
+        -- Gudauta/Sukhumi: 50 miles SE of Krymsk (toward the target area)
+        central_coast = {
+            x = -7000 - (50 * 1852 * 0.64),   -- 50nm at ~130° heading (SE)
+            y = 295000 + (50 * 1852 * 0.77),
+            trackLength = 60000,
+            heading = math.pi * 0.75,  -- NW-SE track aligned with route
+        },
+        -- Kobuleti/Senaki/Kutaisi: 50 miles SE of Krymsk
+        southwest_coast = {
+            x = -7000 - (50 * 1852 * 0.64),
+            y = 295000 + (50 * 1852 * 0.77),
+            trackLength = 60000,
+            heading = math.pi * 0.75,
+        },
+        -- Mozdok: 100 miles east of Krymsk along Krymsk-Mozdok axis
+        northeast = {
+            x = -7000 - (100 * 1852 * 0.14),  -- 100nm at ~98° heading (mostly E)
+            y = 295000 + (100 * 1852 * 0.99),
+            trackLength = 80000,
+            heading = 0,  -- E-W track
+        },
+        -- Tbilisi: 180 miles SE of Krymsk
+        southeast = {
+            x = -7000 - (180 * 1852 * 0.45),  -- 180nm at ~117° heading
+            y = 295000 + (180 * 1852 * 0.89),
+            trackLength = 80000,
+            heading = math.pi * 0.65,  -- NW-SE track
+        },
+    },
+
+    -- Support aircraft group names and orbit altitudes
+    supportAircraft = {
+        { name = "Overlord", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
+        { name = "Texaco", altitude = 5486, speed = 180 },    -- Boom tanker at 18,000 ft
+        { name = "Arco", altitude = 4877, speed = 180 },      -- Drogue tanker at 16,000 ft
+        { name = "Shell", altitude = 4572, speed = 105 },     -- Slow tanker at 15,000 ft
+    },
+
     -- SAM site counts by difficulty
     samCounts = {
         Normal = {
@@ -269,6 +320,7 @@ OperationInfinity.state = {
     -- Generated battlefield
     battlefield = {
         region = nil,           -- Selected aerodrome region
+        regionKey = nil,        -- Key of the selected region (for racetrack lookup)
         targetAerodromes = {},  -- Aerodromes in the selected region
         sectors = {},           -- Generated frontline sectors
         spawnConstraints = nil, -- Region-specific spawn constraints
@@ -894,6 +946,7 @@ function OperationInfinity:generateBattlefield()
     end
 
     self.state.battlefield.region = selected.region
+    self.state.battlefield.regionKey = selected.key
     self.state.battlefield.targetAerodromes = {}
     self.state.battlefield.spawnConstraints = selected.region.spawnConstraints or {}
 
@@ -997,6 +1050,14 @@ function OperationInfinity:generateBattlefield()
                 fn = function(ctx, done)
                     progress("Generating map markers...")
                     OperationInfinity:generateMapMarkersBatched(done)
+                end,
+            },
+            {
+                name = "support_aircraft",
+                fn = function(ctx, done)
+                    progress("Launching support aircraft...")
+                    OperationInfinity:activateSupportAircraft(OperationInfinity.state.battlefield.regionKey)
+                    done()
                 end,
             },
         },
@@ -2265,6 +2326,86 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
 end
 
 -- =============================================================================
+-- SUPPORT AIRCRAFT ACTIVATION
+-- =============================================================================
+
+-- Get the racetrack position for the selected region
+function OperationInfinity:getRacetrackPosition(regionKey)
+    local racetrack = self.config.supportRacetracks[regionKey]
+    if not racetrack then
+        -- Default to northwest if region not found
+        self:log("WARNING: No racetrack config for region '" .. tostring(regionKey) .. "', using default")
+        racetrack = self.config.supportRacetracks.northwest
+    end
+    return racetrack
+end
+
+-- Activate support aircraft and set their orbit positions based on selected region
+function OperationInfinity:activateSupportAircraft(regionKey)
+    local racetrack = self:getRacetrackPosition(regionKey)
+
+    self:log("Activating support aircraft for region: " .. tostring(regionKey))
+    self:log("Racetrack center: (" .. math.floor(racetrack.x) .. ", " .. math.floor(racetrack.y) .. ")")
+
+    -- Calculate racetrack endpoints based on heading and track length
+    local halfTrack = racetrack.trackLength / 2
+    local heading = racetrack.heading or 0
+
+    for i, aircraft in ipairs(self.config.supportAircraft) do
+        local group = Group.getByName(aircraft.name)
+        if group and group:isExist() then
+            -- Offset each aircraft's racetrack slightly to avoid collisions
+            -- AWACS highest and furthest back, tankers spread out
+            local altOffset = (i - 1) * 500  -- 500m altitude separation
+            local lateralOffset = (i - 1) * 5000  -- 5km lateral separation
+
+            -- Calculate this aircraft's racetrack center (offset perpendicular to track)
+            local perpHeading = heading + math.pi / 2
+            local centerX = racetrack.x + lateralOffset * math.cos(perpHeading)
+            local centerY = racetrack.y + lateralOffset * math.sin(perpHeading)
+
+            -- Calculate racetrack endpoints
+            local point1 = {
+                x = centerX - halfTrack * math.cos(heading),
+                y = centerY - halfTrack * math.sin(heading),
+            }
+            local point2 = {
+                x = centerX + halfTrack * math.cos(heading),
+                y = centerY + halfTrack * math.sin(heading),
+            }
+
+            local orbitAltitude = aircraft.altitude + altOffset
+
+            -- Activate the group
+            group:activate()
+
+            -- Push orbit task to the group's controller
+            local controller = group:getController()
+            if controller then
+                local orbitTask = {
+                    id = "Orbit",
+                    params = {
+                        pattern = "Race-Track",
+                        point = point1,
+                        point2 = point2,
+                        altitude = orbitAltitude,
+                        speed = aircraft.speed,
+                    },
+                }
+                controller:pushTask(orbitTask)
+
+                self:log("Activated " .. aircraft.name .. " with racetrack at alt " ..
+                    orbitAltitude .. "m, center (" .. math.floor(centerX) .. ", " .. math.floor(centerY) .. ")")
+            else
+                self:log("WARNING: Could not get controller for " .. aircraft.name)
+            end
+        else
+            self:log("WARNING: Support aircraft group '" .. aircraft.name .. "' not found")
+        end
+    end
+end
+
+-- =============================================================================
 -- LATE JOINER SUPPORT
 -- =============================================================================
 
@@ -2334,10 +2475,11 @@ function OperationInfinity:init()
             "  2. Target Playtime\n\n" ..
             "The first player to make both selections\n" ..
             "locks the settings for all players.\n\n" ..
-            "Support assets available:\n" ..
+            "Support assets will launch after settings are selected:\n" ..
             "  AWACS Overlord: 255.5 MHz\n" ..
             "  Texaco (boom): 270.5 MHz, TACAN 100X\n" ..
-            "  Arco (drogue): 270.1 MHz, TACAN 101X", 30)
+            "  Arco (drogue): 270.1 MHz, TACAN 101X\n" ..
+            "  Shell (slow boom): 270.0 MHz, TACAN 102X", 30)
     end, nil, timer.getTime() + 5)
 
     -- Setup F10 menu

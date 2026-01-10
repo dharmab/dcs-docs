@@ -984,7 +984,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- AWACS: E-3A Overlord
+                            -- AWACS: E-3A Overlord (starts uncontrolled at Krymsk, activated by script)
                             [12] = {
                                 ["groupId"] = 12,
                                 ["name"] = "Overlord",
@@ -993,23 +993,26 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 255.5,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = false,
+                                ["uncontrolled"] = true,
                                 ["hidden"] = false,
-                                ["x"] = 5000,
-                                ["y"] = 320000,
+                                ["lateActivation"] = false,
+                                ["x"] = -6800,
+                                ["y"] = 293500,
                                 ["units"] = {
                                     [1] = {
                                         ["unitId"] = 12,
                                         ["name"] = "Overlord-1",
                                         ["type"] = "E-3A",
                                         ["skill"] = "Excellent",
-                                        ["x"] = 5000,
-                                        ["y"] = 320000,
-                                        ["alt"] = 7925,
+                                        ["x"] = -6800,
+                                        ["y"] = 293500,
+                                        ["alt"] = 20,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
-                                        ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "01",
+                                        ["parking_id"] = "01",
                                         ["onboard_num"] = "001",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1030,35 +1033,17 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 7925,
+                                            ["alt"] = 20,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Fly Over Point",
-                                            ["x"] = 5000,
-                                            ["y"] = 321852,
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -6800,
+                                            ["y"] = 293500,
                                             ["speed"] = 180,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["formation_template"] = "",
-                                            ["task"] = {
-                                                ["id"] = "ComboTask",
-                                                ["params"] = {
-                                                    ["tasks"] = {},
-                                                },
-                                            },
-                                        },
-                                        [2] = {
-                                            ["alt"] = 7925,
-                                            ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Turning Point",
-                                            ["x"] = 5000,
-                                            ["y"] = 320000,
-                                            ["speed"] = 180,
-                                            ["speed_locked"] = true,
-                                            ["ETA"] = 0,
-                                            ["ETA_locked"] = false,
+                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -1089,8 +1074,56 @@ mission = {
                                                         [3] = {
                                                             ["enabled"] = true,
                                                             ["auto"] = false,
-                                                            ["id"] = "Orbit",
+                                                            ["id"] = "WrappedAction",
                                                             ["number"] = 3,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [4] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 7925,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = 5000,
+                                            ["y"] = 320000,
+                                            ["speed"] = 180,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "Orbit",
+                                                            ["number"] = 1,
                                                             ["params"] = {
                                                                 ["altitude"] = 7925,
                                                                 ["pattern"] = "Race-Track",
@@ -1105,34 +1138,6 @@ mission = {
                                                                 },
                                                             },
                                                         },
-                                                        [4] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 4,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetImmortal",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                        [5] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 5,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetInvisible",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
                                                     },
                                                 },
                                             },
@@ -1140,7 +1145,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Texaco (Boom)
+                            -- Tanker: KC-135 Texaco (Boom) (starts uncontrolled at Krymsk, activated by script)
                             [13] = {
                                 ["groupId"] = 13,
                                 ["name"] = "Texaco",
@@ -1149,23 +1154,26 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.5,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = false,
+                                ["uncontrolled"] = true,
                                 ["hidden"] = false,
-                                ["x"] = 10000,
-                                ["y"] = 305000,
+                                ["lateActivation"] = false,
+                                ["x"] = -6900,
+                                ["y"] = 293600,
                                 ["units"] = {
                                     [1] = {
                                         ["unitId"] = 13,
                                         ["name"] = "Texaco-1",
                                         ["type"] = "KC-135",
                                         ["skill"] = "Excellent",
-                                        ["x"] = 10000,
-                                        ["y"] = 305000,
-                                        ["alt"] = 5486,
+                                        ["x"] = -6900,
+                                        ["y"] = 293600,
+                                        ["alt"] = 20,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
-                                        ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "02",
+                                        ["parking_id"] = "02",
                                         ["onboard_num"] = "002",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1186,35 +1194,17 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 5486,
+                                            ["alt"] = 20,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Fly Over Point",
-                                            ["x"] = 10000,
-                                            ["y"] = 306852,
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -6900,
+                                            ["y"] = 293600,
                                             ["speed"] = 180,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["formation_template"] = "",
-                                            ["task"] = {
-                                                ["id"] = "ComboTask",
-                                                ["params"] = {
-                                                    ["tasks"] = {},
-                                                },
-                                            },
-                                        },
-                                        [2] = {
-                                            ["alt"] = 5486,
-                                            ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Turning Point",
-                                            ["x"] = 10000,
-                                            ["y"] = 305000,
-                                            ["speed"] = 180,
-                                            ["speed_locked"] = true,
-                                            ["ETA"] = 0,
-                                            ["ETA_locked"] = false,
+                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -1266,8 +1256,56 @@ mission = {
                                                         [4] = {
                                                             ["enabled"] = true,
                                                             ["auto"] = false,
-                                                            ["id"] = "Orbit",
+                                                            ["id"] = "WrappedAction",
                                                             ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 5486,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = 10000,
+                                            ["y"] = 305000,
+                                            ["speed"] = 180,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "Orbit",
+                                                            ["number"] = 1,
                                                             ["params"] = {
                                                                 ["altitude"] = 5486,
                                                                 ["pattern"] = "Race-Track",
@@ -1282,34 +1320,6 @@ mission = {
                                                                 },
                                                             },
                                                         },
-                                                        [5] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 5,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetImmortal",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                        [6] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 6,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetInvisible",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
                                                     },
                                                 },
                                             },
@@ -1317,7 +1327,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135MPRS Arco (Drogue)
+                            -- Tanker: KC-135MPRS Arco (Drogue) (starts uncontrolled at Krymsk, activated by script)
                             [14] = {
                                 ["groupId"] = 14,
                                 ["name"] = "Arco",
@@ -1326,23 +1336,26 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.1,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = false,
+                                ["uncontrolled"] = true,
                                 ["hidden"] = false,
-                                ["x"] = 15000,
-                                ["y"] = 310000,
+                                ["lateActivation"] = false,
+                                ["x"] = -7000,
+                                ["y"] = 293700,
                                 ["units"] = {
                                     [1] = {
                                         ["unitId"] = 14,
                                         ["name"] = "Arco-1",
                                         ["type"] = "KC135MPRS",
                                         ["skill"] = "Excellent",
-                                        ["x"] = 15000,
-                                        ["y"] = 310000,
-                                        ["alt"] = 4877,
+                                        ["x"] = -7000,
+                                        ["y"] = 293700,
+                                        ["alt"] = 20,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
-                                        ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "03",
+                                        ["parking_id"] = "03",
                                         ["onboard_num"] = "003",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1363,35 +1376,17 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 4877,
+                                            ["alt"] = 20,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Fly Over Point",
-                                            ["x"] = 15000,
-                                            ["y"] = 311852,
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -7000,
+                                            ["y"] = 293700,
                                             ["speed"] = 180,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["formation_template"] = "",
-                                            ["task"] = {
-                                                ["id"] = "ComboTask",
-                                                ["params"] = {
-                                                    ["tasks"] = {},
-                                                },
-                                            },
-                                        },
-                                        [2] = {
-                                            ["alt"] = 4877,
-                                            ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Turning Point",
-                                            ["x"] = 15000,
-                                            ["y"] = 310000,
-                                            ["speed"] = 180,
-                                            ["speed_locked"] = true,
-                                            ["ETA"] = 0,
-                                            ["ETA_locked"] = false,
+                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -1443,8 +1438,56 @@ mission = {
                                                         [4] = {
                                                             ["enabled"] = true,
                                                             ["auto"] = false,
-                                                            ["id"] = "Orbit",
+                                                            ["id"] = "WrappedAction",
                                                             ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 4877,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = 15000,
+                                            ["y"] = 310000,
+                                            ["speed"] = 180,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "Orbit",
+                                                            ["number"] = 1,
                                                             ["params"] = {
                                                                 ["altitude"] = 4877,
                                                                 ["pattern"] = "Race-Track",
@@ -1459,34 +1502,6 @@ mission = {
                                                                 },
                                                             },
                                                         },
-                                                        [5] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 5,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetImmortal",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                        [6] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 6,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetInvisible",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
                                                     },
                                                 },
                                             },
@@ -1494,7 +1509,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Shell (Slow for A-10s)
+                            -- Tanker: KC-135 Shell (Slow for A-10s) (starts uncontrolled at Krymsk, activated by script)
                             [15] = {
                                 ["groupId"] = 15,
                                 ["name"] = "Shell",
@@ -1503,23 +1518,26 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.0,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = false,
+                                ["uncontrolled"] = true,
                                 ["hidden"] = false,
-                                ["x"] = 20000,
-                                ["y"] = 315000,
+                                ["lateActivation"] = false,
+                                ["x"] = -7100,
+                                ["y"] = 293800,
                                 ["units"] = {
                                     [1] = {
                                         ["unitId"] = 15,
                                         ["name"] = "Shell-1",
                                         ["type"] = "KC-135",
                                         ["skill"] = "Excellent",
-                                        ["x"] = 20000,
-                                        ["y"] = 315000,
-                                        ["alt"] = 4572,
+                                        ["x"] = -7100,
+                                        ["y"] = 293800,
+                                        ["alt"] = 20,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 105,
-                                        ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "04",
+                                        ["parking_id"] = "04",
                                         ["onboard_num"] = "004",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1540,35 +1558,17 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 4572,
+                                            ["alt"] = 20,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Fly Over Point",
-                                            ["x"] = 20000,
-                                            ["y"] = 316852,
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -7100,
+                                            ["y"] = 293800,
                                             ["speed"] = 105,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["formation_template"] = "",
-                                            ["task"] = {
-                                                ["id"] = "ComboTask",
-                                                ["params"] = {
-                                                    ["tasks"] = {},
-                                                },
-                                            },
-                                        },
-                                        [2] = {
-                                            ["alt"] = 4572,
-                                            ["alt_type"] = "BARO",
-                                            ["type"] = "Turning Point",
-                                            ["action"] = "Turning Point",
-                                            ["x"] = 20000,
-                                            ["y"] = 315000,
-                                            ["speed"] = 105,
-                                            ["speed_locked"] = true,
-                                            ["ETA"] = 0,
-                                            ["ETA_locked"] = false,
+                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -1620,8 +1620,56 @@ mission = {
                                                         [4] = {
                                                             ["enabled"] = true,
                                                             ["auto"] = false,
-                                                            ["id"] = "Orbit",
+                                                            ["id"] = "WrappedAction",
                                                             ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetImmortal",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [5] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 5,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetInvisible",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 4572,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = 20000,
+                                            ["y"] = 315000,
+                                            ["speed"] = 105,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "Orbit",
+                                                            ["number"] = 1,
                                                             ["params"] = {
                                                                 ["altitude"] = 4572,
                                                                 ["pattern"] = "Race-Track",
@@ -1633,34 +1681,6 @@ mission = {
                                                                 ["point2"] = {
                                                                     ["x"] = 20000,
                                                                     ["y"] = 365000,
-                                                                },
-                                                            },
-                                                        },
-                                                        [5] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 5,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetImmortal",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
-                                                                },
-                                                            },
-                                                        },
-                                                        [6] = {
-                                                            ["enabled"] = true,
-                                                            ["auto"] = false,
-                                                            ["id"] = "WrappedAction",
-                                                            ["number"] = 6,
-                                                            ["params"] = {
-                                                                ["action"] = {
-                                                                    ["id"] = "SetInvisible",
-                                                                    ["params"] = {
-                                                                        ["value"] = true,
-                                                                    },
                                                                 },
                                                             },
                                                         },
