@@ -1,0 +1,30 @@
+warehouses = {
+    ["airports"] = {
+        [15] = {
+            ["coalitionName"] = "blue",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = true,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawnEnabled"] = true,
+            ["aircraft"] = {},
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
+    ["warehouses"] = {},
+}

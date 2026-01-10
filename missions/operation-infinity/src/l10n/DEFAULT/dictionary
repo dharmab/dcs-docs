@@ -1,0 +1,7 @@
+dictionary = {
+    ["DictKey_sortie_1"] = "Operation Infinity",
+    ["DictKey_descriptionText_1"] = "Operation Infinity - A randomized sandbox mission for 1-12 players.\n\nISAF forces are engaged in combat operations across the Caucasus against Erusean forces. Players spawn at Krymsk airbase and use the F10 menu to select difficulty and playtime. The mission then generates a battlefield with appropriate targets.\n\nThis is a sandbox mission with no win condition. Fly, fight, and have fun!",
+    ["DictKey_descriptionBlueTask_1"] = "ISAF Combat Operations\n\nSelect difficulty and playtime via F10 menu after spawning.\nDestroy enemy ground targets and defend against enemy aircraft.\n\nSupport assets:\n- AWACS Overlord (255.5 MHz)\n- Texaco (boom) 270.5 MHz, TACAN 100X\n- Arco (drogue) 270.1 MHz, TACAN 101X",
+    ["DictKey_descriptionRedTask_1"] = "Erusean Defense Forces\n\nDefend Erusean territory from ISAF air strikes.",
+    ["DictKey_descriptionNeutralsTask_1"] = "Neutral",
+}

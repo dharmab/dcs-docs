@@ -1,0 +1,7 @@
+mapResource = {
+    ["ResKey_UnitTemplates"] = "UnitTemplates.lua",
+    ["ResKey_Virtualization"] = "Virtualization.lua",
+    ["ResKey_AirIntercept"] = "AirIntercept.lua",
+    ["ResKey_IADS"] = "IADS.lua",
+    ["ResKey_OperationInfinity"] = "OperationInfinity.lua",
+}
