@@ -29,69 +29,52 @@ OperationInfinity.config = {
         substitutionChance = 0.3,   -- 30% chance for unit type substitution
     },
 
-    -- Terrain exclusion zones (mountain regions from terrain data)
-    -- These are areas with steep slopes where ground vehicles cannot operate
-    terrainExclusions = {
-        -- SouthWest Mountain 2 (center: -180030, 513939, avg elevation 1005m)
-        {
-            vertices = {
-                {x = -181000, y = 510000}, {x = -180000, y = 507000},
-                {x = -179000, y = 510000}, {x = -179000, y = 518000},
-                {x = -180000, y = 520000}, {x = -181000, y = 519000},
-            }
+    -- RED aerodrome positions (from Caucasus terrain data)
+    aerodromes = {
+        maykop = { name = "Maykop-Khanskaya", x = -27626, y = 457048 },
+        gudauta = { name = "Gudauta", x = -195651, y = 515899 },
+        sukhumi = { name = "Sukhumi-Babushara", x = -221382, y = 565909 },
+        senaki = { name = "Senaki-Kolkhi", x = -281903, y = 648379 },
+        kobuleti = { name = "Kobuleti", x = -317605, y = 636704 },
+        kutaisi = { name = "Kutaisi", x = -284583, y = 685030 },
+        mozdok = { name = "Mozdok", x = -83330, y = 835635 },
+        tbilisi = { name = "Tbilisi-Lochini", x = -314926, y = 895724 },
+        vaziani = { name = "Vaziani", x = -318192, y = 902332 },
+    },
+
+    -- Aerodrome regions - geographic clusters for each playtime
+    aerodromeRegions = {
+        northwest = {
+            name = "Maykop Area",
+            aerodromes = { "maykop" },
+            playtimes = { "45" },
         },
-        -- NorthWest Mountain 1 (center: -206556, 606667, avg elevation 1213m)
-        {
-            vertices = {
-                {x = -206000, y = 604000}, {x = -205000, y = 604000},
-                {x = -205000, y = 607000}, {x = -207000, y = 609000},
-                {x = -209000, y = 609000}, {x = -207000, y = 605000},
-            }
+        central_coast = {
+            name = "Gudauta/Sukhumi Area",
+            aerodromes = { "gudauta", "sukhumi" },
+            playtimes = { "45", "90" },
         },
-        -- NorthWest Hill 70 - major Caucasus ridge (7577 km2, avg 2220m, steep slopes)
-        {
-            vertices = {
-                {x = -153000, y = 535000}, {x = -135000, y = 733000},
-                {x = -135000, y = 735000}, {x = -138000, y = 741000},
-                {x = -179000, y = 822000}, {x = -187000, y = 824000},
-                {x = -190000, y = 824000}, {x = -233000, y = 810000},
-                {x = -237000, y = 808000}, {x = -242000, y = 803000},
-                {x = -242000, y = 800000}, {x = -238000, y = 734000},
-            }
+        southwest_coast = {
+            name = "Kobuleti/Senaki/Kutaisi Area",
+            aerodromes = { "kobuleti", "senaki", "kutaisi" },
+            playtimes = { "90" },
         },
-        -- NorthWest Hill 75 (1780 km2, avg 2383m)
-        {
-            vertices = {
-                {x = -217000, y = 844000}, {x = -212000, y = 804000},
-                {x = -209000, y = 801000}, {x = -201000, y = 801000},
-                {x = -198000, y = 802000}, {x = -197000, y = 803000},
-                {x = -175000, y = 833000}, {x = -175000, y = 836000},
-                {x = -179000, y = 871000}, {x = -190000, y = 896000},
-                {x = -194000, y = 898000}, {x = -199000, y = 900000},
-            }
+        northeast = {
+            name = "Mozdok Area",
+            aerodromes = { "mozdok" },
+            playtimes = { "180" },
+        },
+        southeast = {
+            name = "Tbilisi/Vaziani Area",
+            aerodromes = { "tbilisi", "vaziani" },
+            playtimes = { "180" },
         },
     },
 
-    -- Battlefield zones by playtime
-    battlefieldZones = {
-        ["45"] = {
-            center = { x = -40000, y = 320000 },
-            radius = 30000, -- 30 km
-            name = "Anapa/Novorossiysk Area",
-            description = "Close Air Support",
-        },
-        ["90"] = {
-            center = { x = -220000, y = 560000 },
-            radius = 50000, -- 50 km
-            name = "Sukhumi/Zugdidi Area",
-            description = "Interdiction",
-        },
-        ["180"] = {
-            center = { x = -290000, y = 700000 },
-            radius = 60000, -- 60 km
-            name = "Kutaisi/Tbilisi Area",
-            description = "Deep Strike",
-        },
+    -- Battlefield spawning distances from aerodromes
+    battlefieldDistance = {
+        min = 16000,  -- 10 miles in meters
+        max = 64000,  -- 40 miles in meters
     },
 
     -- Frontline generation parameters
@@ -146,9 +129,9 @@ OperationInfinity.state = {
 
     -- Generated battlefield
     battlefield = {
-        center = nil,
-        radius = nil,
-        sectors = {},
+        region = nil,           -- Selected aerodrome region
+        targetAerodromes = {},  -- Aerodromes in the selected region
+        sectors = {},           -- Generated frontline sectors
     },
 
     -- Menu tracking
@@ -197,39 +180,39 @@ function OperationInfinity:randomPointInRadius(center, radius)
     }
 end
 
+-- Select a random region that matches the given playtime
+function OperationInfinity:selectRegionForPlaytime(playtime)
+    local matchingRegions = {}
+    for key, region in pairs(self.config.aerodromeRegions) do
+        for _, pt in ipairs(region.playtimes) do
+            if pt == playtime then
+                table.insert(matchingRegions, { key = key, region = region })
+                break
+            end
+        end
+    end
+    if #matchingRegions == 0 then
+        self:log("WARNING: No regions match playtime " .. playtime)
+        return nil
+    end
+    return matchingRegions[math.random(#matchingRegions)]
+end
+
+-- Generate a random position within 10-40 miles of a given aerodrome
+function OperationInfinity:randomPointNearAerodrome(aerodrome)
+    local minDist = self.config.battlefieldDistance.min
+    local maxDist = self.config.battlefieldDistance.max
+    local angle = math.random() * 2 * math.pi
+    local distance = minDist + math.random() * (maxDist - minDist)
+    return {
+        x = aerodrome.x + distance * math.cos(angle),
+        y = aerodrome.y + distance * math.sin(angle),
+    }
+end
+
 -- =============================================================================
 -- TERRAIN VALIDATION
 -- =============================================================================
-
--- Point-in-polygon test using ray casting algorithm
-function OperationInfinity:pointInPolygon(point, polygon)
-    local x, y = point.x, point.y
-    local inside = false
-    local n = #polygon
-
-    local j = n
-    for i = 1, n do
-        local xi, yi = polygon[i].x, polygon[i].y
-        local xj, yj = polygon[j].x, polygon[j].y
-
-        if ((yi > y) ~= (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi) + xi) then
-            inside = not inside
-        end
-        j = i
-    end
-
-    return inside
-end
-
--- Check if position falls within any terrain exclusion zone
-function OperationInfinity:isInExclusionZone(pos)
-    for _, zone in ipairs(self.config.terrainExclusions) do
-        if self:pointInPolygon(pos, zone.vertices) then
-            return true
-        end
-    end
-    return false
-end
 
 -- Calculate maximum slope around a position by sampling 8 points
 function OperationInfinity:calculateMaxSlope(center, sampleRadius)
@@ -325,11 +308,6 @@ function OperationInfinity:isValidTerrainForUnits(center, options)
     local maxSlope = options.maxSlope or self.config.terrain.defaultMaxSlope
     local maxRoughness = options.maxRoughness or self.config.terrain.defaultMaxRoughness
     local maxRoadDistance = options.maxRoadDistance -- nil means no road requirement
-
-    -- Check exclusion zones first (fastest check)
-    if self:isInExclusionZone(center) then
-        return false, "in exclusion zone"
-    end
 
     -- Check surface type
     if not self:isValidSurfaceType(center) then
@@ -637,19 +615,34 @@ end
 function OperationInfinity:generateBattlefield()
     self.state.missionGenerated = true
 
-    local zone = self.config.battlefieldZones[self.state.playtime]
-    self.state.battlefield.center = zone.center
-    self.state.battlefield.radius = zone.radius
+    -- Select a region for this playtime
+    local selected = self:selectRegionForPlaytime(self.state.playtime)
+    if not selected then
+        trigger.action.outTextForCoalition(coalition.side.BLUE,
+            "ERROR: No region available for playtime " .. self.state.playtime, 15)
+        return
+    end
+
+    self.state.battlefield.region = selected.region
+    self.state.battlefield.targetAerodromes = {}
+
+    -- Populate target aerodromes from the selected region
+    for _, key in ipairs(selected.region.aerodromes) do
+        local aerodrome = self.config.aerodromes[key]
+        if aerodrome then
+            table.insert(self.state.battlefield.targetAerodromes, aerodrome)
+        end
+    end
 
     trigger.action.outTextForCoalition(coalition.side.BLUE,
         "=== OPERATION INFINITY ===\n" ..
         "Difficulty: " .. self.state.difficulty .. "\n" ..
         "Playtime: " .. self.state.playtime .. " minutes\n" ..
-        "Area: " .. zone.name .. "\n\n" ..
+        "Target Area: " .. selected.region.name .. "\n\n" ..
         "Generating battlefield...", 15)
 
     self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
-        ", Playtime: " .. self.state.playtime)
+        ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
 
     -- Generate frontline sectors
     self:generateFrontlineSectors()
@@ -707,22 +700,21 @@ function OperationInfinity:generateFrontlineSectors()
 end
 
 function OperationInfinity:generateSector(index)
-    -- Position sectors in a spread pattern
-    local angle = ((index - 1) / 5) * 2 * math.pi + (math.random() - 0.5) * 0.5
-    local distance = self.state.battlefield.radius * (0.3 + math.random() * 0.5)
+    -- Pick a random target aerodrome from the selected region
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
 
-    local sectorCenter = {
-        x = self.state.battlefield.center.x + distance * math.cos(angle),
-        y = self.state.battlefield.center.y + distance * math.sin(angle),
-    }
+    -- Generate position 10-40 miles from the aerodrome
+    local sectorCenter = self:randomPointNearAerodrome(aerodrome)
 
     local numPairs = self:randomInRange(
         self.config.frontline.platoonPairsMin,
         self.config.frontline.platoonPairsMax
     )
 
-    self:log("Sector " .. index .. ": " .. numPairs .. " platoon pairs at (" ..
-        math.floor(sectorCenter.x) .. ", " .. math.floor(sectorCenter.y) .. ")")
+    self:log("Sector " .. index .. ": " .. numPairs .. " platoon pairs near " ..
+        aerodrome.name .. " at (" .. math.floor(sectorCenter.x) .. ", " ..
+        math.floor(sectorCenter.y) .. ")")
 
     -- Generate platoon pairs
     for j = 1, numPairs do
@@ -955,19 +947,17 @@ function OperationInfinity:generateBehindLinesTargets()
 end
 
 function OperationInfinity:generateConvoy(index)
-    -- Position convoys behind Erusean lines (north of battlefield center)
-    local initialPos = {
-        x = self.state.battlefield.center.x + (math.random() - 0.5) * self.state.battlefield.radius,
-        y = self.state.battlefield.center.y + self.state.battlefield.radius * 0.3 +
-            math.random() * self.state.battlefield.radius * 0.5,
-    }
+    -- Pick a random target aerodrome and position convoy near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local initialPos = self:randomPointNearAerodrome(aerodrome)
 
     -- Convoys should be near roads (within 100m)
     local pos, valid = self:findValidPosition(initialPos, 200, {
         maxRoadDistance = 100,
     })
     if not valid then
-        self:log("Skipping Convoy-" .. index .. " - no valid terrain near roads")
+        self:log("Skipping Convoy-" .. index .. " near " .. aerodrome.name .. " - no valid terrain near roads")
         return
     end
 
@@ -991,19 +981,17 @@ function OperationInfinity:generateConvoy(index)
 end
 
 function OperationInfinity:generateArtilleryBattery(index)
-    -- Position artillery further behind lines
-    local initialPos = {
-        x = self.state.battlefield.center.x + (math.random() - 0.5) * self.state.battlefield.radius * 0.8,
-        y = self.state.battlefield.center.y + self.state.battlefield.radius * 0.5 +
-            math.random() * self.state.battlefield.radius * 0.3,
-    }
+    -- Pick a random target aerodrome and position artillery near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local initialPos = self:randomPointNearAerodrome(aerodrome)
 
     -- Artillery needs flatter terrain (8 degree max slope)
     local pos, valid = self:findValidPosition(initialPos, 300, {
         maxSlope = 8,
     })
     if not valid then
-        self:log("Skipping Artillery-" .. index .. " - no valid flat terrain")
+        self:log("Skipping Artillery-" .. index .. " near " .. aerodrome.name .. " - no valid flat terrain")
         return
     end
 
@@ -1047,16 +1035,15 @@ function OperationInfinity:generateArtilleryBattery(index)
 end
 
 function OperationInfinity:generatePatrolGroup(index)
-    -- Scatter patrol groups throughout the battlefield
-    local initialPos = self:randomPointInRadius(
-        self.state.battlefield.center,
-        self.state.battlefield.radius * 0.9
-    )
+    -- Pick a random target aerodrome and position patrol near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local initialPos = self:randomPointNearAerodrome(aerodrome)
 
     -- Find valid terrain for patrol
     local pos, valid = self:findValidPosition(initialPos, 150)
     if not valid then
-        self:log("Skipping Patrol-" .. index .. " - no valid terrain")
+        self:log("Skipping Patrol-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
         return
     end
 
@@ -1114,19 +1101,24 @@ function OperationInfinity:generateAirDefenses()
 end
 
 function OperationInfinity:generateSAMSite(samType, template, index)
-    -- Position SAM sites within battlefield, with heavier ones further back
-    local distanceMultiplier = 0.5
+    -- Pick a random target aerodrome and position SAM site near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+
+    -- Position SAM sites closer to aerodrome than frontline units
+    -- Heavier SAMs positioned closer to protect the aerodrome
+    local minDist = 5000  -- 5 km minimum from aerodrome
+    local maxDist = 30000 -- 30 km max
     if samType == "SA10" or samType == "SA11" then
-        distanceMultiplier = 0.7 -- Longer range SAMs further back
+        maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
     end
 
     local angle = math.random() * 2 * math.pi
-    local distance = self.state.battlefield.radius * distanceMultiplier +
-        math.random() * self.state.battlefield.radius * 0.3
+    local distance = minDist + math.random() * (maxDist - minDist)
 
     local pos = {
-        x = self.state.battlefield.center.x + distance * math.cos(angle),
-        y = self.state.battlefield.center.y + distance * math.sin(angle),
+        x = aerodrome.x + distance * math.cos(angle),
+        y = aerodrome.y + distance * math.sin(angle),
     }
 
     local units = self:buildSAMUnits(template, pos)
@@ -1195,13 +1187,19 @@ function OperationInfinity:generateEWRs()
     local count = self:randomInRange(ewrCountRange[1], ewrCountRange[2])
 
     for i = 1, count do
-        -- Position EWRs on high ground throughout the area
-        local angle = (i - 1) * (2 * math.pi / count) + math.random() * 0.5
-        local distance = self.state.battlefield.radius * 0.6 + math.random() * self.state.battlefield.radius * 0.3
+        -- Pick a random target aerodrome and position EWR near it
+        local aerodromes = self.state.battlefield.targetAerodromes
+        local aerodrome = aerodromes[math.random(#aerodromes)]
+
+        -- Position EWRs at moderate distance from aerodrome
+        local minDist = 10000  -- 10 km minimum
+        local maxDist = 40000  -- 40 km max
+        local angle = math.random() * 2 * math.pi
+        local distance = minDist + math.random() * (maxDist - minDist)
 
         local pos = {
-            x = self.state.battlefield.center.x + distance * math.cos(angle),
-            y = self.state.battlefield.center.y + distance * math.sin(angle),
+            x = aerodrome.x + distance * math.cos(angle),
+            y = aerodrome.y + distance * math.sin(angle),
         }
 
         local units = {}
@@ -1267,22 +1265,25 @@ function OperationInfinity:displayCoordinates()
         return
     end
 
-    local center = self.state.battlefield.center
-    local zone = self.config.battlefieldZones[self.state.playtime]
+    local region = self.state.battlefield.region
+    local aerodromes = self.state.battlefield.targetAerodromes
 
-    local llStr, mgrsStr = self:formatCoordinates(center)
+    -- Build list of aerodrome coordinates
+    local coordLines = {}
+    for _, aerodrome in ipairs(aerodromes) do
+        local llStr, mgrsStr = self:formatCoordinates(aerodrome)
+        table.insert(coordLines, string.format("  %s:\n    MGRS: %s\n    LL: %s",
+            aerodrome.name, mgrsStr, llStr))
+    end
 
     local msg = string.format(
         "=== TARGET AREA ===\n" ..
         "%s\n\n" ..
-        "Center:\n" ..
-        "  MGRS: %s\n" ..
-        "  LL: %s\n\n" ..
-        "Radius: %d km\n\n" ..
+        "Target Aerodromes:\n%s\n\n" ..
         "Difficulty: %s\n" ..
         "Good hunting!",
-        zone.name, mgrsStr, llStr,
-        zone.radius / 1000,
+        region.name,
+        table.concat(coordLines, "\n"),
         self.state.difficulty
     )
 
