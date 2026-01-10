@@ -984,7 +984,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- AWACS: E-3A Overlord (starts uncontrolled at Krymsk, activated by script)
+                            -- AWACS: E-3A Overlord (late activation, spawned by script)
                             [12] = {
                                 ["groupId"] = 12,
                                 ["name"] = "Overlord",
@@ -993,9 +993,9 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 255.5,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = true,
+                                ["uncontrolled"] = false,
                                 ["hidden"] = false,
-                                ["lateActivation"] = false,
+                                ["lateActivation"] = true,
                                 ["x"] = -6800,
                                 ["y"] = 293500,
                                 ["units"] = {
@@ -1145,7 +1145,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Texaco (Boom) (starts uncontrolled at Krymsk, activated by script)
+                            -- Tanker: KC-135 Texaco (Boom) (late activation, spawned by script)
                             [13] = {
                                 ["groupId"] = 13,
                                 ["name"] = "Texaco",
@@ -1154,9 +1154,9 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.5,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = true,
+                                ["uncontrolled"] = false,
                                 ["hidden"] = false,
-                                ["lateActivation"] = false,
+                                ["lateActivation"] = true,
                                 ["x"] = -6900,
                                 ["y"] = 293600,
                                 ["units"] = {
@@ -1327,7 +1327,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135MPRS Arco (Drogue) (starts uncontrolled at Krymsk, activated by script)
+                            -- Tanker: KC-135MPRS Arco (Drogue) (late activation, spawned by script)
                             [14] = {
                                 ["groupId"] = 14,
                                 ["name"] = "Arco",
@@ -1336,9 +1336,9 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.1,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = true,
+                                ["uncontrolled"] = false,
                                 ["hidden"] = false,
-                                ["lateActivation"] = false,
+                                ["lateActivation"] = true,
                                 ["x"] = -7000,
                                 ["y"] = 293700,
                                 ["units"] = {
@@ -1509,7 +1509,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Shell (Slow for A-10s) (starts uncontrolled at Krymsk, activated by script)
+                            -- Tanker: KC-135 Shell (Slow for A-10s) (late activation, spawned by script)
                             [15] = {
                                 ["groupId"] = 15,
                                 ["name"] = "Shell",
@@ -1518,9 +1518,9 @@ mission = {
                                 ["communication"] = true,
                                 ["frequency"] = 270.0,
                                 ["start_time"] = 0,
-                                ["uncontrolled"] = true,
+                                ["uncontrolled"] = false,
                                 ["hidden"] = false,
-                                ["lateActivation"] = false,
+                                ["lateActivation"] = true,
                                 ["x"] = -7100,
                                 ["y"] = 293800,
                                 ["units"] = {

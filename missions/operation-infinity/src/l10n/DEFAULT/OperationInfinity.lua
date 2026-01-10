@@ -2362,55 +2362,83 @@ function OperationInfinity:activateSupportAircraft(regionKey)
     local heading = racetrack.heading or 0
 
     for i, aircraft in ipairs(self.config.supportAircraft) do
+        -- Activate late activation group (spawns the aircraft)
         local group = Group.getByName(aircraft.name)
-        if group and group:isExist() then
-            -- Offset each aircraft's racetrack slightly to avoid collisions
-            -- AWACS highest and furthest back, tankers spread out
-            local altOffset = (i - 1) * 500  -- 500m altitude separation
-            local lateralOffset = (i - 1) * 5000  -- 5km lateral separation
-
-            -- Calculate this aircraft's racetrack center (offset perpendicular to track)
-            local perpHeading = heading + math.pi / 2
-            local centerX = racetrack.x + lateralOffset * math.cos(perpHeading)
-            local centerY = racetrack.y + lateralOffset * math.sin(perpHeading)
-
-            -- Calculate racetrack endpoints
-            local point1 = {
-                x = centerX - halfTrack * math.cos(heading),
-                y = centerY - halfTrack * math.sin(heading),
-            }
-            local point2 = {
-                x = centerX + halfTrack * math.cos(heading),
-                y = centerY + halfTrack * math.sin(heading),
-            }
-
-            local orbitAltitude = aircraft.altitude + altOffset
-
-            -- Enable the group's AI and push orbit task
-            -- Note: uncontrolled groups use setOnOff(), not activate()
-            local controller = group:getController()
-            if controller then
-                controller:setOnOff(true)
-                local orbitTask = {
-                    id = "Orbit",
-                    params = {
-                        pattern = "Race-Track",
-                        point = point1,
-                        point2 = point2,
-                        altitude = orbitAltitude,
-                        speed = aircraft.speed,
-                    },
-                }
-                controller:pushTask(orbitTask)
-
-                self:log("Activated " .. aircraft.name .. " with racetrack at alt " ..
-                    orbitAltitude .. "m, center (" .. math.floor(centerX) .. ", " .. math.floor(centerY) .. ")")
-            else
-                self:log("WARNING: Could not get controller for " .. aircraft.name)
-            end
+        if group then
+            group:activate()
+            self:log("Activated group: " .. aircraft.name)
         else
-            self:log("WARNING: Support aircraft group '" .. aircraft.name .. "' not found")
+            self:log("WARNING: Could not find group to activate: " .. aircraft.name)
         end
+
+        -- Offset each aircraft's racetrack slightly to avoid collisions
+        -- AWACS highest and furthest back, tankers spread out
+        local altOffset = (i - 1) * 500  -- 500m altitude separation
+        local lateralOffset = (i - 1) * 5000  -- 5km lateral separation
+
+        -- Calculate this aircraft's racetrack center (offset perpendicular to track)
+        local perpHeading = heading + math.pi / 2
+        local centerX = racetrack.x + lateralOffset * math.cos(perpHeading)
+        local centerY = racetrack.y + lateralOffset * math.sin(perpHeading)
+
+        -- Calculate racetrack endpoints
+        local point1 = {
+            x = centerX - halfTrack * math.cos(heading),
+            y = centerY - halfTrack * math.sin(heading),
+        }
+        local point2 = {
+            x = centerX + halfTrack * math.cos(heading),
+            y = centerY + halfTrack * math.sin(heading),
+        }
+
+        local orbitAltitude = aircraft.altitude + altOffset
+
+        -- Schedule orbit task to be pushed once aircraft is airborne
+        local orbitTask = {
+            id = "Orbit",
+            params = {
+                pattern = "Race-Track",
+                point = point1,
+                point2 = point2,
+                altitude = orbitAltitude,
+                speed = aircraft.speed,
+            },
+        }
+        local groupName = aircraft.name
+        local logCenterX = math.floor(centerX)
+        local logCenterY = math.floor(centerY)
+
+        -- Poll until aircraft is airborne, then push orbit task
+        local function checkAndPushOrbit()
+            local grp = Group.getByName(groupName)
+            if not grp or not grp:isExist() then
+                return timer.getTime() + 30  -- Group not ready yet, retry
+            end
+
+            local unit = grp:getUnit(1)
+            if not unit or not unit:isExist() then
+                return timer.getTime() + 30  -- Unit not ready yet, retry
+            end
+
+            -- Check if airborne (inAir returns true when not on ground)
+            if unit:inAir() then
+                local ctrl = grp:getController()
+                if ctrl then
+                    ctrl:pushTask(orbitTask)
+                    OperationInfinity:log("Pushed orbit task to " .. groupName ..
+                        " at (" .. logCenterX .. ", " .. logCenterY .. ")")
+                end
+                return nil  -- Done, stop polling
+            else
+                return timer.getTime() + 30  -- Not airborne yet, check again in 30 seconds
+            end
+        end
+
+        -- Start polling after initial delay (60 sec for engine start)
+        timer.scheduleFunction(checkAndPushOrbit, nil, timer.getTime() + 60)
+
+        self:log("Will push orbit task to " .. aircraft.name .. " once airborne, alt " ..
+            orbitAltitude .. "m, center (" .. logCenterX .. ", " .. logCenterY .. ")")
     end
 end
 
