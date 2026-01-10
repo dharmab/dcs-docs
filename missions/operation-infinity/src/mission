@@ -1005,11 +1005,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = 5000,
                                         ["y"] = 320000,
-                                        ["alt"] = 9144,
+                                        ["alt"] = 7925,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
                                         ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["psi"] = 1.5708,
                                         ["onboard_num"] = "001",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1030,7 +1030,7 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 9144,
+                                            ["alt"] = 7925,
                                             ["alt_type"] = "BARO",
                                             ["type"] = "Turning Point",
                                             ["action"] = "Turning Point",
@@ -1073,7 +1073,7 @@ mission = {
                                                             ["id"] = "Orbit",
                                                             ["number"] = 3,
                                                             ["params"] = {
-                                                                ["altitude"] = 9144,
+                                                                ["altitude"] = 7925,
                                                                 ["pattern"] = "Race-Track",
                                                                 ["speed"] = 180,
                                                                 ["point"] = {
@@ -1114,11 +1114,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = 10000,
                                         ["y"] = 305000,
-                                        ["alt"] = 7620,
+                                        ["alt"] = 5486,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
                                         ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["psi"] = 1.5708,
                                         ["onboard_num"] = "002",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1139,7 +1139,7 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 7620,
+                                            ["alt"] = 5486,
                                             ["alt_type"] = "BARO",
                                             ["type"] = "Turning Point",
                                             ["action"] = "Turning Point",
@@ -1203,7 +1203,7 @@ mission = {
                                                             ["id"] = "Orbit",
                                                             ["number"] = 4,
                                                             ["params"] = {
-                                                                ["altitude"] = 7620,
+                                                                ["altitude"] = 5486,
                                                                 ["pattern"] = "Race-Track",
                                                                 ["speed"] = 180,
                                                                 ["point"] = {
@@ -1244,11 +1244,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = 15000,
                                         ["y"] = 310000,
-                                        ["alt"] = 6706,
+                                        ["alt"] = 4877,
                                         ["alt_type"] = "BARO",
                                         ["speed"] = 180,
                                         ["heading"] = 1.5708,
-                                        ["psi"] = -1.5708,
+                                        ["psi"] = 1.5708,
                                         ["onboard_num"] = "003",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -1269,7 +1269,7 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 6706,
+                                            ["alt"] = 4877,
                                             ["alt_type"] = "BARO",
                                             ["type"] = "Turning Point",
                                             ["action"] = "Turning Point",
@@ -1333,7 +1333,7 @@ mission = {
                                                             ["id"] = "Orbit",
                                                             ["number"] = 4,
                                                             ["params"] = {
-                                                                ["altitude"] = 6706,
+                                                                ["altitude"] = 4877,
                                                                 ["pattern"] = "Race-Track",
                                                                 ["speed"] = 180,
                                                                 ["point"] = {
@@ -1343,6 +1343,136 @@ mission = {
                                                                 ["point2"] = {
                                                                     ["x"] = 15000,
                                                                     ["y"] = 360000,
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Tanker: KC-135 Shell (Slow for A-10s)
+                            [15] = {
+                                ["groupId"] = 15,
+                                ["name"] = "Shell",
+                                ["task"] = "Refueling",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 270.0,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["hidden"] = false,
+                                ["x"] = 20000,
+                                ["y"] = 315000,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 15,
+                                        ["name"] = "Shell-1",
+                                        ["type"] = "KC-135",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = 20000,
+                                        ["y"] = 315000,
+                                        ["alt"] = 4572,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 105,
+                                        ["heading"] = 1.5708,
+                                        ["psi"] = 1.5708,
+                                        ["onboard_num"] = "004",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 90700,
+                                            ["flare"] = 0,
+                                            ["chaff"] = 0,
+                                            ["gun"] = 0,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 3,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Shell11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 4572,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = 20000,
+                                            ["y"] = 315000,
+                                            ["speed"] = 105,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = true,
+                                                            ["id"] = "Tanker",
+                                                            ["number"] = 1,
+                                                            ["params"] = {},
+                                                        },
+                                                        [2] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 2,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "ActivateBeacon",
+                                                                    ["params"] = {
+                                                                        ["type"] = 4,
+                                                                        ["system"] = 4,
+                                                                        ["name"] = "Shell",
+                                                                        ["callsign"] = "SHL",
+                                                                        ["frequency"] = 1190000000,
+                                                                        ["channel"] = 102,
+                                                                        ["modeChannel"] = "X",
+                                                                        ["AA"] = true,
+                                                                        ["bearing"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [3] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 3,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "SetUnlimitedFuel",
+                                                                    ["params"] = {
+                                                                        ["value"] = true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [4] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "Orbit",
+                                                            ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["altitude"] = 4572,
+                                                                ["pattern"] = "Race-Track",
+                                                                ["speed"] = 105,
+                                                                ["point"] = {
+                                                                    ["x"] = 20000,
+                                                                    ["y"] = 315000,
+                                                                },
+                                                                ["point2"] = {
+                                                                    ["x"] = 20000,
+                                                                    ["y"] = 365000,
                                                                 },
                                                             },
                                                         },
