@@ -699,6 +699,41 @@ function OperationInfinity:getRandomFormationType()
     return types[math.random(#types)]
 end
 
+-- Get formation type based on position within sector
+-- Center positions use LINE or WEDGE, side positions use WEDGE or ECHELON
+function OperationInfinity:getFormationTypeByPosition(numPairs, pairIndex)
+    local isCenter = false
+
+    if numPairs == 1 then
+        -- Single pair is always center
+        isCenter = true
+    elseif numPairs == 2 then
+        -- First pair is center, second is side
+        isCenter = (pairIndex == 1)
+    else
+        -- For 3+ pairs, middle index is center
+        local middleIndex = math.ceil(numPairs / 2)
+        isCenter = (pairIndex == middleIndex)
+    end
+
+    if isCenter then
+        -- Center formations: LINE (horizontal) or WEDGE (vee)
+        local centerTypes = {
+            self.FormationType.LINE,
+            self.FormationType.WEDGE,
+        }
+        return centerTypes[math.random(#centerTypes)]
+    else
+        -- Side formations: WEDGE (vee) or ECHELON
+        local sideTypes = {
+            self.FormationType.WEDGE,
+            self.FormationType.ECHELON_LEFT,
+            self.FormationType.ECHELON_RIGHT,
+        }
+        return sideTypes[math.random(#sideTypes)]
+    end
+end
+
 -- =============================================================================
 -- UNIT RANDOMIZATION
 -- =============================================================================
@@ -1095,8 +1130,9 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
     local dirY = dy / dist
     local fireOffset = self.config.frontline.fireOffset
 
-    -- Select random formation for this pair
-    local formation = self:getRandomFormationType()
+    -- Select formation based on position (center vs side)
+    local numPairs = sector.platoonPairs
+    local formation = self:getFormationTypeByPosition(numPairs, pairIndex)
 
     -- Build ISAF units with formation and facing
     local isafTemplate = self:randomizeTemplate(UnitTemplates.ISAFPlatoon)
@@ -1158,7 +1194,7 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
         local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
         local eruseaTemplate = self:randomizeTemplate(baseEruseaTemplate)
         local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaSpreadPos, {
-            formation = self:getRandomFormationType(),
+            formation = self:getFormationTypeByPosition(numPairs, pairIndex),
             facing = eFacing,
         })
         -- Erusea fires past ISAF (opposite direction along engagement axis)
