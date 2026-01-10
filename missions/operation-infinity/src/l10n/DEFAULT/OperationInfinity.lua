@@ -148,31 +148,55 @@ OperationInfinity.config = {
     },
 
     -- Aerodrome regions - geographic clusters for each playtime
+    -- spawnConstraints: optional overrides for ISAF spawn positioning
+    --   angleMin/angleMax: radians, 0=East, π/2=North, π=West, 3π/2=South
+    --   minDistance/maxDistance: meters from aerodrome
+    --   noFrontline: if true, skip frontline generation (logistics/defense only)
     aerodromeRegions = {
         northwest = {
             name = "Maykop Area",
             aerodromes = { "maykop" },
             playtimes = { "45" },
+            -- Default spawn constraints work well for Maykop
         },
         central_coast = {
             name = "Gudauta/Sukhumi Area",
             aerodromes = { "gudauta", "sukhumi" },
             playtimes = { "45", "90" },
+            -- Only good place to spawn ISAF is 4-10 miles NW of Gudauta in flat areas
+            spawnConstraints = {
+                angleMin = math.pi * 0.5,   -- North
+                angleMax = math.pi,          -- West (NW quadrant)
+                minDistance = 6500,          -- ~4 miles
+                maxDistance = 16000,         -- ~10 miles
+            },
         },
         southwest_coast = {
             name = "Kobuleti/Senaki/Kutaisi Area",
             aerodromes = { "kobuleti", "senaki", "kutaisi" },
             playtimes = { "90" },
+            -- North or northwest of Senaki, looking for flat areas
+            spawnConstraints = {
+                angleMin = math.pi * 0.5,   -- North
+                angleMax = math.pi,          -- West (NW quadrant)
+                minDistance = 8000,          -- ~5 miles
+                maxDistance = 24000,         -- ~15 miles
+            },
         },
         northeast = {
             name = "Mozdok Area",
             aerodromes = { "mozdok" },
             playtimes = { "180" },
+            -- Default spawn constraints work well for Mozdok
         },
         southeast = {
             name = "Tbilisi/Vaziani Area",
             aerodromes = { "tbilisi", "vaziani" },
             playtimes = { "180" },
+            -- Deep strike area - no good frontline positions, focus on defense and logistics
+            spawnConstraints = {
+                noFrontline = true,
+            },
         },
     },
 
@@ -196,11 +220,21 @@ OperationInfinity.config = {
         enemySpreadRadius = 150,      -- Meters to spread enemy platoons around engagement area
     },
 
-    -- Behind-lines targets
+    -- Behind-lines targets (normal frontline operations)
     behindLines = {
         convoyCount = { 2, 4 },  -- Min/max convoys
         artilleryCount = { 1, 3 }, -- Min/max artillery batteries
         patrolCount = { 3, 6 },  -- Min/max patrol groups
+    },
+
+    -- Deep strike targets (noFrontline regions like Tbilisi)
+    -- More logistics and defense targets to compensate for no frontline
+    deepStrike = {
+        convoyCount = { 5, 8 },       -- More logistics convoys
+        artilleryCount = { 2, 4 },    -- More artillery
+        patrolCount = { 6, 10 },      -- More patrols
+        depotCount = { 2, 4 },        -- Supply depots
+        fuelTankCount = { 3, 6 },     -- Fuel storage
     },
 
     -- SAM site counts by difficulty
@@ -240,6 +274,7 @@ OperationInfinity.state = {
         region = nil,           -- Selected aerodrome region
         targetAerodromes = {},  -- Aerodromes in the selected region
         sectors = {},           -- Generated frontline sectors
+        spawnConstraints = nil, -- Region-specific spawn constraints
     },
 
     -- Menu tracking
@@ -387,11 +422,25 @@ function OperationInfinity:selectRegionForPlaytime(playtime)
     return matchingRegions[math.random(#matchingRegions)]
 end
 
--- Generate a random position within 10-40 miles of a given aerodrome
-function OperationInfinity:randomPointNearAerodrome(aerodrome)
-    local minDist = self.config.battlefieldDistance.min
-    local maxDist = self.config.battlefieldDistance.max
-    local angle = math.random() * 2 * math.pi
+-- Generate a random position near a given aerodrome
+-- Optional constraints table can override default angle and distance ranges
+function OperationInfinity:randomPointNearAerodrome(aerodrome, constraints)
+    constraints = constraints or {}
+
+    -- Use constraints if provided, otherwise use defaults
+    local minDist = constraints.minDistance or self.config.battlefieldDistance.min
+    local maxDist = constraints.maxDistance or self.config.battlefieldDistance.max
+
+    local angle
+    if constraints.angleMin and constraints.angleMax then
+        -- Random angle within the constrained range
+        local angleRange = constraints.angleMax - constraints.angleMin
+        angle = constraints.angleMin + math.random() * angleRange
+    else
+        -- Full 360 degree range
+        angle = math.random() * 2 * math.pi
+    end
+
     local distance = minDist + math.random() * (maxDist - minDist)
     return {
         x = aerodrome.x + distance * math.cos(angle),
@@ -814,6 +863,7 @@ function OperationInfinity:generateBattlefield()
 
     self.state.battlefield.region = selected.region
     self.state.battlefield.targetAerodromes = {}
+    self.state.battlefield.spawnConstraints = selected.region.spawnConstraints or {}
 
     -- Populate target aerodromes from the selected region
     for _, key in ipairs(selected.region.aerodromes) do
@@ -953,8 +1003,9 @@ function OperationInfinity:generateSector(index)
     local aerodromes = self.state.battlefield.targetAerodromes
     local aerodrome = aerodromes[math.random(#aerodromes)]
 
-    -- Generate position 10-40 miles from the aerodrome
-    local sectorCenter = self:randomPointNearAerodrome(aerodrome)
+    -- Generate position from the aerodrome using region-specific constraints
+    local constraints = self.state.battlefield.spawnConstraints
+    local sectorCenter = self:randomPointNearAerodrome(aerodrome, constraints)
 
     local numPairs = self:randomInRange(
         self.config.frontline.platoonPairsMin,
@@ -1214,6 +1265,14 @@ end
 
 -- Batched version of generateFrontlineSectors
 function OperationInfinity:generateFrontlineSectorsBatched(onComplete)
+    -- Check if this region has noFrontline constraint (e.g., Tbilisi deep strike)
+    local constraints = self.state.battlefield.spawnConstraints
+    if constraints and constraints.noFrontline then
+        self:log("Skipping frontline generation - noFrontline constraint active (deep strike zone)")
+        if onComplete then onComplete() end
+        return
+    end
+
     local numSectors = self:randomInRange(
         self.config.frontline.sectorsMin,
         self.config.frontline.sectorsMax
@@ -1399,21 +1458,116 @@ function OperationInfinity:generatePatrolGroup(index)
     })
 end
 
+function OperationInfinity:generateSupplyDepot(index)
+    -- Pick a random target aerodrome and position depot near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+
+    -- Position depots 5-20km from aerodrome
+    local angle = math.random() * 2 * math.pi
+    local distance = 5000 + math.random() * 15000
+    local initialPos = {
+        x = aerodrome.x + distance * math.cos(angle),
+        y = aerodrome.y + distance * math.sin(angle),
+    }
+
+    -- Depots should be near roads and on flat ground
+    local pos, valid = self:findValidPosition(initialPos, 300, {
+        maxSlope = 8,
+        maxRoadDistance = 200,
+    })
+    if not valid then
+        self:log("Skipping Depot-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        return
+    end
+
+    -- Supply depot: trucks and cargo containers
+    local template = {
+        { type = "Ural-375", count = 4 },
+        { type = "Ural-375 PBU", count = 2 },
+        { type = "KAMAZ Truck", count = 2 },
+    }
+    local units = self:buildPlatoonUnits(template, pos, {
+        formation = self.FormationType.LINE,
+        spacing = 15,
+    })
+
+    Virtualization:registerGroup({
+        name = "Depot-" .. index,
+        center = pos,
+        units = units,
+        countryId = country.id.CJTF_RED,
+        category = Group.Category.GROUND,
+    }, {
+        immortal = false,
+        invisible = false,
+    })
+
+    self:log("Generated supply depot at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+end
+
+function OperationInfinity:generateFuelStorage(index)
+    -- Pick a random target aerodrome and position fuel storage near it
+    local aerodromes = self.state.battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+
+    -- Position fuel storage 3-15km from aerodrome
+    local angle = math.random() * 2 * math.pi
+    local distance = 3000 + math.random() * 12000
+    local initialPos = {
+        x = aerodrome.x + distance * math.cos(angle),
+        y = aerodrome.y + distance * math.sin(angle),
+    }
+
+    -- Fuel storage needs flat ground near roads
+    local pos, valid = self:findValidPosition(initialPos, 300, {
+        maxSlope = 5,
+        maxRoadDistance = 300,
+    })
+    if not valid then
+        self:log("Skipping FuelStorage-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        return
+    end
+
+    -- Fuel storage: ATZ fuel trucks (highly explosive targets)
+    local numTrucks = 3 + math.random(3)  -- 3-6 fuel trucks
+    local template = {
+        { type = "ATZ-10", count = numTrucks },
+    }
+    local units = self:buildPlatoonUnits(template, pos, {
+        formation = self.FormationType.LINE,
+        spacing = 20,
+    })
+
+    Virtualization:registerGroup({
+        name = "FuelStorage-" .. index,
+        center = pos,
+        units = units,
+        countryId = country.id.CJTF_RED,
+        category = Group.Category.GROUND,
+    }, {
+        immortal = false,
+        invisible = false,
+    })
+
+    self:log("Generated fuel storage at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+end
+
 -- Batched version of generateBehindLinesTargets
 function OperationInfinity:generateBehindLinesTargetsBatched(onComplete)
+    -- Check if this is a deep strike zone (noFrontline)
+    local constraints = self.state.battlefield.spawnConstraints
+    local isDeepStrike = constraints and constraints.noFrontline
+    local cfg = isDeepStrike and self.config.deepStrike or self.config.behindLines
+
     -- Calculate all counts upfront
-    local numConvoys = self:randomInRange(
-        self.config.behindLines.convoyCount[1],
-        self.config.behindLines.convoyCount[2]
-    )
-    local numArtillery = self:randomInRange(
-        self.config.behindLines.artilleryCount[1],
-        self.config.behindLines.artilleryCount[2]
-    )
-    local numPatrols = self:randomInRange(
-        self.config.behindLines.patrolCount[1],
-        self.config.behindLines.patrolCount[2]
-    )
+    local numConvoys = self:randomInRange(cfg.convoyCount[1], cfg.convoyCount[2])
+    local numArtillery = self:randomInRange(cfg.artilleryCount[1], cfg.artilleryCount[2])
+    local numPatrols = self:randomInRange(cfg.patrolCount[1], cfg.patrolCount[2])
+
+    -- Deep strike adds supply depots and fuel tanks
+    local numDepots = isDeepStrike and self:randomInRange(cfg.depotCount[1], cfg.depotCount[2]) or 0
+    local numFuelTanks = isDeepStrike and self:randomInRange(cfg.fuelTankCount[1], cfg.fuelTankCount[2]) or 0
 
     -- Build work items array
     local workItems = {}
@@ -1426,9 +1580,20 @@ function OperationInfinity:generateBehindLinesTargetsBatched(onComplete)
     for i = 1, numPatrols do
         table.insert(workItems, { type = "patrol", index = i })
     end
+    for i = 1, numDepots do
+        table.insert(workItems, { type = "depot", index = i })
+    end
+    for i = 1, numFuelTanks do
+        table.insert(workItems, { type = "fuel", index = i })
+    end
 
-    self:log("Generating behind-lines targets (batched): " .. numConvoys .. " convoys, " ..
-        numArtillery .. " artillery, " .. numPatrols .. " patrols")
+    local logMsg = "Generating " .. (isDeepStrike and "deep strike" or "behind-lines") ..
+        " targets (batched): " .. numConvoys .. " convoys, " ..
+        numArtillery .. " artillery, " .. numPatrols .. " patrols"
+    if isDeepStrike then
+        logMsg = logMsg .. ", " .. numDepots .. " depots, " .. numFuelTanks .. " fuel tanks"
+    end
+    self:log(logMsg)
 
     BatchScheduler:processArray({
         array = workItems,
@@ -1439,6 +1604,10 @@ function OperationInfinity:generateBehindLinesTargetsBatched(onComplete)
                 OperationInfinity:generateArtilleryBattery(item.index)
             elseif item.type == "patrol" then
                 OperationInfinity:generatePatrolGroup(item.index)
+            elseif item.type == "depot" then
+                OperationInfinity:generateSupplyDepot(item.index)
+            elseif item.type == "fuel" then
+                OperationInfinity:generateFuelStorage(item.index)
             end
         end,
         onComplete = function()
