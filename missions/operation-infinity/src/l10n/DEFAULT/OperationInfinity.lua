@@ -221,7 +221,7 @@ OperationInfinity.config = {
     behindLines = {
         convoyCount = { 2, 4 },  -- Min/max convoys
         artilleryCount = { 1, 3 }, -- Min/max artillery batteries
-        patrolCount = { 3, 6 },  -- Min/max patrol groups
+        patrolCount = { 8, 12 },  -- Min/max patrol groups (scattered single targets)
     },
 
     -- Deep strike targets (noFrontline regions like Tbilisi)
@@ -229,7 +229,7 @@ OperationInfinity.config = {
     deepStrike = {
         convoyCount = { 5, 8 },       -- More logistics convoys
         artilleryCount = { 2, 4 },    -- More artillery
-        patrolCount = { 6, 10 },      -- More patrols
+        patrolCount = { 12, 18 },     -- More scattered patrols (single targets)
         depotCount = { 2, 4 },        -- Supply depots
         fuelTankCount = { 3, 6 },     -- Fuel storage
     },
@@ -1540,19 +1540,27 @@ function OperationInfinity:generatePatrolGroup(index)
         return
     end
 
-    -- Use simple 2-vehicle patrol with random heading
+    -- Get a random scattered patrol type for variety
+    local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
     local patrolHeading = math.random() * 2 * math.pi
-    local template = {
-        { type = "BRDM-2", count = 2 },
-    }
+
+    -- Choose formation based on patrol type
+    local formation = self.FormationType.LINE
+    if patrolType == "TankPatrol" or patrolType == "APCPatrol" then
+        formation = self:getRandomFormationType()
+    end
+
     local units = self:buildPlatoonUnits(template, pos, {
-        formation = self.FormationType.LINE,
+        formation = formation,
         facing = patrolHeading,
         spacing = 25,
     })
 
+    -- Use patrol type in group name for variety
+    local groupName = patrolType .. "-" .. index
+
     Virtualization:registerGroup({
-        name = "Patrol-" .. index,
+        name = groupName,
         center = pos,
         units = units,
         countryId = country.id.CJTF_RED,
@@ -1561,6 +1569,8 @@ function OperationInfinity:generatePatrolGroup(index)
         immortal = false,
         invisible = false,
     })
+
+    self:log("Generated " .. patrolType .. " at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
 end
 
 function OperationInfinity:generateSupplyDepot(index)

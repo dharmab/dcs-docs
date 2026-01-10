@@ -416,6 +416,119 @@ UnitTemplates.ArtilleryBattery = {
 }
 
 -- =============================================================================
+-- SCATTERED PATROL TYPES
+-- Small groups of units spread across the battlefield for fun single targets
+-- =============================================================================
+
+UnitTemplates.ScatteredPatrols = {
+    -- Tank patrols - pair of MBTs
+    TankPatrol = {
+        weight = 15,  -- Relative spawn weight
+        templates = {
+            { {type = "Leclerc", count = 2} },
+            { {type = "Leopard-2", count = 2} },
+            { {type = "Challenger2", count = 2} },
+            { {type = "T-80UD", count = 2} },
+            { {type = "T-72B", count = 2} },
+        },
+    },
+
+    -- AAA positions - single or pair of AAA guns
+    AAAPosition = {
+        weight = 20,
+        templates = {
+            { {type = "Ural-375 ZU-23", count = 1} },
+            { {type = "Ural-375 ZU-23", count = 2} },
+            { {type = "ZSU-23-4 Shilka", count = 1} },
+            { {type = "ZU-23 Emplacement Closed", count = 1} },
+            { {type = "ZU-23 Emplacement", count = 1} },
+        },
+    },
+
+    -- APC/IFV patrols - pair of APCs or IFVs
+    APCPatrol = {
+        weight = 20,
+        templates = {
+            { {type = "Marder", count = 2} },
+            { {type = "BMP-2", count = 2} },
+            { {type = "BMP-3", count = 2} },
+            { {type = "BTR-80", count = 2} },
+            { {type = "Warrior", count = 2} },
+        },
+    },
+
+    -- Scout patrols - light recon vehicles
+    ScoutPatrol = {
+        weight = 15,
+        templates = {
+            { {type = "BRDM-2", count = 2} },
+            { {type = "BTR-80", count = 1}, {type = "BRDM-2", count = 1} },
+            { {type = "BRDM-2", count = 1} },
+        },
+    },
+
+    -- Truck stops - parked logistics vehicles
+    TruckStop = {
+        weight = 15,
+        templates = {
+            { {type = "Ural-375", count = 2} },
+            { {type = "GAZ-66", count = 3} },
+            { {type = "Ural-375", count = 1}, {type = "GAZ-66", count = 1} },
+            { {type = "KAMAZ Truck", count = 2} },
+        },
+    },
+
+    -- MANPADS teams - infantry with portable SAMs
+    MANPADSTeam = {
+        weight = 10,
+        templates = {
+            { {type = "Igla manridge", count = 1} },
+            { {type = "Stinger manridge", count = 1} },
+            { {type = "Igla manridge", count = 2} },
+        },
+    },
+
+    -- Fuel trucks - explosive targets
+    FuelTruck = {
+        weight = 5,
+        templates = {
+            { {type = "ATZ-10", count = 1} },
+            { {type = "ATZ-10", count = 2} },
+        },
+    },
+}
+
+-- Get a random patrol type and template based on weights
+function UnitTemplates:getRandomScatteredPatrol()
+    -- Calculate total weight
+    local totalWeight = 0
+    local patrolTypes = {}
+    for typeName, config in pairs(self.ScatteredPatrols) do
+        totalWeight = totalWeight + config.weight
+        table.insert(patrolTypes, {name = typeName, config = config, weight = config.weight})
+    end
+
+    -- Select type based on weight
+    local roll = math.random() * totalWeight
+    local cumulative = 0
+    local selectedType = patrolTypes[1]
+
+    for _, patrol in ipairs(patrolTypes) do
+        cumulative = cumulative + patrol.weight
+        if roll <= cumulative then
+            selectedType = patrol
+            break
+        end
+    end
+
+    -- Select random template from the chosen type
+    local templates = selectedType.config.templates
+    local template = templates[math.random(#templates)]
+
+    return template, selectedType.name
+end
+
+-- =============================================================================
 -- UNIT SUBSTITUTIONS
 -- =============================================================================
 
