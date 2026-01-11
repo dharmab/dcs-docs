@@ -205,11 +205,13 @@ OperationInfinity.config = {
 
     -- Frontline generation parameters
     frontline = {
-        sectorsMin = 3,
-        sectorsMax = 5,
-        platoonPairsMin = 2,
-        platoonPairsMax = 3,
-        engagementDistanceMin = 300, -- Minimum meters between opposing platoons
+        platoonSpacingMin = 4800,     -- 3 miles in meters (minimum between platoons)
+        platoonSpacingMax = 11300,    -- 7 miles in meters (maximum between platoons)
+        platoonCountMin = 4,          -- Minimum platoons along frontline
+        platoonCountMax = 8,          -- Maximum platoons along frontline
+        wobbleMax = 500,              -- Max perpendicular offset for natural variation
+        terrainSearchRadius = 1000,   -- Search radius for flat terrain
+        engagementDistanceMin = 300,  -- Minimum meters between opposing platoons
         engagementDistanceMax = 1000, -- Maximum meters between opposing platoons
         fireOffset = 300,             -- Meters offset for FireAtPoint (fire past enemies, not at them)
         enemyPlatoonsMin = 2,         -- Min enemy platoons per friendly platoon
@@ -322,7 +324,12 @@ OperationInfinity.state = {
         region = nil,           -- Selected aerodrome region
         regionKey = nil,        -- Key of the selected region (for racetrack lookup)
         targetAerodromes = {},  -- Aerodromes in the selected region
-        sectors = {},           -- Generated frontline sectors
+        frontline = {
+            center = nil,       -- Center point of the frontline
+            axis = nil,         -- Direction vector along the frontline
+            approachDir = nil,  -- Direction vector from Krymsk toward enemy
+            isafPositions = {}, -- ISAF platoon positions for FEBA visualization
+        },
         spawnConstraints = nil, -- Region-specific spawn constraints
     },
 
@@ -388,18 +395,30 @@ function OperationInfinity:addMarker(text, pos)
     )
 end
 
-function OperationInfinity:addFEBAShape(sector, sectorIndex)
+function OperationInfinity:addFEBAShape()
     local lineColor = {0.2, 0.4, 0.9, 1.0}
     local arrowFill = {0.2, 0.4, 0.9, 0.5}
-    local positions = sector.isafPositions
+    local frontline = self.state.battlefield.frontline
+    local positions = frontline.isafPositions
 
     if #positions < 1 then
-        self:log("No ISAF positions for sector " .. sectorIndex .. ", skipping FEBA shape")
+        self:log("No ISAF positions for frontline, skipping FEBA shape")
         return
     end
 
-    -- Sort positions by x coordinate (west to east) for consistent line drawing
-    table.sort(positions, function(a, b) return a.x < b.x end)
+    -- Sort positions along the frontline axis for consistent line drawing
+    local axis = frontline.axis
+    if axis then
+        -- Project each position onto the frontline axis and sort by that value
+        table.sort(positions, function(a, b)
+            local projA = a.x * axis.x + a.y * axis.y
+            local projB = b.x * axis.x + b.y * axis.y
+            return projA < projB
+        end)
+    else
+        -- Fall back to sorting by x coordinate
+        table.sort(positions, function(a, b) return a.x < b.x end)
+    end
 
     -- Draw line segments connecting friendly positions along the front
     for i = 1, #positions - 1 do
@@ -418,11 +437,15 @@ function OperationInfinity:addFEBAShape(sector, sectorIndex)
         )
     end
 
-    -- Draw arrows from each ISAF position pointing toward enemy (east)
+    -- Draw arrows from each ISAF position pointing toward enemy (along approach direction)
     local arrowLength = 400  -- meters
+    local approachDir = frontline.approachDir or {x = 0, y = 1}  -- Default to north if not set
     for _, pos in ipairs(positions) do
         self.state.markerCounter = self.state.markerCounter + 1
-        local arrowEnd = {x = pos.x, y = pos.y + arrowLength}
+        local arrowEnd = {
+            x = pos.x + approachDir.x * arrowLength,
+            y = pos.y + approachDir.y * arrowLength,
+        }
         trigger.action.arrowToAll(
             coalition.side.BLUE,
             self.state.markerCounter,
@@ -436,21 +459,26 @@ function OperationInfinity:addFEBAShape(sector, sectorIndex)
         )
     end
 
-    -- Add sector label south of the front line (behind friendly lines)
+    -- Add FEBA label at center of the frontline (behind friendly lines)
     local centerPos = positions[math.ceil(#positions / 2)]
     self.state.markerCounter = self.state.markerCounter + 1
+    local labelOffset = 200
     trigger.action.textToAll(
         coalition.side.BLUE,
         self.state.markerCounter,
-        {x = centerPos.x, y = land.getHeight(centerPos), z = centerPos.y - 200},
+        {
+            x = centerPos.x - approachDir.x * labelOffset,
+            y = land.getHeight(centerPos),
+            z = centerPos.y - approachDir.y * labelOffset,
+        },
         lineColor,
         {0, 0, 0, 0},  -- transparent background
         12,
         true,
-        "FEBA " .. sectorIndex
+        "FEBA"
     )
 
-    self:log("Added FEBA shape for sector " .. sectorIndex .. " with " .. #positions .. " positions")
+    self:log("Added FEBA shape with " .. #positions .. " positions")
 end
 
 -- Select a random region that matches the given playtime
@@ -987,7 +1015,7 @@ function OperationInfinity:generateBattlefield()
                 name = "frontline",
                 fn = function(ctx, done)
                     progress("Generating frontline...")
-                    OperationInfinity:generateFrontlineSectorsBatched(done)
+                    OperationInfinity:generateFrontlineBatched(done)
                 end,
             },
             {
@@ -1088,59 +1116,107 @@ end
 -- FRONTLINE GENERATION
 -- =============================================================================
 
-function OperationInfinity:generateFrontlineSectors()
-    local numSectors = self:randomInRange(
-        self.config.frontline.sectorsMin,
-        self.config.frontline.sectorsMax
-    )
-
-    self:log("Generating " .. numSectors .. " frontline sectors")
-
-    for i = 1, numSectors do
-        local sector = self:generateSector(i)
-        table.insert(self.state.battlefield.sectors, sector)
-    end
-end
-
-function OperationInfinity:generateSector(index)
-    -- Pick a random target aerodrome from the selected region
+function OperationInfinity:generateFrontline()
+    -- Calculate target centroid (center of all target aerodromes)
     local aerodromes = self.state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local centroid = {x = 0, y = 0}
+    for _, aerodrome in ipairs(aerodromes) do
+        centroid.x = centroid.x + aerodrome.x
+        centroid.y = centroid.y + aerodrome.y
+    end
+    centroid.x = centroid.x / #aerodromes
+    centroid.y = centroid.y / #aerodromes
 
-    -- Generate position from the aerodrome using region-specific constraints
+    -- Calculate approach direction from Krymsk to target centroid
+    local krymsk = self.config.krymsk
+    local dx = centroid.x - krymsk.x
+    local dy = centroid.y - krymsk.y
+    local approachDist = math.sqrt(dx * dx + dy * dy)
+    local approachDir = {x = dx / approachDist, y = dy / approachDist}
+
+    -- Frontline axis is perpendicular to approach direction (rotate 90 degrees)
+    local frontlineAxis = {x = -approachDir.y, y = approachDir.x}
+
+    -- Frontline center: positioned between player base and targets
+    -- Use constraints if available, otherwise use battlefieldDistance
     local constraints = self.state.battlefield.spawnConstraints
-    local sectorCenter = self:randomPointNearAerodrome(aerodrome, constraints)
+    local frontlineDistance
+    if constraints and constraints.minDistance and constraints.maxDistance then
+        frontlineDistance = (constraints.minDistance + constraints.maxDistance) / 2
+    else
+        frontlineDistance = (self.config.battlefieldDistance.min + self.config.battlefieldDistance.max) / 2
+    end
 
-    local numPairs = self:randomInRange(
-        self.config.frontline.platoonPairsMin,
-        self.config.frontline.platoonPairsMax
-    )
-
-    self:log("Sector " .. index .. ": " .. numPairs .. " platoon pairs near " ..
-        aerodrome.name .. " at (" .. math.floor(sectorCenter.x) .. ", " ..
-        math.floor(sectorCenter.y) .. ")")
-
-    -- Create sector object with positions array for map drawing
-    local sector = {
-        center = sectorCenter,
-        platoonPairs = numPairs,
-        isafPositions = {},  -- Stores friendly platoon positions for FEBA visualization
+    -- Position frontline at specified distance from target centroid, toward player
+    local frontlineCenter = {
+        x = centroid.x - approachDir.x * frontlineDistance,
+        y = centroid.y - approachDir.y * frontlineDistance,
     }
 
-    -- Generate platoon pairs (appends positions to sector.isafPositions)
-    for j = 1, numPairs do
-        self:generatePlatoonPair(sector, index, j)
+    -- Store frontline geometry in state
+    self.state.battlefield.frontline.center = frontlineCenter
+    self.state.battlefield.frontline.axis = frontlineAxis
+    self.state.battlefield.frontline.approachDir = approachDir
+
+    -- Determine number of platoons
+    local numPlatoons = self:randomInRange(
+        self.config.frontline.platoonCountMin,
+        self.config.frontline.platoonCountMax
+    )
+
+    self:log("Generating coherent frontline with " .. numPlatoons .. " platoons")
+    self:log("Frontline center: (" .. math.floor(frontlineCenter.x) .. ", " ..
+        math.floor(frontlineCenter.y) .. ")")
+
+    -- Calculate total frontline length and starting position
+    -- Use average spacing to estimate total length, then center it
+    local avgSpacing = (self.config.frontline.platoonSpacingMin + self.config.frontline.platoonSpacingMax) / 2
+    local totalLength = (numPlatoons - 1) * avgSpacing
+    local currentOffset = -totalLength / 2
+
+    -- Generate platoons along the frontline
+    for i = 1, numPlatoons do
+        -- Add random wobble perpendicular to frontline
+        local wobble = (math.random() - 0.5) * 2 * self.config.frontline.wobbleMax
+
+        -- Calculate initial position along frontline
+        local initialPos = {
+            x = frontlineCenter.x + frontlineAxis.x * currentOffset + approachDir.x * wobble,
+            y = frontlineCenter.y + frontlineAxis.y * currentOffset + approachDir.y * wobble,
+        }
+
+        -- Search for valid flat terrain
+        local validPos, isValid = self:findValidPosition(
+            initialPos,
+            self.config.frontline.terrainSearchRadius
+        )
+
+        if isValid then
+            self:generateFrontlinePlatoon(validPos, i)
+            -- Store ISAF position for FEBA visualization
+            table.insert(self.state.battlefield.frontline.isafPositions, validPos)
+            self:log("Platoon " .. i .. " at (" .. math.floor(validPos.x) .. ", " ..
+                math.floor(validPos.y) .. ")")
+        else
+            self:log("Skipping platoon " .. i .. " - no valid terrain at (" ..
+                math.floor(initialPos.x) .. ", " .. math.floor(initialPos.y) .. ")")
+        end
+
+        -- Advance along frontline by random spacing for next platoon
+        local spacing = self:randomInRange(
+            self.config.frontline.platoonSpacingMin,
+            self.config.frontline.platoonSpacingMax
+        )
+        currentOffset = currentOffset + spacing
     end
 
-    -- Generate SHORAD for this sector
-    self:generateSectorSHORAD(sectorCenter, index)
-
-    return sector
+    -- Generate SHORAD positions along the frontline (behind enemy lines)
+    self:generateFrontlineSHORAD()
 end
 
-function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
-    local sectorCenter = sector.center
-    local offset = (pairIndex - 1) * 300 -- Spread pairs along front
+function OperationInfinity:generateFrontlinePlatoon(position, index)
+    -- Use the stored approach direction to determine engagement orientation
+    local approachDir = self.state.battlefield.frontline.approachDir
 
     -- Randomized engagement distance (300-1000m)
     local engageDist = self:randomInRange(
@@ -1148,63 +1224,58 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
         self.config.frontline.engagementDistanceMax
     )
 
-    -- Randomize the front line orientation slightly
-    local frontAngle = math.random() * 0.3 - 0.15 -- Small angle variation
-
-    -- Initial positions
-    local isafPosInitial = {
-        x = sectorCenter.x + offset * math.cos(frontAngle),
-        y = sectorCenter.y - engageDist / 2,
+    -- ISAF position (friendly side, toward Krymsk)
+    local isafPos = {
+        x = position.x - approachDir.x * (engageDist / 2),
+        y = position.y - approachDir.y * (engageDist / 2),
     }
 
-    local eruseaPosInitial = {
-        x = sectorCenter.x + offset * math.cos(frontAngle),
-        y = sectorCenter.y + engageDist / 2,
+    -- Erusea position (enemy side, toward targets)
+    local eruseaPos = {
+        x = position.x + approachDir.x * (engageDist / 2),
+        y = position.y + approachDir.y * (engageDist / 2),
     }
 
-    -- Find valid terrain for ISAF platoon (100m search radius)
-    local isafPos, isafValid = self:findValidPosition(isafPosInitial, 100)
+    -- Find valid terrain for ISAF platoon
+    local isafValidPos, isafValid = self:findValidPosition(isafPos, 100)
     if not isafValid then
-        self:log("Skipping ISAF platoon S" .. sectorIndex .. "-P" .. pairIndex .. " - no valid terrain")
+        self:log("Skipping ISAF platoon " .. index .. " - no valid terrain")
         return
     end
 
-    -- Store ISAF position for FEBA visualization
-    table.insert(sector.isafPositions, isafPos)
-
     -- Find valid terrain for Erusea platoon
-    local eruseaPos, eruseaValid = self:findValidPosition(eruseaPosInitial, 100)
+    local eruseaValidPos, eruseaValid = self:findValidPosition(eruseaPos, 100)
     if not eruseaValid then
-        self:log("Skipping Erusea platoon S" .. sectorIndex .. "-P" .. pairIndex .. " - no valid terrain")
+        self:log("Skipping Erusea platoon " .. index .. " - no valid terrain")
         return
     end
 
     -- Calculate facing directions (toward each other)
-    local isafFacing = math.atan2(eruseaPos.y - isafPos.y, eruseaPos.x - isafPos.x)
-    local eruseaFacing = math.atan2(isafPos.y - eruseaPos.y, isafPos.x - eruseaPos.x)
+    local isafFacing = math.atan2(eruseaValidPos.y - isafValidPos.y, eruseaValidPos.x - isafValidPos.x)
+    local eruseaFacing = math.atan2(isafValidPos.y - eruseaValidPos.y, isafValidPos.x - eruseaValidPos.x)
 
-    -- Calculate unit direction vector for fire offset (along engagement axis)
-    local dx = eruseaPos.x - isafPos.x
-    local dy = eruseaPos.y - isafPos.y
+    -- Calculate direction vector for fire offset
+    local dx = eruseaValidPos.x - isafValidPos.x
+    local dy = eruseaValidPos.y - isafValidPos.y
     local dist = math.sqrt(dx * dx + dy * dy)
     local dirX = dx / dist
     local dirY = dy / dist
     local fireOffset = self.config.frontline.fireOffset
 
-    -- Select formation based on position (center vs side)
-    local numPairs = sector.platoonPairs
-    local formation = self:getFormationTypeByPosition(numPairs, pairIndex)
+    -- Select formation
+    local formation = self:getRandomFormationType()
 
     -- Build ISAF units with formation and facing
     local isafTemplate = self:randomizeTemplate(UnitTemplates.ISAFPlatoon)
-    local isafUnits = self:buildPlatoonUnits(isafTemplate, isafPos, {
+    local isafUnits = self:buildPlatoonUnits(isafTemplate, isafValidPos, {
         formation = formation,
         facing = isafFacing,
     })
-    -- ISAF fires past Erusea (continue along engagement axis)
+
+    -- Register ISAF group (immortal/invisible for visual firefight only)
     Virtualization:registerGroup({
-        name = "ISAF-S" .. sectorIndex .. "-P" .. pairIndex,
-        center = isafPos,
+        name = "ISAF-F" .. index,
+        center = isafValidPos,
         units = isafUnits,
         countryId = country.id.CJTF_BLUE,
         category = Group.Category.GROUND,
@@ -1213,14 +1284,14 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
         invisible = true,
         holdFire = true,
         fireAtPoint = {
-            x = eruseaPos.x + dirX * fireOffset,
-            y = eruseaPos.y + dirY * fireOffset,
+            x = eruseaValidPos.x + dirX * fireOffset,
+            y = eruseaValidPos.y + dirY * fireOffset,
             radius = 50,
             expendQty = 200,
         },
     })
 
-    -- Build multiple Erusea platoons (2-3x for each ISAF platoon)
+    -- Build multiple Erusea platoons
     local numEruseaPlatoons = self:randomInRange(
         self.config.frontline.enemyPlatoonsMin,
         self.config.frontline.enemyPlatoonsMax
@@ -1229,38 +1300,34 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
     local spreadRadius = self.config.frontline.enemySpreadRadius
 
     for e = 1, numEruseaPlatoons do
-        -- Spread enemy platoons around the base position
         local eruseaSpreadPos
         if e == 1 then
-            eruseaSpreadPos = eruseaPos
+            eruseaSpreadPos = eruseaValidPos
         else
-            -- Offset additional platoons to the sides and slightly back
-            local spreadAngle = (e - 1) * (math.pi / 3) -- 60 degree increments
+            local spreadAngle = (e - 1) * (math.pi / 3)
             eruseaSpreadPos = {
-                x = eruseaPos.x + spreadRadius * math.cos(spreadAngle),
-                y = eruseaPos.y + spreadRadius * 0.5 * math.sin(spreadAngle),
+                x = eruseaValidPos.x + spreadRadius * math.cos(spreadAngle),
+                y = eruseaValidPos.y + spreadRadius * 0.5 * math.sin(spreadAngle),
             }
-            -- Validate terrain for spread position
             local validSpreadPos, spreadValid = self:findValidPosition(eruseaSpreadPos, 50)
             if spreadValid then
                 eruseaSpreadPos = validSpreadPos
             else
-                eruseaSpreadPos = eruseaPos -- Fall back to base position
+                eruseaSpreadPos = eruseaValidPos
             end
         end
 
-        -- Calculate facing toward ISAF position
-        local eFacing = math.atan2(isafPos.y - eruseaSpreadPos.y, isafPos.x - eruseaSpreadPos.x)
+        local eFacing = math.atan2(isafValidPos.y - eruseaSpreadPos.y, isafValidPos.x - eruseaSpreadPos.x)
 
         local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
         local eruseaTemplate = self:randomizeTemplate(baseEruseaTemplate)
         local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaSpreadPos, {
-            formation = self:getFormationTypeByPosition(numPairs, pairIndex),
+            formation = formation,
             facing = eFacing,
         })
-        -- Erusea fires past ISAF (opposite direction along engagement axis)
+
         Virtualization:registerGroup({
-            name = "Erusea-S" .. sectorIndex .. "-P" .. pairIndex .. "-" .. e,
+            name = "Erusea-F" .. index .. "-" .. e,
             center = eruseaSpreadPos,
             units = eruseaUnits,
             countryId = country.id.CJTF_RED,
@@ -1269,12 +1336,57 @@ function OperationInfinity:generatePlatoonPair(sector, sectorIndex, pairIndex)
             immortal = false,
             invisible = false,
             fireAtPoint = {
-                x = isafPos.x - dirX * fireOffset,
-                y = isafPos.y - dirY * fireOffset,
+                x = isafValidPos.x - dirX * fireOffset,
+                y = isafValidPos.y - dirY * fireOffset,
                 radius = 50,
                 expendQty = 200,
             },
         })
+    end
+end
+
+function OperationInfinity:generateFrontlineSHORAD()
+    -- Generate SHORAD along the frontline, positioned behind enemy lines
+    local diff = self.state.difficulty
+    local shoradTemplate = UnitTemplates.SHORAD[diff]
+
+    if not shoradTemplate or #shoradTemplate == 0 then
+        return
+    end
+
+    local frontline = self.state.battlefield.frontline
+    local approachDir = frontline.approachDir
+    local positions = frontline.isafPositions
+
+    -- Place SHORAD near every 2nd or 3rd platoon position
+    local shoradIndex = 0
+    for i = 1, #positions, 2 do
+        shoradIndex = shoradIndex + 1
+        local pos = positions[i]
+
+        -- Position SHORAD 1000 ± 500 meters behind Erusean lines
+        local offsetDist = 1000 + (math.random() - 0.5) * 1000
+        local shoradPos = {
+            x = pos.x + approachDir.x * offsetDist,
+            y = pos.y + approachDir.y * offsetDist,
+        }
+
+        local validPos, isValid = self:findValidPosition(shoradPos, 200)
+        if isValid then
+            local template = self:randomizeTemplate(shoradTemplate)
+            local units = self:buildPlatoonUnits(template, validPos, {
+                formation = self:getRandomFormationType(),
+                facing = math.atan2(-approachDir.y, -approachDir.x),
+            })
+
+            Virtualization:registerGroup({
+                name = "SHORAD-F" .. shoradIndex,
+                center = validPos,
+                units = units,
+                countryId = country.id.CJTF_RED,
+                category = Group.Category.GROUND,
+            }, {})
+        end
     end
 end
 
@@ -1329,47 +1441,8 @@ function OperationInfinity:buildPlatoonUnits(template, center, options)
     return units
 end
 
-function OperationInfinity:generateSectorSHORAD(sectorCenter, sectorIndex)
-    local diff = self.state.difficulty
-    local shoradTemplate = UnitTemplates.SHORAD[diff]
-
-    if not shoradTemplate or #shoradTemplate == 0 then
-        return
-    end
-
-    -- Position SHORAD slightly behind Erusean lines
-    local initialPos = {
-        x = sectorCenter.x + (math.random() - 0.5) * 500,
-        y = sectorCenter.y + 1000 + math.random() * 500,
-    }
-
-    -- Find valid terrain for SHORAD
-    local shoradPos, valid = self:findValidPosition(initialPos, 200)
-    if not valid then
-        self:log("Skipping SHORAD-S" .. sectorIndex .. " - no valid terrain")
-        return
-    end
-
-    -- Apply template randomization and random formation
-    local template = self:randomizeTemplate(shoradTemplate)
-    local units = self:buildPlatoonUnits(template, shoradPos, {
-        formation = self:getRandomFormationType(),
-    })
-
-    Virtualization:registerGroup({
-        name = "SHORAD-S" .. sectorIndex,
-        center = shoradPos,
-        units = units,
-        countryId = country.id.CJTF_RED,
-        category = Group.Category.GROUND,
-    }, {
-        immortal = false,
-        invisible = false,
-    })
-end
-
--- Batched version of generateFrontlineSectors
-function OperationInfinity:generateFrontlineSectorsBatched(onComplete)
+-- Batched version of generateFrontline
+function OperationInfinity:generateFrontlineBatched(onComplete)
     -- Check if this region has noFrontline constraint (e.g., Tbilisi deep strike)
     local constraints = self.state.battlefield.spawnConstraints
     if constraints and constraints.noFrontline then
@@ -1378,29 +1451,10 @@ function OperationInfinity:generateFrontlineSectorsBatched(onComplete)
         return
     end
 
-    local numSectors = self:randomInRange(
-        self.config.frontline.sectorsMin,
-        self.config.frontline.sectorsMax
-    )
+    -- Generate the coherent frontline (all platoons along a single line)
+    self:generateFrontline()
 
-    self:log("Generating " .. numSectors .. " frontline sectors (batched)")
-
-    -- Build array of sector indices to process
-    local sectorIndices = {}
-    for i = 1, numSectors do
-        table.insert(sectorIndices, i)
-    end
-
-    BatchScheduler:processArray({
-        array = sectorIndices,
-        callback = function(sectorIndex)
-            local sector = OperationInfinity:generateSector(sectorIndex)
-            table.insert(OperationInfinity.state.battlefield.sectors, sector)
-        end,
-        onComplete = function()
-            if onComplete then onComplete() end
-        end,
-    })
+    if onComplete then onComplete() end
 end
 
 -- =============================================================================
@@ -1489,14 +1543,15 @@ function OperationInfinity:generateArtilleryBattery(index)
     end
 
     -- Find a frontline position to fire at
-    local targetSector = self.state.battlefield.sectors[math.random(#self.state.battlefield.sectors)]
+    local frontlinePositions = self.state.battlefield.frontline.isafPositions
     local fireTarget = nil
     local facingDirection = math.random() * 2 * math.pi
 
-    if targetSector then
+    if #frontlinePositions > 0 then
+        local targetPos = frontlinePositions[math.random(#frontlinePositions)]
         fireTarget = {
-            x = targetSector.center.x + (math.random() - 0.5) * 500,
-            y = targetSector.center.y - 400, -- Aim at ISAF side
+            x = targetPos.x + (math.random() - 0.5) * 500,
+            y = targetPos.y + (math.random() - 0.5) * 500,
             radius = 100,
             expendQty = 500,
         }
@@ -2266,10 +2321,8 @@ end
 function OperationInfinity:generateMapMarkers()
     self:log("Generating map markers...")
 
-    -- Draw FEBA shapes (lines and arrows showing engagement axis)
-    for i, sector in ipairs(self.state.battlefield.sectors) do
-        self:addFEBAShape(sector, i)
-    end
+    -- Draw FEBA shape (line and arrows showing frontline)
+    self:addFEBAShape()
 
     -- Mark target aerodromes with inaccuracy (1-3 km offset)
     for _, aerodrome in ipairs(self.state.battlefield.targetAerodromes) do
@@ -2295,14 +2348,10 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
     -- Build array of all markers to create
     local markerItems = {}
 
-    -- FEBA sector shapes (lines and arrows showing engagement axis)
-    for i, sector in ipairs(self.state.battlefield.sectors) do
-        table.insert(markerItems, {
-            type = "feba_shape",
-            sectorIndex = i,
-            sector = sector,
-        })
-    end
+    -- FEBA shape (single frontline)
+    table.insert(markerItems, {
+        type = "feba_shape",
+    })
 
     -- Aerodrome objective markers
     for _, aerodrome in ipairs(self.state.battlefield.targetAerodromes) do
@@ -2322,7 +2371,7 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
         array = markerItems,
         callback = function(item)
             if item.type == "feba_shape" then
-                OperationInfinity:addFEBAShape(item.sector, item.sectorIndex)
+                OperationInfinity:addFEBAShape()
             else
                 OperationInfinity:addMarker(item.label, item.pos)
                 OperationInfinity:log("Added " .. item.type .. " marker: " .. item.label)
@@ -2481,7 +2530,7 @@ function OperationInfinity:getStats()
         missionGenerated = self.state.missionGenerated,
         difficulty = self.state.difficulty,
         playtime = self.state.playtime,
-        sectors = #self.state.battlefield.sectors,
+        frontlinePlatoons = #self.state.battlefield.frontline.isafPositions,
         virtualization = virtStats,
         airIntercept = airStats,
         iads = iadsStats,
