@@ -1,0 +1,39 @@
+# SA342Minigun Liveries
+
+| Folder Name | Display Name |
+|-------------|--------------|
+| CYP Air Force Sand | CYP Air Force Sand |
+| FR ALAT CE 1985 | FR ALAT CE 1985 |
+| FR ALAT CE Barkhane 2014 | FR ALAT CE Barkhane 2014 |
+| FR ALAT CE Daguet 1990 | FR ALAT CE Daguet 1990 |
+| FR ALAT CE EALAT | FR ALAT CE EALAT |
+| FR ALAT CE OPEX | FR ALAT CE OPEX |
+| FR ALAT HRI 1981 | FR ALAT HRI 1975 |
+| FR ALAT HRI Daguet 1990 | FR ALAT HRI Daguet 1990 |
+| FR ALAT HRI KFOR 1999 | FR ALAT HRI KFOR 1999 |
+| FR ALAT SABLE Daguet 1990 | FR ALAT SABLE Daguet 1990 |
+| FR ALAT SABLE Djibouti 2003 | FR ALAT SABLE Djibouti 2003 |
+| GEN Black | Generic Black - low vis |
+| GEN Navy | Generic Navy - Grey |
+| GEN Olive Drab | Generic Olive Drab |
+| GER Army GB | GER Army Green / Black |
+| LEB Air Force GG | LEB Air Force Green / Grey |
+| NATO_Drab_Hel | Hellenic Airforce Olive Drab |
+| NATO_Drab_NL | RNLAF Olive Drab |
+| NATO_Drab_UK | UK Army Air Corps Olive Drab |
+| NATO_Drab_US | US Army Olive Drab |
+| SRB Air Force Green | SRB Air Force Green |
+| SWE_FOA | SE Air Force FOA |
+| SYR Airforce ST | SYR Air Force Sand Teal |
+| UK Army BATUS | UK Army Air Corps BATUS |
+| UK Army BATUS Orange | UK Army Air Corps BATUS Orange |
+| UK Army GB | UK Army Air Corps Green/Black |
+| UK Army GB UN | UK Army Air Corps Green/Black UN |
+| UK Army GG | UK Army Air Corps Grey/Green |
+| UK Army Granby | UK Desert Army Air Corps - Operation Granby |
+| UK Marines GB | UK Royal Marines Green/Black |
+| UK Marines GG | UK Royal Marines Grey/Green |
+| UK Navy Red | UK Royal Navy Air 705 Squadron |
+| UK RAF Red | UK Royal Air Force N0. 2 FTS |
+| US Marines Grey | US Marines Grey |
+| YUG Air Force GB | YUG Air Force Green Brown |
