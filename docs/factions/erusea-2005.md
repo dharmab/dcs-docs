@@ -6,19 +6,34 @@ Inspired by Western European nations, particularly France, Germany, and Italy, w
 
 ## Aircraft
 
-- F-14A
-- F/A-18A
-- F/A-18C
-- F-16A
-- F-16C bl.50
+- F-14A-135-GR
+- F/A-18C Lot 20
+- F-16CM bl.50
 - Tornado IDS
+  - jagdbombergeschwader 31 `boelcke` norvenich ab luftwaffe
+  - jagdbombergeschwader 32 lechfeld ab luftwaffe
+  - jagdbombergeschwader 33 buchel ab no. 43+19 experimental scheme
+  - marinefliegergeschwader 2 eggebek ab marineflieger
 - F-15C
+  - 65th Aggressor SQN (WA) MiG
 - F-15E
+  - IDF No 69 Hammers Squadron
 - AV8BNA
-- MiG-29A
+  - VMA-542
+- MiG-29A Fulcrum
 - MiG-29S
+  - 115 GvIAP_Termez
+  - 28 GvIAP_Andreapol
+  - 426th Air Group_Erebuni
+  - 773 IAP_Damgarten
+  - KazAADF old (fictional)
 - Su-27 (uncommon ace aircraft)
+  - Algerian AF BLUE 02
+  - Besovets AFB
 - J-11A (uncommon ace aircraft)
+  - PLAAF OPFOR 'Desert' (Fictional)
+  - PLAAF OPFOR 'Jungle' (Fictional)
+  - USAF 65th Aggressor SQN 'Desert' (Fictional)
 
 ## Helicopters
 
