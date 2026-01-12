@@ -1390,8 +1390,11 @@ function OperationInfinity:updateFireTargets()
                         }
                     }
 
-                    group:getController():setTask(task)
-                    updated = updated + 1
+                    local controller = group:getController()
+                    if controller then
+                        controller:setTask(task)
+                        updated = updated + 1
+                    end
                 end
             end
         end

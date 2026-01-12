@@ -210,6 +210,12 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
         return nil
     end
 
+    -- Validate target unit still exists (it may have been destroyed between spawn request and processing)
+    if not targetUnit or not targetUnit:isExist() then
+        self:log(airfield.name .. ": Target unit no longer exists, aborting spawn")
+        return nil
+    end
+
     -- Select random aircraft type
     local aircraftType = fighterConfig.types[math.random(#fighterConfig.types)]
     local payload = UnitTemplates:getPayload(self.state.difficulty, aircraftType)
@@ -451,8 +457,10 @@ function AirIntercept.eventHandler:onEvent(event)
 
         local unit = event.initiator
         if unit then
-            local unitName = unit:getName()
-            AirIntercept:handleUnitDeath(unitName)
+            local ok, unitName = pcall(function() return unit:getName() end)
+            if ok and unitName then
+                AirIntercept:handleUnitDeath(unitName)
+            end
         end
     end
 end

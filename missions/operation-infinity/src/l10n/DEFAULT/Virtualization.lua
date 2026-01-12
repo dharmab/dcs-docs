@@ -554,8 +554,10 @@ function Virtualization.eventHandler:onEvent(event)
 
         local unit = event.initiator
         if unit then
-            local unitName = unit:getName()
-            Virtualization:handleUnitDeath(unitName)
+            local ok, unitName = pcall(function() return unit:getName() end)
+            if ok and unitName then
+                Virtualization:handleUnitDeath(unitName)
+            end
         end
     end
 end
