@@ -984,9 +984,212 @@ mission = {
                                     },
                                 },
                             },
-                            -- AWACS: E-3A Overlord (late activation, spawned by script)
+                            -- Dynamic spawn template: JF-17
                             [12] = {
+                                ["dynSpawnTemplate"] = true,
                                 ["groupId"] = 12,
+                                ["name"] = "JF-17 Template",
+                                ["task"] = "Ground Attack",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -7400,
+                                ["y"] = 294950,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 12,
+                                        ["name"] = "JF-17-1",
+                                        ["type"] = "JF-17",
+                                        ["skill"] = "Client",
+                                        ["x"] = -7400,
+                                        ["y"] = 294950,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 138.89,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "66",
+                                        ["parking_id"] = "47",
+                                        ["onboard_num"] = "120",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 2330,
+                                            ["flare"] = 64,
+                                            ["chaff"] = 64,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 9,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Chevy11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 20,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -7400,
+                                            ["y"] = 294950,
+                                            ["speed"] = 138.89,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["airdromeId"] = 15,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Dynamic spawn template: Su-25
+                            [13] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["groupId"] = 13,
+                                ["name"] = "Su-25 Template",
+                                ["task"] = "Ground Attack",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -7420,
+                                ["y"] = 294970,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 13,
+                                        ["name"] = "Su-25-1",
+                                        ["type"] = "Su-25",
+                                        ["skill"] = "Client",
+                                        ["x"] = -7420,
+                                        ["y"] = 294970,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 138.89,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "67",
+                                        ["parking_id"] = "48",
+                                        ["onboard_num"] = "130",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 3000,
+                                            ["flare"] = 128,
+                                            ["chaff"] = 128,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = 130,
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 20,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -7420,
+                                            ["y"] = 294970,
+                                            ["speed"] = 138.89,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["airdromeId"] = 15,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Dynamic spawn template: Su-25T
+                            [14] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["groupId"] = 14,
+                                ["name"] = "Su-25T Template",
+                                ["task"] = "Ground Attack",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -7440,
+                                ["y"] = 294990,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 14,
+                                        ["name"] = "Su-25T-1",
+                                        ["type"] = "Su-25T",
+                                        ["skill"] = "Client",
+                                        ["x"] = -7440,
+                                        ["y"] = 294990,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 138.89,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["parking"] = "68",
+                                        ["parking_id"] = "49",
+                                        ["onboard_num"] = "140",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 3840,
+                                            ["flare"] = 128,
+                                            ["chaff"] = 128,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = 140,
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 20,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -7440,
+                                            ["y"] = 294990,
+                                            ["speed"] = 138.89,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["airdromeId"] = 15,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- AWACS: E-3A Overlord (late activation, spawned by script)
+                            [15] = {
+                                ["groupId"] = 15,
                                 ["name"] = "Overlord",
                                 ["task"] = "AWACS",
                                 ["modulation"] = 0,
@@ -1066,7 +1269,7 @@ mission = {
                                                                     ["id"] = "EPLRS",
                                                                     ["params"] = {
                                                                         ["value"] = true,
-                                                                        ["groupId"] = 12,
+                                                                        ["groupId"] = 15,
                                                                     },
                                                                 },
                                                             },
@@ -1146,8 +1349,8 @@ mission = {
                                 },
                             },
                             -- Tanker: KC-135 Texaco (Boom) (late activation, spawned by script)
-                            [13] = {
-                                ["groupId"] = 13,
+                            [16] = {
+                                ["groupId"] = 16,
                                 ["name"] = "Texaco",
                                 ["task"] = "Refueling",
                                 ["modulation"] = 0,
@@ -1161,7 +1364,7 @@ mission = {
                                 ["y"] = 293600,
                                 ["units"] = {
                                     [1] = {
-                                        ["unitId"] = 13,
+                                        ["unitId"] = 16,
                                         ["name"] = "Texaco-1",
                                         ["type"] = "KC-135",
                                         ["skill"] = "Excellent",
@@ -1328,8 +1531,8 @@ mission = {
                                 },
                             },
                             -- Tanker: KC-135MPRS Arco (Drogue) (late activation, spawned by script)
-                            [14] = {
-                                ["groupId"] = 14,
+                            [17] = {
+                                ["groupId"] = 17,
                                 ["name"] = "Arco",
                                 ["task"] = "Refueling",
                                 ["modulation"] = 0,
@@ -1343,7 +1546,7 @@ mission = {
                                 ["y"] = 293700,
                                 ["units"] = {
                                     [1] = {
-                                        ["unitId"] = 14,
+                                        ["unitId"] = 17,
                                         ["name"] = "Arco-1",
                                         ["type"] = "KC135MPRS",
                                         ["skill"] = "Excellent",
@@ -1510,8 +1713,8 @@ mission = {
                                 },
                             },
                             -- Tanker: KC-135 Shell (Slow for A-10s) (late activation, spawned by script)
-                            [15] = {
-                                ["groupId"] = 15,
+                            [18] = {
+                                ["groupId"] = 18,
                                 ["name"] = "Shell",
                                 ["task"] = "Refueling",
                                 ["modulation"] = 0,
@@ -1525,7 +1728,7 @@ mission = {
                                 ["y"] = 293800,
                                 ["units"] = {
                                     [1] = {
-                                        ["unitId"] = 15,
+                                        ["unitId"] = 18,
                                         ["name"] = "Shell-1",
                                         ["type"] = "KC-135",
                                         ["skill"] = "Excellent",

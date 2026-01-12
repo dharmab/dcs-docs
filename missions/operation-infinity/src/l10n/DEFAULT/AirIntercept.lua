@@ -29,8 +29,11 @@ AirIntercept.config = {
         ["F-15ESE"] = 1.5,
         ["F-4E-45MC"] = 1.5,
         ["Mirage-F1CE"] = 1.5,
+        ["JF-17"] = 1.5,
         -- Attack/CAS (weight 0.5)
         ["A-10C_2"] = 0.5,
+        ["Su-25"] = 0.5,
+        ["Su-25T"] = 0.5,
     },
 
     -- Erusean airfields with defense zones

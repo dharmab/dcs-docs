@@ -21,6 +21,9 @@ Players spawn via Dynamic Slots at Krymsk (airdromeId 15). On load, an F10 menu 
 | Mirage F1 | Mirage-F1CE |
 | F-14A Tomcat | F-14A-135-GR |
 | F-14B Tomcat | F-14B |
+| JF-17 Thunder | JF-17 |
+| Su-25 Frogfoot | Su-25 |
+| Su-25T Frogfoot | Su-25T |
 
 Warehouse: unlimited weapons of all types.
 
@@ -71,8 +74,8 @@ Max airborne fighters scales by weighted player count in combat area:
 | Aircraft Category | Weight |
 |-------------------|--------|
 | A-A Fighters (F-15C, F-14A/B) | 2.0 |
-| Multirole (F-16C, F/A-18C, MiG-29A, M-2000C, F-15E, F-4E) | 1.5 |
-| Attack/CAS (A-10C, Mirage F1) | 0.5 |
+| Multirole (F-16C, F/A-18C, MiG-29A, M-2000C, F-15E, F-4E, JF-17) | 1.5 |
+| Attack/CAS (A-10C, Mirage F1, Su-25, Su-25T) | 0.5 |
 
 Formula: `baseMax + floor(log2(weightedPlayerCount + 1))`, capped at 8.
 
