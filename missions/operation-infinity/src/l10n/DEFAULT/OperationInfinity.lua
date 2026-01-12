@@ -2503,15 +2503,30 @@ function OperationInfinity:checkForNewPlayers()
             local name = player:getName()
             if not self.state.knownPlayers[name] then
                 self.state.knownPlayers[name] = true
+                self:log("New player joined: " .. name)
 
-                if self.state.missionGenerated then
-                    -- Send coordinates to new player after a short delay
-                    timer.scheduleFunction(function()
+                -- Schedule welcome/status message after a short delay
+                timer.scheduleFunction(function()
+                    if OperationInfinity.state.missionGenerated then
+                        -- Mission already generated - show coordinates
                         OperationInfinity:displayCoordinates()
-                    end, nil, timer.getTime() + 5)
-
-                    self:log("New player joined: " .. name)
-                end
+                    else
+                        -- Mission not yet generated - show welcome message with instructions
+                        trigger.action.outTextForCoalition(coalition.side.BLUE,
+                            "=== OPERATION INFINITY ===\n\n" ..
+                            "Welcome to Operation Infinity!\n\n" ..
+                            "Use the F10 menu to select:\n" ..
+                            "  1. Difficulty\n" ..
+                            "  2. Target Playtime\n\n" ..
+                            "The first player to make both selections\n" ..
+                            "locks the settings for all players.\n\n" ..
+                            "Support assets will launch after settings are selected:\n" ..
+                            "  AWACS Overlord: 255.5 MHz\n" ..
+                            "  Texaco (boom): 270.5 MHz, TACAN 100X\n" ..
+                            "  Arco (drogue): 270.1 MHz, TACAN 101X\n" ..
+                            "  Shell (slow boom): 270.0 MHz, TACAN 102X", 30)
+                    end
+                end, nil, timer.getTime() + 3)
             end
         end
     end
@@ -2551,31 +2566,15 @@ function OperationInfinity:init()
 
     -- Random number generator seeding is not required in this environment
 
-    -- Display initial hint
-    timer.scheduleFunction(function()
-        trigger.action.outTextForCoalition(coalition.side.BLUE,
-            "=== OPERATION INFINITY ===\n\n" ..
-            "Welcome to Operation Infinity!\n\n" ..
-            "Use the F10 menu to select:\n" ..
-            "  1. Difficulty\n" ..
-            "  2. Target Playtime\n\n" ..
-            "The first player to make both selections\n" ..
-            "locks the settings for all players.\n\n" ..
-            "Support assets will launch after settings are selected:\n" ..
-            "  AWACS Overlord: 255.5 MHz\n" ..
-            "  Texaco (boom): 270.5 MHz, TACAN 100X\n" ..
-            "  Arco (drogue): 270.1 MHz, TACAN 101X\n" ..
-            "  Shell (slow boom): 270.0 MHz, TACAN 102X", 30)
-    end, nil, timer.getTime() + 5)
-
     -- Setup F10 menu
     self:setupMenu()
 
-    -- Start late joiner check loop
+    -- Start player check loop - runs early to catch singleplayer and first multiplayer joiners
+    -- The welcome message is displayed by checkForNewPlayers when players are detected
     timer.scheduleFunction(function(_, time)
         OperationInfinity:checkForNewPlayers()
-        return time + 10 -- Check every 10 seconds
-    end, nil, timer.getTime() + 10)
+        return time + 5 -- Check every 5 seconds
+    end, nil, timer.getTime() + 2)
 
     self.state.initialized = true
     self:log("Initialization complete")
