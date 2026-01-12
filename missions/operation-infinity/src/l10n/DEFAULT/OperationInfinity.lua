@@ -45,7 +45,7 @@ function BatchScheduler:processArray(params)
     end
 
     local function processBatch()
-        local startTime = os.clock() * 1000  -- Current time in ms
+        local startTime = timer.getTime() * 1000  -- Current time in ms
         local budgetMs = BatchScheduler.config.frameBudgetMs
         local itemsProcessed = 0
 
@@ -55,7 +55,7 @@ function BatchScheduler:processArray(params)
             itemsProcessed = itemsProcessed + 1
 
             -- Check time budget (but always process at least minItems)
-            local elapsed = (os.clock() * 1000) - startTime
+            local elapsed = (timer.getTime() * 1000) - startTime
             if itemsProcessed >= BatchScheduler.config.minItems and elapsed >= budgetMs then
                 break
             end

@@ -297,7 +297,7 @@ function IADS:updateEmissionControlBatched()
     end
 
     -- Process SAM sites with time budgeting
-    local startTime = os.clock() * 1000
+    local startTime = timer.getTime() * 1000
     local budgetMs = BatchScheduler.config.frameBudgetMs
     local itemsProcessed = 0
 
@@ -305,7 +305,7 @@ function IADS:updateEmissionControlBatched()
         self:updateSAMSiteCached(samSite, bluePositions)
         itemsProcessed = itemsProcessed + 1
 
-        local elapsed = (os.clock() * 1000) - startTime
+        local elapsed = (timer.getTime() * 1000) - startTime
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             -- Schedule remaining SAM sites for next frame
             local remaining = {}
@@ -324,7 +324,7 @@ end
 
 -- Continue processing remaining SAM sites
 function IADS:updateEmissionControlBatchedContinue(samSites, bluePositions)
-    local startTime = os.clock() * 1000
+    local startTime = timer.getTime() * 1000
     local budgetMs = BatchScheduler.config.frameBudgetMs
     local itemsProcessed = 0
 
@@ -332,7 +332,7 @@ function IADS:updateEmissionControlBatchedContinue(samSites, bluePositions)
         self:updateSAMSiteCached(samSite, bluePositions)
         itemsProcessed = itemsProcessed + 1
 
-        local elapsed = (os.clock() * 1000) - startTime
+        local elapsed = (timer.getTime() * 1000) - startTime
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             local remaining = {}
             for i = idx + 1, #samSites do

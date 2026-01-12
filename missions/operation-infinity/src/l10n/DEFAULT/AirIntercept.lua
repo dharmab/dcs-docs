@@ -545,7 +545,7 @@ end
 
 -- Process spawn requests with time budgeting
 function AirIntercept:processSpawnRequestsBatched(spawnRequests)
-    local startTime = os.clock() * 1000
+    local startTime = timer.getTime() * 1000
     local budgetMs = BatchScheduler.config.frameBudgetMs
     local itemsProcessed = 0
 
@@ -553,7 +553,7 @@ function AirIntercept:processSpawnRequestsBatched(spawnRequests)
         self:spawnInterceptors(req.airfield, req.responseSize, req.targetUnit)
         itemsProcessed = itemsProcessed + 1
 
-        local elapsed = (os.clock() * 1000) - startTime
+        local elapsed = (timer.getTime() * 1000) - startTime
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             -- Schedule remaining spawn requests for next frame
             local remaining = {}

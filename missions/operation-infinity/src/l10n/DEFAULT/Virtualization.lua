@@ -418,7 +418,7 @@ function Virtualization:updateBatched(playerPositions)
     local despawnQueue = {}
 
     -- Use time-budgeted processing for distance checks
-    local startTime = os.clock() * 1000
+    local startTime = timer.getTime() * 1000
     local budgetMs = BatchScheduler.config.frameBudgetMs
     local itemsProcessed = 0
 
@@ -442,7 +442,7 @@ function Virtualization:updateBatched(playerPositions)
         itemsProcessed = itemsProcessed + 1
 
         -- Check time budget (but process at least 1 item)
-        local elapsed = (os.clock() * 1000) - startTime
+        local elapsed = (timer.getTime() * 1000) - startTime
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             -- Schedule remaining groups for next frame
             local remaining = {}
@@ -470,7 +470,7 @@ end
 
 -- Continue processing remaining virtual groups
 function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueue, despawnQueue)
-    local startTime = os.clock() * 1000
+    local startTime = timer.getTime() * 1000
     local budgetMs = BatchScheduler.config.frameBudgetMs
     local itemsProcessed = 0
 
@@ -491,7 +491,7 @@ function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueu
 
         itemsProcessed = itemsProcessed + 1
 
-        local elapsed = (os.clock() * 1000) - startTime
+        local elapsed = (timer.getTime() * 1000) - startTime
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             local remaining = {}
             for i = idx + 1, #groups do
