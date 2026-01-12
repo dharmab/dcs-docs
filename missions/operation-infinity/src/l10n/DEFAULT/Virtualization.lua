@@ -3,6 +3,13 @@
 -- Spawns/despawns ground units based on player proximity to reduce unit count
 -- =============================================================================
 
+-- Guard against multiple script loads
+if _G.VirtualizationLoaded then
+    env.info("[Virtualization] Script already loaded, skipping")
+    return
+end
+_G.VirtualizationLoaded = true
+
 Virtualization = {}
 
 -- =============================================================================

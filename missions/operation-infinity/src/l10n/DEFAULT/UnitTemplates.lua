@@ -3,6 +3,13 @@
 -- Defines unit compositions for all difficulty levels
 -- =============================================================================
 
+-- Guard against multiple script loads
+if _G.UnitTemplatesLoaded then
+    env.info("[UnitTemplates] Script already loaded, skipping")
+    return
+end
+_G.UnitTemplatesLoaded = true
+
 env.info("[UnitTemplates] Script loading...")
 
 UnitTemplates = {}

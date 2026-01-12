@@ -3,6 +3,13 @@
 -- F10 menu, battlefield generation, and coordination display
 -- =============================================================================
 
+-- Guard against multiple script loads (belt-and-suspenders with trigger flag)
+if _G.OperationInfinityLoaded then
+    env.info("[OperationInfinity] Script already loaded, skipping re-initialization")
+    return
+end
+_G.OperationInfinityLoaded = true
+
 -- =============================================================================
 -- BATCH SCHEDULER
 -- Time-budgeted work processing to avoid triggering DCS Antifreeze

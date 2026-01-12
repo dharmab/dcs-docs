@@ -4,6 +4,13 @@
 -- EWRs always active, SAM radars pulse based on threat detection
 -- =============================================================================
 
+-- Guard against multiple script loads
+if _G.IADSLoaded then
+    env.info("[IADS] Script already loaded, skipping")
+    return
+end
+_G.IADSLoaded = true
+
 IADS = {}
 
 -- =============================================================================

@@ -4,6 +4,13 @@
 -- Integrates with OperationInfinity for difficulty-based aircraft selection
 -- =============================================================================
 
+-- Guard against multiple script loads
+if _G.AirInterceptLoaded then
+    env.info("[AirIntercept] Script already loaded, skipping")
+    return
+end
+_G.AirInterceptLoaded = true
+
 AirIntercept = {}
 
 -- =============================================================================

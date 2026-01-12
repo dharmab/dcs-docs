@@ -121,6 +121,7 @@ mission = {
             },
             ["eventlist"] = "",
             ["comment"] = "Load Mission Scripts",
+            ["predicate"] = "triggerOnce",
             ["actions"] = {
                 [1] = {
                     ["predicate"] = "a_do_script_file",
@@ -152,7 +153,7 @@ mission = {
         ["events"] = {},
         ["custom"] = {},
         ["func"] = {
-            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1]() end",
+            [1] = "if mission.trig.flag[1] and mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.flag[1]=false end",
         },
         ["flag"] = {
             [1] = true,
@@ -161,7 +162,7 @@ mission = {
             [1] = "return(c_time_after(0) )",
         },
         ["funcStartup"] = {
-            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.func[1]=nil end",
+            [1] = "if mission.trig.flag[1] and mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.flag[1]=false end",
         },
     },
     ["goals"] = {},
