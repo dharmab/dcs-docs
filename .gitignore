@@ -44,3 +44,6 @@ Thumbs.db
 
 # DCS Lua Datamine (cloned on demand)
 dcs-lua-datamine/
+
+# DCS Mission files (generated from source)
+*.miz

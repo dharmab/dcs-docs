@@ -715,8 +715,9 @@ OperationInfinity.FormationType = {
 }
 
 -- Get relative positions for a formation
-function OperationInfinity:getFormationPositions(unitCount, formationType, spacing)
+function OperationInfinity:getFormationPositions(unitCount, formationType, spacing, widthMultiplier)
     spacing = spacing or 30
+    widthMultiplier = widthMultiplier or 1.0
     local positions = {}
 
     if formationType == self.FormationType.LINE then
@@ -736,7 +737,7 @@ function OperationInfinity:getFormationPositions(unitCount, formationType, spaci
             local row = math.ceil((i - 1) / 2)
             local side = ((i - 1) % 2 == 0) and 1 or -1
             table.insert(positions, {
-                x = side * row * spacing,
+                x = side * row * spacing * widthMultiplier,
                 y = -row * spacing,
             })
         end
@@ -744,7 +745,7 @@ function OperationInfinity:getFormationPositions(unitCount, formationType, spaci
     elseif formationType == self.FormationType.ECHELON_LEFT then
         for i = 1, unitCount do
             table.insert(positions, {
-                x = -(i - 1) * spacing,
+                x = -(i - 1) * spacing * widthMultiplier,
                 y = -(i - 1) * spacing * 0.7,
             })
         end
@@ -752,14 +753,14 @@ function OperationInfinity:getFormationPositions(unitCount, formationType, spaci
     elseif formationType == self.FormationType.ECHELON_RIGHT then
         for i = 1, unitCount do
             table.insert(positions, {
-                x = (i - 1) * spacing,
+                x = (i - 1) * spacing * widthMultiplier,
                 y = -(i - 1) * spacing * 0.7,
             })
         end
 
     else
         -- Default to line if unknown
-        return self:getFormationPositions(unitCount, self.FormationType.LINE, spacing)
+        return self:getFormationPositions(unitCount, self.FormationType.LINE, spacing, widthMultiplier)
     end
 
     return positions
@@ -1277,6 +1278,7 @@ function OperationInfinity:generateFrontlinePlatoon(position, index)
     local isafUnits = self:buildPlatoonUnits(isafTemplate, isafValidPos, {
         formation = formation,
         facing = isafFacing,
+        widthMultiplier = 2.5,
     })
 
     -- Register ISAF group (immortal/invisible for visual firefight only)
@@ -1331,6 +1333,7 @@ function OperationInfinity:generateFrontlinePlatoon(position, index)
         local eruseaUnits = self:buildPlatoonUnits(eruseaTemplate, eruseaSpreadPos, {
             formation = formation,
             facing = eFacing,
+            widthMultiplier = 2.5,
         })
 
         Virtualization:registerGroup({
@@ -1402,6 +1405,7 @@ function OperationInfinity:buildPlatoonUnits(template, center, options)
     local formation = options.formation or self:getRandomFormationType()
     local facing = options.facing or (math.random() * 2 * math.pi)
     local spacing = options.spacing or 30
+    local widthMultiplier = options.widthMultiplier or 1.0
     local jitterMin = options.jitterMin or 10
     local jitterMax = options.jitterMax or 15
 
@@ -1412,7 +1416,7 @@ function OperationInfinity:buildPlatoonUnits(template, center, options)
     end
 
     -- Get formation positions
-    local formationPositions = self:getFormationPositions(totalUnits, formation, spacing)
+    local formationPositions = self:getFormationPositions(totalUnits, formation, spacing, widthMultiplier)
 
     local units = {}
     local unitIndex = 1
