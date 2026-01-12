@@ -3,6 +3,8 @@
 -- Defines unit compositions for all difficulty levels
 -- =============================================================================
 
+env.info("[UnitTemplates] Script loading...")
+
 UnitTemplates = {}
 
 -- =============================================================================

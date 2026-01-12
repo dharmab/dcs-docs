@@ -111,10 +111,16 @@ mission = {
     },
     ["trigrules"] = {
         [1] = {
-            ["rules"] = {},
+            ["rules"] = {
+                [1] = {
+                    ["unitType"] = "",
+                    ["coalitionlist"] = "",
+                    ["seconds"] = 0,
+                    ["predicate"] = "c_time_after",
+                },
+            },
             ["eventlist"] = "",
             ["comment"] = "Load Mission Scripts",
-            ["predicate"] = "triggerStart",
             ["actions"] = {
                 [1] = {
                     ["predicate"] = "a_do_script_file",
@@ -140,13 +146,23 @@ mission = {
         },
     },
     ["trig"] = {
-        ["actions"] = {},
+        ["actions"] = {
+            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
+        },
         ["events"] = {},
         ["custom"] = {},
-        ["func"] = {},
-        ["flag"] = {},
-        ["conditions"] = {},
-        ["funcStartup"] = {},
+        ["func"] = {
+            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1]() end",
+        },
+        ["flag"] = {
+            [1] = true,
+        },
+        ["conditions"] = {
+            [1] = "return(c_time_after(0) )",
+        },
+        ["funcStartup"] = {
+            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.func[1]=nil end",
+        },
     },
     ["goals"] = {},
     ["result"] = {
