@@ -79,6 +79,7 @@ mission = {
         ["userMarks"] = true,
         ["externalViews"] = true,
         ["optionsView"] = "optview_all",
+        ["civTraffic"] = "",
     },
     ["groundControl"] = {
         ["isPilotControlVehicles"] = false,
