@@ -221,6 +221,8 @@ OperationInfinity.config = {
         engagementDistanceMin = 300,  -- Minimum meters between opposing platoons
         engagementDistanceMax = 1000, -- Maximum meters between opposing platoons
         fireOffset = 300,             -- Meters offset for FireAtPoint (fire past enemies, not at them)
+        fireTargetWanderInterval = 15,    -- Seconds between target position updates
+        fireTargetWanderRadius = 150,     -- Meters to randomly wander fire targets
         enemyPlatoonsMin = 2,         -- Min enemy platoons per friendly platoon
         enemyPlatoonsMax = 3,         -- Max enemy platoons per friendly platoon
         enemySpreadRadius = 150,      -- Meters to spread enemy platoons around engagement area
@@ -1077,6 +1079,11 @@ function OperationInfinity:generateBattlefield()
                         AirIntercept:enable(OperationInfinity.state.difficulty)
                         IADS:init()
                         IADS:enable(OperationInfinity.state.difficulty)
+                        -- Start fire target wandering for visual interest
+                        timer.scheduleFunction(function(_, time)
+                            OperationInfinity:updateFireTargets()
+                            return time + OperationInfinity.config.frontline.fireTargetWanderInterval
+                        end, nil, timer.getTime() + 15)
                         done()
                     end)
                 end,
@@ -1353,6 +1360,44 @@ function OperationInfinity:generateFrontlinePlatoon(position, index)
             },
         })
     end
+end
+
+function OperationInfinity:updateFireTargets()
+    local wanderRadius = self.config.frontline.fireTargetWanderRadius
+    local updated = 0
+
+    for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
+        -- Only update spawned frontline groups with fireAtPoint
+        if vGroup.isSpawned and vGroup.options.fireAtPoint then
+            local groupName = vGroup.spawnedGroupName
+            if string.find(groupName, "ISAF%-F") or string.find(groupName, "Erusea%-F") then
+                local group = Group.getByName(groupName)
+                if group and group:isExist() then
+                    -- Random offset from group center
+                    local angle = math.random() * 2 * math.pi
+                    local distance = math.random() * wanderRadius
+                    local newX = vGroup.center.x + distance * math.cos(angle)
+                    local newY = vGroup.center.y + distance * math.sin(angle)
+
+                    local task = {
+                        id = "FireAtPoint",
+                        params = {
+                            x = newX,
+                            y = newY,
+                            radius = vGroup.options.fireAtPoint.radius or 50,
+                            expendQty = vGroup.options.fireAtPoint.expendQty or 200,
+                            expendQtyEnabled = true,
+                        }
+                    }
+
+                    group:getController():setTask(task)
+                    updated = updated + 1
+                end
+            end
+        end
+    end
+
+    self:log("Updated fire targets for " .. updated .. " groups")
 end
 
 function OperationInfinity:generateFrontlineSHORAD()
