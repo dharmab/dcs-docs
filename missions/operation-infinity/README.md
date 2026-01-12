@@ -101,7 +101,7 @@ Two tankers orbit near Anapa:
 - **KC-135 "Texaco"** (boom) at 25,000 ft, 270.5 MHz, TACAN 100X
 - **KC-135MPRS "Arco"** (basket) at 22,000 ft, 270.1 MHz, TACAN 101X
 
-An E-3A AWACS "Overlord" orbits northwest of Krymsk at 30,000 ft with EPLRS enabled. For actual GCI, use SkyEye on 255.3 MHz rather than the in-game AWACS radio.
+An E-3A AWACS "Magic" orbits northwest of Krymsk at 30,000 ft with EPLRS datalink enabled. For GCI, use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 
 ## Multiplayer Notes
 

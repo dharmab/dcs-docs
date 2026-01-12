@@ -163,7 +163,7 @@ Response scaling:
 ## Support Assets
 
 ### AWACS
-E-3A "Overlord" on E-W racetrack NW of Krymsk, 30,000 ft. EPLRS enabled. Frequency 255.5 MHz AM.
+E-3A "Magic" on E-W racetrack NW of Krymsk, 30,000 ft. EPLRS datalink enabled, radio disabled. Players should use SkyEye GCI on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 
 ### Tankers
 

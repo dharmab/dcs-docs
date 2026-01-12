@@ -1187,13 +1187,13 @@ mission = {
                                     },
                                 },
                             },
-                            -- AWACS: E-3A Overlord (late activation, spawned by script)
+                            -- AWACS: E-3A Magic (late activation, spawned by script)
                             [15] = {
                                 ["groupId"] = 15,
-                                ["name"] = "Overlord",
+                                ["name"] = "Magic",
                                 ["task"] = "AWACS",
                                 ["modulation"] = 0,
-                                ["communication"] = true,
+                                ["communication"] = false,
                                 ["frequency"] = 255.5,
                                 ["start_time"] = 0,
                                 ["uncontrolled"] = false,
@@ -1204,7 +1204,7 @@ mission = {
                                 ["units"] = {
                                     [1] = {
                                         ["unitId"] = 12,
-                                        ["name"] = "Overlord-1",
+                                        ["name"] = "Magic-1",
                                         ["type"] = "E-3A",
                                         ["skill"] = "Excellent",
                                         ["x"] = -6800,
@@ -1226,10 +1226,10 @@ mission = {
                                             ["gun"] = 0,
                                         },
                                         ["callsign"] = {
-                                            [1] = 1,
+                                            [1] = 2,
                                             [2] = 1,
                                             [3] = 1,
-                                            ["name"] = "Overlord",
+                                            ["name"] = "Magic",
                                         },
                                     },
                                 },

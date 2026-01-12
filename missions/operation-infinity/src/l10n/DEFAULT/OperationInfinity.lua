@@ -281,7 +281,7 @@ OperationInfinity.config = {
 
     -- Support aircraft group names and orbit altitudes
     supportAircraft = {
-        { name = "Overlord", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
+        { name = "Magic", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
         { name = "Texaco", altitude = 5486, speed = 180 },    -- Boom tanker at 18,000 ft
         { name = "Arco", altitude = 4877, speed = 180 },      -- Drogue tanker at 16,000 ft
         { name = "Shell", altitude = 4572, speed = 105 },     -- Slow tanker at 15,000 ft
@@ -2521,10 +2521,10 @@ function OperationInfinity:checkForNewPlayers()
                             "The first player to make both selections\n" ..
                             "locks the settings for all players.\n\n" ..
                             "Support assets will launch after settings are selected:\n" ..
-                            "  AWACS Overlord: 255.5 MHz\n" ..
                             "  Texaco (boom): 270.5 MHz, TACAN 100X\n" ..
                             "  Arco (drogue): 270.1 MHz, TACAN 101X\n" ..
-                            "  Shell (slow boom): 270.0 MHz, TACAN 102X", 30)
+                            "  Shell (slow boom): 270.0 MHz, TACAN 102X\n\n" ..
+                            "GCI: Use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM", 30)
                     end
                 end, nil, timer.getTime() + 3)
             end
