@@ -47,42 +47,42 @@ AirIntercept.config = {
     airfields = {
         {
             name = "Tbilisi-Lochini",
+            airdromeId = 29,
             zoneCenter = {x = -315000, y = 895000},
             zoneRadius = 45000,
             spawnPoint = {x = -315500, y = 894000},
-            spawnAltitude = 3000,
             spawnHeading = 4.71,  -- West
         },
         {
             name = "Mozdok",
+            airdromeId = 28,
             zoneCenter = {x = -83000, y = 835000},
             zoneRadius = 50000,
             spawnPoint = {x = -83500, y = 834000},
-            spawnAltitude = 3000,
             spawnHeading = 4.71,
         },
         {
             name = "Kutaisi",
+            airdromeId = 25,
             zoneCenter = {x = -285000, y = 683000},
             zoneRadius = 45000,
             spawnPoint = {x = -284600, y = 685000},
-            spawnAltitude = 3000,
             spawnHeading = 4.71,
         },
         {
             name = "Kobuleti",
+            airdromeId = 24,
             zoneCenter = {x = -317000, y = 635000},
             zoneRadius = 40000,
             spawnPoint = {x = -318000, y = 634000},
-            spawnAltitude = 3000,
             spawnHeading = 4.71,
         },
         {
             name = "Sukhumi-Babushara",
+            airdromeId = 20,
             zoneCenter = {x = -220000, y = 565000},
             zoneRadius = 50000,
             spawnPoint = {x = -220500, y = 563000},
-            spawnAltitude = 3000,
             spawnHeading = 4.71,
         },
     },
@@ -244,7 +244,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
             skill = skill,
             x = airfield.spawnPoint.x + offset,
             y = airfield.spawnPoint.y,
-            alt = airfield.spawnAltitude,
+            alt = 300,  -- Runway altitude
             alt_type = "BARO",
             speed = 200,
             heading = airfield.spawnHeading,
@@ -294,10 +294,11 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
         route = {
             points = {
                 [1] = {
-                    alt = airfield.spawnAltitude,
+                    alt = 300,
                     alt_type = "BARO",
-                    type = "Turning Point",
-                    action = "Turning Point",
+                    type = "TakeOff",
+                    action = "From Runway",
+                    airdromeId = airfield.airdromeId,
                     x = airfield.spawnPoint.x,
                     y = airfield.spawnPoint.y,
                     speed = 200,

@@ -221,7 +221,7 @@ The waypoint `type` and `action` fields determine how the aircraft spawns:
 
 ### Singleplayer Slot Example
 
-This example places an F-16C at Batumi airfield (airdromeId 24) with a cold start:
+This example places an F-16C at Kobuleti airfield (airdromeId 24) with a cold start:
 
 ```lua
 [1] = {
@@ -501,16 +501,27 @@ Aircraft with multiple radios can have preset channels configured:
 
 | Airfield | airdromeId |
 |----------|------------|
-| Batumi | 24 |
-| Kobuleti | 25 |
-| Kutaisi | 26 |
-| Senaki | 27 |
-| Tbilisi | 32 |
-| Vaziani | 33 |
-| Sukhumi | 20 |
+| Anapa-Vityazevo | 12 |
+| Krasnodar-Center | 13 |
+| Novorossiysk | 14 |
+| Krymsk | 15 |
+| Maykop-Khanskaya | 16 |
+| Gelendzhik | 17 |
+| Sochi-Adler | 18 |
+| Krasnodar-Pashkovsky | 19 |
+| Sukhumi-Babushara | 20 |
 | Gudauta | 21 |
-| Sochi | 18 |
-| Mozdok | 15 |
+| Batumi | 22 |
+| Senaki-Kolkhi | 23 |
+| Kobuleti | 24 |
+| Kutaisi | 25 |
+| Mineralnye Vody | 26 |
+| Nalchik | 27 |
+| Mozdok | 28 |
+| Tbilisi-Lochini | 29 |
+| Soganlug | 30 |
+| Vaziani | 31 |
+| Beslan | 32 |
 
 ## Checklist
 
