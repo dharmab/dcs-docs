@@ -27,7 +27,7 @@ The `docs/` directory contains the following documentation:
     - `hooks/` - Server-side scripting hooks
 - `units/` - Unit and equipment reference documentation:
   - `ground.md` - Ground units including vehicles, armor, artillery, air defense systems, and infantry
-  - `helicopters.md` - Rotary-wing aircraft with sensors, armament, and capabilities
+  - `helicopters/` - Rotary-wing aircraft with sensors, armament, and capabilities (individual files per aircraft, see `helicopters/index.md`)
   - `sea.md` - Naval units including carriers, destroyers, submarines, and civilian vessels
   - `planes/` - Fixed-wing aircraft with pylons, loadouts, and capabilities (individual files per aircraft, see `planes/index.md`)
   - `ww2-planes.md` - World War II era fixed-wing aircraft with pylons, loadouts, and capabilities
