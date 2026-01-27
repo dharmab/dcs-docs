@@ -38,6 +38,10 @@ def validate_src_directory(src_dir: Path) -> list[str]:
         src_dir / "l10n" / "DEFAULT" / "Virtualization.lua",
         src_dir / "l10n" / "DEFAULT" / "AirIntercept.lua",
         src_dir / "l10n" / "DEFAULT" / "IADS.lua",
+        src_dir / "l10n" / "DEFAULT" / "BatchScheduler.lua",
+        src_dir / "l10n" / "DEFAULT" / "Terrain.lua",
+        src_dir / "l10n" / "DEFAULT" / "Formations.lua",
+        src_dir / "l10n" / "DEFAULT" / "BattlefieldGeneration.lua",
         src_dir / "l10n" / "DEFAULT" / "OperationInfinity.lua",
     ]
 
@@ -74,7 +78,7 @@ def pack_mission(output_path: Path | None = None) -> Path:
         "options",
     ]
 
-    # l10n files
+    # l10n files (order matters for dependency loading)
     l10n_files = [
         "dictionary",
         "mapResource",
@@ -82,6 +86,10 @@ def pack_mission(output_path: Path | None = None) -> Path:
         "Virtualization.lua",
         "AirIntercept.lua",
         "IADS.lua",
+        "BatchScheduler.lua",
+        "Terrain.lua",
+        "Formations.lua",
+        "BattlefieldGeneration.lua",
         "OperationInfinity.lua",
     ]
 
