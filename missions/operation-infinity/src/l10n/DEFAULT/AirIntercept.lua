@@ -19,7 +19,8 @@ AirIntercept = {}
 
 AirIntercept.config = {
     checkInterval = 30,           -- Seconds between zone checks
-    spawnCooldown = 120,          -- Seconds between spawns from same airfield
+    spawnCooldownMin = 300,       -- Minimum seconds between spawns (5 minutes)
+    spawnCooldownMax = 780,       -- Maximum seconds between spawns (13 minutes)
     debug = true,
 
     -- Aircraft category weights for dynamic max calculation
@@ -404,7 +405,7 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
     local currentTime = timer.getTime()
 
     -- Check cooldown
-    if currentTime - afState.lastSpawnTime < self.config.spawnCooldown then
+    if currentTime - afState.lastSpawnTime < afState.nextCooldownDuration then
         self:log(airfield.name .. " on cooldown")
         return nil
     end
@@ -431,12 +432,14 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
 
     if group then
         afState.lastSpawnTime = currentTime
+        afState.nextCooldownDuration = math.random(self.config.spawnCooldownMin, self.config.spawnCooldownMax)
         afState.totalSpawned = afState.totalSpawned + 1
         self.state.totalAirborne = self.state.totalAirborne + flightSize
         table.insert(afState.spawnedGroups, groupData.name)
 
         self:log("Spawned " .. flightSize .. " interceptors from " .. airfield.name ..
-                 " (" .. groupData.name .. "), total airborne: " .. self.state.totalAirborne)
+                 " (" .. groupData.name .. "), total airborne: " .. self.state.totalAirborne ..
+                 ", next cooldown: " .. afState.nextCooldownDuration .. "s")
 
         return group
     else
@@ -601,6 +604,7 @@ function AirIntercept:init()
     for _, airfield in ipairs(self.config.airfields) do
         self.state.airfieldState[airfield.name] = {
             lastSpawnTime = 0,
+            nextCooldownDuration = 0,
             totalSpawned = 0,
             spawnedGroups = {},
         }
