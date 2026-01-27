@@ -146,24 +146,47 @@ mission = {
                 },
             },
         },
+        [2] = {
+            ["rules"] = {
+                [1] = {
+                    ["flag"] = "MISSION_TIME_EXPIRED",
+                    ["predicate"] = "c_flag_is_true",
+                },
+            },
+            ["eventlist"] = "",
+            ["comment"] = "End Mission on Time Limit",
+            ["predicate"] = "triggerOnce",
+            ["actions"] = {
+                [1] = {
+                    ["predicate"] = "a_end_mission",
+                    ["winner"] = "blue",
+                    ["KeyDict_text"] = "DictKey_missionEnd_1",
+                },
+            },
+        },
     },
     ["trig"] = {
         ["actions"] = {
             [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
+            [2] = "a_end_mission(\"blue\", getValueDictByKey(\"DictKey_missionEnd_1\"));",
         },
         ["events"] = {},
         ["custom"] = {},
         ["func"] = {
             [1] = "if mission.trig.flag[1] and mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.flag[1]=false end",
+            [2] = "if mission.trig.flag[2] and mission.trig.conditions[2]() then mission.trig.actions[2](); mission.trig.flag[2]=false end",
         },
         ["flag"] = {
             [1] = true,
+            [2] = true,
         },
         ["conditions"] = {
             [1] = "return(c_time_after(0) )",
+            [2] = "return(c_flag_is_true(\"MISSION_TIME_EXPIRED\") )",
         },
         ["funcStartup"] = {
             [1] = "if mission.trig.flag[1] and mission.trig.conditions[1]() then mission.trig.actions[1](); mission.trig.flag[1]=false end",
+            [2] = "if mission.trig.flag[2] and mission.trig.conditions[2]() then mission.trig.actions[2](); mission.trig.flag[2]=false end",
         },
     },
     ["goals"] = {},

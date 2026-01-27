@@ -24,6 +24,17 @@ OperationInfinity.config = {
     maxSpawnedUnits = 800,
     debug = true,
 
+    -- Mission time limit (8 hours)
+    missionDuration = 28800,
+    missionWarnings = {
+        { remaining = 3600, text = "1 hour" },
+        { remaining = 1800, text = "30 minutes" },
+        { remaining = 900, text = "15 minutes" },
+        { remaining = 600, text = "10 minutes" },
+        { remaining = 300, text = "5 minutes" },
+    },
+    missionEndFlag = "MISSION_TIME_EXPIRED",
+
     -- RED aerodrome positions (from Caucasus terrain data)
     aerodromes = {
         maykop = { name = "Maykop-Khanskaya", x = -27626, y = 457048 },
@@ -264,6 +275,12 @@ OperationInfinity.state = {
 
     -- Marker counter
     markerCounter = 1000,
+
+    -- Mission timer state
+    missionTimer = {
+        warningsIssued = {},
+        expired = false,
+    },
 }
 
 -- =============================================================================
@@ -1047,6 +1064,53 @@ function OperationInfinity:getStats()
 end
 
 -- =============================================================================
+-- MISSION TIME LIMIT
+-- =============================================================================
+
+function OperationInfinity:startMissionTimer()
+    self:log("Starting mission timer - " .. self.config.missionDuration .. " seconds")
+
+    local function checkMissionTime(_, currentTime)
+        local missionTime = timer.getTime()
+        local timeRemaining = OperationInfinity.config.missionDuration - missionTime
+
+        for _, warning in ipairs(OperationInfinity.config.missionWarnings) do
+            if timeRemaining <= warning.remaining and
+               not OperationInfinity.state.missionTimer.warningsIssued[warning.remaining] then
+                OperationInfinity.state.missionTimer.warningsIssued[warning.remaining] = true
+                trigger.action.outTextForCoalition(
+                    coalition.side.BLUE,
+                    "=== MISSION TIME WARNING ===\n\n" ..
+                    warning.text .. " remaining until mission end.\n\n" ..
+                    "RTB and land before time expires!",
+                    30
+                )
+                OperationInfinity:log("Mission time warning: " .. warning.text .. " remaining")
+            end
+        end
+
+        if timeRemaining <= 0 and not OperationInfinity.state.missionTimer.expired then
+            OperationInfinity.state.missionTimer.expired = true
+            trigger.action.outTextForCoalition(
+                coalition.side.BLUE,
+                "=== MISSION COMPLETE ===\n\n" ..
+                "The 8-hour operation window has ended.\n\n" ..
+                "Mission will restart shortly.\n\n" ..
+                "Thank you for flying!",
+                60
+            )
+            OperationInfinity:log("Mission time expired - setting end flag")
+            trigger.action.setUserFlag(OperationInfinity.config.missionEndFlag, 1)
+            return nil
+        end
+
+        return currentTime + 10
+    end
+
+    timer.scheduleFunction(checkMissionTime, nil, timer.getTime() + 10)
+end
+
+-- =============================================================================
 -- INITIALIZATION
 -- =============================================================================
 
@@ -1063,6 +1127,9 @@ function OperationInfinity:init()
     -- Setup F10 menus
     self:setupMenu()
     self:setupCommsPlanMenu()
+
+    -- Start mission time limit countdown
+    self:startMissionTimer()
 
     -- Start player check loop - runs early to catch singleplayer and first multiplayer joiners
     -- The welcome message is displayed by checkForNewPlayers when players are detected
