@@ -174,9 +174,9 @@ OperationInfinity.config = {
     -- Support aircraft group names and orbit altitudes
     supportAircraft = {
         { name = "Magic", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
-        { name = "Texaco", altitude = 5486, speed = 180 },    -- Boom tanker at 18,000 ft
-        { name = "Arco", altitude = 4877, speed = 180 },      -- Drogue tanker at 16,000 ft
-        { name = "Shell", altitude = 4572, speed = 105 },     -- Slow tanker at 15,000 ft
+        { name = "Texaco", altitude = 5486, speed = 180, radio = 270.5, tacan = "100X", tankerType = "boom" },
+        { name = "Arco", altitude = 4877, speed = 180, radio = 270.1, tacan = "101X", tankerType = "drogue" },
+        { name = "Shell", altitude = 4572, speed = 105, radio = 270.0, tacan = "102X", tankerType = "slow boom" },
     },
 
     -- SAM site counts by difficulty
@@ -717,14 +717,25 @@ function OperationInfinity:displayCoordinates()
             aerodrome.name, mgrsStr, llStr))
     end
 
+    -- Build tanker information
+    local tankerLines = {}
+    for _, aircraft in ipairs(self.config.supportAircraft) do
+        if aircraft.tankerType then
+            table.insert(tankerLines, string.format("  %s (%s): %.1f MHz, TACAN %s",
+                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan))
+        end
+    end
+
     local msg = string.format(
         "=== TARGET AREA ===\n" ..
         "%s\n\n" ..
         "Target Aerodromes:\n%s\n\n" ..
+        "Tankers:\n%s\n\n" ..
         "Difficulty: %s\n" ..
         "Good hunting!",
         region.name,
         table.concat(coordLines, "\n"),
+        table.concat(tankerLines, "\n"),
         self.state.difficulty
     )
 
