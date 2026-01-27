@@ -538,6 +538,37 @@ function UnitTemplates:getRandomScatteredPatrol()
 end
 
 -- =============================================================================
+-- CHECKPOINT - Road checkpoint with light defense
+-- =============================================================================
+
+UnitTemplates.Checkpoint = {
+    { type = "BRDM-2", count = 1 },
+    { type = "Ural-375 ZU-23", count = 1 },
+    { type = "Ural-375", count = 1 },
+}
+
+-- =============================================================================
+-- ARMOR PATROL - Heavier armored patrols for approach routes
+-- =============================================================================
+
+UnitTemplates.ArmorPatrol = {
+    templates = {
+        { {type = "Leclerc", count = 2} },
+        { {type = "Leopard-2", count = 2} },
+        { {type = "T-72B", count = 2} },
+        { {type = "BMP-3", count = 2}, {type = "T-72B", count = 1} },
+        { {type = "T-80UD", count = 2} },
+        { {type = "Challenger2", count = 2} },
+    },
+}
+
+-- Get a random armor patrol template
+function UnitTemplates:getRandomArmorPatrol()
+    local templates = self.ArmorPatrol.templates
+    return templates[math.random(#templates)]
+end
+
+-- =============================================================================
 -- UNIT SUBSTITUTIONS
 -- =============================================================================
 

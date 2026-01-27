@@ -121,11 +121,33 @@ OperationInfinity.config = {
     -- Deep strike targets (noFrontline regions like Tbilisi)
     -- More logistics and defense targets to compensate for no frontline
     deepStrike = {
-        convoyCount = { 5, 8 },       -- More logistics convoys
-        artilleryCount = { 2, 4 },    -- More artillery
-        patrolCount = { 12, 18 },     -- More scattered patrols (single targets)
-        depotCount = { 2, 4 },        -- Supply depots
-        fuelTankCount = { 3, 6 },     -- Fuel storage
+        convoyCount = { 6, 10 },      -- More logistics convoys
+        artilleryCount = { 3, 5 },    -- More artillery
+        patrolCount = { 16, 24 },     -- More scattered patrols (single targets)
+        depotCount = { 3, 5 },        -- Supply depots
+        fuelTankCount = { 4, 8 },     -- Fuel storage
+    },
+
+    -- Approach route targets - enemies along flight path to deep strike zones
+    -- Only applies to regions with noFrontline = true
+    approachRoute = {
+        -- Minimum distance from Krymsk (120 miles = 193km) - safe zone
+        safeZoneRadius = 193000,
+        -- Waypoints as fraction of distance from Krymsk to target centroid
+        -- Start at 0.82 to respect 120-mile safe zone (~193km of ~240km total)
+        waypointFractions = { 0.82, 0.88, 0.94 },
+        -- Radius around each waypoint for target placement
+        waypointRadius = 12000,
+        -- Target counts per waypoint
+        targetsPerWaypoint = {
+            patrolCount = { 3, 5 },
+            armorCount = { 1, 2 },
+            convoyCount = { 0, 1 },
+            checkpointCount = { 1, 2 },
+        },
+        -- Lateral offset from approach corridor (positive = toward coast)
+        corridorOffsetMin = -5000,
+        corridorOffsetMax = 8000,
     },
 
     -- Krymsk airfield position (player and support aircraft base)
@@ -582,6 +604,13 @@ function OperationInfinity:generateBattlefield()
                 fn = function(ctx, done)
                     progress("Deploying enemy forces...")
                     BattlefieldGeneration:generateBehindLinesTargetsBatched(done)
+                end,
+            },
+            {
+                name = "approach_route",
+                fn = function(ctx, done)
+                    progress("Deploying approach route targets...")
+                    BattlefieldGeneration:generateApproachRouteTargetsBatched(done)
                 end,
             },
             {

@@ -676,6 +676,276 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
 end
 
 -- =============================================================================
+-- APPROACH ROUTE TARGETS
+-- Targets placed along the flight path from Krymsk to deep strike zones
+-- =============================================================================
+
+function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
+    local config = OperationInfinity.config
+    local state = OperationInfinity.state
+
+    -- Only generate for deep strike (noFrontline) regions
+    local constraints = state.battlefield.spawnConstraints
+    if not constraints or not constraints.noFrontline then
+        self:log("Skipping approach route targets - not a deep strike zone")
+        if onComplete then onComplete() end
+        return
+    end
+
+    local approachConfig = config.approachRoute
+    if not approachConfig then
+        self:log("No approach route configuration found")
+        if onComplete then onComplete() end
+        return
+    end
+
+    -- Calculate target centroid (center of all target aerodromes)
+    local aerodromes = state.battlefield.targetAerodromes
+    local centroid = {x = 0, y = 0}
+    for _, aerodrome in ipairs(aerodromes) do
+        centroid.x = centroid.x + aerodrome.x
+        centroid.y = centroid.y + aerodrome.y
+    end
+    centroid.x = centroid.x / #aerodromes
+    centroid.y = centroid.y / #aerodromes
+
+    -- Calculate approach vector from Krymsk to target centroid
+    local krymsk = config.krymsk
+    local dx = centroid.x - krymsk.x
+    local dy = centroid.y - krymsk.y
+    local totalDistance = math.sqrt(dx * dx + dy * dy)
+    local approachDir = {x = dx / totalDistance, y = dy / totalDistance}
+
+    -- Perpendicular direction for lateral offsets (toward coast is positive)
+    local perpDir = {x = -approachDir.y, y = approachDir.x}
+
+    self:log("Approach route: Krymsk to centroid, total distance " ..
+        math.floor(totalDistance / 1000) .. " km")
+
+    -- Build work items for all waypoints and targets
+    local workItems = {}
+    local waypointIndex = 0
+
+    for _, fraction in ipairs(approachConfig.waypointFractions) do
+        -- Calculate waypoint position
+        local waypointDistance = totalDistance * fraction
+
+        -- Skip if inside safe zone (belt-and-suspenders check)
+        if waypointDistance < approachConfig.safeZoneRadius then
+            self:log("Skipping waypoint at fraction " .. fraction ..
+                " - inside safe zone (" .. math.floor(waypointDistance / 1000) .. " km)")
+        else
+            waypointIndex = waypointIndex + 1
+            local waypointCenter = {
+                x = krymsk.x + approachDir.x * waypointDistance,
+                y = krymsk.y + approachDir.y * waypointDistance,
+            }
+
+            self:log("Waypoint " .. waypointIndex .. " at fraction " .. fraction ..
+                " (" .. math.floor(waypointDistance / 1000) .. " km from Krymsk)")
+
+            -- Generate target counts for this waypoint
+            local targetCounts = approachConfig.targetsPerWaypoint
+            local numPatrols = math.random(targetCounts.patrolCount[1], targetCounts.patrolCount[2])
+            local numArmor = math.random(targetCounts.armorCount[1], targetCounts.armorCount[2])
+            local numConvoys = math.random(targetCounts.convoyCount[1], targetCounts.convoyCount[2])
+            local numCheckpoints = math.random(targetCounts.checkpointCount[1], targetCounts.checkpointCount[2])
+
+            -- Add work items for each target type
+            for i = 1, numPatrols do
+                table.insert(workItems, {
+                    type = "patrol",
+                    waypointIndex = waypointIndex,
+                    targetIndex = i,
+                    waypointCenter = waypointCenter,
+                    approachDir = approachDir,
+                    perpDir = perpDir,
+                })
+            end
+            for i = 1, numArmor do
+                table.insert(workItems, {
+                    type = "armor",
+                    waypointIndex = waypointIndex,
+                    targetIndex = i,
+                    waypointCenter = waypointCenter,
+                    approachDir = approachDir,
+                    perpDir = perpDir,
+                })
+            end
+            for i = 1, numConvoys do
+                table.insert(workItems, {
+                    type = "convoy",
+                    waypointIndex = waypointIndex,
+                    targetIndex = i,
+                    waypointCenter = waypointCenter,
+                    approachDir = approachDir,
+                    perpDir = perpDir,
+                })
+            end
+            for i = 1, numCheckpoints do
+                table.insert(workItems, {
+                    type = "checkpoint",
+                    waypointIndex = waypointIndex,
+                    targetIndex = i,
+                    waypointCenter = waypointCenter,
+                    approachDir = approachDir,
+                    perpDir = perpDir,
+                })
+            end
+        end
+    end
+
+    self:log("Generating " .. #workItems .. " approach route targets across " ..
+        waypointIndex .. " waypoints")
+
+    BatchScheduler:processArray({
+        array = workItems,
+        callback = function(item)
+            BattlefieldGeneration:generateApproachRouteTarget(item)
+        end,
+        onComplete = function()
+            BattlefieldGeneration:log("Approach route targets generated")
+            if onComplete then onComplete() end
+        end,
+    })
+end
+
+function BattlefieldGeneration:generateApproachRouteTarget(item)
+    local config = OperationInfinity.config
+    local approachConfig = config.approachRoute
+
+    -- Calculate position within waypoint area with lateral offset toward coast
+    local lateralOffset = approachConfig.corridorOffsetMin +
+        math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
+    local longitudinalOffset = (math.random() - 0.5) * 2 * approachConfig.waypointRadius
+
+    local initialPos = {
+        x = item.waypointCenter.x + item.approachDir.x * longitudinalOffset +
+            item.perpDir.x * lateralOffset,
+        y = item.waypointCenter.y + item.approachDir.y * longitudinalOffset +
+            item.perpDir.y * lateralOffset,
+    }
+
+    -- Group naming: AR = Approach Route
+    local groupPrefix = "AR-W" .. item.waypointIndex
+
+    if item.type == "patrol" then
+        -- Use existing scattered patrol system
+        local pos, valid = Terrain:findValidPosition(initialPos, 150)
+        if not valid then
+            self:log("Skipping approach route patrol - no valid terrain")
+            return
+        end
+
+        local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
+        local units = Formations:buildPlatoonUnits(template, pos, {
+            formation = Formations.FormationType.LINE,
+            facing = math.random() * 2 * math.pi,
+            spacing = 25,
+        })
+
+        local groupName = groupPrefix .. "-" .. patrolType .. "-" .. item.targetIndex
+
+        Virtualization:registerGroup({
+            name = groupName,
+            center = pos,
+            units = units,
+            countryId = country.id.CJTF_RED,
+            category = Group.Category.GROUND,
+        }, {})
+
+        self:log("Generated approach route " .. patrolType .. " at (" ..
+            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+
+    elseif item.type == "armor" then
+        -- Use armor patrol template for heavier targets
+        local pos, valid = Terrain:findValidPosition(initialPos, 200)
+        if not valid then
+            self:log("Skipping approach route armor - no valid terrain")
+            return
+        end
+
+        local template = UnitTemplates:getRandomArmorPatrol()
+        local units = Formations:buildPlatoonUnits(template, pos, {
+            formation = Formations:getRandomFormationType(),
+            facing = math.random() * 2 * math.pi,
+            spacing = 30,
+        })
+
+        local groupName = groupPrefix .. "-Armor-" .. item.targetIndex
+
+        Virtualization:registerGroup({
+            name = groupName,
+            center = pos,
+            units = units,
+            countryId = country.id.CJTF_RED,
+            category = Group.Category.GROUND,
+        }, {})
+
+        self:log("Generated approach route armor at (" ..
+            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+
+    elseif item.type == "convoy" then
+        -- Position convoy near roads
+        local pos, valid = Terrain:findValidPosition(initialPos, 200, {
+            maxRoadDistance = 100,
+        })
+        if not valid then
+            self:log("Skipping approach route convoy - no valid terrain near roads")
+            return
+        end
+
+        local template = Formations:randomizeTemplate(UnitTemplates.LogisticsConvoy)
+        local units = Formations:buildPlatoonUnits(template, pos, {
+            formation = Formations.FormationType.LINE,
+            spacing = 20,
+        })
+
+        local groupName = groupPrefix .. "-Convoy-" .. item.targetIndex
+
+        Virtualization:registerGroup({
+            name = groupName,
+            center = pos,
+            units = units,
+            countryId = country.id.CJTF_RED,
+            category = Group.Category.GROUND,
+        }, {})
+
+        self:log("Generated approach route convoy at (" ..
+            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+
+    elseif item.type == "checkpoint" then
+        -- Checkpoints near roads
+        local pos, valid = Terrain:findValidPosition(initialPos, 150, {
+            maxRoadDistance = 50,
+        })
+        if not valid then
+            self:log("Skipping approach route checkpoint - no valid terrain near roads")
+            return
+        end
+
+        local template = Formations:randomizeTemplate(UnitTemplates.Checkpoint)
+        local units = Formations:buildPlatoonUnits(template, pos, {
+            formation = Formations.FormationType.LINE,
+            spacing = 15,
+        })
+
+        local groupName = groupPrefix .. "-Checkpoint-" .. item.targetIndex
+
+        Virtualization:registerGroup({
+            name = groupName,
+            center = pos,
+            units = units,
+            countryId = country.id.CJTF_RED,
+            category = Group.Category.GROUND,
+        }, {})
+
+        self:log("Generated approach route checkpoint at (" ..
+            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+    end
+end
+
+-- =============================================================================
 -- AIR DEFENSE GENERATION
 -- =============================================================================
 
