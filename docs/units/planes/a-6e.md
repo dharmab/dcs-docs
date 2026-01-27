@@ -1,0 +1,463 @@
+# A-6E
+
+**Internal Name:** `A-6E`
+
+**Type ID:** `A6E`
+
+**Playable:** No
+
+## Background
+
+The Grumman A-6 Intruder was the U.S. Navy and Marine Corps' premier carrier-based all-weather attack aircraft from 1963 to 1997. Designed from the outset for precision strike in conditions that would ground other aircraft, the Intruder featured an advanced Digital Integrated Attack Navigation Equipment (DIANE) system that allowed accurate weapons delivery at night and in poor weather—capabilities unmatched by any other tactical aircraft of its era.
+
+The A-6 saw extensive combat during the Vietnam War, where Intruders conducted the most demanding missions against heavily defended targets in North Vietnam. A-6s struck bridges, power plants, and supply lines during Rolling Thunder and Linebacker campaigns, often flying when other aircraft could not due to weather. The aircraft's ability to deliver heavy bomb loads accurately at night made it invaluable for interdicting the Ho Chi Minh Trail. Intruder crews suffered significant losses to North Vietnamese SAMs and AAA, but their contribution to the air campaign was substantial.
+
+The A-6E variant, introduced in 1970, featured upgraded avionics and the TRAM (Target Recognition Attack Multi-sensor) turret under the nose, providing FLIR and laser designation capability for precision-guided munitions. A-6Es served in every subsequent U.S. naval operation, including strikes on Libya in 1986 and extensive operations during Desert Storm in 1991. During the Gulf War, Intruders delivered laser-guided bombs, HARM anti-radiation missiles, and conventional ordnance against Iraqi targets. The A-6 was retired in 1997, with its mission partially assumed by the F/A-18 Hornet and later the F/A-18E/F Super Hornet.
+
+## Tasks
+
+- SEAD
+- AFAC
+- Pinpoint Strike
+- CAS
+- Runway Attack
+- Anti-ship Strike
+- Reconnaissance
+- Refueling
+
+## Pylons
+
+### Pylon 1
+
+- Empty TER
+- Empty MER
+- 3x BDU-33 - 25lb Practice Bomb LD (TER)
+- 6x BDU-33 - 25lb Practice Bomb LD (MER)
+- 3x Mk 76 - 25lb Practice Bomb LD (TER)
+- 3x Mk 106 - 5lb Practice Bomb LD (TER)
+- 6x Mk 106 - 5lb Practice Bomb LD (MER)
+- BDU-45B - 500lb Practice Bomb
+- 3x BDU-45B - 500lb Practice Bomb (TER)
+- {HB_A6E_BDU45_TER_2x_LEFT}
+- 6x BDU-45B - 500lb Practice Bomb (MER)
+- 4x BDU-45B - 500lb Practice Bomb (MER)
+- 3x BDU-45B - 500lb Practice Bomb (MER)
+- 2x BDU-45B - 500lb Practice Bomb (MER)
+- 1x BDU-45B - 500lb Practice Bomb (MER)
+- BDU-45 - 500lb Practice Bomb
+- 3x BDU-45 - 500lb Practice Bomb (TER)
+- {HB_A6E_BDU45SE_TER_2x_LEFT}
+- 6x BDU-45 - 500lb Practice Bomb (MER)
+- 4x BDU-45 - 500lb Practice Bomb (MER)
+- 3x BDU-45 - 500lb Practice Bomb (MER)
+- 2x BDU-45 - 500lb Practice Bomb (MER)
+- 1x BDU-45 - 500lb Practice Bomb (MER)
+- Mk-81 - 250lb GP Bomb LD
+- 3x Mk-81 - 250lb GP Bomb LD (TER)
+- 2x Mk-81 - 250lb GP Bomb LD (TER)
+- 6x Mk-81 - 250lb GP Bomb LD (MER)
+- 4x Mk-81 - 250lb GP Bomb LD (MER)
+- 3x Mk-81 - 250lb GP Bomb LD (MER)
+- 2x Mk-81 - 250lb GP Bomb LD (MER)
+- 1x Mk-81 - 250lb GP Bomb LD (MER)
+- Mk-82 - 500lb GP Bomb LD
+- 3x Mk-82 - 500lb GP Bomb LD (TER)
+- 2x Mk-82 - 500lb GP Bomb LD (TER)
+- 6x Mk-82 - 500lb GP Bomb LD (MER)
+- 4x Mk-82 - 500lb GP Bomb LD (MER)
+- 3x Mk-82 - 500lb GP Bomb LD (MER)
+- 2x Mk-82 - 500lb GP Bomb LD (MER)
+- 1x Mk-82 - 500lb GP Bomb LD (MER)
+- Mk-82 Snakeye - 500lb GP Bomb HD
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 6x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 4x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 1x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- Mk-83 - 1000lb GP Bomb LD
+- 3x Mk-83 - 1000lb GP Bomb LD (TER)
+- 2x Mk-83 - 1000lb GP Bomb LD (TER)
+- 3x Mk-83 - 1000lb GP Bomb LD (MER)
+- 2x Mk-83 - 1000lb GP Bomb LD (MER)
+- 1x Mk-83 - 1000lb GP Bomb LD (MER)
+- Mk-84 - 2000lb GP Bomb LD
+- M117 - 750lb GP Bomb LD
+- 3x M117 - 750lb GP Bomb LD (TER)
+- 4x M117 - 750lb GP Bomb LD (MER)
+- 4x M117 - 750lb GP Bomb LD (MER) (OB)
+- GBU-12 - 500lb Laser Guided Bomb
+- 2x GBU-12 - 500lb Laser Guided Bomb (TER)
+- 2x GBU-12 - 500lb Laser Guided Bomb (MER)
+- GBU-16 - 1000lb Laser Guided Bomb
+- 1x GBU-16 - 1000lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (MER)
+- GBU-10 - 2000lb Laser Guided Bomb
+- LAU-10 - 4 x UnGd Rkts, 127 mm Zuni Mk. 24 Mod. 1 HE
+- 3x LAU-10 pod - 4 x 127mm ZUNI, UnGd Rkts Mk71, HE/FRAG (TER)
+- LAU-61 - 19 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU61MK151_TER_3x}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- {HB_A6E_LAU68MK5_TER_3x}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU68MK151_TER_3x}
+- Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (TER)
+- 6x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 4x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 1x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- AGM-45A Shrike ARM (LAU-34)
+- AERO 1D 300 Gallons Fuel Tank
+- AERO 1D 300 Gallons Fuel Tank (Empty)
+- LAU-7 with AIM-9L Sidewinder IR AAM
+- LAU-7 with AIM-9M Sidewinder IR AAM
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- 3x SUU-25 x 8 LUU-2 - Target Marker Flares (TER)
+- 2x SUU-25 x 8 LUU-2 - Target Marker Flares (MER)
+- ALQ-167 pod
+- AGM-88C HARM - High Speed Anti-Radiation Missile
+- AGM-84D Harpoon AShM
+- LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
+- LAU-117 with AGM-65F - Maverick F (IIR ASM)
+- 4x ADM-141A TALD (MER)
+- 2x ADM-141A TALD (MER)
+- 2x ADM-141A TALD (MER) (OB)
+
+### Pylon 2
+
+- Empty TER
+- Empty MER
+- 3x BDU-33 - 25lb Practice Bomb LD (TER)
+- 6x BDU-33 - 25lb Practice Bomb LD (MER)
+- 3x Mk 76 - 25lb Practice Bomb LD (TER)
+- 3x Mk 106 - 5lb Practice Bomb LD (TER)
+- 6x Mk 106 - 5lb Practice Bomb LD (MER)
+- BDU-45B - 500lb Practice Bomb
+- 3x BDU-45B - 500lb Practice Bomb (TER)
+- {HB_A6E_BDU45_TER_2x_LEFT}
+- 5x BDU-45B - 500lb Practice Bomb (MER)
+- 4x BDU-45B - 500lb Practice Bomb (MER)
+- 3x BDU-45B - 500lb Practice Bomb (MER)
+- 2x BDU-45B - 500lb Practice Bomb (MER)
+- 1x BDU-45B - 500lb Practice Bomb (MER)
+- BDU-45 - 500lb Practice Bomb
+- {HB_A6E_BDU45SE_TER_2x_LEFT}
+- 5x BDU-45 - 500lb Practice Bomb (MER)
+- 4x BDU-45 - 500lb Practice Bomb (MER)
+- 3x BDU-45 - 500lb Practice Bomb (MER)
+- 2x BDU-45 - 500lb Practice Bomb (MER)
+- 1x BDU-45 - 500lb Practice Bomb (MER)
+- Mk-81 - 250lb GP Bomb LD
+- 3x Mk-81 - 250lb GP Bomb LD (TER)
+- 2x Mk-81 - 250lb GP Bomb LD (TER)
+- 5x Mk-81 - 250lb GP Bomb LD (MER)
+- 4x Mk-81 - 250lb GP Bomb LD (MER)
+- 3x Mk-81 - 250lb GP Bomb LD (MER)
+- 2x Mk-81 - 250lb GP Bomb LD (MER)
+- 1x Mk-81 - 250lb GP Bomb LD (MER)
+- Mk-82 - 500lb GP Bomb LD
+- 3x Mk-82 - 500lb GP Bomb LD (TER)
+- 2x Mk-82 - 500lb GP Bomb LD (TER)
+- 5x Mk-82 - 500lb GP Bomb LD (MER)
+- 4x Mk-82 - 500lb GP Bomb LD (MER)
+- 3x Mk-82 - 500lb GP Bomb LD (MER)
+- 2x Mk-82 - 500lb GP Bomb LD (MER)
+- 1x Mk-82 - 500lb GP Bomb LD (MER)
+- Mk-82 Snakeye - 500lb GP Bomb HD
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 5x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 4x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 1x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- Mk-83 - 1000lb GP Bomb LD
+- 2x Mk-83 - 1000lb GP Bomb LD (TER)
+- 3x Mk-83 - 1000lb GP Bomb LD (MER)
+- 2x Mk-83 - 1000lb GP Bomb LD (MER)
+- 1x Mk-83 - 1000lb GP Bomb LD (MER)
+- Mk-84 - 2000lb GP Bomb LD
+- M117 - 750lb GP Bomb LD
+- 2x M117 - 750lb GP Bomb LD (TER)
+- 4x M117 - 750lb GP Bomb LD (MER) (OB)
+- GBU-12 - 500lb Laser Guided Bomb
+- 1x GBU-12 - 500lb Laser Guided Bomb (TER)
+- 2x GBU-12 - 500lb Laser Guided Bomb (MER)
+- GBU-16 - 1000lb Laser Guided Bomb
+- 1x GBU-16 - 1000lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (MER)
+- GBU-10 - 2000lb Laser Guided Bomb
+- LAU-10 - 4 x UnGd Rkts, 127 mm Zuni Mk. 24 Mod. 1 HE
+- 2x LAU-10 pod - 4 x 127mm ZUNI, UnGd Rkts Mk71, HE/FRAG (TER)
+- LAU-61 - 19 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU61MK151_TER_2x_LEFT}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- {HB_A6E_LAU68MK5_TER_2x_LEFT}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU68MK151_TER_2x_LEFT}
+- Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (TER)
+- 5x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 4x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 1x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- AGM-45A Shrike ARM (LAU-34)
+- AERO 1D 300 Gallons Fuel Tank
+- AERO 1D 300 Gallons Fuel Tank (Empty)
+- LAU-7 with AIM-9L Sidewinder IR AAM
+- LAU-7 with AIM-9M Sidewinder IR AAM
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- AGM-88C HARM - High Speed Anti-Radiation Missile
+- AGM-84D Harpoon AShM
+- LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
+- LAU-117 with AGM-65F - Maverick F (IIR ASM)
+- AGM-84E Harpoon/SLAM (Stand-Off Land-Attack Missile)
+- AGM-62 Walleye I - Guided Weapon Mk 1 (TV Guided)
+- 2x ADM-141A TALD (MER)
+
+### Pylon 3
+
+- Empty TER
+- Empty MER
+- 3x BDU-33 - 25lb Practice Bomb LD (TER)
+- 6x BDU-33 - 25lb Practice Bomb LD (MER)
+- 3x Mk 76 - 25lb Practice Bomb LD (TER)
+- 3x Mk 106 - 5lb Practice Bomb LD (TER)
+- 6x Mk 106 - 5lb Practice Bomb LD (MER)
+- BDU-45B - 500lb Practice Bomb
+- 3x BDU-45B - 500lb Practice Bomb (TER)
+- 6x BDU-45B - 500lb Practice Bomb (MER)
+- BDU-45 - 500lb Practice Bomb
+- 3x BDU-45 - 500lb Practice Bomb (TER)
+- 5x BDU-45 - 500lb Practice Bomb (MER)
+- Mk-81 - 250lb GP Bomb LD
+- 3x Mk-81 - 250lb GP Bomb LD (TER)
+- 6x Mk-81 - 250lb GP Bomb LD (MER)
+- Mk-82 - 500lb GP Bomb LD
+- 3x Mk-82 - 500lb GP Bomb LD (TER)
+- 6x Mk-82 - 500lb GP Bomb LD (MER)
+- Mk-82 Snakeye - 500lb GP Bomb HD
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 5x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- Mk-83 - 1000lb GP Bomb LD
+- 3x Mk-83 - 1000lb GP Bomb LD (TER)
+- 3x Mk-83 - 1000lb GP Bomb LD (MER)
+- Mk-84 - 2000lb GP Bomb LD
+- M117 - 750lb GP Bomb LD
+- 3x M117 - 750lb GP Bomb LD (TER)
+- 4x M117 - 750lb GP Bomb LD (MER)
+- 1x GBU-12 - 500lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (MER)
+- Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (TER)
+- 6x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- AERO 1D 300 Gallons Fuel Tank
+- AERO 1D 300 Gallons Fuel Tank (Empty)
+- D-704 Refuelling Pod
+
+### Pylon 4
+
+- Empty TER
+- Empty MER
+- 3x BDU-33 - 25lb Practice Bomb LD (TER)
+- 6x BDU-33 - 25lb Practice Bomb LD (MER)
+- 3x Mk 76 - 25lb Practice Bomb LD (TER)
+- 3x Mk 106 - 5lb Practice Bomb LD (TER)
+- 6x Mk 106 - 5lb Practice Bomb LD (MER)
+- BDU-45B - 500lb Practice Bomb
+- 3x BDU-45B - 500lb Practice Bomb (TER)
+- 2x BDU-45B - 500lb Practice Bomb (TER)
+- 5x BDU-45B - 500lb Practice Bomb (MER)
+- 4x BDU-45B - 500lb Practice Bomb (MER)
+- 3x BDU-45B - 500lb Practice Bomb (MER)
+- 2x BDU-45B - 500lb Practice Bomb (MER)
+- 1x BDU-45B - 500lb Practice Bomb (MER)
+- BDU-45 - 500lb Practice Bomb
+- 2x BDU-45 - 500lb Practice Bomb (TER)
+- 5x BDU-45 - 500lb Practice Bomb (MER)
+- 4x BDU-45 - 500lb Practice Bomb (MER)
+- 3x BDU-45 - 500lb Practice Bomb (MER)
+- 2x BDU-45 - 500lb Practice Bomb (MER)
+- 1x BDU-45 - 500lb Practice Bomb (MER)
+- Mk-81 - 250lb GP Bomb LD
+- 3x Mk-81 - 250lb GP Bomb LD (TER)
+- 2x Mk-81 - 250lb GP Bomb LD (TER)
+- 5x Mk-81 - 250lb GP Bomb LD (MER)
+- 4x Mk-81 - 250lb GP Bomb LD (MER)
+- 3x Mk-81 - 250lb GP Bomb LD (MER)
+- 2x Mk-81 - 250lb GP Bomb LD (MER)
+- 1x Mk-81 - 250lb GP Bomb LD (MER)
+- Mk-82 - 500lb GP Bomb LD
+- 3x Mk-82 - 500lb GP Bomb LD (TER)
+- 2x Mk-82 - 500lb GP Bomb LD (TER)
+- 5x Mk-82 - 500lb GP Bomb LD (MER)
+- 4x Mk-82 - 500lb GP Bomb LD (MER)
+- 3x Mk-82 - 500lb GP Bomb LD (MER)
+- 2x Mk-82 - 500lb GP Bomb LD (MER)
+- 1x Mk-82 - 500lb GP Bomb LD (MER)
+- Mk-82 Snakeye - 500lb GP Bomb HD
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 5x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 4x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 1x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- Mk-83 - 1000lb GP Bomb LD
+- 2x Mk-83 - 1000lb GP Bomb LD (TER)
+- 3x Mk-83 - 1000lb GP Bomb LD (MER)
+- 2x Mk-83 - 1000lb GP Bomb LD (MER)
+- 1x Mk-83 - 1000lb GP Bomb LD (MER)
+- Mk-84 - 2000lb GP Bomb LD
+- M117 - 750lb GP Bomb LD
+- 2x M117 - 750lb GP Bomb LD (TER)
+- 4x M117 - 750lb GP Bomb LD (MER) (OB)
+- GBU-12 - 500lb Laser Guided Bomb
+- 1x GBU-12 - 500lb Laser Guided Bomb (TER)
+- 2x GBU-12 - 500lb Laser Guided Bomb (MER)
+- GBU-16 - 1000lb Laser Guided Bomb
+- 1x GBU-16 - 1000lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (MER)
+- GBU-10 - 2000lb Laser Guided Bomb
+- LAU-10 - 4 x UnGd Rkts, 127 mm Zuni Mk. 24 Mod. 1 HE
+- 2x LAU-10 pod - 4 x 127mm ZUNI, UnGd Rkts Mk71, HE/FRAG (TER)
+- LAU-61 - 19 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU61MK151_TER_2x_RIGHT}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- {HB_A6E_LAU68MK5_TER_2x_RIGHT}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU68MK151_TER_2x_RIGHT}
+- Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (TER)
+- 5x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 4x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 1x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- AGM-45A Shrike ARM (LAU-34)
+- AERO 1D 300 Gallons Fuel Tank
+- AERO 1D 300 Gallons Fuel Tank (Empty)
+- LAU-7 with AIM-9L Sidewinder IR AAM
+- LAU-7 with AIM-9M Sidewinder IR AAM
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- ALQ-167 pod
+- AGM-88C HARM - High Speed Anti-Radiation Missile
+- AGM-84D Harpoon AShM
+- LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
+- LAU-117 with AGM-65F - Maverick F (IIR ASM)
+- AGM-84E Harpoon/SLAM (Stand-Off Land-Attack Missile)
+- AGM-62 Walleye I - Guided Weapon Mk 1 (TV Guided)
+- 2x ADM-141A TALD (MER)
+
+### Pylon 5
+
+- Empty TER
+- Empty MER
+- 3x BDU-33 - 25lb Practice Bomb LD (TER)
+- 6x BDU-33 - 25lb Practice Bomb LD (MER)
+- 3x Mk 76 - 25lb Practice Bomb LD (TER)
+- 3x Mk 106 - 5lb Practice Bomb LD (TER)
+- 6x Mk 106 - 5lb Practice Bomb LD (MER)
+- BDU-45B - 500lb Practice Bomb
+- 3x BDU-45B - 500lb Practice Bomb (TER)
+- 2x BDU-45B - 500lb Practice Bomb (TER)
+- 6x BDU-45B - 500lb Practice Bomb (MER)
+- 4x BDU-45B - 500lb Practice Bomb (MER)
+- 3x BDU-45B - 500lb Practice Bomb (MER)
+- 2x BDU-45B - 500lb Practice Bomb (MER)
+- 1x BDU-45B - 500lb Practice Bomb (MER)
+- BDU-45 - 500lb Practice Bomb
+- 3x BDU-45 - 500lb Practice Bomb (TER)
+- 2x BDU-45 - 500lb Practice Bomb (TER)
+- 6x BDU-45 - 500lb Practice Bomb (MER)
+- 4x BDU-45 - 500lb Practice Bomb (MER)
+- 3x BDU-45 - 500lb Practice Bomb (MER)
+- 2x BDU-45 - 500lb Practice Bomb (MER)
+- 1x BDU-45 - 500lb Practice Bomb (MER)
+- Mk-81 - 250lb GP Bomb LD
+- 3x Mk-81 - 250lb GP Bomb LD (TER)
+- 2x Mk-81 - 250lb GP Bomb LD (TER)
+- 6x Mk-81 - 250lb GP Bomb LD (MER)
+- 4x Mk-81 - 250lb GP Bomb LD (MER)
+- 3x Mk-81 - 250lb GP Bomb LD (MER)
+- 2x Mk-81 - 250lb GP Bomb LD (MER)
+- 1x Mk-81 - 250lb GP Bomb LD (MER)
+- Mk-82 - 500lb GP Bomb LD
+- 3x Mk-82 - 500lb GP Bomb LD (TER)
+- 2x Mk-82 - 500lb GP Bomb LD (TER)
+- 6x Mk-82 - 500lb GP Bomb LD (MER)
+- 4x Mk-82 - 500lb GP Bomb LD (MER)
+- 3x Mk-82 - 500lb GP Bomb LD (MER)
+- 2x Mk-82 - 500lb GP Bomb LD (MER)
+- 1x Mk-82 - 500lb GP Bomb LD (MER)
+- Mk-82 Snakeye - 500lb GP Bomb HD
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (TER)
+- 6x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 4x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 3x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 2x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- 1x Mk-82 Snakeye - 500lb GP Bomb HD (MER)
+- Mk-83 - 1000lb GP Bomb LD
+- 3x Mk-83 - 1000lb GP Bomb LD (TER)
+- 2x Mk-83 - 1000lb GP Bomb LD (TER)
+- 3x Mk-83 - 1000lb GP Bomb LD (MER)
+- 2x Mk-83 - 1000lb GP Bomb LD (MER)
+- 1x Mk-83 - 1000lb GP Bomb LD (MER)
+- Mk-84 - 2000lb GP Bomb LD
+- M117 - 750lb GP Bomb LD
+- 3x M117 - 750lb GP Bomb LD (TER)
+- 4x M117 - 750lb GP Bomb LD (MER)
+- 4x M117 - 750lb GP Bomb LD (MER) (OB)
+- GBU-12 - 500lb Laser Guided Bomb
+- 2x GBU-12 - 500lb Laser Guided Bomb (TER)
+- 2x GBU-12 - 500lb Laser Guided Bomb (MER)
+- GBU-16 - 1000lb Laser Guided Bomb
+- 1x GBU-16 - 1000lb Laser Guided Bomb (TER)
+- 1x GBU-16 - 1000lb Laser Guided Bomb (MER)
+- GBU-10 - 2000lb Laser Guided Bomb
+- LAU-10 - 4 x UnGd Rkts, 127 mm Zuni Mk. 24 Mod. 1 HE
+- 3x LAU-10 pod - 4 x 127mm ZUNI, UnGd Rkts Mk71, HE/FRAG (TER)
+- LAU-61 - 19 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU61MK151_TER_3x}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- {HB_A6E_LAU68MK5_TER_3x}
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- {HB_A6E_LAU68MK151_TER_3x}
+- Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (TER)
+- 6x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 4x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 3x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 2x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- 1x Mk-20 Rockeye - 490lbs CBU, 247 x HEAT Bomblets (MER)
+- AGM-45A Shrike ARM (LAU-34)
+- AERO 1D 300 Gallons Fuel Tank
+- AERO 1D 300 Gallons Fuel Tank (Empty)
+- LAU-7 with AIM-9L Sidewinder IR AAM
+- LAU-7 with AIM-9M Sidewinder IR AAM
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- 3x SUU-25 x 8 LUU-2 - Target Marker Flares (TER)
+- 2x SUU-25 x 8 LUU-2 - Target Marker Flares (MER)
+- ALQ-167 pod
+- AGM-88C HARM - High Speed Anti-Radiation Missile
+- AGM-84D Harpoon AShM
+- LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
+- LAU-117 with AGM-65F - Maverick F (IIR ASM)
+- 4x ADM-141A TALD (MER)
+- 2x ADM-141A TALD (MER)
+- 2x ADM-141A TALD (MER) (OB)
+
+## Loadouts
+
+- SEAD: TODO
+- AFAC: TODO
+- Pinpoint Strike: TODO
+- CAS: TODO
+- Runway Attack: TODO
+- Anti-ship Strike: TODO
+- Reconnaissance: TODO
+- Refueling: TODO

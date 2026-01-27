@@ -29,7 +29,7 @@ The `docs/` directory contains the following documentation:
   - `ground.md` - Ground units including vehicles, armor, artillery, air defense systems, and infantry
   - `helicopters.md` - Rotary-wing aircraft with sensors, armament, and capabilities
   - `sea.md` - Naval units including carriers, destroyers, submarines, and civilian vessels
-  - `planes.md` - Fixed-wing aircraft with pylons, loadouts, and capabilities
+  - `planes/` - Fixed-wing aircraft with pylons, loadouts, and capabilities (individual files per aircraft, see `planes/index.md`)
   - `ww2-planes.md` - World War II era fixed-wing aircraft with pylons, loadouts, and capabilities
   - `weapons.md` - Weapons systems including missiles, bombs, and rockets
 - `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):

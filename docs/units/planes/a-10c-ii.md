@@ -1,0 +1,624 @@
+# A-10C II
+
+**Internal Name:** `A-10C II`
+
+**Type ID:** `A-10C_2`
+
+**Playable:** Yes
+
+**Supersedes:** A-10C
+
+## Background
+
+The A-10C is an upgraded variant of the Thunderbolt II that entered service in 2007 under the Precision Engagement program, representing a comprehensive modernization of the venerable Warthog. The C-model introduced digital glass cockpit displays replacing analog instruments, GPS/INS navigation, the ability to employ precision-guided munitions including JDAM GPS bombs and laser-guided weapons, improved communications, and a digital stores management system. The legendary GAU-8/A cannon remains the aircraft's signature weapon.
+
+The A-10C II in DCS represents a simulator-created aircraft based on a subset of later upgrades applied to real-world A-10Cs. These include the AGM-65E2/L laser-guided Maverick missile, APKWS (Advanced Precision Kill Weapon System) laser-guided rockets, Scorpion HMCS helmet-mounted cueing system, and ARC-210 radio system with SATCOM capability. These enhancements transformed the Warthog from a predominantly unguided-munitions platform into a precision strike aircraft while retaining its traditional close air support strengths.
+
+A-10Cs have deployed extensively to Afghanistan and Iraq, where their precision engagement capabilities proved valuable for counterinsurgency operations requiring careful target discrimination to minimize civilian casualties. The aircraft's ability to loiter for hours, communicate directly with ground forces, and deliver weapons ranging from the cannon to GPS-guided bombs makes it the most requested close air support platform among ground troops. Despite periodic attempts to retire the fleet, the A-10C remains in active service and continues receiving upgrades.
+
+## Tasks
+
+- Ground Attack
+- AFAC
+- Runway Attack
+- Anti-ship Strike
+
+## Pylons
+
+### Pylon 1
+
+- LAU-105 with 2 x AIM-9M Sidewinder IR AAM
+- Mk-82 - 500lb GP Bomb LD
+- LAU-105 with 1 x AIM-9M Sidewinder IR AAM
+- LAU-105
+- LAU-105 with 2 x Captive AIM-9M for ACM
+- LAU-105 with 1 x Captive AIM-9M for ACM
+- ALQ-131 - ECM Pod
+- Smokewinder - red
+- Smokewinder - green
+- Smokewinder - blue
+- Smokewinder - white
+- Smokewinder - yellow
+- Smokewinder - orange
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- CBU-87 - 202 x CEM Cluster Bomb
+- ALQ-184 - ECM Pod
+- ALQ-184 Long - ECM Pod
+- CBU-97 - 10 x SFW Cluster Bomb
+- LAU-105 with 1 x AN/ASQ-T50 TCTS Pod - ACMI Pod
+- LAU-105 with 2 x AIM-9L Sidewinder IR AAM
+- LAU-105 with 1 x AIM-9L Sidewinder IR AAM
+
+### Pylon 2
+
+- Mk-82 - 500lb GP Bomb LD
+- AN/AAQ-28 LITENING - Targeting Pod
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- CBU-87 - 202 x CEM Cluster Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- CBU-97 - 10 x SFW Cluster Bomb
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+
+### Pylon 3
+
+- LAU-117 with AGM-65K - Maverick K (CCD Imp ASM)
+- LAU-88 with 1 x AGM-65D - Maverick D (IIR ASM)
+- LAU-88 with 2 x AGM-65D - Maverick D (IIR ASM)
+- LAU-88 with 3 x AGM-65D - Maverick D (IIR ASM)
+- LAU-117 with AGM-65D - Maverick D (IIR ASM)
+- LAU-117 with AGM-65E2/L - Maverick E2/L (Laser Guided ASM)
+- Mk-84 - 2000lb GP Bomb LD
+- Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- CBU-87 - 202 x CEM Cluster Bomb
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- {B2DC636E-5E45-42db-81D9-38F3E059107C}
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- LAU_131x3_HYDRA_70_M278
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- LAU-117 with AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-117 with AGM-65G - Maverick G (IIR ASM - Lg Whd)
+- LAU-88 with 1 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-88 with 2 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-88 with 3 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-117 with TGM-65D - Trg Round for Mav D (IIR)
+- LAU-117 with TGM-65G - Trg Round for Mav G (IIR)
+- LAU-117 with TGM-65H - Trg Round for Mav H (CCD)
+- LAU-117 with CATM-65K - Captive Trg Round for Mav K (CCD)
+- BRU-42 with 3 x GBU-12 - 500lb Laser Guided Bombs
+- BRU-42 with 2 x GBU-12 - 500lb Laser Guided Bomb
+- BRU-42 with 1 x GBU-12 - 500lb Laser Guided Bomb
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 3 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 2 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 1 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 4
+
+- Mk-82 - 500lb GP Bomb LD
+- Mk-84 - 2000lb GP Bomb LD
+- Fuel tank FT600
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- {B2DC636E-5E45-42db-81D9-38F3E059107C}
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- LAU_131x3_HYDRA_70_M278
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- BRU-42 with 3 x GBU-12 - 500lb Laser Guided Bombs
+- BRU-42 with 2 x GBU-12 - 500lb Laser Guided Bomb
+- BRU-42 with 1 x GBU-12 - 500lb Laser Guided Bomb
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 5
+
+- Mk-82 - 500lb GP Bomb LD
+- Mk-84 - 2000lb GP Bomb LD
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 6
+
+- Mk-82 - 500lb GP Bomb LD
+- Mk-84 - 2000lb GP Bomb LD
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- CBU-97 - 10 x SFW Cluster Bomb
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- Fuel tank FT600
+
+### Pylon 7
+
+- Mk-82 - 500lb GP Bomb LD
+- Mk-84 - 2000lb GP Bomb LD
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 8
+
+- Mk-82 - 500lb GP Bomb LD
+- Mk-84 - 2000lb GP Bomb LD
+- Fuel tank FT600
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- {B2DC636E-5E45-42db-81D9-38F3E059107C}
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- LAU_131x3_HYDRA_70_M278
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- BRU-42 with 3 x GBU-12 - 500lb Laser Guided Bombs
+- BRU-42 with 2 x GBU-12 - 500lb Laser Guided Bomb
+- BRU-42 with 1 x GBU-12 - 500lb Laser Guided Bomb
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 9
+
+- LAU-117 with AGM-65K - Maverick K (CCD Imp ASM)
+- LAU-88 with 1 x AGM-65D - Maverick D (IIR ASM)
+- LAU-88 with 2 x AGM-65D - Maverick D (IIR ASM)
+- LAU-88 with 3 x AGM-65D - Maverick D (IIR ASM)
+- LAU-117 with AGM-65D - Maverick D (IIR ASM)
+- LAU-117 with AGM-65E2/L - Maverick E2/L (Laser Guided ASM)
+- Mk-84 - 2000lb GP Bomb LD
+- Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 3 x Mk-82 - 500lb GP Bombs LD
+- BRU-42 with 2 x Mk-82 - 500lb GP Bomb LD
+- BRU-42 with 1 x Mk-82 - 500lb GP Bomb LD
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- GBU-10 - 2000lb Laser Guided Bomb
+- GBU-31(V)1/B - JDAM, 2000lb GPS Guided Bomb
+- GBU-31(V)3/B - JDAM, 2000lb GPS Guided Penetrator Bomb
+- GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
+- CBU-87 - 202 x CEM Cluster Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 3 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- {B2DC636E-5E45-42db-81D9-38F3E059107C}
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 3 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- LAU_131x3_HYDRA_70_M278
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- BRU-42: 2 x LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- MXU-648 Travel Pod
+- BRU-42 - Triple Ejector Rack (TER)
+- BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
+- LAU-117 with AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-117 with AGM-65G - Maverick G (IIR ASM - Lg Whd)
+- LAU-88 with 1 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-88 with 2 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-88 with 3 x AGM-65H - Maverick H (CCD Imp ASM)
+- LAU-117 with TGM-65D - Trg Round for Mav D (IIR)
+- LAU-117 with TGM-65G - Trg Round for Mav G (IIR)
+- LAU-117 with TGM-65H - Trg Round for Mav H (CCD)
+- LAU-117 with CATM-65K - Captive Trg Round for Mav K (CCD)
+- BRU-42 with 3 x GBU-12 - 500lb Laser Guided Bombs
+- BRU-42 with 2 x GBU-12 - 500lb Laser Guided Bomb
+- BRU-42 with 1 x GBU-12 - 500lb Laser Guided Bomb
+- CBU-97 - 10 x SFW Cluster Bomb
+- CBU-105 - 10 x SFW, CBU with WCMD
+- CBU-103 - 202 x CEM, CBU with WCMD
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 3 x Mk-82 AIR Ballute - 500lb GP Bombs HD
+- BRU-42 with 2 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 1 x Mk-82 AIR Ballute - 500lb GP Bomb HD
+- BRU-42 with 3 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 2 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- BRU-42 with 1 x SUU-25 x 8 LUU-2 - Target Marker Flares
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- BRU-42: 3 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- BRU-42: 2 x LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+- GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
+
+### Pylon 10
+
+- Mk-82 - 500lb GP Bomb LD
+- SUU-25 x 8 LUU-2 - Target Marker Flares
+- AN/AAQ-28 LITENING - Targeting Pod
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- CBU-87 - 202 x CEM Cluster Bomb
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-68 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {9115A5AF-6D5C-4b6b-BEA9-31D48B5C6001}
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 1 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 5 HEAT
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 Mk 61 TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M151 HE
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M156 SM
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 WTU-1/B TP
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M257 IL
+- LAU-131 - 7 x UnGd Rkts, 70 mm Hydra 70 M274 TP-SM
+- {1FE353C6-5EB6-4d22-9CFD-6DB384EC7296}
+- CBU-97 - 10 x SFW Cluster Bomb
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M151 HE APKWS
+- LAU-131 - 7 x Laser Guided Rkts, 70 mm Hydra 70 M282 MPP APKWS
+
+### Pylon 11
+
+- LAU-105 with 2 x AIM-9M Sidewinder IR AAM
+- Smokewinder - red
+- Smokewinder - green
+- Smokewinder - blue
+- Smokewinder - white
+- Smokewinder - yellow
+- Smokewinder - orange
+- ALQ-131 - ECM Pod
+- GBU-12 - 500lb Laser Guided Bomb
+- BDU-50LD - 500lb Inert Practice Bomb LD
+- BDU-50HD - 500lb Inert Practice Bomb HD
+- Mk-82 AIR Ballute - 500lb GP Bomb HD
+- Mk-82 - 500lb GP Bomb LD
+- CBU-87 - 202 x CEM Cluster Bomb
+- BDU-50LGB - 500lb Laser Guided Inert Practice Bomb LD
+- CBU-97 - 10 x SFW Cluster Bomb
+- LAU-105 with 1 x AIM-9M Sidewinder IR AAM
+- LAU-105
+- ALQ-184 - ECM Pod
+- ALQ-184 Long - ECM Pod
+- LAU-105 with 2 x Captive AIM-9M for ACM
+- LAU-105 with 1 x Captive AIM-9M for ACM
+- LAU-105 with 1 x AN/ASQ-T50 TCTS Pod - ACMI Pod
+- LAU-105 with 2 x AIM-9L Sidewinder IR AAM
+- LAU-105 with 1 x AIM-9L Sidewinder IR AAM
+
+## Loadouts
+
+- Ground Attack: TODO
+- AFAC: TODO
+- Runway Attack: TODO
+- Anti-ship Strike: TODO
