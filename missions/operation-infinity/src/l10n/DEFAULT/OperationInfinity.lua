@@ -172,11 +172,14 @@ OperationInfinity.config = {
     },
 
     -- Support aircraft group names and orbit altitudes
+    -- Speeds are TAS in m/s, computed to achieve target IAS at each altitude.
+    -- If altitude changes, recalculate: TAS = IAS × sqrt(1.225 / density_at_altitude)
+    -- Target IAS: tankers 300 kt, slow tanker (Shell) 180 kt
     supportAircraft = {
         { name = "Magic", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
-        { name = "Texaco", altitude = 5486, speed = 180, radio = 270.5, tacan = "100X", tankerType = "boom" },
-        { name = "Arco", altitude = 4877, speed = 180, radio = 270.1, tacan = "101X", tankerType = "drogue" },
-        { name = "Shell", altitude = 4572, speed = 105, radio = 270.0, tacan = "102X", tankerType = "slow boom" },
+        { name = "Texaco", altitude = 5486, speed = 207, radio = 270.5, tacan = "100X", tankerType = "boom" },
+        { name = "Arco", altitude = 4877, speed = 199, radio = 270.1, tacan = "101X", tankerType = "drogue" },
+        { name = "Shell", altitude = 4572, speed = 117, radio = 270.0, tacan = "102X", tankerType = "slow boom" },
     },
 
     -- SAM site counts by difficulty
