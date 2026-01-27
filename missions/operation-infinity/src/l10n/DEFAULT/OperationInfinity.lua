@@ -752,6 +752,54 @@ function OperationInfinity:setupMissionInfoMenu()
 end
 
 -- =============================================================================
+-- COMMS PLAN DISPLAY
+-- =============================================================================
+
+function OperationInfinity:displayCommsPlan()
+    local msg = [[=== COMMUNICATIONS PLAN ===
+
+KRYMSK AIRFIELD
+  Tower: 254.1 MHz AM
+  Ground: 254.3 MHz AM
+  Radar: 254.5 MHz AM
+
+MISSION FREQUENCIES
+  Strike: 255.1 MHz AM
+  GCI UHF: 255.3 MHz AM
+  GCI VHF: 124.1 MHz VHF
+  GCI FM: 32.1 MHz FM
+  In-Game AWACS: 255.5 MHz AM
+
+FLIGHT TACTICAL (AM)
+  Red 1-5: 260.1, 260.3, 260.5, 260.7, 260.9
+  Blue 1-5: 261.1, 261.3, 261.5, 261.7, 261.9
+  Green 1-5: 262.1, 262.3, 262.5, 262.7, 262.9
+
+FLIGHT TACTICAL (FM)
+  Yellow 1-5: 30.1, 30.3, 30.5, 30.7, 30.9
+  Orange 1-5: 31.1, 31.3, 31.5, 31.7, 31.9
+
+TANKERS
+  Basket (Arco): 270.1 MHz AM
+  Boom (Texaco): 270.5 MHz AM
+
+GUARD
+  Military: 243.0 MHz AM
+  Civil: 121.5 MHz VHF]]
+
+    trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 45)
+end
+
+function OperationInfinity:setupCommsPlanMenu()
+    missionCommands.addCommandForCoalition(
+        coalition.side.BLUE,
+        "Comms Plan",
+        nil,
+        function() OperationInfinity:displayCommsPlan() end
+    )
+end
+
+-- =============================================================================
 -- MAP MARKERS
 -- =============================================================================
 
@@ -980,8 +1028,9 @@ function OperationInfinity:init()
 
     -- Random number generator seeding is not required in this environment
 
-    -- Setup F10 menu
+    -- Setup F10 menus
     self:setupMenu()
+    self:setupCommsPlanMenu()
 
     -- Start player check loop - runs early to catch singleplayer and first multiplayer joiners
     -- The welcome message is displayed by checkForNewPlayers when players are detected
