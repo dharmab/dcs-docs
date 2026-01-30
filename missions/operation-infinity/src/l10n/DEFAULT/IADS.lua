@@ -130,23 +130,6 @@ function IADS:getBlueAircraftPositions()
     return positions
 end
 
-function IADS:getClosestThreatDistance(samSite)
-    local threats = self:getBlueAircraftPositions()
-    local minDistance = math.huge
-
-    for _, threat in ipairs(threats) do
-        -- Only consider airborne threats (alt > 50m)
-        if threat.alt > 50 then
-            local distance = self:getDistance2D(threat, samSite.center)
-            if distance < minDistance then
-                minDistance = distance
-            end
-        end
-    end
-
-    return minDistance
-end
-
 -- =============================================================================
 -- EMISSION CONTROL
 -- =============================================================================
@@ -181,46 +164,7 @@ function IADS:setRadarState(samSite, active)
     return true
 end
 
-function IADS:updateSAMSite(samSite)
-    local currentTime = timer.getTime()
-    local timeSinceChange = currentTime - samSite.lastStateChange
-    local threatDistance = self:getClosestThreatDistance(samSite)
-
-    -- Threat within activation range
-    if threatDistance < self.config.samActivationRange then
-        -- Threat close - activate radar
-        if not samSite.radarActive then
-            self:setRadarState(samSite, true)
-            samSite.pulsePhase = "on"
-        else
-            -- Already active - check if we should pulse off to avoid being predictable
-            if timeSinceChange > self.config.pulseOnDuration then
-                -- Brief off period even with threat nearby
-                self:setRadarState(samSite, false)
-                samSite.pulsePhase = "off"
-            end
-        end
-    else
-        -- No immediate threat
-        if samSite.radarActive then
-            -- Radar is on - check if pulse on duration exceeded
-            if timeSinceChange > self.config.pulseOnDuration then
-                self:setRadarState(samSite, false)
-                samSite.pulsePhase = "off"
-            end
-        else
-            -- Radar is off - check if we should pulse on
-            if samSite.pulsePhase == "off" and timeSinceChange > self.config.pulseOffDuration then
-                -- Occasional pulse to search for targets
-                self:setRadarState(samSite, true)
-                samSite.pulsePhase = "on"
-            end
-        end
-    end
-end
-
--- Version that uses pre-cached threat positions (more efficient)
-function IADS:updateSAMSiteCached(samSite, bluePositions)
+function IADS:updateSAMSite(samSite, bluePositions)
     local currentTime = timer.getTime()
     local timeSinceChange = currentTime - samSite.lastStateChange
 
@@ -235,7 +179,6 @@ function IADS:updateSAMSiteCached(samSite, bluePositions)
         end
     end
 
-    -- Same logic as updateSAMSite but with pre-computed distance
     if threatDistance < self.config.samActivationRange then
         if not samSite.radarActive then
             self:setRadarState(samSite, true)
@@ -258,12 +201,6 @@ function IADS:updateSAMSiteCached(samSite, bluePositions)
                 samSite.pulsePhase = "on"
             end
         end
-    end
-end
-
-function IADS:updateEmissionControl()
-    for _, samSite in ipairs(self.state.samSites) do
-        self:updateSAMSite(samSite)
     end
 end
 
@@ -289,63 +226,20 @@ end
 
 -- Batched version with position caching
 function IADS:updateEmissionControlBatched()
-    -- Cache blue aircraft positions ONCE per update cycle
-    local bluePositions = self:getBlueAircraftPositions()
-
     if #self.state.samSites == 0 then
         return
     end
 
-    -- Process SAM sites with time budgeting
-    local startTime = timer.getTime() * 1000
-    local budgetMs = BatchScheduler.config.frameBudgetMs
-    local itemsProcessed = 0
+    -- Cache blue aircraft positions ONCE per update cycle
+    local bluePositions = self:getBlueAircraftPositions()
 
-    for idx, samSite in ipairs(self.state.samSites) do
-        self:updateSAMSiteCached(samSite, bluePositions)
-        itemsProcessed = itemsProcessed + 1
-
-        local elapsed = (timer.getTime() * 1000) - startTime
-        if itemsProcessed >= 1 and elapsed >= budgetMs then
-            -- Schedule remaining SAM sites for next frame
-            local remaining = {}
-            for i = idx + 1, #self.state.samSites do
-                table.insert(remaining, self.state.samSites[i])
-            end
-            if #remaining > 0 then
-                timer.scheduleFunction(function()
-                    IADS:updateEmissionControlBatchedContinue(remaining, bluePositions)
-                end, nil, timer.getTime() + 0.001)
-            end
-            return
-        end
-    end
-end
-
--- Continue processing remaining SAM sites
-function IADS:updateEmissionControlBatchedContinue(samSites, bluePositions)
-    local startTime = timer.getTime() * 1000
-    local budgetMs = BatchScheduler.config.frameBudgetMs
-    local itemsProcessed = 0
-
-    for idx, samSite in ipairs(samSites) do
-        self:updateSAMSiteCached(samSite, bluePositions)
-        itemsProcessed = itemsProcessed + 1
-
-        local elapsed = (timer.getTime() * 1000) - startTime
-        if itemsProcessed >= 1 and elapsed >= budgetMs then
-            local remaining = {}
-            for i = idx + 1, #samSites do
-                table.insert(remaining, samSites[i])
-            end
-            if #remaining > 0 then
-                timer.scheduleFunction(function()
-                    IADS:updateEmissionControlBatchedContinue(remaining, bluePositions)
-                end, nil, timer.getTime() + 0.001)
-            end
-            return
-        end
-    end
+    BatchScheduler:processArray({
+        array = self.state.samSites,
+        context = { bluePositions = bluePositions },
+        callback = function(samSite, _, ctx)
+            IADS:updateSAMSite(samSite, ctx.bluePositions)
+        end,
+    })
 end
 
 -- =============================================================================

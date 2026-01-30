@@ -17,6 +17,13 @@ BatchScheduler.config = {
     minItems = 1,       -- Always process at least 1 item
 }
 
+local NEXT_FRAME_MS = 1
+local NEXT_FRAME_SECONDS = NEXT_FRAME_MS / 1000
+
+local function scheduleNextFrame(fn)
+    timer.scheduleFunction(fn, nil, timer.getTime() + NEXT_FRAME_SECONDS)
+end
+
 function BatchScheduler:log(message)
     env.info("[BatchScheduler] " .. message)
 end
@@ -57,14 +64,14 @@ function BatchScheduler:processArray(params)
         end
 
         if index <= total then
-            return timer.getTime() + 0.001  -- Next frame
+            return timer.getTime() + NEXT_FRAME_SECONDS  -- Next frame
         else
             if onComplete then onComplete(context) end
             return nil
         end
     end
 
-    timer.scheduleFunction(processBatch, nil, timer.getTime() + 0.001)
+    scheduleNextFrame(processBatch)
 end
 
 -- Execute sequential async steps with callbacks
@@ -98,13 +105,13 @@ function BatchScheduler:runSequence(params)
                 end
                 return
             end
-            timer.scheduleFunction(runNextStep, nil, timer.getTime() + 0.001)
+            scheduleNextFrame(runNextStep)
         end
 
         step.fn(context, done)
     end
 
-    timer.scheduleFunction(runNextStep, nil, timer.getTime() + 0.001)
+    scheduleNextFrame(runNextStep)
 end
 
 env.info("[BatchScheduler] Loaded successfully")
