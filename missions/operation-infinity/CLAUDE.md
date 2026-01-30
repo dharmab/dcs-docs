@@ -201,3 +201,27 @@ F10 Other
 ## Late Joiner Support
 
 Timer checks every 60 seconds for new players. Late joiners receive target coordinates and EPLRS datalink membership.
+
+## Lua Style Choices
+
+- Use `array[#array + 1] = value` instead of `table.insert()` for performance
+- Name all magic numbers except -1, 0, and 1 as constants
+- Verbose logging is intentional due to limited DCS observability
+- Use shared utility libraries (`Logging`, `Units`, `Spatial`) for common functionality
+
+## Script Loading Order
+
+Scripts must be loaded in this order to satisfy dependencies:
+
+1. `Logging.lua`
+2. `Units.lua`
+3. `Spatial.lua`
+4. `BatchScheduler.lua`
+5. `Terrain.lua`
+6. `UnitTemplates.lua`
+7. `Formations.lua`
+8. `Virtualization.lua`
+9. `IADS.lua`
+10. `AirIntercept.lua`
+11. `BattlefieldGeneration.lua`
+12. `OperationInfinity.lua`

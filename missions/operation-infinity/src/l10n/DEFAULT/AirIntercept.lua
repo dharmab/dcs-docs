@@ -93,41 +93,22 @@ AirIntercept.config = {
 -- STATE
 -- =============================================================================
 
+-- Named constants
+local RUNWAY_ALTITUDE_METERS = 300
+local UNIT_SPACING_METERS = 50
+local INTERCEPT_ALTITUDE_METERS = 6000
+local PLAYER_AIRBORNE_ALTITUDE_METERS = 100
+local MAX_AIRBORNE_CAP = 8
+
 AirIntercept.state = {
     initialized = false,
     enabled = false,
     difficulty = nil,
-    groupCounter = 2000,
-    unitCounter = 2000,
     totalAirborne = 0,
     airfieldState = {},  -- Runtime state per airfield
 }
 
--- =============================================================================
--- UTILITY FUNCTIONS
--- =============================================================================
-
-function AirIntercept:log(message)
-    if self.config.debug then
-        env.info("[AirIntercept] " .. message)
-    end
-end
-
-function AirIntercept:getNextGroupId()
-    self.state.groupCounter = self.state.groupCounter + 1
-    return self.state.groupCounter
-end
-
-function AirIntercept:getNextUnitId()
-    self.state.unitCounter = self.state.unitCounter + 1
-    return self.state.unitCounter
-end
-
-function AirIntercept:getDistance2D(pos1, pos2)
-    local dx = pos1.x - pos2.x
-    local dy = pos1.y - pos2.y
-    return math.sqrt(dx * dx + dy * dy)
-end
+local log = Logging:create("AirIntercept")
 
 -- =============================================================================
 -- PLAYER ANALYSIS
@@ -141,11 +122,11 @@ function AirIntercept:getPlayersInZone(airfield)
         if player and player:isExist() then
             local pos = player:getPoint()
             local playerPos2D = {x = pos.x, y = pos.z}
-            local distance = self:getDistance2D(playerPos2D, airfield.zoneCenter)
+            local distance = Spatial:getDistance2D(playerPos2D, airfield.zoneCenter)
 
-            -- Only count airborne players (alt > 100m)
-            if distance < airfield.zoneRadius and pos.y > 100 then
-                table.insert(inZone, player)
+            -- Only count airborne players
+            if distance < airfield.zoneRadius and pos.y > PLAYER_AIRBORNE_ALTITUDE_METERS then
+                inZone[#inZone + 1] = player
             end
         end
     end
@@ -182,8 +163,7 @@ function AirIntercept:calculateDynamicMaxAirborne()
     local weightedCount = self:calculateWeightedPlayerCount()
     local dynamicMax = baseMax + math.floor(math.log(weightedCount + 1) / math.log(2))
 
-    -- Cap at 8
-    return math.min(dynamicMax, 8)
+    return math.min(dynamicMax, MAX_AIRBORNE_CAP)
 end
 
 function AirIntercept:calculateResponseSize(intruderCount)
@@ -207,13 +187,13 @@ end
 function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
     local fighterConfig = UnitTemplates.Fighters[self.state.difficulty]
     if not fighterConfig or not fighterConfig.types or #fighterConfig.types == 0 then
-        self:log("No fighter types available for difficulty: " .. tostring(self.state.difficulty))
+        log("No fighter types available for difficulty: " .. tostring(self.state.difficulty))
         return nil
     end
 
     -- Validate target unit still exists (it may have been destroyed between spawn request and processing)
     if not targetUnit or not targetUnit:isExist() then
-        self:log(airfield.name .. ": Target unit no longer exists, aborting spawn")
+        log(airfield.name .. ": Target unit no longer exists, aborting spawn")
         return nil
     end
 
@@ -222,7 +202,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
     local payload = UnitTemplates:getPayload(self.state.difficulty, aircraftType)
     local skill = UnitTemplates:getRandomSkill(self.state.difficulty)
 
-    local groupId = self:getNextGroupId()
+    local groupId = Units:getNextGroupId()
     local groupName = "Erusea-Interceptor-" .. groupId
 
     -- Get target position for intercept waypoint
@@ -235,8 +215,8 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
     -- Build units
     local units = {}
     for i = 1, flightSize do
-        local unitId = self:getNextUnitId()
-        local offset = (i - 1) * 50  -- 50m spacing
+        local unitId = Units:getNextUnitId()
+        local offset = (i - 1) * UNIT_SPACING_METERS
 
         local unit = {
             unitId = unitId,
@@ -245,7 +225,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
             skill = skill,
             x = airfield.spawnPoint.x + offset,
             y = airfield.spawnPoint.y,
-            alt = 300,  -- Runway altitude
+            alt = RUNWAY_ALTITUDE_METERS,
             alt_type = "BARO",
             speed = 200,
             heading = airfield.spawnHeading,
@@ -275,7 +255,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
             }
         end
 
-        table.insert(units, unit)
+        units[#units + 1] = unit
     end
 
     -- Build group data
@@ -295,7 +275,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
         route = {
             points = {
                 [1] = {
-                    alt = 300,
+                    alt = RUNWAY_ALTITUDE_METERS,
                     alt_type = "BARO",
                     type = "TakeOff",
                     action = "From Runway",
@@ -356,7 +336,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
                     },
                 },
                 [2] = {
-                    alt = 6000,
+                    alt = INTERCEPT_ALTITUDE_METERS,
                     alt_type = "BARO",
                     type = "Turning Point",
                     action = "Turning Point",
@@ -375,7 +355,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
                     },
                 },
                 [3] = {
-                    alt = 6000,
+                    alt = INTERCEPT_ALTITUDE_METERS,
                     alt_type = "BARO",
                     type = "Turning Point",
                     action = "Turning Point",
@@ -406,14 +386,14 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
 
     -- Check cooldown
     if currentTime - afState.lastSpawnTime < afState.nextCooldownDuration then
-        self:log(airfield.name .. " on cooldown")
+        log(airfield.name .. " on cooldown")
         return nil
     end
 
     -- Check dynamic max airborne
     local maxAirborne = self:calculateDynamicMaxAirborne()
     if self.state.totalAirborne >= maxAirborne then
-        self:log("Max airborne reached: " .. self.state.totalAirborne .. "/" .. maxAirborne)
+        log("Max airborne reached: " .. self.state.totalAirborne .. "/" .. maxAirborne)
         return nil
     end
 
@@ -435,15 +415,15 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
         afState.nextCooldownDuration = math.random(self.config.spawnCooldownMin, self.config.spawnCooldownMax)
         afState.totalSpawned = afState.totalSpawned + 1
         self.state.totalAirborne = self.state.totalAirborne + flightSize
-        table.insert(afState.spawnedGroups, groupData.name)
+        afState.spawnedGroups[#afState.spawnedGroups + 1] = groupData.name
 
-        self:log("Spawned " .. flightSize .. " interceptors from " .. airfield.name ..
+        log("Spawned " .. flightSize .. " interceptors from " .. airfield.name ..
                  " (" .. groupData.name .. "), total airborne: " .. self.state.totalAirborne ..
                  ", next cooldown: " .. afState.nextCooldownDuration .. "s")
 
         return group
     else
-        self:log("Failed to spawn interceptors from " .. airfield.name)
+        log("Failed to spawn interceptors from " .. airfield.name)
         return nil
     end
 end
@@ -464,6 +444,8 @@ function AirIntercept.eventHandler:onEvent(event)
             local ok, unitName = pcall(function() return unit:getName() end)
             if ok and unitName then
                 AirIntercept:handleUnitDeath(unitName)
+            else
+                log("Error getting unit name in death event: " .. tostring(unitName))
             end
         end
     end
@@ -480,7 +462,7 @@ function AirIntercept:handleUnitDeath(unitName)
         for i, groupName in ipairs(afState.spawnedGroups) do
             if string.find(unitName, groupName, 1, true) then
                 self.state.totalAirborne = math.max(0, self.state.totalAirborne - 1)
-                self:log("Interceptor killed: " .. unitName ..
+                log("Interceptor killed: " .. unitName ..
                          ", total airborne: " .. self.state.totalAirborne)
                 return
             end
@@ -508,12 +490,12 @@ function AirIntercept:checkAirfields()
     for _, player in ipairs(players) do
         if player and player:isExist() then
             local pos = player:getPoint()
-            table.insert(playerData, {
+            playerData[#playerData + 1] = {
                 unit = player,
                 x = pos.x,
                 y = pos.z,
                 alt = pos.y,
-            })
+            }
         end
     end
 
@@ -526,9 +508,9 @@ function AirIntercept:checkAirfields()
     for _, airfield in ipairs(self.config.airfields) do
         local intruders = {}
         for _, pData in ipairs(playerData) do
-            local dist = self:getDistance2D(pData, airfield.zoneCenter)
-            if dist < airfield.zoneRadius and pData.alt > 100 then
-                table.insert(intruders, pData)
+            local dist = Spatial:getDistance2D(pData, airfield.zoneCenter)
+            if dist < airfield.zoneRadius and pData.alt > PLAYER_AIRBORNE_ALTITUDE_METERS then
+                intruders[#intruders + 1] = pData
             end
         end
 
@@ -536,14 +518,14 @@ function AirIntercept:checkAirfields()
             local responseSize = self:calculateResponseSize(#intruders)
             local targetUnit = intruders[math.random(#intruders)].unit
 
-            self:log(airfield.name .. ": " .. #intruders ..
+            log(airfield.name .. ": " .. #intruders ..
                      " intruders detected, response size: " .. responseSize)
 
-            table.insert(spawnRequests, {
+            spawnRequests[#spawnRequests + 1] = {
                 airfield = airfield,
                 responseSize = responseSize,
                 targetUnit = targetUnit,
-            })
+            }
         end
     end
 
@@ -557,29 +539,12 @@ end
 
 -- Process spawn requests with time budgeting
 function AirIntercept:processSpawnRequestsBatched(spawnRequests)
-    local startTime = timer.getTime() * 1000
-    local budgetMs = BatchScheduler.config.frameBudgetMs
-    local itemsProcessed = 0
-
-    for idx, req in ipairs(spawnRequests) do
-        self:spawnInterceptors(req.airfield, req.responseSize, req.targetUnit)
-        itemsProcessed = itemsProcessed + 1
-
-        local elapsed = (timer.getTime() * 1000) - startTime
-        if itemsProcessed >= 1 and elapsed >= budgetMs then
-            -- Schedule remaining spawn requests for next frame
-            local remaining = {}
-            for i = idx + 1, #spawnRequests do
-                table.insert(remaining, spawnRequests[i])
-            end
-            if #remaining > 0 then
-                timer.scheduleFunction(function()
-                    AirIntercept:processSpawnRequestsBatched(remaining)
-                end, nil, timer.getTime() + 0.001)
-            end
-            return
-        end
-    end
+    BatchScheduler:processArray({
+        array = spawnRequests,
+        callback = function(req)
+            AirIntercept:spawnInterceptors(req.airfield, req.responseSize, req.targetUnit)
+        end,
+    })
 end
 
 -- =============================================================================
@@ -589,16 +554,16 @@ end
 function AirIntercept:enable(difficulty)
     self.state.difficulty = difficulty
     self.state.enabled = true
-    self:log("Enabled with difficulty: " .. difficulty)
+    log("Enabled with difficulty: " .. difficulty)
 end
 
 function AirIntercept:init()
     if self.state.initialized then
-        self:log("Already initialized!")
+        log("Already initialized!")
         return
     end
 
-    self:log("Initializing Air Intercept System...")
+    log("Initializing Air Intercept System...")
 
     -- Initialize per-airfield state
     for _, airfield in ipairs(self.config.airfields) do
@@ -619,7 +584,7 @@ function AirIntercept:init()
     end, nil, timer.getTime() + 10)
 
     self.state.initialized = true
-    self:log("Initialization complete")
+    log("Initialization complete")
 end
 
 -- =============================================================================

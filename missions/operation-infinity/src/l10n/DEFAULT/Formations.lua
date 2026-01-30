@@ -27,9 +27,7 @@ Formations.config = {
     substitutionChance = 0.3,   -- 30% chance for unit type substitution
 }
 
-function Formations:log(message)
-    env.info("[Formations] " .. message)
-end
+local log = Logging:create("Formations")
 
 -- Get relative positions for a formation
 function Formations:getFormationPositions(unitCount, formationType, spacing, widthMultiplier)
@@ -41,38 +39,38 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
         -- Units spread perpendicular to facing direction
         local startOffset = -((unitCount - 1) * spacing) / 2
         for i = 1, unitCount do
-            table.insert(positions, {
+            positions[#positions + 1] = {
                 x = startOffset + (i - 1) * spacing,
                 y = 0,
-            })
+            }
         end
 
     elseif formationType == self.FormationType.WEDGE then
         -- Arrow/vee shape with lead unit at front
-        table.insert(positions, {x = 0, y = 0}) -- Lead unit
+        positions[#positions + 1] = {x = 0, y = 0} -- Lead unit
         for i = 2, unitCount do
             local row = math.ceil((i - 1) / 2)
             local side = ((i - 1) % 2 == 0) and 1 or -1
-            table.insert(positions, {
+            positions[#positions + 1] = {
                 x = side * row * spacing * widthMultiplier,
                 y = -row * spacing,
-            })
+            }
         end
 
     elseif formationType == self.FormationType.ECHELON_LEFT then
         for i = 1, unitCount do
-            table.insert(positions, {
+            positions[#positions + 1] = {
                 x = -(i - 1) * spacing * widthMultiplier,
                 y = -(i - 1) * spacing * 0.7,
-            })
+            }
         end
 
     elseif formationType == self.FormationType.ECHELON_RIGHT then
         for i = 1, unitCount do
-            table.insert(positions, {
+            positions[#positions + 1] = {
                 x = (i - 1) * spacing * widthMultiplier,
                 y = -(i - 1) * spacing * 0.7,
-            })
+            }
         end
 
     else
@@ -165,20 +163,20 @@ function Formations:randomizeTemplate(template, options)
                 unitType = UnitTemplates:getSubstitute(def.type, cfg.substitutionChance)
             end
 
-            table.insert(result, {
+            result[#result + 1] = {
                 type = unitType,
                 count = newCount,
-            })
+            }
         end
     end
 
     -- Ensure at least one unit remains
     if #result == 0 and #template > 0 then
         local def = template[1]
-        table.insert(result, {
+        result[#result + 1] = {
             type = def.type,
             count = 1,
-        })
+        }
     end
 
     return result

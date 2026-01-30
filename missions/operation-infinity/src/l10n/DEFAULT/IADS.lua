@@ -30,6 +30,9 @@ IADS.config = {
 -- STATE
 -- =============================================================================
 
+-- Named constants
+local MINIMUM_THREAT_ALTITUDE_METERS = 50
+
 IADS.state = {
     initialized = false,
     enabled = false,
@@ -38,29 +41,15 @@ IADS.state = {
     samSites = {},                -- Array of SAM site data
 }
 
--- =============================================================================
--- UTILITY FUNCTIONS
--- =============================================================================
-
-function IADS:log(message)
-    if self.config.debug then
-        env.info("[IADS] " .. message)
-    end
-end
-
-function IADS:getDistance2D(pos1, pos2)
-    local dx = pos1.x - pos2.x
-    local dy = pos1.y - pos2.y
-    return math.sqrt(dx * dx + dy * dy)
-end
+local log = Logging:create("IADS")
 
 -- =============================================================================
 -- REGISTRATION
 -- =============================================================================
 
 function IADS:registerEWR(groupName)
-    table.insert(self.state.ewrGroups, groupName)
-    self:log("Registered EWR: " .. groupName)
+    self.state.ewrGroups[#self.state.ewrGroups + 1] = groupName
+    log("Registered EWR: " .. groupName)
 end
 
 function IADS:registerSAMSite(groupName, siteType, center)
@@ -73,8 +62,8 @@ function IADS:registerSAMSite(groupName, siteType, center)
         pulsePhase = "off",       -- "on" or "off"
     }
 
-    table.insert(self.state.samSites, samSite)
-    self:log("Registered SAM site: " .. groupName .. " (" .. siteType .. ")")
+    self.state.samSites[#self.state.samSites + 1] = samSite
+    log("Registered SAM site: " .. groupName .. " (" .. siteType .. ")")
 
     return samSite
 end
@@ -96,12 +85,12 @@ function IADS:getBlueAircraftPositions()
                 for _, unit in ipairs(units) do
                     if unit and unit:isExist() then
                         local pos = unit:getPoint()
-                        table.insert(positions, {
+                        positions[#positions + 1] = {
                             x = pos.x,
                             y = pos.z,  -- Note: 3D y is altitude, z is north-south
                             alt = pos.y,
                             unit = unit,
-                        })
+                        }
                     end
                 end
             end
@@ -115,12 +104,12 @@ function IADS:getBlueAircraftPositions()
                 for _, unit in ipairs(units) do
                     if unit and unit:isExist() then
                         local pos = unit:getPoint()
-                        table.insert(positions, {
+                        positions[#positions + 1] = {
                             x = pos.x,
                             y = pos.z,
                             alt = pos.y,
                             unit = unit,
-                        })
+                        }
                     end
                 end
             end
@@ -158,7 +147,7 @@ function IADS:setRadarState(samSite, active)
     samSite.lastStateChange = timer.getTime()
 
     if previousState ~= active then
-        self:log(samSite.groupName .. " radar " .. (active and "ACTIVE" or "STANDBY"))
+        log(samSite.groupName .. " radar " .. (active and "ACTIVE" or "STANDBY"))
     end
 
     return true
@@ -171,8 +160,8 @@ function IADS:updateSAMSite(samSite, bluePositions)
     -- Calculate threat distance using cached positions
     local threatDistance = math.huge
     for _, threat in ipairs(bluePositions) do
-        if threat.alt > 50 then
-            local distance = self:getDistance2D(threat, samSite.center)
+        if threat.alt > MINIMUM_THREAT_ALTITUDE_METERS then
+            local distance = Spatial:getDistance2D(threat, samSite.center)
             if distance < threatDistance then
                 threatDistance = distance
             end
@@ -250,7 +239,7 @@ function IADS:enable(difficulty)
     self.state.enabled = true
     self.state.difficulty = difficulty
 
-    self:log("Enabled with difficulty: " .. difficulty)
+    log("Enabled with difficulty: " .. difficulty)
 
     -- On Normal/Hard, set initial state to radars off
     if difficulty == "Normal" or difficulty == "Hard" then
@@ -262,11 +251,11 @@ end
 
 function IADS:init()
     if self.state.initialized then
-        self:log("Already initialized!")
+        log("Already initialized!")
         return
     end
 
-    self:log("Initializing IADS...")
+    log("Initializing IADS...")
 
     -- Schedule update loop
     timer.scheduleFunction(function(_, time)
@@ -274,7 +263,7 @@ function IADS:init()
     end, nil, timer.getTime() + 5)
 
     self.state.initialized = true
-    self:log("Initialization complete")
+    log("Initialization complete")
 end
 
 -- =============================================================================
@@ -306,7 +295,7 @@ function IADS:clear()
 
     self.state.ewrGroups = {}
     self.state.samSites = {}
-    self:log("Cleared all registered sites")
+    log("Cleared all registered sites")
 end
 
 env.info("[IADS] Loaded successfully")

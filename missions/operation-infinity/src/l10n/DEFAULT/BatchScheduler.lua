@@ -19,13 +19,10 @@ BatchScheduler.config = {
 
 local NEXT_FRAME_MS = 1
 local NEXT_FRAME_SECONDS = NEXT_FRAME_MS / 1000
+local log = Logging:create("BatchScheduler")
 
 local function scheduleNextFrame(fn)
     timer.scheduleFunction(fn, nil, timer.getTime() + NEXT_FRAME_SECONDS)
-end
-
-function BatchScheduler:log(message)
-    env.info("[BatchScheduler] " .. message)
 end
 
 -- Process array items within time budget, yielding between frames
@@ -101,7 +98,7 @@ function BatchScheduler:runSequence(params)
                 if onError then
                     onError(err, step.name, context)
                 else
-                    BatchScheduler:log("Error in step " .. step.name .. ": " .. tostring(err))
+                    log("Error in step " .. step.name .. ": " .. tostring(err))
                 end
                 return
             end

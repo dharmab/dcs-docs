@@ -16,9 +16,14 @@ Virtualization = {}
 -- CONFIGURATION
 -- =============================================================================
 
+-- Named constants
+local METERS_PER_NM = 1852
+local SPAWN_DISTANCE_NM = 100
+local DESPAWN_DISTANCE_NM = 120
+
 Virtualization.config = {
-    spawnDistance = 185200,      -- 100 nm in meters
-    despawnDistance = 222240,    -- 120 nm in meters (hysteresis)
+    spawnDistance = SPAWN_DISTANCE_NM * METERS_PER_NM,    -- 100 nm in meters
+    despawnDistance = DESPAWN_DISTANCE_NM * METERS_PER_NM, -- 120 nm in meters (hysteresis)
     updateInterval = 15,         -- Seconds between update checks
     debug = true,
 }
@@ -31,35 +36,9 @@ Virtualization.state = {
     initialized = false,
     virtualGroups = {},          -- Array of virtual group definitions
     permanentGroups = {},        -- Groups that are always spawned (EWRs, radars)
-    groupCounter = 1000,
-    unitCounter = 1000,
 }
 
--- =============================================================================
--- UTILITY FUNCTIONS
--- =============================================================================
-
-function Virtualization:log(message)
-    if self.config.debug then
-        env.info("[Virtualization] " .. message)
-    end
-end
-
-function Virtualization:getNextGroupId()
-    self.state.groupCounter = self.state.groupCounter + 1
-    return self.state.groupCounter
-end
-
-function Virtualization:getNextUnitId()
-    self.state.unitCounter = self.state.unitCounter + 1
-    return self.state.unitCounter
-end
-
-function Virtualization:getDistance2D(pos1, pos2)
-    local dx = pos1.x - pos2.x
-    local dy = pos1.y - pos2.y
-    return math.sqrt(dx * dx + dy * dy)
-end
+local log = Logging:create("Virtualization")
 
 -- =============================================================================
 -- GROUP REGISTRATION
@@ -86,8 +65,8 @@ function Virtualization:registerGroup(groupData, options)
         },
     }
 
-    table.insert(self.state.virtualGroups, vGroup)
-    self:log("Registered virtual group: " .. vGroup.name .. " with " .. #vGroup.units .. " units")
+    self.state.virtualGroups[#self.state.virtualGroups + 1] = vGroup
+    log("Registered virtual group: " .. vGroup.name .. " with " .. #vGroup.units .. " units")
 
     return vGroup
 end
@@ -113,8 +92,8 @@ function Virtualization:registerPermanentGroup(groupData, options)
         },
     }
 
-    table.insert(self.state.permanentGroups, pGroup)
-    self:log("Registered permanent group: " .. pGroup.name)
+    self.state.permanentGroups[#self.state.permanentGroups + 1] = pGroup
+    log("Registered permanent group: " .. pGroup.name)
 
     return pGroup
 end
@@ -124,13 +103,13 @@ end
 -- =============================================================================
 
 function Virtualization:buildGroupData(vGroup)
-    local groupId = self:getNextGroupId()
+    local groupId = Units:getNextGroupId()
     local groupName = vGroup.name .. "-" .. groupId
     local units = {}
 
     for i, vUnit in ipairs(vGroup.units) do
         if vUnit.health == nil or vUnit.health > 0 then
-            local unitId = self:getNextUnitId()
+            local unitId = Units:getNextUnitId()
             units[#units + 1] = {
                 unitId = unitId,
                 name = groupName .. "-Unit-" .. i,
@@ -258,7 +237,7 @@ function Virtualization:spawnGroup(vGroup)
     local groupData = self:buildGroupData(vGroup)
 
     if not groupData then
-        self:log("Cannot spawn " .. vGroup.name .. " - all units destroyed")
+        log("Cannot spawn " .. vGroup.name .. " - all units destroyed")
         return nil
     end
 
@@ -267,10 +246,10 @@ function Virtualization:spawnGroup(vGroup)
     if group then
         vGroup.isSpawned = true
         vGroup.spawnedGroupName = groupData.name
-        self:log("Spawned group: " .. groupData.name .. " with " .. #groupData.units .. " units")
+        log("Spawned group: " .. groupData.name .. " with " .. #groupData.units .. " units")
         return group
     else
-        self:log("Failed to spawn group: " .. vGroup.name)
+        log("Failed to spawn group: " .. vGroup.name)
         return nil
     end
 end
@@ -290,6 +269,7 @@ function Virtualization:despawnGroup(vGroup)
             if liveUnit and liveUnit:isExist() then
                 local life = liveUnit:getLife()
                 local life0 = liveUnit:getLife0()
+                -- Division-by-zero safety: if unit has no baseline health, assume full health
                 if life0 > 0 then
                     vUnit.health = life / life0
                 else
@@ -301,7 +281,7 @@ function Virtualization:despawnGroup(vGroup)
         end
 
         group:destroy()
-        self:log("Despawned group: " .. vGroup.spawnedGroupName)
+        log("Despawned group: " .. vGroup.spawnedGroupName)
     end
 
     vGroup.isSpawned = false
@@ -317,7 +297,7 @@ function Virtualization:spawnPermanentGroups()
                 if group then
                     pGroup.isSpawned = true
                     pGroup.spawnedGroupName = groupData.name
-                    self:log("Spawned permanent group: " .. groupData.name)
+                    log("Spawned permanent group: " .. groupData.name)
                 end
             end
         end
@@ -330,7 +310,7 @@ function Virtualization:spawnPermanentGroupsBatched(onComplete)
     local toSpawn = {}
     for _, pGroup in ipairs(self.state.permanentGroups) do
         if not pGroup.isSpawned then
-            table.insert(toSpawn, pGroup)
+            toSpawn[#toSpawn + 1] = pGroup
         end
     end
 
@@ -339,7 +319,7 @@ function Virtualization:spawnPermanentGroupsBatched(onComplete)
         return
     end
 
-    self:log("Spawning " .. #toSpawn .. " permanent groups (batched)")
+    log("Spawning " .. #toSpawn .. " permanent groups (batched)")
 
     BatchScheduler:processArray({
         array = toSpawn,
@@ -350,7 +330,7 @@ function Virtualization:spawnPermanentGroupsBatched(onComplete)
                 if group then
                     pGroup.isSpawned = true
                     pGroup.spawnedGroupName = groupData.name
-                    Virtualization:log("Spawned permanent group: " .. groupData.name)
+                    log("Spawned permanent group: " .. groupData.name)
                 end
             end
         end,
@@ -372,7 +352,7 @@ function Virtualization:getClosestPlayerDistance(vGroup)
         if player and player:isExist() then
             local pos = player:getPoint()
             local playerPos2D = {x = pos.x, y = pos.z}
-            local distance = self:getDistance2D(playerPos2D, vGroup.center)
+            local distance = Spatial:getDistance2D(playerPos2D, vGroup.center)
             if distance < minDistance then
                 minDistance = distance
             end
@@ -398,7 +378,7 @@ function Virtualization:update()
     for _, player in ipairs(players) do
         if player and player:isExist() then
             local pos = player:getPoint()
-            table.insert(playerPositions, { x = pos.x, y = pos.z })
+            playerPositions[#playerPositions + 1] = { x = pos.x, y = pos.z }
         end
     end
 
@@ -426,7 +406,7 @@ function Virtualization:updateBatched(playerPositions)
         -- Calculate minimum distance to any player using cached positions
         local minDist = math.huge
         for _, pPos in ipairs(playerPositions) do
-            local dist = self:getDistance2D(pPos, vGroup.center)
+            local dist = Spatial:getDistance2D(pPos, vGroup.center)
             if dist < minDist then
                 minDist = dist
             end
@@ -434,9 +414,9 @@ function Virtualization:updateBatched(playerPositions)
 
         -- Queue spawn/despawn decisions
         if vGroup.isSpawned and minDist > self.config.despawnDistance then
-            table.insert(despawnQueue, vGroup)
+            despawnQueue[#despawnQueue + 1] = vGroup
         elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
-            table.insert(spawnQueue, vGroup)
+            spawnQueue[#spawnQueue + 1] = vGroup
         end
 
         itemsProcessed = itemsProcessed + 1
@@ -449,7 +429,7 @@ function Virtualization:updateBatched(playerPositions)
             local foundCurrent = false
             for _, g in ipairs(self.state.virtualGroups) do
                 if foundCurrent then
-                    table.insert(remaining, g)
+                    remaining[#remaining + 1] = g
                 elseif g == vGroup then
                     foundCurrent = true
                 end
@@ -477,16 +457,16 @@ function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueu
     for idx, vGroup in ipairs(groups) do
         local minDist = math.huge
         for _, pPos in ipairs(playerPositions) do
-            local dist = self:getDistance2D(pPos, vGroup.center)
+            local dist = Spatial:getDistance2D(pPos, vGroup.center)
             if dist < minDist then
                 minDist = dist
             end
         end
 
         if vGroup.isSpawned and minDist > self.config.despawnDistance then
-            table.insert(despawnQueue, vGroup)
+            despawnQueue[#despawnQueue + 1] = vGroup
         elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
-            table.insert(spawnQueue, vGroup)
+            spawnQueue[#spawnQueue + 1] = vGroup
         end
 
         itemsProcessed = itemsProcessed + 1
@@ -495,7 +475,7 @@ function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueu
         if itemsProcessed >= 1 and elapsed >= budgetMs then
             local remaining = {}
             for i = idx + 1, #groups do
-                table.insert(remaining, groups[i])
+                remaining[#remaining + 1] = groups[i]
             end
             if #remaining > 0 then
                 timer.scheduleFunction(function()
@@ -557,6 +537,8 @@ function Virtualization.eventHandler:onEvent(event)
             local ok, unitName = pcall(function() return unit:getName() end)
             if ok and unitName then
                 Virtualization:handleUnitDeath(unitName)
+            else
+                log("Error getting unit name in death event: " .. tostring(unitName))
             end
         end
     end
@@ -569,7 +551,7 @@ function Virtualization:handleUnitDeath(unitName)
                 for i, vUnit in ipairs(vGroup.units) do
                     if string.find(unitName, "Unit-" .. i, 1, true) then
                         vUnit.health = 0
-                        self:log("Unit killed: " .. unitName)
+                        log("Unit killed: " .. unitName)
                         return
                     end
                 end
@@ -584,11 +566,11 @@ end
 
 function Virtualization:init()
     if self.state.initialized then
-        self:log("Already initialized!")
+        log("Already initialized!")
         return
     end
 
-    self:log("Initializing Virtualization System...")
+    log("Initializing Virtualization System...")
 
     world.addEventHandler(self.eventHandler)
 
@@ -597,7 +579,7 @@ function Virtualization:init()
     end, nil, timer.getTime() + 5)
 
     self.state.initialized = true
-    self:log("Initialization complete")
+    log("Initialization complete")
 end
 
 -- =============================================================================
@@ -638,7 +620,7 @@ function Virtualization:clear()
     end
 
     self.state.virtualGroups = {}
-    self:log("Cleared all virtual groups")
+    log("Cleared all virtual groups")
 end
 
 env.info("[Virtualization] Loaded successfully")

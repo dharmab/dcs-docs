@@ -19,19 +19,7 @@ Terrain.config = {
     sampleRadius = 50,          -- Meters for slope sampling
 }
 
-function Terrain:log(message)
-    env.info("[Terrain] " .. message)
-end
-
--- Generate a random point within a given radius of a center point
-function Terrain:randomPointInRadius(center, radius)
-    local angle = math.random() * 2 * math.pi
-    local distance = math.random() * radius
-    return {
-        x = center.x + distance * math.cos(angle),
-        y = center.y + distance * math.sin(angle),
-    }
-end
+local log = Logging:create("Terrain")
 
 -- Calculate maximum slope around a position by sampling 8 points
 function Terrain:calculateMaxSlope(center, sampleRadius)
@@ -88,7 +76,7 @@ function Terrain:calculateTerrainRoughness(center, checkRadius)
             }
             local ok, h = pcall(land.getHeight, samplePos)
             if ok then
-                table.insert(heights, h)
+                heights[#heights + 1] = h
                 sum = sum + h
             end
         end
@@ -169,32 +157,15 @@ function Terrain:findValidPosition(center, radius, options, maxAttempts)
 
     -- Try random positions
     for attempt = 1, maxAttempts do
-        local testPos = self:randomPointInRadius(center, radius)
+        local testPos = Spatial:randomPointInRadius(center, radius)
         valid, reason = self:isValidTerrainForUnits(testPos, options)
         if valid then
             return testPos, true
         end
     end
 
-    -- Try with relaxed thresholds (50% higher limits)
-    local relaxedOptions = {
-        maxSlope = (options.maxSlope or self.config.defaultMaxSlope) * 1.5,
-        maxRoughness = (options.maxRoughness or self.config.defaultMaxRoughness) * 1.5,
-        maxRoadDistance = options.maxRoadDistance and (options.maxRoadDistance * 1.5) or nil,
-    }
-
-    for attempt = 1, math.floor(maxAttempts / 2) do
-        local testPos = self:randomPointInRadius(center, radius)
-        valid, reason = self:isValidTerrainForUnits(testPos, relaxedOptions)
-        if valid then
-            self:log("Used relaxed terrain thresholds for position near (" ..
-                math.floor(center.x) .. ", " .. math.floor(center.y) .. ")")
-            return testPos, true
-        end
-    end
-
     -- Failed to find valid position
-    self:log("WARNING: Could not find valid terrain near (" ..
+    log("WARNING: Could not find valid terrain near (" ..
         math.floor(center.x) .. ", " .. math.floor(center.y) .. ") - skipping spawn")
     return nil, false
 end

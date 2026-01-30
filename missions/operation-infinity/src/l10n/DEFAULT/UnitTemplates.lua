@@ -514,7 +514,7 @@ function UnitTemplates:getRandomScatteredPatrol()
     local patrolTypes = {}
     for typeName, config in pairs(self.ScatteredPatrols) do
         totalWeight = totalWeight + config.weight
-        table.insert(patrolTypes, {name = typeName, config = config, weight = config.weight})
+        patrolTypes[#patrolTypes + 1] = {name = typeName, config = config, weight = config.weight}
     end
 
     -- Select type based on weight

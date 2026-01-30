@@ -269,10 +269,6 @@ OperationInfinity.state = {
     -- Player tracking
     knownPlayers = {},
 
-    -- Unit counters
-    groupCounter = 3000,
-    unitCounter = 3000,
-
     -- Marker counter
     markerCounter = 1000,
 
@@ -283,38 +279,11 @@ OperationInfinity.state = {
     },
 }
 
--- =============================================================================
--- UTILITY FUNCTIONS
--- =============================================================================
+-- Named constants
+local FEBA_ARROW_LENGTH_METERS = 400
+local FEBA_LABEL_OFFSET_METERS = 200
 
-function OperationInfinity:log(message)
-    if self.config.debug then
-        env.info("[OperationInfinity] " .. message)
-    end
-end
-
-function OperationInfinity:getNextGroupId()
-    self.state.groupCounter = self.state.groupCounter + 1
-    return self.state.groupCounter
-end
-
-function OperationInfinity:getNextUnitId()
-    self.state.unitCounter = self.state.unitCounter + 1
-    return self.state.unitCounter
-end
-
-function OperationInfinity:randomInRange(min, max)
-    return math.random(min, max)
-end
-
-function OperationInfinity:randomPointInRadius(center, radius)
-    local angle = math.random() * 2 * math.pi
-    local distance = math.random() * radius
-    return {
-        x = center.x + distance * math.cos(angle),
-        y = center.y + distance * math.sin(angle),
-    }
-end
+local log = Logging:create("OperationInfinity")
 
 function OperationInfinity:addMarker(text, pos)
     self.state.markerCounter = self.state.markerCounter + 1
@@ -336,7 +305,7 @@ function OperationInfinity:addFEBAShape()
     local positions = frontline.isafPositions
 
     if #positions < 1 then
-        self:log("No ISAF positions for frontline, skipping FEBA shape")
+        log("No ISAF positions for frontline, skipping FEBA shape")
         return
     end
 
@@ -372,13 +341,12 @@ function OperationInfinity:addFEBAShape()
     end
 
     -- Draw arrows from each ISAF position pointing toward enemy (along approach direction)
-    local arrowLength = 400  -- meters
     local approachDir = frontline.approachDir or {x = 0, y = 1}  -- Default to north if not set
     for _, pos in ipairs(positions) do
         self.state.markerCounter = self.state.markerCounter + 1
         local arrowEnd = {
-            x = pos.x + approachDir.x * arrowLength,
-            y = pos.y + approachDir.y * arrowLength,
+            x = pos.x + approachDir.x * FEBA_ARROW_LENGTH_METERS,
+            y = pos.y + approachDir.y * FEBA_ARROW_LENGTH_METERS,
         }
         trigger.action.arrowToAll(
             coalition.side.BLUE,
@@ -396,14 +364,13 @@ function OperationInfinity:addFEBAShape()
     -- Add FEBA label at center of the frontline (behind friendly lines)
     local centerPos = positions[math.ceil(#positions / 2)]
     self.state.markerCounter = self.state.markerCounter + 1
-    local labelOffset = 200
     trigger.action.textToAll(
         coalition.side.BLUE,
         self.state.markerCounter,
         {
-            x = centerPos.x - approachDir.x * labelOffset,
+            x = centerPos.x - approachDir.x * FEBA_LABEL_OFFSET_METERS,
             y = land.getHeight(centerPos),
-            z = centerPos.y - approachDir.y * labelOffset,
+            z = centerPos.y - approachDir.y * FEBA_LABEL_OFFSET_METERS,
         },
         lineColor,
         {0, 0, 0, 0},  -- transparent background
@@ -412,7 +379,7 @@ function OperationInfinity:addFEBAShape()
         "FEBA"
     )
 
-    self:log("Added FEBA shape with " .. #positions .. " positions")
+    log("Added FEBA shape with " .. #positions .. " positions")
 end
 
 -- Select a random region that matches the given playtime
@@ -421,13 +388,13 @@ function OperationInfinity:selectRegionForPlaytime(playtime)
     for key, region in pairs(self.config.aerodromeRegions) do
         for _, pt in ipairs(region.playtimes) do
             if pt == playtime then
-                table.insert(matchingRegions, { key = key, region = region })
+                matchingRegions[#matchingRegions + 1] = { key = key, region = region }
                 break
             end
         end
     end
     if #matchingRegions == 0 then
-        self:log("WARNING: No regions match playtime " .. playtime)
+        log("WARNING: No regions match playtime " .. playtime)
         return nil
     end
     return matchingRegions[math.random(#matchingRegions)]
@@ -580,7 +547,7 @@ function OperationInfinity:generateBattlefield()
     for _, key in ipairs(selected.region.aerodromes) do
         local aerodrome = self.config.aerodromes[key]
         if aerodrome then
-            table.insert(self.state.battlefield.targetAerodromes, aerodrome)
+            self.state.battlefield.targetAerodromes[#self.state.battlefield.targetAerodromes + 1] = aerodrome
         end
     end
 
@@ -591,7 +558,7 @@ function OperationInfinity:generateBattlefield()
             "and spawn when a player is within 100 nm."
     end
 
-    self:log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
+    log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
         ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
 
     -- Store context for async generation
@@ -717,7 +684,7 @@ function OperationInfinity:generateBattlefield()
             -- Add Mission Info menu for on-demand target info
             OperationInfinity:setupMissionInfoMenu()
 
-            OperationInfinity:log("Battlefield generation complete")
+            log("Battlefield generation complete")
         end,
     })
 end
@@ -762,16 +729,16 @@ function OperationInfinity:displayCoordinates()
     local coordLines = {}
     for _, aerodrome in ipairs(aerodromes) do
         local llStr, mgrsStr = self:formatCoordinates(aerodrome)
-        table.insert(coordLines, string.format("  %s:\n    MGRS: %s\n    LL: %s",
-            aerodrome.name, mgrsStr, llStr))
+        coordLines[#coordLines + 1] = string.format("  %s:\n    MGRS: %s\n    LL: %s",
+            aerodrome.name, mgrsStr, llStr)
     end
 
     -- Build tanker information
     local tankerLines = {}
     for _, aircraft in ipairs(self.config.supportAircraft) do
         if aircraft.tankerType then
-            table.insert(tankerLines, string.format("  %s (%s): %.1f MHz, TACAN %s",
-                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan))
+            tankerLines[#tankerLines + 1] = string.format("  %s (%s): %.1f MHz, TACAN %s",
+                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan)
         end
     end
 
@@ -854,28 +821,28 @@ end
 
 -- Batched version of generateMapMarkers
 function OperationInfinity:generateMapMarkersBatched(onComplete)
-    self:log("Generating map markers (batched)...")
+    log("Generating map markers (batched)...")
 
     -- Build array of all markers to create
     local markerItems = {}
 
     -- FEBA shape (single frontline)
-    table.insert(markerItems, {
+    markerItems[#markerItems + 1] = {
         type = "feba_shape",
-    })
+    }
 
     -- Aerodrome objective markers
     for _, aerodrome in ipairs(self.state.battlefield.targetAerodromes) do
         local offsetDistance = 1000 + math.random() * 2000
         local offsetAngle = math.random() * 2 * math.pi
-        table.insert(markerItems, {
+        markerItems[#markerItems + 1] = {
             type = "aerodrome",
             label = "OBJ " .. string.upper(aerodrome.name),
             pos = {
                 x = aerodrome.x + offsetDistance * math.cos(offsetAngle),
                 y = aerodrome.y + offsetDistance * math.sin(offsetAngle),
             },
-        })
+        }
     end
 
     BatchScheduler:processArray({
@@ -885,11 +852,11 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
                 OperationInfinity:addFEBAShape()
             else
                 OperationInfinity:addMarker(item.label, item.pos)
-                OperationInfinity:log("Added " .. item.type .. " marker: " .. item.label)
+                log("Added " .. item.type .. " marker: " .. item.label)
             end
         end,
         onComplete = function()
-            OperationInfinity:log("Map markers generated")
+            log("Map markers generated")
             if onComplete then onComplete() end
         end,
     })
@@ -904,7 +871,7 @@ function OperationInfinity:getRacetrackPosition(regionKey)
     local racetrack = self.config.supportRacetracks[regionKey]
     if not racetrack then
         -- Default to northwest if region not found
-        self:log("WARNING: No racetrack config for region '" .. tostring(regionKey) .. "', using default")
+        log("WARNING: No racetrack config for region '" .. tostring(regionKey) .. "', using default")
         racetrack = self.config.supportRacetracks.northwest
     end
     return racetrack
@@ -914,8 +881,8 @@ end
 function OperationInfinity:activateSupportAircraft(regionKey)
     local racetrack = self:getRacetrackPosition(regionKey)
 
-    self:log("Activating support aircraft for region: " .. tostring(regionKey))
-    self:log("Racetrack center: (" .. math.floor(racetrack.x) .. ", " .. math.floor(racetrack.y) .. ")")
+    log("Activating support aircraft for region: " .. tostring(regionKey))
+    log("Racetrack center: (" .. math.floor(racetrack.x) .. ", " .. math.floor(racetrack.y) .. ")")
 
     -- Calculate racetrack endpoints based on heading and track length
     local halfTrack = racetrack.trackLength / 2
@@ -926,9 +893,9 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         local group = Group.getByName(aircraft.name)
         if group then
             group:activate()
-            self:log("Activated group: " .. aircraft.name)
+            log("Activated group: " .. aircraft.name)
         else
-            self:log("WARNING: Could not find group to activate: " .. aircraft.name)
+            log("WARNING: Could not find group to activate: " .. aircraft.name)
         end
 
         -- Offset each aircraft's racetrack slightly to avoid collisions
@@ -985,7 +952,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
                 local ctrl = grp:getController()
                 if ctrl then
                     ctrl:pushTask(orbitTask)
-                    OperationInfinity:log("Pushed orbit task to " .. groupName ..
+                    log("Pushed orbit task to " .. groupName ..
                         " at (" .. logCenterX .. ", " .. logCenterY .. ")")
                 end
                 return nil  -- Done, stop polling
@@ -997,7 +964,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         -- Start polling after initial delay (60 sec for engine start)
         timer.scheduleFunction(checkAndPushOrbit, nil, timer.getTime() + 60)
 
-        self:log("Will push orbit task to " .. aircraft.name .. " once airborne, alt " ..
+        log("Will push orbit task to " .. aircraft.name .. " once airborne, alt " ..
             orbitAltitude .. "m, center (" .. logCenterX .. ", " .. logCenterY .. ")")
     end
 end
@@ -1014,7 +981,7 @@ function OperationInfinity:checkForNewPlayers()
             local name = player:getName()
             if not self.state.knownPlayers[name] then
                 self.state.knownPlayers[name] = true
-                self:log("New player joined: " .. name)
+                log("New player joined: " .. name)
 
                 -- Schedule welcome/status message after a short delay
                 timer.scheduleFunction(function()
@@ -1068,7 +1035,7 @@ end
 -- =============================================================================
 
 function OperationInfinity:startMissionTimer()
-    self:log("Starting mission timer - " .. self.config.missionDuration .. " seconds")
+    log("Starting mission timer - " .. self.config.missionDuration .. " seconds")
 
     local function checkMissionTime(_, currentTime)
         local missionTime = timer.getTime()
@@ -1085,7 +1052,7 @@ function OperationInfinity:startMissionTimer()
                     "RTB and land before time expires!",
                     30
                 )
-                OperationInfinity:log("Mission time warning: " .. warning.text .. " remaining")
+                log("Mission time warning: " .. warning.text .. " remaining")
             end
         end
 
@@ -1099,7 +1066,7 @@ function OperationInfinity:startMissionTimer()
                 "Thank you for flying!",
                 60
             )
-            OperationInfinity:log("Mission time expired - setting end flag")
+            log("Mission time expired - setting end flag")
             trigger.action.setUserFlag(OperationInfinity.config.missionEndFlag, 1)
             return nil
         end
@@ -1116,11 +1083,11 @@ end
 
 function OperationInfinity:init()
     if self.state.initialized then
-        self:log("Already initialized!")
+        log("Already initialized!")
         return
     end
 
-    self:log("Initializing Operation Infinity...")
+    log("Initializing Operation Infinity...")
 
     -- Random number generator seeding is not required in this environment
 
@@ -1139,7 +1106,7 @@ function OperationInfinity:init()
     end, nil, timer.getTime() + 2)
 
     self.state.initialized = true
-    self:log("Initialization complete")
+    log("Initialization complete")
 end
 
 -- =============================================================================
