@@ -5,6 +5,10 @@ This repository contains documentation for AI agents to use as context when gene
 ## Directory Structure
 
 - `docs/` - Generated markdown documentation. All documentation output should be placed here.
+- `tools/` - Python CLI tools for working with DCS mission data:
+  - `clsid-export/` - Generates CLSID lookup tables from DCS Lua datamine
+  - `mission-check/` - Validates extracted mission directories or `.miz` files for correct Lua syntax, schema conformance, warehouse field typos (with Levenshtein-based suggestions), dynamic spawn template invariants, ID uniqueness, and airfield consistency. Run with `uv run check-mission check <path>`.
+- `missions/` - DCS mission source directories (extracted `.miz` contents)
 
 ## Available Documentation
 
