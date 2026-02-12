@@ -106,6 +106,8 @@ AirIntercept.state = {
     difficulty = nil,
     totalAirborne = 0,
     airfieldState = {},  -- Runtime state per airfield
+    groupAliveCount = {}, -- groupName -> number of alive units in that group
+    groupToAirfield = {}, -- groupName -> airfield name (reverse lookup)
 }
 
 local log = Logging:create("AirIntercept")
@@ -416,6 +418,8 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
         afState.totalSpawned = afState.totalSpawned + 1
         self.state.totalAirborne = self.state.totalAirborne + flightSize
         afState.spawnedGroups[#afState.spawnedGroups + 1] = groupData.name
+        self.state.groupAliveCount[groupData.name] = flightSize
+        self.state.groupToAirfield[groupData.name] = airfield.name
 
         log("Spawned " .. flightSize .. " interceptors from " .. airfield.name ..
                  " (" .. groupData.name .. "), total airborne: " .. self.state.totalAirborne ..
@@ -457,15 +461,37 @@ function AirIntercept:handleUnitDeath(unitName)
         return
     end
 
-    -- Find which airfield spawned this group
-    for afName, afState in pairs(self.state.airfieldState) do
-        for i, groupName in ipairs(afState.spawnedGroups) do
-            if string.find(unitName, groupName, 1, true) then
-                self.state.totalAirborne = math.max(0, self.state.totalAirborne - 1)
-                log("Interceptor killed: " .. unitName ..
-                         ", total airborne: " .. self.state.totalAirborne)
-                return
+    -- Extract group name from unit name (format: "groupName-N")
+    -- Find the matching group via reverse lookup
+    for groupName, aliveCount in pairs(self.state.groupAliveCount) do
+        if string.find(unitName, groupName, 1, true) then
+            self.state.totalAirborne = math.max(0, self.state.totalAirborne - 1)
+            local newCount = math.max(0, aliveCount - 1)
+            self.state.groupAliveCount[groupName] = newCount
+
+            log("Interceptor killed: " .. unitName ..
+                     ", total airborne: " .. self.state.totalAirborne)
+
+            -- Clean up group when all units are dead
+            if newCount == 0 then
+                self.state.groupAliveCount[groupName] = nil
+                local afName = self.state.groupToAirfield[groupName]
+                self.state.groupToAirfield[groupName] = nil
+
+                if afName and self.state.airfieldState[afName] then
+                    local spawnedGroups = self.state.airfieldState[afName].spawnedGroups
+                    for i, name in ipairs(spawnedGroups) do
+                        if name == groupName then
+                            table.remove(spawnedGroups, i)
+                            break
+                        end
+                    end
+                end
+
+                log("Group " .. groupName .. " fully destroyed, removed from tracking")
             end
+
+            return
         end
     end
 end

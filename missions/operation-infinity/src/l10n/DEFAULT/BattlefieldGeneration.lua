@@ -372,13 +372,12 @@ end
 -- =============================================================================
 
 function BattlefieldGeneration:generateConvoy(index)
-    local config = OperationInfinity.config
     local state = OperationInfinity.state
 
     -- Pick a random target aerodrome and position convoy near it
     local aerodromes = state.battlefield.targetAerodromes
     local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome)
+    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
     -- Convoys should be near roads (within 100m)
     local pos, valid = Terrain:findValidPosition(initialPos, 200, {
@@ -409,13 +408,12 @@ function BattlefieldGeneration:generateConvoy(index)
 end
 
 function BattlefieldGeneration:generateArtilleryBattery(index)
-    local config = OperationInfinity.config
     local state = OperationInfinity.state
 
     -- Pick a random target aerodrome and position artillery near it
     local aerodromes = state.battlefield.targetAerodromes
     local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome)
+    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
     -- Artillery needs flatter terrain (8 degree max slope)
     local pos, valid = Terrain:findValidPosition(initialPos, 300, {
@@ -472,7 +470,7 @@ function BattlefieldGeneration:generatePatrolGroup(index)
     -- Pick a random target aerodrome and position patrol near it
     local aerodromes = state.battlefield.targetAerodromes
     local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome)
+    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
     -- Find valid terrain for patrol
     local pos, valid = Terrain:findValidPosition(initialPos, 150)

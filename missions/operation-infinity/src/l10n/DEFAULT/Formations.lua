@@ -233,6 +233,8 @@ function Formations:buildPlatoonUnits(template, center, options)
                 x = center.x + rotatedPos.x + jitterX,
                 y = center.y + rotatedPos.y + jitterY,
                 heading = unitHeading,
+                -- Ground AI below "High" is ineffective; lower skills miss
+                -- consistently and fail to engage targets at realistic ranges
                 skill = "High",
             }
             unitIndex = unitIndex + 1

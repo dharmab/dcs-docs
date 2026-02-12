@@ -24,7 +24,7 @@ end
 -- Returns a table with x and y fields
 function Spatial:randomPointInRadius(center, radius)
     local angle = math.random() * 2 * math.pi
-    local distance = math.random() * radius
+    local distance = math.sqrt(math.random()) * radius
     return {
         x = center.x + distance * math.cos(angle),
         y = center.y + distance * math.sin(angle),

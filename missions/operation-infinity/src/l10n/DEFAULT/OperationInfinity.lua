@@ -20,6 +20,8 @@ OperationInfinity = {}
 -- CONFIGURATION
 -- =============================================================================
 
+local METERS_PER_NM = 1852
+
 OperationInfinity.config = {
     maxSpawnedUnits = 800,
     debug = true,
@@ -77,8 +79,8 @@ OperationInfinity.config = {
             spawnConstraints = {
                 angleMin = math.pi * 0.5,   -- North
                 angleMax = math.pi,          -- West (NW quadrant)
-                minDistance = 8000,          -- ~5 miles
-                maxDistance = 24000,         -- ~15 miles
+                minDistance = 5 * METERS_PER_NM,   -- ~5 nm
+                maxDistance = 15 * METERS_PER_NM,  -- ~15 nm
             },
         },
         northeast = {
@@ -100,14 +102,14 @@ OperationInfinity.config = {
 
     -- Battlefield spawning distances from aerodromes
     battlefieldDistance = {
-        min = 16000,  -- 10 miles in meters
-        max = 64000,  -- 40 miles in meters
+        min = 10 * METERS_PER_NM,  -- 10 nm
+        max = 40 * METERS_PER_NM,  -- 40 nm
     },
 
     -- Frontline generation parameters
     frontline = {
-        platoonSpacingMin = 4800,     -- 3 miles in meters (minimum between platoons)
-        platoonSpacingMax = 11300,    -- 7 miles in meters (maximum between platoons)
+        platoonSpacingMin = 3 * METERS_PER_NM,   -- 3 nm (minimum between platoons)
+        platoonSpacingMax = 7 * METERS_PER_NM,  -- 7 nm (maximum between platoons)
         platoonCountMin = 4,          -- Minimum platoons along frontline
         platoonCountMax = 8,          -- Maximum platoons along frontline
         wobbleMax = 500,              -- Max perpendicular offset for natural variation
@@ -142,10 +144,10 @@ OperationInfinity.config = {
     -- Approach route targets - enemies along flight path to deep strike zones
     -- Only applies to regions with noFrontline = true
     approachRoute = {
-        -- Minimum distance from Krymsk (120 miles = 193km) - safe zone
-        safeZoneRadius = 193000,
+        -- Minimum distance from Krymsk - safe zone (no approach route targets)
+        safeZoneRadius = 120 * METERS_PER_NM,  -- 120 nm
         -- Waypoints as fraction of distance from Krymsk to target centroid
-        -- Start at 0.82 to respect 120-mile safe zone (~193km of ~240km total)
+        -- Start at 0.82 to respect 120 nm safe zone
         waypointFractions = { 0.82, 0.88, 0.94 },
         -- Radius around each waypoint for target placement
         waypointRadius = 12000,
@@ -165,40 +167,39 @@ OperationInfinity.config = {
     krymsk = { x = -7000, y = 295000 },
 
     -- Support aircraft racetrack positions by region
-    -- Distances in meters (1 nautical mile = 1852 meters)
     supportRacetracks = {
-        -- Maykop: 15 miles south of Krymsk
+        -- Maykop: 15 nm south of Krymsk
         northwest = {
-            x = -7000 - (15 * 1852),  -- 15nm south
+            x = -7000 - (15 * METERS_PER_NM),
             y = 295000,
             trackLength = 50000,      -- 50km racetrack
             heading = 0,              -- East-West track
         },
-        -- Gudauta/Sukhumi: 50 miles SE of Krymsk (toward the target area)
+        -- Gudauta/Sukhumi: 50 nm SE of Krymsk (toward the target area)
         central_coast = {
-            x = -7000 - (50 * 1852 * 0.64),   -- 50nm at ~130 degrees heading (SE)
-            y = 295000 + (50 * 1852 * 0.77),
+            x = -7000 - (50 * METERS_PER_NM * 0.64),   -- ~130 degrees heading (SE)
+            y = 295000 + (50 * METERS_PER_NM * 0.77),
             trackLength = 60000,
             heading = math.pi * 0.75,  -- NW-SE track aligned with route
         },
-        -- Kobuleti/Senaki/Kutaisi: 50 miles SE of Krymsk
+        -- Kobuleti/Senaki/Kutaisi: 50 nm SE of Krymsk
         southwest_coast = {
-            x = -7000 - (50 * 1852 * 0.64),
-            y = 295000 + (50 * 1852 * 0.77),
+            x = -7000 - (50 * METERS_PER_NM * 0.64),
+            y = 295000 + (50 * METERS_PER_NM * 0.77),
             trackLength = 60000,
             heading = math.pi * 0.75,
         },
-        -- Mozdok: 100 miles east of Krymsk along Krymsk-Mozdok axis
+        -- Mozdok: 100 nm east of Krymsk along Krymsk-Mozdok axis
         northeast = {
-            x = -7000 - (100 * 1852 * 0.14),  -- 100nm at ~98 degrees heading (mostly E)
-            y = 295000 + (100 * 1852 * 0.99),
+            x = -7000 - (100 * METERS_PER_NM * 0.14),  -- ~98 degrees heading (mostly E)
+            y = 295000 + (100 * METERS_PER_NM * 0.99),
             trackLength = 80000,
             heading = 0,  -- E-W track
         },
-        -- Tbilisi: 180 miles SE of Krymsk
+        -- Tbilisi: 180 nm SE of Krymsk
         southeast = {
-            x = -7000 - (180 * 1852 * 0.45),  -- 180nm at ~117 degrees heading
-            y = 295000 + (180 * 1852 * 0.89),
+            x = -7000 - (180 * METERS_PER_NM * 0.45),  -- ~117 degrees heading
+            y = 295000 + (180 * METERS_PER_NM * 0.89),
             trackLength = 80000,
             heading = math.pi * 0.65,  -- NW-SE track
         },

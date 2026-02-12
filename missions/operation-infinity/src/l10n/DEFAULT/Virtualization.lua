@@ -264,9 +264,23 @@ function Virtualization:despawnGroup(vGroup)
     if group and group:isExist() then
         local units = group:getUnits()
 
-        for i, vUnit in ipairs(vGroup.units) do
-            local liveUnit = units[i]
+        -- Build lookup from unit index suffix to live unit, since
+        -- getUnits() only returns surviving units (indices shift when
+        -- units are destroyed)
+        local liveUnitsByIndex = {}
+        for _, liveUnit in ipairs(units) do
             if liveUnit and liveUnit:isExist() then
+                local unitName = liveUnit:getName()
+                local indexStr = string.match(unitName, "Unit%-(%d+)$")
+                if indexStr then
+                    liveUnitsByIndex[tonumber(indexStr)] = liveUnit
+                end
+            end
+        end
+
+        for i, vUnit in ipairs(vGroup.units) do
+            local liveUnit = liveUnitsByIndex[i]
+            if liveUnit then
                 local life = liveUnit:getLife()
                 local life0 = liveUnit:getLife0()
                 -- Division-by-zero safety: if unit has no baseline health, assume full health
@@ -392,102 +406,36 @@ function Virtualization:update()
     return timer.getTime() + self.config.updateInterval
 end
 
--- Process virtual groups with time-budgeted batching
+-- Process virtual groups with time-budgeted batching using BatchScheduler
 function Virtualization:updateBatched(playerPositions)
-    local spawnQueue = {}
-    local despawnQueue = {}
-
-    -- Use time-budgeted processing for distance checks
-    local startTime = timer.getTime() * 1000
-    local budgetMs = BatchScheduler.config.frameBudgetMs
-    local itemsProcessed = 0
-
-    for _, vGroup in ipairs(self.state.virtualGroups) do
-        -- Calculate minimum distance to any player using cached positions
-        local minDist = math.huge
-        for _, pPos in ipairs(playerPositions) do
-            local dist = Spatial:getDistance2D(pPos, vGroup.center)
-            if dist < minDist then
-                minDist = dist
-            end
-        end
-
-        -- Queue spawn/despawn decisions
-        if vGroup.isSpawned and minDist > self.config.despawnDistance then
-            despawnQueue[#despawnQueue + 1] = vGroup
-        elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
-            spawnQueue[#spawnQueue + 1] = vGroup
-        end
-
-        itemsProcessed = itemsProcessed + 1
-
-        -- Check time budget (but process at least 1 item)
-        local elapsed = (timer.getTime() * 1000) - startTime
-        if itemsProcessed >= 1 and elapsed >= budgetMs then
-            -- Schedule remaining groups for next frame
-            local remaining = {}
-            local foundCurrent = false
-            for _, g in ipairs(self.state.virtualGroups) do
-                if foundCurrent then
-                    remaining[#remaining + 1] = g
-                elseif g == vGroup then
-                    foundCurrent = true
+    BatchScheduler:processArray({
+        array = self.state.virtualGroups,
+        context = {
+            playerPositions = playerPositions,
+            spawnQueue = {},
+            despawnQueue = {},
+        },
+        callback = function(vGroup, _, ctx)
+            -- Calculate minimum distance to any player using cached positions
+            local minDist = math.huge
+            for _, pPos in ipairs(ctx.playerPositions) do
+                local dist = Spatial:getDistance2D(pPos, vGroup.center)
+                if dist < minDist then
+                    minDist = dist
                 end
             end
-            if #remaining > 0 then
-                timer.scheduleFunction(function()
-                    Virtualization:updateBatchedContinue(remaining, playerPositions, spawnQueue, despawnQueue)
-                end, nil, timer.getTime() + 0.001)
-                return
+
+            -- Queue spawn/despawn decisions
+            if vGroup.isSpawned and minDist > Virtualization.config.despawnDistance then
+                ctx.despawnQueue[#ctx.despawnQueue + 1] = vGroup
+            elseif not vGroup.isSpawned and minDist < Virtualization.config.spawnDistance then
+                ctx.spawnQueue[#ctx.spawnQueue + 1] = vGroup
             end
-            break
-        end
-    end
-
-    -- Process queues
-    self:processQueues(despawnQueue, spawnQueue)
-end
-
--- Continue processing remaining virtual groups
-function Virtualization:updateBatchedContinue(groups, playerPositions, spawnQueue, despawnQueue)
-    local startTime = timer.getTime() * 1000
-    local budgetMs = BatchScheduler.config.frameBudgetMs
-    local itemsProcessed = 0
-
-    for idx, vGroup in ipairs(groups) do
-        local minDist = math.huge
-        for _, pPos in ipairs(playerPositions) do
-            local dist = Spatial:getDistance2D(pPos, vGroup.center)
-            if dist < minDist then
-                minDist = dist
-            end
-        end
-
-        if vGroup.isSpawned and minDist > self.config.despawnDistance then
-            despawnQueue[#despawnQueue + 1] = vGroup
-        elseif not vGroup.isSpawned and minDist < self.config.spawnDistance then
-            spawnQueue[#spawnQueue + 1] = vGroup
-        end
-
-        itemsProcessed = itemsProcessed + 1
-
-        local elapsed = (timer.getTime() * 1000) - startTime
-        if itemsProcessed >= 1 and elapsed >= budgetMs then
-            local remaining = {}
-            for i = idx + 1, #groups do
-                remaining[#remaining + 1] = groups[i]
-            end
-            if #remaining > 0 then
-                timer.scheduleFunction(function()
-                    Virtualization:updateBatchedContinue(remaining, playerPositions, spawnQueue, despawnQueue)
-                end, nil, timer.getTime() + 0.001)
-                return
-            end
-            break
-        end
-    end
-
-    self:processQueues(despawnQueue, spawnQueue)
+        end,
+        onComplete = function(ctx)
+            Virtualization:processQueues(ctx.despawnQueue, ctx.spawnQueue)
+        end,
+    })
 end
 
 -- Process spawn and despawn queues with time budgeting

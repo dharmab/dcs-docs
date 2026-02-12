@@ -68,7 +68,7 @@ function BatchScheduler:processArray(params)
         end
     end
 
-    scheduleNextFrame(processBatch)
+    timer.scheduleFunction(processBatch, nil, timer.getTime() + NEXT_FRAME_SECONDS)
 end
 
 -- Execute sequential async steps with callbacks

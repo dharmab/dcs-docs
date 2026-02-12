@@ -76,41 +76,39 @@ function IADS:getBlueAircraftPositions()
     local positions = {}
 
     -- Get all blue aircraft (players and AI)
-    for _, side in ipairs({coalition.side.BLUE}) do
-        local groups = coalition.getGroups(side, Group.Category.AIRPLANE)
+    local groups = coalition.getGroups(coalition.side.BLUE, Group.Category.AIRPLANE)
 
-        for _, group in ipairs(groups) do
-            if group and group:isExist() then
-                local units = group:getUnits()
-                for _, unit in ipairs(units) do
-                    if unit and unit:isExist() then
-                        local pos = unit:getPoint()
-                        positions[#positions + 1] = {
-                            x = pos.x,
-                            y = pos.z,  -- Note: 3D y is altitude, z is north-south
-                            alt = pos.y,
-                            unit = unit,
-                        }
-                    end
+    for _, group in ipairs(groups) do
+        if group and group:isExist() then
+            local units = group:getUnits()
+            for _, unit in ipairs(units) do
+                if unit and unit:isExist() then
+                    local pos = unit:getPoint()
+                    positions[#positions + 1] = {
+                        x = pos.x,
+                        y = pos.z,  -- Note: 3D y is altitude, z is north-south
+                        alt = pos.y,
+                        unit = unit,
+                    }
                 end
             end
         end
+    end
 
-        -- Also check helicopters
-        local heliGroups = coalition.getGroups(side, Group.Category.HELICOPTER)
-        for _, group in ipairs(heliGroups) do
-            if group and group:isExist() then
-                local units = group:getUnits()
-                for _, unit in ipairs(units) do
-                    if unit and unit:isExist() then
-                        local pos = unit:getPoint()
-                        positions[#positions + 1] = {
-                            x = pos.x,
-                            y = pos.z,
-                            alt = pos.y,
-                            unit = unit,
-                        }
-                    end
+    -- Also check helicopters
+    local heliGroups = coalition.getGroups(coalition.side.BLUE, Group.Category.HELICOPTER)
+    for _, group in ipairs(heliGroups) do
+        if group and group:isExist() then
+            local units = group:getUnits()
+            for _, unit in ipairs(units) do
+                if unit and unit:isExist() then
+                    local pos = unit:getPoint()
+                    positions[#positions + 1] = {
+                        x = pos.x,
+                        y = pos.z,
+                        alt = pos.y,
+                        unit = unit,
+                    }
                 end
             end
         end
