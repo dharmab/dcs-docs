@@ -1,0 +1,35 @@
+[project]
+name = "mission-check"
+version = "0.1.0"
+description = "Validate DCS mission directories and .miz files"
+requires-python = ">=3.14"
+dependencies = [
+    "luadata>=1.0.5",
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "ty",
+]
+
+[project.scripts]
+check-mission = "check_mission:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["check_mission.py"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.environment]
+python-version = "3.14"
