@@ -30,6 +30,8 @@ A plain text file containing the name of the map (theatre) the mission is design
 
 A Lua table defining the supply levels for each warehouse in the mission. Warehouses represent airbases, FARPs, and other logistics points where aircraft can rearm and refuel. Each airbase entry specifies quantities of fuel, ammunition, weapons, and other supplies. The exact structure of this file varies depending on the theatre, as different maps have different default airbase and warehouse configurations.
 
+Key fields for each airbase entry include `coalition`, `unlimitedAircrafts`, `unlimitedFuel`, `unlimitedMunitions`, `dynamicSpawn` (enables dynamic spawn at the airfield), `allowHotStart` (permits players to choose hot or cold start), `speed`, `periodicity`, `size`, `suppliers`, `dynamicCargo`, `aircrafts` (aircraft inventory), and `weapons`.
+
 ### options
 
 A Lua table containing mission-specific difficulty settings that may override the player's global difficulty options when the mission is loaded. This file also contains residual data from the global options of the player who last saved the mission in the Mission Editor, including graphics settings and the player's username. Most of this extra data is not used when loading the mission and can be considered noise.

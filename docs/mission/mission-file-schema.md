@@ -447,7 +447,7 @@ Groups are containers for one or more units that share a common route and task.
 | `hidden` | boolean | Hidden on planning map |
 | `hiddenOnPlanner` | boolean | Hidden in mission planner |
 | `hiddenOnMFD` | boolean | Hidden on MFD displays |
-| `lateActivation` | boolean | Requires trigger to spawn |
+| `lateActivation` | boolean | Requires trigger to spawn; also used on `dynSpawnTemplate` groups to hide them from the traditional slot screen |
 | `uncontrolled` | boolean | Starts with engines off, no AI |
 | `start_time` | number | Spawn time offset (seconds) |
 | `frequency` | number | Radio frequency (MHz) |
