@@ -30,15 +30,49 @@ The dynamic spawn system, introduced in DCS 2.9, allows players to spawn any air
 
 ### Enabling Dynamic Spawn on an Airfield
 
-Dynamic spawn is enabled via the airfield's warehouse configuration in `warehouses` (a separate file in the .miz archive). The mission file aircraft group only needs the template flag.
+Dynamic spawn is enabled via the airfield's warehouse configuration in `warehouses` (a separate file in the .miz archive):
+
+```lua
+-- In the warehouses file
+warehouses = {
+    ["airports"] = {
+        [15] = {  -- Airfield ID (e.g. 15 = Krymsk)
+            ["coalition"] = "BLUE",
+            ["dynamicSpawn"] = true,           -- Enables dynamic spawn at this airfield
+            ["unlimitedAircrafts"] = true,      -- Unlimited aircraft inventory
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["supplier"] = true,
+            ["speed"] = 16.666666,              -- Logistics speed
+            ["periodicity"] = 30,               -- Restock interval
+            ["size"] = 100,                     -- Warehouse capacity
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["aircrafts"] = {},                 -- Aircraft inventory (empty when unlimited)
+            ["weapons"] = {},
+            ["gasoline"] = { ["InitFuel"] = 100000000 },
+            ["methanol_mixture"] = { ["InitFuel"] = 100000000 },
+            ["diesel"] = { ["InitFuel"] = 100000000 },
+            ["jet_fuel"] = { ["InitFuel"] = 100000000 },
+        },
+    },
+    ["warehouses"] = {},
+}
+```
+
+Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. If you want to restrict specific aircraft types, populate the table with entries like `["F-16C_50"] = { ["initialAmount"] = 10, ["unlimited"] = false }`.
 
 ### Dynamic Spawn Template Group
 
-A template group requires `dynSpawnTemplate = true` at the group level:
+A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. The `lateActivation` flag prevents the template from appearing in the traditional slot selection screen:
 
 ```lua
 [1] = {
     ["dynSpawnTemplate"] = true,  -- Marks this as a dynamic spawn template
+    ["lateActivation"] = true,    -- Hides from traditional slot screen
     ["groupId"] = 1,
     ["name"] = "F-4E Template",
     ["task"] = "CAP",
@@ -114,15 +148,15 @@ A template group requires `dynSpawnTemplate = true` at the group level:
 - **Reduced mission complexity**: One template per aircraft type instead of dozens of individual slots
 - **Flexible player count**: Unlimited players can spawn (within warehouse limits)
 - **In-game loadout selection**: Players choose weapons, fuel, and livery when spawning
-- **Hot/cold start option**: Players can choose start type (if enabled in warehouse settings)
 - **Waypoint sharing**: All spawned aircraft of a type inherit the template's waypoints
 
 ### Dynamic Spawn Limitations
 
 - Multiplayer only (not available in singleplayer)
 - Does not work with Supercarrier (carrier manages spawn positions)
-- Template aircraft should be hidden from traditional slot screen using password protection
+- Template groups must use `lateActivation = true` to prevent them from appearing as traditional slots
 - Each aircraft type needs its own template if you want custom waypoints
+- Hot start requires `allowHotStart = true` in the warehouse configuration; without it, only cold start is available
 
 ---
 
@@ -171,6 +205,7 @@ Player aircraft are placed in `coalition.[side].country[n].plane.group`. Each gr
 | `start_time` | number | Spawn time offset from mission start (seconds) |
 | `radioSet` | boolean | Use preset radio frequencies |
 | `dynSpawnTemplate` | boolean | (Dynamic spawn only) Marks group as a template |
+| `lateActivation` | boolean | (Dynamic spawn only) Set to `true` to hide template from traditional slot screen |
 
 ### Unit-Level Fields
 
@@ -531,14 +566,15 @@ When adding player slots, verify:
 - [ ] `unitId` is unique across all units in the mission
 - [ ] `skill` is set to `"Player"` or `"Client"` as appropriate
 - [ ] `dynSpawnTemplate` is set to `true` for dynamic spawn templates
+- [ ] `lateActivation` is set to `true` for dynamic spawn templates
 - [ ] `parking` and `parking_id` reference valid spots at the airfield
 - [ ] `airdromeId` in the first waypoint matches the airfield
 - [ ] `x` and `y` coordinates match the airfield location
 - [ ] `type` is a valid aircraft type string
 - [ ] Unit names are descriptive for slot selection in multiplayer
 - [ ] `maxDictId` in the mission root is updated if adding dictionary entries
-- [ ] (Dynamic spawn) Warehouse settings enable dynamic spawn for the airfield
-- [ ] (Dynamic spawn) Template group is assigned to aircraft type in warehouse settings
+- [ ] (Dynamic spawn) Warehouse `dynamicSpawn` is set to `true` for the airfield
+- [ ] (Dynamic spawn) Warehouse aircraft inventory key is `aircrafts` (plural)
 
 ## See Also
 

@@ -262,6 +262,7 @@ mission = {
                             -- Dynamic spawn template: F-4E
                             [1] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 1,
                                 ["name"] = "F-4E Template",
                                 ["task"] = "CAP",
@@ -334,6 +335,7 @@ mission = {
                             -- Dynamic spawn template: F-16C
                             [2] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 2,
                                 ["name"] = "F-16C Template",
                                 ["task"] = "CAP",
@@ -406,6 +408,7 @@ mission = {
                             -- Dynamic spawn template: F-15E
                             [3] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 3,
                                 ["name"] = "F-15E Template",
                                 ["task"] = "Ground Attack",
@@ -478,6 +481,7 @@ mission = {
                             -- Dynamic spawn template: F-15C
                             [4] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 4,
                                 ["name"] = "F-15C Template",
                                 ["task"] = "CAP",
@@ -550,6 +554,7 @@ mission = {
                             -- Dynamic spawn template: MiG-29A
                             [5] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 5,
                                 ["name"] = "MiG-29A Template",
                                 ["task"] = "CAP",
@@ -617,6 +622,7 @@ mission = {
                             -- Dynamic spawn template: F/A-18C
                             [6] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 6,
                                 ["name"] = "FA-18C Template",
                                 ["task"] = "CAP",
@@ -689,6 +695,7 @@ mission = {
                             -- Dynamic spawn template: A-10C
                             [7] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 7,
                                 ["name"] = "A-10C Template",
                                 ["task"] = "CAS",
@@ -761,6 +768,7 @@ mission = {
                             -- Dynamic spawn template: Mirage 2000C
                             [8] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 8,
                                 ["name"] = "M2000C Template",
                                 ["task"] = "CAP",
@@ -828,6 +836,7 @@ mission = {
                             -- Dynamic spawn template: Mirage F1
                             [9] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 9,
                                 ["name"] = "F1CE Template",
                                 ["task"] = "Ground Attack",
@@ -895,6 +904,7 @@ mission = {
                             -- Dynamic spawn template: F-14A
                             [10] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 10,
                                 ["name"] = "F-14A Template",
                                 ["task"] = "CAP",
@@ -967,6 +977,7 @@ mission = {
                             -- Dynamic spawn template: F-14B
                             [11] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 11,
                                 ["name"] = "F-14B Template",
                                 ["task"] = "CAP",
@@ -1039,6 +1050,7 @@ mission = {
                             -- Dynamic spawn template: JF-17
                             [12] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 12,
                                 ["name"] = "JF-17 Template",
                                 ["task"] = "Ground Attack",
@@ -1111,6 +1123,7 @@ mission = {
                             -- Dynamic spawn template: Su-25
                             [13] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 13,
                                 ["name"] = "Su-25 Template",
                                 ["task"] = "Ground Attack",
@@ -1178,6 +1191,7 @@ mission = {
                             -- Dynamic spawn template: Su-25T
                             [14] = {
                                 ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
                                 ["groupId"] = 14,
                                 ["name"] = "Su-25T Template",
                                 ["task"] = "Ground Attack",
@@ -1259,7 +1273,7 @@ mission = {
                                 ["y"] = 293500,
                                 ["units"] = {
                                     [1] = {
-                                        ["unitId"] = 12,
+                                        ["unitId"] = 15,
                                         ["name"] = "Magic-1",
                                         ["type"] = "E-3A",
                                         ["skill"] = "Excellent",
