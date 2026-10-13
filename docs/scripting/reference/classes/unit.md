@@ -140,6 +140,8 @@ The `unit:getLife` method returns the unit's current hit points. Units with a li
 
 **Returns:** The current hit points as a number.
 
+There is no supported `unit:setLife()` method. See [Restore Unit Life](../../../recipes/restore-unit-life.md) for trigger-command and delete-and-recreate workarounds.
+
 ```lua
 local life = unit:getLife()
 local maxLife = unit:getDesc().life
@@ -155,6 +157,8 @@ number unit:getLife0()
 The `unit:getLife0` method returns the unit's initial (maximum) hit points.
 
 **Returns:** The initial hit points as a number.
+
+There is no supported setter for unit life. See [Restore Unit Life](../../../recipes/restore-unit-life.md) for trigger-command and delete-and-recreate workarounds.
 
 ## unit:getFuel
 
