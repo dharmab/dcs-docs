@@ -65,6 +65,54 @@ warehouses = {
 
 Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. If you want to restrict specific aircraft types, populate the table with entries like `["F-16C_50"] = { ["initialAmount"] = 10, ["unlimited"] = false }`.
 
+### Enabling Dynamic Spawn on a Ship
+
+Carriers (and FARPs) have their own warehouse under `warehouses["warehouses"]`, keyed by the ship's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. This format matches what the DCS 2.9.31 Mission Editor saves (`MissionEditor/modules/me_manager_resource.lua` and `me_mission.lua`), and the multiplayer spawn dialog lists such ships as "Aircraft carrier" bases.
+
+To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`) keyed by type name. Each stock entry takes `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
+
+```lua
+-- In the warehouses file
+warehouses = {
+    ["airports"] = { --[[ airfields ]] },
+    ["warehouses"] = {
+        [20] = {  -- unitId of the carrier (e.g. CVN-74 Stennis)
+            ["coalition"] = "BLUE",
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["unlimitedAircrafts"] = false,      -- only the types stocked below
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            -- speed, periodicity, size, suppliers, OperatingLevel_*, fuels as for airfields
+            ["aircrafts"] = {
+                ["planes"] = {
+                    ["FA-18C_hornet"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 25 },
+                    ["F-14BU"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 28 },
+                },
+                ["helicopters"] = {},
+            },
+            ["weapons"] = {},
+        },
+    },
+}
+```
+
+The Mission Editor fills in every type missing from `aircrafts` with `initialAmount = 100` when it loads a mission (`Config/AirportsEquipment.lua`). If a mission with a restricted carrier is re-saved in the ME, check the carrier's resource manager and zero out any added types.
+
+A ship template's first waypoint links to the ship with `linkUnit` and `helipadId` (both the ship's `unitId`) instead of `airdromeId`:
+
+```lua
+[1] = {
+    ["type"] = "TakeOffParking",
+    ["action"] = "From Parking Area",
+    ["linkUnit"] = 20,
+    ["helipadId"] = 20,
+    -- x, y, alt, speed, task as usual
+},
+```
+
+The Stennis definition has `numParking = 4`, so only a handful of aircraft can sit on deck at once.
+
 ### Dynamic Spawn Template Group
 
 A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. The `lateActivation` flag prevents the template from appearing in the traditional slot selection screen:
@@ -153,7 +201,7 @@ A template group requires `dynSpawnTemplate = true` and `lateActivation = true` 
 ### Dynamic Spawn Limitations
 
 - Multiplayer only (not available in singleplayer)
-- Does not work with Supercarrier (carrier manages spawn positions)
+- Supercarrier module behavior is unverified (older notes claim dynamic spawn does not work on it). Carriers in general are supported; see "Enabling Dynamic Spawn on a Ship"
 - Template groups must use `lateActivation = true` to prevent them from appearing as traditional slots
 - Each aircraft type needs its own template if you want custom waypoints
 - Hot start requires `allowHotStart = true` in the warehouse configuration; without it, only cold start is available

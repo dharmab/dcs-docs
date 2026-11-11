@@ -104,5 +104,64 @@ warehouses = {
             ["unlimitedMunitions"] = true,
         },
     },
-    ["warehouses"] = {},
+    ["warehouses"] = {
+        -- CVN-74 John C. Stennis (unitId 20) - carrier dynamic spawn.
+        -- Only the four types below are stocked; other carrier-capable types
+        -- show as unavailable. linkDynTempl points at each type's template group.
+        [20] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = false,
+            ["aircrafts"] = {
+                ["planes"] = {
+                    ["FA-18C_hornet"] = {
+                        ["unlimited"] = true,
+                        ["initialAmount"] = 0,
+                        ["linkDynTempl"] = 25,
+                    },
+                    ["F-14A-135-GR"] = {
+                        ["unlimited"] = true,
+                        ["initialAmount"] = 0,
+                        ["linkDynTempl"] = 26,
+                    },
+                    ["F-14B"] = {
+                        ["unlimited"] = true,
+                        ["initialAmount"] = 0,
+                        ["linkDynTempl"] = 27,
+                    },
+                    ["F-14BU"] = {
+                        ["unlimited"] = true,
+                        ["initialAmount"] = 0,
+                        ["linkDynTempl"] = 28,
+                    },
+                },
+                ["helicopters"] = {},
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
 }

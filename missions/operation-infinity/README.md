@@ -33,6 +33,13 @@ The following aircraft are available via Dynamic Spawn at Krymsk:
 - Su-25 Frogfoot
 - Su-25T Frogfoot
 
+The following aircraft can also spawn on the carrier CVN-74 John C. Stennis (hot or cold start):
+
+- F/A-18C Hornet
+- F-14A Tomcat
+- F-14B Tomcat
+- F-14B(U) Tomcat
+
 The warehouse is configured for unlimited weapons.
 
 ## Radio Frequencies
@@ -40,6 +47,7 @@ The warehouse is configured for unlimited weapons.
 | Purpose | Frequency |
 |---------|-----------|
 | Tower | 254.1 MHz AM |
+| Carrier (CVN-74 Stennis) | 254.7 MHz AM |
 | Ground | 254.3 MHz AM |
 | Radar | 254.5 MHz AM |
 | Strike | 255.1 MHz AM |
@@ -100,6 +108,10 @@ The warehouse is configured for unlimited weapons.
 Two tankers orbit near Anapa:
 - **KC-135 "Texaco"** (boom) at 25,000 ft, 270.5 MHz, TACAN 100X
 - **KC-135MPRS "Arco"** (basket) at 22,000 ft, 270.1 MHz, TACAN 101X
+
+A carrier strike group operates in the Black Sea about 50 nm southwest of Krymsk: CVN-74 John C. Stennis with a Ticonderoga-class cruiser, two Arleigh Burke-class destroyers, and an Oliver Hazard Perry-class frigate. The carrier steams into the wind for about 25 knots over the deck, turning back downwind when it reaches the edge of its operating area. An SH-60B plane guard helicopter flies off the carrier's starboard side.
+
+- **Carrier:** 254.7 MHz AM, TACAN 74X (STN), ICLS 4, Link 4 336.0 MHz, ACLS
 
 An E-3A AWACS "Magic" orbits northwest of Krymsk at 30,000 ft with EPLRS datalink enabled. For GCI, use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 

@@ -126,21 +126,53 @@ mission = {
             ["actions"] = {
                 [1] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_UnitTemplates",
+                    ["file"] = "ResKey_Logging",
                 },
                 [2] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_Virtualization",
+                    ["file"] = "ResKey_Units",
                 },
                 [3] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_AirIntercept",
+                    ["file"] = "ResKey_Spatial",
                 },
                 [4] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_IADS",
+                    ["file"] = "ResKey_BatchScheduler",
                 },
                 [5] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_Terrain",
+                },
+                [6] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_UnitTemplates",
+                },
+                [7] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_Formations",
+                },
+                [8] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_Virtualization",
+                },
+                [9] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_IADS",
+                },
+                [10] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_AirIntercept",
+                },
+                [11] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_BattlefieldGeneration",
+                },
+                [12] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_CarrierOps",
+                },
+                [13] = {
                     ["predicate"] = "a_do_script_file",
                     ["file"] = "ResKey_OperationInfinity",
                 },
@@ -167,7 +199,7 @@ mission = {
     },
     ["trig"] = {
         ["actions"] = {
-            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
+            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_Logging\")); a_do_script_file(getValueResourceByKey(\"ResKey_Units\")); a_do_script_file(getValueResourceByKey(\"ResKey_Spatial\")); a_do_script_file(getValueResourceByKey(\"ResKey_BatchScheduler\")); a_do_script_file(getValueResourceByKey(\"ResKey_Terrain\")); a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Formations\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_BattlefieldGeneration\")); a_do_script_file(getValueResourceByKey(\"ResKey_CarrierOps\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
             [2] = "a_end_mission(\"blue\", getValueDictByKey(\"DictKey_missionEnd_1\"));",
         },
         ["events"] = {},
@@ -1967,6 +1999,294 @@ mission = {
                                     },
                                 },
                             },
+                            -- Dynamic spawn template: FA-18C (CVN-74 Stennis)
+                            [19] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
+                                ["groupId"] = 25,
+                                ["name"] = "FA-18C Stennis Template",
+                                ["task"] = "CAP",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["uncontrollable"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -53542,
+                                ["y"] = 247652,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 25,
+                                        ["name"] = "FA-18C Stennis-1",
+                                        ["type"] = "FA-18C_hornet",
+                                        ["skill"] = "Client",
+                                        ["x"] = -53542,
+                                        ["y"] = 247652,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 0,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["onboard_num"] = "300",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 4900,
+                                            ["flare"] = 60,
+                                            ["chaff"] = 60,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 5,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Dodge11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -53542,
+                                            ["y"] = 247652,
+                                            ["speed"] = 0,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["linkUnit"] = 20,
+                                            ["helipadId"] = 20,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Dynamic spawn template: F-14A (CVN-74 Stennis)
+                            [20] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
+                                ["groupId"] = 26,
+                                ["name"] = "F-14A Stennis Template",
+                                ["task"] = "CAP",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["uncontrollable"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -53542,
+                                ["y"] = 247652,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 26,
+                                        ["name"] = "F-14A Stennis-1",
+                                        ["type"] = "F-14A-135-GR",
+                                        ["skill"] = "Client",
+                                        ["x"] = -53542,
+                                        ["y"] = 247652,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 0,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["onboard_num"] = "200",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 7348,
+                                            ["flare"] = 60,
+                                            ["chaff"] = 140,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 7,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Chevy11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -53542,
+                                            ["y"] = 247652,
+                                            ["speed"] = 0,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["linkUnit"] = 20,
+                                            ["helipadId"] = 20,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Dynamic spawn template: F-14B (CVN-74 Stennis)
+                            [21] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
+                                ["groupId"] = 27,
+                                ["name"] = "F-14B Stennis Template",
+                                ["task"] = "CAP",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["uncontrollable"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -53542,
+                                ["y"] = 247652,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 27,
+                                        ["name"] = "F-14B Stennis-1",
+                                        ["type"] = "F-14B",
+                                        ["skill"] = "Client",
+                                        ["x"] = -53542,
+                                        ["y"] = 247652,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 0,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["onboard_num"] = "210",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 7348,
+                                            ["flare"] = 60,
+                                            ["chaff"] = 140,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 8,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Pontiac11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -53542,
+                                            ["y"] = 247652,
+                                            ["speed"] = 0,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["linkUnit"] = 20,
+                                            ["helipadId"] = 20,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Dynamic spawn template: F-14B(U) (CVN-74 Stennis)
+                            [22] = {
+                                ["dynSpawnTemplate"] = true,
+                                ["lateActivation"] = true,
+                                ["groupId"] = 28,
+                                ["name"] = "F-14B(U) Stennis Template",
+                                ["task"] = "CAP",
+                                ["modulation"] = 0,
+                                ["communication"] = true,
+                                ["frequency"] = 255.1,
+                                ["start_time"] = 0,
+                                ["uncontrolled"] = false,
+                                ["uncontrollable"] = false,
+                                ["hidden"] = false,
+                                ["x"] = -53542,
+                                ["y"] = 247652,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 28,
+                                        ["name"] = "F-14B(U) Stennis-1",
+                                        ["type"] = "F-14BU",
+                                        ["skill"] = "Client",
+                                        ["x"] = -53542,
+                                        ["y"] = 247652,
+                                        ["alt"] = 20,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 0,
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["onboard_num"] = "220",
+                                        ["livery_id"] = "default",
+                                        ["payload"] = {
+                                            ["pylons"] = {},
+                                            ["fuel"] = 7348,
+                                            ["flare"] = 60,
+                                            ["chaff"] = 140,
+                                            ["gun"] = 100,
+                                        },
+                                        ["callsign"] = {
+                                            [1] = 8,
+                                            [2] = 1,
+                                            [3] = 1,
+                                            ["name"] = "Pontiac11",
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["alt_type"] = "BARO",
+                                            ["type"] = "TakeOffParking",
+                                            ["action"] = "From Parking Area",
+                                            ["x"] = -53542,
+                                            ["y"] = 247652,
+                                            ["speed"] = 0,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["linkUnit"] = 20,
+                                            ["helipadId"] = 20,
+                                            ["formation_template"] = "",
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {},
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                     ["helicopter"] = {
@@ -1976,7 +2296,414 @@ mission = {
                         ["group"] = {},
                     },
                     ["ship"] = {
-                        ["group"] = {},
+                        ["group"] = {
+                            -- Carrier: CVN-74 Stennis (steered by CarrierOps.lua)
+                            [1] = {
+                                ["groupId"] = 20,
+                                ["name"] = "CVN-74 Stennis",
+                                ["hidden"] = false,
+                                ["visible"] = false,
+                                ["uncontrollable"] = false,
+                                ["start_time"] = 0,
+                                ["x"] = -53542,
+                                ["y"] = 247652,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 20,
+                                        ["name"] = "CVN-74 John C. Stennis",
+                                        ["type"] = "Stennis",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = -53542,
+                                        ["y"] = 247652,
+                                        ["heading"] = 4.0841,
+                                        ["frequency"] = 254700000,
+                                        ["modulation"] = 0,
+                                        ["transportable"] = {
+                                            ["randomTransportable"] = false,
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -53542,
+                                            ["y"] = 247652,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                        [1] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 1,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "ActivateBeacon",
+                                                                    ["params"] = {
+                                                                        ["type"] = 4,
+                                                                        ["system"] = 3,
+                                                                        ["name"] = "Stennis",
+                                                                        ["callsign"] = "STN",
+                                                                        ["frequency"] = 1161000000,
+                                                                        ["channel"] = 74,
+                                                                        ["modeChannel"] = "X",
+                                                                        ["AA"] = false,
+                                                                        ["bearing"] = true,
+                                                                        ["unitId"] = 20,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [2] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 2,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "ActivateICLS",
+                                                                    ["params"] = {
+                                                                        ["type"] = 131584,
+                                                                        ["channel"] = 4,
+                                                                        ["unitId"] = 20,
+                                                                        ["name"] = "Stennis",
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [3] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 3,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "ActivateLink4",
+                                                                    ["params"] = {
+                                                                        ["unitId"] = 20,
+                                                                        ["frequency"] = 336000000,
+                                                                        ["name"] = "Stennis",
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        [4] = {
+                                                            ["enabled"] = true,
+                                                            ["auto"] = false,
+                                                            ["id"] = "WrappedAction",
+                                                            ["number"] = 4,
+                                                            ["params"] = {
+                                                                ["action"] = {
+                                                                    ["id"] = "ActivateACLS",
+                                                                    ["params"] = {
+                                                                        ["unitId"] = 20,
+                                                                        ["name"] = "Stennis",
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -86458,
+                                            ["y"] = 202348,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Escort: CSG Cruiser (steered by CarrierOps.lua)
+                            [2] = {
+                                ["groupId"] = 21,
+                                ["name"] = "CSG Cruiser",
+                                ["hidden"] = false,
+                                ["visible"] = false,
+                                ["uncontrollable"] = false,
+                                ["start_time"] = 0,
+                                ["x"] = -55309,
+                                ["y"] = 242069,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 21,
+                                        ["name"] = "CSG Cruiser",
+                                        ["type"] = "TICONDEROG",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = -55309,
+                                        ["y"] = 242069,
+                                        ["heading"] = 4.0841,
+                                        ["frequency"] = 127500000,
+                                        ["modulation"] = 0,
+                                        ["transportable"] = {
+                                            ["randomTransportable"] = false,
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -55309,
+                                            ["y"] = 242069,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -88225,
+                                            ["y"] = 196764,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Escort: CSG Destroyer 1 (steered by CarrierOps.lua)
+                            [3] = {
+                                ["groupId"] = 22,
+                                ["name"] = "CSG Destroyer 1",
+                                ["hidden"] = false,
+                                ["visible"] = false,
+                                ["uncontrollable"] = false,
+                                ["start_time"] = 0,
+                                ["x"] = -59125,
+                                ["y"] = 249420,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 22,
+                                        ["name"] = "CSG Destroyer 1",
+                                        ["type"] = "USS_Arleigh_Burke_IIa",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = -59125,
+                                        ["y"] = 249420,
+                                        ["heading"] = 4.0841,
+                                        ["frequency"] = 127500000,
+                                        ["modulation"] = 0,
+                                        ["transportable"] = {
+                                            ["randomTransportable"] = false,
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -59125,
+                                            ["y"] = 249420,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -92041,
+                                            ["y"] = 204115,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Escort: CSG Destroyer 2 (steered by CarrierOps.lua)
+                            [4] = {
+                                ["groupId"] = 23,
+                                ["name"] = "CSG Destroyer 2",
+                                ["hidden"] = false,
+                                ["visible"] = false,
+                                ["uncontrollable"] = false,
+                                ["start_time"] = 0,
+                                ["x"] = -49047,
+                                ["y"] = 244387,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 23,
+                                        ["name"] = "CSG Destroyer 2",
+                                        ["type"] = "USS_Arleigh_Burke_IIa",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = -49047,
+                                        ["y"] = 244387,
+                                        ["heading"] = 4.0841,
+                                        ["frequency"] = 127500000,
+                                        ["modulation"] = 0,
+                                        ["transportable"] = {
+                                            ["randomTransportable"] = false,
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -49047,
+                                            ["y"] = 244387,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -81963,
+                                            ["y"] = 199082,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            -- Escort: CSG Frigate (steered by CarrierOps.lua)
+                            [5] = {
+                                ["groupId"] = 24,
+                                ["name"] = "CSG Frigate",
+                                ["hidden"] = false,
+                                ["visible"] = false,
+                                ["uncontrollable"] = false,
+                                ["start_time"] = 0,
+                                ["x"] = -49188,
+                                ["y"] = 253646,
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 24,
+                                        ["name"] = "CSG Frigate",
+                                        ["type"] = "PERRY",
+                                        ["skill"] = "Excellent",
+                                        ["x"] = -49188,
+                                        ["y"] = 253646,
+                                        ["heading"] = 4.0841,
+                                        ["frequency"] = 127500000,
+                                        ["modulation"] = 0,
+                                        ["transportable"] = {
+                                            ["randomTransportable"] = false,
+                                        },
+                                    },
+                                },
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -49188,
+                                            ["y"] = 253646,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = true,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        [2] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["x"] = -82104,
+                                            ["y"] = 208341,
+                                            ["speed"] = 9.77,
+                                            ["speed_locked"] = true,
+                                            ["ETA"] = 0,
+                                            ["ETA_locked"] = false,
+                                            ["task"] = {
+                                                ["id"] = "ComboTask",
+                                                ["params"] = {
+                                                    ["tasks"] = {
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                     },
                     ["static"] = {
                         ["group"] = {},

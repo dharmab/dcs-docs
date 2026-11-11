@@ -4,7 +4,7 @@ This document provides technical details for AI agents generating or modifying t
 
 ## Mission Structure
 
-Players spawn via Dynamic Slots at Krymsk (airdromeId 15). On load, an F10 menu allows selection of difficulty and playtime. First player to select both locks settings. Scripts generate a randomized battlefield and display coordinates to players.
+Players spawn via Dynamic Slots at Krymsk (airdromeId 15) or on the CVN-74 Stennis (ship warehouse keyed by unitId 20; carrier types only). On load, an F10 menu allows selection of difficulty and playtime. First player to select both locks settings. Scripts generate a randomized battlefield and display coordinates to players.
 
 ## Player Aircraft
 
@@ -26,6 +26,19 @@ Players spawn via Dynamic Slots at Krymsk (airdromeId 15). On load, an F10 menu 
 | Su-25T Frogfoot | Su-25T |
 
 Warehouse: unlimited weapons of all types.
+
+### Carrier Slots (CVN-74 Stennis)
+
+Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), hot or cold start:
+
+| Aircraft | DCS Type String | Template Group (groupId) |
+|----------|-----------------|--------------------------|
+| F/A-18C Hornet | FA-18C_hornet | FA-18C Stennis Template (25) |
+| F-14A Tomcat | F-14A-135-GR | F-14A Stennis Template (26) |
+| F-14B Tomcat | F-14B | F-14B Stennis Template (27) |
+| F-14B(U) Tomcat | F-14BU | F-14B(U) Stennis Template (28) |
+
+`F-14BU` comes from Quaggles' datamine (DCS 2.9.31.29434, `db/Units/Planes/Plane/F-14BU.lua`; display name "F-14B(U)").
 
 ## Communications Plan
 
@@ -173,6 +186,25 @@ E-3A "Magic" on E-W racetrack NW of Krymsk, 30,000 ft. EPLRS datalink enabled, r
 
 Both orbit near Anapa.
 
+### Carrier Strike Group
+
+Managed by `CarrierOps.lua`, independent of the F10 settings (starts at mission load).
+
+| Ship | Group / Unit Name | Type |
+|------|-------------------|------|
+| CVN-74 John C. Stennis | `CVN-74 Stennis` / `CVN-74 John C. Stennis` | `Stennis` |
+| Cruiser | `CSG Cruiser` | `TICONDEROG` |
+| Destroyer x2 | `CSG Destroyer 1`, `CSG Destroyer 2` | `USS_Arleigh_Burke_IIa` |
+| Frigate | `CSG Frigate` | `PERRY` |
+| Plane guard (script-spawned) | `Angel` | `SH-60B` |
+
+- Operating area: 30 km radius circle centered X=-70000, Y=225000 (open water SW of Anapa, ~50 nm from Krymsk)
+- Carrier systems: radio 254.7 MHz AM, TACAN 74X "STN", ICLS 4, Link 4 336.0 MHz, ACLS. Set on waypoint 1 in the mission file and re-applied by the script after every route change.
+- Into-wind leg: course = wind-from + 9 degrees (angled deck), speed = 25 kt WOD minus headwind, clamped 5-25 kt. Wind is read at runtime with `atmosphere.getWind()`.
+- Repositioning leg: 25 kt back to the downwind edge of the area when the into-wind leg reaches the edge.
+- Escorts: separate groups, each held at a fixed offset along the wind axis (not the carrier's heading) so tracks stay parallel through turnarounds. Re-steered every 60 s.
+- Plane guard: SH-60B on the carrier's starboard side (900 m starboard, 300 m ahead, 300 ft RADIO), clear of the port-side Case I pattern. Unlimited fuel, weapons hold, re-steered every 3 s, respawned 120 s after loss.
+
 ## Weather and Time
 
 - Time: Random 0700-1700 local
@@ -224,4 +256,7 @@ Scripts must be loaded in this order to satisfy dependencies:
 9. `IADS.lua`
 10. `AirIntercept.lua`
 11. `BattlefieldGeneration.lua`
-12. `OperationInfinity.lua`
+12. `CarrierOps.lua`
+13. `OperationInfinity.lua`
+
+When adding a script, update all four places: the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`.

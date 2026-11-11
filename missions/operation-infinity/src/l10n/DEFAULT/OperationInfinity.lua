@@ -780,6 +780,12 @@ KRYMSK AIRFIELD
   Ground: 254.3 MHz AM
   Radar: 254.5 MHz AM
 
+CVN-74 STENNIS (Black Sea, ~50 nm SW of Krymsk)
+  Carrier: 254.7 MHz AM
+  TACAN: 74X STN
+  ICLS: 4
+  Link 4: 336.0 MHz, ACLS on
+
 MISSION FREQUENCIES
   Strike: 255.1 MHz AM
   GCI UHF: 255.3 MHz AM
