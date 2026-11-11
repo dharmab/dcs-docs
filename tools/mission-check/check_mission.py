@@ -256,10 +256,62 @@ KNOWN_WAREHOUSE_FIELDS: set[str] = {
 }
 
 
+KNOWN_AIRCRAFT_STOCK_FIELDS: set[str] = {
+    "initialAmount",
+    "unlimited",
+    "linkDynTempl",
+    "wsType",
+}
+
+
+def _check_warehouse_entry(
+    path: str, entry: dict[str, Any], diag: DiagnosticCollector
+) -> None:
+    """Validate one airport or ship warehouse entry."""
+    if "coalition" not in entry:
+        diag.fail(path, "missing required field 'coalition'")
+
+    for field in sorted(entry.keys()):
+        if field not in KNOWN_WAREHOUSE_FIELDS:
+            suggestion = suggest_field(field, KNOWN_WAREHOUSE_FIELDS)
+            msg = f"unknown field '{field}'"
+            if suggestion:
+                msg += f" (did you mean '{suggestion}'?)"
+            diag.fail(path, msg)
+
+    aircrafts = entry.get("aircrafts")
+    if not isinstance(aircrafts, dict):
+        return
+    for category in sorted(aircrafts.keys()):
+        if category not in ("planes", "helicopters"):
+            suggestion = suggest_field(str(category), {"planes", "helicopters"})
+            msg = f"unknown aircrafts category '{category}'"
+            if suggestion:
+                msg += f" (did you mean '{suggestion}'?)"
+            diag.fail(f"{path}.aircrafts", msg)
+            continue
+        stock = aircrafts[category]
+        if not isinstance(stock, dict):
+            continue
+        for type_name, item in stock.items():
+            if not isinstance(item, dict):
+                continue
+            for field in sorted(item.keys()):
+                if field not in KNOWN_AIRCRAFT_STOCK_FIELDS:
+                    suggestion = suggest_field(field, KNOWN_AIRCRAFT_STOCK_FIELDS)
+                    msg = f"unknown field '{field}'"
+                    if suggestion:
+                        msg += f" (did you mean '{suggestion}'?)"
+                    diag.fail(f"{path}.aircrafts.{category}[{type_name}]", msg)
+
+
 def check_warehouse_schema(
     warehouses: dict[str, Any], diag: DiagnosticCollector
 ) -> set[int]:
-    """Validate warehouse airports. Returns the set of known airport IDs."""
+    """Validate warehouse airports and ship/FARP warehouses.
+
+    Returns the set of known airport IDs.
+    """
     airport_ids: set[int] = set()
     airports = warehouses.get("airports") if isinstance(warehouses, dict) else None
     if not isinstance(airports, dict):
@@ -273,17 +325,17 @@ def check_warehouse_schema(
         if not isinstance(airport, dict):
             diag.fail(path, "airport entry is not a table")
             continue
+        _check_warehouse_entry(path, airport, diag)
 
-        if "coalition" not in airport:
-            diag.fail(path, "missing required field 'coalition'")
-
-        for field in sorted(airport.keys()):
-            if field not in KNOWN_WAREHOUSE_FIELDS:
-                suggestion = suggest_field(field, KNOWN_WAREHOUSE_FIELDS)
-                msg = f"unknown field '{field}'"
-                if suggestion:
-                    msg += f" (did you mean '{suggestion}'?)"
-                diag.fail(path, msg)
+    # Ship and FARP warehouses, keyed by the owning unit's unitId
+    unit_warehouses = warehouses.get("warehouses")
+    if isinstance(unit_warehouses, dict):
+        for uid, entry in unit_warehouses.items():
+            path = f"warehouses.warehouses[{uid}]"
+            if not isinstance(entry, dict):
+                diag.fail(path, "warehouse entry is not a table")
+                continue
+            _check_warehouse_entry(path, entry, diag)
 
     return airport_ids
 
@@ -347,6 +399,23 @@ def check_dyn_spawn_templates(
     )
     if not isinstance(airports, dict):
         airports = {}
+    unit_warehouses = (
+        warehouses.get("warehouses") if isinstance(warehouses, dict) else None
+    )
+    if not isinstance(unit_warehouses, dict):
+        unit_warehouses = {}
+
+    # Ship unit IDs (valid linkUnit targets) and template groupId -> unit type
+    ship_units: set[Any] = set()
+    template_types: dict[Any, Any] = {}
+    for _side, category, _ci, _gi, _path, group in iter_groups(mission):
+        for _ui, unit in _items(group.get("units") or {}):
+            if not isinstance(unit, dict):
+                continue
+            if category == "ship":
+                ship_units.add(unit.get("unitId"))
+            if group.get("dynSpawnTemplate") and group.get("groupId") is not None:
+                template_types.setdefault(group["groupId"], unit.get("type"))
 
     for side, _category, _ci, _gi, path, group in iter_groups(mission):
         if not group.get("dynSpawnTemplate"):
@@ -381,35 +450,94 @@ def check_dyn_spawn_templates(
             continue
 
         adrome_id = first_wp.get("airdromeId")
-        if adrome_id is None:
+        link_unit = first_wp.get("linkUnit")
+        if adrome_id is not None:
+            base = airports.get(adrome_id)
+            label = f"warehouse airport {adrome_id}"
+            if base is None:
+                diag.fail(
+                    path,
+                    f"first waypoint airdromeId {adrome_id} not found in warehouses",
+                )
+                continue
+        elif link_unit is not None:
+            # Ship/FARP template: linkUnit and helipadId name the host unit
+            helipad = first_wp.get("helipadId")
+            if helipad is not None and helipad != link_unit:
+                diag.fail(
+                    path,
+                    f"first waypoint helipadId {helipad} does not match "
+                    f"linkUnit {link_unit}",
+                )
+            if link_unit not in ship_units:
+                diag.fail(
+                    path,
+                    f"first waypoint linkUnit {link_unit} is not a ship unit "
+                    f"in the mission",
+                )
+            base = unit_warehouses.get(link_unit)
+            label = f"unit warehouse {link_unit}"
+            if base is None:
+                diag.fail(
+                    path,
+                    f"first waypoint linkUnit {link_unit} has no entry in "
+                    f"warehouses.warehouses",
+                )
+                continue
+        else:
             continue
 
-        airport = airports.get(adrome_id)
-        if airport is None:
+        if not isinstance(base, dict):
+            continue
+
+        if not base.get("dynamicSpawn"):
             diag.fail(
                 path,
-                f"first waypoint airdromeId {adrome_id} not found in warehouses",
-            )
-            continue
-
-        if not isinstance(airport, dict):
-            continue
-
-        if not airport.get("dynamicSpawn"):
-            diag.fail(
-                path,
-                f"warehouse airport {adrome_id} must have dynamicSpawn = true "
-                f"for dynSpawnTemplate group",
+                f"{label} must have dynamicSpawn = true for dynSpawnTemplate group",
             )
 
-        ap_coalition = airport.get("coalition", "")
+        ap_coalition = base.get("coalition", "")
         expected = _coalition_label(side)
         if isinstance(ap_coalition, str) and ap_coalition.upper() != expected:
             diag.fail(
                 path,
-                f"warehouse airport {adrome_id} coalition '{ap_coalition}' "
+                f"{label} coalition '{ap_coalition}' "
                 f"does not match group coalition '{side}'",
             )
+
+    # Each linkDynTempl must point at a template group of the same aircraft type
+    bases: list[tuple[str, Any]] = [
+        (f"warehouses.airports[{k}]", v) for k, v in airports.items()
+    ] + [(f"warehouses.warehouses[{k}]", v) for k, v in unit_warehouses.items()]
+    for base_path, base_entry in bases:
+        if not isinstance(base_entry, dict):
+            continue
+        aircrafts = base_entry.get("aircrafts")
+        if not isinstance(aircrafts, dict):
+            continue
+        for category in ("planes", "helicopters"):
+            stock = aircrafts.get(category)
+            if not isinstance(stock, dict):
+                continue
+            for type_name, item in stock.items():
+                if not isinstance(item, dict):
+                    continue
+                link = item.get("linkDynTempl")
+                if link is None or link == 0:
+                    continue
+                ipath = f"{base_path}.aircrafts.{category}[{type_name}]"
+                template_type = template_types.get(link)
+                if template_type is None:
+                    diag.fail(
+                        ipath,
+                        f"linkDynTempl {link} is not a dynSpawnTemplate groupId",
+                    )
+                elif template_type != type_name:
+                    diag.fail(
+                        ipath,
+                        f"linkDynTempl {link} template is type "
+                        f"'{template_type}', expected '{type_name}'",
+                    )
 
 
 # ---------------------------------------------------------------------------
