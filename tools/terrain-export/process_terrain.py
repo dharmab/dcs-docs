@@ -23,7 +23,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, TypedDict
 
-import mgrs
 import numpy as np
 import semver
 from matplotlib.path import Path as PolygonPath
@@ -145,8 +144,8 @@ class GridDict(TypedDict):
 
     elevation: NDArray[np.floating[Any]]
     surface: NDArray[np.int32]
-    lat: NDArray[np.floating[Any]]
-    lon: NDArray[np.floating[Any]]
+    x: NDArray[np.floating[Any]]
+    z: NDArray[np.floating[Any]]
     bounds: BoundsDict
     resolution: float
     shape: tuple[int, int]
@@ -518,7 +517,8 @@ class TerrainProcessor:
                             source_resolution[ix, iz] = point_res
                         except KeyError as e:
                             print(
-                                f"Warning: Missing key {e} in point {point} at grid ({ix}, {iz}), skipping this cell."
+                                f"Warning: Missing key {e} in point {point} "
+                                f"at grid ({ix}, {iz}), skipping this cell."
                             )
 
         return {
@@ -755,8 +755,6 @@ class TerrainProcessor:
         ).fit(coords)
 
         settlements = []
-        mgrs_converter = mgrs.MGRS()
-
         for cluster_id in set(clustering.labels_):
             if cluster_id == -1:  # Skip noise
                 continue

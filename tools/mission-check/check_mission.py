@@ -145,9 +145,7 @@ REQUIRED_FILES = [
 ]
 
 
-def check_files(
-    mission_dir: Path, diag: DiagnosticCollector
-) -> dict[str, Any]:
+def check_files(mission_dir: Path, diag: DiagnosticCollector) -> dict[str, Any]:
     """Check required files exist and parse, returning parsed data keyed by filename."""
     parsed: dict[str, Any] = {}
     for rel in REQUIRED_FILES:
@@ -351,9 +349,7 @@ REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "skill", "x", "y", "heading"}
 AIRCRAFT_UNIT_FIELDS = {"alt", "alt_type", "speed", "psi", "payload"}
 
 
-def check_groups_and_units(
-    mission: dict[str, Any], diag: DiagnosticCollector
-) -> None:
+def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
     for _side, category, _ci, _gi, path, group in iter_groups(mission):
         required = set(REQUIRED_GROUP_FIELDS)
         if category in AIRCRAFT_CATEGORIES:
@@ -392,11 +388,7 @@ def check_dyn_spawn_templates(
     warehouses: dict[str, Any],
     diag: DiagnosticCollector,
 ) -> None:
-    airports = (
-        warehouses.get("airports")
-        if isinstance(warehouses, dict)
-        else None
-    )
+    airports = warehouses.get("airports") if isinstance(warehouses, dict) else None
     if not isinstance(airports, dict):
         airports = {}
     unit_warehouses = (
@@ -545,9 +537,7 @@ def check_dyn_spawn_templates(
 # ---------------------------------------------------------------------------
 
 
-def check_id_uniqueness(
-    mission: dict[str, Any], diag: DiagnosticCollector
-) -> None:
+def check_id_uniqueness(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
     group_ids: dict[int, str] = {}
     unit_ids: dict[int, str] = {}
     group_names: dict[str, str] = {}

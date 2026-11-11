@@ -50,7 +50,7 @@ def find_dcs_installation() -> Path | None:
                     path = Path(path_value)
                     if path.exists():
                         return path
-            except (FileNotFoundError, OSError):
+            except FileNotFoundError, OSError:
                 continue
 
     # Fall back to common paths
@@ -132,9 +132,7 @@ def iter_liveries(livery_entry_dir: Path) -> Generator[Livery]:
 
         if description_file.exists():
             try:
-                content = description_file.read_text(
-                    encoding="utf-8", errors="replace"
-                )
+                content = description_file.read_text(encoding="utf-8", errors="replace")
                 display_name = extract_livery_name(content)
             except OSError:
                 pass

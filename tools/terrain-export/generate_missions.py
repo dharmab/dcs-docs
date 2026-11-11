@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 from typing import Any
 
-import luadata  # type: ignore
+import luadata
 
 
 def load_terrain_sampler_script() -> str:
