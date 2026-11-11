@@ -69,6 +69,19 @@ OperationInfinity.config = {
             -- Mountainous terrain unsuitable for frontline - use deep strike targets
             spawnConstraints = {
                 noFrontline = true,
+                -- Overrides for config.approachRoute. This is a 45-minute region,
+                -- so targets start ~60 nm from Krymsk instead of ~140 nm and are
+                -- denser, giving players regular contact along the coast.
+                approachRoute = {
+                    safeZoneRadius = 50 * METERS_PER_NM,
+                    waypointFractions = { 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.94 },
+                    targetsPerWaypoint = {
+                        patrolCount = { 4, 6 },
+                        armorCount = { 1, 3 },
+                        convoyCount = { 0, 1 },
+                        checkpointCount = { 1, 2 },
+                    },
+                },
             },
         },
         southwest_coast = {
@@ -205,15 +218,15 @@ OperationInfinity.config = {
         },
     },
 
-    -- Support aircraft group names and orbit altitudes
-    -- Speeds are TAS in m/s, computed to achieve target IAS at each altitude.
-    -- If altitude changes, recalculate: TAS = IAS × sqrt(1.225 / density_at_altitude)
-    -- Target IAS: tankers 300 kt, slow tanker (Shell) 180 kt
+    -- Support aircraft group names, orbit altitudes (feet MSL) and target
+    -- indicated airspeeds (knots). The Orbit task takes TAS in m/s, which is
+    -- derived at runtime from IAS and altitude (see indicatedToTrueAirspeed).
+    -- Each aircraft gets its own altitude block; no per-index offset is added.
     supportAircraft = {
-        { name = "Magic", altitude = 7925, speed = 180 },  -- AWACS at 26,000 ft
-        { name = "Texaco", altitude = 5486, speed = 207, radio = 270.5, tacan = "100X", tankerType = "boom" },
-        { name = "Arco", altitude = 4877, speed = 199, radio = 270.1, tacan = "101X", tankerType = "drogue" },
-        { name = "Shell", altitude = 4572, speed = 117, radio = 270.0, tacan = "102X", tankerType = "slow boom" },
+        { name = "Magic", role = "AWACS, datalink only - use SkyEye", altitudeFt = 30000, iasKnots = 280 },
+        { name = "Texaco", altitudeFt = 25000, iasKnots = 280, radio = 270.5, tacan = "100X", tankerType = "boom" },
+        { name = "Arco", altitudeFt = 21000, iasKnots = 250, radio = 270.1, tacan = "101X", tankerType = "drogue" },
+        { name = "Shell", altitudeFt = 15000, iasKnots = 200, radio = 270.7, tacan = "102X", tankerType = "slow boom" },
     },
 
     -- SAM site counts by difficulty
@@ -734,29 +747,38 @@ function OperationInfinity:displayCoordinates()
             aerodrome.name, mgrsStr, llStr)
     end
 
-    -- Build tanker information
-    local tankerLines = {}
-    for _, aircraft in ipairs(self.config.supportAircraft) do
-        if aircraft.tankerType then
-            tankerLines[#tankerLines + 1] = string.format("  %s (%s): %.1f MHz, TACAN %s",
-                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan)
-        end
-    end
-
     local msg = string.format(
         "=== TARGET AREA ===\n" ..
         "%s\n\n" ..
         "Target Aerodromes:\n%s\n\n" ..
-        "Tankers:\n%s\n\n" ..
+        "Support Assets:\n%s\n\n" ..
         "Difficulty: %s\n" ..
         "Good hunting!",
         region.name,
         table.concat(coordLines, "\n"),
-        table.concat(tankerLines, "\n"),
+        self:getSupportAssetText(),
         self.state.difficulty
     )
 
     trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 30)
+end
+
+-- Callsigns and frequencies of all support assets, one per line
+function OperationInfinity:getSupportAssetText()
+    local lines = {
+        "  GCI (SkyEye): 255.3 MHz AM, 124.1 MHz VHF, 32.1 MHz FM",
+    }
+    for _, aircraft in ipairs(self.config.supportAircraft) do
+        if aircraft.tankerType then
+            lines[#lines + 1] = string.format("  %s (%s): %.1f MHz AM, TACAN %s, %d ft, %d KIAS",
+                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan,
+                aircraft.altitudeFt, aircraft.iasKnots)
+        else
+            lines[#lines + 1] = string.format("  %s (%s)", aircraft.name, aircraft.role)
+        end
+    end
+    lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
+    return table.concat(lines, "\n")
 end
 
 function OperationInfinity:setupMissionInfoMenu()
@@ -774,37 +796,37 @@ end
 
 function OperationInfinity:displayCommsPlan()
     local msg = [[=== COMMUNICATIONS PLAN ===
+Radio 1 to talk, radio 2 on SkyEye
 
-KRYMSK AIRFIELD
-  Tower: 254.1 MHz AM
-  Ground: 254.3 MHz AM
-  Radar: 254.5 MHz AM
+MAIN RADIO PRESETS (UHF, all aircraft)
+  1 Strike 255.1 / 2 SkyEye 255.3
+  3 Tower 254.1 / 4 Ground 254.3 / 5 Radar 254.5
+  6 Stennis 254.7
+  7 Texaco 270.5 / 8 Arco 270.1 / 9 Shell 270.7
+  10-14 Red 1-5: 260.1-260.9 (.2 steps)
+  15-19 Blue 1-5: 261.1-261.9 (.2 steps)
+  20 Guard 243.0 (F-4E has presets 1-18 only)
 
-CVN-74 STENNIS (Black Sea, ~50 nm SW of Krymsk)
-  Carrier: 254.7 MHz AM
-  TACAN: 74X STN
-  ICLS: 4
-  Link 4: 336.0 MHz, ACLS on
+SECOND RADIO PRESETS
+  V/UHF radios: 1 SkyEye 124.1 VHF, 2-20 = main 1-19
+  F-16 COMM2: 1 SkyEye 124.1, 2 SkyEye 32.1 FM,
+    3 Civil Guard 121.5, 4-8 Yellow 1-5, 9-13 Orange 1-5
+  A-10 FM: 1 SkyEye 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
+  F-4E AUX: 1 Texaco, 2 Arco, 3 Shell
+  F-15C, MiG-29A, Su-25, Su-25T: tune manually in SRS
 
-MISSION FREQUENCIES
-  Strike: 255.1 MHz AM
-  GCI UHF: 255.3 MHz AM
-  GCI VHF: 124.1 MHz VHF
-  GCI FM: 32.1 MHz FM
-  In-Game AWACS: 255.5 MHz AM
+SKYEYE GCI: 255.3 AM, 124.1 AM, 32.1 FM (same controller)
+OVERFLOW INTERFLIGHT: Green 1-5 262.1-262.9
+FM INTERFLIGHT: Yellow 1-5 30.1-30.9, Orange 1-5 31.1-31.9
 
-FLIGHT TACTICAL (AM)
-  Red 1-5: 260.1, 260.3, 260.5, 260.7, 260.9
-  Blue 1-5: 261.1, 261.3, 261.5, 261.7, 261.9
-  Green 1-5: 262.1, 262.3, 262.5, 262.7, 262.9
+CVN-74 STENNIS (~50 nm SW of Krymsk)
+  TACAN 74X STN, ICLS 4, Link 4 336.0, ACLS
 
-FLIGHT TACTICAL (FM)
-  Yellow 1-5: 30.1, 30.3, 30.5, 30.7, 30.9
-  Orange 1-5: 31.1, 31.3, 31.5, 31.7, 31.9
-
-TANKERS
-  Basket (Arco): 270.1 MHz AM
-  Boom (Texaco): 270.5 MHz AM
+SUPPORT
+  AWACS (Magic): datalink only, no voice
+  Arco (basket): TACAN 101X, 21,000 ft, 250 KIAS
+  Texaco (boom): TACAN 100X, 25,000 ft, 280 KIAS
+  Shell (slow boom): TACAN 102X, 15,000 ft, 200 KIAS
 
 GUARD
   Military: 243.0 MHz AM
@@ -884,6 +906,20 @@ function OperationInfinity:getRacetrackPosition(regionKey)
     return racetrack
 end
 
+local METERS_PER_FOOT = 0.3048
+local MPS_PER_KNOT = 0.514444
+local ISA_SEA_LEVEL_DENSITY = 1.225       -- kg/m^3
+local ISA_LAPSE_FACTOR = 2.25577e-5       -- per meter, troposphere
+local ISA_DENSITY_EXPONENT = 4.25588
+
+-- Convert indicated airspeed to true airspeed (both m/s) using the ISA
+-- troposphere density model (valid below 11 km). Treats IAS as EAS.
+local function indicatedToTrueAirspeed(iasMps, altitudeMeters)
+    local density = ISA_SEA_LEVEL_DENSITY *
+        (1 - ISA_LAPSE_FACTOR * altitudeMeters) ^ ISA_DENSITY_EXPONENT
+    return iasMps * math.sqrt(ISA_SEA_LEVEL_DENSITY / density)
+end
+
 -- Activate support aircraft and set their orbit positions based on selected region
 function OperationInfinity:activateSupportAircraft(regionKey)
     local racetrack = self:getRacetrackPosition(regionKey)
@@ -905,9 +941,8 @@ function OperationInfinity:activateSupportAircraft(regionKey)
             log("WARNING: Could not find group to activate: " .. aircraft.name)
         end
 
-        -- Offset each aircraft's racetrack slightly to avoid collisions
-        -- AWACS highest and furthest back, tankers spread out
-        local altOffset = (i - 1) * 500  -- 500m altitude separation
+        -- Offset each aircraft's racetrack laterally; altitude separation comes
+        -- from each aircraft's own altitudeFt block
         local lateralOffset = (i - 1) * 5000  -- 5km lateral separation
 
         -- Calculate this aircraft's racetrack center (offset perpendicular to track)
@@ -925,7 +960,8 @@ function OperationInfinity:activateSupportAircraft(regionKey)
             y = centerY + halfTrack * math.sin(heading),
         }
 
-        local orbitAltitude = aircraft.altitude + altOffset
+        local orbitAltitude = aircraft.altitudeFt * METERS_PER_FOOT
+        local orbitSpeed = indicatedToTrueAirspeed(aircraft.iasKnots * MPS_PER_KNOT, orbitAltitude)
 
         -- Schedule orbit task to be pushed once aircraft is airborne
         local orbitTask = {
@@ -935,7 +971,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
                 point = point1,
                 point2 = point2,
                 altitude = orbitAltitude,
-                speed = aircraft.speed,
+                speed = orbitSpeed,
             },
         }
         local groupName = aircraft.name
@@ -972,7 +1008,8 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         timer.scheduleFunction(checkAndPushOrbit, nil, timer.getTime() + 60)
 
         log("Will push orbit task to " .. aircraft.name .. " once airborne, alt " ..
-            orbitAltitude .. "m, center (" .. logCenterX .. ", " .. logCenterY .. ")")
+            aircraft.altitudeFt .. " ft, " .. aircraft.iasKnots .. " KIAS (" ..
+            math.floor(orbitSpeed) .. " m/s TAS), center (" .. logCenterX .. ", " .. logCenterY .. ")")
     end
 end
 
@@ -1006,10 +1043,8 @@ function OperationInfinity:checkForNewPlayers()
                             "The first player to make both selections\n" ..
                             "locks the settings for all players.\n\n" ..
                             "Support assets will launch after settings are selected:\n" ..
-                            "  Texaco (boom): 270.5 MHz, TACAN 100X\n" ..
-                            "  Arco (drogue): 270.1 MHz, TACAN 101X\n" ..
-                            "  Shell (slow boom): 270.0 MHz, TACAN 102X\n\n" ..
-                            "GCI: Use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM", 30)
+                            OperationInfinity:getSupportAssetText() .. "\n\n" ..
+                            "Full comms plan: F10 > Comms Plan", 30)
                     end
                 end, nil, timer.getTime() + 3)
             end

@@ -33,7 +33,7 @@ The following aircraft are available via Dynamic Spawn at Krymsk:
 - Su-25 Frogfoot
 - Su-25T Frogfoot
 
-The following aircraft can also spawn on the carrier CVN-74 John C. Stennis (hot or cold start):
+The following aircraft can also spawn on the carrier CVN-74 John C. Stennis (cold start only):
 
 - F/A-18C Hornet
 - F-14A Tomcat

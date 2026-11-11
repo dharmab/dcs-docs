@@ -682,6 +682,26 @@ end
 -- Targets placed along the flight path from Krymsk to deep strike zones
 -- =============================================================================
 
+-- config.approachRoute with any keys from the region's
+-- spawnConstraints.approachRoute layered on top (shallow merge)
+function BattlefieldGeneration:getApproachRouteConfig()
+    local base = OperationInfinity.config.approachRoute
+    local constraints = OperationInfinity.state.battlefield.spawnConstraints
+    local override = constraints and constraints.approachRoute
+    if not base or not override then
+        return base
+    end
+
+    local merged = {}
+    for k, v in pairs(base) do
+        merged[k] = v
+    end
+    for k, v in pairs(override) do
+        merged[k] = v
+    end
+    return merged
+end
+
 function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
     local config = OperationInfinity.config
     local state = OperationInfinity.state
@@ -694,7 +714,7 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
         return
     end
 
-    local approachConfig = config.approachRoute
+    local approachConfig = self:getApproachRouteConfig()
     if not approachConfig then
         log("No approach route configuration found")
         if onComplete then onComplete() end
@@ -814,7 +834,7 @@ end
 
 function BattlefieldGeneration:generateApproachRouteTarget(item)
     local config = OperationInfinity.config
-    local approachConfig = config.approachRoute
+    local approachConfig = self:getApproachRouteConfig()
 
     -- Calculate position within waypoint area with lateral offset toward coast
     local lateralOffset = approachConfig.corridorOffsetMin +

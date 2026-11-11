@@ -21,6 +21,7 @@ AirIntercept.config = {
     checkInterval = 30,           -- Seconds between zone checks
     spawnCooldownMin = 300,       -- Minimum seconds between spawns (5 minutes)
     spawnCooldownMax = 780,       -- Maximum seconds between spawns (13 minutes)
+    globalSpawnCooldown = 180,    -- Minimum seconds between spawns from ANY airfield
     debug = true,
 
     -- Aircraft category weights for dynamic max calculation
@@ -95,7 +96,6 @@ AirIntercept.config = {
 
 -- Named constants
 local RUNWAY_ALTITUDE_METERS = 300
-local UNIT_SPACING_METERS = 50
 local INTERCEPT_ALTITUDE_METERS = 6000
 local PLAYER_AIRBORNE_ALTITUDE_METERS = 100
 local MAX_AIRBORNE_CAP = 8
@@ -108,6 +108,8 @@ AirIntercept.state = {
     airfieldState = {},  -- Runtime state per airfield
     groupAliveCount = {}, -- groupName -> number of alive units in that group
     groupToAirfield = {}, -- groupName -> airfield name (reverse lookup)
+    deadUnits = {},       -- unitName -> true; DEAD/CRASH/UNIT_LOST can all fire for one unit
+    lastGlobalSpawnTime = nil,
 }
 
 local log = Logging:create("AirIntercept")
@@ -186,6 +188,20 @@ end
 -- SPAWN FUNCTIONS
 -- =============================================================================
 
+-- Resolve the airbase's actual reference point so the runway spawn lands on the
+-- field. A route point that is not on the airdrome makes DCS air-start the group.
+function AirIntercept:getRunwaySpawnPoint(airfield)
+    for _, airbase in ipairs(world.getAirbases()) do
+        if airbase:getID() == airfield.airdromeId then
+            local p = airbase:getPoint()
+            return {x = p.x, y = p.z, alt = p.y}
+        end
+    end
+    log("WARNING: airdromeId " .. airfield.airdromeId .. " (" .. airfield.name ..
+        ") not found, falling back to configured spawn point")
+    return {x = airfield.spawnPoint.x, y = airfield.spawnPoint.y, alt = RUNWAY_ALTITUDE_METERS}
+end
+
 function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
     local fighterConfig = UnitTemplates.Fighters[self.state.difficulty]
     if not fighterConfig or not fighterConfig.types or #fighterConfig.types == 0 then
@@ -208,26 +224,27 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
     local groupName = "Erusea-Interceptor-" .. groupId
 
     -- Get target position for intercept waypoint
+    local spawn = self:getRunwaySpawnPoint(airfield)
+
     local targetPos = targetUnit:getPoint()
     local interceptPoint = {
-        x = (airfield.spawnPoint.x + targetPos.x) / 2,
-        y = (airfield.spawnPoint.y + targetPos.z) / 2,
+        x = (spawn.x + targetPos.x) / 2,
+        y = (spawn.y + targetPos.z) / 2,
     }
 
     -- Build units
     local units = {}
     for i = 1, flightSize do
         local unitId = Units:getNextUnitId()
-        local offset = (i - 1) * UNIT_SPACING_METERS
 
         local unit = {
             unitId = unitId,
             name = groupName .. "-" .. i,
             type = aircraftType,
             skill = skill,
-            x = airfield.spawnPoint.x + offset,
-            y = airfield.spawnPoint.y,
-            alt = RUNWAY_ALTITUDE_METERS,
+            x = spawn.x,
+            y = spawn.y,
+            alt = spawn.alt,
             alt_type = "BARO",
             speed = 200,
             heading = airfield.spawnHeading,
@@ -271,19 +288,19 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
         start_time = 0,
         uncontrolled = false,
         hidden = false,
-        x = airfield.spawnPoint.x,
-        y = airfield.spawnPoint.y,
+        x = spawn.x,
+        y = spawn.y,
         units = units,
         route = {
             points = {
                 [1] = {
-                    alt = RUNWAY_ALTITUDE_METERS,
+                    alt = spawn.alt,
                     alt_type = "BARO",
                     type = "TakeOff",
                     action = "From Runway",
                     airdromeId = airfield.airdromeId,
-                    x = airfield.spawnPoint.x,
-                    y = airfield.spawnPoint.y,
+                    x = spawn.x,
+                    y = spawn.y,
                     speed = 200,
                     speed_locked = true,
                     ETA = 0,
@@ -392,6 +409,13 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
         return nil
     end
 
+    -- Several airfield zones overlap; space out waves across all airfields too
+    local lastGlobal = self.state.lastGlobalSpawnTime
+    if lastGlobal and currentTime - lastGlobal < self.config.globalSpawnCooldown then
+        log(airfield.name .. ": global spawn cooldown active")
+        return nil
+    end
+
     -- Check dynamic max airborne
     local maxAirborne = self:calculateDynamicMaxAirborne()
     if self.state.totalAirborne >= maxAirborne then
@@ -414,6 +438,7 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
 
     if group then
         afState.lastSpawnTime = currentTime
+        self.state.lastGlobalSpawnTime = currentTime
         afState.nextCooldownDuration = math.random(self.config.spawnCooldownMin, self.config.spawnCooldownMax)
         afState.totalSpawned = afState.totalSpawned + 1
         self.state.totalAirborne = self.state.totalAirborne + flightSize
@@ -461,37 +486,41 @@ function AirIntercept:handleUnitDeath(unitName)
         return
     end
 
-    -- Extract group name from unit name (format: "groupName-N")
-    -- Find the matching group via reverse lookup
-    for groupName, aliveCount in pairs(self.state.groupAliveCount) do
-        if string.find(unitName, groupName, 1, true) then
-            self.state.totalAirborne = math.max(0, self.state.totalAirborne - 1)
-            local newCount = math.max(0, aliveCount - 1)
-            self.state.groupAliveCount[groupName] = newCount
+    -- One loss can raise DEAD, CRASH and UNIT_LOST; count each unit only once
+    if self.state.deadUnits[unitName] then
+        return
+    end
+    self.state.deadUnits[unitName] = true
 
-            log("Interceptor killed: " .. unitName ..
-                     ", total airborne: " .. self.state.totalAirborne)
+    -- Extract group name from unit name (format: "groupName-N"). An exact lookup
+    -- avoids "Erusea-Interceptor-1" matching units of "Erusea-Interceptor-12".
+    local groupName = string.match(unitName, "^(.*)%-%d+$")
+    local aliveCount = groupName and self.state.groupAliveCount[groupName]
+    if aliveCount then
+        self.state.totalAirborne = math.max(0, self.state.totalAirborne - 1)
+        local newCount = math.max(0, aliveCount - 1)
+        self.state.groupAliveCount[groupName] = newCount
 
-            -- Clean up group when all units are dead
-            if newCount == 0 then
-                self.state.groupAliveCount[groupName] = nil
-                local afName = self.state.groupToAirfield[groupName]
-                self.state.groupToAirfield[groupName] = nil
+        log("Interceptor killed: " .. unitName ..
+                 ", total airborne: " .. self.state.totalAirborne)
 
-                if afName and self.state.airfieldState[afName] then
-                    local spawnedGroups = self.state.airfieldState[afName].spawnedGroups
-                    for i, name in ipairs(spawnedGroups) do
-                        if name == groupName then
-                            table.remove(spawnedGroups, i)
-                            break
-                        end
+        -- Clean up group when all units are dead
+        if newCount == 0 then
+            self.state.groupAliveCount[groupName] = nil
+            local afName = self.state.groupToAirfield[groupName]
+            self.state.groupToAirfield[groupName] = nil
+
+            if afName and self.state.airfieldState[afName] then
+                local spawnedGroups = self.state.airfieldState[afName].spawnedGroups
+                for i, name in ipairs(spawnedGroups) do
+                    if name == groupName then
+                        table.remove(spawnedGroups, i)
+                        break
                     end
                 end
-
-                log("Group " .. groupName .. " fully destroyed, removed from tracking")
             end
 
-            return
+            log("Group " .. groupName .. " fully destroyed, removed from tracking")
         end
     end
 end

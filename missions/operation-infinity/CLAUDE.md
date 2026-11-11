@@ -29,7 +29,7 @@ Warehouse: unlimited weapons of all types.
 
 ### Carrier Slots (CVN-74 Stennis)
 
-Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), hot or cold start:
+Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), cold start only (`allowHotStart = false`):
 
 | Aircraft | DCS Type String | Template Group (groupId) |
 |----------|-----------------|--------------------------|
@@ -42,7 +42,34 @@ Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = fals
 
 ## Communications Plan
 
-Reference `docs/recipes/comm-plan.md` for the standardized frequencies. Player aircraft presets should include Strike (255.1), GCI (255.3), appropriate flight tactical, and tanker frequencies.
+Reference `docs/recipes/comm-plan.md` for the standardized frequencies and per-aircraft radio capabilities.
+
+Radio presets live in each dynamic spawn template's `Radio` table (groups 1-14 at Krymsk, 25-28 on the Stennis). Templates only apply when the base's warehouse stock entry links them with `linkDynTempl`, so Krymsk stocks each player type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`).
+
+Main (UHF) radio, identical in every aircraft. 18 channels so the F-4E fits; priority is Strike, SkyEye, all three ATC frequencies (human controllers on SRS), carrier, tankers, then interflight with whatever is left:
+
+| Ch | Use | MHz |
+|----|-----|-----|
+| 1 | Strike | 255.1 |
+| 2 | SkyEye GCI | 255.3 |
+| 3-5 | Krymsk Tower / Ground / Radar | 254.1 / 254.3 / 254.5 |
+| 6 | Stennis | 254.7 |
+| 7-9 | Texaco / Arco / Shell | 270.5 / 270.1 / 270.7 |
+| 10-14 | Red 1-5 | 260.1-260.9 |
+| 15-18 | Blue 1-4 | 261.1-261.7 |
+| 19 | Blue 5 (20-channel radios) | 261.9 |
+| 20 | Guard (20-channel radios) | 243.0 |
+
+Second radios ("radio 1 to talk, radio 2 on SkyEye"):
+
+- V/UHF radios (F/A-18 COMM2, F-15E Radio 2, F-14 ARC-182, A-10 ARC-210, M-2000C V/UHF, F1 TRAP-136): ch1 SkyEye VHF 124.1, ch2-20 = main ch1-19. Radios with more than 20 channels continue with Guard, Green 1-5, SkyEye FM, Yellow/Orange FM, Civil Guard, JTAC.
+- F-16 COMM2 (VHF AM 116-156 / FM 30-88 only): 124.1, 32.1 FM, 121.5, Yellow 1-5, Orange 1-5, JTAC 1-4.
+- A-10 ARC-186 (FM only): 32.1, Yellow 1-5, Orange 1-5, JTAC 1-4.
+- F-4E aux receiver (265-284.9): Texaco, Arco, Shell; remaining channels are module defaults.
+- JF-17: one shared 20-preset list for COMM1/COMM2 = main layout.
+- F-15C, MiG-29A, Su-25, Su-25T (FC3): no mission presets; players tune in SRS.
+
+The in-game AWACS (Magic) has `communication = false`; it exists for datalink only. Voice GCI is SkyEye on 255.3 AM / 124.1 AM / 32.1 FM. The comms card text is the `displayCommsPlan` long string in `OperationInfinity.lua`; the blue-task briefing in `dictionary` carries the same card.
 
 ## Factions
 
@@ -165,7 +192,7 @@ Dynamic interceptor spawns from Erusean airfields:
 | Kobuleti | 40 km |
 | Sukhumi-Babushara | 50 km |
 
-Spawn cooldown: 120 seconds between waves per airfield.
+Spawn cooldown: random 300-780 seconds between waves per airfield, plus a 180-second global cooldown across all airfields (zones overlap near Sukhumi/Kobuleti/Kutaisi). Interceptors take off from the runway; the spawn point is read from the airbase at runtime (`world.getAirbases()` by airdromeId), since a route point off the airdrome makes DCS air-start the group. Unit losses are de-duplicated by name because DEAD, CRASH and UNIT_LOST can all fire for one aircraft.
 
 Response scaling:
 - 1-2 players: 1 interceptor
@@ -176,15 +203,17 @@ Response scaling:
 ## Support Assets
 
 ### AWACS
-E-3A "Magic" on E-W racetrack NW of Krymsk, 30,000 ft. EPLRS datalink enabled, radio disabled. Players should use SkyEye GCI on 255.3 MHz, 124.1 VHF, or 32.1 FM.
+E-3A "Magic" on the regional support racetrack, 30,000 ft, 280 KIAS. EPLRS datalink enabled, radio disabled. Players should use SkyEye GCI on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 
 ### Tankers
 
-**KC-135 "Texaco"** (boom): 25,000 ft, 270.5 MHz AM, TACAN 100X
+**KC-135 "Texaco"** (boom): 25,000 ft, 280 KIAS, 270.5 MHz AM, TACAN 100X
 
-**KC-135MPRS "Arco"** (basket): 22,000 ft, 270.1 MHz AM, TACAN 101X
+**KC-135MPRS "Arco"** (basket): 21,000 ft, 250 KIAS, 270.1 MHz AM, TACAN 101X
 
-Both orbit near Anapa.
+**KC-135 "Shell"** (slow boom, A-10/Su-25): 15,000 ft, 200 KIAS, 270.7 MHz AM, TACAN 102X
+
+Orbits are pushed by `OperationInfinity.lua` once each aircraft is airborne, on a racetrack chosen by the selected region. `supportAircraft` stores altitude in feet and target IAS in knots; the Orbit task's TAS is computed at runtime from the ISA density model, so changing an altitude doesn't require recomputing speeds. Racetracks are offset 5 km laterally per aircraft; altitude separation comes only from each aircraft's own altitude.
 
 ### Carrier Strike Group
 

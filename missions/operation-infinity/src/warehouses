@@ -1,10 +1,13 @@
 warehouses = {
     ["airports"] = {
         -- Krymsk (BLUE - player spawn)
+        -- Dynamic spawn uses a template (loadout, radio presets) only when the
+        -- base's stock entry links it with linkDynTempl = template groupId, so
+        -- each player type is stocked (unlimited) and linked explicitly.
         [15] = {
             ["coalition"] = "BLUE",
             ["supplier"] = true,
-            ["unlimitedAircrafts"] = true,
+            ["unlimitedAircrafts"] = false,
             ["unlimitedFuel"] = true,
             ["unlimitedMunitions"] = true,
             ["OperatingLevel_Air"] = 10,
@@ -16,7 +19,25 @@ warehouses = {
             ["size"] = 100,
             ["suppliers"] = {},
             ["dynamicCargo"] = true,
-            ["aircrafts"] = {},
+            ["aircrafts"] = {
+                ["planes"] = {
+                    ["F-4E-45MC"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 1 },
+                    ["F-16C_50"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 2 },
+                    ["F-15ESE"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 3 },
+                    ["F-15C"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 4 },
+                    ["MiG-29A"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 5 },
+                    ["FA-18C_hornet"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 6 },
+                    ["A-10C_2"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 7 },
+                    ["M-2000C"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 8 },
+                    ["Mirage-F1CE"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 9 },
+                    ["F-14A-135-GR"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 10 },
+                    ["F-14B"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 11 },
+                    ["JF-17"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 12 },
+                    ["Su-25"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 13 },
+                    ["Su-25T"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 14 },
+                },
+                ["helicopters"] = {},
+            },
             ["weapons"] = {},
             ["gasoline"] = {
                 ["InitFuel"] = 100000000,
@@ -118,7 +139,7 @@ warehouses = {
             ["OperatingLevel_Eqp"] = 10,
             ["OperatingLevel_Fuel"] = 10,
             ["dynamicSpawn"] = true,
-            ["allowHotStart"] = true,
+            ["allowHotStart"] = false,
             ["speed"] = 16.666666,
             ["periodicity"] = 30,
             ["size"] = 100,

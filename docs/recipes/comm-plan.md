@@ -49,7 +49,7 @@ This document defines a standardized frequency allocation for DCS World missions
 | GCI UHF | 255.3 | Primary GCI frequency |
 | GCI VHF | 124.1 VHF | VHF alternate |
 | GCI FM | 32.1 FM | FM alternate |
-| In-Game AWACS | 255.5 | DCS AI AWACS (fallback when SkyEye or human GCI unavailable) |
+| In-Game AWACS | 255.5 | Reserved. DCS AI AWACS radio calls are poor; keep AI AWACS for datalink only (`communication = false`) and don't preset this |
 | **JTAC** |||
 | JTAC 1 | 32.3 FM | Forward air controller |
 | JTAC 2 | 32.5 FM | Forward air controller |
@@ -72,18 +72,39 @@ All operational frequencies avoid the guard frequencies (243.0 MHz military, 121
 
 ## Aircraft Radio Compatibility
 
+Ranges and preset counts below come from each type's `panelRadio` table in Quaggles' DCS Lua Datamine (`_G/db/Units/Planes/Plane/<type>.lua`). The `Radio` table in a mission unit is indexed in `panelRadio` order, which is the "Mission index" column. Each `Radio[n]` entry has parallel `channels` (MHz) and `modulations` (0 = AM, 1 = FM) arrays.
+
+| Aircraft (type) | Mission index: radio, range, presets |
+|-----------------|--------------------------------------|
+| F-4E-45MC | [1] ARC-164 UHF 225-399.95, **18**; [2] aux receiver 265-284.9, 20 |
+| F-16C_50 | [1] COMM1 ARC-164 UHF 225-399.975, 20; [2] COMM2 ARC-222 VHF AM 116-155.975 + FM 30-87.975 (no UHF), 20 |
+| FA-18C_hornet | [1] COMM1 ARC-210 30-399.975, 20; [2] COMM2 ARC-210 30-399.975, 20 |
+| F-15ESE | [1] UHF Radio 1 225-399.975, 20; [2] V/UHF Radio 2 30-399.975, 40 |
+| F-14A-135-GR / F-14B / F-14BU | [1] ARC-159 UHF 225-399.975 (pilot), 20; [2] ARC-182 V/UHF 30-399.975 (RIO), 30 |
+| A-10C_2 | [1] ARC-210 30-399.975, 25; [2] ARC-164 UHF 225-399.975, 20; [3] ARC-186 FM 30-87.995, 20 |
+| M-2000C | [1] UHF 225-400, 20; [2] V/UHF 118-400, 20 |
+| Mirage-F1CE | [1] TRAP-136 V/UHF 118-399.975, 20; [2] TRAP-137B UHF 225-399.975, 20 |
+| JF-17 | [1] one 20-preset list shared by COMM1 and COMM2, both 30-399.975 |
+| F-15C, MiG-29A, Su-25, Su-25T (FC3) | No `panelRadio`; mission presets are not possible. With SRS, players tune UHF/VHF/FM radios in the SRS overlay. |
+
+Not yet verified against the datamine:
+
 | Aircraft | Radio 1 | Radio 2 | Radio 3 |
 |----------|---------|---------|---------|
-| F-4E Phantom II | 225.0-399.95 AM | 265.0-284.9 AM | — |
-| F-16C Viper | 225.0-399.975 AM | 108.0-151.975 VHF | — |
-| F/A-18C Hornet | 225.0-399.975 AM | 225.0-399.975 AM | — |
-| F-15C/E Eagle | 225.0-399.975 AM | 225.0-399.975 AM | — |
-| F-14A/B Tomcat | 225.0-399.975 AM | 225.0-399.975 AM | — |
-| A-10C Warthog | 225.0-399.975 AM | 116.0-151.975 VHF AM | 30.0-87.975 FM |
 | AV-8B Harrier | 225.0-399.975 AM | 225.0-399.975 AM | — |
 | AH-64D Apache | 225.0-399.975 AM | 116.0-151.975 VHF AM | 30.0-87.975 FM |
 | UH-1H Huey | 225.0-399.975 AM | 30.0-75.975 FM | — |
 | Mi-24P Hind | 100.0-399.9 AM | 20.0-59.975 FM | — |
 | Ka-50 Black Shark | 100.0-399.9 AM | 20.0-59.9 FM | — |
+
+Every jet above except the FC3 types has at least one 225-400 MHz radio, so an all-UHF main preset list works everywhere. The constraints are the second radios: F-16 COMM2 and the A-10's ARC-186 cannot tune UHF, which is why SkyEye also listens on 124.1 VHF and 32.1 FM.
+
+## Radio Presets
+
+Use one main-radio list in every aircraft, capped at 18 channels for the F-4E. Fill it in priority order: Strike, SkyEye GCI, the ATC frequencies (Tower, Ground, Radar; they're used by human controllers on SRS), Carrier, tankers, then flight tactical with whatever slots remain. Drop interflight channels before anything above them. Don't preset an in-game AI AWACS voice frequency; it is kept only for datalink, and voice GCI is SkyEye.
+
+Use the second radio for SkyEye ("radio 1 to talk, radio 2 on GCI"): put SkyEye VHF 124.1 on channel 1 of every second radio that can tune VHF, followed by the main list. For VHF/FM-only radios, add 32.1 FM and the FM flight tactical channels. Dynamic spawn templates only apply their presets at a base whose warehouse stock links the template with `linkDynTempl` (see [player-slots.md](player-slots.md)).
+
+Operation Infinity (`missions/operation-infinity/CLAUDE.md`) has a complete worked layout.
 
 A-10 and helicopter flights should use FM frequencies for internal flight communications, leaving UHF free for strike coordination, JTAC, and other package-level traffic.
