@@ -30,6 +30,7 @@ This document provides comprehensive information about all aircraft in DCS World
 | [F-14A-135-GR](f-14a-135-gr.md) | `F-14A-135-GR` | `F-14A-135-GR` | Yes | CAP, Escort, Fighter Sweep, Intercept |
 | [F-14A](f-14a.md) | `F-14A` | `F-14A` | No | CAP, Escort, Fighter Sweep, Intercept |
 | [F-14B](f-14b.md) | `F-14B` | `F-14B` | Yes | CAP, Escort, Fighter Sweep, Intercept, Ground Attack, Anti-ship Strike |
+| [F-14B(U)](f-14b-u.md) | `F-14B(U)` | `F-14BU` | Yes | CAP, Escort, Fighter Sweep, Intercept, Reconnaissance, Ground Attack, Runway Attack, Pinpoint Strike, Anti-ship Strike, CAS, AFAC, SEAD |
 | [F-15C](f-15c.md) | `F-15C` | `F-15C` | Yes | Escort, Fighter Sweep, Intercept |
 | [F-15E S4+](f-15e-s4-plus.md) | `F-15E S4+` | `F-15ESE` | Yes | CAP, Escort, Fighter Sweep, Intercept, Ground Attack, Anti-ship Strike, SEAD, Runway Attack |
 | [F-15E](f-15e.md) | `F-15E` | `F-15E` | Yes | CAP, Escort, Fighter Sweep, Intercept, Ground Attack, Anti-ship Strike, SEAD, Runway Attack |
