@@ -26,11 +26,11 @@ Players spawn via Dynamic Slots at Krymsk (airdromeId 15) or on the CVN-74 Stenn
 | Su-25 Frogfoot | Su-25 |
 | Su-25T Frogfoot | Su-25T |
 
-Warehouse: unlimited weapons of all types.
+Warehouse: unlimited weapons of all types. Hot or cold start is the player's choice (`allowHotStart = true`).
 
 ### Carrier Slots (CVN-74 Stennis)
 
-Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), cold start only (`allowHotStart = false`):
+Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), hot or cold start (`allowHotStart = true`):
 
 | Aircraft | DCS Type String | Template Group (groupId) |
 |----------|-----------------|--------------------------|
