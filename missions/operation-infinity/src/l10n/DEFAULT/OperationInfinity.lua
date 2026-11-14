@@ -940,7 +940,10 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         local group = Group.getByName(aircraft.name)
         if group then
             group:activate()
-            log("Activated group: " .. aircraft.name)
+            -- The mission can run 8 hours; without this the aircraft go
+            -- bingo, RTB and are never replaced
+            group:getController():setCommand({ id = "SetUnlimitedFuel", params = { value = true } })
+            log("Activated group with unlimited fuel: " .. aircraft.name)
         else
             log("WARNING: Could not find group to activate: " .. aircraft.name)
         end
