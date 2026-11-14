@@ -88,4 +88,4 @@ Document available unit liveries for visual consistency within factions.
 
 ## Maintenance
 
-After completing each phase, update `CLAUDE.md` to reflect new documentation in the Available Documentation section.
+After completing each phase, update `AGENTS.md` to reflect new documentation in the Available Documentation section.

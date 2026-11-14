@@ -105,6 +105,6 @@ Use one main-radio list in every aircraft, capped at 18 channels for the F-4E. F
 
 Use the second radio for SkyEye ("radio 1 to talk, radio 2 on GCI"): put SkyEye VHF 124.1 on channel 1 of every second radio that can tune VHF, followed by the main list. For VHF/FM-only radios, add 32.1 FM and the FM flight tactical channels. Dynamic spawn templates only apply their presets at a base whose warehouse stock links the template with `linkDynTempl` (see [player-slots.md](player-slots.md)).
 
-Operation Infinity (`missions/operation-infinity/CLAUDE.md`) has a complete worked layout.
+Operation Infinity (`missions/operation-infinity/AGENTS.md`) has a complete worked layout.
 
 A-10 and helicopter flights should use FM frequencies for internal flight communications, leaving UHF free for strike coordination, JTAC, and other package-level traffic.
