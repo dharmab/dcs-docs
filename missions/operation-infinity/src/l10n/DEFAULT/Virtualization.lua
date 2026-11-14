@@ -493,17 +493,22 @@ function Virtualization.eventHandler:onEvent(event)
 end
 
 function Virtualization:handleUnitDeath(unitName)
+    -- Unit names are "<spawnedGroupName>-Unit-<index>". Parse them exactly;
+    -- substring matching let "Unit-1" match "Unit-10" through "Unit-19".
+    local groupName, indexStr = string.match(unitName, "^(.*)%-Unit%-(%d+)$")
+    if not groupName then
+        return
+    end
+    local index = tonumber(indexStr)
+
     for _, vGroup in ipairs(self.state.virtualGroups) do
-        if vGroup.isSpawned and vGroup.spawnedGroupName then
-            if string.find(unitName, vGroup.spawnedGroupName, 1, true) then
-                for i, vUnit in ipairs(vGroup.units) do
-                    if string.find(unitName, "Unit-" .. i, 1, true) then
-                        vUnit.health = 0
-                        log("Unit killed: " .. unitName)
-                        return
-                    end
-                end
+        if vGroup.isSpawned and vGroup.spawnedGroupName == groupName then
+            local vUnit = vGroup.units[index]
+            if vUnit then
+                vUnit.health = 0
+                log("Unit killed: " .. unitName)
             end
+            return
         end
     end
 end
