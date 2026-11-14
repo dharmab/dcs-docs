@@ -79,17 +79,20 @@ The in-game AWACS (Magic) has `communication = false`; it exists for datalink on
 
 ## Difficulty Settings
 
+Enemy helicopters listed below are planned but not implemented; no script spawns them.
+
 ### Very Easy (Training)
 - Erusea 2004 equipment
-- Ground targets only, immortal (do not shoot back)
-- No enemy fighters or air defense systems
+- Ground targets only
+- No enemy fighters, SAMs, EWRs or SHORAD
+- Planned, not implemented: targets immortal and holding fire. Today Erusean groups have neither option set.
 
 ### Easy
 - Erusea 2004 equipment
 - Scattered defenses: ZU-23, Shilka, MANPADS, SA-9, SA-13
-- 1-2 incomplete SA-2 batteries
+- 1-2 incomplete SA-2 batteries (SNR-75 and launchers, no search radar), 1-2 SA-9, 1-2 SA-13 (`samCounts.Easy`). Not under IADS emission control.
 - Enemy fighters: MiG-21Bis, F-5E, F-5E-3, A-10A with IR missiles (R-60, AIM-9B)
-- Enemy helicopters: Mi-24P, Mi-24V, Ka-50
+- Enemy helicopters (planned): Mi-24P, Mi-24V, Ka-50
 - Max 2 fighters airborne, skill Average-Ace
 
 ### Normal
@@ -97,7 +100,7 @@ The in-game AWACS (Magic) has `communication = false`; it exists for datalink on
 - IADS: EWRs (1L13, P-19), SA-2, SA-3, SA-6, SA-8 Osa
 - AAA: Shilka, Gepard, Roland ADS
 - Enemy fighters: MiG-29A, MiG-29S, Mirage 2000-5, F-16A, Tornado IDS with R-73, R-27R
-- Enemy helicopters: Mi-24P, Ka-50, AH-64A
+- Enemy helicopters (planned): Mi-24P, Ka-50, AH-64A
 - Max 4 fighters airborne, skill Average-Ace
 
 ### Hard
@@ -105,8 +108,10 @@ The in-game AWACS (Magic) has `communication = false`; it exists for datalink on
 - Layered IADS: SA-10 with SA-15 SHORAD, SA-11 Buk, multiple SA-6/SA-8
 - Emission control on radar systems
 - Enemy fighters: F-15C, F-15E, F/A-18A, F/A-18C, F-16C, Su-27, J-11A, F-14A with AIM-120, R-77
-- Enemy helicopters: AH-64D, Ka-50
+- Enemy helicopters (planned): AH-64D, Ka-50
 - Max 6 fighters airborne, skill Average-Ace
+
+`UnitTemplates.AAA` is defined but not used.
 
 ### Dynamic Fighter Scaling
 
@@ -120,44 +125,48 @@ Max airborne fighters scales by weighted player count in combat area:
 
 Formula: `baseMax + floor(log2(weightedPlayerCount + 1))`, capped at 8.
 
-## Playtime Zones
+## Playtime Regions
 
-| Duration | Area | Center (approx) | Radius |
-|----------|------|-----------------|--------|
-| 45 min | Anapa/Novorossiysk | X=-40000, Y=320000 | 30km |
-| 90 min | Sukhumi/Zugdidi | X=-220000, Y=560000 | 50km |
-| 180 min | Kutaisi/Tbilisi | X=-290000, Y=700000 | 60km |
+Each playtime picks one random region from `OperationInfinity.config.aerodromeRegions`. Targets are placed around the region's aerodromes.
+
+| Region key | Aerodromes | Playtimes | Notes |
+|------------|------------|-----------|-------|
+| `northwest` | Maykop-Khanskaya | 45 | Frontline |
+| `central_coast` | Gudauta, Sukhumi-Babushara | 45, 90 | No frontline; dense approach-route targets starting 50 nm from Krymsk |
+| `southwest_coast` | Kobuleti, Senaki-Kolkhi, Kutaisi | 90 | Frontline 5-15 nm NW of the aerodromes |
+| `northeast` | Mozdok | 180 | Frontline |
+| `southeast` | Tbilisi-Lochini, Vaziani | 180 | No frontline; deep strike targets plus approach-route targets past 120 nm |
 
 ## IADS Behavior
 
-EWRs (1L13, P-19) always spawned at mission start. SAM tracking radars also spawned at start.
+EWRs, SAM sites and airbase SHORAD are permanent groups, spawned once after generation and never virtualized. Emission control (`IADS.lua`) runs on Normal and Hard only and switches whole SAM groups between alarm state RED and GREEN every 10 s:
 
-On Normal/Hard:
-- EWRs always active
-- Search radars pulse on/off when threats detected
-- Tracking radars activate when targets enter engagement range
+- No blue aircraft within 60 km: the site pulses, 30 s on, 45 s off.
+- Blue aircraft within 60 km (above 50 m MSL): the site turns on, then turns off again after 30 s even if the target is still in range. Missiles in flight lose guidance when this happens.
+- EWRs stay on. They don't cue SAM sites; threat checks use the true positions of all blue aircraft.
 
 ## Ground Unit Composition
 
 ### Frontline Firefights
 
-Generate 3-5 fighting areas spread across the battlefield. Each area has 2-3 platoon engagements.
+Regions without `noFrontline` get one frontline perpendicular to the Krymsk-to-target axis, centered between the battlefield distance limits (default 10-40 nm from the aerodromes). It has 4-8 engagement points 3-7 nm apart.
 
-**ISAF Platoon** (immortal/invisible per ground-firefight recipe):
+Each engagement point has one ISAF platoon facing 2-3 Erusean platoons, 300-1000 m apart.
+
+**ISAF Platoon** (immortal, invisible, weapons hold, per ground-firefight recipe):
 - 2x M-1 Abrams
 - 2x M-2 Bradley
 - 1x M163 Vulcan
+- 1x M1083 truck
 
 **Erusea Platoon** (targets):
 - 2x Leclerc
 - 2x Marder
-- 1x Gepard or ZSU-23-4 Shilka
+- 1x Shilka (Easy) or Gepard (Normal/Hard); none on Very Easy
 
-Layout: Platoons 500-1000m apart, using FireAtPoint with 50-100m offset for sustained visual combat.
+Each side's FireAtPoint target starts 300 m past the opposing platoon. Every 15 s the target moves to a random point within 150 m of that start, around the enemy and never the shooter.
 
-SHORAD per area: 1-2x Ural-375 ZU-23, MANPADS near Erusean positions.
-
-Total: 15-25 platoons per side.
+Frontline SHORAD: one group behind Erusean lines at every second engagement point (Easy: ZU-23, SA-9. Normal: ZU-23, SA-13, Shilka. Hard: Gepard, SA-13, Tunguska).
 
 ### Behind-Lines Targets
 
@@ -167,9 +176,9 @@ Total: 15-25 platoons per side.
 **Artillery Batteries**:
 - 4x SAU Akatsia, 1x Ural-375, 1x BRDM-2
 
-**Air Assets** (virtualized): CH-47D transport, AH-64 patrols
+**Scattered Presence**: Patrol vehicles and checkpoints
 
-**Scattered Presence**: Patrol vehicles, checkpoints, helicopter patrols (Mi-24P, Ka-50, AH-64A)
+Planned, not implemented: virtualized air assets (CH-47D transport, AH-64 patrols) and helicopter patrols (Mi-24P, Ka-50, AH-64A).
 
 ## Unit Virtualization
 
@@ -193,7 +202,11 @@ Dynamic interceptor spawns from Erusean airfields:
 | Kobuleti | 40 km |
 | Sukhumi-Babushara | 50 km |
 
-Spawn cooldown: random 300-780 seconds between waves per airfield, plus a 180-second global cooldown across all airfields (zones overlap near Sukhumi/Kobuleti/Kutaisi). Interceptors take off from the runway; the spawn point is read from the airbase at runtime (`world.getAirbases()` by airdromeId), since a route point off the airdrome makes DCS air-start the group. Unit losses are de-duplicated by name because DEAD, CRASH and UNIT_LOST can all fire for one aircraft.
+No zone covers Maykop, Gudauta, Senaki or Vaziani, so the 45-minute Maykop region has no enemy fighters.
+
+Spawn cooldown: random 300-780 seconds between waves per airfield, plus a 180-second global cooldown across all airfields (zones overlap near Sukhumi/Kobuleti/Kutaisi). Interceptors take off from the runway; the spawn point is read from the airbase at runtime (`world.getAirbases()` by airdromeId), since a route point off the airdrome makes DCS air-start the group.
+
+An interceptor leaves the airborne count when it is lost (DEAD, CRASH, UNIT_LOST) or lands (S_EVENT_LAND). A landed interceptor is destroyed 60 s after touchdown. Removals are de-duplicated by unit name because several of these events can fire for one aircraft.
 
 Response scaling:
 - 1-2 players: 1 interceptor
@@ -214,7 +227,7 @@ E-3A "Magic" on the regional support racetrack, 30,000 ft, 280 KIAS. EPLRS datal
 
 **KC-135 "Shell"** (slow boom, A-10/Su-25): 15,000 ft, 200 KIAS, 270.7 MHz AM, TACAN 102X
 
-Orbits are pushed by `OperationInfinity.lua` once each aircraft is airborne, on a racetrack chosen by the selected region. `supportAircraft` stores altitude in feet and target IAS in knots; the Orbit task's TAS is computed at runtime from the ISA density model, so changing an altitude doesn't require recomputing speeds. Racetracks are offset 5 km laterally per aircraft; altitude separation comes only from each aircraft's own altitude.
+All four support aircraft are late-activated when the battlefield is generated and are immortal and invisible. The script sets `SetUnlimitedFuel` on activation so they stay on station for the whole mission. Orbits are pushed by `OperationInfinity.lua` once each aircraft is airborne, on a racetrack chosen by the selected region. `supportAircraft` stores altitude in feet and target IAS in knots; the Orbit task's TAS is computed at runtime from the ISA density model, so changing an altitude doesn't require recomputing speeds. Racetracks are offset 5 km laterally per aircraft; altitude separation comes only from each aircraft's own altitude.
 
 ### Carrier Strike Group
 
@@ -248,21 +261,27 @@ Managed by `CarrierOps.lua`, independent of the F10 settings (starts at mission 
 
 ```
 F10 Other
-├── Mission Settings
+├── Mission Settings          (removed once settings lock)
 │   ├── Difficulty
-│   │   ├── Very Easy (Training)
-│   │   ├── Easy
-│   │   ├── Normal
-│   │   └── Hard
-│   └── Playtime
+│   │   ├── Very Easy (Training - no enemies shoot back)
+│   │   ├── Easy (Light defenses, IR missiles only)
+│   │   ├── Normal (IADS, semi-active radar missiles)
+│   │   └── Hard (Layered IADS, active radar missiles)
+│   └── Target Playtime
 │       ├── 45 Minutes (Western Caucasus)
 │       ├── 90 Minutes (Central Caucasus)
 │       └── 180 Minutes (Eastern Caucasus)
+├── Comms Plan
+└── Mission Info              (added after generation)
 ```
 
 ## Late Joiner Support
 
-Timer checks every 60 seconds for new players. Late joiners receive target coordinates and EPLRS datalink membership.
+A timer checks every 5 seconds for new players. Each new player triggers a coalition-wide message: the welcome text before generation, or the target area and support assets after it. Planned, not implemented: EPLRS datalink membership for late joiners.
+
+## Mission Time Limit
+
+The mission runs 8 hours (`missionDuration = 28800`). Warnings go out at 60, 30, 15, 10 and 5 minutes remaining. At expiry the script sets flag `MISSION_TIME_EXPIRED`, and a mission trigger ends the mission.
 
 ## Lua Style Choices
 
