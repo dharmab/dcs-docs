@@ -63,13 +63,13 @@ warehouses = {
 }
 ```
 
-Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. If you want to restrict specific aircraft types, populate the table with entries like `["F-16C_50"] = { ["initialAmount"] = 10, ["unlimited"] = false }`.
+Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. If you want to restrict specific aircraft types, populate the table with entries like `["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["initialAmount"] = 10, ["unlimited"] = false }` (see the wsType note below).
 
 ### Enabling Dynamic Spawn on a Ship
 
 Carriers (and FARPs) have their own warehouse under `warehouses["warehouses"]`, keyed by the ship's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. This format matches what the DCS 2.9.31 Mission Editor saves (`MissionEditor/modules/me_manager_resource.lua` and `me_mission.lua`), and the multiplayer spawn dialog lists such ships as "Aircraft carrier" bases.
 
-To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`) keyed by type name. Each stock entry takes `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
+To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`) keyed by type name. Each stock entry takes `wsType` (required), `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
 
 ```lua
 -- In the warehouses file
@@ -86,8 +86,8 @@ warehouses = {
             -- speed, periodicity, size, suppliers, OperatingLevel_*, fuels as for airfields
             ["aircrafts"] = {
                 ["planes"] = {
-                    ["FA-18C_hornet"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 25 },
-                    ["F-14BU"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 28 },
+                    ["FA-18C_hornet"] = { ["wsType"] = { 1, 1, 1, 280 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 25 },
+                    ["F-14BU"] = { ["wsType"] = { 1, 1, 1, 351 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 28 },
                 },
                 ["helicopters"] = {},
             },
@@ -96,6 +96,21 @@ warehouses = {
     },
 }
 ```
+
+**Every aircraft stock entry needs `wsType`.** The sim matches stock to aircraft types by this 4-number type ID, not by the type-name key. An entry without `wsType` counts as zero, so in the multiplayer spawn dialog every type shows `(0)` and is greyed out, at airfields and on carriers alike. The ME always writes `wsType` (and, when `dynamicSpawn = true`, writes the full stock list even with `unlimitedAircrafts = true`). Copy the values from an ME-saved `warehouses` file, such as a stock mission under `Mods/aircraft/*/Missions`. Some values for DCS 2.9:
+
+| Type | wsType | Type | wsType |
+|------|--------|------|--------|
+| `A-10C_2` | 1, 1, 6, 264 | `F-15C` | 1, 1, 1, 6 |
+| `F-14A-135-GR` | 1, 1, 1, 279 | `F-15ESE` | 1, 1, 1, 327 |
+| `F-14B` | 1, 1, 1, 278 | `F-16C_50` | 1, 1, 1, 275 |
+| `F-14BU` | 1, 1, 1, 351 | `F-4E-45MC` | 1, 1, 1, 328 |
+| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17` | 1, 1, 1, 271 |
+| `M-2000C` | 1, 1, 1, 284 | `Mirage-F1CE` | 1, 1, 1, 302 |
+| `MiG-29A` | 1, 1, 1, 2 | `Su-25` | 1, 1, 6, 16 |
+| `Su-25T` | 1, 1, 6, 54 | | |
+
+Module aircraft get the fourth number assigned at load time (`WSTYPE_PLACEHOLDER`), so re-check it against a fresh ME save after a major DCS update. `mission-check` fails any stock entry missing `wsType`.
 
 The Mission Editor fills in every type missing from `aircrafts` with `initialAmount = 100` when it loads a mission (`Config/AirportsEquipment.lua`). If a mission with a restricted carrier is re-saved in the ME, check the carrier's resource manager and zero out any added types.
 

@@ -47,3 +47,6 @@ dcs-lua-datamine/
 
 # DCS Mission files (generated from source)
 *.miz
+
+# Local scratch notes
+bug.md

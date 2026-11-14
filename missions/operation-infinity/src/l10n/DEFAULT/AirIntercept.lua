@@ -30,6 +30,7 @@ AirIntercept.config = {
         ["F-15C"] = 2.0,
         ["F-14A-135-GR"] = 2.0,
         ["F-14B"] = 2.0,
+        ["F-14BU"] = 2.0,
         -- Multirole (weight 1.5)
         ["F-16C_50"] = 1.5,
         ["FA-18C_hornet"] = 1.5,

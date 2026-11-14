@@ -3,7 +3,8 @@ warehouses = {
         -- Krymsk (BLUE - player spawn)
         -- Dynamic spawn uses a template (loadout, radio presets) only when the
         -- base's stock entry links it with linkDynTempl = template groupId, so
-        -- each player type is stocked (unlimited) and linked explicitly.
+        -- each player type is stocked (unlimited) and linked explicitly. Every
+        -- stock entry needs wsType or the sim counts it as 0 (greyed out).
         [15] = {
             ["coalition"] = "BLUE",
             ["supplier"] = true,
@@ -21,20 +22,21 @@ warehouses = {
             ["dynamicCargo"] = true,
             ["aircrafts"] = {
                 ["planes"] = {
-                    ["F-4E-45MC"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 1 },
-                    ["F-16C_50"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 2 },
-                    ["F-15ESE"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 3 },
-                    ["F-15C"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 4 },
-                    ["MiG-29A"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 5 },
-                    ["FA-18C_hornet"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 6 },
-                    ["A-10C_2"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 7 },
-                    ["M-2000C"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 8 },
-                    ["Mirage-F1CE"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 9 },
-                    ["F-14A-135-GR"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 10 },
-                    ["F-14B"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 11 },
-                    ["JF-17"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 12 },
-                    ["Su-25"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 13 },
-                    ["Su-25T"] = { ["unlimited"] = true, ["initialAmount"] = 0, ["linkDynTempl"] = 14 },
+                    ["F-4E-45MC"] = { ["wsType"] = { 1, 1, 1, 328 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 1 },
+                    ["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 2 },
+                    ["F-15ESE"] = { ["wsType"] = { 1, 1, 1, 327 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 3 },
+                    ["F-15C"] = { ["wsType"] = { 1, 1, 1, 6 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 4 },
+                    ["MiG-29A"] = { ["wsType"] = { 1, 1, 1, 2 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 5 },
+                    ["FA-18C_hornet"] = { ["wsType"] = { 1, 1, 1, 280 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 6 },
+                    ["A-10C_2"] = { ["wsType"] = { 1, 1, 6, 264 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 7 },
+                    ["M-2000C"] = { ["wsType"] = { 1, 1, 1, 284 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 8 },
+                    ["Mirage-F1CE"] = { ["wsType"] = { 1, 1, 1, 302 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 9 },
+                    ["F-14A-135-GR"] = { ["wsType"] = { 1, 1, 1, 279 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 10 },
+                    ["F-14B"] = { ["wsType"] = { 1, 1, 1, 278 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 11 },
+                    ["F-14BU"] = { ["wsType"] = { 1, 1, 1, 351 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 29 },
+                    ["JF-17"] = { ["wsType"] = { 1, 1, 1, 271 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 12 },
+                    ["Su-25"] = { ["wsType"] = { 1, 1, 6, 16 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 13 },
+                    ["Su-25T"] = { ["wsType"] = { 1, 1, 6, 54 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 14 },
                 },
                 ["helicopters"] = {},
             },
@@ -148,23 +150,27 @@ warehouses = {
             ["aircrafts"] = {
                 ["planes"] = {
                     ["FA-18C_hornet"] = {
+                        ["wsType"] = { 1, 1, 1, 280 },
                         ["unlimited"] = true,
-                        ["initialAmount"] = 0,
+                        ["initialAmount"] = 100,
                         ["linkDynTempl"] = 25,
                     },
                     ["F-14A-135-GR"] = {
+                        ["wsType"] = { 1, 1, 1, 279 },
                         ["unlimited"] = true,
-                        ["initialAmount"] = 0,
+                        ["initialAmount"] = 100,
                         ["linkDynTempl"] = 26,
                     },
                     ["F-14B"] = {
+                        ["wsType"] = { 1, 1, 1, 278 },
                         ["unlimited"] = true,
-                        ["initialAmount"] = 0,
+                        ["initialAmount"] = 100,
                         ["linkDynTempl"] = 27,
                     },
                     ["F-14BU"] = {
+                        ["wsType"] = { 1, 1, 1, 351 },
                         ["unlimited"] = true,
-                        ["initialAmount"] = 0,
+                        ["initialAmount"] = 100,
                         ["linkDynTempl"] = 28,
                     },
                 },

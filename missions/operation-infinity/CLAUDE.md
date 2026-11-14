@@ -21,6 +21,7 @@ Players spawn via Dynamic Slots at Krymsk (airdromeId 15) or on the CVN-74 Stenn
 | Mirage F1 | Mirage-F1CE |
 | F-14A Tomcat | F-14A-135-GR |
 | F-14B Tomcat | F-14B |
+| F-14B(U) Tomcat | F-14BU |
 | JF-17 Thunder | JF-17 |
 | Su-25 Frogfoot | Su-25 |
 | Su-25T Frogfoot | Su-25T |
@@ -44,7 +45,7 @@ Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = fals
 
 Reference `docs/recipes/comm-plan.md` for the standardized frequencies and per-aircraft radio capabilities.
 
-Radio presets live in each dynamic spawn template's `Radio` table (groups 1-14 at Krymsk, 25-28 on the Stennis). Templates only apply when the base's warehouse stock entry links them with `linkDynTempl`, so Krymsk stocks each player type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`).
+Radio presets live in each dynamic spawn template's `Radio` table (groups 1-14 and 29 at Krymsk, 25-28 on the Stennis). Templates only apply when the base's warehouse stock entry links them with `linkDynTempl`, so Krymsk stocks each player type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`).
 
 Main (UHF) radio, identical in every aircraft. 18 channels so the F-4E fits; priority is Strike, SkyEye, all three ATC frequencies (human controllers on SRS), carrier, tankers, then interflight with whatever is left:
 

@@ -514,10 +514,26 @@ def check_dyn_spawn_templates(
             for type_name, item in stock.items():
                 if not isinstance(item, dict):
                     continue
+                ipath = f"{base_path}.aircrafts.{category}[{type_name}]"
+                # The sim matches stock to aircraft types by wsType; an entry
+                # without it counts as zero and the type is greyed out in the
+                # dynamic spawn dialog.
+                ws = item.get("wsType")
+                if isinstance(ws, dict):
+                    ws_values = [ws.get(i) for i in range(1, 5)] if len(ws) == 4 else []
+                elif isinstance(ws, list):
+                    ws_values = ws if len(ws) == 4 else []
+                else:
+                    ws_values = []
+                if not ws_values or not all(isinstance(v, int) for v in ws_values):
+                    diag.fail(
+                        ipath,
+                        "aircraft stock entry needs wsType = { a, b, c, d } "
+                        "(copy it from an ME-saved warehouses file)",
+                    )
                 link = item.get("linkDynTempl")
                 if link is None or link == 0:
                     continue
-                ipath = f"{base_path}.aircrafts.{category}[{type_name}]"
                 template_type = template_types.get(link)
                 if template_type is None:
                     diag.fail(

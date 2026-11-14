@@ -29,6 +29,7 @@ The following aircraft are available via Dynamic Spawn at Krymsk:
 - Mirage F1
 - F-14A Tomcat
 - F-14B Tomcat
+- F-14B(U) Tomcat
 - JF-17 Thunder
 - Su-25 Frogfoot
 - Su-25T Frogfoot
