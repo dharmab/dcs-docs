@@ -568,7 +568,7 @@ function OperationInfinity:generateBattlefield()
     -- Build virtualization notice for longer missions
     local virtNote = ""
     if self.state.playtime == "90" or self.state.playtime == "180" then
-        virtNote = "\n\nNote: For performance, ground units are virtualized\n" ..
+        virtNote = "\n\nNote: For performance, ground units are virtualized " ..
             "and spawn when a player is within 100 nm."
     end
 
@@ -1040,8 +1040,7 @@ function OperationInfinity:checkForNewPlayers()
                             "Use the F10 menu to select:\n" ..
                             "  1. Difficulty\n" ..
                             "  2. Target Playtime\n\n" ..
-                            "The first player to make both selections\n" ..
-                            "locks the settings for all players.\n\n" ..
+                            "The first player to make both selections locks the settings for all players.\n\n" ..
                             "Support assets will launch after settings are selected:\n" ..
                             OperationInfinity:getSupportAssetText() .. "\n\n" ..
                             "Full comms plan: F10 > Comms Plan", 30)
