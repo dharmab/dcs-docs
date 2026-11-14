@@ -73,19 +73,22 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each gro
 |-----------|---------|------|
 | SM-90 Launcher | `S_75M_Volhov` | Launcher (1 missile) |
 | SNR-75 Fan Song | `SNR_75V` | Tracking radar |
+| P-19 Flat Face | `p-19 s-125 sr` | Search radar |
 | RD-75 Amazonka | `RD_75` | Radio direction finding (optional) |
 
 **Battery Composition:**
 
+- 1× P-19 Flat Face (search radar, in the same group)
 - 1× SNR-75 Fan Song (tracking radar)
 - 6× SM-90 Launchers
-- 1× EWR (P-19 or 1L13, optional but recommended)
+
+Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targets without a search radar in DCS, and ED hasn't said. Without one, the site may never fire.
 
 **Recommended Layout:**
 
 - Place Fan Song at the center of the site
 - Arrange six launchers in a circular "flower" pattern, 1–2 km from the radar
-- Position EWR several kilometers away to avoid single-weapon kills
+- Place the P-19 at the site, a few hundred meters from the Fan Song
 - Best deployed on flat terrain with clear radar horizon
 
 **Example Group Definition:**
@@ -103,6 +106,16 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each gro
     ["units"] = {
         [1] = {
             ["unitId"] = 200,
+            ["name"] = "SA-2-SR",
+            ["type"] = "p-19 s-125 sr",
+            ["skill"] = "High",
+            ["x"] = -100300,  -- 300 m south
+            ["y"] = 500000,
+            ["heading"] = 0,
+            ["playerCanDrive"] = false,
+        },
+        [2] = {
+            ["unitId"] = 201,
             ["name"] = "SA-2-STR",
             ["type"] = "SNR_75V",
             ["skill"] = "High",
@@ -111,23 +124,23 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each gro
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
-        [2] = {
-            ["unitId"] = 201,
+        [3] = {
+            ["unitId"] = 202,
             ["name"] = "SA-2-LN1",
             ["type"] = "S_75M_Volhov",
             ["skill"] = "High",
-            ["x"] = -100000,
-            ["y"] = 501500,  -- 1.5 km north
+            ["x"] = -98500,  -- 1.5 km north
+            ["y"] = 500000,
             ["heading"] = 3.14159,  -- Facing south toward radar
             ["playerCanDrive"] = false,
         },
-        [3] = {
-            ["unitId"] = 202,
+        [4] = {
+            ["unitId"] = 203,
             ["name"] = "SA-2-LN2",
             ["type"] = "S_75M_Volhov",
             ["skill"] = "High",
-            ["x"] = -98700,
-            ["y"] = 500750,  -- 1.5 km northeast
+            ["x"] = -98940,  -- 1.5 km northeast
+            ["y"] = 501060,
             ["heading"] = 3.93,  -- Facing southwest
             ["playerCanDrive"] = false,
         },
