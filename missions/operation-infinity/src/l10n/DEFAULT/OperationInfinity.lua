@@ -231,6 +231,11 @@ OperationInfinity.config = {
 
     -- SAM site counts by difficulty
     samCounts = {
+        Easy = {
+            SA2Incomplete = { 1, 2 },
+            SA9 = { 1, 2 },
+            SA13 = { 1, 2 },
+        },
         Normal = {
             SA2 = { 0, 1 },
             SA3 = { 1, 2 },
@@ -614,8 +619,7 @@ function OperationInfinity:generateBattlefield()
             {
                 name = "air_defenses",
                 fn = function(ctx, done)
-                    if OperationInfinity.state.difficulty == "Normal" or
-                       OperationInfinity.state.difficulty == "Hard" then
+                    if OperationInfinity.state.difficulty ~= "VeryEasy" then
                         progress("Deploying air defenses...")
                         BattlefieldGeneration:generateAirDefensesBatched(done)
                     else
