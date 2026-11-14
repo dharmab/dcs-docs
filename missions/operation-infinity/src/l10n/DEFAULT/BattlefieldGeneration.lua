@@ -273,11 +273,13 @@ function BattlefieldGeneration:updateFireTargets()
             if string.find(groupName, "ISAF%-F") or string.find(groupName, "Erusea%-F") then
                 local group = Group.getByName(groupName)
                 if group and group:isExist() then
-                    -- Random offset from group center
+                    -- Random offset from the group's original fire target, not
+                    -- its own position (which would make it shell itself)
+                    local fireTarget = vGroup.options.fireAtPoint
                     local angle = math.random() * 2 * math.pi
                     local distance = math.random() * wanderRadius
-                    local newX = vGroup.center.x + distance * math.cos(angle)
-                    local newY = vGroup.center.y + distance * math.sin(angle)
+                    local newX = fireTarget.x + distance * math.cos(angle)
+                    local newY = fireTarget.y + distance * math.sin(angle)
 
                     local task = {
                         id = "FireAtPoint",
