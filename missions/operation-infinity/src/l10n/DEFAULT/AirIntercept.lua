@@ -100,6 +100,7 @@ local RUNWAY_ALTITUDE_METERS = 300
 local INTERCEPT_ALTITUDE_METERS = 6000
 local PLAYER_AIRBORNE_ALTITUDE_METERS = 100
 local MAX_AIRBORNE_CAP = 8
+local LANDED_DESPAWN_DELAY_SECONDS = 60
 
 AirIntercept.state = {
     initialized = false,
@@ -478,7 +479,33 @@ function AirIntercept.eventHandler:onEvent(event)
                 log("Error getting unit name in death event: " .. tostring(unitName))
             end
         end
+    elseif event.id == world.event.S_EVENT_LAND then
+        AirIntercept:handleUnitLanded(event.initiator)
     end
+end
+
+-- Interceptors that RTB and land would otherwise count toward the airborne
+-- cap forever. Free the slot now and remove the parked aircraft later.
+function AirIntercept:handleUnitLanded(unit)
+    if not unit then
+        return
+    end
+
+    local ok, unitName = pcall(function() return unit:getName() end)
+    if not ok or not unitName or not string.find(unitName, "Erusea-Interceptor-", 1, true) then
+        return
+    end
+
+    log("Interceptor landed: " .. unitName)
+    self:handleUnitDeath(unitName)
+
+    timer.scheduleFunction(function()
+        local landed = Unit.getByName(unitName)
+        if landed and landed:isExist() then
+            landed:destroy()
+            log("Removed landed interceptor: " .. unitName)
+        end
+    end, nil, timer.getTime() + LANDED_DESPAWN_DELAY_SECONDS)
 end
 
 function AirIntercept:handleUnitDeath(unitName)
@@ -487,7 +514,8 @@ function AirIntercept:handleUnitDeath(unitName)
         return
     end
 
-    -- One loss can raise DEAD, CRASH and UNIT_LOST; count each unit only once
+    -- One loss can raise DEAD, CRASH and UNIT_LOST, and a landed unit is
+    -- counted on LAND before it is destroyed; count each unit only once
     if self.state.deadUnits[unitName] then
         return
     end
@@ -502,7 +530,7 @@ function AirIntercept:handleUnitDeath(unitName)
         local newCount = math.max(0, aliveCount - 1)
         self.state.groupAliveCount[groupName] = newCount
 
-        log("Interceptor killed: " .. unitName ..
+        log("Interceptor removed from airborne count: " .. unitName ..
                  ", total airborne: " .. self.state.totalAirborne)
 
         -- Clean up group when all units are dead
