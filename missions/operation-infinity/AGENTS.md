@@ -90,7 +90,7 @@ Enemy helicopters listed below are planned but not implemented; no script spawns
 ### Easy
 - Erusea 2004 equipment
 - Scattered defenses: ZU-23, Shilka, MANPADS, SA-9, SA-13
-- 1-2 incomplete SA-2 batteries (SNR-75 and launchers, no search radar), 1-2 SA-9, 1-2 SA-13 (`samCounts.Easy`). Not under IADS emission control.
+- 1-2 incomplete SA-2 batteries (P-19, SNR-75 and 3 launchers), 1-2 SA-9, 1-2 SA-13 (`samCounts.Easy`). Not under IADS emission control.
 - Enemy fighters: MiG-21Bis, F-5E, F-5E-3, A-10A with IR missiles (R-60, AIM-9B)
 - Enemy helicopters (planned): Mi-24P, Mi-24V, Ka-50
 - Max 2 fighters airborne, skill Average-Ace

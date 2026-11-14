@@ -79,7 +79,10 @@ UnitTemplates.SHORAD = {
 
 UnitTemplates.SAMSites = {
     Easy = {
+        -- Incomplete = half the launchers. Keep the P-19: there is no solid
+        -- evidence the SNR-75 can acquire targets on its own in DCS.
         SA2Incomplete = {
+            {type = "p-19 s-125 sr", count = 1},
             {type = "SNR_75V", count = 1},
             {type = "S_75M_Volhov", count = 3},
         },
