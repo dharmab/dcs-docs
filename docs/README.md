@@ -74,3 +74,9 @@ The [units/](units/) directory contains equipment and capability data:
 | [units/sea.md](units/sea.md) | Ships, carriers, submarines |
 | [units/planes.md](units/planes.md) | Fixed-wing aircraft with pylons and loadouts |
 | [units/weapons.md](units/weapons.md) | Missiles, bombs, rockets |
+
+### Debugging
+
+| Document | Description |
+|----------|-------------|
+| [tacview/acmi-debugging.md](tacview/acmi-debugging.md) | Reading Tacview ACMI recordings to debug AI behavior and spawn scripts |

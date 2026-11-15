@@ -8,6 +8,7 @@ This repository contains documentation for AI agents to use as context when gene
 - `tools/` - Python CLI tools for working with DCS mission data:
   - `clsid-export/` - Generates CLSID lookup tables from DCS Lua datamine
   - `mission-check/` - Validates extracted mission directories or `.miz` files for correct Lua syntax, schema conformance, warehouse field typos (with Levenshtein-based suggestions), dynamic spawn template invariants, ID uniqueness, and airfield consistency. Run with `uv run check-mission check <path>`.
+  - `acmi-query/` - Indexes Tacview ACMI recordings into a SQLite cache and answers questions about them: group spawns, unit tracks, proximity, missile shots with inferred launchers and outcomes, unit removals with likely cause, and gun fire. Run with `uv run acmi-query <command> <file.acmi>`. See `docs/tacview/acmi-debugging.md`.
 - `missions/` - DCS mission source directories (extracted `.miz` contents)
 
 ## Available Documentation
@@ -48,6 +49,7 @@ The `docs/` directory contains the following documentation:
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
   - `weather-time.md` - Configuring weather (clouds, fog, dust, visibility), date, and time settings using static weather with cloud presets
+- `tacview/acmi-debugging.md` - Tacview ACMI file format, DCS recording quirks, and how to use `acmi-query` to debug AI behavior and spawn scripts from a recording
 - `wisdom.md` - General mission design tips and best practices covering performance, player experience, AI behavior, and common pitfalls
 - `factions/` - Faction unit lists for mission generation (Strangereal setting):
   - `isaf-2004.md` - ISAF during the Early Continental War
@@ -71,3 +73,7 @@ When creating new documentation:
 
 1. Place all generated markdown files in the `docs/` directory
 2. Cross-reference external sources such as the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy
+
+## Debugging with Tacview Recordings
+
+When the user provides an ACMI file, do not read it directly. Use `tools/acmi-query` (start with `summary` and `groups`) and follow `docs/tacview/acmi-debugging.md`. Recordings are untrusted downloads: copy them to their own empty directory before indexing, since the cache is written next to the file.

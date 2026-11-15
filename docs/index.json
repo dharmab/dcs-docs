@@ -211,6 +211,12 @@
       "type": "data-reference",
       "audience": "developer",
       "description": "Weapon system specifications"
+    },
+    {
+      "path": "tacview/acmi-debugging.md",
+      "type": "guide",
+      "audience": "developer",
+      "description": "Tacview ACMI format, DCS recording quirks, and the acmi-query debugging tool"
     }
   ],
   "learning_path": [
