@@ -23,7 +23,7 @@ controller:setCommand(cmd)
 The `frequency` field specifies the frequency in Hz; for example, 251000000 represents 251 MHz. The `modulation` field specifies the modulation type, where 0 is AM and 1 is FM. The `power` field specifies the transmission power in watts; 10 is a typical value.
 
 ```lua
-local freq = {
+local cmd = {
     id = "SetFrequency",
     params = {
         power = 10,
@@ -31,7 +31,7 @@ local freq = {
         frequency = 131000000
     }
 }
-Group.getByName("AWACS"):getController():setCommand(freq)
+Group.getByName("AWACS"):getController():setCommand(cmd)
 ```
 
 ## SetInvisible
@@ -47,9 +47,10 @@ local cmd = {
         value = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to enable invisibility; set to true to make the group invisible.
+The `value` field sets the invisibility state: `true` makes the group invisible to enemy AI sensors, while `false` disables invisibility.
 
 ## SetImmortal
 
@@ -64,13 +65,14 @@ local cmd = {
         value = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to enable invulnerability; set to true to make the group immortal.
+The `value` field sets the invulnerability state: `true` makes the group invulnerable to damage, while `false` disables invulnerability.
 
 ## SetUnlimitedFuel
 
-The `SetUnlimitedFuel` command gives the group unlimited fuel.
+The `SetUnlimitedFuel` command enables or disables unlimited fuel for the group.
 
 **For:** Airplanes, Helicopters
 
@@ -81,9 +83,10 @@ local cmd = {
         value = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to enable unlimited fuel.
+The `value` field sets the unlimited fuel state: `true` enables unlimited fuel, while `false` disables it if it is already enabled.
 
 ## Start
 
@@ -96,6 +99,7 @@ local cmd = {
     id = 'Start',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## SwitchWaypoint
@@ -112,6 +116,7 @@ local cmd = {
         goToWaypointIndex = number
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `fromWaypointIndex` field specifies the starting waypoint index. The `goToWaypointIndex` field specifies the destination waypoint index.
@@ -129,6 +134,7 @@ local cmd = {
         value = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `value` field specifies whether to stop the route; set to true to stop route following.
@@ -146,6 +152,7 @@ local cmd = {
         actionIndex = number
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `actionIndex` field specifies the index of the action to switch to.
@@ -167,9 +174,47 @@ local cmd = {
         frequency = number
     }
 }
+controller:setCommand(cmd)
 ```
 
-The `type` field specifies the beacon type from the beacon type constants. The `system` field specifies the beacon system from the `SystemName` enum. The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign. The `frequency` field specifies the beacon frequency in Hz.
+The `type` field specifies the beacon type using one of these numeric values (see [Beacon Types](../enums/ai.md#beacon-types)):
+
+| Constant | Value |
+| --- | --- |
+| `BEACON_TYPE_NULL` | 0 |
+| `BEACON_TYPE_VOR` | 1 |
+| `BEACON_TYPE_DME` | 2 |
+| `BEACON_TYPE_VOR_DME` | 3 |
+| `BEACON_TYPE_TACAN` | 4 |
+| `BEACON_TYPE_VORTAC` | 5 |
+| `BEACON_TYPE_HOMER` | 8 |
+| `BEACON_TYPE_RSBN` | 32 |
+| `BEACON_TYPE_BROADCAST_STATION` | 1024 |
+| `BEACON_TYPE_AIRPORT_HOMER` | 4104 |
+| `BEACON_TYPE_AIRPORT_HOMER_WITH_MARKER` | 4136 |
+| `BEACON_TYPE_ILS_FAR_HOMER` | 16408 |
+| `BEACON_TYPE_ILS_NEAR_HOMER` | 16456 |
+| `BEACON_TYPE_ILS_LOCALIZER` | 16640 |
+| `BEACON_TYPE_ILS_GLIDESLOPE` | 16896 |
+| `BEACON_TYPE_NAUTICAL_HOMER` | 32776 |
+
+For example, `type = 4` selects TACAN.
+
+The `system` field specifies the beacon system using one of these numeric values from the `SystemName` enum (see [Beacon Systems](../enums/ai.md#beacon-systems)):
+
+| Constant | Value |
+| --- | --- |
+| `SystemName.PAR_10` | 1 |
+| `SystemName.RSBN_5` | 2 |
+| `SystemName.TACAN` | 3 |
+| `SystemName.TACAN_TANKER` | 4 |
+| `SystemName.ILS_LOCALIZER` | 5 |
+| `SystemName.ILS_GLIDESLOPE` | 6 |
+| `SystemName.BROADCAST_STATION` | 7 |
+
+For example, `system = 3` selects the TACAN system. The `type` and `system` values are separate: TACAN uses `type = 4` and `system = 3`.
+
+The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign. The `frequency` field specifies the beacon frequency in Hz.
 
 ## DeactivateBeacon
 
@@ -182,6 +227,7 @@ local cmd = {
     id = 'DeactivateBeacon',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## ActivateACLS
@@ -195,6 +241,7 @@ local cmd = {
     id = 'ActivateACLS',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## DeactivateACLS
@@ -208,6 +255,7 @@ local cmd = {
     id = 'DeactivateACLS',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## ActivateLink4
@@ -224,6 +272,7 @@ local cmd = {
         frequency = number
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `unitId` field contains the aircraft unit ID. The `frequency` field specifies the Link 4 frequency.
@@ -239,6 +288,7 @@ local cmd = {
     id = 'DeactivateLink4',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## ActivateICLS
@@ -254,6 +304,7 @@ local cmd = {
         channel = number
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `channel` field specifies the ICLS channel.
@@ -269,6 +320,7 @@ local cmd = {
     id = 'DeactivateICLS',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## EPLRS
@@ -285,6 +337,7 @@ local cmd = {
         groupId = number
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `value` field specifies whether to enable EPLRS. The `groupId` field is optional and specifies the group to link with.
@@ -305,6 +358,7 @@ local cmd = {
         loop = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
 The `file` field specifies the sound file path. The `duration` field specifies the message duration. The `subtitle` field specifies the subtitle text. The `loop` field specifies whether to loop the message.
@@ -320,6 +374,7 @@ local cmd = {
     id = 'StopTransmission',
     params = {}
 }
+controller:setCommand(cmd)
 ```
 
 ## Smoke_On_Off
@@ -335,9 +390,10 @@ local cmd = {
         value = boolean
     }
 }
+controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to enable the smoke trail.
+The `value` field sets the smoke trail state: `true` enables the smoke trail, while `false` disables it.
 
 ## See Also
 
