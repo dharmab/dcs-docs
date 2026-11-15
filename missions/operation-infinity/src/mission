@@ -78,7 +78,7 @@ mission = {
     ["forcedOptions"] = {
         ["userMarks"] = true,
         ["externalViews"] = true,
-        ["optionsView"] = "optview_all",
+        ["optionsView"] = "optview_allies",
         ["civTraffic"] = "",
     },
     ["groundControl"] = {
