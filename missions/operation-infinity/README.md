@@ -83,6 +83,8 @@ The warehouse is configured for unlimited weapons.
 | Orange 5 | 31.9 MHz FM |
 | Basket Tanker | 270.1 MHz AM |
 | Boom Tanker | 270.5 MHz AM |
+| Slow Boom Tanker | 270.7 MHz AM |
+| Recovery Tanker | 270.3 MHz AM |
 | Military Guard | 243.0 MHz AM |
 | Civil Guard | 121.5 MHz VHF |
 
@@ -106,13 +108,17 @@ The warehouse is configured for unlimited weapons.
 
 ## Support Assets
 
-Two tankers orbit near Anapa:
+Three tankers orbit on a racetrack between Krymsk and the target area:
 - **KC-135 "Texaco"** (boom) at 25,000 ft, 270.5 MHz, TACAN 100X
-- **KC-135MPRS "Arco"** (basket) at 22,000 ft, 270.1 MHz, TACAN 101X
+- **KC-135MPRS "Arco"** (basket) at 21,000 ft, 270.1 MHz, TACAN 101X
+- **KC-135 "Shell"** (slow boom for A-10s) at 15,000 ft, 270.7 MHz, TACAN 102X
 
 A carrier strike group operates in the Black Sea about 50 nm southwest of Krymsk: CVN-74 John C. Stennis with a Ticonderoga-class cruiser, two Arleigh Burke-class destroyers, and an Oliver Hazard Perry-class frigate. The carrier steams into the wind for about 25 knots over the deck, turning back downwind when it reaches the edge of its operating area. An SH-60B plane guard helicopter flies off the carrier's starboard side.
 
 - **Carrier:** 254.7 MHz AM, TACAN 74X (STN), ICLS 4, Link 4 336.0 MHz, ACLS
+- **S-3B "Arco 2-1"** (basket recovery tanker): orbits over the carrier's operating area at 8,000 ft, 270.3 MHz, TACAN 103X
+
+Aircraft that spawn on the Stennis have the carrier on preset 3 and Krymsk on presets 4-6. Krymsk aircraft have Krymsk on 3-5 and the carrier on 6. Presets 7-8 hold the tankers your aircraft can refuel from.
 
 An E-3A AWACS "Magic" orbits northwest of Krymsk at 30,000 ft with EPLRS datalink enabled. For GCI, use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 

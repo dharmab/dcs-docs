@@ -101,9 +101,16 @@ Every jet above except the FC3 types has at least one 225-400 MHz radio, so an a
 
 ## Radio Presets
 
-Use one main-radio list in every aircraft, capped at 18 channels for the F-4E. Fill it in priority order: Strike, SkyEye GCI, the ATC frequencies (Tower, Ground, Radar; they're used by human controllers on SRS), Carrier, tankers, then flight tactical with whatever slots remain. Drop interflight channels before anything above them. Don't preset an in-game AI AWACS voice frequency; it is kept only for datalink, and voice GCI is SkyEye.
+Use one main-radio layout in every aircraft, capped at 18 channels for the F-4E. Fill it in priority order: Strike, SkyEye GCI, the ATC frequencies (Tower, Ground, Radar; they're used by human controllers on SRS), Carrier, tankers, then flight tactical with whatever slots remain. Drop interflight channels before anything above them. Don't preset an in-game AI AWACS voice frequency; it is kept only for datalink, and voice GCI is SkyEye.
 
 Use the second radio for SkyEye ("radio 1 to talk, radio 2 on GCI"): put SkyEye VHF 124.1 on channel 1 of every second radio that can tune VHF, followed by the main list. For VHF/FM-only radios, add 32.1 FM and the FM flight tactical channels. Dynamic spawn templates only apply their presets at a base whose warehouse stock links the template with `linkDynTempl` (see [player-slots.md](player-slots.md)).
+
+### Multiple Bases and Tanker Types
+
+The list can vary in two blocks while every other channel keeps its number across the package:
+
+- **Home block:** with more than one player base, give each base's templates the ATC channels in the same slots, with the home base first. Put the other base's Tower and Radar next, since they matter most for a divert.
+- **Tanker block:** give each aircraft only the tankers its refueling system can use (boom or probe). Every receiver type needs the same number of tanker slots, so the channels after the block don't shift.
 
 Operation Infinity (`missions/operation-infinity/AGENTS.md`) has a complete worked layout.
 

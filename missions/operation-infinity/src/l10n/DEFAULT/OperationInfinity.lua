@@ -782,6 +782,8 @@ function OperationInfinity:getSupportAssetText()
         end
     end
     lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
+    -- Arco 2-1 is a mission-file group over the carrier area, not on the regional racetrack
+    lines[#lines + 1] = "  Arco 2-1 (S-3B basket): 270.3 MHz AM, TACAN 103X, 8000 ft, 250 KIAS over the carrier area"
     return table.concat(lines, "\n")
 end
 
@@ -804,19 +806,22 @@ Radio 1 to talk, radio 2 on SkyEye
 
 MAIN RADIO PRESETS (UHF, all aircraft)
   1 Strike 255.1 / 2 SkyEye 255.3
-  3 Tower 254.1 / 4 Ground 254.3 / 5 Radar 254.5
-  6 Stennis 254.7
-  7 Texaco 270.5 / 8 Arco 270.1 / 9 Shell 270.7
-  10-14 Red 1-5: 260.1-260.9 (.2 steps)
-  15-19 Blue 1-5: 261.1-261.9 (.2 steps)
-  20 Guard 243.0 (F-4E has presets 1-18 only)
+  3-6 Home block:
+    Krymsk: 3 Tower 254.1 / 4 Ground 254.3 / 5 Radar 254.5 / 6 Stennis 254.7
+    Stennis: 3 Stennis 254.7 / 4 Tower 254.1 / 5 Radar 254.5 / 6 Ground 254.3
+  7-8 Tankers:
+    Boom (F-4E, F-16, F-15E, A-10): 7 Texaco 270.5 / 8 Shell 270.7
+    Probe (F/A-18, F-14, M-2000C, F1, JF-17): 7 Arco 1-1 270.1 / 8 Arco 2-1 270.3
+  9-13 Red 1-5: 260.1-260.9 (.2 steps)
+  14-18 Blue 1-5: 261.1-261.9 (.2 steps)
+  19 Guard 243.0 / 20 Green 1 262.1 (F-4E has presets 1-18 only)
 
 SECOND RADIO PRESETS
   V/UHF radios: 1 SkyEye 124.1 VHF, 2-20 = main 1-19
   F-16 COMM2: 1 SkyEye 124.1, 2 SkyEye 32.1 FM,
     3 Civil Guard 121.5, 4-8 Yellow 1-5, 9-13 Orange 1-5
   A-10 FM: 1 SkyEye 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
-  F-4E AUX: 1 Texaco, 2 Arco, 3 Shell
+  F-4E AUX: 1 Texaco, 2 Shell
   F-15C, MiG-29A, Su-25, Su-25T: tune manually in SRS
 
 SKYEYE GCI: 255.3 AM, 124.1 AM, 32.1 FM (same controller)
@@ -831,6 +836,7 @@ SUPPORT
   Arco (basket): TACAN 101X, 21,000 ft, 250 KIAS
   Texaco (boom): TACAN 100X, 25,000 ft, 280 KIAS
   Shell (slow boom): TACAN 102X, 15,000 ft, 200 KIAS
+  Arco 2-1 (S-3B basket): TACAN 103X, 8,000 ft, 250 KIAS over the carrier area
 
 GUARD
   Military: 243.0 MHz AM

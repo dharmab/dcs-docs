@@ -836,8 +836,10 @@ For BLUEFOR tankers, use the three-element array callsign format:
 | Callsign Name | Index [1] | Example |
 |---------------|-----------|---------|
 | Texaco | 1 | `[1]=1, [2]=1, [3]=1` → "Texaco 11" |
-| Shell | 2 | `[1]=2, [2]=1, [3]=1` → "Shell 11" |
-| Arco | 3 | `[1]=3, [2]=1, [3]=1` → "Arco 11" |
+| Arco | 2 | `[1]=2, [2]=1, [3]=1` → "Arco 11" |
+| Shell | 3 | `[1]=3, [2]=1, [3]=1` → "Shell 11" |
+
+DCS has only three tanker callsign names. A mission with more than three tankers must reuse a name with a different flight number (`[2]`), such as "Arco 21". A known DCS multiplayer bug can label every tanker that shares a name with the same callsign in the F10 radio menu (for example, Arco 11 and Arco 21 both shown as "Arco 11"). Separately, VAICOM recognizes only the base name.
 
 ### Russian Callsigns (Numeric Format)
 
@@ -848,6 +850,8 @@ For REDFOR tankers, use a three-digit numeric callsign:
 ```
 
 ## Common Tanker Frequencies
+
+These are typical values. Missions that follow the [standardized comm plan](comm-plan.md) should use its tanker frequencies instead (270.1 basket, 270.3 recovery, 270.5 fighter boom, 270.7 heavy boom).
 
 | Tanker Role | Frequency | Notes |
 |-------------|-----------|-------|

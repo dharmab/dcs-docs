@@ -42,11 +42,13 @@ The `docs/` directory contains the following documentation:
   - `air-to-air-setup.md` - Configuring AI fighter aircraft for Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort roles with proper tasking and AI options
   - `artillery-battery.md` - Creating artillery batteries with continuous fire for visual spectacle and SEAD/DEAD gameplay
   - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
+  - `comm-plan.md` - Standardized frequency allocation, per-aircraft radio ranges and preset counts, and radio preset layout rules (home block per base, tankers by refueling system)
   - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
   - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
   - `jtac-setup.md` - Configuring AI JTACs and FACs for Close Air Support with laser designation, smoke marking, and radio communication
   - `convoy-route.md` - Creating ground vehicle convoys with road-following waypoints, looping routes, and escort compositions
   - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
+  - `tanker-setup.md` - Configuring aerial refueling tankers (KC-135, KC-135MPRS, KC-130, S-3B) with Tanker tasks, TACAN beacons, orbits, and callsigns
   - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
   - `weather-time.md` - Configuring weather (clouds, fog, dust, visibility), date, and time settings using static weather with cloud presets
 - `tacview/acmi-debugging.md` - Tacview ACMI file format, DCS recording quirks, and how to use `acmi-query` to debug AI behavior and spawn scripts from a recording

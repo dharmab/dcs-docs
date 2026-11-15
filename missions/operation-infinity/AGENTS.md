@@ -47,26 +47,29 @@ Reference `docs/recipes/comm-plan.md` for the standardized frequencies and per-a
 
 Radio presets live in each dynamic spawn template's `Radio` table (groups 1-14 and 29 at Krymsk, 25-28 on the Stennis). Templates only apply when the base's warehouse stock entry links them with `linkDynTempl`, so Krymsk stocks each player type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`).
 
-Main (UHF) radio, identical in every aircraft. 18 channels so the F-4E fits; priority is Strike, SkyEye, all three ATC frequencies (human controllers on SRS), carrier, tankers, then interflight with whatever is left:
+Main (UHF) radio. Every channel number means the same thing in every aircraft except the home block (ch3-6), which depends on the spawn base, and the tanker block (ch7-8), which depends on the refueling system. 18 channels so the F-4E fits; priority is Strike, SkyEye, all three ATC frequencies (human controllers on SRS), carrier, tankers, then interflight with whatever is left:
 
 | Ch | Use | MHz |
 |----|-----|-----|
 | 1 | Strike | 255.1 |
 | 2 | SkyEye GCI | 255.3 |
-| 3-5 | Krymsk Tower / Ground / Radar | 254.1 / 254.3 / 254.5 |
-| 6 | Stennis | 254.7 |
-| 7-9 | Texaco / Arco / Shell | 270.5 / 270.1 / 270.7 |
-| 10-14 | Red 1-5 | 260.1-260.9 |
-| 15-18 | Blue 1-4 | 261.1-261.7 |
-| 19 | Blue 5 (20-channel radios) | 261.9 |
-| 20 | Guard (20-channel radios) | 243.0 |
+| 3-6 | Home block, Krymsk templates: Tower / Ground / Radar / Stennis | 254.1 / 254.3 / 254.5 / 254.7 |
+| 3-6 | Home block, Stennis templates (25-28): Stennis / Tower / Radar / Ground | 254.7 / 254.1 / 254.5 / 254.3 |
+| 7-8 | Boom receivers (F-4E, F-16C, F-15E, A-10C): Texaco / Shell | 270.5 / 270.7 |
+| 7-8 | Probe receivers (F/A-18C, F-14s, M-2000C, F1, JF-17): Arco 1-1 / Arco 2-1 | 270.1 / 270.3 |
+| 9-13 | Red 1-5 | 260.1-260.9 |
+| 14-18 | Blue 1-5 | 261.1-261.9 |
+| 19 | Guard (20-channel radios) | 243.0 |
+| 20 | Green 1 (20-channel radios) | 262.1 |
+
+On the Stennis list, Tower and Radar sit next to each other for a divert to Krymsk; Ground is last because it is only needed after landing.
 
 Second radios ("radio 1 to talk, radio 2 on SkyEye"):
 
-- V/UHF radios (F/A-18 COMM2, F-15E Radio 2, F-14 ARC-182, A-10 ARC-210, M-2000C V/UHF, F1 TRAP-136): ch1 SkyEye VHF 124.1, ch2-20 = main ch1-19. Radios with more than 20 channels continue with Guard, Green 1-5, SkyEye FM, Yellow/Orange FM, Civil Guard, JTAC.
+- V/UHF radios (F/A-18 COMM2, F-15E Radio 2, F-14 ARC-182, A-10 ARC-210, M-2000C V/UHF, F1 TRAP-136): ch1 SkyEye VHF 124.1, ch2-20 = main ch1-19 (so Stennis templates carry their own home block). Radios with more than 20 channels continue with Green 1-5 (ch21 = main ch20), SkyEye FM, Yellow/Orange FM, Civil Guard, JTAC.
 - F-16 COMM2 (VHF AM 116-156 / FM 30-88 only): 124.1, 32.1 FM, 121.5, Yellow 1-5, Orange 1-5, JTAC 1-4.
 - A-10 ARC-186 (FM only): 32.1, Yellow 1-5, Orange 1-5, JTAC 1-4.
-- F-4E aux receiver (265-284.9): Texaco, Arco, Shell; remaining channels are module defaults.
+- F-4E aux receiver (265-284.9): Texaco, Shell; remaining channels are module defaults.
 - JF-17: one shared 20-preset list for COMM1/COMM2 = main layout.
 - F-15C, MiG-29A, Su-25, Su-25T (FC3): no mission presets; players tune in SRS.
 
@@ -242,7 +245,9 @@ E-3A "Magic" on the regional support racetrack, 30,000 ft, 280 KIAS. EPLRS datal
 
 **KC-135 "Shell"** (slow boom, A-10/Su-25): 15,000 ft, 200 KIAS, 270.7 MHz AM, TACAN 102X
 
-All four support aircraft are late-activated when the battlefield is generated and are immortal and invisible. The script sets `SetUnlimitedFuel` on activation so they stay on station for the whole mission. Orbits are pushed by `OperationInfinity.lua` once each aircraft is airborne, on a racetrack chosen by the selected region. `supportAircraft` stores altitude in feet and target IAS in knots; the Orbit task's TAS is computed at runtime from the ISA density model, so changing an altitude doesn't require recomputing speeds. Racetracks are offset 5 km laterally per aircraft; altitude separation comes only from each aircraft's own altitude.
+**S-3B Tanker "Arco 2-1"** (recovery, basket): 8,000 ft, 250 KIAS (145 m/s TAS), 270.3 MHz AM, TACAN 103X "AR2". Group `Arco 2`, group/unit ID 30. DCS has only three tanker callsigns (Texaco, Arco, Shell), so it shares Arco with the other basket tanker; a known DCS multiplayer bug can show tankers that share a name under one callsign in the F10 radio menu. Unlike the KC-135s it is not in `supportAircraft`: it air-starts at mission load (carrier ops don't wait for the F10 settings) and flies a Circle orbit over the center of the carrier operating area, so it stays within about 30 km of the carrier without re-tasking. Its waypoint 1 sets Tanker, TACAN, unlimited fuel, immortal and invisible. `getSupportAssetText` lists it with a hardcoded line.
+
+The AWACS and three KC-135s are late-activated when the battlefield is generated and are immortal and invisible. The script sets `SetUnlimitedFuel` on activation so they stay on station for the whole mission. Orbits are pushed by `OperationInfinity.lua` once each aircraft is airborne, on a racetrack chosen by the selected region. `supportAircraft` stores altitude in feet and target IAS in knots; the Orbit task's TAS is computed at runtime from the ISA density model, so changing an altitude doesn't require recomputing speeds. Racetracks are offset 5 km laterally per aircraft; altitude separation comes only from each aircraft's own altitude.
 
 ### Carrier Strike Group
 
@@ -255,6 +260,7 @@ Managed by `CarrierOps.lua`, independent of the F10 settings (starts at mission 
 | Destroyer x2 | `CSG Destroyer 1`, `CSG Destroyer 2` | `USS_Arleigh_Burke_IIa` |
 | Frigate | `CSG Frigate` | `PERRY` |
 | Plane guard (script-spawned) | `Angel` | `SH-60B` |
+| Recovery tanker (mission file) | `Arco 2` | `S-3B Tanker` |
 
 - Operating area: 30 km radius circle centered X=-70000, Y=225000 (open water SW of Anapa, ~50 nm from Krymsk)
 - Carrier systems: radio 254.7 MHz AM, TACAN 74X "STN", ICLS 4, Link 4 336.0 MHz, ACLS. Set on waypoint 1 in the mission file and re-applied by the script after every route change.
