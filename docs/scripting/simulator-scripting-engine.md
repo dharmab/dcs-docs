@@ -59,7 +59,7 @@ Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the No
 
 ### Time Values
 
-The DCS scripting engine measures mission time in seconds as a floating-point number with millisecond precision. The [timer](reference/singletons/timer.md) singleton provides time-related functions. The `timer.getTime()` function returns mission time, which is the number of seconds since the mission started and pauses when the game is paused. The `timer.getAbsTime()` function returns absolute time, which is the number of seconds since midnight of the mission date. The `timer.getTime0()` function returns the mission start time expressed as absolute time.
+The DCS scripting engine measures mission time in seconds as a floating-point number with millisecond precision. The [timer](reference/singletons/timer.md) singleton provides time-related functions. The [`timer.getTime()`](reference/singletons/timer.md#timergettime) function returns mission time, which is the number of seconds since the mission started and pauses when the game is paused. The [`timer.getAbsTime()`](reference/singletons/timer.md#timergetabstime) function returns absolute time, which is the number of seconds since midnight of the mission date. The [`timer.getTime0()`](reference/singletons/timer.md#timergettime0) function returns the mission start time expressed as absolute time.
 
 ### Distance and Angles
 
@@ -76,27 +76,27 @@ Headings use true north as 0 and increase clockwise: East is π/2, South is π, 
 
 ### Singletons
 
-A singleton is a global object that provides access to a category of game functionality. You access singletons by their name, then call functions on them. For example, `timer.getTime()` calls the `getTime` function on the `timer` singleton.
+A singleton is a global object that provides access to a category of game functionality. You access singletons by their name, then call functions on them. For example, [`timer.getTime()`](reference/singletons/timer.md#timergettime) calls the [`getTime`](reference/singletons/timer.md#timergettime) function on the [`timer`](reference/singletons/timer.md) singleton.
 
 The main singletons are:
 
 | Singleton | Purpose |
 |-----------|---------|
-| `env` | Logging and environment information |
-| `timer` | Mission time and scheduled functions |
-| `land` | Terrain queries (ground height, surface type) |
-| `atmosphere` | Weather conditions |
-| `world` | Event handlers and object searches |
-| `coalition` | Operations related to the red and blue sides |
-| `trigger` | Trigger zones and trigger-style actions like messages |
-| `coord` | Coordinate conversions (lat/long to game coordinates) |
-| `missionCommands` | F10 radio menu manipulation |
+| [`env`](reference/singletons/env.md) | Logging and environment information |
+| [`timer`](reference/singletons/timer.md) | Mission time and scheduled functions |
+| [`land`](reference/singletons/land.md) | Terrain queries (ground height, surface type) |
+| [`atmosphere`](reference/singletons/atmosphere.md) | Weather conditions |
+| [`world`](reference/singletons/world.md) | Event handlers and object searches |
+| [`coalition`](reference/singletons/coalition.md) | Operations related to the red and blue sides |
+| [`trigger`](reference/singletons/trigger.md) | Trigger zones and trigger-style actions like messages |
+| [`coord`](reference/singletons/coord.md) | Coordinate conversions (lat/long to game coordinates) |
+| [`missionCommands`](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
 
 ### Objects and Functions
 
 The game world contains objects: aircraft, ground units, ships, airbases, weapons, and scenery. Scripts can get references to these objects and then call functions on them to get information or make changes.
 
-For example, to get a unit and check its remaining fuel:
+For example, use [`Unit.getByName()`](reference/classes/unit.md#unitgetbyname) to get a unit, [`Unit:getFuel()`](reference/classes/unit.md#unitgetfuel) to check its remaining fuel, and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to display the result:
 
 ```lua
 -- Get a reference to a unit named "Eagle 1-1"
@@ -111,33 +111,33 @@ if eagle then
 end
 ```
 
-Note the colon (`:`) when calling functions on objects: `eagle:getFuel()`. This is Lua syntax for calling a function that belongs to an object. The singleton functions use a dot (`.`) instead: `timer.getTime()`.
+Note the colon (`:`) when calling functions on objects: [`eagle:getFuel()`](reference/classes/unit.md#unitgetfuel). This is Lua syntax for calling a function that belongs to an object. The singleton functions use a dot (`.`) instead: [`timer.getTime()`](reference/singletons/timer.md#timergettime).
 
 Common object types and some of their functions:
 
 **Unit** (aircraft, vehicles, ships)
-- `getName()` - Get the unit's name
-- `getPosition()` - Get location and orientation
-- `getLife()` - Get remaining hit points
-- `getFuel()` - Get fuel level (0.0 to 1.0)
-- `getAmmo()` - Get ammunition counts
-- `getVelocity()` - Get speed and direction of movement
-- `inAir()` - Check if an aircraft is flying
+- [`getName()`](reference/classes/object.md#objectgetname) - Get the unit's name
+- [`getPosition()`](reference/classes/object.md#objectgetposition) - Get location and orientation
+- [`getLife()`](reference/classes/unit.md#unitgetlife) - Get remaining hit points
+- [`getFuel()`](reference/classes/unit.md#unitgetfuel) - Get fuel level (0.0 to 1.0)
+- [`getAmmo()`](reference/classes/unit.md#unitgetammo) - Get ammunition counts
+- [`getVelocity()`](reference/classes/object.md#objectgetvelocity) - Get speed and direction of movement
+- [`inAir()`](reference/classes/object.md#objectinair) - Check if an aircraft is flying
 
 **Group** (collection of units)
-- `getName()` - Get the group's name
-- `getUnits()` - Get a list of all units in the group
-- `getSize()` - Get how many units are in the group
-- `activate()` - Activate a late-activation group
+- [`getName()`](reference/classes/group.md#groupgetname) - Get the group's name
+- [`getUnits()`](reference/classes/group.md#groupgetunits) - Get a list of all units in the group
+- [`getSize()`](reference/classes/group.md#groupgetsize) - Get how many units are in the group
+- [`activate()`](reference/classes/group.md#groupactivate) - Activate a late-activation group
 
 **Airbase** (airports, FARPs, carriers)
-- `getName()` - Get the airbase name
-- `getCallsign()` - Get the radio callsign
-- `getParking()` - Get parking spot information
+- [`getName()`](reference/classes/object.md#objectgetname) - Get the airbase name
+- [`getCallsign()`](reference/classes/airbase.md#airbasegetcallsign) - Get the radio callsign
+- [`getParking()`](reference/classes/airbase.md#airbasegetparking) - Get parking spot information
 
 ### Events
 
-The event system notifies your scripts when things happen in the simulation. You create an event handler and register it with the game, then your handler function gets called whenever events occur.
+The event system notifies your scripts when things happen in the simulation. You create an event handler and register it with [`world.addEventHandler()`](reference/singletons/world.md#worldaddeventhandler), then your handler function gets called whenever events occur. This example uses [`getName()`](reference/classes/object.md#objectgetname) and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to announce a destroyed unit.
 
 ```lua
 -- Create a table to serve as our event handler
@@ -180,7 +180,7 @@ The event table passed to your handler contains different information depending 
 
 ### Scheduled Functions
 
-You can tell the game to run a function at a specific time in the future. This is useful for periodic checks, delayed actions, or creating repeating behaviors.
+You can tell the game to run a function at a specific time in the future with [`timer.scheduleFunction()`](reference/singletons/timer.md#timerschedulefunction). This is useful for periodic checks, delayed actions, or creating repeating behaviors. This example reads the mission time with [`timer.getTime()`](reference/singletons/timer.md#timergettime) and displays it with [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext).
 
 ```lua
 local function showTimeMessage()
@@ -233,7 +233,7 @@ local groupName = thisGroup:getName()
 trigger.action.outText("Group " .. groupName .. " is doing something", 10)
 ```
 
-This feature lets you write one script and attach it to multiple groups without having to change the group name in the code each time.
+This example uses [`Group:getName()`](reference/classes/group.md#groupgetname) to get the group's name and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to display a message. This feature lets you write one script and attach it to multiple groups without having to change the group name in the code each time.
 
 ### Group Spawn Condition
 
@@ -248,7 +248,7 @@ If the script returns `true`, the group spawns normally. If it returns `false`, 
 
 ### LUA Predicate Condition
 
-Triggers can use the LUA PREDICATE condition type to evaluate custom Lua code. The script must return `true` or `false`. This enables complex conditions that the built-in trigger conditions cannot express:
+Triggers can use the LUA PREDICATE condition type to evaluate custom Lua code. The script must return `true` or `false`. This enables complex conditions that the built-in trigger conditions cannot express, such as checking for a group with [`Group.getByName()`](reference/classes/group.md#groupgetbyname):
 
 ```lua
 -- Check if a group named 'reinforcements' exists
@@ -300,7 +300,7 @@ This means you can extract a MIZ file with a tool like 7-Zip, edit the Lua files
 
 ## Debugging
 
-When scripts do not work as expected, logging helps you understand what is happening. The `env` singleton provides logging functions:
+When scripts do not work as expected, logging helps you understand what is happening. The [`env`](reference/singletons/env.md) singleton provides logging functions: [`env.info()`](reference/singletons/env.md#envinfo), [`env.warning()`](reference/singletons/env.md#envwarning), and [`env.error()`](reference/singletons/env.md#enverror).
 
 ```lua
 env.info("This is an information message")
@@ -310,7 +310,7 @@ env.error("This is an error")
 
 These messages appear in `dcs.log` in your DCS Saved Games directory (typically `C:\Users\[YourName]\Saved Games\DCS` or `DCS.openbeta`). Open this file in a text editor to see your messages along with any errors the game encountered.
 
-You can also display messages in-game for quick feedback while developing:
+You can also display messages in-game with [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) for quick feedback while developing:
 
 ```lua
 trigger.action.outText("Debug: reached this point in the code", 5)
