@@ -973,24 +973,8 @@ end
 -- AIR DEFENSE GENERATION
 -- =============================================================================
 
-function BattlefieldGeneration:generateSAMSite(samType, template, index)
-    local config = OperationInfinity.config
-    local state = OperationInfinity.state
-
-    -- Pick a random target aerodrome and position SAM site near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-
-    -- Position SAM sites closer to aerodrome than frontline units
-    -- Heavier SAMs positioned closer to protect the aerodrome
-    local minDist = 5000  -- 5 km minimum from aerodrome
-    local maxDist = 30000 -- 30 km max
-    if samType == "SA10" or samType == "SA11" then
-        maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
-    end
-
-    -- Try multiple random positions near the aerodrome until we find valid terrain
-    local pos = nil
+-- Find flat, dry ground for an air defense site minDist-maxDist from center
+local function findAirDefensePosition(center, minDist, maxDist, searchRadius)
     local maxPositionAttempts = 5
 
     for attempt = 1, maxPositionAttempts do
@@ -998,32 +982,63 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index)
         local distance = minDist + math.random() * (maxDist - minDist)
 
         local initialPos = {
-            x = aerodrome.x + distance * math.cos(angle),
-            y = aerodrome.y + distance * math.sin(angle),
+            x = center.x + distance * math.cos(angle),
+            y = center.y + distance * math.sin(angle),
         }
 
-        -- Validate terrain - SAM sites need flat, dry ground
-        local validPos, found = Terrain:findValidPosition(initialPos, 3000, {
+        local validPos, found = Terrain:findValidPosition(initialPos, searchRadius, {
             maxSlope = 10,
             maxRoughness = 5,
         })
 
         if found then
-            pos = validPos
-            break
+            return validPos
+        end
+    end
+
+    return nil
+end
+
+-- Generate a SAM site. With anchor set, place it 1-3 km from anchor as point
+-- defense; otherwise near a random target aerodrome. Returns the site position,
+-- or nil if no valid terrain was found.
+function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
+    local state = OperationInfinity.state
+
+    local pos = nil
+    if anchor then
+        pos = findAirDefensePosition(anchor, 1000, 3000, 500)
+        if not pos then
+            log("WARNING: Could not find valid terrain for " .. samType .. " near its site - placing at random")
         end
     end
 
     if not pos then
+        -- Pick a random target aerodrome and position SAM site near it
+        local aerodromes = state.battlefield.targetAerodromes
+        local aerodrome = aerodromes[math.random(#aerodromes)]
+
+        -- Position SAM sites closer to aerodrome than frontline units
+        -- Heavier SAMs positioned closer to protect the aerodrome
+        local minDist = 5000  -- 5 km minimum from aerodrome
+        local maxDist = 30000 -- 30 km max
+        if samType == "SA10" or samType == "SA11" then
+            maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
+        end
+
+        pos = findAirDefensePosition(aerodrome, minDist, maxDist, 3000)
+    end
+
+    if not pos then
         log("WARNING: Could not find valid terrain for " .. samType .. " near aerodrome - skipping")
-        return
+        return nil
     end
 
     local units = self:buildSAMUnits(template, pos)
     local groupName = samType .. "-" .. index
 
     -- Register as permanent group (always spawned - SAM radars need to be active)
-    Virtualization:registerPermanentGroup({
+    local pGroup = Virtualization:registerPermanentGroup({
         name = groupName,
         center = pos,
         units = units,
@@ -1031,10 +1046,13 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index)
         category = Group.Category.GROUND,
     })
 
-    -- Register with IADS for emission control
-    IADS:registerSAMSite(groupName, samType, pos)
+    -- Register with IADS (ignores SHORAD and Easy types)
+    IADS:registerSAMSite(pGroup, samType, pos)
 
-    log("Generated " .. samType .. " at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+    log("Generated " .. samType .. " at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")" ..
+        (anchor and " as point defense" or ""))
+
+    return pos
 end
 
 function BattlefieldGeneration:buildSAMUnits(template, center)
@@ -1080,20 +1098,65 @@ function BattlefieldGeneration:generateAirDefensesBatched(onComplete)
 
     log("Generating air defenses for difficulty: " .. state.difficulty .. " (batched)")
 
-    -- Build work items for all SAM sites
-    local workItems = {}
+    -- Roll site counts
+    local counts = {}
     for samType, countRange in pairs(samCounts) do
-        if samType ~= "EWR" then
-            local template = samTemplates[samType]
-            if template then
-                local count = math.random(countRange[1], countRange[2])
-                for i = 1, count do
-                    workItems[#workItems + 1] = {
-                        samType = samType,
-                        template = template,
-                        index = i,
-                    }
+        if samType ~= "EWR" and samTemplates[samType] then
+            counts[samType] = math.random(countRange[1], countRange[2])
+        end
+    end
+
+    -- Long-range sites first, longest range first, so the most valuable
+    -- sites get point defense when there isn't enough SHORAD for all
+    local longRangeItems = {}
+    local otherItems = {}
+    for samType, count in pairs(counts) do
+        local typeData = IADS.siteTypes[samType]
+        if not typeData or typeData.role ~= "SHORAD" then
+            for i = 1, count do
+                local item = { samType = samType, template = samTemplates[samType], index = i }
+                if typeData and typeData.role == "SAM" then
+                    longRangeItems[#longRangeItems + 1] = item
+                else
+                    otherItems[#otherItems + 1] = item
                 end
+            end
+        end
+    end
+    table.sort(longRangeItems, function(a, b)
+        return IADS.siteTypes[a.samType].maxRange > IADS.siteTypes[b.samType].maxRange
+    end)
+
+    -- One SHORAD per long-range site, never two
+    local nextIndex = {}
+    local function claimSHORAD(shoradType)
+        local available = counts[shoradType] or 0
+        local used = nextIndex[shoradType] or 0
+        if used >= available then
+            return nil
+        end
+        nextIndex[shoradType] = used + 1
+        return { samType = shoradType, template = samTemplates[shoradType], index = used + 1 }
+    end
+
+    local workItems = {}
+    for _, item in ipairs(longRangeItems) do
+        local pointDefense = IADS.siteTypes[item.samType].pointDefense
+        if pointDefense then
+            item.pointDefense = claimSHORAD(pointDefense)
+        end
+        workItems[#workItems + 1] = item
+    end
+    for _, item in ipairs(otherItems) do
+        workItems[#workItems + 1] = item
+    end
+
+    -- Leftover SHORAD keeps random placement
+    for samType, count in pairs(counts) do
+        local typeData = IADS.siteTypes[samType]
+        if typeData and typeData.role == "SHORAD" then
+            for i = (nextIndex[samType] or 0) + 1, count do
+                workItems[#workItems + 1] = { samType = samType, template = samTemplates[samType], index = i }
             end
         end
     end
@@ -1101,7 +1164,12 @@ function BattlefieldGeneration:generateAirDefensesBatched(onComplete)
     BatchScheduler:processArray({
         array = workItems,
         callback = function(item)
-            BattlefieldGeneration:generateSAMSite(item.samType, item.template, item.index)
+            local pos = BattlefieldGeneration:generateSAMSite(item.samType, item.template, item.index)
+            local pd = item.pointDefense
+            if pd then
+                -- Falls back to random placement if the site itself failed
+                BattlefieldGeneration:generateSAMSite(pd.samType, pd.template, pd.index, pos)
+            end
         end,
         onComplete = function()
             if onComplete then onComplete() end
@@ -1151,30 +1219,8 @@ function BattlefieldGeneration:generateEWRsBatched(onComplete)
             local minDist = 10000
             local maxDist = 40000
 
-            -- Try multiple random positions near the aerodrome until we find valid terrain
-            local pos = nil
-            local maxPositionAttempts = 5
-
-            for attempt = 1, maxPositionAttempts do
-                local angle = math.random() * 2 * math.pi
-                local distance = minDist + math.random() * (maxDist - minDist)
-
-                local initialPos = {
-                    x = aerodrome.x + distance * math.cos(angle),
-                    y = aerodrome.y + distance * math.sin(angle),
-                }
-
-                -- Validate terrain - EWRs need flat, dry ground
-                local validPos, found = Terrain:findValidPosition(initialPos, 3000, {
-                    maxSlope = 10,
-                    maxRoughness = 5,
-                })
-
-                if found then
-                    pos = validPos
-                    break
-                end
-            end
+            -- EWRs need flat, dry ground
+            local pos = findAirDefensePosition(aerodrome, minDist, maxDist, 3000)
 
             if not pos then
                 log("WARNING: Could not find valid terrain for EWR near aerodrome - skipping")
@@ -1196,7 +1242,7 @@ function BattlefieldGeneration:generateEWRsBatched(onComplete)
 
             local groupName = "EWR-" .. i
 
-            Virtualization:registerPermanentGroup({
+            local pGroup = Virtualization:registerPermanentGroup({
                 name = groupName,
                 center = pos,
                 units = units,
@@ -1204,7 +1250,7 @@ function BattlefieldGeneration:generateEWRsBatched(onComplete)
                 category = Group.Category.GROUND,
             })
 
-            IADS:registerEWR(groupName)
+            IADS:registerEWR(pGroup)
 
             log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
         end,

@@ -105,7 +105,7 @@ Enemy helicopters listed below are planned but not implemented; no script spawns
 
 ### Hard
 - Erusea 2005 equipment
-- Layered IADS: SA-10 with SA-15 SHORAD, SA-11 Buk, multiple SA-6/SA-8
+- Layered IADS: EWRs (1L13, 55G6), SA-10 and SA-11 Buk with SA-15 point defense, SA-6
 - Emission control on radar systems
 - Enemy fighters: F-15C, F-15E, F/A-18A, F/A-18C, F-16C, Su-27, J-11A, F-14A with AIM-120, R-77
 - Enemy helicopters (planned): AH-64D, Ka-50
@@ -139,11 +139,26 @@ Each playtime picks one random region from `OperationInfinity.config.aerodromeRe
 
 ## IADS Behavior
 
-EWRs, SAM sites and airbase SHORAD are permanent groups, spawned once after generation and never virtualized. Emission control (`IADS.lua`) runs on Normal and Hard only and switches whole SAM groups between alarm state RED and GREEN every 10 s:
+EWRs, SAM sites and airbase SHORAD are permanent groups, spawned once after generation and never virtualized. Emission control (`IADS.lua`) runs on Normal and Hard only and covers long-range sites (SA-2, SA-3, SA-6, SA-10, SA-11). Sites stay in alarm state RED; the script switches radars with `group:enableEmission`. Rules in priority order:
 
-- No blue aircraft within 60 km: the site pulses, 30 s on, 45 s off.
-- Blue aircraft within 60 km (above 50 m MSL): the site turns on, then turns off again after 30 s even if the target is still in range. Missiles in flight lose guidance when this happens.
-- EWRs stay on. They don't cue SAM sites; threat checks use the true positions of all blue aircraft.
+1. **HARM defense.** `S_EVENT_SHOT` tracks blue anti-radiation missiles (`RADAR_PASSIVE` guidance). A 2 s loop runs only while one is in flight. An ARM is aimed at a site when the site is inside a 15-degree cone around its horizontal velocity. The first time, the site rolls a shutdown ETA (Normal 30-60 s, biased high; Hard 15-30 s, biased low). When the ARM's ETA drops below the roll, the site goes dark for 60-180 s, even with its own missiles in flight.
+2. **Keep guiding.** A site stays on while any missile it fired still exists.
+3. **Cueing.** Every 10 s the script merges radar detections from live EWRs with spy reports. Spies report every blue aircraft below 5000 ft AGL within 60 km of a target aerodrome on a random 2-4 minute cycle; each report arrives 20-40 s later with the old position and lasts 60 s. Spies can't be killed. A site turns on when a cued target is inside 75% of its max range and turns off 20 s after the last cue.
+4. **Autonomous fallback.** A site with no live EWR within 250 km pulses: 10-20 s on, 90-240 s off. During a pulse it stays on while its own radar tracks a blue aircraft inside 50% of max range.
+
+Max ranges are launcher `ThreatRange` values from Quaggles' datamine (DCS 2.9.27):
+
+| Site | Max range | Cue (75%) | Autonomous (50%) |
+|------|-----------|-----------|------------------|
+| SA-2 | 43 km | 32 km | 21.5 km |
+| SA-3 | 18 km | 13.5 km | 9 km |
+| SA-6 | 25 km | 19 km | 12.5 km |
+| SA-10 | 120 km | 90 km | 60 km |
+| SA-11 | 50 km | 37.5 km | 25 km |
+
+SA-8 and SA-15 are point defense on DCS default AI, always on. Generation places one SHORAD 1-3 km from each long-range site, longest range first: SA-15 with the SA-10 and SA-11 (Hard), SA-8 with the SA-3 and SA-6 (Normal). SA-2 and Hard SA-6 get none. Leftover SHORAD is placed at random. Easy SAMs are not under emission control.
+
+Every state change is logged to `dcs.log` with an `[IADS]` prefix and its reason.
 
 ## Ground Unit Composition
 
