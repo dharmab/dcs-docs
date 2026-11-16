@@ -67,6 +67,7 @@ On the Stennis list, Tower and Radar sit next to each other for a divert to Krym
 Second radios ("radio 1 to talk, radio 2 on SkyEye"):
 
 - V/UHF radios (F/A-18 COMM2, F-15E Radio 2, F-14 ARC-182, A-10 ARC-210, M-2000C V/UHF, F1 TRAP-136): ch1 SkyEye VHF 124.1, ch2-20 = main ch1-19 (so Stennis templates carry their own home block). Radios with more than 20 channels continue with Green 1-5 (ch21 = main ch20), SkyEye FM, Yellow/Orange FM, Civil Guard, JTAC.
+- A-10 ARC-210 preset names live in a `channelsNames` table beside `channels` (`[n] = "NAME"`). Only the ARC-210 has editable names (`editableName` in Quaggles' datamine, `A-10C_2.lua`). Names: MAGIC VHF, STRIKE, MAGIC, KRYMSK TWR/GND/RDR, CVN-74, TEXACO, SHELL, RED 1-5, BLUE 1-5, GUARD, GREEN 1-5.
 - F-16 COMM2 (VHF AM 116-156 / FM 30-88 only): 124.1, 32.1 FM, 121.5, Yellow 1-5, Orange 1-5, JTAC 1-4.
 - A-10 ARC-186 (FM only): 32.1, Yellow 1-5, Orange 1-5, JTAC 1-4.
 - F-4E aux receiver (265-284.9): Texaco, Shell; remaining channels are module defaults.

@@ -72,7 +72,7 @@ All operational frequencies avoid the guard frequencies (243.0 MHz military, 121
 
 ## Aircraft Radio Compatibility
 
-Ranges and preset counts below come from each type's `panelRadio` table in Quaggles' DCS Lua Datamine (`_G/db/Units/Planes/Plane/<type>.lua`). The `Radio` table in a mission unit is indexed in `panelRadio` order, which is the "Mission index" column. Each `Radio[n]` entry has parallel `channels` (MHz) and `modulations` (0 = AM, 1 = FM) arrays.
+Ranges and preset counts below come from each type's `panelRadio` table in Quaggles' DCS Lua Datamine (`_G/db/Units/Planes/Plane/<type>.lua`). The `Radio` table in a mission unit is indexed in `panelRadio` order, which is the "Mission index" column. Each `Radio[n]` entry has parallel `channels` (MHz) and `modulations` (0 = AM, 1 = FM) arrays. Radios whose `panelRadio` channels set `editableName = true` (in DCS 2.9.27, only the A-10C II ARC-210) also take a `channelsNames` array of preset names (`[1] = "STRIKE"`), which the Mission Editor writes beside `channels`.
 
 | Aircraft (type) | Mission index: radio, range, presets |
 |-----------------|--------------------------------------|
