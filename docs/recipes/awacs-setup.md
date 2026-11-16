@@ -16,12 +16,12 @@ An AWACS aircraft requires:
 
 ## Unit Type Strings
 
-| Aircraft | Type String | Coalition | Recommended Altitude |
-|----------|-------------|-----------|---------------------|
-| E-3A Sentry | `E-3A` | Blue (NATO) | 30,000 ft (9,144 m) |
-| E-2D Advanced Hawkeye | `E-2C` | Blue (NATO) | 20,000 ft (6,096 m) |
-| A-50 Mainstay | `A-50` | Red (Russia) | 30,000 ft (9,144 m) |
-| KJ-2000 | `KJ-2000` | Red (China) | 30,000 ft (9,144 m) |
+| Aircraft              | Type String | Coalition    | Recommended Altitude |
+| --------------------- | ----------- | ------------ | -------------------- |
+| E-3A Sentry           | `E-3A`      | Blue (NATO)  | 30,000 ft (9,144 m)  |
+| E-2D Advanced Hawkeye | `E-2C`      | Blue (NATO)  | 20,000 ft (6,096 m)  |
+| A-50 Mainstay         | `A-50`      | Red (Russia) | 30,000 ft (9,144 m)  |
+| KJ-2000               | `KJ-2000`   | Red (China)  | 30,000 ft (9,144 m)  |
 
 > **Note:** The E-2D uses type ID `E-2C` in the mission file despite being the Advanced Hawkeye variant.
 
@@ -534,13 +534,13 @@ For Red coalition AWACS, use the A-50 Mainstay. Place in a Russian country entry
 ### NATO Callsigns (Array Format)
 
 | Index | Callsign |
-|-------|----------|
-| 1 | Overlord |
-| 2 | Magic |
-| 3 | Chalice |
-| 4 | Wizard |
-| 5 | Focus |
-| 6 | Darkstar |
+| ----- | -------- |
+| 1     | Overlord |
+| 2     | Magic    |
+| 3     | Chalice  |
+| 4     | Wizard   |
+| 5     | Focus    |
+| 6     | Darkstar |
 
 ```lua
 ["callsign"] = {
@@ -561,25 +561,25 @@ Russian aircraft use a simple numeric callsign:
 
 ## Common Radio Frequencies
 
-| Frequency | Use |
-|-----------|-----|
-| 251.000 MHz | Default AWACS (Blue) |
-| 264.000 MHz | Alternate AWACS (Blue) |
+| Frequency   | Use                      |
+| ----------- | ------------------------ |
+| 251.000 MHz | Default AWACS (Blue)     |
+| 264.000 MHz | Alternate AWACS (Blue)   |
 | 124.000 MHz | Common Russian frequency |
-| 225.000 MHz | Military common |
+| 225.000 MHz | Military common          |
 
 ## Unit Conversions
 
 | Measurement | Conversion |
-|-------------|------------|
-| 30,000 ft | 9,144 m |
-| 25,000 ft | 7,620 m |
-| 20,000 ft | 6,096 m |
-| 350 knots | 180 m/s |
-| 300 knots | 154 m/s |
-| 260 knots | 134 m/s |
-| 50 nm | 92,600 m |
-| 40 nm | 74,080 m |
+| ----------- | ---------- |
+| 30,000 ft   | 9,144 m    |
+| 25,000 ft   | 7,620 m    |
+| 20,000 ft   | 6,096 m    |
+| 350 knots   | 180 m/s    |
+| 300 knots   | 154 m/s    |
+| 260 knots   | 134 m/s    |
+| 50 nm       | 92,600 m   |
+| 40 nm       | 74,080 m   |
 
 ## Checklist
 

@@ -90,10 +90,10 @@ OperationInfinity.config = {
             playtimes = { "90" },
             -- North or northwest of Senaki, looking for flat areas
             spawnConstraints = {
-                angleMin = math.pi * 0.5,   -- North
-                angleMax = math.pi,          -- West (NW quadrant)
-                minDistance = 5 * METERS_PER_NM,   -- ~5 nm
-                maxDistance = 15 * METERS_PER_NM,  -- ~15 nm
+                angleMin = math.pi * 0.5, -- North
+                angleMax = math.pi, -- West (NW quadrant)
+                minDistance = 5 * METERS_PER_NM, -- ~5 nm
+                maxDistance = 15 * METERS_PER_NM, -- ~15 nm
             },
         },
         northeast = {
@@ -115,50 +115,50 @@ OperationInfinity.config = {
 
     -- Battlefield spawning distances from aerodromes
     battlefieldDistance = {
-        min = 10 * METERS_PER_NM,  -- 10 nm
-        max = 40 * METERS_PER_NM,  -- 40 nm
+        min = 10 * METERS_PER_NM, -- 10 nm
+        max = 40 * METERS_PER_NM, -- 40 nm
     },
 
     -- Frontline generation parameters
     frontline = {
-        platoonSpacingMin = 3 * METERS_PER_NM,   -- 3 nm (minimum between platoons)
-        platoonSpacingMax = 7 * METERS_PER_NM,  -- 7 nm (maximum between platoons)
-        platoonCountMin = 4,          -- Minimum platoons along frontline
-        platoonCountMax = 8,          -- Maximum platoons along frontline
-        wobbleMax = 500,              -- Max perpendicular offset for natural variation
-        terrainSearchRadius = 1000,   -- Search radius for flat terrain
-        engagementDistanceMin = 300,  -- Minimum meters between opposing platoons
+        platoonSpacingMin = 3 * METERS_PER_NM, -- 3 nm (minimum between platoons)
+        platoonSpacingMax = 7 * METERS_PER_NM, -- 7 nm (maximum between platoons)
+        platoonCountMin = 4, -- Minimum platoons along frontline
+        platoonCountMax = 8, -- Maximum platoons along frontline
+        wobbleMax = 500, -- Max perpendicular offset for natural variation
+        terrainSearchRadius = 1000, -- Search radius for flat terrain
+        engagementDistanceMin = 300, -- Minimum meters between opposing platoons
         engagementDistanceMax = 1000, -- Maximum meters between opposing platoons
-        fireOffset = 300,             -- Meters offset for FireAtPoint (fire past enemies, not at them)
-        fireTargetWanderInterval = 15,    -- Seconds between target position updates
-        fireTargetWanderRadius = 150,     -- Meters to randomly wander fire targets
-        enemyPlatoonsMin = 2,         -- Min enemy platoons per friendly platoon
-        enemyPlatoonsMax = 3,         -- Max enemy platoons per friendly platoon
-        enemySpreadRadius = 150,      -- Meters to spread enemy platoons around engagement area
+        fireOffset = 300, -- Meters offset for FireAtPoint (fire past enemies, not at them)
+        fireTargetWanderInterval = 15, -- Seconds between target position updates
+        fireTargetWanderRadius = 150, -- Meters to randomly wander fire targets
+        enemyPlatoonsMin = 2, -- Min enemy platoons per friendly platoon
+        enemyPlatoonsMax = 3, -- Max enemy platoons per friendly platoon
+        enemySpreadRadius = 150, -- Meters to spread enemy platoons around engagement area
     },
 
     -- Behind-lines targets (normal frontline operations)
     behindLines = {
-        convoyCount = { 2, 4 },  -- Min/max convoys
+        convoyCount = { 2, 4 }, -- Min/max convoys
         artilleryCount = { 1, 3 }, -- Min/max artillery batteries
-        patrolCount = { 8, 12 },  -- Min/max patrol groups (scattered single targets)
+        patrolCount = { 8, 12 }, -- Min/max patrol groups (scattered single targets)
     },
 
     -- Deep strike targets (noFrontline regions like Tbilisi)
     -- More logistics and defense targets to compensate for no frontline
     deepStrike = {
-        convoyCount = { 6, 10 },      -- More logistics convoys
-        artilleryCount = { 3, 5 },    -- More artillery
-        patrolCount = { 16, 24 },     -- More scattered patrols (single targets)
-        depotCount = { 3, 5 },        -- Supply depots
-        fuelTankCount = { 4, 8 },     -- Fuel storage
+        convoyCount = { 6, 10 }, -- More logistics convoys
+        artilleryCount = { 3, 5 }, -- More artillery
+        patrolCount = { 16, 24 }, -- More scattered patrols (single targets)
+        depotCount = { 3, 5 }, -- Supply depots
+        fuelTankCount = { 4, 8 }, -- Fuel storage
     },
 
     -- Approach route targets - enemies along flight path to deep strike zones
     -- Only applies to regions with noFrontline = true
     approachRoute = {
         -- Minimum distance from Krymsk - safe zone (no approach route targets)
-        safeZoneRadius = 120 * METERS_PER_NM,  -- 120 nm
+        safeZoneRadius = 120 * METERS_PER_NM, -- 120 nm
         -- Waypoints as fraction of distance from Krymsk to target centroid
         -- Start at 0.82 to respect 120 nm safe zone
         waypointFractions = { 0.82, 0.88, 0.94 },
@@ -185,15 +185,15 @@ OperationInfinity.config = {
         northwest = {
             x = -7000 - (15 * METERS_PER_NM),
             y = 295000,
-            trackLength = 50000,      -- 50km racetrack
-            heading = 0,              -- East-West track
+            trackLength = 50000, -- 50km racetrack
+            heading = 0, -- East-West track
         },
         -- Gudauta/Sukhumi: 50 nm SE of Krymsk (toward the target area)
         central_coast = {
-            x = -7000 - (50 * METERS_PER_NM * 0.64),   -- ~130 degrees heading (SE)
+            x = -7000 - (50 * METERS_PER_NM * 0.64), -- ~130 degrees heading (SE)
             y = 295000 + (50 * METERS_PER_NM * 0.77),
             trackLength = 60000,
-            heading = math.pi * 0.75,  -- NW-SE track aligned with route
+            heading = math.pi * 0.75, -- NW-SE track aligned with route
         },
         -- Kobuleti/Senaki/Kutaisi: 50 nm SE of Krymsk
         southwest_coast = {
@@ -204,17 +204,17 @@ OperationInfinity.config = {
         },
         -- Mozdok: 100 nm east of Krymsk along Krymsk-Mozdok axis
         northeast = {
-            x = -7000 - (100 * METERS_PER_NM * 0.14),  -- ~98 degrees heading (mostly E)
+            x = -7000 - (100 * METERS_PER_NM * 0.14), -- ~98 degrees heading (mostly E)
             y = 295000 + (100 * METERS_PER_NM * 0.99),
             trackLength = 80000,
-            heading = 0,  -- E-W track
+            heading = 0, -- E-W track
         },
         -- Tbilisi: 180 nm SE of Krymsk
         southeast = {
-            x = -7000 - (180 * METERS_PER_NM * 0.45),  -- ~117 degrees heading
+            x = -7000 - (180 * METERS_PER_NM * 0.45), -- ~117 degrees heading
             y = 295000 + (180 * METERS_PER_NM * 0.89),
             trackLength = 80000,
-            heading = math.pi * 0.65,  -- NW-SE track
+            heading = math.pi * 0.65, -- NW-SE track
         },
     },
 
@@ -268,13 +268,13 @@ OperationInfinity.state = {
 
     -- Generated battlefield
     battlefield = {
-        region = nil,           -- Selected aerodrome region
-        regionKey = nil,        -- Key of the selected region (for racetrack lookup)
-        targetAerodromes = {},  -- Aerodromes in the selected region
+        region = nil, -- Selected aerodrome region
+        regionKey = nil, -- Key of the selected region (for racetrack lookup)
+        targetAerodromes = {}, -- Aerodromes in the selected region
         frontline = {
-            center = nil,       -- Center point of the frontline
-            axis = nil,         -- Direction vector along the frontline
-            approachDir = nil,  -- Direction vector from Krymsk toward enemy
+            center = nil, -- Center point of the frontline
+            axis = nil, -- Direction vector along the frontline
+            approachDir = nil, -- Direction vector from Krymsk toward enemy
             isafPositions = {}, -- ISAF platoon positions for FEBA visualization
         },
         spawnConstraints = nil, -- Region-specific spawn constraints
@@ -309,20 +309,20 @@ local log = Logging:create("OperationInfinity")
 
 function OperationInfinity:addMarker(text, pos)
     self.state.markerCounter = self.state.markerCounter + 1
-    local vec3 = {x = pos.x, y = land.getHeight(pos), z = pos.y}
+    local vec3 = { x = pos.x, y = land.getHeight(pos), z = pos.y }
     trigger.action.markToCoalition(
         self.state.markerCounter,
         text,
         vec3,
         coalition.side.BLUE,
-        true,  -- readOnly (players cannot delete)
-        ""     -- no announcement message
+        true, -- readOnly (players cannot delete)
+        "" -- no announcement message
     )
 end
 
 function OperationInfinity:addFEBAShape()
-    local lineColor = {0.2, 0.4, 0.9, 1.0}
-    local arrowFill = {0.2, 0.4, 0.9, 0.5}
+    local lineColor = { 0.2, 0.4, 0.9, 1.0 }
+    local arrowFill = { 0.2, 0.4, 0.9, 0.5 }
     local frontline = self.state.battlefield.frontline
     local positions = frontline.isafPositions
 
@@ -342,7 +342,9 @@ function OperationInfinity:addFEBAShape()
         end)
     else
         -- Fall back to sorting by x coordinate
-        table.sort(positions, function(a, b) return a.x < b.x end)
+        table.sort(positions, function(a, b)
+            return a.x < b.x
+        end)
     end
 
     -- Draw line segments connecting friendly positions along the front
@@ -353,17 +355,17 @@ function OperationInfinity:addFEBAShape()
         trigger.action.lineToAll(
             coalition.side.BLUE,
             self.state.markerCounter,
-            {x = p1.x, y = land.getHeight(p1), z = p1.y},
-            {x = p2.x, y = land.getHeight(p2), z = p2.y},
+            { x = p1.x, y = land.getHeight(p1), z = p1.y },
+            { x = p2.x, y = land.getHeight(p2), z = p2.y },
             lineColor,
-            1,      -- dashed line
-            true,   -- readOnly
+            1, -- dashed line
+            true, -- readOnly
             ""
         )
     end
 
     -- Draw arrows from each ISAF position pointing toward enemy (along approach direction)
-    local approachDir = frontline.approachDir or {x = 0, y = 1}  -- Default to north if not set
+    local approachDir = frontline.approachDir or { x = 0, y = 1 } -- Default to north if not set
     for _, pos in ipairs(positions) do
         self.state.markerCounter = self.state.markerCounter + 1
         local arrowEnd = {
@@ -373,12 +375,12 @@ function OperationInfinity:addFEBAShape()
         trigger.action.arrowToAll(
             coalition.side.BLUE,
             self.state.markerCounter,
-            {x = arrowEnd.x, y = land.getHeight(arrowEnd), z = arrowEnd.y},
-            {x = pos.x, y = land.getHeight(pos), z = pos.y},
+            { x = arrowEnd.x, y = land.getHeight(arrowEnd), z = arrowEnd.y },
+            { x = pos.x, y = land.getHeight(pos), z = pos.y },
             lineColor,
             arrowFill,
-            1,      -- dashed
-            true,   -- readOnly
+            1, -- dashed
+            true, -- readOnly
             ""
         )
     end
@@ -395,7 +397,7 @@ function OperationInfinity:addFEBAShape()
             z = centerPos.y - approachDir.y * FEBA_LABEL_OFFSET_METERS,
         },
         lineColor,
-        {0, 0, 0, 0},  -- transparent background
+        { 0, 0, 0, 0 }, -- transparent background
         12,
         true,
         "FEBA"
@@ -454,76 +456,62 @@ end
 
 function OperationInfinity:setupMenu()
     -- Create root menu
-    self.state.settingsMenu = missionCommands.addSubMenuForCoalition(
-        coalition.side.BLUE, "Mission Settings", nil
-    )
+    self.state.settingsMenu = missionCommands.addSubMenuForCoalition(coalition.side.BLUE, "Mission Settings", nil)
 
     -- Difficulty submenu
-    self.state.difficultyMenu = missionCommands.addSubMenuForCoalition(
-        coalition.side.BLUE, "Difficulty", self.state.settingsMenu
-    )
+    self.state.difficultyMenu =
+        missionCommands.addSubMenuForCoalition(coalition.side.BLUE, "Difficulty", self.state.settingsMenu)
 
     local difficulties = {
         { key = "VeryEasy", label = "Very Easy (Training - no enemies shoot back)" },
-        { key = "Easy",     label = "Easy (Light defenses, IR missiles only)" },
-        { key = "Normal",   label = "Normal (IADS, semi-active radar missiles)" },
-        { key = "Hard",     label = "Hard (Layered IADS, active radar missiles)" },
+        { key = "Easy", label = "Easy (Light defenses, IR missiles only)" },
+        { key = "Normal", label = "Normal (IADS, semi-active radar missiles)" },
+        { key = "Hard", label = "Hard (Layered IADS, active radar missiles)" },
     }
 
     for _, diff in ipairs(difficulties) do
-        missionCommands.addCommandForCoalition(
-            coalition.side.BLUE,
-            diff.label,
-            self.state.difficultyMenu,
-            function() OperationInfinity:selectDifficulty(diff.key) end
-        )
+        missionCommands.addCommandForCoalition(coalition.side.BLUE, diff.label, self.state.difficultyMenu, function()
+            OperationInfinity:selectDifficulty(diff.key)
+        end)
     end
 
     -- Playtime submenu
-    self.state.playtimeMenu = missionCommands.addSubMenuForCoalition(
-        coalition.side.BLUE, "Target Playtime", self.state.settingsMenu
-    )
+    self.state.playtimeMenu =
+        missionCommands.addSubMenuForCoalition(coalition.side.BLUE, "Target Playtime", self.state.settingsMenu)
 
     local playtimes = {
-        { key = "45",  label = "45 Minutes (Western Caucasus)" },
-        { key = "90",  label = "90 Minutes (Central Caucasus)" },
+        { key = "45", label = "45 Minutes (Western Caucasus)" },
+        { key = "90", label = "90 Minutes (Central Caucasus)" },
         { key = "180", label = "180 Minutes (Eastern Caucasus)" },
     }
 
     for _, pt in ipairs(playtimes) do
-        missionCommands.addCommandForCoalition(
-            coalition.side.BLUE,
-            pt.label,
-            self.state.playtimeMenu,
-            function() OperationInfinity:selectPlaytime(pt.key) end
-        )
+        missionCommands.addCommandForCoalition(coalition.side.BLUE, pt.label, self.state.playtimeMenu, function()
+            OperationInfinity:selectPlaytime(pt.key)
+        end)
     end
 end
 
 function OperationInfinity:selectDifficulty(difficulty)
     if self.state.missionGenerated then
-        trigger.action.outTextForCoalition(coalition.side.BLUE,
-            "Mission already generated!", 10)
+        trigger.action.outTextForCoalition(coalition.side.BLUE, "Mission already generated!", 10)
         return
     end
 
     self.state.difficulty = difficulty
-    trigger.action.outTextForCoalition(coalition.side.BLUE,
-        "Difficulty set to: " .. difficulty, 10)
+    trigger.action.outTextForCoalition(coalition.side.BLUE, "Difficulty set to: " .. difficulty, 10)
 
     self:checkAndGenerate()
 end
 
 function OperationInfinity:selectPlaytime(playtime)
     if self.state.missionGenerated then
-        trigger.action.outTextForCoalition(coalition.side.BLUE,
-            "Mission already generated!", 10)
+        trigger.action.outTextForCoalition(coalition.side.BLUE, "Mission already generated!", 10)
         return
     end
 
     self.state.playtime = playtime
-    trigger.action.outTextForCoalition(coalition.side.BLUE,
-        "Playtime set to: " .. playtime .. " minutes", 10)
+    trigger.action.outTextForCoalition(coalition.side.BLUE, "Playtime set to: " .. playtime .. " minutes", 10)
 
     self:checkAndGenerate()
 end
@@ -555,8 +543,11 @@ function OperationInfinity:generateBattlefield()
     -- Select a region for this playtime
     local selected = self:selectRegionForPlaytime(self.state.playtime)
     if not selected then
-        trigger.action.outTextForCoalition(coalition.side.BLUE,
-            "ERROR: No region available for playtime " .. self.state.playtime, 15)
+        trigger.action.outTextForCoalition(
+            coalition.side.BLUE,
+            "ERROR: No region available for playtime " .. self.state.playtime,
+            15
+        )
         return
     end
 
@@ -576,12 +567,18 @@ function OperationInfinity:generateBattlefield()
     -- Build virtualization notice for longer missions
     local virtNote = ""
     if self.state.playtime == "90" or self.state.playtime == "180" then
-        virtNote = "\n\nNote: For performance, ground units are virtualized " ..
-            "and spawn when a player is within 100 nm."
+        virtNote = "\n\nNote: For performance, ground units are virtualized "
+            .. "and spawn when a player is within 100 nm."
     end
 
-    log("Generating battlefield - Difficulty: " .. self.state.difficulty ..
-        ", Playtime: " .. self.state.playtime .. ", Region: " .. selected.region.name)
+    log(
+        "Generating battlefield - Difficulty: "
+            .. self.state.difficulty
+            .. ", Playtime: "
+            .. self.state.playtime
+            .. ", Region: "
+            .. selected.region.name
+    )
 
     -- Store context for async generation
     local genContext = {
@@ -689,12 +686,19 @@ function OperationInfinity:generateBattlefield()
         },
         onComplete = function(ctx)
             -- Display completion message
-            local completionMsg = "=== OPERATION INFINITY ===\n" ..
-                "Difficulty: " .. OperationInfinity.state.difficulty .. "\n" ..
-                "Playtime: " .. OperationInfinity.state.playtime .. " minutes\n" ..
-                "Target Area: " .. ctx.selected.region.name .. "\n\n" ..
-                "BATTLEFIELD READY\n\n" ..
-                "Good hunting, pilots!" .. ctx.virtNote
+            local completionMsg = "=== OPERATION INFINITY ===\n"
+                .. "Difficulty: "
+                .. OperationInfinity.state.difficulty
+                .. "\n"
+                .. "Playtime: "
+                .. OperationInfinity.state.playtime
+                .. " minutes\n"
+                .. "Target Area: "
+                .. ctx.selected.region.name
+                .. "\n\n"
+                .. "BATTLEFIELD READY\n\n"
+                .. "Good hunting, pilots!"
+                .. ctx.virtNote
             trigger.action.outTextForCoalition(coalition.side.BLUE, completionMsg, 15)
 
             -- Display coordinates after a short delay
@@ -716,13 +720,16 @@ end
 
 function OperationInfinity:formatCoordinates(pos)
     -- Convert to Lat/Lon
-    local lat, lon, alt = coord.LOtoLL({x = pos.x, y = 0, z = pos.y})
+    local lat, lon, alt = coord.LOtoLL({ x = pos.x, y = 0, z = pos.y })
 
     -- Convert to MGRS
     local mgrs = coord.LLtoMGRS(lat, lon)
-    local mgrsStr = mgrs.UTMZone .. mgrs.MGRSDigraph .. " " ..
-        string.format("%05d", math.floor(mgrs.Easting)) .. " " ..
-        string.format("%05d", math.floor(mgrs.Northing))
+    local mgrsStr = mgrs.UTMZone
+        .. mgrs.MGRSDigraph
+        .. " "
+        .. string.format("%05d", math.floor(mgrs.Easting))
+        .. " "
+        .. string.format("%05d", math.floor(mgrs.Northing))
 
     -- Format Lat/Lon
     local latDir = lat >= 0 and "N" or "S"
@@ -732,8 +739,7 @@ function OperationInfinity:formatCoordinates(pos)
     local lonDeg = math.floor(math.abs(lon))
     local lonMin = (math.abs(lon) - lonDeg) * 60
 
-    local llStr = string.format("%02d*%06.3f'%s %03d*%06.3f'%s",
-        latDeg, latMin, latDir, lonDeg, lonMin, lonDir)
+    local llStr = string.format("%02d*%06.3f'%s %03d*%06.3f'%s", latDeg, latMin, latDir, lonDeg, lonMin, lonDir)
 
     return llStr, mgrsStr
 end
@@ -750,17 +756,16 @@ function OperationInfinity:displayCoordinates(groupId)
     local coordLines = {}
     for _, aerodrome in ipairs(aerodromes) do
         local llStr, mgrsStr = self:formatCoordinates(aerodrome)
-        coordLines[#coordLines + 1] = string.format("  %s:\n    MGRS: %s\n    LL: %s",
-            aerodrome.name, mgrsStr, llStr)
+        coordLines[#coordLines + 1] = string.format("  %s:\n    MGRS: %s\n    LL: %s", aerodrome.name, mgrsStr, llStr)
     end
 
     local msg = string.format(
-        "=== TARGET AREA ===\n" ..
-        "%s\n\n" ..
-        "Target Aerodromes:\n%s\n\n" ..
-        "Support Assets:\n%s\n\n" ..
-        "Difficulty: %s\n" ..
-        "Good hunting!",
+        "=== TARGET AREA ===\n"
+            .. "%s\n\n"
+            .. "Target Aerodromes:\n%s\n\n"
+            .. "Support Assets:\n%s\n\n"
+            .. "Difficulty: %s\n"
+            .. "Good hunting!",
         region.name,
         table.concat(coordLines, "\n"),
         self:getSupportAssetText(),
@@ -782,9 +787,15 @@ function OperationInfinity:getSupportAssetText()
     }
     for _, aircraft in ipairs(self.config.supportAircraft) do
         if aircraft.tankerType then
-            lines[#lines + 1] = string.format("  %s (%s): %.1f MHz AM, TACAN %s, %d ft, %d KIAS",
-                aircraft.name, aircraft.tankerType, aircraft.radio, aircraft.tacan,
-                aircraft.altitudeFt, aircraft.iasKnots)
+            lines[#lines + 1] = string.format(
+                "  %s (%s): %.1f MHz AM, TACAN %s, %d ft, %d KIAS",
+                aircraft.name,
+                aircraft.tankerType,
+                aircraft.radio,
+                aircraft.tacan,
+                aircraft.altitudeFt,
+                aircraft.iasKnots
+            )
         else
             lines[#lines + 1] = string.format("  %s (%s)", aircraft.name, aircraft.role)
         end
@@ -797,12 +808,9 @@ end
 
 function OperationInfinity:addMissionInfoMenu(groupId)
     missionCommands.removeItemForGroup(groupId, { "Mission Info" })
-    missionCommands.addCommandForGroup(
-        groupId,
-        "Mission Info",
-        nil,
-        function() OperationInfinity:displayCoordinates(groupId) end
-    )
+    missionCommands.addCommandForGroup(groupId, "Mission Info", nil, function()
+        OperationInfinity:displayCoordinates(groupId)
+    end)
 end
 
 function OperationInfinity:setupMissionInfoMenu()
@@ -879,12 +887,9 @@ function OperationInfinity:setupGroupMenus(group)
 
     -- Dynamic spawn can reuse a group ID, so clear any items left from an earlier group
     missionCommands.removeItemForGroup(groupId, { "Comms Plan" })
-    missionCommands.addCommandForGroup(
-        groupId,
-        "Comms Plan",
-        nil,
-        function() OperationInfinity:displayCommsPlan(groupId) end
-    )
+    missionCommands.addCommandForGroup(groupId, "Comms Plan", nil, function()
+        OperationInfinity:displayCommsPlan(groupId)
+    end)
     if self.state.missionGenerated then
         self:addMissionInfoMenu(groupId)
     end
@@ -932,7 +937,9 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
         end,
         onComplete = function()
             log("Map markers generated")
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -954,15 +961,14 @@ end
 
 local METERS_PER_FOOT = 0.3048
 local MPS_PER_KNOT = 0.514444
-local ISA_SEA_LEVEL_DENSITY = 1.225       -- kg/m^3
-local ISA_LAPSE_FACTOR = 2.25577e-5       -- per meter, troposphere
+local ISA_SEA_LEVEL_DENSITY = 1.225 -- kg/m^3
+local ISA_LAPSE_FACTOR = 2.25577e-5 -- per meter, troposphere
 local ISA_DENSITY_EXPONENT = 4.25588
 
 -- Convert indicated airspeed to true airspeed (both m/s) using the ISA
 -- troposphere density model (valid below 11 km). Treats IAS as EAS.
 local function indicatedToTrueAirspeed(iasMps, altitudeMeters)
-    local density = ISA_SEA_LEVEL_DENSITY *
-        (1 - ISA_LAPSE_FACTOR * altitudeMeters) ^ ISA_DENSITY_EXPONENT
+    local density = ISA_SEA_LEVEL_DENSITY * (1 - ISA_LAPSE_FACTOR * altitudeMeters) ^ ISA_DENSITY_EXPONENT
     return iasMps * math.sqrt(ISA_SEA_LEVEL_DENSITY / density)
 end
 
@@ -992,7 +998,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
 
         -- Offset each aircraft's racetrack laterally; altitude separation comes
         -- from each aircraft's own altitudeFt block
-        local lateralOffset = (i - 1) * 5000  -- 5km lateral separation
+        local lateralOffset = (i - 1) * 5000 -- 5km lateral separation
 
         -- Calculate this aircraft's racetrack center (offset perpendicular to track)
         local perpHeading = heading + math.pi / 2
@@ -1031,12 +1037,12 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         local function checkAndPushOrbit()
             local grp = Group.getByName(groupName)
             if not grp or not grp:isExist() then
-                return timer.getTime() + 30  -- Group not ready yet, retry
+                return timer.getTime() + 30 -- Group not ready yet, retry
             end
 
             local unit = grp:getUnit(1)
             if not unit or not unit:isExist() then
-                return timer.getTime() + 30  -- Unit not ready yet, retry
+                return timer.getTime() + 30 -- Unit not ready yet, retry
             end
 
             -- Check if airborne (inAir returns true when not on ground)
@@ -1044,21 +1050,32 @@ function OperationInfinity:activateSupportAircraft(regionKey)
                 local ctrl = grp:getController()
                 if ctrl then
                     ctrl:pushTask(orbitTask)
-                    log("Pushed orbit task to " .. groupName ..
-                        " at (" .. logCenterX .. ", " .. logCenterY .. ")")
+                    log("Pushed orbit task to " .. groupName .. " at (" .. logCenterX .. ", " .. logCenterY .. ")")
                 end
-                return nil  -- Done, stop polling
+                return nil -- Done, stop polling
             else
-                return timer.getTime() + 30  -- Not airborne yet, check again in 30 seconds
+                return timer.getTime() + 30 -- Not airborne yet, check again in 30 seconds
             end
         end
 
         -- Start polling after initial delay (60 sec for engine start)
         timer.scheduleFunction(checkAndPushOrbit, nil, timer.getTime() + 60)
 
-        log("Will push orbit task to " .. aircraft.name .. " once airborne, alt " ..
-            aircraft.altitudeFt .. " ft, " .. aircraft.iasKnots .. " KIAS (" ..
-            math.floor(orbitSpeed) .. " m/s TAS), center (" .. logCenterX .. ", " .. logCenterY .. ")")
+        log(
+            "Will push orbit task to "
+                .. aircraft.name
+                .. " once airborne, alt "
+                .. aircraft.altitudeFt
+                .. " ft, "
+                .. aircraft.iasKnots
+                .. " KIAS ("
+                .. math.floor(orbitSpeed)
+                .. " m/s TAS), center ("
+                .. logCenterX
+                .. ", "
+                .. logCenterY
+                .. ")"
+        )
     end
 end
 
@@ -1089,16 +1106,20 @@ function OperationInfinity:checkForNewPlayers()
                         OperationInfinity:displayCoordinates(groupId)
                     else
                         -- Mission not yet generated - show welcome message with instructions
-                        trigger.action.outTextForGroup(groupId,
-                            "=== OPERATION INFINITY ===\n\n" ..
-                            "Welcome to Operation Infinity!\n\n" ..
-                            "Use the F10 menu to select:\n" ..
-                            "  1. Difficulty\n" ..
-                            "  2. Target Playtime\n\n" ..
-                            "The first player to make both selections locks the settings for all players.\n\n" ..
-                            "Support assets will launch after settings are selected:\n" ..
-                            OperationInfinity:getSupportAssetText() .. "\n\n" ..
-                            "Full comms plan: F10 > Comms Plan", 30)
+                        trigger.action.outTextForGroup(
+                            groupId,
+                            "=== OPERATION INFINITY ===\n\n"
+                                .. "Welcome to Operation Infinity!\n\n"
+                                .. "Use the F10 menu to select:\n"
+                                .. "  1. Difficulty\n"
+                                .. "  2. Target Playtime\n\n"
+                                .. "The first player to make both selections locks the settings for all players.\n\n"
+                                .. "Support assets will launch after settings are selected:\n"
+                                .. OperationInfinity:getSupportAssetText()
+                                .. "\n\n"
+                                .. "Full comms plan: F10 > Comms Plan",
+                            30
+                        )
                     end
                 end, nil, timer.getTime() + 3)
             end
@@ -1138,14 +1159,17 @@ function OperationInfinity:startMissionTimer()
         local timeRemaining = OperationInfinity.config.missionDuration - missionTime
 
         for _, warning in ipairs(OperationInfinity.config.missionWarnings) do
-            if timeRemaining <= warning.remaining and
-               not OperationInfinity.state.missionTimer.warningsIssued[warning.remaining] then
+            if
+                timeRemaining <= warning.remaining
+                and not OperationInfinity.state.missionTimer.warningsIssued[warning.remaining]
+            then
                 OperationInfinity.state.missionTimer.warningsIssued[warning.remaining] = true
                 trigger.action.outTextForCoalition(
                     coalition.side.BLUE,
-                    "=== MISSION TIME WARNING ===\n\n" ..
-                    warning.text .. " remaining until mission end.\n\n" ..
-                    "RTB and land before time expires!",
+                    "=== MISSION TIME WARNING ===\n\n"
+                        .. warning.text
+                        .. " remaining until mission end.\n\n"
+                        .. "RTB and land before time expires!",
                     30
                 )
                 log("Mission time warning: " .. warning.text .. " remaining")
@@ -1156,10 +1180,10 @@ function OperationInfinity:startMissionTimer()
             OperationInfinity.state.missionTimer.expired = true
             trigger.action.outTextForCoalition(
                 coalition.side.BLUE,
-                "=== MISSION COMPLETE ===\n\n" ..
-                "The 8-hour operation window has ended.\n\n" ..
-                "Mission will restart shortly.\n\n" ..
-                "Thank you for flying!",
+                "=== MISSION COMPLETE ===\n\n"
+                    .. "The 8-hour operation window has ended.\n\n"
+                    .. "Mission will restart shortly.\n\n"
+                    .. "Thank you for flying!",
                 60
             )
             log("Mission time expired - setting end flag")

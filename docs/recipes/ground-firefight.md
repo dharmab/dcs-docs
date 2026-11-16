@@ -18,25 +18,25 @@ A dramatic firefight requires:
 
 ### Direct-Fire Units (Front-Line Appropriate)
 
-| Unit | Type ID | Role | Notes |
-|------|---------|------|-------|
-| T-72B3 | `T-72B3` | Main battle tank | Russian modern MBT |
-| T-80U | `T-80UD` | Main battle tank | Russian MBT |
-| T-55 | `T-55` | Main battle tank | Older Soviet MBT |
-| BMP-2 | `BMP-2` | Infantry fighting vehicle | 30mm autocannon |
-| BMP-3 | `BMP-3` | Infantry fighting vehicle | 100mm gun + 30mm |
-| BTR-80 | `BTR-80` | Armored personnel carrier | 14.5mm MG |
-| M1A2 Abrams | `M-1 Abrams` | Main battle tank | NATO MBT |
-| M2A2 Bradley | `M-2 Bradley` | Infantry fighting vehicle | 25mm chain gun |
-| M1126 Stryker | `M1126 Stryker ICV` | Infantry carrier | .50 cal MG |
-| Leopard 2 | `Leopard-2` | Main battle tank | German MBT |
-| ZSU-23-4 Shilka | `ZSU-23-4 Shilka` | SPAAG | High rate of fire, tracers |
-| M163 Vulcan | `Vulcan` | SPAAG | 20mm Gatling, spectacular tracers |
+| Unit            | Type ID             | Role                      | Notes                             |
+| --------------- | ------------------- | ------------------------- | --------------------------------- |
+| T-72B3          | `T-72B3`            | Main battle tank          | Russian modern MBT                |
+| T-80U           | `T-80UD`            | Main battle tank          | Russian MBT                       |
+| T-55            | `T-55`              | Main battle tank          | Older Soviet MBT                  |
+| BMP-2           | `BMP-2`             | Infantry fighting vehicle | 30mm autocannon                   |
+| BMP-3           | `BMP-3`             | Infantry fighting vehicle | 100mm gun + 30mm                  |
+| BTR-80          | `BTR-80`            | Armored personnel carrier | 14.5mm MG                         |
+| M1A2 Abrams     | `M-1 Abrams`        | Main battle tank          | NATO MBT                          |
+| M2A2 Bradley    | `M-2 Bradley`       | Infantry fighting vehicle | 25mm chain gun                    |
+| M1126 Stryker   | `M1126 Stryker ICV` | Infantry carrier          | .50 cal MG                        |
+| Leopard 2       | `Leopard-2`         | Main battle tank          | German MBT                        |
+| ZSU-23-4 Shilka | `ZSU-23-4 Shilka`   | SPAAG                     | High rate of fire, tracers        |
+| M163 Vulcan     | `Vulcan`            | SPAAG                     | 20mm Gatling, spectacular tracers |
 
 ### Ammunition Carriers
 
-| Unit | Type ID | Notes |
-|------|---------|-------|
+| Unit                   | Type ID  | Notes                              |
+| ---------------------- | -------- | ---------------------------------- |
 | Ammo M30 Cargo Carrier | `M30_CC` | Automatically reloads nearby units |
 
 ### Short-Range Air Defense
@@ -45,40 +45,40 @@ Early Cold War and simpler systems are often more fun to fight against—they're
 
 **Gun-Based (No Missiles)**
 
-| Unit | Type ID | Caliber | Notes |
-|------|---------|---------|-------|
-| ZSU-23-4 Shilka | `ZSU-23-4 Shilka` | 23mm | Radar-guided, iconic Soviet SPAAG |
-| ZSU-57-2 | `ZSU_57_2` | 57mm | Twin 57mm, slow rate of fire |
-| ZU-23 Emplacement | `ZU-23 Emplacement` | 23mm | Towed twin autocannon |
-| ZU-23 on Ural | `Ural-375 ZU-23` | 23mm | Truck-mounted |
-| M163 Vulcan | `Vulcan` | 20mm | M61 Gatling on M113 |
-| Gepard | `Gepard` | 35mm | German twin 35mm SPAAG |
-| S-60 57mm | `S-60_Type59_Artillery` | 57mm | Heavy AAA (needs SON-9 radar) |
+| Unit              | Type ID                 | Caliber | Notes                             |
+| ----------------- | ----------------------- | ------- | --------------------------------- |
+| ZSU-23-4 Shilka   | `ZSU-23-4 Shilka`       | 23mm    | Radar-guided, iconic Soviet SPAAG |
+| ZSU-57-2          | `ZSU_57_2`              | 57mm    | Twin 57mm, slow rate of fire      |
+| ZU-23 Emplacement | `ZU-23 Emplacement`     | 23mm    | Towed twin autocannon             |
+| ZU-23 on Ural     | `Ural-375 ZU-23`        | 23mm    | Truck-mounted                     |
+| M163 Vulcan       | `Vulcan`                | 20mm    | M61 Gatling on M113               |
+| Gepard            | `Gepard`                | 35mm    | German twin 35mm SPAAG            |
+| S-60 57mm         | `S-60_Type59_Artillery` | 57mm    | Heavy AAA (needs SON-9 radar)     |
 
 **IR Missiles (Early Generation - No Radar Warning)**
 
-| Unit | Type ID | Era | Notes |
-|------|---------|-----|-------|
-| SA-9 Gaskin | `Strela-1 9P31` | 1968 | BRDM-2 mounted, early IR seeker |
-| SA-13 Gopher | `Strela-10M3` | 1976 | MT-LB mounted, improved seeker |
+| Unit         | Type ID         | Era  | Notes                           |
+| ------------ | --------------- | ---- | ------------------------------- |
+| SA-9 Gaskin  | `Strela-1 9P31` | 1968 | BRDM-2 mounted, early IR seeker |
+| SA-13 Gopher | `Strela-10M3`   | 1976 | MT-LB mounted, improved seeker  |
 
 **Modern SHORAD (More Challenging)**
 
-| Unit | Type ID | Role |
-|------|---------|------|
-| SA-19 Tunguska | `2S6 Tunguska` | Gun/missile combo |
-| SA-15 Tor | `Tor 9A331` | Missile SHORAD |
-| M6 Linebacker | `M6 Linebacker` | Bradley with Stingers |
-| M1097 Avenger | `M1097 Avenger` | HMMWV with Stingers |
+| Unit           | Type ID         | Role                  |
+| -------------- | --------------- | --------------------- |
+| SA-19 Tunguska | `2S6 Tunguska`  | Gun/missile combo     |
+| SA-15 Tor      | `Tor 9A331`     | Missile SHORAD        |
+| M6 Linebacker  | `M6 Linebacker` | Bradley with Stingers |
+| M1097 Avenger  | `M1097 Avenger` | HMMWV with Stingers   |
 
 **Machine Guns and Technicals**
 
-| Unit | Type ID | Caliber | Notes |
-|------|---------|---------|-------|
-| M45 Quadmount | `M45_Quadmount` | 12.7mm | Quad .50 cal, WWII era |
-| Technical (DShK) | `HL_DSHK` | 12.7mm | Pickup with heavy MG |
-| Technical (KORD) | `HL_KORD` | 12.7mm | Pickup with heavy MG |
-| LC Technical (DShK) | `tt_DSHK` | 12.7mm | Land Cruiser with DShK |
+| Unit                | Type ID         | Caliber | Notes                  |
+| ------------------- | --------------- | ------- | ---------------------- |
+| M45 Quadmount       | `M45_Quadmount` | 12.7mm  | Quad .50 cal, WWII era |
+| Technical (DShK)    | `HL_DSHK`       | 12.7mm  | Pickup with heavy MG   |
+| Technical (KORD)    | `HL_KORD`       | 12.7mm  | Pickup with heavy MG   |
+| LC Technical (DShK) | `tt_DSHK`       | 12.7mm  | Land Cruiser with DShK |
 
 ## Mission File Structure
 
@@ -121,7 +121,7 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Since ea
 
 ## FireAtPoint Task Structure
 
-The `FireAtPoint` task orders ground units to fire at a specific map location. By targeting points *near* the enemy rather than the enemy units themselves, you create sustained suppressive fire without immediately destroying targets.
+The `FireAtPoint` task orders ground units to fire at a specific map location. By targeting points _near_ the enemy rather than the enemy units themselves, you create sustained suppressive fire without immediately destroying targets.
 
 ```lua
 ["task"] = {
@@ -150,12 +150,12 @@ The `FireAtPoint` task orders ground units to fire at a specific map location. B
 
 **Key Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `x` | number | Target X coordinate (meters) |
-| `y` | number | Target Y coordinate (meters) |
-| `radius` | number | Dispersion radius for impacts (meters) |
-| `expendQty` | number | Number of rounds to fire |
+| Parameter          | Type    | Description                             |
+| ------------------ | ------- | --------------------------------------- |
+| `x`                | number  | Target X coordinate (meters)            |
+| `y`                | number  | Target Y coordinate (meters)            |
+| `radius`           | number  | Dispersion radius for impacts (meters)  |
+| `expendQty`        | number  | Number of rounds to fire                |
 | `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure |
 
 > **Tip:** Set the target point 20-100 meters offset from the actual enemy position. This creates near-misses and dramatic incoming fire without quickly destroying targets.
@@ -791,12 +791,12 @@ This example uses Cold War era systems (Shilka, SA-9, ZU-23) that are dangerous 
 
 Front-line engagements work best at realistic direct-fire ranges:
 
-| Distance | Effect |
-|----------|--------|
-| 500-800m | Close combat, intense exchange |
-| 800-1500m | Typical tank engagement range |
-| 1500-2500m | Long-range tank gunnery |
-| 2500m+ | Extreme range, consider ATGMs |
+| Distance   | Effect                         |
+| ---------- | ------------------------------ |
+| 500-800m   | Close combat, intense exchange |
+| 800-1500m  | Typical tank engagement range  |
+| 1500-2500m | Long-range tank gunnery        |
+| 2500m+     | Extreme range, consider ATGMs  |
 
 The example uses ~900m separation, suitable for a close tank/IFV battle.
 
@@ -804,12 +804,12 @@ The example uses ~900m separation, suitable for a close tank/IFV battle.
 
 The offset between the target point and actual enemy position controls "accuracy":
 
-| Offset | Effect |
-|--------|--------|
-| 0-20m | Direct hits likely, rapid destruction |
-| 20-50m | Near misses, some casualties over time |
+| Offset  | Effect                                         |
+| ------- | ---------------------------------------------- |
+| 0-20m   | Direct hits likely, rapid destruction          |
+| 20-50m  | Near misses, some casualties over time         |
 | 50-100m | Dramatic but largely harmless suppressive fire |
-| 100m+ | Fire lands nearby but is clearly missing |
+| 100m+   | Fire lands nearby but is clearly missing       |
 
 ### Multiple Groups for Variety
 
@@ -831,12 +831,12 @@ Position the SHORAD group:
 
 ### Choosing SHORAD Difficulty
 
-| Difficulty | Recommended Units | Notes |
-|------------|-------------------|-------|
-| Easy | Technicals, M45 Quadmount | Machine guns only, short range |
-| Medium | ZU-23, Shilka, SA-9 | Cold War AAA and early IR missiles |
-| Hard | SA-13, SA-19 Tunguska | Better seekers, gun/missile combo |
-| Very Hard | SA-15 Tor, Avenger, Linebacker | Modern systems, difficult to defeat |
+| Difficulty | Recommended Units              | Notes                               |
+| ---------- | ------------------------------ | ----------------------------------- |
+| Easy       | Technicals, M45 Quadmount      | Machine guns only, short range      |
+| Medium     | ZU-23, Shilka, SA-9            | Cold War AAA and early IR missiles  |
+| Hard       | SA-13, SA-19 Tunguska          | Better seekers, gun/missile combo   |
+| Very Hard  | SA-15 Tor, Avenger, Linebacker | Modern systems, difficult to defeat |
 
 ## Placement Diagram
 

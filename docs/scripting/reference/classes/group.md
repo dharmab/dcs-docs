@@ -25,6 +25,7 @@ Group Group.getByName(string name)
 The `Group.getByName` function is a static function that returns a group by its Mission Editor name.
 
 **Parameters:**
+
 - `name` (string): The group's name as defined in the Mission Editor.
 
 **Returns:** A Group object, or nil if the group is not found.
@@ -121,6 +122,7 @@ Unit group:getUnit(number index)
 The `group:getUnit` method returns a specific unit from the group by index. The indexing is 1-based.
 
 **Parameters:**
+
 - `index` (number): The unit position in the group, where 1 is the lead.
 
 **Returns:** A Unit object.
@@ -196,6 +198,7 @@ nil group:enableEmission(boolean enable)
 The `group:enableEmission` method enables or disables radar and radio emissions for all units in the group.
 
 **Parameters:**
+
 - `enable` (boolean): Set to true to enable emissions, or false to disable.
 
 ## Spawning Notes

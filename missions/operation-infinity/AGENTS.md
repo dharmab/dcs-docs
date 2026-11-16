@@ -8,23 +8,23 @@ Players spawn via Dynamic Slots at Krymsk (airdromeId 15) or on the CVN-74 Stenn
 
 ## Player Aircraft
 
-| Aircraft | DCS Type String |
-|----------|-----------------|
-| F-4E Phantom II | F-4E-45MC |
-| F-16C Viper | F-16C_50 |
-| F-15E Strike Eagle | F-15ESE |
-| F-15C Eagle | F-15C |
-| MiG-29A Fulcrum | MiG-29A |
-| F/A-18C Hornet | FA-18C_hornet |
-| A-10C Warthog | A-10C_2 |
-| Mirage 2000C | M-2000C |
-| Mirage F1 | Mirage-F1CE |
-| F-14A Tomcat | F-14A-135-GR |
-| F-14B Tomcat | F-14B |
-| F-14B(U) Tomcat | F-14BU |
-| JF-17 Thunder | JF-17 |
-| Su-25 Frogfoot | Su-25 |
-| Su-25T Frogfoot | Su-25T |
+| Aircraft           | DCS Type String |
+| ------------------ | --------------- |
+| F-4E Phantom II    | F-4E-45MC       |
+| F-16C Viper        | F-16C_50        |
+| F-15E Strike Eagle | F-15ESE         |
+| F-15C Eagle        | F-15C           |
+| MiG-29A Fulcrum    | MiG-29A         |
+| F/A-18C Hornet     | FA-18C_hornet   |
+| A-10C Warthog      | A-10C_2         |
+| Mirage 2000C       | M-2000C         |
+| Mirage F1          | Mirage-F1CE     |
+| F-14A Tomcat       | F-14A-135-GR    |
+| F-14B Tomcat       | F-14B           |
+| F-14B(U) Tomcat    | F-14BU          |
+| JF-17 Thunder      | JF-17           |
+| Su-25 Frogfoot     | Su-25           |
+| Su-25T Frogfoot    | Su-25T          |
 
 Warehouse: unlimited weapons of all types. Hot or cold start is the player's choice (`allowHotStart = true`).
 
@@ -32,12 +32,12 @@ Warehouse: unlimited weapons of all types. Hot or cold start is the player's cho
 
 Dynamic spawn on the Stennis offers only these types (`unlimitedAircrafts = false`, each type `unlimited = true`), hot or cold start (`allowHotStart = true`):
 
-| Aircraft | DCS Type String | Template Group (groupId) |
-|----------|-----------------|--------------------------|
-| F/A-18C Hornet | FA-18C_hornet | FA-18C Stennis Template (25) |
-| F-14A Tomcat | F-14A-135-GR | F-14A Stennis Template (26) |
-| F-14B Tomcat | F-14B | F-14B Stennis Template (27) |
-| F-14B(U) Tomcat | F-14BU | F-14B(U) Stennis Template (28) |
+| Aircraft        | DCS Type String | Template Group (groupId)       |
+| --------------- | --------------- | ------------------------------ |
+| F/A-18C Hornet  | FA-18C_hornet   | FA-18C Stennis Template (25)   |
+| F-14A Tomcat    | F-14A-135-GR    | F-14A Stennis Template (26)    |
+| F-14B Tomcat    | F-14B           | F-14B Stennis Template (27)    |
+| F-14B(U) Tomcat | F-14BU          | F-14B(U) Stennis Template (28) |
 
 `F-14BU` comes from Quaggles' datamine (DCS 2.9.31.29434, `db/Units/Planes/Plane/F-14BU.lua`; display name "F-14B(U)").
 
@@ -49,18 +49,18 @@ Radio presets live in each dynamic spawn template's `Radio` table (groups 1-14 a
 
 Main (UHF) radio. Every channel number means the same thing in every aircraft except the home block (ch3-6), which depends on the spawn base, and the tanker block (ch7-8), which depends on the refueling system. 18 channels so the F-4E fits; priority is Strike, SkyEye, all three ATC frequencies (human controllers on SRS), carrier, tankers, then interflight with whatever is left:
 
-| Ch | Use | MHz |
-|----|-----|-----|
-| 1 | Strike | 255.1 |
-| 2 | SkyEye GCI | 255.3 |
-| 3-6 | Home block, Krymsk templates: Tower / Ground / Radar / Stennis | 254.1 / 254.3 / 254.5 / 254.7 |
-| 3-6 | Home block, Stennis templates (25-28): Stennis / Tower / Radar / Ground | 254.7 / 254.1 / 254.5 / 254.3 |
-| 7-8 | Boom receivers (F-4E, F-16C, F-15E, A-10C): Texaco / Shell | 270.5 / 270.7 |
-| 7-8 | Probe receivers (F/A-18C, F-14s, M-2000C, F1, JF-17): Arco 1-1 / Arco 2-1 | 270.1 / 270.3 |
-| 9-13 | Red 1-5 | 260.1-260.9 |
-| 14-18 | Blue 1-5 | 261.1-261.9 |
-| 19 | Guard (20-channel radios) | 243.0 |
-| 20 | Green 1 (20-channel radios) | 262.1 |
+| Ch    | Use                                                                       | MHz                           |
+| ----- | ------------------------------------------------------------------------- | ----------------------------- |
+| 1     | Strike                                                                    | 255.1                         |
+| 2     | SkyEye GCI                                                                | 255.3                         |
+| 3-6   | Home block, Krymsk templates: Tower / Ground / Radar / Stennis            | 254.1 / 254.3 / 254.5 / 254.7 |
+| 3-6   | Home block, Stennis templates (25-28): Stennis / Tower / Radar / Ground   | 254.7 / 254.1 / 254.5 / 254.3 |
+| 7-8   | Boom receivers (F-4E, F-16C, F-15E, A-10C): Texaco / Shell                | 270.5 / 270.7                 |
+| 7-8   | Probe receivers (F/A-18C, F-14s, M-2000C, F1, JF-17): Arco 1-1 / Arco 2-1 | 270.1 / 270.3                 |
+| 9-13  | Red 1-5                                                                   | 260.1-260.9                   |
+| 14-18 | Blue 1-5                                                                  | 261.1-261.9                   |
+| 19    | Guard (20-channel radios)                                                 | 243.0                         |
+| 20    | Green 1 (20-channel radios)                                               | 262.1                         |
 
 On the Stennis list, Tower and Radar sit next to each other for a divert to Krymsk; Ground is last because it is only needed after landing.
 
@@ -86,12 +86,14 @@ The in-game AWACS (Magic) has `communication = false`; it exists for datalink on
 Enemy helicopters listed below are planned but not implemented; no script spawns them.
 
 ### Very Easy (Training)
+
 - Erusea 2004 equipment
 - Ground targets only
 - No enemy fighters, SAMs, EWRs or SHORAD
 - Planned, not implemented: targets immortal and holding fire. Today Erusean groups have neither option set.
 
 ### Easy
+
 - Erusea 2004 equipment
 - Scattered defenses: ZU-23, Shilka, MANPADS, SA-9, SA-13
 - 1-2 incomplete SA-2 batteries (P-19, SNR-75 and 3 launchers), 1-2 SA-9, 1-2 SA-13 (`samCounts.Easy`). Not under IADS emission control.
@@ -100,6 +102,7 @@ Enemy helicopters listed below are planned but not implemented; no script spawns
 - Max 2 fighters airborne, skill Average-Ace
 
 ### Normal
+
 - Erusea 2004 with rare 2005 equipment
 - IADS: EWRs (1L13, P-19), SA-2, SA-3, SA-6, SA-8 Osa
 - AAA: Shilka, Gepard, Roland ADS
@@ -108,6 +111,7 @@ Enemy helicopters listed below are planned but not implemented; no script spawns
 - Max 4 fighters airborne, skill Average-Ace
 
 ### Hard
+
 - Erusea 2005 equipment
 - Layered IADS: EWRs (1L13, 55G6), SA-10 and SA-11 Buk with SA-15 point defense, SA-6
 - Emission control on radar systems
@@ -121,11 +125,11 @@ Enemy helicopters listed below are planned but not implemented; no script spawns
 
 Max airborne fighters scales by weighted player count in combat area:
 
-| Aircraft Category | Weight |
-|-------------------|--------|
-| A-A Fighters (F-15C, F-14A/B) | 2.0 |
-| Multirole (F-16C, F/A-18C, MiG-29A, M-2000C, F-15E, F-4E, JF-17) | 1.5 |
-| Attack/CAS (A-10C, Mirage F1, Su-25, Su-25T) | 0.5 |
+| Aircraft Category                                                | Weight |
+| ---------------------------------------------------------------- | ------ |
+| A-A Fighters (F-15C, F-14A/B)                                    | 2.0    |
+| Multirole (F-16C, F/A-18C, MiG-29A, M-2000C, F-15E, F-4E, JF-17) | 1.5    |
+| Attack/CAS (A-10C, Mirage F1, Su-25, Su-25T)                     | 0.5    |
 
 Formula: `baseMax + floor(log2(weightedPlayerCount + 1))`, capped at 8.
 
@@ -133,13 +137,13 @@ Formula: `baseMax + floor(log2(weightedPlayerCount + 1))`, capped at 8.
 
 Each playtime picks one random region from `OperationInfinity.config.aerodromeRegions`. Targets are placed around the region's aerodromes.
 
-| Region key | Aerodromes | Playtimes | Notes |
-|------------|------------|-----------|-------|
-| `northwest` | Maykop-Khanskaya | 45 | Frontline |
-| `central_coast` | Gudauta, Sukhumi-Babushara | 45, 90 | No frontline; dense approach-route targets starting 50 nm from Krymsk |
-| `southwest_coast` | Kobuleti, Senaki-Kolkhi, Kutaisi | 90 | Frontline 5-15 nm NW of the aerodromes |
-| `northeast` | Mozdok | 180 | Frontline |
-| `southeast` | Tbilisi-Lochini, Vaziani | 180 | No frontline; deep strike targets plus approach-route targets past 120 nm |
+| Region key        | Aerodromes                       | Playtimes | Notes                                                                     |
+| ----------------- | -------------------------------- | --------- | ------------------------------------------------------------------------- |
+| `northwest`       | Maykop-Khanskaya                 | 45        | Frontline                                                                 |
+| `central_coast`   | Gudauta, Sukhumi-Babushara       | 45, 90    | No frontline; dense approach-route targets starting 50 nm from Krymsk     |
+| `southwest_coast` | Kobuleti, Senaki-Kolkhi, Kutaisi | 90        | Frontline 5-15 nm NW of the aerodromes                                    |
+| `northeast`       | Mozdok                           | 180       | Frontline                                                                 |
+| `southeast`       | Tbilisi-Lochini, Vaziani         | 180       | No frontline; deep strike targets plus approach-route targets past 120 nm |
 
 ## IADS Behavior
 
@@ -152,13 +156,13 @@ EWRs, SAM sites and airbase SHORAD are permanent groups, spawned once after gene
 
 Max ranges are launcher `ThreatRange` values from Quaggles' datamine (DCS 2.9.27):
 
-| Site | Max range | Cue (75%) | Autonomous (50%) |
-|------|-----------|-----------|------------------|
-| SA-2 | 43 km | 32 km | 21.5 km |
-| SA-3 | 18 km | 13.5 km | 9 km |
-| SA-6 | 25 km | 19 km | 12.5 km |
-| SA-10 | 120 km | 90 km | 60 km |
-| SA-11 | 50 km | 37.5 km | 25 km |
+| Site  | Max range | Cue (75%) | Autonomous (50%) |
+| ----- | --------- | --------- | ---------------- |
+| SA-2  | 43 km     | 32 km     | 21.5 km          |
+| SA-3  | 18 km     | 13.5 km   | 9 km             |
+| SA-6  | 25 km     | 19 km     | 12.5 km          |
+| SA-10 | 120 km    | 90 km     | 60 km            |
+| SA-11 | 50 km     | 37.5 km   | 25 km            |
 
 SA-8 and SA-15 are point defense on DCS default AI, always on. Generation places one SHORAD 1-3 km from each long-range site, longest range first: SA-15 with the SA-10 and SA-11 (Hard), SA-8 with the SA-3 and SA-6 (Normal). SA-2 and Hard SA-6 get none. Leftover SHORAD is placed at random. Easy SAMs are not under emission control.
 
@@ -173,12 +177,14 @@ Regions without `noFrontline` get one frontline perpendicular to the Krymsk-to-t
 Each engagement point has one ISAF platoon facing 2-3 Erusean platoons, 300-1000 m apart.
 
 **ISAF Platoon** (immortal, invisible, weapons hold, per ground-firefight recipe):
+
 - 2x M-1 Abrams
 - 2x M-2 Bradley
 - 1x M163 Vulcan
 - 1x M1083 truck
 
 **Erusea Platoon** (targets):
+
 - 2x Leclerc
 - 2x Marder
 - 1x Shilka (Easy) or Gepard (Normal/Hard); none on Very Easy
@@ -190,9 +196,11 @@ Frontline SHORAD: one group behind Erusean lines at every second engagement poin
 ### Behind-Lines Targets
 
 **Logistics Convoys** (virtualized):
+
 - 4-6x Ural-375, 1-2x BRDM-2, 1x Ural-375 ZU-23
 
 **Artillery Batteries**:
+
 - 4x SAU Akatsia, 1x Ural-375, 1x BRDM-2
 
 **Scattered Presence**: Patrol vehicles and checkpoints
@@ -213,13 +221,13 @@ Performance target: 800-1000 max spawned units.
 
 Dynamic interceptor spawns from Erusean airfields:
 
-| Airfield | Zone Radius |
-|----------|-------------|
-| Mozdok | 50 km |
-| Tbilisi-Lochini | 45 km |
-| Kutaisi | 45 km |
-| Kobuleti | 40 km |
-| Sukhumi-Babushara | 50 km |
+| Airfield          | Zone Radius |
+| ----------------- | ----------- |
+| Mozdok            | 50 km       |
+| Tbilisi-Lochini   | 45 km       |
+| Kutaisi           | 45 km       |
+| Kobuleti          | 40 km       |
+| Sukhumi-Babushara | 50 km       |
 
 No zone covers Maykop, Gudauta, Senaki or Vaziani, so the 45-minute Maykop region has no enemy fighters.
 
@@ -228,6 +236,7 @@ Spawn cooldown: random 300-780 seconds between waves per airfield, plus a 180-se
 An interceptor leaves the airborne count when it is lost (DEAD, CRASH, UNIT_LOST) or lands (S_EVENT_LAND). A landed interceptor is destroyed 60 s after touchdown. Removals are de-duplicated by unit name because several of these events can fire for one aircraft.
 
 Response scaling:
+
 - 1-2 players: 1 interceptor
 - 3 players: 2 interceptors
 - 4 players: 3 interceptors
@@ -236,6 +245,7 @@ Response scaling:
 ## Support Assets
 
 ### AWACS
+
 E-3A "Magic" on the regional support racetrack, 30,000 ft, 280 KIAS. EPLRS datalink enabled, radio disabled. Players should use SkyEye GCI on 255.3 MHz, 124.1 VHF, or 32.1 FM.
 
 ### Tankers
@@ -254,14 +264,14 @@ The AWACS and three KC-135s are late-activated when the battlefield is generated
 
 Managed by `CarrierOps.lua`, independent of the F10 settings (starts at mission load).
 
-| Ship | Group / Unit Name | Type |
-|------|-------------------|------|
-| CVN-74 John C. Stennis | `CVN-74 Stennis` / `CVN-74 John C. Stennis` | `Stennis` |
-| Cruiser | `CSG Cruiser` | `TICONDEROG` |
-| Destroyer x2 | `CSG Destroyer 1`, `CSG Destroyer 2` | `USS_Arleigh_Burke_IIa` |
-| Frigate | `CSG Frigate` | `PERRY` |
-| Plane guard (script-spawned) | `Angel` | `SH-60B` |
-| Recovery tanker (mission file) | `Arco 2` | `S-3B Tanker` |
+| Ship                           | Group / Unit Name                           | Type                    |
+| ------------------------------ | ------------------------------------------- | ----------------------- |
+| CVN-74 John C. Stennis         | `CVN-74 Stennis` / `CVN-74 John C. Stennis` | `Stennis`               |
+| Cruiser                        | `CSG Cruiser`                               | `TICONDEROG`            |
+| Destroyer x2                   | `CSG Destroyer 1`, `CSG Destroyer 2`        | `USS_Arleigh_Burke_IIa` |
+| Frigate                        | `CSG Frigate`                               | `PERRY`                 |
+| Plane guard (script-spawned)   | `Angel`                                     | `SH-60B`                |
+| Recovery tanker (mission file) | `Arco 2`                                    | `S-3B Tanker`           |
 
 - Operating area: 30 km radius circle centered X=-70000, Y=225000 (open water SW of Anapa, ~50 nm from Krymsk)
 - Carrier systems: radio 254.7 MHz AM, TACAN 74X "STN", ICLS 4, Link 4 336.0 MHz, ACLS. Set on waypoint 1 in the mission file and re-applied by the script after every route change.

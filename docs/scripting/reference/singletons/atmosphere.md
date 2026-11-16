@@ -13,6 +13,7 @@ Vec3 atmosphere.getWind(Vec3 position)
 The `atmosphere.getWind` function returns the wind vector at a position without including turbulence effects. The returned vector indicates the direction the wind is blowing to, not from.
 
 **Parameters:**
+
 - `position` (Vec3): The world position to query.
 
 **Returns:** A Vec3 wind vector in meters per second.
@@ -32,6 +33,7 @@ Vec3 atmosphere.getWindWithTurbulence(Vec3 position)
 The `atmosphere.getWindWithTurbulence` function returns the wind vector including turbulence effects.
 
 **Parameters:**
+
 - `position` (Vec3): The world position to query.
 
 **Returns:** A Vec3 wind vector in meters per second.
@@ -45,6 +47,7 @@ number, number atmosphere.getTemperatureAndPressure(Vec3 position)
 The `atmosphere.getTemperatureAndPressure` function returns atmospheric conditions at a position.
 
 **Parameters:**
+
 - `position` (Vec3): The world position to query.
 
 **Returns:** Two numbers representing the temperature in Kelvin and the pressure in Pascals.

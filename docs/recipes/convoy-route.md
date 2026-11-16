@@ -17,56 +17,56 @@ A functional convoy requires:
 
 ### Transport Trucks
 
-| Unit | Type ID | Origin | Notes |
-|------|---------|--------|-------|
-| Ural-375 | `Ural-375` | Soviet/Russian | Standard cargo truck |
-| Ural-4320-31 | `Ural-4320-31` | Russia | Armored cab variant |
-| Ural-4320T | `Ural-4320T` | Russia | Tanker variant |
-| KAMAZ-43101 | `KAMAZ Truck` | Russia | Modern cargo truck |
-| GAZ-66 | `GAZ-66` | Soviet/Russian | Light truck |
-| GAZ-3308 | `GAZ-3308` | Russia | Medium truck |
-| KrAZ-6322 | `KrAZ6322` | Ukraine | Heavy truck |
-| ZIL-131 | `ZIL-131 APA-80` | Soviet | Utility truck |
-| M939 | `M 818` | USA | 5-ton cargo truck |
-| M1083 MTV | `CHAP_M1083` | USA | Medium tactical vehicle |
-| Bedford MWD | `Bedford_MWD` | UK | WWII-era truck |
-| Opel Blitz | `Blitz_36-6700A` | Germany | WWII-era truck |
-| GMC CCKW-353 | `CCKW_353` | USA | WWII-era truck |
+| Unit         | Type ID          | Origin         | Notes                   |
+| ------------ | ---------------- | -------------- | ----------------------- |
+| Ural-375     | `Ural-375`       | Soviet/Russian | Standard cargo truck    |
+| Ural-4320-31 | `Ural-4320-31`   | Russia         | Armored cab variant     |
+| Ural-4320T   | `Ural-4320T`     | Russia         | Tanker variant          |
+| KAMAZ-43101  | `KAMAZ Truck`    | Russia         | Modern cargo truck      |
+| GAZ-66       | `GAZ-66`         | Soviet/Russian | Light truck             |
+| GAZ-3308     | `GAZ-3308`       | Russia         | Medium truck            |
+| KrAZ-6322    | `KrAZ6322`       | Ukraine        | Heavy truck             |
+| ZIL-131      | `ZIL-131 APA-80` | Soviet         | Utility truck           |
+| M939         | `M 818`          | USA            | 5-ton cargo truck       |
+| M1083 MTV    | `CHAP_M1083`     | USA            | Medium tactical vehicle |
+| Bedford MWD  | `Bedford_MWD`    | UK             | WWII-era truck          |
+| Opel Blitz   | `Blitz_36-6700A` | Germany        | WWII-era truck          |
+| GMC CCKW-353 | `CCKW_353`       | USA            | WWII-era truck          |
 
 ### Fuel Trucks
 
-| Unit | Type ID | Origin |
-|------|---------|--------|
-| ATZ-10 | `ATZ-10` | Soviet/Russian |
-| ATMZ-5 | `ATMZ-5` | Soviet/Russian |
-| ATZ-5 | `ATZ-5` | Soviet/Russian |
-| M978 HEMTT | `M978 HEMTT Tanker` | USA |
+| Unit       | Type ID             | Origin         |
+| ---------- | ------------------- | -------------- |
+| ATZ-10     | `ATZ-10`            | Soviet/Russian |
+| ATMZ-5     | `ATMZ-5`            | Soviet/Russian |
+| ATZ-5      | `ATZ-5`             | Soviet/Russian |
+| M978 HEMTT | `M978 HEMTT Tanker` | USA            |
 
 ### Armored Personnel Carriers
 
 For escorted or combat convoys:
 
-| Unit | Type ID | Origin | Notes |
-|------|---------|--------|-------|
-| BTR-80 | `BTR-80` | Soviet/Russian | 8x8 wheeled APC |
-| BTR-82A | `BTR-82A` | Russia | Improved BTR with 30mm |
-| BRDM-2 | `BRDM-2` | Soviet | Scout car |
-| M1126 Stryker | `M1126 Stryker ICV` | USA | 8x8 wheeled IFV |
-| LAV-25 | `LAV-25` | USA | 8x8 wheeled recon |
-| M1043 HMMWV | `M1043 HMMWV Armament` | USA | Armed Humvee |
-| Tigr | `Tigr_233036` | Russia | Light armored vehicle |
+| Unit          | Type ID                | Origin         | Notes                  |
+| ------------- | ---------------------- | -------------- | ---------------------- |
+| BTR-80        | `BTR-80`               | Soviet/Russian | 8x8 wheeled APC        |
+| BTR-82A       | `BTR-82A`              | Russia         | Improved BTR with 30mm |
+| BRDM-2        | `BRDM-2`               | Soviet         | Scout car              |
+| M1126 Stryker | `M1126 Stryker ICV`    | USA            | 8x8 wheeled IFV        |
+| LAV-25        | `LAV-25`               | USA            | 8x8 wheeled recon      |
+| M1043 HMMWV   | `M1043 HMMWV Armament` | USA            | Armed Humvee           |
+| Tigr          | `Tigr_233036`          | Russia         | Light armored vehicle  |
 
 ### Self-Propelled Air Defense
 
 For convoy escort:
 
-| Unit | Type ID | Notes |
-|------|---------|-------|
-| ZSU-23-4 Shilka | `ZSU-23-4 Shilka` | Radar-guided 23mm |
-| SA-9 Gaskin | `Strela-1 9P31` | IR SAM on BRDM-2 |
-| SA-13 Gopher | `Strela-10M3` | IR SAM on MT-LB |
-| M163 Vulcan | `Vulcan` | 20mm Gatling |
-| M1097 Avenger | `M1097 Avenger` | Stinger launcher on HMMWV |
+| Unit            | Type ID           | Notes                     |
+| --------------- | ----------------- | ------------------------- |
+| ZSU-23-4 Shilka | `ZSU-23-4 Shilka` | Radar-guided 23mm         |
+| SA-9 Gaskin     | `Strela-1 9P31`   | IR SAM on BRDM-2          |
+| SA-13 Gopher    | `Strela-10M3`     | IR SAM on MT-LB           |
+| M163 Vulcan     | `Vulcan`          | 20mm Gatling              |
+| M1097 Avenger   | `M1097 Avenger`   | Stinger launcher on HMMWV |
 
 ## Mission File Structure
 
@@ -143,24 +143,24 @@ Each waypoint uses `action = "On Road"` to follow the road network. The AI pathf
 
 **Key Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `x`, `y` | number | Waypoint coordinates (should be near a road) |
-| `action` | string | `"On Road"` for road following, `"Off Road"` for direct movement |
-| `speed` | number | Speed in meters per second |
-| `speed_locked` | boolean | When true, maintains specified speed |
-| `formation_template` | string | Formation name (leave empty for default column) |
+| Parameter            | Type    | Description                                                      |
+| -------------------- | ------- | ---------------------------------------------------------------- |
+| `x`, `y`             | number  | Waypoint coordinates (should be near a road)                     |
+| `action`             | string  | `"On Road"` for road following, `"Off Road"` for direct movement |
+| `speed`              | number  | Speed in meters per second                                       |
+| `speed_locked`       | boolean | When true, maintains specified speed                             |
+| `formation_template` | string  | Formation name (leave empty for default column)                  |
 
 ## Speed Recommendations
 
 Ground unit speed affects both realism and AI behavior stability. Higher speeds can cause erratic pathfinding.
 
-| Speed (m/s) | Speed (km/h) | Use Case |
-|-------------|--------------|----------|
-| 8-10 | 29-36 | Tactical convoy, realistic truck speeds |
-| 12-15 | 43-54 | Fast road march |
-| 5-8 | 18-29 | Slow, cautious movement through contested areas |
-| 20+ | 72+ | Not recommended; causes pathfinding issues |
+| Speed (m/s) | Speed (km/h) | Use Case                                        |
+| ----------- | ------------ | ----------------------------------------------- |
+| 8-10        | 29-36        | Tactical convoy, realistic truck speeds         |
+| 12-15       | 43-54        | Fast road march                                 |
+| 5-8         | 18-29        | Slow, cautious movement through contested areas |
+| 20+         | 72+          | Not recommended; causes pathfinding issues      |
 
 > **Tip:** Use slower speeds (8-10 m/s) for more reliable pathfinding behavior. Higher speeds can cause the lead vehicle to make erratic turns at intersections.
 

@@ -29,6 +29,7 @@ Unit Unit.getByName(string name)
 The `Unit.getByName` function is a static function that returns a unit by its Mission Editor name.
 
 **Parameters:**
+
 - `name` (string): The unit's name as defined in the Mission Editor.
 
 **Returns:** A Unit object, or nil if the unit is not found or has been destroyed.
@@ -245,6 +246,7 @@ nil unit:enableEmission(boolean enable)
 The `unit:enableEmission` method enables or disables radar and radio emissions for the unit.
 
 **Parameters:**
+
 - `enable` (boolean): Set to true to enable emissions, or false to disable.
 
 ```lua

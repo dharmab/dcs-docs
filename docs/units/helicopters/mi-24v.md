@@ -48,7 +48,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 - UB-32A-24 - 32 x UnGd Rkts, 57 mm S-5M HE
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - Fuel tank PTB-450
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - GUV-8700 w AP-30 - 30mm Grenade Launcher
@@ -64,7 +64,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 - UB-32A-24 - 32 x UnGd Rkts, 57 mm S-5M HE
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - Fuel tank PTB-450
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - GUV-8700 w AP-30 - 30mm Grenade Launcher
@@ -85,7 +85,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 - UB-32A-24 - 32 x UnGd Rkts, 57 mm S-5M HE
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - Fuel tank PTB-450
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - GUV-8700 w AP-30 - 30mm Grenade Launcher
@@ -112,7 +112,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - GUV-8700 w 1x12.7 mm & 2x7.62 mm Rotary HMG
 - 2 x 9M114 Shturm (AT-6 Spiral) - ATGM, SACLOS, HEAT
 
@@ -121,7 +121,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - Fuel tank PTB-450
 - GUV-8700 w 1x12.7 mm & 2x7.62 mm Rotary HMG
 - GUV-8700 w AP-30 - 30mm Grenade Launcher
@@ -139,7 +139,7 @@ The Mi-24V has served with Soviet successor states and export customers worldwid
 
 ### Pylon 6
 
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - Fuel tank PTB-450
 - GUV-8700 w 1x12.7 mm & 2x7.62 mm Rotary HMG
 - GUV-8700 w AP-30 - 30mm Grenade Launcher

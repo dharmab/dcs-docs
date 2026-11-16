@@ -15,27 +15,27 @@ Air-to-air AI configuration requires:
 
 The four operational scenarios covered are:
 
-| Scenario | Purpose | Primary Task | Key Characteristic |
-|----------|---------|--------------|-------------------|
-| Combat Air Patrol | Defend an area from enemy aircraft | Orbit + EngageTargets | Loiters on station |
-| Fighter Sweep | Clear enemy aircraft from an area | EngageTargets (linear route) | Moves through hostile airspace |
-| Intercept | Engage a specific known threat | AttackGroup/AttackUnit | Direct attack on designated target |
-| Strike Escort | Protect a friendly group | Escort | Maintains formation with protected group |
+| Scenario          | Purpose                            | Primary Task                 | Key Characteristic                       |
+| ----------------- | ---------------------------------- | ---------------------------- | ---------------------------------------- |
+| Combat Air Patrol | Defend an area from enemy aircraft | Orbit + EngageTargets        | Loiters on station                       |
+| Fighter Sweep     | Clear enemy aircraft from an area  | EngageTargets (linear route) | Moves through hostile airspace           |
+| Intercept         | Engage a specific known threat     | AttackGroup/AttackUnit       | Direct attack on designated target       |
+| Strike Escort     | Protect a friendly group           | Escort                       | Maintains formation with protected group |
 
 ## Fighter Aircraft Type Strings
 
-| Aircraft | Type String | Coalition | Role | Radar Range |
-|----------|-------------|-----------|------|-------------|
-| F-15C Eagle | `F-15C` | Blue | Air superiority | Long |
-| F-16C Viper | `F-16C_50` | Blue | Multirole | Medium |
-| F/A-18C Hornet | `FA-18C_hornet` | Blue | Multirole | Medium |
-| F-14B Tomcat | `F-14B` | Blue | Fleet defense | Long |
-| Su-27 Flanker | `Su-27` | Red | Air superiority | Long |
-| Su-33 Flanker-D | `Su-33` | Red | Carrier-based | Long |
-| MiG-29A Fulcrum | `MiG-29A` | Red | Tactical fighter | Medium |
-| MiG-29S Fulcrum | `MiG-29S` | Red | Improved tactical | Medium |
-| MiG-31 Foxhound | `MiG-31` | Red | Interceptor | Very long |
-| Mirage 2000-5 | `Mirage 2000-5` | Blue | Multirole | Medium |
+| Aircraft        | Type String     | Coalition | Role              | Radar Range |
+| --------------- | --------------- | --------- | ----------------- | ----------- |
+| F-15C Eagle     | `F-15C`         | Blue      | Air superiority   | Long        |
+| F-16C Viper     | `F-16C_50`      | Blue      | Multirole         | Medium      |
+| F/A-18C Hornet  | `FA-18C_hornet` | Blue      | Multirole         | Medium      |
+| F-14B Tomcat    | `F-14B`         | Blue      | Fleet defense     | Long        |
+| Su-27 Flanker   | `Su-27`         | Red       | Air superiority   | Long        |
+| Su-33 Flanker-D | `Su-33`         | Red       | Carrier-based     | Long        |
+| MiG-29A Fulcrum | `MiG-29A`       | Red       | Tactical fighter  | Medium      |
+| MiG-29S Fulcrum | `MiG-29S`       | Red       | Improved tactical | Medium      |
+| MiG-31 Foxhound | `MiG-31`        | Red       | Interceptor       | Very long   |
+| Mirage 2000-5   | `Mirage 2000-5` | Blue      | Multirole         | Medium      |
 
 ## AI Options Reference
 
@@ -43,55 +43,55 @@ AI options control fighter behavior in combat. Set them via waypoint tasks using
 
 ### Rules of Engagement (ROE)
 
-| Value | Constant | Behavior |
-|-------|----------|----------|
-| 0 | `WEAPON_FREE` | Attack any detected enemy |
-| 1 | `OPEN_FIRE_WEAPON_FREE` | Attack enemies threatening friendlies while engaging at will |
-| 2 | `OPEN_FIRE` | Attack only enemies threatening friendlies |
-| 3 | `RETURN_FIRE` | Fire only when fired upon |
-| 4 | `WEAPON_HOLD` | Do not fire weapons |
+| Value | Constant                | Behavior                                                     |
+| ----- | ----------------------- | ------------------------------------------------------------ |
+| 0     | `WEAPON_FREE`           | Attack any detected enemy                                    |
+| 1     | `OPEN_FIRE_WEAPON_FREE` | Attack enemies threatening friendlies while engaging at will |
+| 2     | `OPEN_FIRE`             | Attack only enemies threatening friendlies                   |
+| 3     | `RETURN_FIRE`           | Fire only when fired upon                                    |
+| 4     | `WEAPON_HOLD`           | Do not fire weapons                                          |
 
 For air-to-air, use `WEAPON_FREE` (0) for aggressive patrols or `OPEN_FIRE_WEAPON_FREE` (1) for escort missions.
 
 ### Reaction on Threat
 
-| Value | Constant | Behavior | Use Case |
-|-------|----------|----------|----------|
-| 0 | `NO_REACTION` | No defensive action | Suicide attackers |
-| 1 | `PASSIVE_DEFENCE` | Countermeasures only | BVR-focused intercepts |
-| 2 | `EVADE_FIRE` | Maneuver + countermeasures | Standard dogfighting |
-| 3 | `BYPASS_AND_ESCAPE` | Route around threats | Non-combat transit |
-| 4 | `ALLOW_ABORT_MISSION` | RTB if situation critical | Defensive CAP |
+| Value | Constant              | Behavior                   | Use Case               |
+| ----- | --------------------- | -------------------------- | ---------------------- |
+| 0     | `NO_REACTION`         | No defensive action        | Suicide attackers      |
+| 1     | `PASSIVE_DEFENCE`     | Countermeasures only       | BVR-focused intercepts |
+| 2     | `EVADE_FIRE`          | Maneuver + countermeasures | Standard dogfighting   |
+| 3     | `BYPASS_AND_ESCAPE`   | Route around threats       | Non-combat transit     |
+| 4     | `ALLOW_ABORT_MISSION` | RTB if situation critical  | Defensive CAP          |
 
 Use `EVADE_FIRE` (2) for most combat scenarios.
 
 ### Radar Usage
 
-| Value | Constant | Behavior |
-|-------|----------|----------|
-| 0 | `NEVER` | Radar off (EMCON) |
-| 1 | `FOR_ATTACK_ONLY` | Radar on only when engaging |
-| 2 | `FOR_SEARCH_IF_REQUIRED` | Search when needed |
-| 3 | `FOR_CONTINUOUS_SEARCH` | Radar always active |
+| Value | Constant                 | Behavior                    |
+| ----- | ------------------------ | --------------------------- |
+| 0     | `NEVER`                  | Radar off (EMCON)           |
+| 1     | `FOR_ATTACK_ONLY`        | Radar on only when engaging |
+| 2     | `FOR_SEARCH_IF_REQUIRED` | Search when needed          |
+| 3     | `FOR_CONTINUOUS_SEARCH`  | Radar always active         |
 
 Use `FOR_CONTINUOUS_SEARCH` (3) for CAP and sweep missions. Use `FOR_ATTACK_ONLY` (1) for stealthy intercepts.
 
 ### Missile Attack Range
 
-| Value | Constant | Behavior | Tactical Use |
-|-------|----------|----------|--------------|
-| 0 | `MAX_RANGE` | Fire at maximum range | BVR engagement |
-| 1 | `NEZ_RANGE` | Fire at no-escape zone | Close-in fights |
-| 2 | `HALF_WAY_RMAX_NEZ` | Fire halfway between max and NEZ | Balanced approach |
-| 3 | `TARGET_THREAT_EST` | Based on threat assessment | Escort missions |
-| 4 | `RANDOM_RANGE` | Random selection | Variety |
+| Value | Constant            | Behavior                         | Tactical Use      |
+| ----- | ------------------- | -------------------------------- | ----------------- |
+| 0     | `MAX_RANGE`         | Fire at maximum range            | BVR engagement    |
+| 1     | `NEZ_RANGE`         | Fire at no-escape zone           | Close-in fights   |
+| 2     | `HALF_WAY_RMAX_NEZ` | Fire halfway between max and NEZ | Balanced approach |
+| 3     | `TARGET_THREAT_EST` | Based on threat assessment       | Escort missions   |
+| 4     | `RANDOM_RANGE`      | Random selection                 | Variety           |
 
 ### RTB Behavior
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `RTB_ON_BINGO` | true | Return to base when fuel low |
-| `RTB_ON_OUT_OF_AMMO` | true | Return to base when weapons expended |
+| Option               | Default | Description                          |
+| -------------------- | ------- | ------------------------------------ |
+| `RTB_ON_BINGO`       | true    | Return to base when fuel low         |
+| `RTB_ON_OUT_OF_AMMO` | true    | Return to base when weapons expended |
 
 Disable these for fighter sweep missions where completing the route is more important than survival.
 
@@ -796,35 +796,35 @@ Air-to-air combat is challenging for most players. A few enemy fighters (2-4 air
 
 ### Skill Levels
 
-| Skill | AI Behavior | Recommended Use |
-|-------|-------------|-----------------|
-| Average | Slow reactions, poor accuracy | Training scenarios |
-| Good | Competent but beatable | Standard encounters |
-| High | Aggressive, accurate | Challenging opponents |
-| Excellent | Expert-level performance | Elite enemy aces |
+| Skill     | AI Behavior                   | Recommended Use       |
+| --------- | ----------------------------- | --------------------- |
+| Average   | Slow reactions, poor accuracy | Training scenarios    |
+| Good      | Competent but beatable        | Standard encounters   |
+| High      | Aggressive, accurate          | Challenging opponents |
+| Excellent | Expert-level performance      | Elite enemy aces      |
 
 Avoid the "Random" skill level—it can produce erratic behavior. Mixing skill levels within a flight (e.g., lead at High, wingmen at Good) creates natural variety.
 
 ### Flight Size Guidelines
 
-| Scenario | Recommended Size | Rationale |
-|----------|------------------|-----------|
-| Light opposition | 2 aircraft | Manageable threat |
-| Standard CAP | 2-4 aircraft | Meaningful challenge |
-| Major threat | 4 aircraft | Difficult engagement |
-| Boss fight | 4 aircraft (all High/Excellent) | Climactic encounter |
+| Scenario         | Recommended Size                | Rationale            |
+| ---------------- | ------------------------------- | -------------------- |
+| Light opposition | 2 aircraft                      | Manageable threat    |
+| Standard CAP     | 2-4 aircraft                    | Meaningful challenge |
+| Major threat     | 4 aircraft                      | Difficult engagement |
+| Boss fight       | 4 aircraft (all High/Excellent) | Climactic encounter  |
 
 ## Recommended Configurations
 
 Quick reference for AI options by scenario:
 
-| Scenario | ROE | Threat Reaction | Radar | Missile Attack | RTB Bingo | RTB Ammo |
-|----------|-----|-----------------|-------|----------------|-----------|----------|
-| Defensive CAP | OPEN_FIRE (2) | EVADE_FIRE (2) | CONTINUOUS (3) | HALF_WAY (2) | true | true |
-| Aggressive CAP | WEAPON_FREE (0) | EVADE_FIRE (2) | CONTINUOUS (3) | MAX_RANGE (0) | false | false |
-| Fighter Sweep | WEAPON_FREE (0) | EVADE_FIRE (2) | CONTINUOUS (3) | NEZ_RANGE (1) | false | false |
-| Intercept | WEAPON_FREE (0) | PASSIVE_DEFENCE (1) | ATTACK_ONLY (1) | MAX_RANGE (0) | false | false |
-| Strike Escort | OPEN_FIRE_WEAPON_FREE (1) | EVADE_FIRE (2) | CONTINUOUS (3) | TARGET_THREAT_EST (3) | true | true |
+| Scenario       | ROE                       | Threat Reaction     | Radar           | Missile Attack        | RTB Bingo | RTB Ammo |
+| -------------- | ------------------------- | ------------------- | --------------- | --------------------- | --------- | -------- |
+| Defensive CAP  | OPEN_FIRE (2)             | EVADE_FIRE (2)      | CONTINUOUS (3)  | HALF_WAY (2)          | true      | true     |
+| Aggressive CAP | WEAPON_FREE (0)           | EVADE_FIRE (2)      | CONTINUOUS (3)  | MAX_RANGE (0)         | false     | false    |
+| Fighter Sweep  | WEAPON_FREE (0)           | EVADE_FIRE (2)      | CONTINUOUS (3)  | NEZ_RANGE (1)         | false     | false    |
+| Intercept      | WEAPON_FREE (0)           | PASSIVE_DEFENCE (1) | ATTACK_ONLY (1) | MAX_RANGE (0)         | false     | false    |
+| Strike Escort  | OPEN_FIRE_WEAPON_FREE (1) | EVADE_FIRE (2)      | CONTINUOUS (3)  | TARGET_THREAT_EST (3) | true      | true     |
 
 ## Obtaining Weapon CLSIDs
 

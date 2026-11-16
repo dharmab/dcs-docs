@@ -13,10 +13,10 @@ _G.TerrainLoaded = true
 Terrain = {}
 
 Terrain.config = {
-    defaultMaxSlope = 15,       -- Degrees
-    defaultMaxRoughness = 5,    -- Meters standard deviation
-    maxSearchAttempts = 10,     -- Attempts to find valid position
-    sampleRadius = 50,          -- Meters for slope sampling
+    defaultMaxSlope = 15, -- Degrees
+    defaultMaxRoughness = 5, -- Meters standard deviation
+    maxSearchAttempts = 10, -- Attempts to find valid position
+    sampleRadius = 50, -- Meters for slope sampling
 }
 
 local log = Logging:create("Terrain")
@@ -25,7 +25,7 @@ local log = Logging:create("Terrain")
 function Terrain:calculateMaxSlope(center, sampleRadius)
     sampleRadius = sampleRadius or self.config.sampleRadius
 
-    local centerHeight = land.getHeight({x = center.x, y = center.y})
+    local centerHeight = land.getHeight({ x = center.x, y = center.y })
     local maxSlope = 0
 
     -- Sample 8 points around center
@@ -33,7 +33,7 @@ function Terrain:calculateMaxSlope(center, sampleRadius)
         local angle = i * (math.pi / 4)
         local samplePos = {
             x = center.x + sampleRadius * math.cos(angle),
-            y = center.y + sampleRadius * math.sin(angle)
+            y = center.y + sampleRadius * math.sin(angle),
         }
 
         local ok, sampleHeight = pcall(land.getHeight, samplePos)
@@ -51,7 +51,7 @@ end
 
 -- Check if surface type is valid for ground units
 function Terrain:isValidSurfaceType(pos)
-    local ok, surfaceType = pcall(land.getSurfaceType, {x = pos.x, y = pos.y})
+    local ok, surfaceType = pcall(land.getSurfaceType, { x = pos.x, y = pos.y })
     if not ok then
         return false
     end
@@ -72,7 +72,7 @@ function Terrain:calculateTerrainRoughness(center, checkRadius)
         for dy = -2, 2 do
             local samplePos = {
                 x = center.x + dx * (checkRadius / 2),
-                y = center.y + dy * (checkRadius / 2)
+                y = center.y + dy * (checkRadius / 2),
             }
             local ok, h = pcall(land.getHeight, samplePos)
             if ok then
@@ -165,8 +165,13 @@ function Terrain:findValidPosition(center, radius, options, maxAttempts)
     end
 
     -- Failed to find valid position
-    log("WARNING: Could not find valid terrain near (" ..
-        math.floor(center.x) .. ", " .. math.floor(center.y) .. ") - skipping spawn")
+    log(
+        "WARNING: Could not find valid terrain near ("
+            .. math.floor(center.x)
+            .. ", "
+            .. math.floor(center.y)
+            .. ") - skipping spawn"
+    )
     return nil, false
 end
 

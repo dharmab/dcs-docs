@@ -35,11 +35,11 @@ The `date` table sets the mission calendar date. This affects:
 - Unit camouflage patterns on certain vehicles
 - Sun position and day length
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `Year` | number | Year (e.g., 2024) |
-| `Month` | number | Month (1-12) |
-| `Day` | number | Day of month (1-31) |
+| Field   | Type   | Description         |
+| ------- | ------ | ------------------- |
+| `Year`  | number | Year (e.g., 2024)   |
+| `Month` | number | Month (1-12)        |
+| `Day`   | number | Day of month (1-31) |
 
 ```lua
 ["date"] = {
@@ -106,10 +106,10 @@ Temperature affects:
 - Air density (affects aircraft performance at high temperatures)
 - Terrain visual appearance when combined with date
 
-| Temperature | Available Precipitation |
-|-------------|------------------------|
-| Above 0°C | None, Rain, Thunderstorm |
-| At or below 0°C | None, Snow, Snowstorm |
+| Temperature     | Available Precipitation  |
+| --------------- | ------------------------ |
+| Above 0°C       | None, Rain, Thunderstorm |
+| At or below 0°C | None, Snow, Snowstorm    |
 
 ---
 
@@ -146,22 +146,22 @@ Wind is configured at three altitude bands. Each band specifies speed in meters 
 },
 ```
 
-| Altitude Band | Description |
-|---------------|-------------|
-| `atGround` | Ground level (10 meters / 33 ft AGL) |
-| `at2000` | 2000 meters (~6,600 ft) |
-| `at8000` | 8000 meters (~26,000 ft) |
+| Altitude Band | Description                          |
+| ------------- | ------------------------------------ |
+| `atGround`    | Ground level (10 meters / 33 ft AGL) |
+| `at2000`      | 2000 meters (~6,600 ft)              |
+| `at8000`      | 8000 meters (~26,000 ft)             |
 
 **Wind Speed Reference:**
 
-| Condition | Speed (m/s) | Speed (knots) |
-|-----------|-------------|---------------|
-| Calm | 0-2 | 0-4 |
-| Light breeze | 3-5 | 6-10 |
-| Moderate | 6-10 | 12-20 |
-| Fresh | 11-15 | 22-30 |
-| Strong | 16-20 | 32-40 |
-| Gale | 21+ | 42+ |
+| Condition    | Speed (m/s) | Speed (knots) |
+| ------------ | ----------- | ------------- |
+| Calm         | 0-2         | 0-4           |
+| Light breeze | 3-5         | 6-10          |
+| Moderate     | 6-10        | 12-20         |
+| Fresh        | 11-15       | 22-30         |
+| Strong       | 16-20       | 32-40         |
+| Gale         | 21+         | 42+           |
 
 ### Wind Direction Considerations
 
@@ -185,12 +185,12 @@ The `groundTurbulence` field controls low-level turbulence intensity in meters p
 ["groundTurbulence"] = 5,  -- Moderate turbulence
 ```
 
-| Value | Effect |
-|-------|--------|
-| 0 | No turbulence (smooth air) |
-| 1-5 | Light turbulence |
-| 6-10 | Moderate turbulence |
-| 11+ | Severe turbulence |
+| Value | Effect                     |
+| ----- | -------------------------- |
+| 0     | No turbulence (smooth air) |
+| 1-5   | Light turbulence           |
+| 6-10  | Moderate turbulence        |
+| 11+   | Severe turbulence          |
 
 ---
 
@@ -205,12 +205,12 @@ Base visibility distance is set in meters. This is the maximum visibility when f
 ```
 
 | Condition | Distance (meters) |
-|-----------|------------------|
-| Excellent | 80000+ |
-| Good | 40000-80000 |
-| Moderate | 10000-40000 |
-| Poor | 5000-10000 |
-| Very poor | 1000-5000 |
+| --------- | ----------------- |
+| Excellent | 80000+            |
+| Good      | 40000-80000       |
+| Moderate  | 10000-40000       |
+| Poor      | 5000-10000        |
+| Very poor | 1000-5000         |
 
 ---
 
@@ -232,38 +232,38 @@ DCS provides pre-configured cloud presets that create realistic multi-layer volu
 
 **Available Presets:**
 
-| Preset | Coverage | Description |
-|--------|----------|-------------|
-| `Preset1` | FEW | Few clouds at ~7000 ft |
-| `Preset2` | FEW | Few clouds, scattered high layer |
-| `Preset3`-`Preset6` | SCT | Scattered clouds, 2 layers |
-| `Preset7`-`Preset12` | SCT-BKN | Scattered to broken, multiple layers |
-| `Preset13`-`Preset20` | BKN | Broken clouds, good for tactical missions |
-| `Preset21`-`Preset27` | OVC | Overcast, heavy cloud coverage |
-| `RainyPreset1` | OVC+RA | Overcast with rain |
-| `RainyPreset3`-`RainyPreset5` | Various+RA | Various coverage with rain |
+| Preset                        | Coverage   | Description                               |
+| ----------------------------- | ---------- | ----------------------------------------- |
+| `Preset1`                     | FEW        | Few clouds at ~7000 ft                    |
+| `Preset2`                     | FEW        | Few clouds, scattered high layer          |
+| `Preset3`-`Preset6`           | SCT        | Scattered clouds, 2 layers                |
+| `Preset7`-`Preset12`          | SCT-BKN    | Scattered to broken, multiple layers      |
+| `Preset13`-`Preset20`         | BKN        | Broken clouds, good for tactical missions |
+| `Preset21`-`Preset27`         | OVC        | Overcast, heavy cloud coverage            |
+| `RainyPreset1`                | OVC+RA     | Overcast with rain                        |
+| `RainyPreset3`-`RainyPreset5` | Various+RA | Various coverage with rain                |
 
 **Recommended Presets by Mission Type:**
 
-| Mission Type | Suggested Presets |
-|--------------|-------------------|
-| Clear day operations | `Preset1`, `Preset2` |
-| Scattered clouds | `Preset3`, `Preset4`, `Preset6` |
-| Tactical (some cover) | `Preset7`, `Preset9`, `Preset14` |
-| Overcast | `Preset21`, `Preset24`, `Preset25` |
-| Bad weather training | `RainyPreset1`, `RainyPreset3` |
+| Mission Type          | Suggested Presets                  |
+| --------------------- | ---------------------------------- |
+| Clear day operations  | `Preset1`, `Preset2`               |
+| Scattered clouds      | `Preset3`, `Preset4`, `Preset6`    |
+| Tactical (some cover) | `Preset7`, `Preset9`, `Preset14`   |
+| Overcast              | `Preset21`, `Preset24`, `Preset25` |
+| Bad weather training  | `RainyPreset1`, `RainyPreset3`     |
 
 ### Precipitation
 
 The `iprecptns` field controls precipitation type. Available options depend on temperature.
 
-| Value | Type | Requires |
-|-------|------|----------|
-| 0 | None | Any temperature |
-| 1 | Rain | Temperature > 0°C |
-| 2 | Thunderstorm | Temperature > 0°C |
-| 3 | Snow | Temperature <= 0°C |
-| 4 | Snowstorm | Temperature <= 0°C |
+| Value | Type         | Requires           |
+| ----- | ------------ | ------------------ |
+| 0     | None         | Any temperature    |
+| 1     | Rain         | Temperature > 0°C  |
+| 2     | Thunderstorm | Temperature > 0°C  |
+| 3     | Snow         | Temperature <= 0°C |
+| 4     | Snowstorm    | Temperature <= 0°C |
 
 ```lua
 ["clouds"] = {
@@ -302,11 +302,11 @@ The volumetric fog system affects AI detection and creates atmospheric visual ef
 },
 ```
 
-| Field | Range | Description |
-|-------|-------|-------------|
-| `enable_fog` | boolean | Enables/disables fog |
-| `visibility` | 100-100000 m | Horizontal visibility at sea level |
-| `thickness` | 100-5000 m | Fog extends from sea level to this altitude |
+| Field        | Range        | Description                                 |
+| ------------ | ------------ | ------------------------------------------- |
+| `enable_fog` | boolean      | Enables/disables fog                        |
+| `visibility` | 100-100000 m | Horizontal visibility at sea level          |
+| `thickness`  | 100-5000 m   | Fog extends from sea level to this altitude |
 
 **Fog Thickness Limits:**
 
@@ -316,23 +316,23 @@ The volumetric fog system affects AI detection and creates atmospheric visual ef
 
 ### Fog Visibility Reference
 
-| Condition | Visibility (m) |
-|-----------|----------------|
-| Dense fog | 100-500 |
-| Thick fog | 500-1000 |
-| Moderate fog | 1000-2000 |
-| Light fog | 2000-5000 |
-| Mist | 5000-10000 |
+| Condition    | Visibility (m) |
+| ------------ | -------------- |
+| Dense fog    | 100-500        |
+| Thick fog    | 500-1000       |
+| Moderate fog | 1000-2000      |
+| Light fog    | 2000-5000      |
+| Mist         | 5000-10000     |
 
 ### Fog and AI Behavior
 
 Fog blocks visual detection for AI:
 
-| System | Affected by Fog |
-|--------|-----------------|
-| AI ground vehicle detection | Yes - blocked |
-| AI aircraft visual detection | Yes - blocked |
-| Radar systems | No - radar penetrates fog |
+| System                       | Affected by Fog           |
+| ---------------------------- | ------------------------- |
+| AI ground vehicle detection  | Yes - blocked             |
+| AI aircraft visual detection | Yes - blocked             |
+| Radar systems                | No - radar penetrates fog |
 
 Fog creates tactical opportunities for low-level ingress against optically-guided threats. SAM systems that rely on optical tracking (IR SAMs, optically-guided AAA) are degraded by fog, while radar-guided systems remain fully effective.
 
@@ -347,9 +347,9 @@ Dust creates a yellow-brown atmospheric haze, simulating desert or dusty conditi
 ["dust_density"] = 2000,  -- Visibility in meters (300-3000)
 ```
 
-| Field | Range | Description |
-|-------|-------|-------------|
-| `enable_dust` | boolean | Enables/disables dust |
+| Field          | Range      | Description                   |
+| -------------- | ---------- | ----------------------------- |
+| `enable_dust`  | boolean    | Enables/disables dust         |
 | `dust_density` | 300-3000 m | Visibility through dust layer |
 
 Dust always extends approximately 700 meters (2,300 ft) above ground level. On high-elevation maps, dust effects may be less visible.
@@ -562,13 +562,13 @@ Dust always extends approximately 700 meters (2,300 ft) above ground level. On h
 
 Understanding which weather phenomena affect AI systems helps create balanced scenarios.
 
-| Weather | AI Visual Detection | Radar Systems | Optical/IR SAMs |
-|---------|---------------------|---------------|-----------------|
-| Clouds | No effect | No effect | No effect |
-| Fog | Blocked | No effect | Degraded |
-| Dust | Reduced | No effect | Reduced |
-| Rain | No effect | No effect | No effect |
-| Night | Reduced | No effect | Reduced (optical) |
+| Weather | AI Visual Detection | Radar Systems | Optical/IR SAMs   |
+| ------- | ------------------- | ------------- | ----------------- |
+| Clouds  | No effect           | No effect     | No effect         |
+| Fog     | Blocked             | No effect     | Degraded          |
+| Dust    | Reduced             | No effect     | Reduced           |
+| Rain    | No effect           | No effect     | No effect         |
+| Night   | Reduced             | No effect     | Reduced (optical) |
 
 Radar systems (SAMs, AWACS, fighter radar) are unaffected by any weather or visibility conditions. Fog is the most tactically significant weather element for degrading optically-guided threats.
 

@@ -6,10 +6,7 @@ requires-python = ">=3.14"
 dependencies = []
 
 [dependency-groups]
-dev = [
-    "ruff",
-    "ty",
-]
+dev = ["ruff", "ty"]
 
 [project.scripts]
 extract-liveries = "extract_liveries:main"

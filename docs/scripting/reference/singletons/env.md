@@ -11,6 +11,7 @@ nil env.info(string message, boolean showMessageBox)
 The `env.info` function logs an informational message to `dcs.log`. This function is the primary debugging tool for mission scripts.
 
 **Parameters:**
+
 - `message` (string): The message to log.
 - `showMessageBox` (boolean): Optional. If true, the function also displays a message box to the user. The default is false.
 
@@ -28,6 +29,7 @@ nil env.warning(string message, boolean showMessageBox)
 The `env.warning` function logs a warning message to `dcs.log`. Use this function for recoverable issues.
 
 **Parameters:**
+
 - `message` (string): The warning message to log.
 - `showMessageBox` (boolean): Optional. If true, the function displays a message box to the user.
 
@@ -46,6 +48,7 @@ nil env.error(string message, boolean showMessageBox)
 The `env.error` function logs an error message to `dcs.log`. Use this function for serious problems that may affect mission functionality.
 
 **Parameters:**
+
 - `message` (string): The error message to log.
 - `showMessageBox` (boolean): Optional. If true, the function displays a message box to the user.
 
@@ -64,6 +67,7 @@ nil env.setErrorMessageBoxEnabled(boolean enabled)
 The `env.setErrorMessageBoxEnabled` function enables or disables the error message box that appears when script errors occur.
 
 **Parameters:**
+
 - `enabled` (boolean): Set to true to show error dialogs, or false to suppress them.
 
 ```lua
@@ -79,6 +83,7 @@ string env.getValueDictByKey(string key)
 The `env.getValueDictByKey` function returns a localized string from the mission's dictionary. This function is used for internationalization.
 
 **Parameters:**
+
 - `key` (string): The dictionary key to look up.
 
 **Returns:** The localized string value, or the key itself if the key is not found.

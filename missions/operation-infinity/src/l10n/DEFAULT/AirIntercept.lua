@@ -18,10 +18,10 @@ AirIntercept = {}
 -- =============================================================================
 
 AirIntercept.config = {
-    checkInterval = 30,           -- Seconds between zone checks
-    spawnCooldownMin = 300,       -- Minimum seconds between spawns (5 minutes)
-    spawnCooldownMax = 780,       -- Maximum seconds between spawns (13 minutes)
-    globalSpawnCooldown = 180,    -- Minimum seconds between spawns from ANY airfield
+    checkInterval = 30, -- Seconds between zone checks
+    spawnCooldownMin = 300, -- Minimum seconds between spawns (5 minutes)
+    spawnCooldownMax = 780, -- Maximum seconds between spawns (13 minutes)
+    globalSpawnCooldown = 180, -- Minimum seconds between spawns from ANY airfield
     debug = true,
 
     -- Aircraft category weights for dynamic max calculation
@@ -51,41 +51,41 @@ AirIntercept.config = {
         {
             name = "Tbilisi-Lochini",
             airdromeId = 29,
-            zoneCenter = {x = -315000, y = 895000},
+            zoneCenter = { x = -315000, y = 895000 },
             zoneRadius = 45000,
-            spawnPoint = {x = -315500, y = 894000},
-            spawnHeading = 4.71,  -- West
+            spawnPoint = { x = -315500, y = 894000 },
+            spawnHeading = 4.71, -- West
         },
         {
             name = "Mozdok",
             airdromeId = 28,
-            zoneCenter = {x = -83000, y = 835000},
+            zoneCenter = { x = -83000, y = 835000 },
             zoneRadius = 50000,
-            spawnPoint = {x = -83500, y = 834000},
+            spawnPoint = { x = -83500, y = 834000 },
             spawnHeading = 4.71,
         },
         {
             name = "Kutaisi",
             airdromeId = 25,
-            zoneCenter = {x = -285000, y = 683000},
+            zoneCenter = { x = -285000, y = 683000 },
             zoneRadius = 45000,
-            spawnPoint = {x = -284600, y = 685000},
+            spawnPoint = { x = -284600, y = 685000 },
             spawnHeading = 4.71,
         },
         {
             name = "Kobuleti",
             airdromeId = 24,
-            zoneCenter = {x = -317000, y = 635000},
+            zoneCenter = { x = -317000, y = 635000 },
             zoneRadius = 40000,
-            spawnPoint = {x = -318000, y = 634000},
+            spawnPoint = { x = -318000, y = 634000 },
             spawnHeading = 4.71,
         },
         {
             name = "Sukhumi-Babushara",
             airdromeId = 20,
-            zoneCenter = {x = -220000, y = 565000},
+            zoneCenter = { x = -220000, y = 565000 },
             zoneRadius = 50000,
-            spawnPoint = {x = -220500, y = 563000},
+            spawnPoint = { x = -220500, y = 563000 },
             spawnHeading = 4.71,
         },
     },
@@ -107,10 +107,10 @@ AirIntercept.state = {
     enabled = false,
     difficulty = nil,
     totalAirborne = 0,
-    airfieldState = {},  -- Runtime state per airfield
+    airfieldState = {}, -- Runtime state per airfield
     groupAliveCount = {}, -- groupName -> number of alive units in that group
     groupToAirfield = {}, -- groupName -> airfield name (reverse lookup)
-    deadUnits = {},       -- unitName -> true; DEAD/CRASH/UNIT_LOST can all fire for one unit
+    deadUnits = {}, -- unitName -> true; DEAD/CRASH/UNIT_LOST can all fire for one unit
     lastGlobalSpawnTime = nil,
 }
 
@@ -127,7 +127,7 @@ function AirIntercept:getPlayersInZone(airfield)
     for _, player in ipairs(players) do
         if player and player:isExist() then
             local pos = player:getPoint()
-            local playerPos2D = {x = pos.x, y = pos.z}
+            local playerPos2D = { x = pos.x, y = pos.z }
             local distance = Spatial:getDistance2D(playerPos2D, airfield.zoneCenter)
 
             -- Only count airborne players
@@ -182,7 +182,7 @@ function AirIntercept:calculateResponseSize(intruderCount)
     elseif intruderCount == 4 then
         return 3
     else
-        return 4  -- Max per wave
+        return 4 -- Max per wave
     end
 end
 
@@ -196,12 +196,17 @@ function AirIntercept:getRunwaySpawnPoint(airfield)
     for _, airbase in ipairs(world.getAirbases()) do
         if airbase:getID() == airfield.airdromeId then
             local p = airbase:getPoint()
-            return {x = p.x, y = p.z, alt = p.y}
+            return { x = p.x, y = p.z, alt = p.y }
         end
     end
-    log("WARNING: airdromeId " .. airfield.airdromeId .. " (" .. airfield.name ..
-        ") not found, falling back to configured spawn point")
-    return {x = airfield.spawnPoint.x, y = airfield.spawnPoint.y, alt = RUNWAY_ALTITUDE_METERS}
+    log(
+        "WARNING: airdromeId "
+            .. airfield.airdromeId
+            .. " ("
+            .. airfield.name
+            .. ") not found, falling back to configured spawn point"
+    )
+    return { x = airfield.spawnPoint.x, y = airfield.spawnPoint.y, alt = RUNWAY_ALTITUDE_METERS }
 end
 
 function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
@@ -263,13 +268,17 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
         }
 
         -- Handle callsign based on aircraft type
-        if aircraftType == "MiG-29A" or aircraftType == "MiG-29S" or
-           aircraftType == "Su-27" or aircraftType == "J-11A" or
-           aircraftType == "MiG-21Bis" then
+        if
+            aircraftType == "MiG-29A"
+            or aircraftType == "MiG-29S"
+            or aircraftType == "Su-27"
+            or aircraftType == "J-11A"
+            or aircraftType == "MiG-21Bis"
+        then
             unit.callsign = 100 + unitId % 100
         else
             unit.callsign = {
-                [1] = 9,  -- Chevy
+                [1] = 9, -- Chevy
                 [2] = math.floor(groupId / 10) % 10 + 1,
                 [3] = i,
                 ["name"] = "Chevy" .. ((groupId % 10) + 1) .. i,
@@ -318,7 +327,7 @@ function AirIntercept:createInterceptorGroup(airfield, flightSize, targetUnit)
                                     id = "EngageTargets",
                                     number = 1,
                                     params = {
-                                        targetTypes = {"Air"},
+                                        targetTypes = { "Air" },
                                         priority = 0,
                                     },
                                 },
@@ -448,9 +457,19 @@ function AirIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
         self.state.groupAliveCount[groupData.name] = flightSize
         self.state.groupToAirfield[groupData.name] = airfield.name
 
-        log("Spawned " .. flightSize .. " interceptors from " .. airfield.name ..
-                 " (" .. groupData.name .. "), total airborne: " .. self.state.totalAirborne ..
-                 ", next cooldown: " .. afState.nextCooldownDuration .. "s")
+        log(
+            "Spawned "
+                .. flightSize
+                .. " interceptors from "
+                .. airfield.name
+                .. " ("
+                .. groupData.name
+                .. "), total airborne: "
+                .. self.state.totalAirborne
+                .. ", next cooldown: "
+                .. afState.nextCooldownDuration
+                .. "s"
+        )
 
         return group
     else
@@ -466,13 +485,16 @@ end
 AirIntercept.eventHandler = {}
 
 function AirIntercept.eventHandler:onEvent(event)
-    if event.id == world.event.S_EVENT_DEAD or
-       event.id == world.event.S_EVENT_CRASH or
-       event.id == world.event.S_EVENT_UNIT_LOST then
-
+    if
+        event.id == world.event.S_EVENT_DEAD
+        or event.id == world.event.S_EVENT_CRASH
+        or event.id == world.event.S_EVENT_UNIT_LOST
+    then
         local unit = event.initiator
         if unit then
-            local ok, unitName = pcall(function() return unit:getName() end)
+            local ok, unitName = pcall(function()
+                return unit:getName()
+            end)
             if ok and unitName then
                 AirIntercept:handleUnitDeath(unitName)
             else
@@ -491,7 +513,9 @@ function AirIntercept:handleUnitLanded(unit)
         return
     end
 
-    local ok, unitName = pcall(function() return unit:getName() end)
+    local ok, unitName = pcall(function()
+        return unit:getName()
+    end)
     if not ok or not unitName or not string.find(unitName, "Erusea-Interceptor-", 1, true) then
         return
     end
@@ -530,8 +554,7 @@ function AirIntercept:handleUnitDeath(unitName)
         local newCount = math.max(0, aliveCount - 1)
         self.state.groupAliveCount[groupName] = newCount
 
-        log("Interceptor removed from airborne count: " .. unitName ..
-                 ", total airborne: " .. self.state.totalAirborne)
+        log("Interceptor removed from airborne count: " .. unitName .. ", total airborne: " .. self.state.totalAirborne)
 
         -- Clean up group when all units are dead
         if newCount == 0 then
@@ -602,8 +625,7 @@ function AirIntercept:checkAirfields()
             local responseSize = self:calculateResponseSize(#intruders)
             local targetUnit = intruders[math.random(#intruders)].unit
 
-            log(airfield.name .. ": " .. #intruders ..
-                     " intruders detected, response size: " .. responseSize)
+            log(airfield.name .. ": " .. #intruders .. " intruders detected, response size: " .. responseSize)
 
             spawnRequests[#spawnRequests + 1] = {
                 airfield = airfield,

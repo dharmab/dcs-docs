@@ -80,18 +80,18 @@ A singleton is a global object that provides access to a category of game functi
 
 The main singletons are:
 
-| Singleton | Purpose |
-|-----------|---------|
-| [`env`](reference/singletons/env.md) | Logging and environment information |
-| [`timer`](reference/singletons/timer.md) | Mission time and scheduled functions |
-| [`land`](reference/singletons/land.md) | Terrain queries (ground height, surface type) |
-| [`atmosphere`](reference/singletons/atmosphere.md) | Weather conditions |
-| [`world`](reference/singletons/world.md) | Event handlers and object searches |
-| [`coalition`](reference/singletons/coalition.md) | Operations related to the red and blue sides |
-| [`trigger`](reference/singletons/trigger.md) | Trigger zones and trigger-style actions like messages |
-| [`coord`](reference/singletons/coord.md) | Coordinate conversions (lat/long to game coordinates) |
-| [`missionCommands`](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
-| [`net`](reference/singletons/net.md) | Chat, player information, and slot control |
+| Singleton                                                     | Purpose                                               |
+| ------------------------------------------------------------- | ----------------------------------------------------- |
+| [`env`](reference/singletons/env.md)                          | Logging and environment information                   |
+| [`timer`](reference/singletons/timer.md)                      | Mission time and scheduled functions                  |
+| [`land`](reference/singletons/land.md)                        | Terrain queries (ground height, surface type)         |
+| [`atmosphere`](reference/singletons/atmosphere.md)            | Weather conditions                                    |
+| [`world`](reference/singletons/world.md)                      | Event handlers and object searches                    |
+| [`coalition`](reference/singletons/coalition.md)              | Operations related to the red and blue sides          |
+| [`trigger`](reference/singletons/trigger.md)                  | Trigger zones and trigger-style actions like messages |
+| [`coord`](reference/singletons/coord.md)                      | Coordinate conversions (lat/long to game coordinates) |
+| [`missionCommands`](reference/singletons/mission-commands.md) | F10 radio menu manipulation                           |
+| [`net`](reference/singletons/net.md)                          | Chat, player information, and slot control            |
 
 ### Objects and Functions
 
@@ -117,6 +117,7 @@ Note the colon (`:`) when calling functions on objects: [`eagle:getFuel()`](refe
 Common object types and some of their functions:
 
 **Unit** (aircraft, vehicles, ships)
+
 - [`getName()`](reference/classes/object.md#objectgetname) - Get the unit's name
 - [`getPosition()`](reference/classes/object.md#objectgetposition) - Get location and orientation
 - [`getLife()`](reference/classes/unit.md#unitgetlife) - Get remaining hit points
@@ -126,12 +127,14 @@ Common object types and some of their functions:
 - [`inAir()`](reference/classes/object.md#objectinair) - Check if an aircraft is flying
 
 **Group** (collection of units)
+
 - [`getName()`](reference/classes/group.md#groupgetname) - Get the group's name
 - [`getUnits()`](reference/classes/group.md#groupgetunits) - Get a list of all units in the group
 - [`getSize()`](reference/classes/group.md#groupgetsize) - Get how many units are in the group
 - [`activate()`](reference/classes/group.md#groupactivate) - Activate a late-activation group
 
 **Airbase** (airports, FARPs, carriers)
+
 - [`getName()`](reference/classes/object.md#objectgetname) - Get the airbase name
 - [`getCallsign()`](reference/classes/airbase.md#airbasegetcallsign) - Get the radio callsign
 - [`getParking()`](reference/classes/airbase.md#airbasegetparking) - Get parking spot information
@@ -161,21 +164,21 @@ world.addEventHandler(deathTracker)
 
 Common events include:
 
-| Event | When it fires |
-|-------|---------------|
-| `S_EVENT_SHOT` | A weapon is fired |
-| `S_EVENT_HIT` | An object is struck by a weapon |
-| `S_EVENT_TAKEOFF` | An aircraft departs |
-| `S_EVENT_LAND` | An aircraft lands |
-| `S_EVENT_RUNWAY_TAKEOFF` | An aircraft leaves the ground |
-| `S_EVENT_RUNWAY_TOUCH` | An aircraft touches down |
-| `S_EVENT_CRASH` | An aircraft crashes |
-| `S_EVENT_EJECTION` | A pilot ejects |
-| `S_EVENT_DEAD` | An object is destroyed |
-| `S_EVENT_BIRTH` | A unit spawns |
+| Event                       | When it fires                    |
+| --------------------------- | -------------------------------- |
+| `S_EVENT_SHOT`              | A weapon is fired                |
+| `S_EVENT_HIT`               | An object is struck by a weapon  |
+| `S_EVENT_TAKEOFF`           | An aircraft departs              |
+| `S_EVENT_LAND`              | An aircraft lands                |
+| `S_EVENT_RUNWAY_TAKEOFF`    | An aircraft leaves the ground    |
+| `S_EVENT_RUNWAY_TOUCH`      | An aircraft touches down         |
+| `S_EVENT_CRASH`             | An aircraft crashes              |
+| `S_EVENT_EJECTION`          | A pilot ejects                   |
+| `S_EVENT_DEAD`              | An object is destroyed           |
+| `S_EVENT_BIRTH`             | A unit spawns                    |
 | `S_EVENT_PLAYER_ENTER_UNIT` | A player takes control of a unit |
-| `S_EVENT_KILL` | One unit kills another |
-| `S_EVENT_MARK_ADDED` | A map marker is created |
+| `S_EVENT_KILL`              | One unit kills another           |
+| `S_EVENT_MARK_ADDED`        | A map marker is created          |
 
 The event table passed to your handler contains different information depending on the event type. Most events include `id` (which event occurred), `time` (mission time), and `initiator` (the object involved).
 
@@ -324,6 +327,7 @@ Understanding how scripts are stored in mission files helps when troubleshooting
 MIZ files are ZIP archives that you can open with any archive utility. When you use **Do Script**, your code is embedded directly in the `mission` file as text within the trigger data.
 
 When you use **Do Script File**, the Lua file is:
+
 1. Copied into the `l10n/DEFAULT` directory inside the archive
 2. Registered in the `l10n/DEFAULT/mapResource` file
 3. Referenced by the trigger action
@@ -356,57 +360,57 @@ The reference documentation is organized into the [reference/](reference/) direc
 
 ### Types and Enums
 
-| Reference | Description |
-|-----------|-------------|
-| [Coordinate Types](reference/types/coordinates.md) | Vec2, Vec3, Position3 type definitions |
-| [Coalition Enums](reference/enums/coalition.md) | Coalition and country identifiers |
-| [AI Enums](reference/enums/ai.md) | AI skill levels, task enums, and beacon types |
+| Reference                                          | Description                                   |
+| -------------------------------------------------- | --------------------------------------------- |
+| [Coordinate Types](reference/types/coordinates.md) | Vec2, Vec3, Position3 type definitions        |
+| [Coalition Enums](reference/enums/coalition.md)    | Coalition and country identifiers             |
+| [AI Enums](reference/enums/ai.md)                  | AI skill levels, task enums, and beacon types |
 
 ### Singletons
 
-| Singleton | Description |
-|-----------|-------------|
-| [timer](reference/singletons/timer.md) | Mission time and scheduled functions |
-| [env](reference/singletons/env.md) | Logging, environment info, and mission data access |
-| [trigger](reference/singletons/trigger.md) | Trigger zones and trigger-style actions (messages, smoke, explosions) |
-| [world](reference/singletons/world.md) | Event handlers, object searches, and world queries |
-| [coalition](reference/singletons/coalition.md) | Coalition-specific operations, group spawning, and queries |
-| [missionCommands](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
-| [net](reference/singletons/net.md) | Chat, player information, and slot control |
-| [coord](reference/singletons/coord.md) | Coordinate conversions (lat/long, MGRS, game coordinates) |
-| [land](reference/singletons/land.md) | Terrain queries (height, surface type, line of sight, pathfinding) |
-| [atmosphere](reference/singletons/atmosphere.md) | Weather conditions (wind, temperature, pressure) |
+| Singleton                                                   | Description                                                           |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| [timer](reference/singletons/timer.md)                      | Mission time and scheduled functions                                  |
+| [env](reference/singletons/env.md)                          | Logging, environment info, and mission data access                    |
+| [trigger](reference/singletons/trigger.md)                  | Trigger zones and trigger-style actions (messages, smoke, explosions) |
+| [world](reference/singletons/world.md)                      | Event handlers, object searches, and world queries                    |
+| [coalition](reference/singletons/coalition.md)              | Coalition-specific operations, group spawning, and queries            |
+| [missionCommands](reference/singletons/mission-commands.md) | F10 radio menu manipulation                                           |
+| [net](reference/singletons/net.md)                          | Chat, player information, and slot control                            |
+| [coord](reference/singletons/coord.md)                      | Coordinate conversions (lat/long, MGRS, game coordinates)             |
+| [land](reference/singletons/land.md)                        | Terrain queries (height, surface type, line of sight, pathfinding)    |
+| [atmosphere](reference/singletons/atmosphere.md)            | Weather conditions (wind, temperature, pressure)                      |
 
 ### Classes
 
-| Class | Description |
-|-------|-------------|
-| [Object](reference/classes/object.md) | Base class for all game objects |
+| Class                                                    | Description                                           |
+| -------------------------------------------------------- | ----------------------------------------------------- |
+| [Object](reference/classes/object.md)                    | Base class for all game objects                       |
 | [CoalitionObject](reference/classes/coalition-object.md) | Extends Object with coalition and country information |
-| [Unit](reference/classes/unit.md) | Aircraft, vehicles, ships, and structures |
-| [Group](reference/classes/group.md) | Collections of units |
-| [Airbase](reference/classes/airbase.md) | Airports, FARPs, and carriers |
-| [StaticObject](reference/classes/static-object.md) | Non-moving objects (buildings, cargo, decorations) |
-| [Weapon](reference/classes/weapon.md) | Weapons in flight (missiles, bombs, rockets) |
-| [Controller](reference/classes/controller.md) | AI control interface for issuing tasks and commands |
-| [Spot](reference/classes/spot.md) | Laser and infrared designator spots |
+| [Unit](reference/classes/unit.md)                        | Aircraft, vehicles, ships, and structures             |
+| [Group](reference/classes/group.md)                      | Collections of units                                  |
+| [Airbase](reference/classes/airbase.md)                  | Airports, FARPs, and carriers                         |
+| [StaticObject](reference/classes/static-object.md)       | Non-moving objects (buildings, cargo, decorations)    |
+| [Weapon](reference/classes/weapon.md)                    | Weapons in flight (missiles, bombs, rockets)          |
+| [Controller](reference/classes/controller.md)            | AI control interface for issuing tasks and commands   |
+| [Spot](reference/classes/spot.md)                        | Laser and infrared designator spots                   |
 
 ### Events
 
-| Reference | Description |
-|-----------|-------------|
+| Reference                            | Description                               |
+| ------------------------------------ | ----------------------------------------- |
 | [Events](reference/events/events.md) | Event system overview and all event types |
 
 ### AI Control
 
-| Reference | Description |
-|-----------|-------------|
-| [AI Tasks](reference/ai/tasks.md) | Main tasks, en-route tasks, and task wrappers |
+| Reference                               | Description                                    |
+| --------------------------------------- | ---------------------------------------------- |
+| [AI Tasks](reference/ai/tasks.md)       | Main tasks, en-route tasks, and task wrappers  |
 | [AI Commands](reference/ai/commands.md) | Instant AI commands (frequency, beacons, etc.) |
-| [AI Options](reference/ai/options.md) | Air, ground, and naval behavior options |
+| [AI Options](reference/ai/options.md)   | Air, ground, and naval behavior options        |
 
 ### Server Development
 
-| Reference | Description |
-|-----------|-------------|
+| Reference                                       | Description                                                       |
+| ----------------------------------------------- | ----------------------------------------------------------------- |
 | [Server Hooks](reference/hooks/server-hooks.md) | Server-side scripting API (lfs, Sim, log, net, Export, callbacks) |

@@ -103,6 +103,7 @@ boolean object:hasAttribute(string attributeName)
 The `object:hasAttribute` method checks if the object has a specific attribute, such as "Air", "Ground Units", or "SAM related".
 
 **Parameters:**
+
 - `attributeName` (string): The attribute to check for.
 
 **Returns:** True if the object has the attribute, or false otherwise.

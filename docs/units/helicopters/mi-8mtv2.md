@@ -44,7 +44,7 @@ Russian Mi-8MTVs have deployed to Syria and Ukraine, providing transport and fir
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8TsM SM Violet
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OM IL
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OFP2 MPP
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - FAB-500M-62 - 500 kg GP Bomb LD
 - GUV-8700 w 1x12.7 mm & 2x7.62 mm Rotary HMG
@@ -104,7 +104,7 @@ Russian Mi-8MTVs have deployed to Syria and Ukraine, providing transport and fir
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8TsM SM Violet
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OM IL
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OFP2 MPP
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - FAB-500M-62 - 500 kg GP Bomb LD
 - GUV-8700 w 1x12.7 mm & 2x7.62 mm Rotary HMG

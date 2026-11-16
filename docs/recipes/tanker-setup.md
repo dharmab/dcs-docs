@@ -17,22 +17,22 @@ A tanker aircraft requires:
 
 DCS models two distinct aerial refueling systems. Aircraft must use a tanker compatible with their refueling system:
 
-| Refueling System | Tanker Aircraft | Receiver Aircraft |
-|------------------|-----------------|-------------------|
+| Refueling System          | Tanker Aircraft                         | Receiver Aircraft                                                              |
+| ------------------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
 | Probe-and-Drogue (Basket) | KC-130, KC-135MPRS, S-3B Tanker, IL-78M | F/A-18, AV-8B, A-6, Mirage, Rafale, Su-27/33, MiG-29, Tornado, all helicopters |
-| Flying Boom | KC-135 | F-15, F-16, A-10, F-4, B-52 |
+| Flying Boom               | KC-135                                  | F-15, F-16, A-10, F-4, B-52                                                    |
 
 > **Note:** The KC-135MPRS (Multi-Point Refueling System) is a KC-135 variant equipped with wing-mounted drogue pods, allowing it to refuel probe-equipped aircraft. Use this tanker when you need to support Navy/Marine aircraft with a boom-equipped tanker airframe.
 
 ## Unit Type Strings
 
-| Aircraft | Type String | Coalition | Refueling System | Recommended Altitude |
-|----------|-------------|-----------|------------------|---------------------|
-| KC-135 Stratotanker | `KC-135` | Blue (NATO) | Flying Boom | 20,000-25,000 ft (6,096-7,620 m) |
-| KC-135MPRS | `KC135MPRS` | Blue (NATO) | Probe-and-Drogue | 20,000-25,000 ft (6,096-7,620 m) |
-| KC-130 Hercules | `KC130` | Blue (NATO) | Probe-and-Drogue | 15,000-20,000 ft (4,572-6,096 m) |
-| S-3B Viking Tanker | `S-3B Tanker` | Blue (NATO) | Probe-and-Drogue | 15,000-20,000 ft (4,572-6,096 m) |
-| Il-78M Midas | `IL-78M` | Red (Russia) | Probe-and-Drogue | 20,000-25,000 ft (6,096-7,620 m) |
+| Aircraft            | Type String   | Coalition    | Refueling System | Recommended Altitude             |
+| ------------------- | ------------- | ------------ | ---------------- | -------------------------------- |
+| KC-135 Stratotanker | `KC-135`      | Blue (NATO)  | Flying Boom      | 20,000-25,000 ft (6,096-7,620 m) |
+| KC-135MPRS          | `KC135MPRS`   | Blue (NATO)  | Probe-and-Drogue | 20,000-25,000 ft (6,096-7,620 m) |
+| KC-130 Hercules     | `KC130`       | Blue (NATO)  | Probe-and-Drogue | 15,000-20,000 ft (4,572-6,096 m) |
+| S-3B Viking Tanker  | `S-3B Tanker` | Blue (NATO)  | Probe-and-Drogue | 15,000-20,000 ft (4,572-6,096 m) |
+| Il-78M Midas        | `IL-78M`      | Red (Russia) | Probe-and-Drogue | 20,000-25,000 ft (6,096-7,620 m) |
 
 > **Note:** The S-3B Tanker is typically used for carrier-based operations, providing organic tanking capability to the carrier air wing.
 
@@ -206,9 +206,11 @@ The TACAN beacon allows aircraft to navigate to the tanker using their TACAN rec
 > **Note:** Always use X-mode TACAN channels for tankers. Y-mode is not commonly used for air-to-air refueling operations.
 
 **TACAN Frequency Calculation (X-mode):**
+
 - Channels 70-126: frequency = 1088 + channel (MHz)
 
 For example, channel **100X**:
+
 - X-mode channel 100: frequency = 1088 + 100 = **1188 MHz** = **1188000000 Hz**
 
 ```lua
@@ -833,11 +835,11 @@ The Ilyushin Il-78M provides aerial refueling capability for Russian and allied 
 
 For BLUEFOR tankers, use the three-element array callsign format:
 
-| Callsign Name | Index [1] | Example |
-|---------------|-----------|---------|
-| Texaco | 1 | `[1]=1, [2]=1, [3]=1` → "Texaco 11" |
-| Arco | 2 | `[1]=2, [2]=1, [3]=1` → "Arco 11" |
-| Shell | 3 | `[1]=3, [2]=1, [3]=1` → "Shell 11" |
+| Callsign Name | Index [1] | Example                             |
+| ------------- | --------- | ----------------------------------- |
+| Texaco        | 1         | `[1]=1, [2]=1, [3]=1` → "Texaco 11" |
+| Arco          | 2         | `[1]=2, [2]=1, [3]=1` → "Arco 11"   |
+| Shell         | 3         | `[1]=3, [2]=1, [3]=1` → "Shell 11"  |
 
 DCS has only three tanker callsign names. A mission with more than three tankers must reuse a name with a different flight number (`[2]`), such as "Arco 21". A known DCS multiplayer bug can label every tanker that shares a name with the same callsign in the F10 radio menu (for example, Arco 11 and Arco 21 both shown as "Arco 11"). Separately, VAICOM recognizes only the base name.
 
@@ -853,41 +855,41 @@ For REDFOR tankers, use a three-digit numeric callsign:
 
 These are typical values. Missions that follow the [standardized comm plan](comm-plan.md) should use its tanker frequencies instead (270.1 basket, 270.3 recovery, 270.5 fighter boom, 270.7 heavy boom).
 
-| Tanker Role | Frequency | Notes |
-|-------------|-----------|-------|
-| Primary Boom | 251.0 MHz | KC-135 |
+| Tanker Role    | Frequency | Notes             |
+| -------------- | --------- | ----------------- |
+| Primary Boom   | 251.0 MHz | KC-135            |
 | Primary Drogue | 264.0 MHz | KC-135MPRS/KC-130 |
-| Alternate | 276.0 MHz | Secondary tanker |
-| Carrier Tanker | 290.0 MHz | S-3B Viking |
-| REDFOR | 132.0 MHz | IL-78M |
+| Alternate      | 276.0 MHz | Secondary tanker  |
+| Carrier Tanker | 290.0 MHz | S-3B Viking       |
+| REDFOR         | 132.0 MHz | IL-78M            |
 
 ## Common TACAN Channels
 
-| Tanker | Channel | Frequency (Hz) |
-|--------|---------|----------------|
-| Primary Boom | 100X | 1188000000 |
-| Primary Drogue | 101X | 1189000000 |
-| KC-130 | 73X | 1161000000 |
-| S-3B | 75X | 1163000000 |
-| REDFOR | 90X | 1178000000 |
+| Tanker         | Channel | Frequency (Hz) |
+| -------------- | ------- | -------------- |
+| Primary Boom   | 100X    | 1188000000     |
+| Primary Drogue | 101X    | 1189000000     |
+| KC-130         | 73X     | 1161000000     |
+| S-3B           | 75X     | 1163000000     |
+| REDFOR         | 90X     | 1178000000     |
 
 ## Unit Conversions
 
 | Measurement | Conversion |
-|-------------|------------|
-| 25,000 ft | 7,620 m |
-| 22,000 ft | 6,706 m |
-| 20,000 ft | 6,096 m |
-| 18,000 ft | 5,486 m |
-| 15,000 ft | 4,572 m |
-| 350 knots | 180 m/s |
-| 300 knots | 154 m/s |
-| 275 knots | 141 m/s |
-| 250 knots | 128 m/s |
-| 200 knots | 103 m/s |
-| 50 nm | 92,600 m |
-| 40 nm | 74,080 m |
-| 30 nm | 55,560 m |
+| ----------- | ---------- |
+| 25,000 ft   | 7,620 m    |
+| 22,000 ft   | 6,706 m    |
+| 20,000 ft   | 6,096 m    |
+| 18,000 ft   | 5,486 m    |
+| 15,000 ft   | 4,572 m    |
+| 350 knots   | 180 m/s    |
+| 300 knots   | 154 m/s    |
+| 275 knots   | 141 m/s    |
+| 250 knots   | 128 m/s    |
+| 200 knots   | 103 m/s    |
+| 50 nm       | 92,600 m   |
+| 40 nm       | 74,080 m   |
+| 30 nm       | 55,560 m   |
 
 ## Checklist
 

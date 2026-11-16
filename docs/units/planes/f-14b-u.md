@@ -51,30 +51,30 @@ Heatblur's DCS: F-14B(U) builds on its F-14A/B module with upgraded cockpits, an
 
 DCS payload indices differ from the station labels shown in the Mission Editor. The table summarizes major compatible stores, not every rack or training-store option. Stores on neighboring stations can impose additional restrictions; a store appearing on two stations does not guarantee that both can carry it simultaneously.
 
-| Payload index | Station | Major compatible stores |
-|---------------|---------|-------------------------|
-| 1 | 1A | AIM-9L/M on LAU-7 or LAU-138; ACMI/training and smoke stores |
-| 2 | 1B | AIM-54A/C (Mk 47/60), AIM-7E/F/M/MH/P, AIM-9L/M; unguided bombs, practice bombs and Zuni rocket racks |
-| 3 | 2 | 300-gallon external fuel tank (full or empty) |
-| 4 | 3 | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-10/12/16/24/24E; GBU-38 and GBU-31(V)2/B or (V)4/B; ECA adapter |
-| 5 | 4 | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-12/16; GBU-38 and GBU-31(V)2/B or (V)4/B |
-| 6 | 5 | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-12/16/24/24E; GBU-38 and GBU-31(V)2/B or (V)4/B; TARPS |
-| 7 | 6 | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-10/12/16; GBU-38 and GBU-31(V)2/B or (V)4/B; AN/ALQ-167 pod |
-| 8 | 7 | 300-gallon external fuel tank (full or empty) |
-| 9 | 8B | AIM-54A/C (Mk 47/60), AIM-7E/F/M/MH/P, AIM-9L/M; unguided bombs, practice bombs and Zuni rocket racks; LANTIRN targeting pod |
-| 10 | 8A | AIM-9L/M on LAU-7 or LAU-138; ACMI/training and smoke stores |
+| Payload index | Station | Major compatible stores                                                                                                      |
+| ------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 1             | 1A      | AIM-9L/M on LAU-7 or LAU-138; ACMI/training and smoke stores                                                                 |
+| 2             | 1B      | AIM-54A/C (Mk 47/60), AIM-7E/F/M/MH/P, AIM-9L/M; unguided bombs, practice bombs and Zuni rocket racks                        |
+| 3             | 2       | 300-gallon external fuel tank (full or empty)                                                                                |
+| 4             | 3       | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-10/12/16/24/24E; GBU-38 and GBU-31(V)2/B or (V)4/B; ECA adapter              |
+| 5             | 4       | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-12/16; GBU-38 and GBU-31(V)2/B or (V)4/B                                     |
+| 6             | 5       | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-12/16/24/24E; GBU-38 and GBU-31(V)2/B or (V)4/B; TARPS                       |
+| 7             | 6       | AIM-54A/C, AIM-7E/F/M/MH/P; unguided bombs; GBU-10/12/16; GBU-38 and GBU-31(V)2/B or (V)4/B; AN/ALQ-167 pod                  |
+| 8             | 7       | 300-gallon external fuel tank (full or empty)                                                                                |
+| 9             | 8B      | AIM-54A/C (Mk 47/60), AIM-7E/F/M/MH/P, AIM-9L/M; unguided bombs, practice bombs and Zuni rocket racks; LANTIRN targeting pod |
+| 10            | 8A      | AIM-9L/M on LAU-7 or LAU-138; ACMI/training and smoke stores                                                                 |
 
 ### Precision-strike CLSIDs
 
 Use these exact launcher identifiers in `payload.pylons[index].CLSID`:
 
-| Store | CLSID | Station labels (payload indices) |
-|-------|-------|----------------------------------|
-| GBU-38 JDAM | `{BRU-32 GBU-38}` | 3, 4, 5, 6 (4, 5, 6, 7) |
-| GBU-31(V)2/B JDAM | `{BRU-32 GBU_31_V_2B}` | 3, 4, 5, 6 (4, 5, 6, 7) |
-| GBU-31(V)4/B JDAM | `{BRU-32 GBU_31_V_4B}` | 3, 4, 5, 6 (4, 5, 6, 7) |
-| GBU-24E | `{BRU-32 GBU-24E}` | 3, 5 (4, 6) |
-| LANTIRN | `{F14-LANTIRN-TP}` | 8B (9) |
+| Store             | CLSID                  | Station labels (payload indices) |
+| ----------------- | ---------------------- | -------------------------------- |
+| GBU-38 JDAM       | `{BRU-32 GBU-38}`      | 3, 4, 5, 6 (4, 5, 6, 7)          |
+| GBU-31(V)2/B JDAM | `{BRU-32 GBU_31_V_2B}` | 3, 4, 5, 6 (4, 5, 6, 7)          |
+| GBU-31(V)4/B JDAM | `{BRU-32 GBU_31_V_4B}` | 3, 4, 5, 6 (4, 5, 6, 7)          |
+| GBU-24E           | `{BRU-32 GBU-24E}`     | 3, 5 (4, 6)                      |
+| LANTIRN           | `{F14-LANTIRN-TP}`     | 8B (9)                           |
 
 For example, this payload entry mounts a GBU-38 on station 3 (payload index 4):
 

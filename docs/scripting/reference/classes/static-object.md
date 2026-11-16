@@ -15,6 +15,7 @@ StaticObject StaticObject.getByName(string name)
 The `StaticObject.getByName` function is a static function that returns a static object by name.
 
 **Parameters:**
+
 - `name` (string): The object's name as defined in the Mission Editor.
 
 **Returns:** A StaticObject, or nil if the object is not found.

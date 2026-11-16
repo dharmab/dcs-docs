@@ -44,7 +44,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - Kh-25ML (AS-10 Karen) - 300kg, ASM, Semi-Act Laser
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 - OFAB-250-270 - 250 kg GP Bomb LD
@@ -61,7 +61,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - Kh-25ML (AS-10 Karen) - 300kg, ASM, Semi-Act Laser
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 - OFAB-250-270 - 250 kg GP Bomb LD
@@ -78,7 +78,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - Kh-25ML (AS-10 Karen) - 300kg, ASM, Semi-Act Laser
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 - OFAB-250-270 - 250 kg GP Bomb LD
@@ -94,7 +94,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OM IL
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 - OFAB-250-270 - 250 kg GP Bomb LD
@@ -119,7 +119,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - Kh-25ML (AS-10 Karen) - 300kg, ASM, Semi-Act Laser
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - APU-6 - 6 x 9M127 Vikhr - ATGM, LOSBR, Tandem HEAT/Frag
 - 9S846 Strelets - 2 x 9M39 Igla
@@ -134,7 +134,7 @@ The Black Shark 3 maintains all the distinctive characteristics of the Ka-50 des
 - Kh-25ML (AS-10 Karen) - 300kg, ASM, Semi-Act Laser
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 - OFAB-250-270 - 250 kg GP Bomb LD

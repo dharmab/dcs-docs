@@ -3,15 +3,10 @@ name = "mission-check"
 version = "0.1.0"
 description = "Validate DCS mission directories and .miz files"
 requires-python = ">=3.14"
-dependencies = [
-    "luadata>=1.0.5",
-]
+dependencies = ["luadata>=1.0.5"]
 
 [dependency-groups]
-dev = [
-    "ruff",
-    "ty",
-]
+dev = ["ruff", "ty"]
 
 [project.scripts]
 check-mission = "check_mission:main"

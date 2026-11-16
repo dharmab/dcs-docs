@@ -22,6 +22,7 @@ Spot Spot.createLaser(Object source, table localPosition, Vec3 targetPoint, numb
 The `Spot.createLaser` function creates a laser spot emanating from an object.
 
 **Parameters:**
+
 - `source` (Object): The object the laser originates from.
 - `localPosition` (table): The offset from the object's center.
 - `targetPoint` (Vec3): The point where the laser is pointing.
@@ -44,6 +45,7 @@ Spot Spot.createInfraRed(Object source, table localPosition, Vec3 targetPoint)
 Creates an infrared pointer spot.
 
 **Parameters:**
+
 - `source` (Object): The object the IR pointer originates from.
 - `localPosition` (table): Offset from the object's center.
 - `targetPoint` (Vec3): Where the IR is pointing.
@@ -77,6 +79,7 @@ nil spot:setPoint(Vec3 targetPoint)
 Changes where the spot is pointing.
 
 **Parameters:**
+
 - `targetPoint` (Vec3): New target position.
 
 ```lua
@@ -104,6 +107,7 @@ nil spot:setCode(number code)
 Changes the laser code.
 
 **Parameters:**
+
 - `code` (number): New 4-digit laser code (1111-1788).
 
 ## See Also

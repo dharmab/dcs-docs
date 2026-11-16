@@ -81,8 +81,8 @@ CarrierOps.config = {
         tacanCallsign = "STN",
         iclsChannel = 4,
         link4Frequency = 336.0,
-        radioFrequency = 254.7,  -- Carrier (Marshal/Approach/LSO) per comm plan
-        radioModulation = 0,     -- AM
+        radioFrequency = 254.7, -- Carrier (Marshal/Approach/LSO) per comm plan
+        radioModulation = 0, -- AM
         radioPower = 10,
     },
 
@@ -91,8 +91,18 @@ CarrierOps.config = {
     -- along: meters toward the upwind end of the track (negative = downwind)
     -- across: meters to the right of the into-wind course (negative = left)
     escorts = {
-        { groupName = "CSG Cruiser", along = 3 * METERS_PER_NM, across = 1 * METERS_PER_NM, maxSpeed = 30 * KNOTS_TO_MPS },
-        { groupName = "CSG Destroyer 1", along = 1 * METERS_PER_NM, across = -3 * METERS_PER_NM, maxSpeed = 30 * KNOTS_TO_MPS },
+        {
+            groupName = "CSG Cruiser",
+            along = 3 * METERS_PER_NM,
+            across = 1 * METERS_PER_NM,
+            maxSpeed = 30 * KNOTS_TO_MPS,
+        },
+        {
+            groupName = "CSG Destroyer 1",
+            along = 1 * METERS_PER_NM,
+            across = -3 * METERS_PER_NM,
+            maxSpeed = 30 * KNOTS_TO_MPS,
+        },
         { groupName = "CSG Destroyer 2", along = 0, across = 3 * METERS_PER_NM, maxSpeed = 30 * KNOTS_TO_MPS },
         { groupName = "CSG Frigate", along = -4 * METERS_PER_NM, across = 0, maxSpeed = 28 * KNOTS_TO_MPS },
     },
@@ -129,11 +139,11 @@ CarrierOps.config = {
 -- =============================================================================
 
 CarrierOps.state = {
-    phase = nil,           -- "INTO_WIND" or "REPOSITION"
-    legEnd = nil,          -- {x, y} end of the current leg
-    legCourse = nil,       -- radians, course of the current leg
-    legSpeed = nil,        -- m/s, carrier speed on the current leg
-    windAxis = nil,        -- radians, into-wind course used for escort stations
+    phase = nil, -- "INTO_WIND" or "REPOSITION"
+    legEnd = nil, -- {x, y} end of the current leg
+    legCourse = nil, -- radians, course of the current leg
+    legSpeed = nil, -- m/s, carrier speed on the current leg
+    windAxis = nil, -- radians, into-wind course used for escort stations
     plannedWindFrom = nil,
     plannedWindSpeed = nil,
     planeGuardRespawnAt = nil,
@@ -296,9 +306,20 @@ function CarrierOps:activateCarrierSystems(carrierUnit)
         },
     })
 
-    log("Carrier systems active: TACAN " .. sys.tacanChannel .. sys.tacanMode .. " " .. sys.tacanCallsign ..
-        ", ICLS " .. sys.iclsChannel .. ", Link 4 " .. sys.link4Frequency ..
-        ", ACLS on, radio " .. sys.radioFrequency .. " AM")
+    log(
+        "Carrier systems active: TACAN "
+            .. sys.tacanChannel
+            .. sys.tacanMode
+            .. " "
+            .. sys.tacanCallsign
+            .. ", ICLS "
+            .. sys.iclsChannel
+            .. ", Link 4 "
+            .. sys.link4Frequency
+            .. ", ACLS on, radio "
+            .. sys.radioFrequency
+            .. " AM"
+    )
 end
 
 -- =============================================================================
@@ -371,8 +392,13 @@ function CarrierOps:startIntoWindLeg(carrierUnit)
 
     local legEnd = offsetPoint(pos, course, legLength, 0)
     if not isDeepWater(legEnd) then
-        log("WARNING: Into-wind leg end is not deep water at (" ..
-            math.floor(legEnd.x) .. ", " .. math.floor(legEnd.y) .. ")")
+        log(
+            "WARNING: Into-wind leg end is not deep water at ("
+                .. math.floor(legEnd.x)
+                .. ", "
+                .. math.floor(legEnd.y)
+                .. ")"
+        )
     end
 
     self.state.phase = "INTO_WIND"
@@ -386,10 +412,17 @@ function CarrierOps:startIntoWindLeg(carrierUnit)
     carrierUnit:getGroup():getController():setTask(shipRoute(pos, legEnd, speed))
     self:activateCarrierSystems(carrierUnit)
 
-    log(string.format("INTO_WIND: wind from %03d at %d kt, course %03d at %d kt (WOD ~%d kt), leg %.1f nm",
-        toDegrees(windFrom), toKnots(windSpeed), toDegrees(course), toKnots(speed),
-        toKnots(speed + windSpeed * math.cos(angleDifference(course, windFrom))),
-        legLength / METERS_PER_NM))
+    log(
+        string.format(
+            "INTO_WIND: wind from %03d at %d kt, course %03d at %d kt (WOD ~%d kt), leg %.1f nm",
+            toDegrees(windFrom),
+            toKnots(windSpeed),
+            toDegrees(course),
+            toKnots(speed),
+            toKnots(speed + windSpeed * math.cos(angleDifference(course, windFrom))),
+            legLength / METERS_PER_NM
+        )
+    )
 
     self:updateEscorts()
 end
@@ -414,9 +447,14 @@ function CarrierOps:startRepositionLeg(carrierUnit)
     carrierUnit:getGroup():getController():setTask(shipRoute(pos, target, cfg.repositionSpeed))
     self:activateCarrierSystems(carrierUnit)
 
-    log(string.format("REPOSITION: course %03d at %d kt, %.1f nm to downwind start point",
-        toDegrees(course), toKnots(cfg.repositionSpeed),
-        math.sqrt(dx * dx + dy * dy) / METERS_PER_NM))
+    log(
+        string.format(
+            "REPOSITION: course %03d at %d kt, %.1f nm to downwind start point",
+            toDegrees(course),
+            toKnots(cfg.repositionSpeed),
+            math.sqrt(dx * dx + dy * dy) / METERS_PER_NM
+        )
+    )
 
     self:updateEscorts()
 end
@@ -460,8 +498,8 @@ function CarrierOps:checkCarrier()
     if self.state.phase == "INTO_WIND" then
         local cfg = self.config.carrier
         local windFrom, windSpeed = self:getWindAt(pos)
-        local shifted = windSpeed >= cfg.calmWindSpeed and
-            angleDifference(windFrom, self.state.plannedWindFrom) > cfg.replanWindShift
+        local shifted = windSpeed >= cfg.calmWindSpeed
+            and angleDifference(windFrom, self.state.plannedWindFrom) > cfg.replanWindShift
         local changed = math.abs(windSpeed - self.state.plannedWindSpeed) > cfg.replanWindSpeedChange
         if shifted or changed then
             log("Wind changed, replanning into-wind leg")
@@ -497,8 +535,7 @@ function CarrierOps:updateEscorts()
             -- Speed up or slow down to close the along-track gap to station
             local alongError = (station.x - escortPos.x) * legDir.x + (station.y - escortPos.y) * legDir.y
             local speed = self.state.legSpeed + alongError * self.config.escortSpeedGain
-            speed = math.max(self.state.legSpeed * self.config.escortMinSpeedFactor,
-                math.min(escort.maxSpeed, speed))
+            speed = math.max(self.state.legSpeed * self.config.escortMinSpeedFactor, math.min(escort.maxSpeed, speed))
 
             group:getController():setTask(shipRoute(escortPos, stationEnd, speed))
         end

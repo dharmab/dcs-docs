@@ -15,24 +15,25 @@ If you're new to DCS World mission creation, work through these documents in ord
 
 ### Tutorials
 
-| Document | Description |
-|----------|-------------|
-| [mission-editor.md](mission-editor.md) | Guide to the Mission Editor GUI for creating scenarios |
-| [scripting/lua-basics.md](scripting/lua-basics.md) | Lua language fundamentals for DCS scripting |
-| [scripting/simulator-scripting-engine.md](scripting/simulator-scripting-engine.md) | Overview of the SSE scripting API |
+| Document                                                                           | Description                                            |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [mission-editor.md](mission-editor.md)                                             | Guide to the Mission Editor GUI for creating scenarios |
+| [scripting/lua-basics.md](scripting/lua-basics.md)                                 | Lua language fundamentals for DCS scripting            |
+| [scripting/simulator-scripting-engine.md](scripting/simulator-scripting-engine.md) | Overview of the SSE scripting API                      |
 
 ### Mission File Format
 
-| Document | Description |
-|----------|-------------|
-| [mission/miz-file-format.md](mission/miz-file-format.md) | Structure of .miz mission archives |
-| [mission/mission-file-schema.md](mission/mission-file-schema.md) | Schema for the mission Lua table |
+| Document                                                         | Description                        |
+| ---------------------------------------------------------------- | ---------------------------------- |
+| [mission/miz-file-format.md](mission/miz-file-format.md)         | Structure of .miz mission archives |
+| [mission/mission-file-schema.md](mission/mission-file-schema.md) | Schema for the mission Lua table   |
 
 ### Scripting API Reference
 
 The [scripting/reference/](scripting/reference/) directory contains detailed API documentation organized by category:
 
 **Singletons** (Global namespace objects)
+
 - [env](scripting/reference/singletons/env.md) - Logging and environment information
 - [timer](scripting/reference/singletons/timer.md) - Mission time and scheduled functions
 - [world](scripting/reference/singletons/world.md) - Event handlers and object searches
@@ -44,6 +45,7 @@ The [scripting/reference/](scripting/reference/) directory contains detailed API
 - [missionCommands](scripting/reference/singletons/mission-commands.md) - F10 radio menu
 
 **Classes** (Object types)
+
 - [Unit](scripting/reference/classes/unit.md) - Aircraft, vehicles, ships
 - [Group](scripting/reference/classes/group.md) - Collections of units
 - [Object](scripting/reference/classes/object.md) - Base object type
@@ -55,6 +57,7 @@ The [scripting/reference/](scripting/reference/) directory contains detailed API
 - [Spot](scripting/reference/classes/spot.md) - Laser and IR designators
 
 **Other Reference**
+
 - [events/events.md](scripting/reference/events/events.md) - Event system reference
 - [ai/tasks.md](scripting/reference/ai/tasks.md) - AI task definitions
 - [ai/commands.md](scripting/reference/ai/commands.md) - AI command definitions
@@ -68,15 +71,15 @@ The [scripting/reference/](scripting/reference/) directory contains detailed API
 
 The [units/](units/) directory contains equipment and capability data:
 
-| Document | Description |
-|----------|-------------|
-| [units/ground.md](units/ground.md) | Ground vehicles, armor, artillery, air defense, infantry |
-| [units/sea.md](units/sea.md) | Ships, carriers, submarines |
-| [units/planes.md](units/planes.md) | Fixed-wing aircraft with pylons and loadouts |
-| [units/weapons.md](units/weapons.md) | Missiles, bombs, rockets |
+| Document                             | Description                                              |
+| ------------------------------------ | -------------------------------------------------------- |
+| [units/ground.md](units/ground.md)   | Ground vehicles, armor, artillery, air defense, infantry |
+| [units/sea.md](units/sea.md)         | Ships, carriers, submarines                              |
+| [units/planes.md](units/planes.md)   | Fixed-wing aircraft with pylons and loadouts             |
+| [units/weapons.md](units/weapons.md) | Missiles, bombs, rockets                                 |
 
 ### Debugging
 
-| Document | Description |
-|----------|-------------|
+| Document                                               | Description                                                            |
+| ------------------------------------------------------ | ---------------------------------------------------------------------- |
 | [tacview/acmi-debugging.md](tacview/acmi-debugging.md) | Reading Tacview ACMI recordings to debug AI behavior and spawn scripts |

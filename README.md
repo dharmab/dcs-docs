@@ -3,6 +3,7 @@
 This repository contains documentation for AI agents and developers working with DCS World, the combat flight simulator. The documentation covers mission design, Lua scripting, file formats, and unit data.
 
 > **Note:** This documentation is over 99% generated with [Claude Code](https://claude.ai/claude-code), using sources including:
+>
 > - Official DCS World simulator manuals and documentation
 > - The [Hoggit Wiki](https://wiki.hoggitworld.com/)
 > - [Quaggles' DCS Lua Datamine](https://github.com/Quaggles/dcs-lua-datamine)
@@ -31,6 +32,7 @@ The [recipes](docs/recipes/) directory contains step-by-step guides for common m
 The documentation index at [docs/index.json](docs/index.json) provides a structured manifest of all files with metadata including type, audience, and description.
 
 Reference documentation follows consistent patterns:
+
 - API methods include signatures, parameters, return types, and examples
 - Cross-references via "See Also" sections connect related concepts
 - Categorical organization under `docs/scripting/reference/` aids discovery

@@ -27,6 +27,7 @@ Airbase Airbase.getByName(string name)
 The `Airbase.getByName` function is a static function that returns an airbase by name.
 
 **Parameters:**
+
 - `name` (string): The airbase name, such as "Batumi" or "CVN-74 John C. Stennis".
 
 **Returns:** An Airbase object, or nil if the airbase is not found.
@@ -55,6 +56,7 @@ Unit airbase:getUnit(number index)
 The `airbase:getUnit` method returns the ship unit for ship-based airbases.
 
 **Parameters:**
+
 - `index` (number): The unit index, typically 1.
 
 **Returns:** A Unit object for ships, or nil for ground airbases.
@@ -68,6 +70,7 @@ table airbase:getParking(boolean available)
 The `airbase:getParking` method returns parking spot information.
 
 **Parameters:**
+
 - `available` (boolean): Optional. If true, the method returns only unoccupied spots.
 
 **Returns:** An array of parking spot tables. Each table contains fields such as `Term_Index`, `vTerminalPos`, `fDistToRW`, and `Term_Type`.
@@ -108,6 +111,7 @@ nil airbase:setRadioSilentMode(boolean silent)
 The `airbase:setRadioSilentMode` method enables or disables the airbase's radio.
 
 **Parameters:**
+
 - `silent` (boolean): Set to true to silence the radio, or false to enable it.
 
 ## airbase:setCoalition
@@ -119,6 +123,7 @@ nil airbase:setCoalition(number coalitionId)
 The `airbase:setCoalition` method changes the airbase's coalition, effectively capturing it.
 
 **Parameters:**
+
 - `coalitionId` (number): The new coalition from `coalition.side`.
 
 ```lua
@@ -134,6 +139,7 @@ nil airbase:autoCapture(boolean enable)
 The `airbase:autoCapture` method enables or disables automatic capture when ground forces are nearby.
 
 **Parameters:**
+
 - `enable` (boolean): Set to true to enable auto-capture, or false to disable.
 
 ## airbase:autoCaptureIsOn

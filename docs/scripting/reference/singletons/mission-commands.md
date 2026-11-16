@@ -11,6 +11,7 @@ table missionCommands.addCommand(string name, table path, function handler, any 
 The `missionCommands.addCommand` function adds a command to the F10 menu that all players can see and use.
 
 **Parameters:**
+
 - `name` (string): The menu item text.
 - `path` (table): The parent menu path. Pass nil to add the command to the root menu.
 - `handler` (function): The function called when the player selects the command.
@@ -38,6 +39,7 @@ table missionCommands.addSubMenu(string name, table path)
 The `missionCommands.addSubMenu` function adds a submenu to the F10 menu.
 
 **Parameters:**
+
 - `name` (string): The submenu text.
 - `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
 
@@ -58,6 +60,7 @@ nil missionCommands.removeItem(table path)
 The `missionCommands.removeItem` function removes a command or submenu from the F10 menu.
 
 **Parameters:**
+
 - `path` (table): The path table returned by `missionCommands.addCommand` or `missionCommands.addSubMenu`.
 
 ## missionCommands.addCommandForCoalition
@@ -69,6 +72,7 @@ table missionCommands.addCommandForCoalition(number coalitionId, string name, ta
 The `missionCommands.addCommandForCoalition` function adds a command visible only to players of a specific coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `name` (string): The menu item text.
 - `path` (table): The parent menu path. Pass nil to add the command to the root menu.
@@ -86,6 +90,7 @@ table missionCommands.addSubMenuForCoalition(number coalitionId, string name, ta
 The `missionCommands.addSubMenuForCoalition` function adds a submenu visible only to players of a specific coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `name` (string): The submenu text.
 - `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
@@ -101,6 +106,7 @@ nil missionCommands.removeItemForCoalition(number coalitionId, table path)
 The `missionCommands.removeItemForCoalition` function removes a coalition-specific menu item.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `path` (table): The path table returned when the item was created.
 
@@ -113,6 +119,7 @@ table missionCommands.addCommandForGroup(number groupId, string name, table path
 The `missionCommands.addCommandForGroup` function adds a command visible only to players in a specific group. This function is the most common way to create player-specific menus.
 
 **Parameters:**
+
 - `groupId` (number): The group's numeric ID. Call `group:getID()` on a Group object to obtain this value.
 - `name` (string): The menu item text.
 - `path` (table): The parent menu path. Pass nil to add the command to the root menu.
@@ -143,6 +150,7 @@ table missionCommands.addSubMenuForGroup(number groupId, string name, table path
 The `missionCommands.addSubMenuForGroup` function adds a submenu visible only to players in a specific group.
 
 **Parameters:**
+
 - `groupId` (number): The group's numeric ID. Call `group:getID()` on a Group object to obtain this value.
 - `name` (string): The submenu text.
 - `path` (table): The parent menu path. Pass nil to add the submenu to the root menu.
@@ -158,6 +166,7 @@ nil missionCommands.removeItemForGroup(number groupId, table path)
 The `missionCommands.removeItemForGroup` function removes a group-specific menu item.
 
 **Parameters:**
+
 - `groupId` (number): The group's numeric ID.
 - `path` (table): The path table returned when the item was created.
 

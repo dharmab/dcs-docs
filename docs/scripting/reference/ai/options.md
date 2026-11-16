@@ -27,13 +27,13 @@ AI.Option.Air.id.ROE = 0
 
 Values in `AI.Option.Air.val.ROE`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `WEAPON_FREE` | `0` | Attack any detected enemy. |
-| `OPEN_FIRE_WEAPON_FREE` | `1` | Attack enemies attacking friendlies while engaging at will. |
-| `OPEN_FIRE` | `2` | Attack only enemies attacking friendlies. |
-| `RETURN_FIRE` | `3` | Fire only when fired upon. |
-| `WEAPON_HOLD` | `4` | Do not fire weapons. |
+| Name                    | Value | Behavior                                                    |
+| ----------------------- | ----- | ----------------------------------------------------------- |
+| `WEAPON_FREE`           | `0`   | Attack any detected enemy.                                  |
+| `OPEN_FIRE_WEAPON_FREE` | `1`   | Attack enemies attacking friendlies while engaging at will. |
+| `OPEN_FIRE`             | `2`   | Attack only enemies attacking friendlies.                   |
+| `RETURN_FIRE`           | `3`   | Fire only when fired upon.                                  |
+| `WEAPON_HOLD`           | `4`   | Do not fire weapons.                                        |
 
 ```lua
 controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_FREE)           -- Attack any detected enemy
@@ -53,14 +53,14 @@ AI.Option.Air.id.REACTION_ON_THREAT = 1
 
 Values in `AI.Option.Air.val.REACTION_ON_THREAT`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `NO_REACTION` | `0` | Take no defensive action. |
-| `PASSIVE_DEFENCE` | `1` | Use jammers and countermeasures without defensive maneuvering. |
-| `EVADE_FIRE` | `2` | Use defensive maneuvers and countermeasures. |
-| `BYPASS_AND_ESCAPE` | `3` | Route around threat zones and fly above threats. |
-| `ALLOW_ABORT_MISSION` | `4` | Allow returning to base if the situation becomes too dangerous. |
-| `AAA_EVADE_FIRE` | `5` | Perform S-turns at altitude. |
+| Name                  | Value | Behavior                                                        |
+| --------------------- | ----- | --------------------------------------------------------------- |
+| `NO_REACTION`         | `0`   | Take no defensive action.                                       |
+| `PASSIVE_DEFENCE`     | `1`   | Use jammers and countermeasures without defensive maneuvering.  |
+| `EVADE_FIRE`          | `2`   | Use defensive maneuvers and countermeasures.                    |
+| `BYPASS_AND_ESCAPE`   | `3`   | Route around threat zones and fly above threats.                |
+| `ALLOW_ABORT_MISSION` | `4`   | Allow returning to base if the situation becomes too dangerous. |
+| `AAA_EVADE_FIRE`      | `5`   | Perform S-turns at altitude.                                    |
 
 ```lua
 controller:setOption(AI.Option.Air.id.REACTION_ON_THREAT, AI.Option.Air.val.REACTION_ON_THREAT.NO_REACTION)         -- No defensive action
@@ -81,12 +81,12 @@ AI.Option.Air.id.RADAR_USING = 3
 
 Values in `AI.Option.Air.val.RADAR_USING`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `NEVER` | `0` | Never use radar. |
-| `FOR_ATTACK_ONLY` | `1` | Use radar only for attacks. |
-| `FOR_SEARCH_IF_REQUIRED` | `2` | Use radar to search when required. |
-| `FOR_CONTINUOUS_SEARCH` | `3` | Use radar for continuous search. |
+| Name                     | Value | Behavior                           |
+| ------------------------ | ----- | ---------------------------------- |
+| `NEVER`                  | `0`   | Never use radar.                   |
+| `FOR_ATTACK_ONLY`        | `1`   | Use radar only for attacks.        |
+| `FOR_SEARCH_IF_REQUIRED` | `2`   | Use radar to search when required. |
+| `FOR_CONTINUOUS_SEARCH`  | `3`   | Use radar for continuous search.   |
 
 ```lua
 controller:setOption(AI.Option.Air.id.RADAR_USING, AI.Option.Air.val.RADAR_USING.NEVER)                  -- Never use radar
@@ -105,12 +105,12 @@ AI.Option.Air.id.FLARE_USING = 4
 
 Values in `AI.Option.Air.val.FLARE_USING`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `NEVER` | `0` | Never deploy flares or chaff. |
-| `AGAINST_FIRED_MISSILE` | `1` | Deploy against incoming missiles. |
-| `WHEN_FLYING_IN_SAM_WEZ` | `2` | Deploy while flying within a SAM weapon engagement zone (WEZ). |
-| `WHEN_FLYING_NEAR_ENEMIES` | `3` | Deploy while flying near enemies. |
+| Name                       | Value | Behavior                                                       |
+| -------------------------- | ----- | -------------------------------------------------------------- |
+| `NEVER`                    | `0`   | Never deploy flares or chaff.                                  |
+| `AGAINST_FIRED_MISSILE`    | `1`   | Deploy against incoming missiles.                              |
+| `WHEN_FLYING_IN_SAM_WEZ`   | `2`   | Deploy while flying within a SAM weapon engagement zone (WEZ). |
+| `WHEN_FLYING_NEAR_ENEMIES` | `3`   | Deploy while flying near enemies.                              |
 
 ```lua
 controller:setOption(AI.Option.Air.id.FLARE_USING, AI.Option.Air.val.FLARE_USING.NEVER)                    -- Never deploy countermeasures
@@ -131,10 +131,10 @@ AI.Option.Air.id.Formation = 5
 
 The `RTB_ON_BINGO` option controls whether aircraft automatically return to base when fuel is low.
 
-| Argument | Type | Meaning |
-| --- | --- | --- |
-| `optionId` | Number | `AI.Option.Air.id.RTB_ON_BINGO` (numeric ID `6`) selects this option. |
-| `value` | Boolean | `true` enables automatic return on low fuel; `false` disables it. |
+| Argument   | Type    | Meaning                                                               |
+| ---------- | ------- | --------------------------------------------------------------------- |
+| `optionId` | Number  | `AI.Option.Air.id.RTB_ON_BINGO` (numeric ID `6`) selects this option. |
+| `value`    | Boolean | `true` enables automatic return on low fuel; `false` disables it.     |
 
 ```lua
 controller:setOption(AI.Option.Air.id.RTB_ON_BINGO, true)  -- Enable
@@ -173,12 +173,12 @@ AI.Option.Air.id.ECM_USING = 13
 
 Values in `AI.Option.Air.val.ECM_USING`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `NEVER_USE` | `0` | Never use ECM. |
-| `USE_IF_ONLY_LOCK_BY_RADAR` | `1` | Use ECM only when locked by radar. |
-| `USE_IF_DETECTED_LOCK_BY_RADAR` | `2` | Use ECM when detected or locked by radar. |
-| `ALWAYS_USE` | `3` | Always use ECM. |
+| Name                            | Value | Behavior                                  |
+| ------------------------------- | ----- | ----------------------------------------- |
+| `NEVER_USE`                     | `0`   | Never use ECM.                            |
+| `USE_IF_ONLY_LOCK_BY_RADAR`     | `1`   | Use ECM only when locked by radar.        |
+| `USE_IF_DETECTED_LOCK_BY_RADAR` | `2`   | Use ECM when detected or locked by radar. |
+| `ALWAYS_USE`                    | `3`   | Always use ECM.                           |
 
 ```lua
 controller:setOption(AI.Option.Air.id.ECM_USING, AI.Option.Air.val.ECM_USING.NEVER_USE)                     -- Never use ECM
@@ -237,13 +237,13 @@ AI.Option.Air.id.MISSILE_ATTACK = 18
 
 Values in `AI.Option.Air.val.MISSILE_ATTACK`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `MAX_RANGE` | `0` | Fire at maximum range. |
-| `NEZ_RANGE` | `1` | Fire at no-escape zone (NEZ) range. |
-| `HALF_WAY_RMAX_NEZ` | `2` | Fire halfway between maximum range and no-escape zone range. |
-| `TARGET_THREAT_EST` | `3` | Select launch range based on target threat assessment. |
-| `RANDOM_RANGE` | `4` | Select a random launch range. |
+| Name                | Value | Behavior                                                     |
+| ------------------- | ----- | ------------------------------------------------------------ |
+| `MAX_RANGE`         | `0`   | Fire at maximum range.                                       |
+| `NEZ_RANGE`         | `1`   | Fire at no-escape zone (NEZ) range.                          |
+| `HALF_WAY_RMAX_NEZ` | `2`   | Fire halfway between maximum range and no-escape zone range. |
+| `TARGET_THREAT_EST` | `3`   | Select launch range based on target threat assessment.       |
+| `RANDOM_RANGE`      | `4`   | Select a random launch range.                                |
 
 ```lua
 controller:setOption(AI.Option.Air.id.MISSILE_ATTACK, AI.Option.Air.val.MISSILE_ATTACK.MAX_RANGE)         -- Fire at maximum range
@@ -315,11 +315,11 @@ AI.Option.Ground.id.ROE = 0
 
 Values in `AI.Option.Ground.val.ROE`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `OPEN_FIRE` | `2` | Engage enemy targets at will. |
-| `RETURN_FIRE` | `3` | Fire only when fired upon. |
-| `WEAPON_HOLD` | `4` | Do not fire weapons. |
+| Name          | Value | Behavior                      |
+| ------------- | ----- | ----------------------------- |
+| `OPEN_FIRE`   | `2`   | Engage enemy targets at will. |
+| `RETURN_FIRE` | `3`   | Fire only when fired upon.    |
+| `WEAPON_HOLD` | `4`   | Do not fire weapons.          |
 
 ```lua
 controller:setOption(AI.Option.Ground.id.ROE, AI.Option.Ground.val.ROE.OPEN_FIRE)   -- Engage enemies at will
@@ -337,11 +337,11 @@ AI.Option.Ground.id.ALARM_STATE = 9
 
 Values in `AI.Option.Ground.val.ALARM_STATE`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `AUTO` | `0` | Change alert state automatically based on the situation. |
-| `GREEN` | `1` | Remain relaxed with weapons safe. |
-| `RED` | `2` | Remain combat ready with weapons hot. |
+| Name    | Value | Behavior                                                 |
+| ------- | ----- | -------------------------------------------------------- |
+| `AUTO`  | `0`   | Change alert state automatically based on the situation. |
+| `GREEN` | `1`   | Remain relaxed with weapons safe.                        |
+| `RED`   | `2`   | Remain combat ready with weapons hot.                    |
 
 ```lua
 local controller = Group.getByName("SA-10"):getController()
@@ -400,11 +400,11 @@ AI.Option.Naval.id.ROE = 0
 
 Values in `AI.Option.Naval.val.ROE`:
 
-| Name | Value | Behavior |
-| --- | --- | --- |
-| `OPEN_FIRE` | `2` | Engage enemy targets at will. |
-| `RETURN_FIRE` | `3` | Fire only when fired upon. |
-| `WEAPON_HOLD` | `4` | Do not fire weapons. |
+| Name          | Value | Behavior                      |
+| ------------- | ----- | ----------------------------- |
+| `OPEN_FIRE`   | `2`   | Engage enemy targets at will. |
+| `RETURN_FIRE` | `3`   | Fire only when fired upon.    |
+| `WEAPON_HOLD` | `4`   | Do not fire weapons.          |
 
 ```lua
 controller:setOption(AI.Option.Naval.id.ROE, AI.Option.Naval.val.ROE.OPEN_FIRE)   -- Engage enemies at will

@@ -53,6 +53,7 @@ end
 After you have finished exporting terrain data, you should restore the original `MissionScripting.lua` to re-enable security protections. This prevents untrusted missions from accessing your filesystem.
 
 Either:
+
 1. Remove the `--` comment markers you added, or
 2. Restore from the backup copy you made before editing
 
@@ -71,6 +72,7 @@ If you regularly play multiplayer missions from untrusted sources, keeping the f
 5. Wait for the "Terrain export complete!" message (may take 1-2 minutes for large maps)
 
 6. Find the JSON output at:
+
    ```
    Saved Games/DCS/TerrainExport/{theatre}-terrain.json
    ```
@@ -118,6 +120,7 @@ Install [uv](https://docs.astral.sh/uv/) for Python project management.
 1. Place the JSON file in `tools/terrain-export/data/`
 
 2. Run the processor:
+
    ```bash
    cd tools/terrain-export
    uv run process-terrain data/{theatre}-terrain.json -o ../../docs/maps/{theatre}.md
@@ -148,7 +151,7 @@ So we have to figure it out ourselves. We sample thousands of elevation measurem
 
 ### Stage 1: Data Extraction (Inside DCS)
 
-DCS World stores detailed terrain data internally, but there's no "export" button. The workaround is to run a script *inside* the game that queries terrain data point-by-point and saves the results.
+DCS World stores detailed terrain data internally, but there's no "export" button. The workaround is to run a script _inside_ the game that queries terrain data point-by-point and saves the results.
 
 When you load an export mission, an embedded script starts sampling the terrain after 30 seconds. Imagine dropping a surveyor onto the map who measures the ground elevation and surface type (land, water, or road) at thousands of locations arranged in a grid.
 
@@ -170,25 +173,26 @@ The Python script reads the JSON file and transforms raw numbers into geographic
 
 **Classifying terrain:** The script calculates two properties for each grid cell:
 
-- *Slope* measures steepness—how quickly elevation changes as you move horizontally. A flat parking lot has near-zero slope; a cliff face has very high slope. This is calculated from the *gradient*, which is the rate of elevation change in each direction.
+- _Slope_ measures steepness—how quickly elevation changes as you move horizontally. A flat parking lot has near-zero slope; a cliff face has very high slope. This is calculated from the _gradient_, which is the rate of elevation change in each direction.
 
-- *Prominence* measures how much a point rises above its surroundings. A 500-meter hill in flat Kansas has high prominence; a 500-meter bump in the Rockies might have low prominence because everything around it is also high.
+- _Prominence_ measures how much a point rises above its surroundings. A 500-meter hill in flat Kansas has high prominence; a 500-meter bump in the Rockies might have low prominence because everything around it is also high.
 
 These properties determine terrain type:
+
 - Flat terrain has low slope (under 5°) regardless of absolute elevation—a high plateau is still "flat"
 - Mountains have steep slopes (15°+) and high prominence
 - Hills have moderate slope but aren't extreme enough to be mountains
 - Valleys sit below the local average elevation in non-flat areas
 
-**Finding distinct regions:** After classifying each grid cell, the code groups adjacent cells of the same type into regions. This uses *connected component labeling*, an algorithm that works like a flood-fill in image editing—start at one cell, spread to all neighbors of the same type, and mark them as one region. Each region gets a *convex hull* boundary, which is the smallest polygon that completely contains all the region's points (imagine stretching a rubber band around a set of pushpins).
+**Finding distinct regions:** After classifying each grid cell, the code groups adjacent cells of the same type into regions. This uses _connected component labeling_, an algorithm that works like a flood-fill in image editing—start at one cell, spread to all neighbors of the same type, and mark them as one region. Each region gets a _convex hull_ boundary, which is the smallest polygon that completely contains all the region's points (imagine stretching a rubber band around a set of pushpins).
 
 **Detecting water bodies:** Water surfaces get grouped the same way. Large bodies touching the map edge are labeled "sea"; smaller interior bodies become "lakes."
 
-**Finding settlements:** Real cities and towns don't exist in DCS's data, so we infer them from road density. The script uses *DBSCAN* (Density-Based Spatial Clustering of Applications with Noise), a clustering algorithm that finds groups of points packed closely together. Unlike some clustering methods, DBSCAN doesn't require you to specify how many clusters to find—it discovers them automatically by looking for dense neighborhoods. Clusters with enough road points are marked as settlements.
+**Finding settlements:** Real cities and towns don't exist in DCS's data, so we infer them from road density. The script uses _DBSCAN_ (Density-Based Spatial Clustering of Applications with Noise), a clustering algorithm that finds groups of points packed closely together. Unlike some clustering methods, DBSCAN doesn't require you to specify how many clusters to find—it discovers them automatically by looking for dense neighborhoods. Clusters with enough road points are marked as settlements.
 
-Settlement names come from their *MGRS grid location*. MGRS (Military Grid Reference System) divides the world into labeled grid squares; instead of inventing fake city names, each settlement is named after its grid coordinates.
+Settlement names come from their _MGRS grid location_. MGRS (Military Grid Reference System) divides the world into labeled grid squares; instead of inventing fake city names, each settlement is named after its grid coordinates.
 
-**Analyzing connectivity:** The script checks which terrain regions roads connect. A *spatial index* makes this fast. Without an index, you'd have to check every road segment against every region—millions of comparisons. The spatial index divides the map into a grid of buckets; each road segment and region gets assigned to buckets based on its *bounding box* (the smallest rectangle that contains it). When checking connectivity, you only compare items that share a bucket.
+**Analyzing connectivity:** The script checks which terrain regions roads connect. A _spatial index_ makes this fast. Without an index, you'd have to check every road segment against every region—millions of comparisons. The spatial index divides the map into a grid of buckets; each road segment and region gets assigned to buckets based on its _bounding box_ (the smallest rectangle that contains it). When checking connectivity, you only compare items that share a bucket.
 
 The final output is a markdown document describing the map's geography in a format ready for AI-assisted mission generation.
 

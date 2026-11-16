@@ -30,7 +30,7 @@ function BattlefieldGeneration:generateFrontline()
 
     -- Calculate target centroid (center of all target aerodromes)
     local aerodromes = state.battlefield.targetAerodromes
-    local centroid = {x = 0, y = 0}
+    local centroid = { x = 0, y = 0 }
     for _, aerodrome in ipairs(aerodromes) do
         centroid.x = centroid.x + aerodrome.x
         centroid.y = centroid.y + aerodrome.y
@@ -43,10 +43,10 @@ function BattlefieldGeneration:generateFrontline()
     local dx = centroid.x - krymsk.x
     local dy = centroid.y - krymsk.y
     local approachDist = math.sqrt(dx * dx + dy * dy)
-    local approachDir = {x = dx / approachDist, y = dy / approachDist}
+    local approachDir = { x = dx / approachDist, y = dy / approachDist }
 
     -- Frontline axis is perpendicular to approach direction (rotate 90 degrees)
-    local frontlineAxis = {x = -approachDir.y, y = approachDir.x}
+    local frontlineAxis = { x = -approachDir.y, y = approachDir.x }
 
     -- Frontline center: positioned between player base and targets
     -- Use constraints if available, otherwise use battlefieldDistance
@@ -70,14 +70,10 @@ function BattlefieldGeneration:generateFrontline()
     state.battlefield.frontline.approachDir = approachDir
 
     -- Determine number of platoons
-    local numPlatoons = math.random(
-        config.frontline.platoonCountMin,
-        config.frontline.platoonCountMax
-    )
+    local numPlatoons = math.random(config.frontline.platoonCountMin, config.frontline.platoonCountMax)
 
     log("Generating coherent frontline with " .. numPlatoons .. " platoons")
-    log("Frontline center: (" .. math.floor(frontlineCenter.x) .. ", " ..
-        math.floor(frontlineCenter.y) .. ")")
+    log("Frontline center: (" .. math.floor(frontlineCenter.x) .. ", " .. math.floor(frontlineCenter.y) .. ")")
 
     -- Calculate total frontline length and starting position
     -- Use average spacing to estimate total length, then center it
@@ -97,27 +93,27 @@ function BattlefieldGeneration:generateFrontline()
         }
 
         -- Search for valid flat terrain
-        local validPos, isValid = Terrain:findValidPosition(
-            initialPos,
-            config.frontline.terrainSearchRadius
-        )
+        local validPos, isValid = Terrain:findValidPosition(initialPos, config.frontline.terrainSearchRadius)
 
         if isValid then
             self:generateFrontlinePlatoon(validPos, i)
             -- Store ISAF position for FEBA visualization
             state.battlefield.frontline.isafPositions[#state.battlefield.frontline.isafPositions + 1] = validPos
-            log("Platoon " .. i .. " at (" .. math.floor(validPos.x) .. ", " ..
-                math.floor(validPos.y) .. ")")
+            log("Platoon " .. i .. " at (" .. math.floor(validPos.x) .. ", " .. math.floor(validPos.y) .. ")")
         else
-            log("Skipping platoon " .. i .. " - no valid terrain at (" ..
-                math.floor(initialPos.x) .. ", " .. math.floor(initialPos.y) .. ")")
+            log(
+                "Skipping platoon "
+                    .. i
+                    .. " - no valid terrain at ("
+                    .. math.floor(initialPos.x)
+                    .. ", "
+                    .. math.floor(initialPos.y)
+                    .. ")"
+            )
         end
 
         -- Advance along frontline by random spacing for next platoon
-        local spacing = math.random(
-            config.frontline.platoonSpacingMin,
-            config.frontline.platoonSpacingMax
-        )
+        local spacing = math.random(config.frontline.platoonSpacingMin, config.frontline.platoonSpacingMax)
         currentOffset = currentOffset + spacing
     end
 
@@ -133,10 +129,7 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
     local approachDir = state.battlefield.frontline.approachDir
 
     -- Randomized engagement distance (300-1000m)
-    local engageDist = math.random(
-        config.frontline.engagementDistanceMin,
-        config.frontline.engagementDistanceMax
-    )
+    local engageDist = math.random(config.frontline.engagementDistanceMin, config.frontline.engagementDistanceMax)
 
     -- ISAF position (friendly side, toward Krymsk)
     local isafPos = {
@@ -207,10 +200,7 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
     })
 
     -- Build multiple Erusea platoons
-    local numEruseaPlatoons = math.random(
-        config.frontline.enemyPlatoonsMin,
-        config.frontline.enemyPlatoonsMax
-    )
+    local numEruseaPlatoons = math.random(config.frontline.enemyPlatoonsMin, config.frontline.enemyPlatoonsMax)
     local diff = state.difficulty
     local spreadRadius = config.frontline.enemySpreadRadius
 
@@ -289,7 +279,7 @@ function BattlefieldGeneration:updateFireTargets()
                             radius = vGroup.options.fireAtPoint.radius or 50,
                             expendQty = vGroup.options.fireAtPoint.expendQty or 200,
                             expendQtyEnabled = true,
-                        }
+                        },
                     }
 
                     local controller = group:getController()
@@ -359,14 +349,18 @@ function BattlefieldGeneration:generateFrontlineBatched(onComplete)
     local constraints = OperationInfinity.state.battlefield.spawnConstraints
     if constraints and constraints.noFrontline then
         log("Skipping frontline generation - noFrontline constraint active (deep strike zone)")
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
     -- Generate the coherent frontline (all platoons along a single line)
     self:generateFrontline()
 
-    if onComplete then onComplete() end
+    if onComplete then
+        onComplete()
+    end
 end
 
 -- =============================================================================
@@ -590,7 +584,7 @@ function BattlefieldGeneration:generateFuelStorage(index)
     end
 
     -- Fuel storage: ATZ fuel trucks (highly explosive targets)
-    local numTrucks = 3 + math.random(3)  -- 3-6 fuel trucks
+    local numTrucks = 3 + math.random(3) -- 3-6 fuel trucks
     local template = {
         { type = "ATZ-10", count = numTrucks },
     }
@@ -650,9 +644,15 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
         workItems[#workItems + 1] = { type = "fuel", index = i }
     end
 
-    local logMsg = "Generating " .. (isDeepStrike and "deep strike" or "behind-lines") ..
-        " targets (batched): " .. numConvoys .. " convoys, " ..
-        numArtillery .. " artillery, " .. numPatrols .. " patrols"
+    local logMsg = "Generating "
+        .. (isDeepStrike and "deep strike" or "behind-lines")
+        .. " targets (batched): "
+        .. numConvoys
+        .. " convoys, "
+        .. numArtillery
+        .. " artillery, "
+        .. numPatrols
+        .. " patrols"
     if isDeepStrike then
         logMsg = logMsg .. ", " .. numDepots .. " depots, " .. numFuelTanks .. " fuel tanks"
     end
@@ -674,7 +674,9 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
             end
         end,
         onComplete = function()
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -712,20 +714,24 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
     local constraints = state.battlefield.spawnConstraints
     if not constraints or not constraints.noFrontline then
         log("Skipping approach route targets - not a deep strike zone")
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
     local approachConfig = self:getApproachRouteConfig()
     if not approachConfig then
         log("No approach route configuration found")
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
     -- Calculate target centroid (center of all target aerodromes)
     local aerodromes = state.battlefield.targetAerodromes
-    local centroid = {x = 0, y = 0}
+    local centroid = { x = 0, y = 0 }
     for _, aerodrome in ipairs(aerodromes) do
         centroid.x = centroid.x + aerodrome.x
         centroid.y = centroid.y + aerodrome.y
@@ -738,13 +744,12 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
     local dx = centroid.x - krymsk.x
     local dy = centroid.y - krymsk.y
     local totalDistance = math.sqrt(dx * dx + dy * dy)
-    local approachDir = {x = dx / totalDistance, y = dy / totalDistance}
+    local approachDir = { x = dx / totalDistance, y = dy / totalDistance }
 
     -- Perpendicular direction for lateral offsets (toward coast is positive)
-    local perpDir = {x = -approachDir.y, y = approachDir.x}
+    local perpDir = { x = -approachDir.y, y = approachDir.x }
 
-    log("Approach route: Krymsk to centroid, total distance " ..
-        math.floor(totalDistance / 1000) .. " km")
+    log("Approach route: Krymsk to centroid, total distance " .. math.floor(totalDistance / 1000) .. " km")
 
     -- Build work items for all waypoints and targets
     local workItems = {}
@@ -756,8 +761,13 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
 
         -- Skip if inside safe zone (belt-and-suspenders check)
         if waypointDistance < approachConfig.safeZoneRadius then
-            log("Skipping waypoint at fraction " .. fraction ..
-                " - inside safe zone (" .. math.floor(waypointDistance / 1000) .. " km)")
+            log(
+                "Skipping waypoint at fraction "
+                    .. fraction
+                    .. " - inside safe zone ("
+                    .. math.floor(waypointDistance / 1000)
+                    .. " km)"
+            )
         else
             waypointIndex = waypointIndex + 1
             local waypointCenter = {
@@ -765,8 +775,15 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
                 y = krymsk.y + approachDir.y * waypointDistance,
             }
 
-            log("Waypoint " .. waypointIndex .. " at fraction " .. fraction ..
-                " (" .. math.floor(waypointDistance / 1000) .. " km from Krymsk)")
+            log(
+                "Waypoint "
+                    .. waypointIndex
+                    .. " at fraction "
+                    .. fraction
+                    .. " ("
+                    .. math.floor(waypointDistance / 1000)
+                    .. " km from Krymsk)"
+            )
 
             -- Generate target counts for this waypoint
             local targetCounts = approachConfig.targetsPerWaypoint
@@ -819,8 +836,7 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
         end
     end
 
-    log("Generating " .. #workItems .. " approach route targets across " ..
-        waypointIndex .. " waypoints")
+    log("Generating " .. #workItems .. " approach route targets across " .. waypointIndex .. " waypoints")
 
     BatchScheduler:processArray({
         array = workItems,
@@ -829,7 +845,9 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
         end,
         onComplete = function()
             log("Approach route targets generated")
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -839,15 +857,13 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
     local approachConfig = self:getApproachRouteConfig()
 
     -- Calculate position within waypoint area with lateral offset toward coast
-    local lateralOffset = approachConfig.corridorOffsetMin +
-        math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
+    local lateralOffset = approachConfig.corridorOffsetMin
+        + math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
     local longitudinalOffset = (math.random() - 0.5) * 2 * approachConfig.waypointRadius
 
     local initialPos = {
-        x = item.waypointCenter.x + item.approachDir.x * longitudinalOffset +
-            item.perpDir.x * lateralOffset,
-        y = item.waypointCenter.y + item.approachDir.y * longitudinalOffset +
-            item.perpDir.y * lateralOffset,
+        x = item.waypointCenter.x + item.approachDir.x * longitudinalOffset + item.perpDir.x * lateralOffset,
+        y = item.waypointCenter.y + item.approachDir.y * longitudinalOffset + item.perpDir.y * lateralOffset,
     }
 
     -- Group naming: AR = Approach Route
@@ -878,9 +894,15 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
             category = Group.Category.GROUND,
         }, {})
 
-        log("Generated approach route " .. patrolType .. " at (" ..
-            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
-
+        log(
+            "Generated approach route "
+                .. patrolType
+                .. " at ("
+                .. math.floor(pos.x)
+                .. ", "
+                .. math.floor(pos.y)
+                .. ")"
+        )
     elseif item.type == "armor" then
         -- Use armor patrol template for heavier targets
         local pos, valid = Terrain:findValidPosition(initialPos, 200)
@@ -906,9 +928,7 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
             category = Group.Category.GROUND,
         }, {})
 
-        log("Generated approach route armor at (" ..
-            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
-
+        log("Generated approach route armor at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "convoy" then
         -- Position convoy near roads
         local pos, valid = Terrain:findValidPosition(initialPos, 200, {
@@ -935,9 +955,7 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
             category = Group.Category.GROUND,
         }, {})
 
-        log("Generated approach route convoy at (" ..
-            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
-
+        log("Generated approach route convoy at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "checkpoint" then
         -- Checkpoints near roads
         local pos, valid = Terrain:findValidPosition(initialPos, 150, {
@@ -964,8 +982,7 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
             category = Group.Category.GROUND,
         }, {})
 
-        log("Generated approach route checkpoint at (" ..
-            math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+        log("Generated approach route checkpoint at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     end
 end
 
@@ -1020,7 +1037,7 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
 
         -- Position SAM sites closer to aerodrome than frontline units
         -- Heavier SAMs positioned closer to protect the aerodrome
-        local minDist = 5000  -- 5 km minimum from aerodrome
+        local minDist = 5000 -- 5 km minimum from aerodrome
         local maxDist = 30000 -- 30 km max
         if samType == "SA10" or samType == "SA11" then
             maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
@@ -1049,8 +1066,16 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
     -- Register with IADS (ignores SHORAD and Easy types)
     IADS:registerSAMSite(pGroup, samType, pos)
 
-    log("Generated " .. samType .. " at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")" ..
-        (anchor and " as point defense" or ""))
+    log(
+        "Generated "
+            .. samType
+            .. " at ("
+            .. math.floor(pos.x)
+            .. ", "
+            .. math.floor(pos.y)
+            .. ")"
+            .. (anchor and " as point defense" or "")
+    )
 
     return pos
 end
@@ -1086,13 +1111,17 @@ function BattlefieldGeneration:generateAirDefensesBatched(onComplete)
 
     local samCounts = config.samCounts[state.difficulty]
     if not samCounts then
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
     local samTemplates = UnitTemplates.SAMSites[state.difficulty]
     if not samTemplates then
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
@@ -1172,7 +1201,9 @@ function BattlefieldGeneration:generateAirDefensesBatched(onComplete)
             end
         end,
         onComplete = function()
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -1255,7 +1286,9 @@ function BattlefieldGeneration:generateEWRsBatched(onComplete)
             log("Generated EWR at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
         end,
         onComplete = function()
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -1266,8 +1299,8 @@ end
 
 function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
     -- Position SHORAD close to the airbase (1-3 km) to defend against low-level attacks
-    local minDist = 1000  -- 1 km minimum
-    local maxDist = 3000  -- 3 km maximum
+    local minDist = 1000 -- 1 km minimum
+    local maxDist = 3000 -- 3 km maximum
 
     -- Try multiple positions to find valid terrain
     local pos = nil
@@ -1318,8 +1351,15 @@ function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
         category = Group.Category.GROUND,
     })
 
-    log("Generated airbase SHORAD for " .. aerodrome.name .. " at (" ..
-        math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
+    log(
+        "Generated airbase SHORAD for "
+            .. aerodrome.name
+            .. " at ("
+            .. math.floor(pos.x)
+            .. ", "
+            .. math.floor(pos.y)
+            .. ")"
+    )
 end
 
 -- Batched version of generateAirbaseSHORAD
@@ -1330,7 +1370,9 @@ function BattlefieldGeneration:generateAirbaseSHORADBatched(onComplete)
 
     if not shoradTemplate or #shoradTemplate == 0 then
         log("No airbase SHORAD template for difficulty: " .. diff)
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
@@ -1344,7 +1386,9 @@ function BattlefieldGeneration:generateAirbaseSHORADBatched(onComplete)
             BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, ctx.template)
         end,
         onComplete = function()
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end

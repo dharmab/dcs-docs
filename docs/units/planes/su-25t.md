@@ -135,7 +135,7 @@ Development of the Su-25T began after Soviet experience in Afghanistan demonstra
 - O-25 - 1 x UnGd Rkts, 340 mm S-25-OFM Hardened Target Penetrator
 - O-25 - 1 x UnGd Rkts, 420 mm S-25-O Fragmentation
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
-- SPPU-22-1 - 2 x 23mm  GSh-23L Autocannon Pod
+- SPPU-22-1 - 2 x 23mm GSh-23L Autocannon Pod
 - Kh-25MP (AS-12 Kegler) - 320kg, ARM, Pas Rdr
 
 ### Pylon 5
@@ -173,7 +173,7 @@ Development of the Su-25T began after Soviet experience in Afghanistan demonstra
 - O-25 - 1 x UnGd Rkts, 420 mm S-25-O Fragmentation
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - Fuel tank 800L Wing
-- SPPU-22-1 - 2 x 23mm  GSh-23L Autocannon Pod
+- SPPU-22-1 - 2 x 23mm GSh-23L Autocannon Pod
 
 ### Pylon 6
 
@@ -215,7 +215,7 @@ Development of the Su-25T began after Soviet experience in Afghanistan demonstra
 - O-25 - 1 x UnGd Rkts, 420 mm S-25-O Fragmentation
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
 - Fuel tank 800L Wing
-- SPPU-22-1 - 2 x 23mm  GSh-23L Autocannon Pod
+- SPPU-22-1 - 2 x 23mm GSh-23L Autocannon Pod
 
 ### Pylon 8
 
@@ -250,7 +250,7 @@ Development of the Su-25T began after Soviet experience in Afghanistan demonstra
 - O-25 - 1 x UnGd Rkts, 340 mm S-25-OFM Hardened Target Penetrator
 - O-25 - 1 x UnGd Rkts, 420 mm S-25-O Fragmentation
 - B-8M1 - 20 x UnGd Rkts, 80 mm S-8TsM SM Orange
-- SPPU-22-1 - 2 x 23mm  GSh-23L Autocannon Pod
+- SPPU-22-1 - 2 x 23mm GSh-23L Autocannon Pod
 - Kh-25MP (AS-12 Kegler) - 320kg, ARM, Pas Rdr
 
 ### Pylon 9

@@ -6,13 +6,14 @@ This recipe describes how to create player-controllable aircraft slots at an air
 
 DCS World supports three types of player slots:
 
-| Slot Type | `skill` Value | Use Case |
-|-----------|---------------|----------|
-| **Singleplayer** | `"Player"` | Single slot for solo missions |
-| **Traditional Multiplayer** | `"Client"` | Individual slots for each player aircraft |
-| **Dynamic Spawn Template** | `"Client"` + `dynSpawnTemplate = true` | Template-based spawning from warehouse (preferred for multiplayer) |
+| Slot Type                   | `skill` Value                          | Use Case                                                           |
+| --------------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| **Singleplayer**            | `"Player"`                             | Single slot for solo missions                                      |
+| **Traditional Multiplayer** | `"Client"`                             | Individual slots for each player aircraft                          |
+| **Dynamic Spawn Template**  | `"Client"` + `dynSpawnTemplate = true` | Template-based spawning from warehouse (preferred for multiplayer) |
 
 A mission typically uses one approach:
+
 - **Singleplayer missions**: One unit with `skill = "Player"`
 - **Traditional multiplayer**: Multiple units with `skill = "Client"` for each available slot
 - **Dynamic spawn (recommended for multiplayer)**: One template per aircraft type with `dynSpawnTemplate = true`, players spawn from warehouse inventory
@@ -99,16 +100,16 @@ warehouses = {
 
 **Every aircraft stock entry needs `wsType`.** The sim matches stock to aircraft types by this 4-number type ID, not by the type-name key. An entry without `wsType` counts as zero, so in the multiplayer spawn dialog every type shows `(0)` and is greyed out, at airfields and on carriers alike. The ME always writes `wsType` (and, when `dynamicSpawn = true`, writes the full stock list even with `unlimitedAircrafts = true`). Copy the values from an ME-saved `warehouses` file, such as a stock mission under `Mods/aircraft/*/Missions`. Some values for DCS 2.9:
 
-| Type | wsType | Type | wsType |
-|------|--------|------|--------|
-| `A-10C_2` | 1, 1, 6, 264 | `F-15C` | 1, 1, 1, 6 |
-| `F-14A-135-GR` | 1, 1, 1, 279 | `F-15ESE` | 1, 1, 1, 327 |
-| `F-14B` | 1, 1, 1, 278 | `F-16C_50` | 1, 1, 1, 275 |
-| `F-14BU` | 1, 1, 1, 351 | `F-4E-45MC` | 1, 1, 1, 328 |
-| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17` | 1, 1, 1, 271 |
-| `M-2000C` | 1, 1, 1, 284 | `Mirage-F1CE` | 1, 1, 1, 302 |
-| `MiG-29A` | 1, 1, 1, 2 | `Su-25` | 1, 1, 6, 16 |
-| `Su-25T` | 1, 1, 6, 54 | | |
+| Type            | wsType       | Type          | wsType       |
+| --------------- | ------------ | ------------- | ------------ |
+| `A-10C_2`       | 1, 1, 6, 264 | `F-15C`       | 1, 1, 1, 6   |
+| `F-14A-135-GR`  | 1, 1, 1, 279 | `F-15ESE`     | 1, 1, 1, 327 |
+| `F-14B`         | 1, 1, 1, 278 | `F-16C_50`    | 1, 1, 1, 275 |
+| `F-14BU`        | 1, 1, 1, 351 | `F-4E-45MC`   | 1, 1, 1, 328 |
+| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17`       | 1, 1, 1, 271 |
+| `M-2000C`       | 1, 1, 1, 284 | `Mirage-F1CE` | 1, 1, 1, 302 |
+| `MiG-29A`       | 1, 1, 1, 2   | `Su-25`       | 1, 1, 6, 16  |
+| `Su-25T`        | 1, 1, 6, 54  |               |              |
 
 Module aircraft get the fourth number assigned at load time (`WSTYPE_PLACEHOLDER`), so re-check it against a fresh ME save after a major DCS update. `mission-check` fails any stock entry missing `wsType`.
 
@@ -251,46 +252,46 @@ Player aircraft are placed in `coalition.[side].country[n].plane.group`. Each gr
 
 ### Group-Level Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `groupId` | number | Unique group ID (must be unique across all groups in mission) |
-| `name` | string | Group name (displayed in mission planning) |
-| `task` | string | Primary task (e.g., "CAP", "CAS", "Ground Attack") |
-| `units` | table | Array of unit definitions |
-| `route` | table | Route with waypoints |
-| `x` | number | Initial X position (meters, map coordinates) |
-| `y` | number | Initial Y position (meters, map coordinates) |
-| `hidden` | boolean | Hidden on planning map |
-| `uncontrolled` | boolean | Starts with engines off, no AI control |
-| `communication` | boolean | Radio communications enabled |
-| `frequency` | number | Radio frequency (MHz) |
-| `modulation` | number | Radio modulation (0=AM, 1=FM) |
-| `start_time` | number | Spawn time offset from mission start (seconds) |
-| `radioSet` | boolean | Use preset radio frequencies |
-| `dynSpawnTemplate` | boolean | (Dynamic spawn only) Marks group as a template |
-| `lateActivation` | boolean | (Dynamic spawn only) Set to `true` to hide template from traditional slot screen |
+| Field              | Type    | Description                                                                      |
+| ------------------ | ------- | -------------------------------------------------------------------------------- |
+| `groupId`          | number  | Unique group ID (must be unique across all groups in mission)                    |
+| `name`             | string  | Group name (displayed in mission planning)                                       |
+| `task`             | string  | Primary task (e.g., "CAP", "CAS", "Ground Attack")                               |
+| `units`            | table   | Array of unit definitions                                                        |
+| `route`            | table   | Route with waypoints                                                             |
+| `x`                | number  | Initial X position (meters, map coordinates)                                     |
+| `y`                | number  | Initial Y position (meters, map coordinates)                                     |
+| `hidden`           | boolean | Hidden on planning map                                                           |
+| `uncontrolled`     | boolean | Starts with engines off, no AI control                                           |
+| `communication`    | boolean | Radio communications enabled                                                     |
+| `frequency`        | number  | Radio frequency (MHz)                                                            |
+| `modulation`       | number  | Radio modulation (0=AM, 1=FM)                                                    |
+| `start_time`       | number  | Spawn time offset from mission start (seconds)                                   |
+| `radioSet`         | boolean | Use preset radio frequencies                                                     |
+| `dynSpawnTemplate` | boolean | (Dynamic spawn only) Marks group as a template                                   |
+| `lateActivation`   | boolean | (Dynamic spawn only) Set to `true` to hide template from traditional slot screen |
 
 ### Unit-Level Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `unitId` | number | Unique unit ID (must be unique across all units in mission) |
-| `name` | string | Unit name (displayed in slot selection) |
-| `type` | string | Aircraft type string (e.g., "F-16C_50", "F/A-18C_hornet") |
-| `skill` | string | `"Player"` for singleplayer, `"Client"` for multiplayer/dynamic |
-| `x` | number | Position X (same as group for parking start) |
-| `y` | number | Position Y (same as group for parking start) |
-| `alt` | number | Altitude (meters, typically airfield elevation) |
-| `alt_type` | string | Altitude reference ("BARO" or "RADIO") |
-| `speed` | number | Initial speed (m/s) |
-| `heading` | number | Heading (radians) |
-| `psi` | number | Orientation angle (radians, typically same as heading) |
-| `parking` | string | Parking spot number at the airfield |
-| `parking_id` | string | Parking spot identifier |
-| `onboard_num` | string | Aircraft tail number |
-| `livery_id` | string | Livery/skin name |
-| `payload` | table | Weapons and stores configuration |
-| `callsign` | table | Callsign configuration |
+| Field         | Type   | Description                                                     |
+| ------------- | ------ | --------------------------------------------------------------- |
+| `unitId`      | number | Unique unit ID (must be unique across all units in mission)     |
+| `name`        | string | Unit name (displayed in slot selection)                         |
+| `type`        | string | Aircraft type string (e.g., "F-16C_50", "F/A-18C_hornet")       |
+| `skill`       | string | `"Player"` for singleplayer, `"Client"` for multiplayer/dynamic |
+| `x`           | number | Position X (same as group for parking start)                    |
+| `y`           | number | Position Y (same as group for parking start)                    |
+| `alt`         | number | Altitude (meters, typically airfield elevation)                 |
+| `alt_type`    | string | Altitude reference ("BARO" or "RADIO")                          |
+| `speed`       | number | Initial speed (m/s)                                             |
+| `heading`     | number | Heading (radians)                                               |
+| `psi`         | number | Orientation angle (radians, typically same as heading)          |
+| `parking`     | string | Parking spot number at the airfield                             |
+| `parking_id`  | string | Parking spot identifier                                         |
+| `onboard_num` | string | Aircraft tail number                                            |
+| `livery_id`   | string | Livery/skin name                                                |
+| `payload`     | table  | Weapons and stores configuration                                |
+| `callsign`    | table  | Callsign configuration                                          |
 
 ## Parking Spot Assignment
 
@@ -300,6 +301,7 @@ When starting from an airfield parking area, you must specify both `parking` and
 - `parking_id` - The parking spot identifier (as a string, e.g., "17")
 
 These values are airfield-specific and can be found by:
+
 1. Placing a unit in the Mission Editor and examining the generated mission file
 2. Using the SSE `airbase:getParking()` method to query available spots
 
@@ -307,11 +309,11 @@ These values are airfield-specific and can be found by:
 
 The waypoint `type` and `action` fields determine how the aircraft spawns:
 
-| Start Type | Waypoint Type | Waypoint Action |
-|------------|---------------|-----------------|
-| Cold on ramp | `"TakeOffParking"` | `"From Parking Area"` |
-| Hot on ramp | `"TakeOffParkingHot"` | `"From Parking Area Hot"` |
-| On runway | `"TakeOff"` | `"From Runway"` |
+| Start Type   | Waypoint Type         | Waypoint Action           |
+| ------------ | --------------------- | ------------------------- |
+| Cold on ramp | `"TakeOffParking"`    | `"From Parking Area"`     |
+| Hot on ramp  | `"TakeOffParkingHot"` | `"From Parking Area Hot"` |
+| On runway    | `"TakeOff"`           | `"From Runway"`           |
 
 ## Spawn Known Issues
 
@@ -522,16 +524,16 @@ For traditional multiplayer missions without dynamic spawn, use `skill = "Client
 
 Common callsign group numbers for US aircraft:
 
-| Number | Callsign |
-|--------|----------|
-| 1 | Enfield |
-| 2 | Springfield |
-| 3 | Uzi |
-| 4 | Colt |
-| 5 | Dodge |
-| 6 | Ford |
-| 7 | Chevy |
-| 8 | Pontiac |
+| Number | Callsign    |
+| ------ | ----------- |
+| 1      | Enfield     |
+| 2      | Springfield |
+| 3      | Uzi         |
+| 4      | Colt        |
+| 5      | Dodge       |
+| 6      | Ford        |
+| 7      | Chevy       |
+| 8      | Pontiac     |
 
 ## Aircraft-Specific Properties
 
@@ -612,29 +614,29 @@ Aircraft with multiple radios can have preset channels configured:
 
 ## Common Airfield IDs (Caucasus Map)
 
-| Airfield | airdromeId |
-|----------|------------|
-| Anapa-Vityazevo | 12 |
-| Krasnodar-Center | 13 |
-| Novorossiysk | 14 |
-| Krymsk | 15 |
-| Maykop-Khanskaya | 16 |
-| Gelendzhik | 17 |
-| Sochi-Adler | 18 |
-| Krasnodar-Pashkovsky | 19 |
-| Sukhumi-Babushara | 20 |
-| Gudauta | 21 |
-| Batumi | 22 |
-| Senaki-Kolkhi | 23 |
-| Kobuleti | 24 |
-| Kutaisi | 25 |
-| Mineralnye Vody | 26 |
-| Nalchik | 27 |
-| Mozdok | 28 |
-| Tbilisi-Lochini | 29 |
-| Soganlug | 30 |
-| Vaziani | 31 |
-| Beslan | 32 |
+| Airfield             | airdromeId |
+| -------------------- | ---------- |
+| Anapa-Vityazevo      | 12         |
+| Krasnodar-Center     | 13         |
+| Novorossiysk         | 14         |
+| Krymsk               | 15         |
+| Maykop-Khanskaya     | 16         |
+| Gelendzhik           | 17         |
+| Sochi-Adler          | 18         |
+| Krasnodar-Pashkovsky | 19         |
+| Sukhumi-Babushara    | 20         |
+| Gudauta              | 21         |
+| Batumi               | 22         |
+| Senaki-Kolkhi        | 23         |
+| Kobuleti             | 24         |
+| Kutaisi              | 25         |
+| Mineralnye Vody      | 26         |
+| Nalchik              | 27         |
+| Mozdok               | 28         |
+| Tbilisi-Lochini      | 29         |
+| Soganlug             | 30         |
+| Vaziani              | 31         |
+| Beslan               | 32         |
 
 ## Checklist
 
@@ -660,6 +662,7 @@ When adding player slots, verify:
 - [Mission Editor Guide](../mission-editor.md) - GUI-based mission creation
 - [Aircraft Reference](../units/planes.md) - Aircraft type strings and loadouts
 - [DCS Forum: Dynamic Spawn Guide](https://forum.dcs.world/topic/352814-dynamic-spawn-guide/) - Official ED guide
+
 ## References
 
 [^nevatim-bugs]: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).

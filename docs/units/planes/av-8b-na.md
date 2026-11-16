@@ -66,23 +66,23 @@ The Night Attack variant represented in DCS features the ASB-19(V)2 Angle Rate B
 - GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
 - GBU-32(V)2/B - JDAM, 1000lb GPS Guided Bomb
 - GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
-- 2 Mk-82 */*
-- 2 Mk-20 Rockeye */*
-- 2 CBU-99 */*
-- 2 GBU-12 *-*
-- 2 Mk-82 AIR */*
-- 2 Mk-82 Snakeye */*
-- 2 GBU-38 *-*
-- 2 GBU-54(V)1/B *-*
-- 2 Mk-82 *\\*
-- 2 Mk-20 Rockeye *\\*
-- 2 CBU-99 *\\*
-- 2 Mk-82 AIR *\\*
-- 2 Mk-82 Snakeye *\\*
-- 2 GBU-38 *\\*
-- 2 GBU-54(V)1/B *\\*
-- 2 GBU-38 */*
-- 2 GBU-54(V)1/B */*
+- 2 Mk-82 _/_
+- 2 Mk-20 Rockeye _/_
+- 2 CBU-99 _/_
+- 2 GBU-12 _-_
+- 2 Mk-82 AIR _/_
+- 2 Mk-82 Snakeye _/_
+- 2 GBU-38 _-_
+- 2 GBU-54(V)1/B _-_
+- 2 Mk-82 _\\_
+- 2 Mk-20 Rockeye _\\_
+- 2 CBU-99 _\\_
+- 2 Mk-82 AIR _\\_
+- 2 Mk-82 Snakeye _\\_
+- 2 GBU-38 _\\_
+- 2 GBU-54(V)1/B _\\_
+- 2 GBU-38 _/_
+- 2 GBU-54(V)1/B _/_
 - 3 Mk-81
 - 3 Mk-82
 - 3 Mk-82 AIR
@@ -138,15 +138,15 @@ The Night Attack variant represented in DCS features the ASB-19(V)2 Angle Rate B
 - GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
 - GBU-32(V)2/B - JDAM, 1000lb GPS Guided Bomb
 - GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
-- 2 Mk-81 */*
-- 2 Mk-82 */*
-- 2 Mk-83 */*
-- 2 Mk-20 Rockeye */*
-- 2 CBU-99 */*
-- 2 Mk-82 AIR */*
-- 2 Mk-82 Snakeye */*
-- 2 GBU-38 */*
-- 2 GBU-54(V)1/B */*
+- 2 Mk-81 _/_
+- 2 Mk-82 _/_
+- 2 Mk-83 _/_
+- 2 Mk-20 Rockeye _/_
+- 2 CBU-99 _/_
+- 2 Mk-82 AIR _/_
+- 2 Mk-82 Snakeye _/_
+- 2 GBU-38 _/_
+- 2 GBU-54(V)1/B _/_
 - BDU-33 - 25lb Practice Bomb LD
 - BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
 - LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
@@ -199,15 +199,15 @@ The Night Attack variant represented in DCS features the ASB-19(V)2 Angle Rate B
 - GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
 - GBU-32(V)2/B - JDAM, 1000lb GPS Guided Bomb
 - GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
-- 2 Mk-81 *\\*
-- 2 Mk-82 *\\*
-- 2 Mk-83 *\\*
-- 2 Mk-20 Rockeye *\\*
-- 2 CBU-99 *\\*
-- 2 Mk-82 AIR *\\*
-- 2 Mk-82 Snakeye *\\*
-- 2 GBU-38 *\\*
-- 2 GBU-54(V)1/B *\\*
+- 2 Mk-81 _\\_
+- 2 Mk-82 _\\_
+- 2 Mk-83 _\\_
+- 2 Mk-20 Rockeye _\\_
+- 2 CBU-99 _\\_
+- 2 Mk-82 AIR _\\_
+- 2 Mk-82 Snakeye _\\_
+- 2 GBU-38 _\\_
+- 2 GBU-54(V)1/B _\\_
 - BDU-33 - 25lb Practice Bomb LD
 - BRU-42 with 3 x BDU-33 - 25lb Practice Bombs LD
 - LAU-117 with AGM-65E - Maverick E (Laser ASM - Lg Whd)
@@ -252,23 +252,23 @@ The Night Attack variant represented in DCS features the ASB-19(V)2 Angle Rate B
 - GBU-38(V)1/B - JDAM, 500lb GPS Guided Bomb
 - GBU-32(V)2/B - JDAM, 1000lb GPS Guided Bomb
 - GBU-54(V)1/B - LJDAM, 500lb Laser & GPS Guided Bomb LD
-- 2 Mk-82 *\\*
-- 2 Mk-20 Rockeye *\\*
-- 2 CBU-99 *\\*
-- 2 GBU-12 *-*
-- 2 Mk-82 AIR *\\*
-- 2 Mk-82 Snakeye *\\*
-- 2 GBU-38 *-*
-- 2 GBU-54(V)1/B *-*
-- 2 Mk-82 */*
-- 2 Mk-20 Rockeye */*
-- 2 CBU-99 */*
-- 2 Mk-82 AIR */*
-- 2 Mk-82 Snakeye */*
-- 2 GBU-38 */*
-- 2 GBU-54(V)1/B */*
-- 2 GBU-38 *\\*
-- 2 GBU-54(V)1/B *\\*
+- 2 Mk-82 _\\_
+- 2 Mk-20 Rockeye _\\_
+- 2 CBU-99 _\\_
+- 2 GBU-12 _-_
+- 2 Mk-82 AIR _\\_
+- 2 Mk-82 Snakeye _\\_
+- 2 GBU-38 _-_
+- 2 GBU-54(V)1/B _-_
+- 2 Mk-82 _/_
+- 2 Mk-20 Rockeye _/_
+- 2 CBU-99 _/_
+- 2 Mk-82 AIR _/_
+- 2 Mk-82 Snakeye _/_
+- 2 GBU-38 _/_
+- 2 GBU-54(V)1/B _/_
+- 2 GBU-38 _\\_
+- 2 GBU-54(V)1/B _\\_
 - 3 Mk-81
 - 3 Mk-82
 - 3 Mk-82 AIR

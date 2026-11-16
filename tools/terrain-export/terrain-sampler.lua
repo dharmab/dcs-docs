@@ -7,7 +7,6 @@
 TerrainSampler = {}
 TerrainSampler.VERSION = "1.3.0"
 
-
 -- =============================================================================
 -- CONFIGURATION
 -- =============================================================================
@@ -42,34 +41,34 @@ TerrainSampler.config = {
 
     -- Enable dynamic bounds detection (recommended for unknown terrains)
     detectBounds = true,
-    detectStepSize = 10000,      -- meters per step when searching for bounds
+    detectStepSize = 10000, -- meters per step when searching for bounds
     detectMaxDistance = 1000000, -- max distance from origin to search (meters)
-    detectFlatThreshold = 3,     -- how many consecutive flat heights to consider as "flat" (out of bounds)
-    detectMinArea = 200000,      -- minimum area (meters) to always include (e.g. 200km)
+    detectFlatThreshold = 3, -- how many consecutive flat heights to consider as "flat" (out of bounds)
+    detectMinArea = 200000, -- minimum area (meters) to always include (e.g. 200km)
 
     -- Progress update intervals
-    gridProgressInterval = 2500,       -- Show progress every N terrain samples
-    roadProgressInterval = 25,         -- Show progress every N road points (more frequent updates)
+    gridProgressInterval = 2500, -- Show progress every N terrain samples
+    roadProgressInterval = 25, -- Show progress every N road points (more frequent updates)
     connectivityProgressInterval = 50, -- Show progress every N road points checked for connectivity
 
     -- Road sampling thresholds
     roadProximityFactor = 0.75, -- Maximum distance to road as fraction of grid resolution
-    roadNeighborCount = 8,      -- Number of neighboring road points to check for connectivity
+    roadNeighborCount = 8, -- Number of neighboring road points to check for connectivity
 
     -- Adaptive sampling configuration
-    adaptiveSampling = true,          -- Enable multi-pass adaptive resolution sampling
-    coarseResolution = 5000,          -- Coarse pass resolution in meters (5km)
-    mediumResolution = 2500,          -- Medium pass resolution in meters (2.5km)
-    fineResolution = 1000,            -- Fine pass resolution in meters (1km)
+    adaptiveSampling = true, -- Enable multi-pass adaptive resolution sampling
+    coarseResolution = 5000, -- Coarse pass resolution in meters (5km)
+    mediumResolution = 2500, -- Medium pass resolution in meters (2.5km)
+    fineResolution = 1000, -- Fine pass resolution in meters (1km)
     elevationVarianceThreshold = 200, -- Minimum elevation variance (meters) to trigger refinement
-    roadDensityThreshold = 3,         -- Minimum road points per cell to trigger refinement
-    gradientThreshold = 0.05,         -- Minimum elevation gradient to neighbors (rise/run)
-    mediumScoreThreshold = 2,         -- Minimum score for medium refinement
-    fineScoreThreshold = 4,           -- Minimum score for fine refinement
+    roadDensityThreshold = 3, -- Minimum road points per cell to trigger refinement
+    gradientThreshold = 0.05, -- Minimum elevation gradient to neighbors (rise/run)
+    mediumScoreThreshold = 2, -- Minimum score for medium refinement
+    fineScoreThreshold = 4, -- Minimum score for fine refinement
 
     -- Chunked sampling/throttling for DCS scripting safety
     maxSamplesPerChunk = 50, -- Reduced samples per scheduled chunk for safer throttling
-    maxChunkTime = 0.01,     -- Reduced wall clock time (seconds) per chunk
+    maxChunkTime = 0.01, -- Reduced wall clock time (seconds) per chunk
 
     -- Theatre-specific bounds (approximate, in game coordinates)
     -- x = East-West, z = North-South
@@ -143,14 +142,14 @@ TerrainSampler.state = {
     phaseStartTime = nil,
 
     -- Adaptive sampling state
-    coarseCells = {},     -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
-    coarseNx = 0,         -- Number of coarse cells in X
-    coarseNz = 0,         -- Number of coarse cells in Z
-    mediumCells = {},     -- List of {ix, iz} cells for medium refinement (level 1)
-    fineCells = {},       -- List of {ix, iz} cells for fine refinement (level 2)
+    coarseCells = {}, -- 2D table: [ix][iz] = {min, max, sum, sumSq, count}
+    coarseNx = 0, -- Number of coarse cells in X
+    coarseNz = 0, -- Number of coarse cells in Z
+    mediumCells = {}, -- List of {ix, iz} cells for medium refinement (level 1)
+    fineCells = {}, -- List of {ix, iz} cells for fine refinement (level 2)
     roadDensityGrid = {}, -- 2D table: [ix][iz] = road_count
-    mediumSamples = {},   -- Samples from medium refinement pass
-    fineSamples = {},     -- Samples from fine refinement pass
+    mediumSamples = {}, -- Samples from medium refinement pass
+    fineSamples = {}, -- Samples from fine refinement pass
 }
 
 -- =============================================================================
@@ -258,7 +257,7 @@ function TerrainSampler:updateCellStats(ix, iz, height)
             max = height,
             sum = height,
             sumSq = height * height,
-            count = 1
+            count = 1,
         }
     else
         local cell = self.state.coarseCells[ix][iz]
@@ -276,7 +275,9 @@ end
 -- @return Variance in meters^2, or 0 if insufficient data
 function TerrainSampler:getCellVariance(ix, iz)
     local cell = self.state.coarseCells[ix] and self.state.coarseCells[ix][iz]
-    if not cell or cell.count < 2 then return 0 end
+    if not cell or cell.count < 2 then
+        return 0
+    end
     local mean = cell.sum / cell.count
     return (cell.sumSq / cell.count) - (mean * mean)
 end
@@ -287,7 +288,9 @@ end
 -- @return Mean elevation in meters, or nil if no data
 function TerrainSampler:getCellMean(ix, iz)
     local cell = self.state.coarseCells[ix] and self.state.coarseCells[ix][iz]
-    if not cell or cell.count == 0 then return nil end
+    if not cell or cell.count == 0 then
+        return nil
+    end
     return cell.sum / cell.count
 end
 
@@ -341,8 +344,10 @@ function TerrainSampler:computeInterestScore(ix, iz)
     local myMean = self:getCellMean(ix, iz)
     if myMean then
         local neighbors = {
-            { ix - 1, iz }, { ix + 1, iz },
-            { ix,     iz - 1 }, { ix, iz + 1 }
+            { ix - 1, iz },
+            { ix + 1, iz },
+            { ix, iz - 1 },
+            { ix, iz + 1 },
         }
         for _, neighbor in ipairs(neighbors) do
             local nix, niz = neighbor[1], neighbor[2]
@@ -426,29 +431,48 @@ function TerrainSampler:sampleCellsAtResolution(cells, targetRes, level, phaseNa
     if #cells == 0 then
         self:log("No cells to sample for " .. phaseName)
         self:endPhase(phaseName, "0 samples (no cells)")
-        if callback then callback({}) end
+        if callback then
+            callback({})
+        end
         return
     end
 
     if not bounds then
         self:logWarning("No bounds available for " .. phaseName)
         self:endPhase(phaseName, "0 samples (no bounds)")
-        if callback then callback({}) end
+        if callback then
+            callback({})
+        end
         return
     end
 
     local coarseRes = self.config.coarseResolution
     local samplesPerCell = math.floor(coarseRes / targetRes)
 
-    self:log("Sampling " .. tostring(#cells) .. " cells at " ..
-        tostring(targetRes) .. "m resolution (" .. tostring(samplesPerCell) ..
-        "x" .. tostring(samplesPerCell) .. " samples per cell)")
+    self:log(
+        "Sampling "
+            .. tostring(#cells)
+            .. " cells at "
+            .. tostring(targetRes)
+            .. "m resolution ("
+            .. tostring(samplesPerCell)
+            .. "x"
+            .. tostring(samplesPerCell)
+            .. " samples per cell)"
+    )
 
     -- Calculate total samples expected
     local totalSamples = #cells * samplesPerCell * samplesPerCell
-    self:showMessage("Sampling " .. tostring(totalSamples) ..
-        " points in " .. tostring(#cells) .. " cells at " ..
-        tostring(targetRes / 1000) .. "km...", 15)
+    self:showMessage(
+        "Sampling "
+            .. tostring(totalSamples)
+            .. " points in "
+            .. tostring(#cells)
+            .. " cells at "
+            .. tostring(targetRes / 1000)
+            .. "km...",
+        15
+    )
 
     -- Chunked stateful sampling
     local state = {
@@ -487,9 +511,16 @@ function TerrainSampler:sampleCellsAtResolution(cells, targetRes, level, phaseNa
                         -- Progress updates
                         if state.count - state.lastProgressUpdate >= self.config.gridProgressInterval then
                             local percent = math.floor((state.count / totalSamples) * 100)
-                            self:showProgress(phaseName .. ": " ..
-                                tostring(state.count) .. "/" .. tostring(totalSamples) ..
-                                " (" .. tostring(percent) .. "%)")
+                            self:showProgress(
+                                phaseName
+                                    .. ": "
+                                    .. tostring(state.count)
+                                    .. "/"
+                                    .. tostring(totalSamples)
+                                    .. " ("
+                                    .. tostring(percent)
+                                    .. "%)"
+                            )
                             state.lastProgressUpdate = state.count
                         end
                     end
@@ -532,18 +563,24 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
 
     local origin = { x = 0, y = 0 }
     local directions = {
-        { name = "East",  dx = 1,  dz = 0 },
-        { name = "West",  dx = -1, dz = 0 },
-        { name = "North", dx = 0,  dz = 1 },
-        { name = "South", dx = 0,  dz = -1 },
+        { name = "East", dx = 1, dz = 0 },
+        { name = "West", dx = -1, dz = 0 },
+        { name = "North", dx = 0, dz = 1 },
+        { name = "South", dx = 0, dz = -1 },
     }
     local bounds = { minX = 0, maxX = 0, minZ = 0, maxZ = 0 }
     local minSteps = math.floor((minArea / 2) / stepSize)
 
     local function getHeightSafe(x, z)
-        if not land or type(land.getHeight) ~= "function" then return nil end
-        local ok, h = pcall(function() return land.getHeight({ x = x, y = z }) end)
-        if ok and type(h) == "number" then return h end
+        if not land or type(land.getHeight) ~= "function" then
+            return nil
+        end
+        local ok, h = pcall(function()
+            return land.getHeight({ x = x, y = z })
+        end)
+        if ok and type(h) == "number" then
+            return h
+        end
         return nil
     end
 
@@ -569,24 +606,31 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
         local dist = lastValid * stepSize
         if dir.name == "East" then
             bounds.maxX = origin.x + dist
-            self:log(string.format("Detected East bound at x=%.0f (%s after %d steps)", bounds.maxX, reason,
-                lastValid))
+            self:log(string.format("Detected East bound at x=%.0f (%s after %d steps)", bounds.maxX, reason, lastValid))
         elseif dir.name == "West" then
             bounds.minX = origin.x - dist
-            self:log(string.format("Detected West bound at x=%.0f (%s after %d steps)", bounds.minX, reason,
-                lastValid))
+            self:log(string.format("Detected West bound at x=%.0f (%s after %d steps)", bounds.minX, reason, lastValid))
         elseif dir.name == "North" then
             bounds.maxZ = origin.y + dist
-            self:log(string.format("Detected North bound at z=%.0f (%s after %d steps)", bounds.maxZ, reason,
-                lastValid))
+            self:log(
+                string.format("Detected North bound at z=%.0f (%s after %d steps)", bounds.maxZ, reason, lastValid)
+            )
         elseif dir.name == "South" then
             bounds.minZ = origin.y - dist
-            self:log(string.format("Detected South bound at z=%.0f (%s after %d steps)", bounds.minZ, reason,
-                lastValid))
+            self:log(
+                string.format("Detected South bound at z=%.0f (%s after %d steps)", bounds.minZ, reason, lastValid)
+            )
         end
     end
-    self:log(string.format("Dynamic bounds: x=%.0f to %.0f, z=%.0f to %.0f", bounds.minX, bounds.maxX, bounds.minZ,
-        bounds.maxZ))
+    self:log(
+        string.format(
+            "Dynamic bounds: x=%.0f to %.0f, z=%.0f to %.0f",
+            bounds.minX,
+            bounds.maxX,
+            bounds.minZ,
+            bounds.maxZ
+        )
+    )
     return bounds
 end
 
@@ -601,9 +645,15 @@ function TerrainSampler:encodeJSON(data)
         elseif t == "boolean" then
             return val and "true" or "false"
         elseif t == "number" then
-            if val ~= val then return "null" end -- NaN
-            if val == math.huge then return "1e308" end
-            if val == -math.huge then return "-1e308" end
+            if val ~= val then
+                return "null"
+            end -- NaN
+            if val == math.huge then
+                return "1e308"
+            end
+            if val == -math.huge then
+                return "-1e308"
+            end
             -- Use integer format for whole numbers, float otherwise
             if val == math.floor(val) and math.abs(val) < 1e15 then
                 return string.format("%.0f", val)
@@ -611,11 +661,8 @@ function TerrainSampler:encodeJSON(data)
                 return string.format("%.6f", val)
             end
         elseif t == "string" then
-            local escaped = val:gsub('\\', '\\\\')
-                :gsub('"', '\\"')
-                :gsub('\n', '\\n')
-                :gsub('\r', '\\r')
-                :gsub('\t', '\\t')
+            local escaped =
+                val:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t")
             return '"' .. escaped .. '"'
         elseif t == "table" then
             -- Check if array (sequential integer keys starting at 1)
@@ -667,25 +714,42 @@ end
 function TerrainSampler:sampleTerrainPoint(xCoord, zCoord)
     -- Validate land API
     if not land or type(land) ~= "table" then
-        self:logError("land API is not available at sampleGrid, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        self:logError(
+            "land API is not available at sampleGrid, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
     if type(land.getHeight) ~= "function" then
-        self:logError("land.getHeight is not available at sampleGrid, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        self:logError(
+            "land.getHeight is not available at sampleGrid, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
     if type(land.getSurfaceType) ~= "function" then
-        self:logError("land.getSurfaceType is not available at sampleGrid, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        self:logError(
+            "land.getSurfaceType is not available at sampleGrid, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
 
     -- Validate coordinates
     if type(xCoord) ~= "number" or type(zCoord) ~= "number" then
-        self:logWarning("Invalid coordinates at sampleGrid: x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord) .. ". Skipping sample.")
+        self:logWarning(
+            "Invalid coordinates at sampleGrid: x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+                .. ". Skipping sample."
+        )
         return nil
     end
 
@@ -696,9 +760,15 @@ function TerrainSampler:sampleTerrainPoint(xCoord, zCoord)
         surfaceType = land.getSurfaceType({ x = xCoord, y = zCoord })
     end)
     if not ok or type(height) ~= "number" then
-        self:logError("Error calling land.getHeight or land.getSurfaceType at queryPoint: {x=" ..
-            tostring(xCoord) ..
-            ", y=" .. tostring(zCoord) .. "} | Error: " .. tostring(err) .. ". Skipping sample.")
+        self:logError(
+            "Error calling land.getHeight or land.getSurfaceType at queryPoint: {x="
+                .. tostring(xCoord)
+                .. ", y="
+                .. tostring(zCoord)
+                .. "} | Error: "
+                .. tostring(err)
+                .. ". Skipping sample."
+        )
         return nil
     end
 
@@ -709,21 +779,38 @@ function TerrainSampler:sampleTerrainPoint(xCoord, zCoord)
             lat, lon, alt = coord.LOtoLL(xCoord, height, zCoord)
         end)
         if not okLL then
-            self:logWarning("coord.LOtoLL failed at x=" ..
-                tostring(xCoord) ..
-                ", y=" ..
-                tostring(height) .. ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errLL) ..
-                " | Args: x=" ..
-                tostring(xCoord) .. ", y=" .. tostring(height) .. ", z=" .. tostring(zCoord) ..
-                " | Types: x=" ..
-                type(xCoord) ..
-                ", y=" .. type(height) .. ", z=" .. type(zCoord) .. ". Skipping lat/lon for this sample.")
+            self:logWarning(
+                "coord.LOtoLL failed at x="
+                    .. tostring(xCoord)
+                    .. ", y="
+                    .. tostring(height)
+                    .. ", z="
+                    .. tostring(zCoord)
+                    .. " | Error: "
+                    .. tostring(errLL)
+                    .. " | Args: x="
+                    .. tostring(xCoord)
+                    .. ", y="
+                    .. tostring(height)
+                    .. ", z="
+                    .. tostring(zCoord)
+                    .. " | Types: x="
+                    .. type(xCoord)
+                    .. ", y="
+                    .. type(height)
+                    .. ", z="
+                    .. type(zCoord)
+                    .. ". Skipping lat/lon for this sample."
+            )
             lat, lon, alt = nil, nil, nil
         end
     else
         self:logWarning(
-            "coord or coord.LOtoLL not available at sampleGrid, skipping lat/lon for sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+            "coord or coord.LOtoLL not available at sampleGrid, skipping lat/lon for sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
     end
 
     return {
@@ -788,13 +875,24 @@ function TerrainSampler:sampleGrid(callback)
         self.state.coarseNz = totalZ
     end
 
-    self:log("Grid dimensions: " ..
-        tostring(totalX) .. " x " .. tostring(totalZ) .. " = " .. tostring(totalSamples) .. " samples")
+    self:log(
+        "Grid dimensions: "
+            .. tostring(totalX)
+            .. " x "
+            .. tostring(totalZ)
+            .. " = "
+            .. tostring(totalSamples)
+            .. " samples"
+    )
     self:log("Resolution: " .. tostring(resolution) .. " meters")
     self:showMessage(
-        "Sampling " ..
-        tostring(totalSamples) .. " terrain points at " .. tostring(resolution / 1000) .. "km resolution...",
-        15)
+        "Sampling "
+            .. tostring(totalSamples)
+            .. " terrain points at "
+            .. tostring(resolution / 1000)
+            .. "km resolution...",
+        15
+    )
 
     -- Chunked stateful sampling
     self.state.gridSamples = {}
@@ -847,8 +945,15 @@ function TerrainSampler:sampleGrid(callback)
                     -- Progress updates
                     if count - lastProgressUpdate >= self.config.gridProgressInterval then
                         local percent = math.floor((count / totalSamples) * 100)
-                        self:showProgress("Terrain: " ..
-                            tostring(count) .. "/" .. tostring(totalSamples) .. " (" .. tostring(percent) .. "%)")
+                        self:showProgress(
+                            "Terrain: "
+                                .. tostring(count)
+                                .. "/"
+                                .. tostring(totalSamples)
+                                .. " ("
+                                .. tostring(percent)
+                                .. "%)"
+                        )
                         lastProgressUpdate = count
                     end
                 end
@@ -897,19 +1002,30 @@ end
 function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
     -- Validate land API
     if not land or type(land) ~= "table" then
-        self:logError("land API is not available at sampleRoads, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        self:logError(
+            "land API is not available at sampleRoads, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
     if type(land.getClosestPointOnRoads) ~= "function" then
         self:logError(
-            "land.getClosestPointOnRoads is not available at sampleRoads, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+            "land.getClosestPointOnRoads is not available at sampleRoads, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
     if type(land.getHeight) ~= "function" then
-        self:logError("land.getHeight is not available at sampleRoads, skipping sample at x=" ..
-            tostring(xCoord) .. ", z=" .. tostring(zCoord))
+        self:logError(
+            "land.getHeight is not available at sampleRoads, skipping sample at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+        )
         return nil
     end
 
@@ -919,9 +1035,15 @@ function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
         roadX, roadZ = land.getClosestPointOnRoads("roads", xCoord, zCoord)
     end)
     if not okRoad then
-        self:logWarning("land.getClosestPointOnRoads failed at x=" ..
-            tostring(xCoord) ..
-            ", z=" .. tostring(zCoord) .. " | Error: " .. tostring(errRoad) .. ". Skipping sample.")
+        self:logWarning(
+            "land.getClosestPointOnRoads failed at x="
+                .. tostring(xCoord)
+                .. ", z="
+                .. tostring(zCoord)
+                .. " | Error: "
+                .. tostring(errRoad)
+                .. ". Skipping sample."
+        )
         return nil
     end
 
@@ -942,10 +1064,15 @@ function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
         height = land.getHeight({ x = roadX, y = roadZ })
     end)
     if not okHeight or type(height) ~= "number" then
-        self:logWarning("land.getHeight failed for road point at x=" ..
-            tostring(roadX) ..
-            ", z=" ..
-            tostring(roadZ) .. " | Error: " .. tostring(errHeight) .. ". Skipping sample.")
+        self:logWarning(
+            "land.getHeight failed for road point at x="
+                .. tostring(roadX)
+                .. ", z="
+                .. tostring(roadZ)
+                .. " | Error: "
+                .. tostring(errHeight)
+                .. ". Skipping sample."
+        )
         return nil
     end
 
@@ -956,23 +1083,38 @@ function TerrainSampler:sampleRoadPoint(xCoord, zCoord, resolution)
             lat, lon = coord.LOtoLL(roadX, height, roadZ)
         end)
         if not okLL then
-            self:logWarning("coord.LOtoLL failed for road point at x=" ..
-                tostring(roadX) ..
-                ", y=" ..
-                tostring(height) ..
-                ", z=" .. tostring(roadZ) .. " | Error: " .. tostring(errLL) ..
-                " | Args: x=" ..
-                tostring(roadX) .. ", y=" .. tostring(height) .. ", z=" .. tostring(roadZ) ..
-                " | Types: x=" ..
-                type(roadX) ..
-                ", y=" ..
-                type(height) .. ", z=" .. type(roadZ) .. ". Skipping lat/lon for this sample.")
+            self:logWarning(
+                "coord.LOtoLL failed for road point at x="
+                    .. tostring(roadX)
+                    .. ", y="
+                    .. tostring(height)
+                    .. ", z="
+                    .. tostring(roadZ)
+                    .. " | Error: "
+                    .. tostring(errLL)
+                    .. " | Args: x="
+                    .. tostring(roadX)
+                    .. ", y="
+                    .. tostring(height)
+                    .. ", z="
+                    .. tostring(roadZ)
+                    .. " | Types: x="
+                    .. type(roadX)
+                    .. ", y="
+                    .. type(height)
+                    .. ", z="
+                    .. type(roadZ)
+                    .. ". Skipping lat/lon for this sample."
+            )
             lat, lon = nil, nil
         end
     else
         self:logWarning(
-            "coord or coord.LOtoLL not available at sampleRoads, skipping lat/lon for sample at x=" ..
-            tostring(roadX) .. ", z=" .. tostring(roadZ))
+            "coord or coord.LOtoLL not available at sampleRoads, skipping lat/lon for sample at x="
+                .. tostring(roadX)
+                .. ", z="
+                .. tostring(roadZ)
+        )
     end
 
     return {
@@ -1018,11 +1160,15 @@ function TerrainSampler:sampleRoads(callback)
     local lastProgressUpdate = 0
 
     -- Defensive: Check land and its methods
-    local landOK = land and type(land) == "table" and type(land.getClosestPointOnRoads) == "function" and
-        type(land.getHeight) == "function"
+    local landOK = land
+        and type(land) == "table"
+        and type(land.getClosestPointOnRoads) == "function"
+        and type(land.getHeight) == "function"
     if not landOK then
         self:logError("land or required land methods not available at sampleRoads")
-        if callback then callback({ points = {}, segments = {} }) end
+        if callback then
+            callback({ points = {}, segments = {} })
+        end
         return
     end
 
@@ -1068,9 +1214,8 @@ function TerrainSampler:sampleRoads(callback)
 
                     -- Track road density for adaptive sampling
                     if self.config.adaptiveSampling and self.state.detectedBounds then
-                        local coarseIx, coarseIz = self:worldToCoarseCell(
-                            roadPoint.x, roadPoint.z, self.state.detectedBounds
-                        )
+                        local coarseIx, coarseIz =
+                            self:worldToCoarseCell(roadPoint.x, roadPoint.z, self.state.detectedBounds)
                         self:incrementRoadDensity(coarseIx, coarseIz)
                     end
                 end
@@ -1078,11 +1223,17 @@ function TerrainSampler:sampleRoads(callback)
                 -- Progress updates
                 if gridPointsChecked - lastProgressUpdate >= self.config.roadProgressInterval then
                     local percent = math.floor((gridPointsChecked / totalGridPoints) * 100)
-                    self:showProgress("Road scan: " ..
-                        tostring(gridPointsChecked) ..
-                        "/" ..
-                        tostring(totalGridPoints) ..
-                        " (" .. tostring(percent) .. "%) - " .. tostring(#roadPoints) .. " points found")
+                    self:showProgress(
+                        "Road scan: "
+                            .. tostring(gridPointsChecked)
+                            .. "/"
+                            .. tostring(totalGridPoints)
+                            .. " ("
+                            .. tostring(percent)
+                            .. "%) - "
+                            .. tostring(#roadPoints)
+                            .. " points found"
+                    )
                     lastProgressUpdate = gridPointsChecked
                 end
 
@@ -1120,7 +1271,9 @@ function TerrainSampler:sampleRoads(callback)
             self:logWarning("land.findPathOnRoads not available at sampleRoads, skipping connectivity")
             self.state.roadPointCount = #roadPoints
             self:endPhase("Road Network Sampling", tostring(#roadPoints) .. " points, 0 segments")
-            if callback then callback({ points = roadPoints, segments = {} }) end
+            if callback then
+                callback({ points = roadPoints, segments = {} })
+            end
             return
         end
 
@@ -1167,11 +1320,18 @@ function TerrainSampler:sampleRoads(callback)
                             })
                             segmentCount = segmentCount + 1
                         elseif not okPath then
-                            self:logWarning("land.findPathOnRoads failed for segment from (" ..
-                                tostring(p1.x) ..
-                                "," ..
-                                tostring(p1.z) ..
-                                ") to (" .. tostring(p2.x) .. "," .. tostring(p2.z) .. ") | Error: " .. tostring(errPath))
+                            self:logWarning(
+                                "land.findPathOnRoads failed for segment from ("
+                                    .. tostring(p1.x)
+                                    .. ","
+                                    .. tostring(p1.z)
+                                    .. ") to ("
+                                    .. tostring(p2.x)
+                                    .. ","
+                                    .. tostring(p2.z)
+                                    .. ") | Error: "
+                                    .. tostring(errPath)
+                            )
                         end
                     end
 
@@ -1200,8 +1360,13 @@ function TerrainSampler:sampleRoads(callback)
 
                 -- Progress update
                 if iIndex % self.config.connectivityProgressInterval == 0 then
-                    self:showProgress("Road connectivity: " ..
-                        tostring(segmentCount) .. " segments from " .. tostring(iIndex) .. " points checked")
+                    self:showProgress(
+                        "Road connectivity: "
+                            .. tostring(segmentCount)
+                            .. " segments from "
+                            .. tostring(iIndex)
+                            .. " points checked"
+                    )
                 end
 
                 iIndex = iIndex + 1
@@ -1211,10 +1376,14 @@ function TerrainSampler:sampleRoads(callback)
             -- Done with connectivity
             self.state.connectivitySegmentCount = segmentCount
             self.state.roadPointCount = #roadPoints
-            self:endPhase("Road Network Sampling",
-                tostring(#roadPoints) .. " points, " .. tostring(segmentCount) .. " segments")
+            self:endPhase(
+                "Road Network Sampling",
+                tostring(#roadPoints) .. " points, " .. tostring(segmentCount) .. " segments"
+            )
 
-            if callback then callback({ points = roadPoints, segments = segments }) end
+            if callback then
+                callback({ points = roadPoints, segments = segments })
+            end
         end
 
         timer.scheduleFunction(connectivityChunkProcessor, {}, timer.getTime() + 0.1)
@@ -1257,11 +1426,28 @@ function TerrainSampler:collectAirbases(callback)
                         lat, lon, alt = coord.LOtoLL(pos.x, pos.y, pos.z)
                     end)
                     if not okLL then
-                        self:logWarning("coord.LOtoLL failed for airbase at x=" ..
-                            tostring(pos.x) ..
-                            ", y=" .. tostring(pos.y) .. ", z=" .. tostring(pos.z) .. " | Error: " .. tostring(errLL) ..
-                            " | Args: x=" .. tostring(pos.x) .. ", y=" .. tostring(pos.y) .. ", z=" .. tostring(pos.z) ..
-                            " | Types: x=" .. type(pos.x) .. ", y=" .. type(pos.y) .. ", z=" .. type(pos.z))
+                        self:logWarning(
+                            "coord.LOtoLL failed for airbase at x="
+                                .. tostring(pos.x)
+                                .. ", y="
+                                .. tostring(pos.y)
+                                .. ", z="
+                                .. tostring(pos.z)
+                                .. " | Error: "
+                                .. tostring(errLL)
+                                .. " | Args: x="
+                                .. tostring(pos.x)
+                                .. ", y="
+                                .. tostring(pos.y)
+                                .. ", z="
+                                .. tostring(pos.z)
+                                .. " | Types: x="
+                                .. type(pos.x)
+                                .. ", y="
+                                .. type(pos.y)
+                                .. ", z="
+                                .. type(pos.z)
+                        )
                         lat, lon, alt = nil, nil, nil
                     end
                 else
@@ -1272,8 +1458,9 @@ function TerrainSampler:collectAirbases(callback)
                 local desc = type(airbase.getDesc) == "function" and airbase:getDesc() or nil
                 local category = desc and desc.category or -1
 
-                self:log("Processing airbase " ..
-                    tostring(idx) .. "/" .. tostring(totalAirbases) .. ": " .. tostring(name))
+                self:log(
+                    "Processing airbase " .. tostring(idx) .. "/" .. tostring(totalAirbases) .. ": " .. tostring(name)
+                )
 
                 -- Get parking spots
                 local parkingSpots = {}
@@ -1283,22 +1470,28 @@ function TerrainSampler:collectAirbases(callback)
                         local spotLat, spotLon
                         if spot.vTerminalPos and coord and type(coord.LOtoLL) == "function" then
                             local okSpotLL, errSpotLL = pcall(function()
-                                spotLat, spotLon = coord.LOtoLL(
-                                    spot.vTerminalPos.x,
-                                    spot.vTerminalPos.y or 0,
-                                    spot.vTerminalPos.z
-                                )
+                                spotLat, spotLon =
+                                    coord.LOtoLL(spot.vTerminalPos.x, spot.vTerminalPos.y or 0, spot.vTerminalPos.z)
                             end)
                             if not okSpotLL then
-                                self:logWarning("coord.LOtoLL failed for parking spot at airbase " .. tostring(name) ..
-                                    " | Error: " .. tostring(errSpotLL) ..
-                                    " | Args: x=" ..
-                                    tostring(spot.vTerminalPos.x) ..
-                                    ", y=" ..
-                                    tostring(spot.vTerminalPos.y or 0) .. ", z=" .. tostring(spot.vTerminalPos.z) ..
-                                    " | Types: x=" ..
-                                    type(spot.vTerminalPos.x) ..
-                                    ", y=" .. type(spot.vTerminalPos.y) .. ", z=" .. type(spot.vTerminalPos.z))
+                                self:logWarning(
+                                    "coord.LOtoLL failed for parking spot at airbase "
+                                        .. tostring(name)
+                                        .. " | Error: "
+                                        .. tostring(errSpotLL)
+                                        .. " | Args: x="
+                                        .. tostring(spot.vTerminalPos.x)
+                                        .. ", y="
+                                        .. tostring(spot.vTerminalPos.y or 0)
+                                        .. ", z="
+                                        .. tostring(spot.vTerminalPos.z)
+                                        .. " | Types: x="
+                                        .. type(spot.vTerminalPos.x)
+                                        .. ", y="
+                                        .. type(spot.vTerminalPos.y)
+                                        .. ", z="
+                                        .. type(spot.vTerminalPos.z)
+                                )
                                 spotLat, spotLon = nil, nil
                             end
                         end
@@ -1354,7 +1547,9 @@ function TerrainSampler:collectAirbases(callback)
 
     self.state.airbaseCount = #airbases
     self:endPhase("Airbase Collection", tostring(#airbases) .. " airbases with parking/runway data")
-    if callback then callback(airbases) end
+    if callback then
+        callback(airbases)
+    end
 end
 
 -- =============================================================================
@@ -1395,8 +1590,16 @@ function TerrainSampler:export()
     sampler:showMessage("API check passed", 5)
 
     local bounds = sampler:getBounds()
-    sampler:log("Bounds: x=" .. tostring(bounds.minX) .. " to " .. tostring(bounds.maxX) ..
-        ", z=" .. tostring(bounds.minZ) .. " to " .. tostring(bounds.maxZ))
+    sampler:log(
+        "Bounds: x="
+            .. tostring(bounds.minX)
+            .. " to "
+            .. tostring(bounds.maxX)
+            .. ", z="
+            .. tostring(bounds.minZ)
+            .. " to "
+            .. tostring(bounds.maxZ)
+    )
 
     local boundsWidth = (bounds.maxX - bounds.minX) / 1000
     local boundsHeight = (bounds.maxZ - bounds.minZ) / 1000
@@ -1470,8 +1673,9 @@ function TerrainSampler:export()
                         if ok then
                             sampler:log("Removed old export file: " .. filePath)
                         else
-                            sampler:logWarning("Could not remove file: " ..
-                                filePath .. " | Error: " .. tostring(removeErr))
+                            sampler:logWarning(
+                                "Could not remove file: " .. filePath .. " | Error: " .. tostring(removeErr)
+                            )
                         end
                     end
                 end
@@ -1486,10 +1690,13 @@ function TerrainSampler:export()
 
         local file, fileErr = io.open(filename, "w")
         if not file then
-            sampler:logError("Could not open file for writing: " ..
-                tostring(filename) .. " | Error: " .. tostring(fileErr))
+            sampler:logError(
+                "Could not open file for writing: " .. tostring(filename) .. " | Error: " .. tostring(fileErr)
+            )
             sampler:showMessage(
-                "ERROR: Could not write to file!\n" .. tostring(filename) .. "\nCheck permissions and disk space.", 30)
+                "ERROR: Could not write to file!\n" .. tostring(filename) .. "\nCheck permissions and disk space.",
+                30
+            )
             return
         end
 
@@ -1522,15 +1729,15 @@ function TerrainSampler:export()
             sampler:log("  - Airbases: " .. tostring(sampler.state.airbaseCount or 0))
 
             local summaryMsg = string.format(
-                "=== EXPORT COMPLETE ===\n" ..
-                "Theatre: %s\n" ..
-                "File: %s\n" ..
-                "Size: %d KB\n" ..
-                "Time: %s\n" ..
-                "---\n" ..
-                "Terrain samples: %d\n" ..
-                "Road points: %d\n" ..
-                "Airbases: %d",
+                "=== EXPORT COMPLETE ===\n"
+                    .. "Theatre: %s\n"
+                    .. "File: %s\n"
+                    .. "Size: %d KB\n"
+                    .. "Time: %s\n"
+                    .. "---\n"
+                    .. "Terrain samples: %d\n"
+                    .. "Road points: %d\n"
+                    .. "Airbases: %d",
                 theatre,
                 filename,
                 math.floor(#json / 1024),
@@ -1617,10 +1824,7 @@ end
 trigger.action.outText("[Terrain Export] Script loaded. Export will begin shortly...", 10)
 env.info("[TerrainSampler] Script loaded, preparing to export...")
 
-
 -- Run export immediately (mission trigger handles timing)
-
-
 
 local status, err = pcall(function()
     TerrainSampler:export()
@@ -1629,13 +1833,15 @@ end)
 if not status then
     env.error("[TerrainSampler] Export failed with error: " .. tostring(err))
     trigger.action.outText(
-        "=== TERRAIN EXPORT FAILED ===\n" ..
-        "Error: " .. tostring(err) .. "\n\n" ..
-        "Check DCS.log for details.\n" ..
-        "Common issues:\n" ..
-        "- MissionScripting.lua not desanitized\n" ..
-        "- Invalid theatre bounds\n" ..
-        "- Disk full or permission denied",
+        "=== TERRAIN EXPORT FAILED ===\n"
+            .. "Error: "
+            .. tostring(err)
+            .. "\n\n"
+            .. "Check DCS.log for details.\n"
+            .. "Common issues:\n"
+            .. "- MissionScripting.lua not desanitized\n"
+            .. "- Invalid theatre bounds\n"
+            .. "- Disk full or permission denied",
         60
     )
 end

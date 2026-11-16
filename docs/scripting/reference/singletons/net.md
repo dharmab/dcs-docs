@@ -38,6 +38,7 @@ nil net.send_chat(string message, boolean all)
 Sends a chat message.
 
 **Parameters:**
+
 - `message` (string): The message to send.
 - `all` (boolean): `true` to send to all players, `false` for coalition only.
 
@@ -54,10 +55,12 @@ nil net.send_chat_to(string message, number playerID)
 Sends a private chat message to a specific player.
 
 **Parameters:**
+
 - `message` (string): The message to send.
 - `playerID` (number): The target player ID, or a special constant.
 
 **Special Player IDs:**
+
 - `net.CHAT_ALL` - Send to all players
 - `net.CHAT_TEAM` - Send to your team
 
@@ -70,6 +73,7 @@ nil net.recv_chat(string message, number from)
 Displays a chat message locally, optionally appearing as if sent by another player.
 
 **Parameters:**
+
 - `message` (string): The message to display.
 - `from` (number): Optional player ID. 0 or omitted means system message.
 
@@ -101,10 +105,12 @@ any net.get_player_info(number playerID, string attribute)
 Returns player information.
 
 **Parameters:**
+
 - `playerID` (number): The player's ID.
 - `attribute` (string): Optional. If provided, returns only that attribute.
 
 **Attributes:**
+
 - `'id'` - Player ID
 - `'name'` - Player name
 - `'side'` - Coalition (0=spectators, 1=red, 2=blue)
@@ -150,6 +156,7 @@ string net.get_name(number playerID)
 Shortcut for `net.get_player_info(playerID, 'name')`.
 
 **Parameters:**
+
 - `playerID` (number): The player's ID.
 
 **Returns:** Player name string.
@@ -163,6 +170,7 @@ number, string net.get_slot(number playerID)
 Returns a player's current slot.
 
 **Parameters:**
+
 - `playerID` (number): The player's ID.
 
 **Returns:** Side ID and slot ID.
@@ -183,10 +191,12 @@ number net.get_stat(number playerID, number statID)
 Returns a player statistic.
 
 **Parameters:**
+
 - `playerID` (number): The player's ID.
 - `statID` (number): The statistic type.
 
 **Statistic IDs:**
+
 - `net.PS_PING` (0) - Ping in ms
 - `net.PS_CRASH` (1) - Number of crashes
 - `net.PS_CAR` (2) - Destroyed vehicles
@@ -209,6 +219,7 @@ nil net.kick(number playerID, string message)
 Kicks a player from the server.
 
 **Parameters:**
+
 - `playerID` (number): The player to kick.
 - `message` (string): Reason shown to the player.
 
@@ -225,6 +236,7 @@ nil net.set_slot(number sideID, string slotID)
 Attempts to change the local player's slot.
 
 **Parameters:**
+
 - `sideID` (number): Target coalition (0=spectators, 1=red, 2=blue).
 - `slotID` (string): Target slot ID, or empty string for spectators.
 
@@ -237,6 +249,7 @@ boolean net.force_player_slot(number playerID, number sideID, string slotID)
 Forces a player into a specific slot. Server only.
 
 **Parameters:**
+
 - `playerID` (number): The player to move.
 - `sideID` (number): Target coalition (0=spectators, 1=red, 2=blue).
 - `slotID` (string): Target slot ID, or empty string for spectators.
@@ -259,6 +272,7 @@ string net.lua2json(any value)
 Converts a Lua value to a JSON string.
 
 **Parameters:**
+
 - `value` (any): The Lua value to convert.
 
 **Returns:** JSON string.
@@ -278,6 +292,7 @@ any net.json2lua(string json)
 Converts a JSON string to a Lua value.
 
 **Parameters:**
+
 - `json` (string): The JSON string to parse.
 
 **Returns:** The parsed Lua value.
@@ -301,6 +316,7 @@ string net.dostring_in(string state, string luaCode)
 Executes Lua code in a specified internal Lua state.
 
 **Parameters:**
+
 - `state` (string): Target state name.
 - `luaCode` (string): Lua code to execute.
 
@@ -319,6 +335,7 @@ net.allow_dostring_in = {
     "mission",    -- Allow net.dostring_in("scripting", "code")
 }
 ```
+
 ## Example
 
 ```lua

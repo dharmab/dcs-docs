@@ -15,12 +15,12 @@ The carrier should be at the formation center with escorts positioned 5-12 nauti
 
 ## Unit Type Strings
 
-| Unit | Type String | Livery |
-|------|-------------|--------|
-| CVN-74 John C. Stennis | `Stennis` | - |
-| CG Ticonderoga | `TICONDEROG` | - |
-| DDG Arleigh Burke IIa | `USS_Arleigh_Burke_IIa` | - |
-| UH-60A Black Hawk | `UH-60A` | `Golden Angels` |
+| Unit                   | Type String             | Livery          |
+| ---------------------- | ----------------------- | --------------- |
+| CVN-74 John C. Stennis | `Stennis`               | -               |
+| CG Ticonderoga         | `TICONDEROG`            | -               |
+| DDG Arleigh Burke IIa  | `USS_Arleigh_Burke_IIa` | -               |
+| UH-60A Black Hawk      | `UH-60A`                | `Golden Angels` |
 
 > **Note:** The Stennis is recommended because it is freely available to all DCS users without requiring the Supercarrier DLC.
 
@@ -43,10 +43,12 @@ Ship Heading = Wind Direction (where wind comes FROM)
 ### Example Calculation
 
 If mission wind is set to:
+
 - Wind speed: 10 m/s (19.4 knots)
 - Wind direction: 045° (wind coming FROM northeast)
 
 Required ship speed:
+
 - Target WOD: 30 knots = 15.4 m/s
 - Ship speed needed: 15.4 - 10 = 5.4 m/s (10.5 knots)
 - Ship heading: 045° (into the wind)
@@ -299,6 +301,7 @@ Configure TACAN, ICLS, and radio frequency as waypoint tasks on the first waypoi
 The TACAN beacon allows aircraft to navigate to the carrier. Use channel **71X** (matching CVN-71's convention, easily memorable).
 
 TACAN frequency calculation for channel 71X:
+
 - X-mode channels 70-126: frequency = 1088 + channel = 1088 + 71 = **1159 MHz** = **1159000000 Hz**
 
 ```lua
@@ -468,22 +471,22 @@ The following diagram illustrates escort positioning relative to the carrier:
 
 ## Distance Conversions
 
-| Distance | Nautical Miles | Meters |
-|----------|----------------|--------|
-| Close escort | 5 nm | 9,260 m |
-| Standard | 7 nm | 12,964 m |
-| Wide | 10 nm | 18,520 m |
-| Maximum | 12 nm | 22,224 m |
+| Distance     | Nautical Miles | Meters   |
+| ------------ | -------------- | -------- |
+| Close escort | 5 nm           | 9,260 m  |
+| Standard     | 7 nm           | 12,964 m |
+| Wide         | 10 nm          | 18,520 m |
+| Maximum      | 12 nm          | 22,224 m |
 
 ## Speed Conversions
 
-| Speed | Knots | m/s |
-|-------|-------|-----|
-| Minimum steerage | 5 kt | 2.6 m/s |
-| Cruise | 12 kt | 6.2 m/s |
-| Flight ops | 15 kt | 7.7 m/s |
-| High speed | 20 kt | 10.3 m/s |
-| Flank | 30 kt | 15.4 m/s |
+| Speed            | Knots | m/s      |
+| ---------------- | ----- | -------- |
+| Minimum steerage | 5 kt  | 2.6 m/s  |
+| Cruise           | 12 kt | 6.2 m/s  |
+| Flight ops       | 15 kt | 7.7 m/s  |
+| High speed       | 20 kt | 10.3 m/s |
+| Flank            | 30 kt | 15.4 m/s |
 
 ## Rescue Helicopter (Plane Guard)
 
@@ -492,6 +495,7 @@ During flight operations, a rescue helicopter maintains station on the carrier's
 ### Helicopter Position
 
 The rescue helicopter should maintain:
+
 - **Altitude:** 70 meters (230 feet)
 - **Offset X:** 200 meters ahead of the carrier (in direction of travel)
 - **Offset Z:** -200 meters (port side, negative value)
@@ -561,6 +565,7 @@ Place the helicopter group in `coalition.[side].country[n].helicopter.group`:
 Each waypoint must mirror the carrier's waypoints with the port-side offset applied. The offset depends on the carrier's heading at each waypoint.
 
 For a carrier heading of 045° (northeast into the wind), the port offset of 200m translates to:
+
 - X offset: +141m (200 × cos(45°) for ahead) + (-141m for port) = 0m net, but we want ahead+port
 - Y offset: +141m (200 × sin(45°) for ahead) + (-141m for port side)
 
@@ -574,6 +579,7 @@ helo_y = carrier_y + (ahead × sin(θ)) + (port × cos(θ))
 ```
 
 For 200m ahead and 200m port at 45° heading:
+
 ```
 helo_x = carrier_x + (200 × 0.707) - (200 × 0.707) = carrier_x
 helo_y = carrier_y + (200 × 0.707) + (200 × 0.707) = carrier_y + 283
@@ -582,10 +588,12 @@ helo_y = carrier_y + (200 × 0.707) + (200 × 0.707) = carrier_y + 283
 Wait—port side at 045° heading means we go to the aircraft's left, which is northwest. Let's recalculate:
 
 At heading 045°:
+
 - Forward vector: (cos(45°), sin(45°)) = (0.707, 0.707)
 - Port vector (90° left of heading): (cos(135°), sin(135°)) = (-0.707, 0.707)
 
 For 200m ahead and 200m port:
+
 ```
 helo_x = carrier_x + 200×0.707 + 200×(-0.707) = carrier_x
 helo_y = carrier_y + 200×0.707 + 200×0.707 = carrier_y + 283

@@ -74,6 +74,7 @@ Aircraft groups consist of one to four units. Each group has configurable proper
 - **Late Activation**: Group spawns only when triggered
 
 Available aircraft tasks include:
+
 - Nothing, AFAC, Anti-ship Strike, AWACS, CAP, CAS, Escort, Fighter Sweep, Ground Attack, Intercept, Pinpoint Strike, Reconnaissance, Refueling, Runway Attack, SEAD, and Transport
 
 ### Ground and Naval Units
@@ -164,6 +165,7 @@ The trigger system enables event-driven scripting using a condition-action model
 ### Trigger Events
 
 Triggers can be limited to evaluate only on specific events:
+
 - NO EVENT (evaluates continuously)
 - ON DESTROY, ON SHOT, ON CRASH, ON EJECT
 - ON REFUEL, ON REFUEL STOP
@@ -176,6 +178,7 @@ Triggers can be limited to evaluate only on specific events:
 Common conditions include:
 
 **Zone-based conditions**:
+
 - ALL/PART OF COALITION IN/OUT OF ZONE
 - ALL/PART OF GROUP IN/OUT OF ZONE
 - UNIT INSIDE/OUTSIDE ZONE
@@ -183,20 +186,24 @@ Common conditions include:
 - BOMB/MISSILE IN ZONE
 
 **Unit state conditions**:
+
 - GROUP/UNIT ALIVE, DEAD, DAMAGED
 - GROUP ALIVE LESS THAN (percentage)
 - UNIT'S LIFE LESS THAN (percentage)
 
 **Flag conditions**:
+
 - FLAG IS TRUE/FALSE
 - FLAG EQUALS, FLAG IS LESS/MORE
 - FLAG EQUALS FLAG, FLAG IS LESS/MORE THAN FLAG
 
 **Time conditions**:
+
 - TIME LESS/MORE (seconds from mission start)
 - TIME SINCE FLAG
 
 **Other conditions**:
+
 - RANDOM (percentage probability)
 - COALITION HAS AIRDROME/HELIPAD
 - MISSION SCORE HIGHER/LOWER THAN
@@ -211,6 +218,7 @@ Multiple conditions operate with AND logic by default. Use the OR button to sepa
 Common actions include:
 
 **Group/Unit control**:
+
 - GROUP ACTIVATE/DEACTIVATE
 - GROUP AI ON/OFF
 - GROUP RESUME/STOP
@@ -219,21 +227,25 @@ Common actions include:
 - EXPLODE UNIT
 
 **Messaging**:
+
 - MESSAGE TO ALL/COALITION/COUNTRY/GROUP
 - SOUND TO ALL/COALITION/COUNTRY/GROUP
 - RADIO TRANSMISSION
 
 **Flag manipulation**:
+
 - FLAG ON/OFF
 - FLAG INCREASE/DECREASE
 - SET FLAG VALUE
 - FLAG SET RANDOM VALUE
 
 **AI tasking**:
+
 - AI TASK PUSH
 - AI TASK SET
 
 **Effects**:
+
 - EXPLOSION, ILLUMINATING BOMB
 - SMOKE MARKER (on zone or unit)
 - SIGNAL FLARE (on zone or unit)
@@ -243,10 +255,12 @@ Common actions include:
 SCENERY REMOVE OBJECTS ZONE is unreliable in multiplayer: removed objects may stay visible or collidable for some clients.[^scenery-removal] Clear areas with FARPs instead, or avoid runtime scenery removal.
 
 **Map markers**:
+
 - MARK TO ALL/COALITION/GROUP
 - REMOVE MARK
 
 **Mission control**:
+
 - END MISSION
 - LOAD MISSION (multiplayer campaigns)
 - DO SCRIPT, DO SCRIPT FILE (Lua execution)
@@ -283,6 +297,7 @@ Dynamic weather creates evolving wind and cloud conditions based on pressure sys
 ## Mission Goals
 
 Goals define victory, draw, and failure conditions using a point-based system:
+
 - 0-49 points: Mission failure
 - 50 points: Mission draw
 - 51+ points: Mission success
@@ -354,6 +369,7 @@ The tasks, commands, and options available in the Mission Editor can also be ass
 ## Briefing Creation
 
 The briefing panel includes:
+
 - **Sortie**: Mission title
 - **Coalition lists**: Automatically populated from assigned countries
 - **Briefing images**: Custom images for RED and BLUE sides (recommended 1024x1024 pixels, JPG/PNG format)
@@ -381,6 +397,7 @@ Disable bird strikes. Despite the name, DCS does not render flocks of birds that
 ### Other Options
 
 Additional mission options include:
+
 - **Permit Crash Recovery**: Allow players to respawn after crashes
 - **External Views**: Enable third-person camera views
 - **F10 View Options**: Control what appears on the map view

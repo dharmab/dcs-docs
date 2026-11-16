@@ -30,6 +30,7 @@ controller:setTask(task)
 ```
 
 Tasks are divided into:
+
 - **Main Tasks** - Primary objectives that control the group's behavior
 - **En-route Tasks** - Ongoing behaviors that run alongside the main mission
 - **Task Wrappers** - Containers that hold other tasks with conditions

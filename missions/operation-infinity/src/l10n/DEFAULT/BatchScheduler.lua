@@ -13,8 +13,8 @@ _G.BatchSchedulerLoaded = true
 BatchScheduler = {}
 
 BatchScheduler.config = {
-    frameBudgetMs = 1,  -- Max milliseconds per frame
-    minItems = 1,       -- Always process at least 1 item
+    frameBudgetMs = 1, -- Max milliseconds per frame
+    minItems = 1, -- Always process at least 1 item
 }
 
 local NEXT_FRAME_MS = 1
@@ -39,12 +39,14 @@ function BatchScheduler:processArray(params)
     local total = #array
 
     if total == 0 then
-        if onComplete then onComplete(context) end
+        if onComplete then
+            onComplete(context)
+        end
         return
     end
 
     local function processBatch()
-        local startTime = timer.getTime() * 1000  -- Current time in ms
+        local startTime = timer.getTime() * 1000 -- Current time in ms
         local budgetMs = BatchScheduler.config.frameBudgetMs
         local itemsProcessed = 0
 
@@ -61,9 +63,11 @@ function BatchScheduler:processArray(params)
         end
 
         if index <= total then
-            return timer.getTime() + NEXT_FRAME_SECONDS  -- Next frame
+            return timer.getTime() + NEXT_FRAME_SECONDS -- Next frame
         else
-            if onComplete then onComplete(context) end
+            if onComplete then
+                onComplete(context)
+            end
             return nil
         end
     end
@@ -86,7 +90,9 @@ function BatchScheduler:runSequence(params)
 
     local function runNextStep()
         if stepIndex > #steps then
-            if onComplete then onComplete(context) end
+            if onComplete then
+                onComplete(context)
+            end
             return nil
         end
 

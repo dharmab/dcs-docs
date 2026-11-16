@@ -22,9 +22,9 @@ Formations.FormationType = {
 
 -- Unit randomization settings (can be overridden)
 Formations.config = {
-    countVariance = 0.3,        -- +/-30% unit count variation
-    missingUnitChance = 0.1,    -- 10% chance each unit is "missing"
-    substitutionChance = 0.3,   -- 30% chance for unit type substitution
+    countVariance = 0.3, -- +/-30% unit count variation
+    missingUnitChance = 0.1, -- 10% chance each unit is "missing"
+    substitutionChance = 0.3, -- 30% chance for unit type substitution
 }
 
 local log = Logging:create("Formations")
@@ -44,10 +44,9 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
                 y = 0,
             }
         end
-
     elseif formationType == self.FormationType.WEDGE then
         -- Arrow/vee shape with lead unit at front
-        positions[#positions + 1] = {x = 0, y = 0} -- Lead unit
+        positions[#positions + 1] = { x = 0, y = 0 } -- Lead unit
         for i = 2, unitCount do
             local row = math.ceil((i - 1) / 2)
             local side = ((i - 1) % 2 == 0) and 1 or -1
@@ -56,7 +55,6 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
                 y = -row * spacing,
             }
         end
-
     elseif formationType == self.FormationType.ECHELON_LEFT then
         for i = 1, unitCount do
             positions[#positions + 1] = {
@@ -64,7 +62,6 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
                 y = -(i - 1) * spacing * 0.7,
             }
         end
-
     elseif formationType == self.FormationType.ECHELON_RIGHT then
         for i = 1, unitCount do
             positions[#positions + 1] = {
@@ -72,7 +69,6 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
                 y = -(i - 1) * spacing * 0.7,
             }
         end
-
     else
         -- Default to line if unknown
         return self:getFormationPositions(unitCount, self.FormationType.LINE, spacing, widthMultiplier)
@@ -213,7 +209,7 @@ function Formations:buildPlatoonUnits(template, center, options)
 
     for _, def in ipairs(template) do
         for c = 1, def.count do
-            local formPos = formationPositions[unitIndex] or {x = 0, y = 0}
+            local formPos = formationPositions[unitIndex] or { x = 0, y = 0 }
 
             -- Rotate position to face the correct direction
             local rotatedPos = self:rotatePosition(formPos, facing)

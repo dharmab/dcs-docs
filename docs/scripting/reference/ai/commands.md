@@ -179,38 +179,38 @@ controller:setCommand(cmd)
 
 The `type` field specifies the beacon type using one of these numeric values (see [Beacon Types](../enums/ai.md#beacon-types)):
 
-| Constant | Value |
-| --- | --- |
-| `BEACON_TYPE_NULL` | 0 |
-| `BEACON_TYPE_VOR` | 1 |
-| `BEACON_TYPE_DME` | 2 |
-| `BEACON_TYPE_VOR_DME` | 3 |
-| `BEACON_TYPE_TACAN` | 4 |
-| `BEACON_TYPE_VORTAC` | 5 |
-| `BEACON_TYPE_HOMER` | 8 |
-| `BEACON_TYPE_RSBN` | 32 |
-| `BEACON_TYPE_BROADCAST_STATION` | 1024 |
-| `BEACON_TYPE_AIRPORT_HOMER` | 4104 |
-| `BEACON_TYPE_AIRPORT_HOMER_WITH_MARKER` | 4136 |
-| `BEACON_TYPE_ILS_FAR_HOMER` | 16408 |
-| `BEACON_TYPE_ILS_NEAR_HOMER` | 16456 |
-| `BEACON_TYPE_ILS_LOCALIZER` | 16640 |
-| `BEACON_TYPE_ILS_GLIDESLOPE` | 16896 |
-| `BEACON_TYPE_NAUTICAL_HOMER` | 32776 |
+| Constant                                | Value |
+| --------------------------------------- | ----- |
+| `BEACON_TYPE_NULL`                      | 0     |
+| `BEACON_TYPE_VOR`                       | 1     |
+| `BEACON_TYPE_DME`                       | 2     |
+| `BEACON_TYPE_VOR_DME`                   | 3     |
+| `BEACON_TYPE_TACAN`                     | 4     |
+| `BEACON_TYPE_VORTAC`                    | 5     |
+| `BEACON_TYPE_HOMER`                     | 8     |
+| `BEACON_TYPE_RSBN`                      | 32    |
+| `BEACON_TYPE_BROADCAST_STATION`         | 1024  |
+| `BEACON_TYPE_AIRPORT_HOMER`             | 4104  |
+| `BEACON_TYPE_AIRPORT_HOMER_WITH_MARKER` | 4136  |
+| `BEACON_TYPE_ILS_FAR_HOMER`             | 16408 |
+| `BEACON_TYPE_ILS_NEAR_HOMER`            | 16456 |
+| `BEACON_TYPE_ILS_LOCALIZER`             | 16640 |
+| `BEACON_TYPE_ILS_GLIDESLOPE`            | 16896 |
+| `BEACON_TYPE_NAUTICAL_HOMER`            | 32776 |
 
 For example, `type = 4` selects TACAN.
 
 The `system` field specifies the beacon system using one of these numeric values from the `SystemName` enum (see [Beacon Systems](../enums/ai.md#beacon-systems)):
 
-| Constant | Value |
-| --- | --- |
-| `SystemName.PAR_10` | 1 |
-| `SystemName.RSBN_5` | 2 |
-| `SystemName.TACAN` | 3 |
-| `SystemName.TACAN_TANKER` | 4 |
-| `SystemName.ILS_LOCALIZER` | 5 |
-| `SystemName.ILS_GLIDESLOPE` | 6 |
-| `SystemName.BROADCAST_STATION` | 7 |
+| Constant                       | Value |
+| ------------------------------ | ----- |
+| `SystemName.PAR_10`            | 1     |
+| `SystemName.RSBN_5`            | 2     |
+| `SystemName.TACAN`             | 3     |
+| `SystemName.TACAN_TANKER`      | 4     |
+| `SystemName.ILS_LOCALIZER`     | 5     |
+| `SystemName.ILS_GLIDESLOPE`    | 6     |
+| `SystemName.BROADCAST_STATION` | 7     |
 
 For example, `system = 3` selects the TACAN system. The `type` and `system` values are separate: TACAN uses `type = 4` and `system = 3`.
 

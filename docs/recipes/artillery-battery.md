@@ -18,44 +18,44 @@ An effective artillery spectacle requires:
 
 ### Self-Propelled Howitzers
 
-| Unit | Type ID | Caliber | Country | Notes |
-|------|---------|---------|---------|-------|
-| SPH M109 Paladin | `M-109` | 155mm | USA | Standard NATO SPH, dramatic muzzle flash |
-| SPH 2S3 Akatsia | `SAU Akatsia` | 152mm | USSR | Soviet equivalent, heavy smoke |
-| SPH 2S19 Msta | `SAU Msta` | 152mm | Russia | Modern SPH, rapid fire |
-| SPH 2S1 Gvozdika | `SAU Gvozdika` | 122mm | USSR | Light SPH, high rate of fire |
-| SPH Dana vz77 | `SpGH_Dana` | 152mm | Czechoslovakia | 8x8 wheeled, distinctive look |
-| SPH T155 Firtina | `T155_Firtina` | 155mm | Turkey | Modern, very loud |
-| PLZ-05 | `PLZ05` | 155mm | China | Modern Chinese SPH |
-| SPM 2S9 Nona | `SAU 2-C9` | 120mm | USSR | Airborne mortar/howitzer |
+| Unit             | Type ID        | Caliber | Country        | Notes                                    |
+| ---------------- | -------------- | ------- | -------------- | ---------------------------------------- |
+| SPH M109 Paladin | `M-109`        | 155mm   | USA            | Standard NATO SPH, dramatic muzzle flash |
+| SPH 2S3 Akatsia  | `SAU Akatsia`  | 152mm   | USSR           | Soviet equivalent, heavy smoke           |
+| SPH 2S19 Msta    | `SAU Msta`     | 152mm   | Russia         | Modern SPH, rapid fire                   |
+| SPH 2S1 Gvozdika | `SAU Gvozdika` | 122mm   | USSR           | Light SPH, high rate of fire             |
+| SPH Dana vz77    | `SpGH_Dana`    | 152mm   | Czechoslovakia | 8x8 wheeled, distinctive look            |
+| SPH T155 Firtina | `T155_Firtina` | 155mm   | Turkey         | Modern, very loud                        |
+| PLZ-05           | `PLZ05`        | 155mm   | China          | Modern Chinese SPH                       |
+| SPM 2S9 Nona     | `SAU 2-C9`     | 120mm   | USSR           | Airborne mortar/howitzer                 |
 
 ### Multiple Rocket Launchers
 
 MRLs fire in salvos rather than continuously, creating different visual effects—spectacular bursts followed by reload pauses.
 
-| Unit | Type ID | Caliber | Country | Notes |
-|------|---------|---------|---------|-------|
-| MLRS BM-21 Grad | `Grad-URAL` | 122mm | USSR | 40 rockets, iconic Soviet MRL |
-| MLRS BM-27 Uragan | `Uragan_BM-27` | 220mm | USSR | 16 rockets, heavier warheads |
-| MLRS BM-30 Smerch | `Smerch` | 300mm | Russia | 12 rockets, massive explosions |
-| MLRS BM-30 Smerch HE | `Smerch_HE` | 300mm | Russia | HE variant |
-| MLRS M270 | `MLRS` | 227mm | USA | 12 rockets, NATO standard |
-| MLRS TOS-1A | `CHAP_TOS1A` | 220mm | Russia | Thermobaric, spectacular fireballs |
+| Unit                 | Type ID        | Caliber | Country | Notes                              |
+| -------------------- | -------------- | ------- | ------- | ---------------------------------- |
+| MLRS BM-21 Grad      | `Grad-URAL`    | 122mm   | USSR    | 40 rockets, iconic Soviet MRL      |
+| MLRS BM-27 Uragan    | `Uragan_BM-27` | 220mm   | USSR    | 16 rockets, heavier warheads       |
+| MLRS BM-30 Smerch    | `Smerch`       | 300mm   | Russia  | 12 rockets, massive explosions     |
+| MLRS BM-30 Smerch HE | `Smerch_HE`    | 300mm   | Russia  | HE variant                         |
+| MLRS M270            | `MLRS`         | 227mm   | USA     | 12 rockets, NATO standard          |
+| MLRS TOS-1A          | `CHAP_TOS1A`   | 220mm   | Russia  | Thermobaric, spectacular fireballs |
 
 ### Towed Artillery and Mortars
 
 Towed pieces lack the dramatic vehicle silhouette but can be effective for infantry support scenarios.
 
-| Unit | Type ID | Caliber | Notes |
-|------|---------|---------|-------|
-| Mortar 2B11 | `2B11 mortar` | 120mm | Soviet heavy mortar, high rate of fire |
-| L118 Light Gun | `L118_Unit` | 105mm | British towed howitzer |
-| FH M2A1 | `M2A1-105` | 105mm | WWII American howitzer |
+| Unit           | Type ID       | Caliber | Notes                                  |
+| -------------- | ------------- | ------- | -------------------------------------- |
+| Mortar 2B11    | `2B11 mortar` | 120mm   | Soviet heavy mortar, high rate of fire |
+| L118 Light Gun | `L118_Unit`   | 105mm   | British towed howitzer                 |
+| FH M2A1        | `M2A1-105`    | 105mm   | WWII American howitzer                 |
 
 ### Ammunition Carriers
 
-| Unit | Type ID | Notes |
-|------|---------|-------|
+| Unit                   | Type ID  | Notes                                            |
+| ---------------------- | -------- | ------------------------------------------------ |
 | Ammo M30 Cargo Carrier | `M30_CC` | Automatically reloads nearby units (within 100m) |
 
 ## Mission File Structure
@@ -112,13 +112,13 @@ The `FireAtPoint` task orders ground units to fire at a specific map location. F
 
 **Key Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `x` | number | Target X coordinate (meters) |
-| `y` | number | Target Y coordinate (meters) |
-| `radius` | number | Dispersion radius for impacts (meters, 100-500 typical) |
-| `expendQty` | number | Number of rounds to fire—set very high (500-9999) for sustained fire |
-| `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure |
+| Parameter          | Type    | Description                                                          |
+| ------------------ | ------- | -------------------------------------------------------------------- |
+| `x`                | number  | Target X coordinate (meters)                                         |
+| `y`                | number  | Target Y coordinate (meters)                                         |
+| `radius`           | number  | Dispersion radius for impacts (meters, 100-500 typical)              |
+| `expendQty`        | number  | Number of rounds to fire—set very high (500-9999) for sustained fire |
+| `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure                              |
 
 > **Tip:** For sustained bombardment, set `expendQty` to a very high number (1000+) and include ammunition carriers. The carriers will continuously resupply the guns.
 
@@ -133,12 +133,12 @@ Choose a target point that is:
 
 ### Example Target Scenarios
 
-| Scenario | Target Placement | Effect |
-|----------|------------------|--------|
-| Suppression fire | Open field ahead of player advance | Distant rumble, smoke on horizon |
-| Counter-battery target | Empty hillside | Players see impacts, search for source |
-| Area denial | Road junction | Explosions block route, tension builder |
-| Harassment fire | Near (not at) enemy airfield | Dramatic backdrop for takeoff/landing |
+| Scenario               | Target Placement                   | Effect                                  |
+| ---------------------- | ---------------------------------- | --------------------------------------- |
+| Suppression fire       | Open field ahead of player advance | Distant rumble, smoke on horizon        |
+| Counter-battery target | Empty hillside                     | Players see impacts, search for source  |
+| Area denial            | Road junction                      | Explosions block route, tension builder |
+| Harassment fire        | Near (not at) enemy airfield       | Dramatic backdrop for takeoff/landing   |
 
 ## Complete Example: Russian Artillery Battery
 

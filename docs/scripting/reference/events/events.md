@@ -19,6 +19,7 @@ world.addEventHandler(shotHandler)
 ```
 
 All events contain at least:
+
 - `id` (number): Event type from `world.event`
 - `time` (number): Mission time when the event occurred
 
@@ -60,6 +61,7 @@ end
 ```
 
 **Event ID Enum:**
+
 ```lua
 world.event = {
     S_EVENT_SHOT = 1,
@@ -108,6 +110,7 @@ world.event = {
 The `S_EVENT_SHOT` event fires when a unit fires a weapon such as a missile, bomb, or rocket. This event does not fire for guns; use `S_EVENT_SHOOTING_START` and `S_EVENT_SHOOTING_END` to detect gun fire.
 
 **Event Table:**
+
 ```lua
 {
     id = 1,
@@ -136,6 +139,7 @@ end
 The `S_EVENT_HIT` event fires when a weapon hits a target. In multiplayer, the `weapon` field may be nil due to network desync.
 
 **Event Table:**
+
 ```lua
 {
     id = 2,
@@ -153,6 +157,7 @@ The `initiator` field contains the Unit object that fired the weapon. The `weapo
 The `S_EVENT_SHOOTING_START` event fires when a unit begins firing guns or other continuous fire weapons.
 
 **Event Table:**
+
 ```lua
 {
     id = 23,
@@ -169,6 +174,7 @@ The `initiator` field contains the Unit object that is firing. The `weapon_name`
 The `S_EVENT_SHOOTING_END` event fires when a unit stops firing guns.
 
 **Event Table:**
+
 ```lua
 {
     id = 24,
@@ -185,6 +191,7 @@ The `initiator` field contains the Unit object that stopped firing. The `weapon_
 The `S_EVENT_KILL` event fires when a unit kills another unit.
 
 **Event Table:**
+
 ```lua
 {
     id = 28,
@@ -205,6 +212,7 @@ The `initiator` field contains the Unit object that scored the kill. The `target
 The `S_EVENT_DEAD` event fires when a unit is destroyed and its hit points reach zero. For aircraft, `S_EVENT_CRASH` may fire instead of or in addition to `S_EVENT_DEAD`.
 
 **Event Table:**
+
 ```lua
 {
     id = 8,
@@ -231,6 +239,7 @@ end
 The `S_EVENT_CRASH` event fires when an aircraft crashes into the ground and is completely destroyed.
 
 **Event Table:**
+
 ```lua
 {
     id = 5,
@@ -246,6 +255,7 @@ The `initiator` field contains the Unit object representing the aircraft that cr
 The `S_EVENT_PILOT_DEAD` event fires when a pilot dies, which is tracked separately from aircraft destruction.
 
 **Event Table:**
+
 ```lua
 {
     id = 9,
@@ -261,6 +271,7 @@ The `initiator` field contains the Unit object representing the aircraft whose p
 The `S_EVENT_UNIT_LOST` event fires when any unit is lost from the mission for any reason.
 
 **Event Table:**
+
 ```lua
 {
     id = 30,
@@ -276,6 +287,7 @@ The `initiator` field contains the Unit object that was lost.
 The `S_EVENT_HUMAN_FAILURE` event fires when a player-controlled aircraft experiences a system failure.
 
 **Event Table:**
+
 ```lua
 {
     id = 16,
@@ -291,6 +303,7 @@ The `initiator` field contains the Unit object representing the aircraft that ex
 The `S_EVENT_DETAILED_FAILURE` event fires with detailed information about system failures.
 
 **Event Table:**
+
 ```lua
 {
     id = 17,
@@ -308,6 +321,7 @@ The `initiator` field contains the Unit object representing the aircraft that ex
 The `S_EVENT_TAKEOFF` event fires when an aircraft takes off from an airbase, FARP, or ship. This event fires several seconds after liftoff, after the aircraft has been airborne for a short period of time. Use `S_EVENT_RUNWAY_TAKEOFF` if you need to detect the exact moment of liftoff.
 
 **Event Table:**
+
 ```lua
 {
     id = 3,
@@ -325,6 +339,7 @@ The `initiator` field contains the Unit object representing the aircraft that to
 The `S_EVENT_LAND` event fires when an aircraft lands at an airbase, FARP, or ship and sufficiently slows down. This event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
 
 **Event Table:**
+
 ```lua
 {
     id = 4,
@@ -342,6 +357,7 @@ The `initiator` field contains the Unit object representing the aircraft that la
 The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
 
 **Event Table:**
+
 ```lua
 {
     id = 36,
@@ -358,6 +374,7 @@ The `initiator` field contains the Unit object representing the aircraft. The `p
 The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
 
 **Event Table:**
+
 ```lua
 {
     id = 37,
@@ -374,6 +391,7 @@ The `initiator` field contains the Unit object representing the aircraft. The `p
 The `S_EVENT_REFUELING` event fires when an aircraft connects with a tanker and begins taking on fuel.
 
 **Event Table:**
+
 ```lua
 {
     id = 7,
@@ -389,6 +407,7 @@ The `initiator` field contains the Unit object representing the aircraft receivi
 The `S_EVENT_REFUELING_STOP` event fires when an aircraft disconnects from a tanker.
 
 **Event Table:**
+
 ```lua
 {
     id = 14,
@@ -404,6 +423,7 @@ The `initiator` field contains the Unit object representing the aircraft that di
 The `S_EVENT_EJECTION` event fires when a pilot ejects from an aircraft. For aircraft with ejector seats, the `target` field contains the seat object rather than the pilot; wait for `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` to get the pilot. The pilot object is special and most scripting functions do not work on it.
 
 **Event Table:**
+
 ```lua
 {
     id = 6,
@@ -420,6 +440,7 @@ The `initiator` field contains the Unit object representing the aircraft from wh
 The `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` event fires when the ejector seat separates from the pilot.
 
 **Event Table:**
+
 ```lua
 {
     id = 32,
@@ -436,6 +457,7 @@ The `initiator` field contains the Unit object representing the original aircraf
 The `S_EVENT_LANDING_AFTER_EJECTION` event fires when an ejected pilot lands after the parachute touchdown.
 
 **Event Table:**
+
 ```lua
 {
     id = 31,
@@ -452,6 +474,7 @@ The `initiator` field contains the Unit object representing the original aircraf
 The `S_EVENT_ENGINE_STARTUP` event fires when an aircraft starts its engines.
 
 **Event Table:**
+
 ```lua
 {
     id = 18,
@@ -467,6 +490,7 @@ The `initiator` field contains the Unit object representing the aircraft that st
 The `S_EVENT_ENGINE_SHUTDOWN` event fires when an aircraft shuts down its engines.
 
 **Event Table:**
+
 ```lua
 {
     id = 19,
@@ -482,6 +506,7 @@ The `initiator` field contains the Unit object representing the aircraft that sh
 The `S_EVENT_LANDING_QUALITY_MARK` event fires for carrier landings and includes LSO grade information.
 
 **Event Table:**
+
 ```lua
 {
     id = 34,
@@ -501,6 +526,7 @@ The `initiator` field contains the Unit object representing the aircraft that la
 The `S_EVENT_BIRTH` event fires when any unit spawns into the mission. This is the preferred event for tracking player respawns and slot-ins for aircraft and helicopters, as `S_EVENT_PLAYER_ENTER_UNIT` only fires for Combined Arms ground vehicles.
 
 **Event Table:**
+
 ```lua
 {
     id = 15,
@@ -530,6 +556,7 @@ The `S_EVENT_PLAYER_ENTER_UNIT` event fires when a player takes control of a Com
 To track players entering aircraft or helicopters (respawns, slot-ins), use `S_EVENT_BIRTH` instead.
 
 **Event Table:**
+
 ```lua
 {
     id = 20,
@@ -556,6 +583,7 @@ end
 The `S_EVENT_PLAYER_LEAVE_UNIT` event fires when a player leaves a unit, whether by disconnecting, spectating, or changing slot.
 
 **Event Table:**
+
 ```lua
 {
     id = 21,
@@ -571,6 +599,7 @@ The `initiator` field contains the Unit object that the player left.
 The `S_EVENT_PLAYER_COMMENT` event fires when a player sends a chat message.
 
 **Event Table:**
+
 ```lua
 {
     id = 22,
@@ -589,6 +618,7 @@ The `initiator` field contains the Unit object representing the player who sent 
 The `S_EVENT_MISSION_START` event fires when the mission begins.
 
 **Event Table:**
+
 ```lua
 {
     id = 11,
@@ -601,6 +631,7 @@ The `S_EVENT_MISSION_START` event fires when the mission begins.
 The `S_EVENT_MISSION_END` event fires when the mission ends.
 
 **Event Table:**
+
 ```lua
 {
     id = 12,
@@ -613,6 +644,7 @@ The `S_EVENT_MISSION_END` event fires when the mission ends.
 The `S_EVENT_BASE_CAPTURED` event fires when an airbase changes coalition.
 
 **Event Table:**
+
 ```lua
 {
     id = 10,
@@ -629,6 +661,7 @@ The `initiator` field contains the Unit object that captured the base. The `plac
 The `S_EVENT_AI_ABORT_MISSION` event fires when an AI group aborts its mission.
 
 **Event Table:**
+
 ```lua
 {
     id = 35,
@@ -648,6 +681,7 @@ Map marker events allow scripts to respond to player map annotations.
 The `S_EVENT_MARK_ADDED` event fires when a mark or shape is added to the map.
 
 **Event Table:**
+
 ```lua
 {
     id = 25,
@@ -679,6 +713,7 @@ end
 The `S_EVENT_MARK_CHANGE` event fires when a mark is modified.
 
 **Event Table:**
+
 ```lua
 {
     id = 26,
@@ -699,6 +734,7 @@ The fields have the same meanings as in `S_EVENT_MARK_ADDED`.
 The `S_EVENT_MARK_REMOVE` event fires when a mark is deleted.
 
 **Event Table:**
+
 ```lua
 {
     id = 27,
@@ -720,6 +756,7 @@ The fields have the same meanings as in `S_EVENT_MARK_ADDED`.
 The `S_EVENT_WEAPON_ADD` event fires when a weapon is added to a unit, such as during rearming.
 
 **Event Table:**
+
 ```lua
 {
     id = 33,

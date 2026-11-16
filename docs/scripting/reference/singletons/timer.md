@@ -58,6 +58,7 @@ functionId timer.scheduleFunction(function callback, any argument, number runTim
 The `timer.scheduleFunction` function schedules a function to run at a specific mission time. The callback receives the provided argument and the scheduled time as its parameters. If the callback returns a number, the game will reschedule the callback for that mission time. If you schedule a function for a time that has already passed, the game runs it immediately on the next simulation frame.
 
 **Parameters:**
+
 - `callback` (function): The function to call. The function signature is `function(argument, time)`.
 - `argument` (any): The value passed to the callback as its first parameter. Use a table to pass multiple values.
 - `runTime` (number): The mission time in seconds when the function should run.
@@ -91,6 +92,7 @@ nil timer.removeFunction(functionId id)
 The `timer.removeFunction` function removes a scheduled function so it will not run. This function has no effect if the function has already run or was already removed.
 
 **Parameters:**
+
 - `id` (functionId): The ID returned by `timer.scheduleFunction`.
 
 ```lua
@@ -107,6 +109,7 @@ nil timer.setFunctionTime(functionId id, number newTime)
 The `timer.setFunctionTime` function changes when a scheduled function will run. This function is useful for delaying or advancing scheduled tasks.
 
 **Parameters:**
+
 - `id` (functionId): The ID returned by `timer.scheduleFunction`.
 - `newTime` (number): The new mission time in seconds when the function should run.
 

@@ -1,5 +1,5 @@
 # su-25tm Liveries
 
-| Folder Name | Display Name |
-|-------------|--------------|
-| Flight Research Institute  VVS |  |
+| Folder Name                   | Display Name |
+| ----------------------------- | ------------ |
+| Flight Research Institute VVS |              |

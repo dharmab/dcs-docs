@@ -45,48 +45,48 @@ The warehouse is configured for unlimited weapons.
 
 ## Radio Frequencies
 
-| Purpose | Frequency |
-|---------|-----------|
-| Tower | 254.1 MHz AM |
-| Carrier (CVN-74 Stennis) | 254.7 MHz AM |
-| Ground | 254.3 MHz AM |
-| Radar | 254.5 MHz AM |
-| Strike | 255.1 MHz AM |
-| GCI UHF | 255.3 MHz AM |
-| GCI VHF | 124.1 MHz VHF |
-| GCI FM | 32.1 MHz FM |
-| In-Game AWACS | 255.5 MHz AM |
-| Red 1 | 260.1 MHz AM |
-| Red 2 | 260.3 MHz AM |
-| Red 3 | 260.5 MHz AM |
-| Red 4 | 260.7 MHz AM |
-| Red 5 | 260.9 MHz AM |
-| Blue 1 | 261.1 MHz AM |
-| Blue 2 | 261.3 MHz AM |
-| Blue 3 | 261.5 MHz AM |
-| Blue 4 | 261.7 MHz AM |
-| Blue 5 | 261.9 MHz AM |
-| Green 1 | 262.1 MHz AM |
-| Green 2 | 262.3 MHz AM |
-| Green 3 | 262.5 MHz AM |
-| Green 4 | 262.7 MHz AM |
-| Green 5 | 262.9 MHz AM |
-| Yellow 1 | 30.1 MHz FM |
-| Yellow 2 | 30.3 MHz FM |
-| Yellow 3 | 30.5 MHz FM |
-| Yellow 4 | 30.7 MHz FM |
-| Yellow 5 | 30.9 MHz FM |
-| Orange 1 | 31.1 MHz FM |
-| Orange 2 | 31.3 MHz FM |
-| Orange 3 | 31.5 MHz FM |
-| Orange 4 | 31.7 MHz FM |
-| Orange 5 | 31.9 MHz FM |
-| Basket Tanker | 270.1 MHz AM |
-| Boom Tanker | 270.5 MHz AM |
-| Slow Boom Tanker | 270.7 MHz AM |
-| Recovery Tanker | 270.3 MHz AM |
-| Military Guard | 243.0 MHz AM |
-| Civil Guard | 121.5 MHz VHF |
+| Purpose                  | Frequency     |
+| ------------------------ | ------------- |
+| Tower                    | 254.1 MHz AM  |
+| Carrier (CVN-74 Stennis) | 254.7 MHz AM  |
+| Ground                   | 254.3 MHz AM  |
+| Radar                    | 254.5 MHz AM  |
+| Strike                   | 255.1 MHz AM  |
+| GCI UHF                  | 255.3 MHz AM  |
+| GCI VHF                  | 124.1 MHz VHF |
+| GCI FM                   | 32.1 MHz FM   |
+| In-Game AWACS            | 255.5 MHz AM  |
+| Red 1                    | 260.1 MHz AM  |
+| Red 2                    | 260.3 MHz AM  |
+| Red 3                    | 260.5 MHz AM  |
+| Red 4                    | 260.7 MHz AM  |
+| Red 5                    | 260.9 MHz AM  |
+| Blue 1                   | 261.1 MHz AM  |
+| Blue 2                   | 261.3 MHz AM  |
+| Blue 3                   | 261.5 MHz AM  |
+| Blue 4                   | 261.7 MHz AM  |
+| Blue 5                   | 261.9 MHz AM  |
+| Green 1                  | 262.1 MHz AM  |
+| Green 2                  | 262.3 MHz AM  |
+| Green 3                  | 262.5 MHz AM  |
+| Green 4                  | 262.7 MHz AM  |
+| Green 5                  | 262.9 MHz AM  |
+| Yellow 1                 | 30.1 MHz FM   |
+| Yellow 2                 | 30.3 MHz FM   |
+| Yellow 3                 | 30.5 MHz FM   |
+| Yellow 4                 | 30.7 MHz FM   |
+| Yellow 5                 | 30.9 MHz FM   |
+| Orange 1                 | 31.1 MHz FM   |
+| Orange 2                 | 31.3 MHz FM   |
+| Orange 3                 | 31.5 MHz FM   |
+| Orange 4                 | 31.7 MHz FM   |
+| Orange 5                 | 31.9 MHz FM   |
+| Basket Tanker            | 270.1 MHz AM  |
+| Boom Tanker              | 270.5 MHz AM  |
+| Slow Boom Tanker         | 270.7 MHz AM  |
+| Recovery Tanker          | 270.3 MHz AM  |
+| Military Guard           | 243.0 MHz AM  |
+| Civil Guard              | 121.5 MHz VHF |
 
 ## Difficulty Levels
 
@@ -109,6 +109,7 @@ The warehouse is configured for unlimited weapons.
 ## Support Assets
 
 Three tankers orbit on a racetrack between Krymsk and the target area:
+
 - **KC-135 "Texaco"** (boom) at 25,000 ft, 270.5 MHz, TACAN 100X
 - **KC-135MPRS "Arco"** (basket) at 21,000 ft, 270.1 MHz, TACAN 101X
 - **KC-135 "Shell"** (slow boom for A-10s) at 15,000 ft, 270.7 MHz, TACAN 102X

@@ -39,6 +39,7 @@ The `repeat...until true` pattern (lines 434, 617, etc.) is used as a break-from
 ### [x] Magic numbers (2026-01-09)
 
 Several constants are embedded in the code:
+
 - `0.75` distance factor on line 651
 - `8` for road neighbor count on line 755
 - Various other threshold values
@@ -78,6 +79,7 @@ No validation of the JSON structure before processing. Malformed exports or vers
 ### [x] Missing type annotations (2026-01-09)
 
 Several variables lack type hints:
+
 - `data` field in function parameters
 - Return types on some helper methods
 - Dict value types in several places
@@ -97,6 +99,7 @@ The `compute_connectivity()` function iterates through all road segments and che
 ### [x] Magic limit numbers (2026-01-09)
 
 Various limits were hardcoded:
+
 - Top 20 regions (line 673)
 - Top 15 water bodies (line 704)
 - Top 30 connections (line 749)

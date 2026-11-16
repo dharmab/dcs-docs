@@ -24,6 +24,7 @@ nil controller:setTask(table task)
 The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, delay task assignment by at least 2 seconds using `timer.scheduleFunction()` before calling `setTask`. This is separate from confirming the group exists—even after a group is accessible, its controller may not be ready for immediate task assignment. Calling `setTask` immediately after spawning can fail silently.
 
 **Parameters:**
+
 - `task` (table): The task definition table.
 
 ```lua
@@ -48,6 +49,7 @@ nil controller:pushTask(table task)
 The `controller:pushTask` method adds a task to the front of the task queue. The current task is suspended until the new task completes.
 
 **Parameters:**
+
 - `task` (table): The task definition table.
 
 ## controller:popTask
@@ -85,6 +87,7 @@ nil controller:setCommand(table command)
 The `controller:setCommand` method issues an immediate command to the controller.
 
 **Parameters:**
+
 - `command` (table): The command definition table.
 
 ```lua
@@ -104,6 +107,7 @@ nil controller:setOption(number optionId, any value)
 The `controller:setOption` method sets an AI behavior option.
 
 **Parameters:**
+
 - `optionId` (number): The option ID from `AI.Option.[Air/Ground/Naval].id`.
 - `value` (any): The option value from the corresponding enum.
 
@@ -122,6 +126,7 @@ nil controller:setOnOff(boolean on)
 The `controller:setOnOff` method enables or disables the AI controller.
 
 **Parameters:**
+
 - `on` (boolean): Set to true to enable the controller, or false to disable it and make the unit passive.
 
 ## controller:setAltitude
@@ -133,6 +138,7 @@ nil controller:setAltitude(number altitude, boolean keep, string altType)
 The `controller:setAltitude` method sets the desired altitude for aircraft.
 
 **Parameters:**
+
 - `altitude` (number): The altitude in meters.
 - `keep` (boolean): If true, the aircraft maintains altitude even when not tasked.
 - `altType` (string): The altitude type. Use "RADIO" for altitude above ground level (AGL) or "BARO" for altitude above mean sea level (MSL).
@@ -150,6 +156,7 @@ nil controller:setSpeed(number speed, boolean keep)
 The `controller:setSpeed` method sets the desired speed for aircraft.
 
 **Parameters:**
+
 - `speed` (number): The speed in meters per second.
 - `keep` (boolean): If true, the aircraft maintains speed even when not tasked.
 
@@ -162,6 +169,7 @@ table controller:getDetectedTargets(number detectionTypes)
 The `controller:getDetectedTargets` method returns targets detected by the unit or group.
 
 **Parameters:**
+
 - `detectionTypes` (number): Optional. A bitmask of `Controller.Detection` values.
 
 **Returns:** An array of detected target tables. Each table contains `object`, `visible`, `type`, and `distance` fields.
@@ -184,6 +192,7 @@ boolean, boolean, ... controller:isTargetDetected(Object target, number detectio
 The `controller:isTargetDetected` method checks if a specific target is detected.
 
 **Parameters:**
+
 - `target` (Object): The object to check.
 - `detectionTypes` (number): A bitmask of detection types.
 
@@ -198,6 +207,7 @@ nil controller:knowTarget(Object target, boolean type, boolean distance)
 The `controller:knowTarget` method forces the AI to "know" about a target.
 
 **Parameters:**
+
 - `target` (Object): The target to reveal to the AI.
 - `type` (boolean): If true, the AI knows the target type.
 - `distance` (boolean): If true, the AI knows the exact distance to the target.

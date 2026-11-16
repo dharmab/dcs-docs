@@ -20,11 +20,11 @@ A JTAC requires:
 
 Ground JTACs must be armed vehicles with optical targeting systems. Unarmed vehicles and infantry (during night) cannot reliably designate targets.
 
-| Unit | Type ID | Notes |
-|------|---------|-------|
-| M1045 HMMWV TOW | `M1045 HMMWV TOW` | Good optical system, ~4 km effective range |
-| M1134 Stryker ATGM | `M1134 Stryker ATGM` | Superior optics, recommended for night ops |
-| M1043 HMMWV | `M1043 HMMWV Armament` | Armed Humvee, shorter range |
+| Unit               | Type ID                | Notes                                      |
+| ------------------ | ---------------------- | ------------------------------------------ |
+| M1045 HMMWV TOW    | `M1045 HMMWV TOW`      | Good optical system, ~4 km effective range |
+| M1134 Stryker ATGM | `M1134 Stryker ATGM`   | Superior optics, recommended for night ops |
+| M1043 HMMWV        | `M1043 HMMWV Armament` | Armed Humvee, shorter range                |
 
 > **Night Operations:** For night missions requiring IR pointer designation, use the M1134 Stryker ATGM. Other ground units have unreliable night capability.
 
@@ -32,10 +32,10 @@ Ground JTACs must be armed vehicles with optical targeting systems. Unarmed vehi
 
 UAVs provide the most reliable JTAC capability due to altitude advantage and consistent line of sight. Set the aircraft task to **AFAC** (Armed Forward Air Controller) when placing the unit.
 
-| Unit | Type ID | Notes |
-|------|---------|-------|
-| MQ-9 Reaper | `MQ-9 Reaper` | Recommended for JTAC, superior sensors |
-| MQ-1A Predator | `RQ-1A Predator` | Lighter payload, still effective |
+| Unit           | Type ID          | Notes                                  |
+| -------------- | ---------------- | -------------------------------------- |
+| MQ-9 Reaper    | `MQ-9 Reaper`    | Recommended for JTAC, superior sensors |
+| MQ-1A Predator | `RQ-1A Predator` | Lighter payload, still effective       |
 
 ## Mission File Structure
 
@@ -449,14 +449,14 @@ DCS provides two FAC task types with different behaviors:
 
 The `designation` parameter controls how the JTAC marks targets:
 
-| Designation | Value | Notes |
-|-------------|-------|-------|
-| Auto | `"Auto"` | JTAC selects best available method |
-| Laser | `"Laser"` | Laser designation (code 1688) |
-| IR Pointer | `"IR-Pointer"` | Infrared pointer (night, NVG required) |
-| WP | `"WP"` | White phosphorus smoke |
-| WP + Laser | `"WP + Laser"` | Smoke and laser simultaneously |
-| No Mark | `"No"` | Coordinates only, no marking |
+| Designation | Value          | Notes                                  |
+| ----------- | -------------- | -------------------------------------- |
+| Auto        | `"Auto"`       | JTAC selects best available method     |
+| Laser       | `"Laser"`      | Laser designation (code 1688)          |
+| IR Pointer  | `"IR-Pointer"` | Infrared pointer (night, NVG required) |
+| WP          | `"WP"`         | White phosphorus smoke                 |
+| WP + Laser  | `"WP + Laser"` | Smoke and laser simultaneously         |
+| No Mark     | `"No"`         | Coordinates only, no marking           |
 
 ### Laser Codes
 
@@ -477,34 +477,34 @@ Configure your aircraft's laser-guided weapons to code 1688:
 
 Ground JTAC callsigns use a different set than aircraft. The `callname` parameter indexes into this list:
 
-| Index | Callsign |
-|-------|----------|
-| 1 | Axeman |
-| 2 | Darknight |
-| 3 | Warrior |
-| 4 | Pointer |
-| 5 | Eyeball |
-| 6 | Moonbeam |
-| 7 | Whiplash |
-| 8 | Finger |
-| 9 | Pinpoint |
-| 10 | Ferret |
-| 11 | Shaba |
-| 12 | Playboy |
-| 13 | Hammer |
-| 14 | Jaguar |
-| 15 | Deathstar |
+| Index | Callsign  |
+| ----- | --------- |
+| 1     | Axeman    |
+| 2     | Darknight |
+| 3     | Warrior   |
+| 4     | Pointer   |
+| 5     | Eyeball   |
+| 6     | Moonbeam  |
+| 7     | Whiplash  |
+| 8     | Finger    |
+| 9     | Pinpoint  |
+| 10    | Ferret    |
+| 11    | Shaba     |
+| 12    | Playboy   |
+| 13    | Hammer    |
+| 14    | Jaguar    |
+| 15    | Deathstar |
 
 ---
 
 ## Recommended Radio Frequencies
 
-| Frequency | Use |
-|-----------|-----|
-| 30.000 MHz FM | JTAC Primary (FM band) |
+| Frequency      | Use                    |
+| -------------- | ---------------------- |
+| 30.000 MHz FM  | JTAC Primary (FM band) |
 | 133.000 MHz AM | JTAC Primary (AM band) |
-| 134.000 MHz AM | JTAC Alternate |
-| 252.000 MHz AM | JTAC Tertiary |
+| 134.000 MHz AM | JTAC Alternate         |
+| 252.000 MHz AM | JTAC Tertiary          |
 
 Ground units support both FM (30-88 MHz) and AM (110-150 MHz). For aircraft like the A-10C that have separate FM and UHF radios, FM frequencies in the 30 MHz range often work well.
 

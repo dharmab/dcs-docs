@@ -15,6 +15,7 @@ The `coalition.addGroup` function dynamically spawns a group into the mission. T
 You must add a delay before accessing the group's controller after spawning, because issuing tasks immediately can crash the game. If a group or unit name matches an existing object, the game destroys the existing object. You cannot spawn aircraft with skill "Client" but can use "Player" in single-player, which destroys the current player aircraft. Spawn FARPs with `groupCategory = -1`.
 
 **Parameters:**
+
 - `countryId` (number): The country ID from the `country.id` enum.
 - `groupCategory` (number): The category from `Group.Category`. Valid values are AIRPLANE, HELICOPTER, GROUND, SHIP, and TRAIN.
 - `groupData` (table): The complete group definition. See the structure below.
@@ -86,6 +87,7 @@ StaticObject coalition.addStaticObject(number countryId, table staticData)
 The `coalition.addStaticObject` function spawns a static object into the mission.
 
 **Parameters:**
+
 - `countryId` (number): The country ID from the `country.id` enum.
 - `staticData` (table): The static object definition.
 
@@ -112,6 +114,7 @@ table coalition.getGroups(number coalitionId, number groupCategory)
 The `coalition.getGroups` function returns all groups belonging to a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `groupCategory` (number): Optional. If provided, the function filters the results by `Group.Category`.
 
@@ -133,6 +136,7 @@ table coalition.getStaticObjects(number coalitionId)
 The `coalition.getStaticObjects` function returns all static objects belonging to a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 
 **Returns:** An array of StaticObject objects.
@@ -146,6 +150,7 @@ table coalition.getPlayers(number coalitionId)
 The `coalition.getPlayers` function returns all human player units in a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 
 **Returns:** An array of Unit objects containing only player-controlled units.
@@ -167,6 +172,7 @@ table coalition.getAirbases(number coalitionId)
 The `coalition.getAirbases` function returns all airbases belonging to a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 
 **Returns:** An array of Airbase objects.
@@ -180,6 +186,7 @@ table coalition.getServiceProviders(number coalitionId, number serviceType)
 The `coalition.getServiceProviders` function returns groups providing a specific service.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `serviceType` (number): The service type from the `coalition.service` enum. Valid values are ATC (0), AWACS (1), TANKER (2), and FAC (3).
 
@@ -198,6 +205,7 @@ nil coalition.addRefPoint(number coalitionId, table refPoint)
 The `coalition.addRefPoint` function adds a reference point (such as a bullseye or custom waypoint) for a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 - `refPoint` (table): The reference point definition. This table must contain a `callsign` field (a string) and a `point` field (a Vec3).
 
@@ -210,6 +218,7 @@ table coalition.getRefPoints(number coalitionId)
 The `coalition.getRefPoints` function returns all reference points for a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 
 **Returns:** A table of reference points indexed by callsign.
@@ -223,6 +232,7 @@ Vec3 coalition.getMainRefPoint(number coalitionId)
 The `coalition.getMainRefPoint` function returns the main bullseye position for a coalition.
 
 **Parameters:**
+
 - `coalitionId` (number): The coalition from `coalition.side`.
 
 **Returns:** The bullseye position as a Vec3.
@@ -241,6 +251,7 @@ number coalition.getCountryCoalition(number countryId)
 The `coalition.getCountryCoalition` function returns which coalition a country belongs to.
 
 **Parameters:**
+
 - `countryId` (number): The country ID from the `country.id` enum.
 
 **Returns:** The coalition from `coalition.side`.

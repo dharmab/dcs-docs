@@ -585,34 +585,34 @@ AirfieldIntercept:init()
 
 ### Airfield Configuration
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Airfield identifier (used for logging and API calls) |
-| `zoneCenter` | Vec2 | Defense zone center coordinates `{x, y}` |
-| `zoneRadius` | number | Defense zone radius in meters |
-| `spawnPoint` | Vec2 | Aircraft spawn location near runway |
-| `countryId` | number | Country ID for spawned aircraft (e.g., `country.id.RUSSIA`) |
-| `interceptor` | table | Aircraft configuration (see below) |
-| `maxAirborne` | number | Maximum interceptors in the air simultaneously |
-| `maxTotal` | number or nil | Maximum total spawns (`nil` for unlimited) |
+| Field         | Type          | Description                                                 |
+| ------------- | ------------- | ----------------------------------------------------------- |
+| `name`        | string        | Airfield identifier (used for logging and API calls)        |
+| `zoneCenter`  | Vec2          | Defense zone center coordinates `{x, y}`                    |
+| `zoneRadius`  | number        | Defense zone radius in meters                               |
+| `spawnPoint`  | Vec2          | Aircraft spawn location near runway                         |
+| `countryId`   | number        | Country ID for spawned aircraft (e.g., `country.id.RUSSIA`) |
+| `interceptor` | table         | Aircraft configuration (see below)                          |
+| `maxAirborne` | number        | Maximum interceptors in the air simultaneously              |
+| `maxTotal`    | number or nil | Maximum total spawns (`nil` for unlimited)                  |
 
 ### Interceptor Configuration
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `type` | string | Aircraft type string (e.g., `"MiG-29A"`, `"Su-27"`) |
-| `skill` | string | AI skill level (`"Average"`, `"Good"`, `"High"`, `"Excellent"`) |
-| `payload` | table | Weapons and fuel configuration |
+| Field     | Type   | Description                                                     |
+| --------- | ------ | --------------------------------------------------------------- |
+| `type`    | string | Aircraft type string (e.g., `"MiG-29A"`, `"Su-27"`)             |
+| `skill`   | string | AI skill level (`"Average"`, `"Good"`, `"High"`, `"Excellent"`) |
+| `payload` | table  | Weapons and fuel configuration                                  |
 
 ### Payload Configuration
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `pylons` | table | Weapon stations with CLSID references |
-| `fuel` | number | Internal fuel in kg |
-| `flare` | number | Flare count |
-| `chaff` | number | Chaff count |
-| `gun` | number | Gun ammunition percentage (0-100) |
+| Field    | Type   | Description                           |
+| -------- | ------ | ------------------------------------- |
+| `pylons` | table  | Weapon stations with CLSID references |
+| `fuel`   | number | Internal fuel in kg                   |
+| `flare`  | number | Flare count                           |
+| `chaff`  | number | Chaff count                           |
+| `gun`    | number | Gun ammunition percentage (0-100)     |
 
 ## Common Interceptor Loadouts
 

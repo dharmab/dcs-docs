@@ -52,7 +52,7 @@ The Mi-28N saw its combat debut during Russian operations in Syria beginning in 
 - 8 x Ataka 9M120 - ATGM, SACLOS, Tandem HEAT
 - 8 x Ataka 9M120F - AGM, SACLOS, HE
 - 4 x 9M39 Igla
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 
 ### Pylon 2
 
@@ -69,7 +69,7 @@ The Mi-28N saw its combat debut during Russian operations in Syria beginning in 
 - 8 x Ataka 9M120 - ATGM, SACLOS, Tandem HEAT
 - 8 x Ataka 9M120F - AGM, SACLOS, HE
 - 4 x 9M39 Igla
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 
 ### Pylon 3
 
@@ -84,7 +84,7 @@ The Mi-28N saw its combat debut during Russian operations in Syria beginning in 
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OM IL
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - KMGU-2 - 96 x PTAB-2.5KO Dispenser (CBU) HEAT/AP
 
@@ -99,7 +99,7 @@ The Mi-28N saw its combat debut during Russian operations in Syria beginning in 
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8OM IL
 - B-8V20A - 20 x UnGd Rkts, 80 mm S-8KOM HEAT/Frag
 - B-13L - 5 x UnGd Rkts, 122 mm S-13OF Blast/Fragmentation
-- UPK-23-250 - 2 x 23mm  GSh-23L Autocannon Pod
+- UPK-23-250 - 2 x 23mm GSh-23L Autocannon Pod
 - KMGU-2 - 96 x AO-2.5RT Dispenser (CBU) HE/Frag
 - 8 x Ataka 9M120 - ATGM, SACLOS, Tandem HEAT
 - 8 x Ataka 9M120F - AGM, SACLOS, HE

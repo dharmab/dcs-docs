@@ -4,20 +4,17 @@ version = "0.1.0"
 description = "Process DCS World terrain exports into markdown documentation"
 requires-python = ">=3.14"
 dependencies = [
-    "matplotlib",
-    "mgrs>=1.4.0",
-    "numpy",
-    "scipy",
-    "scikit-learn",
-    "luadata>=1.0.5",
-    "semver>=3.0.0",
+  "matplotlib",
+  "mgrs>=1.4.0",
+  "numpy",
+  "scipy",
+  "scikit-learn",
+  "luadata>=1.0.5",
+  "semver>=3.0.0",
 ]
 
 [dependency-groups]
-dev = [
-    "ruff",
-    "ty",
-]
+dev = ["ruff", "ty"]
 
 [project.scripts]
 process-terrain = "process_terrain:main"

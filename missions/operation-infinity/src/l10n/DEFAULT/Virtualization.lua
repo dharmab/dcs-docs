@@ -22,9 +22,9 @@ local SPAWN_DISTANCE_NM = 100
 local DESPAWN_DISTANCE_NM = 120
 
 Virtualization.config = {
-    spawnDistance = SPAWN_DISTANCE_NM * METERS_PER_NM,    -- 100 nm in meters
+    spawnDistance = SPAWN_DISTANCE_NM * METERS_PER_NM, -- 100 nm in meters
     despawnDistance = DESPAWN_DISTANCE_NM * METERS_PER_NM, -- 120 nm in meters (hysteresis)
-    updateInterval = 15,         -- Seconds between update checks
+    updateInterval = 15, -- Seconds between update checks
     debug = true,
 }
 
@@ -34,8 +34,8 @@ Virtualization.config = {
 
 Virtualization.state = {
     initialized = false,
-    virtualGroups = {},          -- Array of virtual group definitions
-    permanentGroups = {},        -- Groups that are always spawned (EWRs, radars)
+    virtualGroups = {}, -- Array of virtual group definitions
+    permanentGroups = {}, -- Groups that are always spawned (EWRs, radars)
 }
 
 local log = Logging:create("Virtualization")
@@ -138,7 +138,7 @@ function Virtualization:buildGroupData(vGroup)
             params = {
                 action = {
                     id = "SetImmortal",
-                    params = {value = true},
+                    params = { value = true },
                 },
             },
         }
@@ -153,7 +153,7 @@ function Virtualization:buildGroupData(vGroup)
             params = {
                 action = {
                     id = "SetInvisible",
-                    params = {value = true},
+                    params = { value = true },
                 },
             },
         }
@@ -170,7 +170,7 @@ function Virtualization:buildGroupData(vGroup)
                 action = {
                     id = "Option",
                     params = {
-                        name = 0,  -- AI.Option.Ground.id.ROE
+                        name = 0, -- AI.Option.Ground.id.ROE
                         value = 4, -- AI.Option.Ground.val.ROE.WEAPON_HOLD
                     },
                 },
@@ -329,7 +329,9 @@ function Virtualization:spawnPermanentGroupsBatched(onComplete)
     end
 
     if #toSpawn == 0 then
-        if onComplete then onComplete() end
+        if onComplete then
+            onComplete()
+        end
         return
     end
 
@@ -349,7 +351,9 @@ function Virtualization:spawnPermanentGroupsBatched(onComplete)
             end
         end,
         onComplete = function()
-            if onComplete then onComplete() end
+            if onComplete then
+                onComplete()
+            end
         end,
     })
 end
@@ -365,7 +369,7 @@ function Virtualization:getClosestPlayerDistance(vGroup)
     for _, player in ipairs(players) do
         if player and player:isExist() then
             local pos = player:getPoint()
-            local playerPos2D = {x = pos.x, y = pos.z}
+            local playerPos2D = { x = pos.x, y = pos.z }
             local distance = Spatial:getDistance2D(playerPos2D, vGroup.center)
             if distance < minDistance then
                 minDistance = distance
@@ -476,13 +480,16 @@ end
 Virtualization.eventHandler = {}
 
 function Virtualization.eventHandler:onEvent(event)
-    if event.id == world.event.S_EVENT_DEAD or
-       event.id == world.event.S_EVENT_CRASH or
-       event.id == world.event.S_EVENT_UNIT_LOST then
-
+    if
+        event.id == world.event.S_EVENT_DEAD
+        or event.id == world.event.S_EVENT_CRASH
+        or event.id == world.event.S_EVENT_UNIT_LOST
+    then
         local unit = event.initiator
         if unit then
-            local ok, unitName = pcall(function() return unit:getName() end)
+            local ok, unitName = pcall(function()
+                return unit:getName()
+            end)
             if ok and unitName then
                 Virtualization:handleUnitDeath(unitName)
             else

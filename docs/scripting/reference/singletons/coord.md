@@ -13,6 +13,7 @@ number, number, number coord.LLtoLO(number latitude, number longitude, number al
 The `coord.LLtoLO` function converts Latitude/Longitude/Altitude to the game's XYZ coordinate system.
 
 **Parameters:**
+
 - `latitude` (number): The latitude in decimal degrees, where positive values indicate North.
 - `longitude` (number): The longitude in decimal degrees, where positive values indicate East.
 - `altitude` (number): The altitude in meters above mean sea level.
@@ -33,6 +34,7 @@ number, number, number coord.LOtoLL(number x, number y, number z)
 The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/Altitude.
 
 **Parameters:**
+
 - `x` (number): The X coordinate representing the East-West position.
 - `y` (number): The Y coordinate representing altitude.
 - `z` (number): The Z coordinate representing the North-South position.
@@ -54,6 +56,7 @@ table coord.LLtoMGRS(number latitude, number longitude)
 The `coord.LLtoMGRS` function converts Latitude/Longitude to MGRS (Military Grid Reference System).
 
 **Parameters:**
+
 - `latitude` (number): The latitude in decimal degrees.
 - `longitude` (number): The longitude in decimal degrees.
 
@@ -75,6 +78,7 @@ number, number coord.MGRStoLL(table mgrs)
 The `coord.MGRStoLL` function converts MGRS coordinates to Latitude/Longitude.
 
 **Parameters:**
+
 - `mgrs` (table): An MGRS table with the following fields: `UTMZone`, `MGRSDigraph`, `Easting`, and `Northing`.
 
 **Returns:** Two numbers representing the latitude and longitude.

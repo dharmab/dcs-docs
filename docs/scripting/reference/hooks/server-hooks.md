@@ -8,45 +8,45 @@ Server hooks provide a scripting environment for DCS World servers that operates
 
 Server hooks differ from mission scripting (the SSE) in several important ways:
 
-| Aspect | Mission Scripting | Server Hooks |
-|--------|------------------|--------------|
-| Location | Inside `.miz` files | `$WRITE_DIR/Scripts/Hooks/` |
-| Lua State | Mission environment | GUI/hooks environment |
-| Persistence | Resets each mission | Persists across missions |
+| Aspect      | Mission Scripting   | Server Hooks                |
+| ----------- | ------------------- | --------------------------- |
+| Location    | Inside `.miz` files | `$WRITE_DIR/Scripts/Hooks/` |
+| Lua State   | Mission environment | GUI/hooks environment       |
+| Persistence | Resets each mission | Persists across missions    |
 
 ### Available APIs
 
-| API | Mission Scripting | Server Hooks |
-|-----|:-----------------:|:------------:|
-| Lua base library, `math`, `string`, `table` | Yes | Yes |
-| `io`, `os`, `lfs` | No (unless desanitized) | Yes |
-| `debug` | Unverified | Yes |
-| [`env`](../singletons/env.md) | Yes | No |
-| [`timer`](../singletons/timer.md) | Yes | No |
-| [`land`](../singletons/land.md) | Yes | No |
-| [`atmosphere`](../singletons/atmosphere.md) | Yes | No |
-| [`world`](../singletons/world.md) | Yes | No |
-| [`coalition`](../singletons/coalition.md) | Yes | No |
-| [`trigger`](../singletons/trigger.md) | Yes | No |
-| [`coord`](../singletons/coord.md) | Yes | No |
-| [`missionCommands`](../singletons/mission-commands.md) | Yes | No |
-| [`Object`](../classes/object.md) | Yes | No |
-| [`CoalitionObject`](../classes/coalition-object.md) | Yes | No |
-| [`Unit`](../classes/unit.md) | Yes | No |
-| [`Group`](../classes/group.md) | Yes | No |
-| [`Airbase`](../classes/airbase.md) | Yes | No |
-| [`StaticObject`](../classes/static-object.md) | Yes | No |
-| [`Weapon`](../classes/weapon.md) | Yes | No |
-| [`Controller`](../classes/controller.md) | Yes | No |
-| [`Spot`](../classes/spot.md) | Yes | No |
-| `SceneryObject` | Yes | No |
-| `Warehouse` | Yes | No |
-| [`AI`](../enums/ai.md) | Yes | No |
-| [`country`](../enums/coalition.md) | Yes | No |
-| [`Sim`](#sim-control-api-sim) | No | Yes |
-| [`net`](../singletons/net.md) | Shared functions | Shared and [hooks-only](#network-api-net) functions |
-| [`log`](#logging-api-log) | Unverified | Yes |
-| [`Export`](#export-api-export) | No | Yes |
+| API                                                    |    Mission Scripting    |                    Server Hooks                     |
+| ------------------------------------------------------ | :---------------------: | :-------------------------------------------------: |
+| Lua base library, `math`, `string`, `table`            |           Yes           |                         Yes                         |
+| `io`, `os`, `lfs`                                      | No (unless desanitized) |                         Yes                         |
+| `debug`                                                |       Unverified        |                         Yes                         |
+| [`env`](../singletons/env.md)                          |           Yes           |                         No                          |
+| [`timer`](../singletons/timer.md)                      |           Yes           |                         No                          |
+| [`land`](../singletons/land.md)                        |           Yes           |                         No                          |
+| [`atmosphere`](../singletons/atmosphere.md)            |           Yes           |                         No                          |
+| [`world`](../singletons/world.md)                      |           Yes           |                         No                          |
+| [`coalition`](../singletons/coalition.md)              |           Yes           |                         No                          |
+| [`trigger`](../singletons/trigger.md)                  |           Yes           |                         No                          |
+| [`coord`](../singletons/coord.md)                      |           Yes           |                         No                          |
+| [`missionCommands`](../singletons/mission-commands.md) |           Yes           |                         No                          |
+| [`Object`](../classes/object.md)                       |           Yes           |                         No                          |
+| [`CoalitionObject`](../classes/coalition-object.md)    |           Yes           |                         No                          |
+| [`Unit`](../classes/unit.md)                           |           Yes           |                         No                          |
+| [`Group`](../classes/group.md)                         |           Yes           |                         No                          |
+| [`Airbase`](../classes/airbase.md)                     |           Yes           |                         No                          |
+| [`StaticObject`](../classes/static-object.md)          |           Yes           |                         No                          |
+| [`Weapon`](../classes/weapon.md)                       |           Yes           |                         No                          |
+| [`Controller`](../classes/controller.md)               |           Yes           |                         No                          |
+| [`Spot`](../classes/spot.md)                           |           Yes           |                         No                          |
+| `SceneryObject`                                        |           Yes           |                         No                          |
+| `Warehouse`                                            |           Yes           |                         No                          |
+| [`AI`](../enums/ai.md)                                 |           Yes           |                         No                          |
+| [`country`](../enums/coalition.md)                     |           Yes           |                         No                          |
+| [`Sim`](#sim-control-api-sim)                          |           No            |                         Yes                         |
+| [`net`](../singletons/net.md)                          |    Shared functions     | Shared and [hooks-only](#network-api-net) functions |
+| [`log`](#logging-api-log)                              |       Unverified        |                         Yes                         |
+| [`Export`](#export-api-export)                         |           No            |                         Yes                         |
 
 Hooks can run code in the mission environment with [`net.dostring_in`](../singletons/net.md#netdostring_in).
 
@@ -54,10 +54,10 @@ Hooks can run code in the mission environment with [`net.dostring_in`](../single
 
 Throughout this documentation, `$WRITE_DIR` refers to the DCS "Saved Games" folder. This path varies by installation type:
 
-| Installation | Path |
-|--------------|------|
-| Steam | `%userprofile%\Saved Games\DCS` |
-| Standalone | `%userprofile%\Saved Games\DCS` |
+| Installation     | Path                                     |
+| ---------------- | ---------------------------------------- |
+| Steam            | `%userprofile%\Saved Games\DCS`          |
+| Standalone       | `%userprofile%\Saved Games\DCS`          |
 | Legacy Open Beta | `%userprofile%\Saved Games\DCS.Openbeta` |
 
 > **Note:** If you upgraded from an Open Beta version prior to patch 2.9.3.51704, your saved games folder may still be `DCS.Openbeta` even after the Open Beta and Stable versions were unified.
@@ -111,6 +111,7 @@ Most callbacks have no return value. However, three callbacks can return values 
 - `onPlayerTryChangeSlot`
 
 For these callbacks:
+
 - Returning a value breaks the callback chain and uses that result
 - Returning nothing (or `nil`) continues to the next hook in the chain
 - If no hook returns a value, a default allow-all behavior is used
@@ -179,6 +180,7 @@ boolean, string lfs.mkdir(string path)
 Creates a new directory.
 
 **Parameters:**
+
 - `path` (string): The path of the directory to create.
 
 **Returns:** `true` on success, or `nil` and an error message on failure.
@@ -192,6 +194,7 @@ boolean, string lfs.rmdir(string path)
 Removes an empty directory.
 
 **Parameters:**
+
 - `path` (string): The path of the directory to remove.
 
 **Returns:** `true` on success, or `nil` and an error message on failure.
@@ -205,6 +208,7 @@ table lfs.attributes(string path, string attributeName)
 Returns file or directory attributes.
 
 **Parameters:**
+
 - `path` (string): The path to query.
 - `attributeName` (string): Optional. A specific attribute to return.
 
@@ -219,6 +223,7 @@ iterator lfs.dir(string path)
 Returns an iterator over directory entries.
 
 **Parameters:**
+
 - `path` (string): The directory path.
 
 **Returns:** An iterator function.
@@ -240,6 +245,7 @@ string lfs.normpath(string path)
 Normalizes a file path.
 
 **Parameters:**
+
 - `path` (string): The path to normalize.
 
 **Returns:** The normalized path.
@@ -253,6 +259,7 @@ string lfs.realpath(string path)
 Returns the absolute path, resolving any symbolic links.
 
 **Parameters:**
+
 - `path` (string): The path to resolve.
 
 **Returns:** The resolved absolute path.
@@ -270,6 +277,7 @@ nil Sim.setUserCallbacks(table callbacks)
 Registers a table of callback functions to receive server hooks.
 
 **Parameters:**
+
 - `callbacks` (table): A table with hook functions as members.
 
 ```lua
@@ -289,6 +297,7 @@ nil Sim.setPause(boolean paused)
 Pauses or resumes the simulation. This function is only available on the server.
 
 **Parameters:**
+
 - `paused` (boolean): `true` to pause, `false` to resume.
 
 #### Sim.getPause
@@ -401,9 +410,11 @@ table Sim.getAvailableSlots(number coalitionID)
 Returns available slots for a coalition.
 
 **Parameters:**
+
 - `coalitionID` (number): The coalition ID (1=red, 2=blue).
 
 **Returns:** An array of slot tables, each containing:
+
 - `unitId`: The slot ID (for multi-seat units this is `unitID_seatID`)
 - `type`: Aircraft type
 - `role`: Crew position/role
@@ -452,6 +463,7 @@ number Sim.getMissionResult(string side)
 Returns the mission result score for a side.
 
 **Parameters:**
+
 - `side` (string): Either `"red"` or `"blue"`.
 
 **Returns:** A score from 0 to 100.
@@ -465,10 +477,12 @@ any Sim.getUnitProperty(number missionId, number propertyId)
 Returns a property of a unit by its mission ID.
 
 **Parameters:**
+
 - `missionId` (number): The unit's mission ID.
 - `propertyId` (number): One of the `Sim.UNIT_*` constants.
 
 **Property Constants:**
+
 - `Sim.UNIT_RUNTIME_ID` - Unique within runtime mission (int)
 - `Sim.UNIT_MISSION_ID` - Unique within mission file (int > 0)
 - `Sim.UNIT_NAME` - Unit name from mission designer
@@ -497,6 +511,7 @@ string Sim.getUnitType(number missionId)
 Returns the unit type for a mission ID. This is a shortcut for `Sim.getUnitProperty(missionId, Sim.UNIT_TYPE)`.
 
 **Parameters:**
+
 - `missionId` (number): The unit's mission ID.
 
 **Returns:** The unit type string.
@@ -510,6 +525,7 @@ string Sim.getUnitTypeAttribute(string typeId, string attribute)
 Returns a database attribute for a unit type.
 
 **Parameters:**
+
 - `typeId` (string): The unit type (e.g., "Ural").
 - `attribute` (string): The attribute name.
 
@@ -528,6 +544,7 @@ nil Sim.writeDebriefing(string text)
 Writes a custom string to the debriefing file.
 
 **Parameters:**
+
 - `text` (string): The text to write.
 
 #### Sim.makeScreenShot
@@ -539,6 +556,7 @@ nil Sim.makeScreenShot(string name)
 Takes a screenshot with the given name.
 
 **Parameters:**
+
 - `name` (string): The screenshot filename.
 
 #### Sim.getLogHistory
@@ -550,9 +568,11 @@ table, number Sim.getLogHistory(number fromIndex)
 Returns recent log messages starting from a given index.
 
 **Parameters:**
+
 - `fromIndex` (number): The starting index.
 
 **Returns:** An array of log entries and the last index. Each entry is a table with:
+
 - `abstime`: Absolute time
 - `level`: Log level
 - `subsystem`: Subsystem name
@@ -573,6 +593,7 @@ any Sim.getConfigValue(string configPath)
 Reads a value from the configuration state.
 
 **Parameters:**
+
 - `configPath` (string): The configuration path.
 
 **Returns:** The configuration value.
@@ -585,29 +606,29 @@ The logging API provides structured logging with subsystems and levels.
 
 Messages are tagged with a level indicating severity:
 
-| Constant | Description |
-|----------|-------------|
-| `log.ALERT` | Critical alerts |
-| `log.ERROR` | Error conditions |
-| `log.WARNING` | Warning conditions |
-| `log.INFO` | Informational messages |
-| `log.DEBUG` | Debug messages |
-| `log.ALL` | All of the above levels |
-| `log.TRACE` | Trace messages (excluded from main log) |
+| Constant      | Description                             |
+| ------------- | --------------------------------------- |
+| `log.ALERT`   | Critical alerts                         |
+| `log.ERROR`   | Error conditions                        |
+| `log.WARNING` | Warning conditions                      |
+| `log.INFO`    | Informational messages                  |
+| `log.DEBUG`   | Debug messages                          |
+| `log.ALL`     | All of the above levels                 |
+| `log.TRACE`   | Trace messages (excluded from main log) |
 
 #### Output Flags
 
 Output formatting is controlled by flags:
 
-| Constant | Description |
-|----------|-------------|
-| `log.MESSAGE` | Include the message |
-| `log.TIME_UTC` | Include UTC timestamp |
-| `log.TIME_LOCAL` | Include local timestamp |
-| `log.TIME_RELATIVE` | Include relative timestamp |
-| `log.MODULE` | Include subsystem name |
-| `log.LEVEL` | Include log level |
-| `log.FULL` | `MESSAGE + TIME_UTC + MODULE + LEVEL` |
+| Constant            | Description                           |
+| ------------------- | ------------------------------------- |
+| `log.MESSAGE`       | Include the message                   |
+| `log.TIME_UTC`      | Include UTC timestamp                 |
+| `log.TIME_LOCAL`    | Include local timestamp               |
+| `log.TIME_RELATIVE` | Include relative timestamp            |
+| `log.MODULE`        | Include subsystem name                |
+| `log.LEVEL`         | Include log level                     |
+| `log.FULL`          | `MESSAGE + TIME_UTC + MODULE + LEVEL` |
 
 #### log.write
 
@@ -618,6 +639,7 @@ nil log.write(string subsystem, number level, string message, ...)
 Writes a message to the logger.
 
 **Parameters:**
+
 - `subsystem` (string): The subsystem name.
 - `level` (number): One of the log level constants.
 - `message` (string): The message format string.
@@ -636,6 +658,7 @@ nil log.set_output(string logName, string subsystem, number levelMask, number ou
 Configures a log output file.
 
 **Parameters:**
+
 - `logName` (string): Log filename without extension. Creates `$WRITE_DIR/Logs/<logName>.log`.
 - `subsystem` (string): Subsystem name to match, or empty string for all subsystems.
 - `levelMask` (number): Sum of log level flags to include.
@@ -672,9 +695,11 @@ table, number net.get_chat_history(number fromIndex)
 Returns recent chat messages starting from a given index.
 
 **Parameters:**
+
 - `fromIndex` (number): The starting index.
 
 **Returns:** An array of chat entries and the last index. Each entry contains:
+
 - `abstime`: Absolute time
 - `side`: Coalition
 - `playerName`: Sender name
@@ -697,6 +722,7 @@ table net.banlist_get()
 Returns an array of active ban records.
 
 **Returns:** Array of ban records, each containing:
+
 - `ucid` - Unique Client Identifier
 - `ipaddr` - IP address string
 - `name` - Player name at time of ban
@@ -713,6 +739,7 @@ boolean net.banlist_add(number playerID, number period, string reason)
 Bans and kicks a player.
 
 **Parameters:**
+
 - `playerID` (number): The player to ban.
 - `period` (number): Ban duration in seconds.
 - `reason` (string): Ban reason.
@@ -733,6 +760,7 @@ boolean net.banlist_remove(string ucid)
 Removes a ban.
 
 **Parameters:**
+
 - `ucid` (string): The banned player's UCID.
 
 **Returns:** `true` if successful.
@@ -748,6 +776,7 @@ table net.missionlist_get()
 Returns the current mission list configuration.
 
 **Returns:** A table with:
+
 - `listLoop` - Whether list loops
 - `listShuffle` - Whether list is shuffled
 - `missionList` - Array of mission filenames
@@ -762,6 +791,7 @@ boolean net.missionlist_append(string mizFilename)
 Adds a mission to the end of the list.
 
 **Parameters:**
+
 - `mizFilename` (string): Path to the mission file.
 
 **Returns:** `true` if successful.
@@ -775,6 +805,7 @@ boolean net.missionlist_delete(number index)
 Removes a mission from the list.
 
 **Parameters:**
+
 - `index` (number): The mission index to remove.
 
 **Returns:** `true` if successful.
@@ -788,6 +819,7 @@ boolean net.missionlist_move(number oldIndex, number newIndex)
 Moves a mission within the list.
 
 **Parameters:**
+
 - `oldIndex` (number): Current position.
 - `newIndex` (number): New position.
 
@@ -802,6 +834,7 @@ nil net.missionlist_set_shuffle(boolean shuffle)
 Sets whether the mission list is shuffled.
 
 **Parameters:**
+
 - `shuffle` (boolean): Enable or disable shuffle.
 
 ##### net.missionlist_set_loop
@@ -813,6 +846,7 @@ nil net.missionlist_set_loop(boolean loop)
 Sets whether the mission list loops.
 
 **Parameters:**
+
 - `loop` (boolean): Enable or disable looping.
 
 ##### net.missionlist_run
@@ -824,6 +858,7 @@ boolean net.missionlist_run(number index)
 Loads a mission from the list by index.
 
 **Parameters:**
+
 - `index` (number): The mission index to load.
 
 **Returns:** `true` if successful.
@@ -849,6 +884,7 @@ nil net.load_mission(string mizFilename)
 Loads a specific mission, temporarily overriding the server mission list. Server only.
 
 **Parameters:**
+
 - `mizFilename` (string): Path to the mission file.
 
 ##### net.load_next_mission
@@ -892,10 +928,12 @@ These functions are always available:
 #### Conditionally Available Functions
 
 **When `LoIsObjectExportAllowed()` is true:**
+
 - `Export.LoGetObjectById()`
 - `Export.LoGetWorldObjects()`
 
 **When `LoIsSensorExportAllowed()` is true:**
+
 - `Export.LoGetTWSInfo()`
 - `Export.LoGetTargetInformation()`
 - `Export.LoGetLockedTargetInformation()`
@@ -904,6 +942,7 @@ These functions are always available:
 - `Export.LoGetWingTargets()`
 
 **When `LoIsOwnshipExportAllowed()` is true:**
+
 - `Export.LoGetPlayerPlaneId()`
 - `Export.LoGetIndicatedAirSpeed()`
 - `Export.LoGetAngleOfAttack()`
@@ -944,6 +983,7 @@ These functions are always available:
 #### Unavailable in Hooks
 
 The following Export functions are not available in hooks:
+
 - `Export.LoSetSharedTexture()`
 - `Export.LoRemoveSharedTexture()`
 - `Export.LoUpdateSharedTexture()`
@@ -975,6 +1015,7 @@ nil onMissionLoadProgress(number progress, string message)
 Called periodically during mission loading.
 
 **Parameters:**
+
 - `progress` (number): Loading progress from 0.0 to 1.0.
 - `message` (string): Description of current loading stage.
 
@@ -1035,6 +1076,7 @@ nil onGameEvent(string eventName, ...)
 Called for various game events. Arguments vary by event type.
 
 **Event Types and Arguments:**
+
 - `"friendly_fire"` - playerID, weaponName, victimPlayerID
 - `"mission_end"` - winner, message
 - `"kill"` - killerPlayerID, killerUnitType, killerSide, victimPlayerID, victimUnitType, victimSide, weaponName
@@ -1094,6 +1136,7 @@ nil onNetDisconnect(string reasonMessage, number errorCode)
 Called when disconnected from a server.
 
 **Disconnect Error Codes:**
+
 - `net.ERR_INVALID_ADDRESS`
 - `net.ERR_CONNECT_FAILED`
 - `net.ERR_WRONG_VERSION`
@@ -1116,12 +1159,14 @@ boolean, string onPlayerTryConnect(string addr, string name, string ucid, number
 Called when a player attempts to connect. Can allow or deny connection.
 
 **Parameters:**
+
 - `addr` (string): Player's IP address.
 - `name` (string): Player's display name.
 - `ucid` (string): Unique Client Identifier.
 - `playerID` (number): The ID the player will have if allowed.
 
 **Returns:**
+
 - Return `true` to allow connection
 - Return `false, "reason"` to deny with a message
 - Return nothing to continue the callback chain
@@ -1186,11 +1231,13 @@ boolean onPlayerTryChangeSlot(number playerID, number side, string slotID)
 Called when a player attempts to change slots. Can allow or deny.
 
 **Parameters:**
+
 - `playerID` (number): The player's ID.
 - `side` (number): Target coalition (0=spectators, 1=red, 2=blue).
 - `slotID` (string): Target slot ID.
 
 **Returns:**
+
 - Return `true` to allow
 - Return `false` to deny
 - Return nothing to continue the callback chain
@@ -1204,11 +1251,13 @@ string onPlayerTrySendChat(number playerID, string message, number to)
 Called when a player attempts to send a chat message. Can filter or block.
 
 **Parameters:**
+
 - `playerID` (number): The sending player's ID.
 - `message` (string): The message content.
 - `to` (number): Target (all or team).
 
 **Returns:**
+
 - Return a modified string to change the message
 - Return empty string `""` to block the message
 - Return nothing to allow the original message

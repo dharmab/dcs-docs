@@ -1,13 +1,13 @@
 # URAL-4320T Liveries
 
-| Folder Name | Display Name |
-|-------------|--------------|
-| autumn | autumn |
+| Folder Name  | Display Name |
+| ------------ | ------------ |
+| autumn       | autumn       |
 | autumn_GREEN | autumn_green |
-| desert | desert |
-| spring | spring |
+| desert       | desert       |
+| spring       | spring       |
 | spring_GREEN | spring_green |
-| summer | summer |
+| summer       | summer       |
 | summer_GREEN | summer_green |
-| winter | winter |
-| winter_GREEN | winter |
+| winter       | winter       |
+| winter_GREEN | winter       |

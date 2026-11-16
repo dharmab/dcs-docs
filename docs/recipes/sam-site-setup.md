@@ -69,12 +69,12 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each gro
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| SM-90 Launcher | `S_75M_Volhov` | Launcher (1 missile) |
-| SNR-75 Fan Song | `SNR_75V` | Tracking radar |
-| P-19 Flat Face | `p-19 s-125 sr` | Search radar |
-| RD-75 Amazonka | `RD_75` | Radio direction finding (optional) |
+| Component       | Type ID         | Role                               |
+| --------------- | --------------- | ---------------------------------- |
+| SM-90 Launcher  | `S_75M_Volhov`  | Launcher (1 missile)               |
+| SNR-75 Fan Song | `SNR_75V`       | Tracking radar                     |
+| P-19 Flat Face  | `p-19 s-125 sr` | Search radar                       |
+| RD-75 Amazonka  | `RD_75`         | Radio direction finding (optional) |
 
 **Battery Composition:**
 
@@ -177,11 +177,11 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 5P73 Launcher | `5p73 s-125 ln` | Launcher (4 missiles) |
-| SNR-125 Low Blow | `snr s-125 tr` | Tracking radar |
-| P-19 Flat Face | `p-19 s-125 sr` | Search radar |
+| Component        | Type ID         | Role                  |
+| ---------------- | --------------- | --------------------- |
+| 5P73 Launcher    | `5p73 s-125 ln` | Launcher (4 missiles) |
+| SNR-125 Low Blow | `snr s-125 tr`  | Tracking radar        |
+| P-19 Flat Face   | `p-19 s-125 sr` | Search radar          |
 
 **Battery Composition:**
 
@@ -204,12 +204,12 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 5P72 Launcher | `S-200_Launcher` | Launcher (1 large missile) |
-| RPC 5N62V Square Pair | `RPC_5N62V` | Tracking radar |
-| P-14 Tall King | `P14_SR` | Search radar |
-| 19J6 | `RLS_19J6` | Search radar (alternate) |
+| Component             | Type ID          | Role                       |
+| --------------------- | ---------------- | -------------------------- |
+| 5P72 Launcher         | `S-200_Launcher` | Launcher (1 large missile) |
+| RPC 5N62V Square Pair | `RPC_5N62V`      | Tracking radar             |
+| P-14 Tall King        | `P14_SR`         | Search radar               |
+| 19J6                  | `RLS_19J6`       | Search radar (alternate)   |
 
 **Battery Composition:**
 
@@ -232,9 +232,9 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 2P25 TEL | `Kub 2P25 ln` | Launcher (3 missiles) |
+| Component           | Type ID        | Role                        |
+| ------------------- | -------------- | --------------------------- |
+| 2P25 TEL            | `Kub 2P25 ln`  | Launcher (3 missiles)       |
 | 1S91 Straight Flush | `Kub 1S91 str` | Combined search/track radar |
 
 **Battery Composition:**
@@ -258,8 +258,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component | Type ID       | Role                               |
+| --------- | ------------- | ---------------------------------- |
 | 9A33 TLAR | `Osa 9A33 ln` | Self-contained launcher with radar |
 
 **Battery Composition:**
@@ -283,15 +283,15 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 5P85C TEL | `S-300PS 5P85C ln` | Launcher (4 missiles, truck) |
-| 5P85D TEL | `S-300PS 5P85D ln` | Launcher (4 missiles, trailer) |
-| 30N6 Flap Lid | `S-300PS 5H63C 30H6_tr` | Tracking radar |
-| 40B6M | `S-300PS 40B6M tr` | Tracking radar (alternate) |
-| 40B6MD Clam Shell | `S-300PS 40B6MD sr` | Search radar |
-| 64H6E Big Bird | `S-300PS 64H6E sr` | Search radar (alternate) |
-| 54K6 | `S-300PS 54K6 cp` | Command post |
+| Component         | Type ID                 | Role                           |
+| ----------------- | ----------------------- | ------------------------------ |
+| 5P85C TEL         | `S-300PS 5P85C ln`      | Launcher (4 missiles, truck)   |
+| 5P85D TEL         | `S-300PS 5P85D ln`      | Launcher (4 missiles, trailer) |
+| 30N6 Flap Lid     | `S-300PS 5H63C 30H6_tr` | Tracking radar                 |
+| 40B6M             | `S-300PS 40B6M tr`      | Tracking radar (alternate)     |
+| 40B6MD Clam Shell | `S-300PS 40B6MD sr`     | Search radar                   |
+| 64H6E Big Bird    | `S-300PS 64H6E sr`      | Search radar (alternate)       |
+| 54K6              | `S-300PS 54K6 cp`       | Command post                   |
 
 **Battery Composition:**
 
@@ -422,11 +422,11 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 9A310M1 TELAR | `SA-11 Buk LN 9A310M1` | Launcher with onboard radar |
-| 9S470M1 | `SA-11 Buk CC 9S470M1` | Command post |
-| 9S18M1 Snow Drift | `SA-11 Buk SR 9S18M1` | Search radar |
+| Component         | Type ID                | Role                        |
+| ----------------- | ---------------------- | --------------------------- |
+| 9A310M1 TELAR     | `SA-11 Buk LN 9A310M1` | Launcher with onboard radar |
+| 9S470M1           | `SA-11 Buk CC 9S470M1` | Command post                |
+| 9S18M1 Snow Drift | `SA-11 Buk SR 9S18M1`  | Search radar                |
 
 **Battery Composition:**
 
@@ -449,8 +449,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component    | Type ID       | Role               |
+| ------------ | ------------- | ------------------ |
 | 9A35M3 TELAR | `Strela-10M3` | IR-guided launcher |
 
 **Battery Composition:**
@@ -473,10 +473,10 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| 9A331 | `Tor 9A331` | Self-contained launcher with radar |
-| Tor-M2 | `CHAP_TorM2` | Improved variant |
+| Component | Type ID      | Role                               |
+| --------- | ------------ | ---------------------------------- |
+| 9A331     | `Tor 9A331`  | Self-contained launcher with radar |
+| Tor-M2    | `CHAP_TorM2` | Improved variant                   |
 
 **Battery Composition:**
 
@@ -498,8 +498,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component    | Type ID        | Role                        |
+| ------------ | -------------- | --------------------------- |
 | 2S6 Tunguska | `2S6 Tunguska` | Combined gun/missile system |
 
 **Battery Composition:**
@@ -522,8 +522,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component  | Type ID          | Role                        |
+| ---------- | ---------------- | --------------------------- |
 | Pantsir-S1 | `CHAP_PantsirS1` | Combined gun/missile system |
 
 **Battery Composition:**
@@ -544,8 +544,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component       | Type ID           | Role             |
+| --------------- | ----------------- | ---------------- |
 | ZSU-23-4 Shilka | `ZSU-23-4 Shilka` | Radar-guided AAA |
 
 **Battery Composition:**
@@ -570,13 +570,13 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| M192 Launcher | `Hawk ln` | Launcher (3 missiles) |
-| AN/MPQ-46 TR | `Hawk tr` | Tracking radar (illuminator) |
-| AN/MPQ-50 SR | `Hawk sr` | Search radar |
+| Component      | Type ID     | Role                              |
+| -------------- | ----------- | --------------------------------- |
+| M192 Launcher  | `Hawk ln`   | Launcher (3 missiles)             |
+| AN/MPQ-46 TR   | `Hawk tr`   | Tracking radar (illuminator)      |
+| AN/MPQ-50 SR   | `Hawk sr`   | Search radar                      |
 | AN/MPQ-55 CWAR | `Hawk cwar` | Continuous wave acquisition radar |
-| PCP | `Hawk pcp` | Platoon Command Post |
+| PCP            | `Hawk pcp`  | Platoon Command Post              |
 
 **Battery Composition:**
 
@@ -600,14 +600,14 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| M901 Launcher | `Patriot ln` | Launcher (4 missiles) |
-| AN/MPQ-53 STR | `Patriot str` | Search/track radar (phased array) |
-| ECS | `Patriot ECS` | Engagement Control Station |
-| EPP-III | `Patriot EPP` | Electric Power Plant |
-| ICC | `Patriot cp` | Information Coordination Central |
-| AMG AN/MRC-137 | `Patriot AMG` | Communications relay |
+| Component      | Type ID       | Role                              |
+| -------------- | ------------- | --------------------------------- |
+| M901 Launcher  | `Patriot ln`  | Launcher (4 missiles)             |
+| AN/MPQ-53 STR  | `Patriot str` | Search/track radar (phased array) |
+| ECS            | `Patriot ECS` | Engagement Control Station        |
+| EPP-III        | `Patriot EPP` | Electric Power Plant              |
+| ICC            | `Patriot cp`  | Information Coordination Central  |
+| AMG AN/MRC-137 | `Patriot AMG` | Communications relay              |
 
 **Battery Composition:**
 
@@ -740,12 +740,12 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| LCHR (AIM-120B) | `NASAMS_LN_B` | Launcher |
-| LCHR (AIM-120C) | `NASAMS_LN_C` | Launcher |
-| AN/MPQ-64F1 | `NASAMS_Radar_MPQ64F1` | Sentinel search radar |
-| FDC | `NASAMS_Command_Post` | Fire Distribution Center |
+| Component       | Type ID                | Role                     |
+| --------------- | ---------------------- | ------------------------ |
+| LCHR (AIM-120B) | `NASAMS_LN_B`          | Launcher                 |
+| LCHR (AIM-120C) | `NASAMS_LN_C`          | Launcher                 |
+| AN/MPQ-64F1     | `NASAMS_Radar_MPQ64F1` | Sentinel search radar    |
+| FDC             | `NASAMS_Command_Post`  | Fire Distribution Center |
 
 **Battery Composition:**
 
@@ -768,8 +768,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component     | Type ID         | Role               |
+| ------------- | --------------- | ------------------ |
 | M48 Chaparral | `M48 Chaparral` | IR-guided launcher |
 
 **Battery Composition:**
@@ -790,8 +790,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component     | Type ID         | Role                      |
+| ------------- | --------------- | ------------------------- |
 | M1097 Avenger | `M1097 Avenger` | Stinger launcher on HMMWV |
 
 **Battery Composition:**
@@ -812,8 +812,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component   | Type ID       | Role                     |
+| ----------- | ------------- | ------------------------ |
 | M163 Vulcan | `M163 Vulcan` | 20mm Gatling gun on M113 |
 
 **Battery Composition:**
@@ -835,8 +835,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component     | Type ID         | Role                          |
+| ------------- | --------------- | ----------------------------- |
 | M6 Linebacker | `M6 Linebacker` | Bradley with Stinger missiles |
 
 **Battery Composition:**
@@ -858,11 +858,11 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| Launcher | `rapier_fsa_launcher` | Launcher (4 missiles) |
-| Blindfire TR | `rapier_fsa_blindfire_radar` | Tracking radar |
-| Optical Tracker | `rapier_fsa_optical_tracker_unit` | Optical tracking |
+| Component       | Type ID                           | Role                  |
+| --------------- | --------------------------------- | --------------------- |
+| Launcher        | `rapier_fsa_launcher`             | Launcher (4 missiles) |
+| Blindfire TR    | `rapier_fsa_blindfire_radar`      | Tracking radar        |
+| Optical Tracker | `rapier_fsa_optical_tracker_unit` | Optical tracking      |
 
 **Battery Composition:**
 
@@ -884,11 +884,11 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| Launcher | `CHAP_IRISTSLM_LN` | Vertical launcher |
-| STR | `CHAP_IRISTSLM_STR` | Search/track radar |
-| C2 | `CHAP_IRISTSLM_CP` | Command post |
+| Component | Type ID             | Role               |
+| --------- | ------------------- | ------------------ |
+| Launcher  | `CHAP_IRISTSLM_LN`  | Vertical launcher  |
+| STR       | `CHAP_IRISTSLM_STR` | Search/track radar |
+| C2        | `CHAP_IRISTSLM_CP`  | Command post       |
 
 **Battery Composition:**
 
@@ -910,10 +910,10 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
-| TELAR | `HQ-7_LN_SP` | Self-contained launcher with radar |
-| SR | `HQ-7_STR_SP` | Search radar (optional) |
+| Component | Type ID       | Role                               |
+| --------- | ------------- | ---------------------------------- |
+| TELAR     | `HQ-7_LN_SP`  | Self-contained launcher with radar |
+| SR        | `HQ-7_STR_SP` | Search radar (optional)            |
 
 **Battery Composition:**
 
@@ -934,8 +934,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Unit Type Strings:**
 
-| Component | Type ID | Role |
-|-----------|---------|------|
+| Component  | Type ID      | Role                    |
+| ---------- | ------------ | ----------------------- |
 | Roland ADS | `Roland ADS` | Self-contained launcher |
 
 **Battery Composition:**
@@ -954,14 +954,14 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 Early warning radars extend detection range and provide cueing to SAM batteries. Place them several kilometers from SAM sites to avoid single-weapon kills.
 
-| Radar | Type ID | Notes |
-|-------|---------|-------|
-| 1L13 EWR | `1L13 EWR` | Soviet long-range search |
-| P-19 Flat Face | `p-19 s-125 sr` | Soviet medium-range |
-| P-14 Tall King | `P14_SR` | Soviet long-range |
-| 55G6 EWR | `55G6 EWR` | Modern Russian |
-| AN/FPS-117 | `FPS-117` | US long-range |
-| AN/TPS-80 | `AN/TPS-80` | US G/ATOR |
+| Radar          | Type ID         | Notes                    |
+| -------------- | --------------- | ------------------------ |
+| 1L13 EWR       | `1L13 EWR`      | Soviet long-range search |
+| P-19 Flat Face | `p-19 s-125 sr` | Soviet medium-range      |
+| P-14 Tall King | `P14_SR`        | Soviet long-range        |
+| 55G6 EWR       | `55G6 EWR`      | Modern Russian           |
+| AN/FPS-117     | `FPS-117`       | US long-range            |
+| AN/TPS-80      | `AN/TPS-80`     | US G/ATOR                |
 
 ---
 
@@ -1002,6 +1002,7 @@ Early Warning:
 The following script implements emission control for a layered IADS. Early warning radars stay on continuously to detect threats. Search radars pulse at medium intervals when the EWR detects hostiles in the general area. Track radars activate only when targets enter effective engagement range.
 
 **Group naming convention:** The script expects groups to be named with prefixes:
+
 - `EWR-` for early warning radars (e.g., `EWR-North`, `EWR-South`)
 - `SAM-Search-` for search radar groups (e.g., `SAM-Search-SA10`, `SAM-Search-Hawk`)
 - `SAM-Track-` for tracking/engagement groups (e.g., `SAM-Track-SA10`, `SAM-Track-SA11`)
@@ -1191,14 +1192,14 @@ timer.scheduleFunction(function(_, time) return IADS:update(_, time) end, nil, t
 
 **Example group setup:**
 
-| Group Name | Units | Role |
-|------------|-------|------|
-| `EWR-North` | 1L13 EWR | Always-on early warning |
-| `EWR-South` | 55G6 EWR | Always-on early warning |
-| `SAM-Search-SA10` | Big Bird (64N6E) | Pulsing search radar |
-| `SAM-Track-SA10` | Clam Shell, Flap Lid, TELs | Engagement group |
-| `SAM-Search-Hawk` | AN/MPQ-50 | Pulsing search radar |
-| `SAM-Track-Hawk` | AN/MPQ-46, Launchers | Engagement group |
+| Group Name        | Units                      | Role                    |
+| ----------------- | -------------------------- | ----------------------- |
+| `EWR-North`       | 1L13 EWR                   | Always-on early warning |
+| `EWR-South`       | 55G6 EWR                   | Always-on early warning |
+| `SAM-Search-SA10` | Big Bird (64N6E)           | Pulsing search radar    |
+| `SAM-Track-SA10`  | Clam Shell, Flap Lid, TELs | Engagement group        |
+| `SAM-Search-Hawk` | AN/MPQ-50                  | Pulsing search radar    |
+| `SAM-Track-Hawk`  | AN/MPQ-46, Launchers       | Engagement group        |
 
 **Customization options:**
 
@@ -1216,12 +1217,12 @@ controller:setOption(AI.Option.Ground.id.EVASION_OF_ARM, true)
 
 SAM effectiveness varies with skill level:
 
-| Skill | Behavior |
-|-------|----------|
-| `"Average"` | Slower reaction, more likely to miss |
-| `"Good"` | Standard performance |
-| `"High"` | Fast reaction, accurate |
-| `"Excellent"` | Near-perfect performance |
+| Skill         | Behavior                             |
+| ------------- | ------------------------------------ |
+| `"Average"`   | Slower reaction, more likely to miss |
+| `"Good"`      | Standard performance                 |
+| `"High"`      | Fast reaction, accurate              |
+| `"Excellent"` | Near-perfect performance             |
 
 For challenging SEAD missions, use `"High"` or `"Excellent"`. For training scenarios, use `"Average"` or `"Good"`.
 

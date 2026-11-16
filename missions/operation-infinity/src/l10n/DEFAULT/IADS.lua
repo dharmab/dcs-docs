@@ -23,27 +23,27 @@ IADS = {}
 -- =============================================================================
 
 IADS.config = {
-    updateInterval = 10,          -- Seconds between main updates
-    harmUpdateInterval = 2,       -- Seconds between ARM checks while an ARM is in flight
-    ewrDetectionRange = 250000,   -- 250 km: a site with no live EWR this close runs autonomously
-    cueRangeFraction = 0.75,      -- Fraction of max range at which EWR/spy cues turn a site on
+    updateInterval = 10, -- Seconds between main updates
+    harmUpdateInterval = 2, -- Seconds between ARM checks while an ARM is in flight
+    ewrDetectionRange = 250000, -- 250 km: a site with no live EWR this close runs autonomously
+    cueRangeFraction = 0.75, -- Fraction of max range at which EWR/spy cues turn a site on
     autonomousRangeFraction = 0.5, -- Fraction of max range at which a pulsing site holds on its own track
-    cueHoldTime = 20,             -- Seconds a site stays on after its last cue (hysteresis)
+    cueHoldTime = 20, -- Seconds a site stays on after its last cue (hysteresis)
     autonomousTrackHoldTime = 20, -- Seconds a pulsing site stays on after its own radar's last track
-    harmConeDegrees = 15,         -- Half-angle of the cone around an ARM's velocity vector
-    darkPeriodMin = 60,           -- Seconds a site stays dark after a HARM shutdown
+    harmConeDegrees = 15, -- Half-angle of the cone around an ARM's velocity vector
+    darkPeriodMin = 60, -- Seconds a site stays dark after a HARM shutdown
     darkPeriodMax = 180,
-    pulseOnMin = 10,              -- Autonomous pulse on duration (seconds)
+    pulseOnMin = 10, -- Autonomous pulse on duration (seconds)
     pulseOnMax = 20,
-    pulseOffMin = 90,             -- Autonomous pulse off duration (seconds)
+    pulseOffMin = 90, -- Autonomous pulse off duration (seconds)
     pulseOffMax = 240,
-    spyCycleMin = 120,            -- Seconds between spy report cycles
+    spyCycleMin = 120, -- Seconds between spy report cycles
     spyCycleMax = 240,
-    spyDelayMin = 20,             -- Seconds before a spy report reaches the IADS
+    spyDelayMin = 20, -- Seconds before a spy report reaches the IADS
     spyDelayMax = 40,
-    spyReportDuration = 60,       -- Seconds a spy report stays a cued target
-    spyMaxAltitudeAGL = 1524,     -- 5000 ft AGL
-    spyTerritoryRadius = 60000,   -- 60 km around each target aerodrome
+    spyReportDuration = 60, -- Seconds a spy report stays a cued target
+    spyMaxAltitudeAGL = 1524, -- 5000 ft AGL
+    spyTerritoryRadius = 60000, -- 60 km around each target aerodrome
 }
 
 -- HARM shutdown ETA rolls (seconds). Normal sites are scared and shut down
@@ -87,14 +87,14 @@ IADS.state = {
     initialized = false,
     enabled = false,
     difficulty = nil,
-    ewrs = {},                    -- Array of {pGroup, name, center, alive}
-    samSites = {},                -- Array of SAM site data
-    sitesByGroupName = {},        -- Spawned group name -> SAM site
-    trackedARMs = {},             -- Array of {weapon, rolls, triggered}
+    ewrs = {}, -- Array of {pGroup, name, center, alive}
+    samSites = {}, -- Array of SAM site data
+    sitesByGroupName = {}, -- Spawned group name -> SAM site
+    trackedARMs = {}, -- Array of {weapon, rolls, triggered}
     harmLoopRunning = false,
-    spyReports = {},              -- Array of {x, y, activeAt, expiresAt}
+    spyReports = {}, -- Array of {x, y, activeAt, expiresAt}
     nextSpyReportTime = 0,
-    cuedTargets = {},             -- Cued targets from the last main update
+    cuedTargets = {}, -- Cued targets from the last main update
 }
 
 local log = Logging:create("IADS")
@@ -136,7 +136,7 @@ function IADS:registerSAMSite(pGroup, siteType, center)
         autonomousRange = typeData.maxRange * self.config.autonomousRangeFraction,
         alive = true,
         emitting = false,
-        missiles = {},            -- Own missiles in flight
+        missiles = {}, -- Own missiles in flight
         lastCueTime = -math.huge,
         lastCueSource = nil,
         darkUntil = 0,
@@ -146,8 +146,15 @@ function IADS:registerSAMSite(pGroup, siteType, center)
     }
 
     self.state.samSites[#self.state.samSites + 1] = samSite
-    log("Registered SAM site: " .. pGroup.name .. " (" .. siteType .. ", cue " ..
-        math.floor(samSite.cueRange / 1000) .. " km)")
+    log(
+        "Registered SAM site: "
+            .. pGroup.name
+            .. " ("
+            .. siteType
+            .. ", cue "
+            .. math.floor(samSite.cueRange / 1000)
+            .. " km)"
+    )
 
     return samSite
 end
@@ -213,8 +220,8 @@ end
 function IADS:trackARM(weapon)
     self.state.trackedARMs[#self.state.trackedARMs + 1] = {
         weapon = weapon,
-        rolls = {},               -- SAM site -> shutdown ETA roll
-        triggered = {},           -- SAM site -> true once this ARM shut it down
+        rolls = {}, -- SAM site -> shutdown ETA roll
+        triggered = {}, -- SAM site -> true once this ARM shut it down
     }
     log("Tracking ARM: " .. weapon:getTypeName() .. " (" .. #self.state.trackedARMs .. " in flight)")
 
@@ -260,8 +267,15 @@ function IADS:checkARM(arm, now)
                     if not roll then
                         roll = self:rollShutdownETA()
                         arm.rolls[samSite] = roll
-                        log("ARM aimed at " .. samSite.name .. ": ETA " .. math.floor(eta) ..
-                            "s, shutdown at " .. math.floor(roll) .. "s")
+                        log(
+                            "ARM aimed at "
+                                .. samSite.name
+                                .. ": ETA "
+                                .. math.floor(eta)
+                                .. "s, shutdown at "
+                                .. math.floor(roll)
+                                .. "s"
+                        )
                     end
                     if not arm.triggered[samSite] and eta <= roll then
                         arm.triggered[samSite] = true
@@ -360,8 +374,10 @@ function IADS:runSpyCycle(now)
                     local pos = unit:getPoint()
                     local pos2D = { x = pos.x, y = pos.z }
                     local agl = pos.y - land.getHeight(pos2D)
-                    if agl < self.config.spyMaxAltitudeAGL and
-                       isInSpyTerritory(pos2D, aerodromes, self.config.spyTerritoryRadius) then
+                    if
+                        agl < self.config.spyMaxAltitudeAGL
+                        and isInSpyTerritory(pos2D, aerodromes, self.config.spyTerritoryRadius)
+                    then
                         local activeAt = now + randomBetween(self.config.spyDelayMin, self.config.spyDelayMax)
                         self.state.spyReports[#self.state.spyReports + 1] = {
                             x = pos2D.x,
@@ -523,8 +539,12 @@ function IADS:evaluateSite(samSite, now, cuedTargets)
         if autonomous then
             samSite.pulseOnUntil = nil
             samSite.nextPulseTime = now + randomBetween(self.config.pulseOffMin, self.config.pulseOffMax)
-            log(samSite.name .. " autonomous: no live EWR within " ..
-                math.floor(self.config.ewrDetectionRange / 1000) .. " km")
+            log(
+                samSite.name
+                    .. " autonomous: no live EWR within "
+                    .. math.floor(self.config.ewrDetectionRange / 1000)
+                    .. " km"
+            )
         end
     end
     if autonomous then
@@ -608,16 +628,22 @@ function IADS:enable(difficulty)
     end
 
     self.state.enabled = true
-    log("Enabled with difficulty: " .. difficulty .. " (" .. #self.state.samSites .. " sites, " ..
-        #self.state.ewrs .. " EWRs)")
+    log(
+        "Enabled with difficulty: "
+            .. difficulty
+            .. " ("
+            .. #self.state.samSites
+            .. " sites, "
+            .. #self.state.ewrs
+            .. " EWRs)"
+    )
 
     -- Alarm state RED keeps tracks, so a site fires as soon as it emits
     for _, samSite in ipairs(self.state.samSites) do
         local group = getLiveGroup(samSite.pGroup)
         if group then
             self.state.sitesByGroupName[samSite.pGroup.spawnedGroupName] = samSite
-            group:getController():setOption(AI.Option.Ground.id.ALARM_STATE,
-                AI.Option.Ground.val.ALARM_STATE.RED)
+            group:getController():setOption(AI.Option.Ground.id.ALARM_STATE, AI.Option.Ground.val.ALARM_STATE.RED)
             group:enableEmission(false)
             samSite.emitting = false
         else
@@ -626,8 +652,7 @@ function IADS:enable(difficulty)
         end
     end
 
-    self.state.nextSpyReportTime = timer.getTime() +
-        randomBetween(self.config.spyCycleMin, self.config.spyCycleMax)
+    self.state.nextSpyReportTime = timer.getTime() + randomBetween(self.config.spyCycleMin, self.config.spyCycleMax)
 
     world.addEventHandler(self.eventHandler)
 

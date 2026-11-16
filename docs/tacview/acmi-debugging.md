@@ -17,17 +17,17 @@ The first command builds a SQLite cache next to the recording (`<file>.db`, abou
 
 ### Commands
 
-| Command | Use it to answer |
-|---|---|
-| `summary` | What mission, DCS version, duration, and object counts by type and color? |
-| `groups` | When did each group spawn, how many units, how many were removed? |
-| `objects` | Which units existed, with spawn and removal times and spawn position in mission x/y? `--alive-at T` shows a snapshot. `--kind weapon\|ephemeral\|all` widens the set. |
-| `timeline` | What happened in order? Unit spawns, removals, weapon launches, and `Event=` lines. |
-| `track OBJ` | Where did a unit go? Lat/lon, mission x/y, altitude, heading, ground speed, vertical speed, roll, and pitch every `--interval` seconds. |
-| `near OBJ --range NM` | What came within range of a unit, when, and how close? |
-| `shots` | Who launched each missile or bomb, how long it flew, which unit was nearest when it ended, and whether that unit was removed soon after. |
-| `removals` | Why did each unit disappear? Lists the nearest weapon that ended within `--radius` meters and `--window` seconds. |
-| `guns` | Which units fired guns, cannons, or AAA, how many recorded rounds, and when. |
+| Command               | Use it to answer                                                                                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `summary`             | What mission, DCS version, duration, and object counts by type and color?                                                                                             |
+| `groups`              | When did each group spawn, how many units, how many were removed?                                                                                                     |
+| `objects`             | Which units existed, with spawn and removal times and spawn position in mission x/y? `--alive-at T` shows a snapshot. `--kind weapon\|ephemeral\|all` widens the set. |
+| `timeline`            | What happened in order? Unit spawns, removals, weapon launches, and `Event=` lines.                                                                                   |
+| `track OBJ`           | Where did a unit go? Lat/lon, mission x/y, altitude, heading, ground speed, vertical speed, roll, and pitch every `--interval` seconds.                               |
+| `near OBJ --range NM` | What came within range of a unit, when, and how close?                                                                                                                |
+| `shots`               | Who launched each missile or bomb, how long it flew, which unit was nearest when it ended, and whether that unit was removed soon after.                              |
+| `removals`            | Why did each unit disappear? Lists the nearest weapon that ended within `--radius` meters and `--window` seconds.                                                     |
+| `guns`                | Which units fired guns, cannons, or AAA, how many recorded rounds, and when.                                                                                          |
 
 `OBJ` is a hex object ID, a unit name, or a group name. Unit names repeat when a script respawns a group; the tool lists the matches with spawn times, and `--from`/`--to` picks the right one.
 
@@ -67,15 +67,15 @@ These come from a DCS 2.9 recording made with DCS2ACMI 1.8.7.
 
 ACMI 2.2 is UTF-8 text, often zipped (`.zip.acmi` holds one `.txt.acmi`). Each line is one of these:
 
-| Line | Meaning |
-|---|---|
-| `FileType=text/acmi/tacview`, `FileVersion=2.2` | Header |
-| `0,Key=Value` | Global property (`ReferenceTime`, `ReferenceLatitude`, `ReferenceLongitude`, `Title`, `DataSource`, ...) |
-| `#123.45` | Time frame in seconds after `ReferenceTime`. Applies to the lines that follow. |
-| `a02,T=...,Type=...,Name=...` | Object update. The ID is hex. Properties are sticky: omitted ones keep their last value. |
-| `-a02` | Object removed |
-| `0,Event=Type\|id\|...\|text` | Event (`Destroyed`, `TakenOff`, `Landed`, `Message`, `Bookmark`, ...) |
-| `// ...` | Comment |
+| Line                                            | Meaning                                                                                                  |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `FileType=text/acmi/tacview`, `FileVersion=2.2` | Header                                                                                                   |
+| `0,Key=Value`                                   | Global property (`ReferenceTime`, `ReferenceLatitude`, `ReferenceLongitude`, `Title`, `DataSource`, ...) |
+| `#123.45`                                       | Time frame in seconds after `ReferenceTime`. Applies to the lines that follow.                           |
+| `a02,T=...,Type=...,Name=...`                   | Object update. The ID is hex. Properties are sticky: omitted ones keep their last value.                 |
+| `-a02`                                          | Object removed                                                                                           |
+| `0,Event=Type\|id\|...\|text`                   | Event (`Destroyed`, `TakenOff`, `Landed`, `Message`, `Bookmark`, ...)                                    |
+| `// ...`                                        | Comment                                                                                                  |
 
 Text values escape commas as `\,`. A line ending in `\` continues on the next line. Continuation lines can start with `-`, so join them before treating a line as a removal.
 
@@ -83,12 +83,12 @@ Text values escape commas as `\,`. A line ending in `\` continues on the next li
 
 `T` has 3, 5, 6, or 9 `|`-separated fields. An empty field means unchanged.
 
-| Fields | Layout |
-|---|---|
-| 3 | `lon\|lat\|alt` |
-| 5 | `lon\|lat\|alt\|u\|v` |
-| 6 | `lon\|lat\|alt\|roll\|pitch\|yaw` |
-| 9 | `lon\|lat\|alt\|roll\|pitch\|yaw\|u\|v\|heading` |
+| Fields | Layout                                           |
+| ------ | ------------------------------------------------ |
+| 3      | `lon\|lat\|alt`                                  |
+| 5      | `lon\|lat\|alt\|u\|v`                            |
+| 6      | `lon\|lat\|alt\|roll\|pitch\|yaw`                |
+| 9      | `lon\|lat\|alt\|roll\|pitch\|yaw\|u\|v\|heading` |
 
 Longitude and latitude are degree offsets from `ReferenceLongitude` and `ReferenceLatitude`. Altitude is meters MSL. Angles are degrees, and yaw and heading are clockwise from true north. `u` and `v` are the simulator's native flat-world coordinates in meters.
 

@@ -13,6 +13,7 @@ number land.getHeight(Vec2 position)
 The `land.getHeight` function returns the terrain height at a position.
 
 **Parameters:**
+
 - `position` (Vec2): A table with x and y coordinates.
 
 **Returns:** The height in meters above sea level.
@@ -30,6 +31,7 @@ number land.getSurfaceHeightWithSeabed(Vec2 position)
 The `land.getSurfaceHeightWithSeabed` function returns the height including the seabed. This function returns negative values for underwater terrain.
 
 **Parameters:**
+
 - `position` (Vec2): A table with x and y coordinates.
 
 **Returns:** The height in meters, where negative values indicate the seabed.
@@ -43,6 +45,7 @@ number land.getSurfaceType(Vec2 position)
 The `land.getSurfaceType` function returns the surface type at a position.
 
 **Parameters:**
+
 - `position` (Vec2): A table with x and y coordinates.
 
 **Returns:** A surface type enum value from `land.SurfaceType`.
@@ -77,6 +80,7 @@ boolean land.isVisible(Vec3 origin, Vec3 destination)
 The `land.isVisible` function checks if there is line-of-sight between two points. This function only considers terrain and ignores objects.
 
 **Parameters:**
+
 - `origin` (Vec3): The starting position.
 - `destination` (Vec3): The target position.
 
@@ -99,6 +103,7 @@ Vec3 land.getIP(Vec3 origin, Vec3 direction, number distance)
 The `land.getIP` function performs a ray cast and returns the intersection point with terrain. The direction parameter is a vector, not angles; use unit vectors from `getPosition()`.
 
 **Parameters:**
+
 - `origin` (Vec3): The starting position for the ray.
 - `direction` (Vec3): The direction vector. The function normalizes this vector.
 - `distance` (number): The maximum ray distance in meters.
@@ -122,6 +127,7 @@ table land.profile(Vec2 start, Vec2 finish)
 The `land.profile` function returns terrain heights along a path between two points.
 
 **Parameters:**
+
 - `start` (Vec2): The starting position.
 - `finish` (Vec2): The ending position.
 
@@ -136,6 +142,7 @@ number, number land.getClosestPointOnRoads(string roadType, number x, number y)
 The `land.getClosestPointOnRoads` function finds the nearest point on a road network.
 
 **Parameters:**
+
 - `roadType` (string): The type of road network. Valid values are "roads" or "railroads".
 - `x` (number): The X coordinate.
 - `y` (number): The Y coordinate using Vec2 convention.
@@ -155,6 +162,7 @@ table land.findPathOnRoads(string roadType, number x1, number y1, number x2, num
 The `land.findPathOnRoads` function finds a path along roads between two points.
 
 **Parameters:**
+
 - `roadType` (string): The type of road network. Valid values are "roads" or "railroads".
 - `x1` (number): The starting X coordinate.
 - `y1` (number): The starting Y coordinate.

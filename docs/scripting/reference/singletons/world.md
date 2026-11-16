@@ -13,6 +13,7 @@ nil world.addEventHandler(table handler)
 The `world.addEventHandler` function registers an event handler to receive game events. The handler must be a table with an `onEvent` function.
 
 **Parameters:**
+
 - `handler` (table): A table containing an `onEvent(self, event)` function.
 
 ```lua
@@ -39,6 +40,7 @@ nil world.removeEventHandler(table handler)
 The `world.removeEventHandler` function unregisters a previously registered event handler.
 
 **Parameters:**
+
 - `handler` (table): The same handler table that was passed to `world.addEventHandler`.
 
 ## world.getPlayer
@@ -60,6 +62,7 @@ table world.getAirbases(number coalitionId)
 The `world.getAirbases` function returns all airbases belonging to a coalition. The returned list includes airports, FARPs, and carrier ships.
 
 **Parameters:**
+
 - `coalitionId` (number): Optional. If provided, the function returns only airbases for that coalition.
 
 **Returns:** An array of Airbase objects.
@@ -80,6 +83,7 @@ nil world.searchObjects(number objectCategory, table searchVolume, function hand
 The `world.searchObjects` function searches for objects within a 3D volume and calls a handler function for each object found.
 
 **Parameters:**
+
 - `objectCategory` (number): The category of objects to search for, from the `Object.Category` enum. Valid values are UNIT, WEAPON, STATIC, BASE, SCENERY, and CARGO.
 - `searchVolume` (table): A table that defines the search area. The table must have an `id` field specifying the volume type and a `params` field containing the volume parameters.
 - `handler` (function): A function called for each found object. Return true from the handler to continue searching, or false to stop.
@@ -120,6 +124,7 @@ number world.removeJunk(table searchVolume)
 The `world.removeJunk` function removes debris and wreckage within a volume.
 
 **Parameters:**
+
 - `searchVolume` (table): The area to clear. This table uses the same format as the `searchVolume` parameter of `world.searchObjects`.
 
 **Returns:** The number of objects removed.

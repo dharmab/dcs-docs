@@ -1,5 +1,5 @@
 # TYPE-59 Liveries
 
 | Folder Name | Display Name |
-|-------------|--------------|
-| pla camo | PLA Army |
+| ----------- | ------------ |
+| pla camo    | PLA Army     |
