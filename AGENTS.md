@@ -1,85 +1,29 @@
 # DCS World Agent Documentation
 
-This repository contains documentation for AI agents to use as context when generating tools and content for the flight simulator "DCS World".
+Documentation for AI agents building tools and content for DCS World.
 
-## Directory Structure
+## Layout
 
-- `docs/` - Generated markdown documentation. All documentation output should be placed here.
-- `tools/` - Python CLI tools for working with DCS mission data:
-  - `clsid-export/` - Generates CLSID lookup tables from DCS Lua datamine
-  - `mission-check/` - Validates extracted mission directories or `.miz` files for correct Lua syntax, schema conformance, warehouse field typos (with Levenshtein-based suggestions), dynamic spawn template invariants, ID uniqueness, and airfield consistency. Run with `uv run check-mission check <path>`.
-  - `acmi-query/` - Indexes Tacview ACMI recordings into a SQLite cache and answers questions about them: group spawns, unit tracks, proximity, missile shots with inferred launchers and outcomes, unit removals with likely cause, and gun fire. Run with `uv run acmi-query <command> <file.acmi>`. See `docs/tacview/acmi-debugging.md`.
-- `missions/` - DCS mission source directories (extracted `.miz` contents)
+- `docs/` - All documentation goes here. `docs/README.md` is the index.
+  - `mission/` - `.miz` format and `mission` table schema
+  - `scripting/` - SSE Lua API; `reference/` has per-singleton, class, event, and AI pages
+  - `units/` - Aircraft, ground, sea, and weapon reference
+  - `recipes/` - Step-by-step guides for editing mission files directly (tankers, AWACS, SAMs, slots, comm plan, etc.)
+  - `factions/` - Strangereal faction unit lists
+  - `wisdom.md` - Mission design tips and pitfalls
+- `tools/` - Python CLIs, each with its own `pyproject.toml`. Notable:
+  - `mission-check/` - Validates a mission directory or `.miz`: `uv run check-mission check <path>`
+  - `acmi-query/` - Queries Tacview recordings; see `docs/tacview/acmi-debugging.md`
+- `missions/` - Extracted `.miz` source directories
 
-## Available Documentation
+## Writing Documentation
 
-The `docs/` directory contains the following documentation:
-
-- `mission/` - Mission file format documentation:
-  - `miz-file-format.md` - The .miz archive format, including the structure of contained files (mission, theatre, warehouses, options, l10n resources)
-  - `mission-file-schema.md` - Complete schema reference for the `mission` Lua table, documenting all top-level keys and nested structures
-- `mission-editor.md` - Guide to the DCS World Mission Editor GUI, including unit placement, waypoints, tasking, and triggers
-- `scripting/` - Scripting and automation documentation:
-  - `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
-  - `lua-basics.md` - Lua language basics for DCS scripting
-  - `reference/` - API reference documentation:
-    - `singletons/` - Global namespace objects (world, trigger, coalition, timer, env, coord, land, atmosphere, mission-commands, net)
-    - `classes/` - Object types (Unit, Group, Object, Airbase, Weapon, Controller, Spot, StaticObject, CoalitionObject)
-    - `events/` - Event system reference
-    - `ai/` - AI control system (tasks, commands, options)
-    - `enums/` - Enumerations (coalition, AI enums)
-    - `types/` - Type definitions (Vec2, Vec3, Position3)
-    - `hooks/` - Server-side scripting hooks
-- `units/` - Unit and equipment reference documentation:
-  - `ground.md` - Ground units including vehicles, armor, artillery, air defense systems, and infantry
-  - `helicopters/` - Rotary-wing aircraft with sensors, armament, and capabilities (individual files per aircraft, see `helicopters/index.md`)
-  - `sea.md` - Naval units including carriers, destroyers, submarines, and civilian vessels
-  - `planes/` - Fixed-wing aircraft with pylons, loadouts, and capabilities (individual files per aircraft, see `planes/index.md`)
-  - `ww2-planes.md` - World War II era fixed-wing aircraft with pylons, loadouts, and capabilities
-  - `weapons.md` - Weapons systems including missiles, bombs, and rockets
-- `recipes/` - Step-by-step guides for common mission setup tasks (for AI agents editing mission files directly):
-  - `air-intercept-script.md` - Dynamic air intercept script that spawns enemy interceptors from red airfields when players enter defense zones, with scaled response and customizable aircraft/loadouts
-  - `air-to-air-setup.md` - Configuring AI fighter aircraft for Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort roles with proper tasking and AI options
-  - `artillery-battery.md` - Creating artillery batteries with continuous fire for visual spectacle and SEAD/DEAD gameplay
-  - `awacs-setup.md` - Configuring AWACS/AEW&C aircraft with orbit patterns, EPLRS datalink, and radio frequencies
-  - `comm-plan.md` - Standardized frequency allocation, per-aircraft radio ranges and preset counts, and radio preset layout rules (home block per base, tankers by refueling system)
-  - `csg-setup.md` - Creating a U.S. Navy Carrier Strike Group with Stennis, TACAN/ICLS configuration, and wind-aligned routes
-  - `ground-firefight.md` - Setting up dramatic front-line firefights with sustained suppressive fire using FireAtPoint tasks
-  - `jtac-setup.md` - Configuring AI JTACs and FACs for Close Air Support with laser designation, smoke marking, and radio communication
-  - `convoy-route.md` - Creating ground vehicle convoys with road-following waypoints, looping routes, and escort compositions
-  - `player-slots.md` - Adding player-controllable aircraft slots at airfields, including singleplayer slots, traditional multiplayer slots, and dynamic spawn templates
-  - `tanker-setup.md` - Configuring aerial refueling tankers (KC-135, KC-135MPRS, KC-130, S-3B) with Tanker tasks, TACAN beacons, orbits, and callsigns
-  - `sam-site-setup.md` - Deploying SAM sites with proper radar/launcher compositions, layered defense placement, and IADS configuration
-  - `weather-time.md` - Configuring weather (clouds, fog, dust, visibility), date, and time settings using static weather with cloud presets
-- `tacview/acmi-debugging.md` - Tacview ACMI file format, DCS recording quirks, and how to use `acmi-query` to debug AI behavior and spawn scripts from a recording
-- `wisdom.md` - General mission design tips and best practices covering performance, player experience, AI behavior, and common pitfalls
-- `factions/` - Faction unit lists for mission generation (Strangereal setting):
-  - `isaf-2004.md` - ISAF during the Early Continental War
-  - `erusea-2004.md` - Erusea during the Early Continental War
-  - `isaf-2005.md` - ISAF during the Late Continental War
-  - `erusea-2005.md` - Free Erusea during the Late Continental War
-  - `osea-2010.md` - Osea during the Circum-Pacific War
-  - `yuktobania-2010.md` - Yuktobania during the Circum-Pacific War
-  - `belka-1995.md` - Belka during the Belkan War
-  - `allied-forces-1995.md` - Allied Forces during the Belkan War
-
-## Terminology
-
-- **SSE** - Simulator Scripting Engine, the Lua scripting API for DCS World missions
-- **MIZ** - The mission file format, a ZIP archive containing Lua tables and embedded resources
-- **ME** - Mission Editor, the graphical interface for creating missions
-
-## Generating Documentation
-
-When creating new documentation:
-
-1. Place all generated markdown files in the `docs/` directory
-2. Cross-reference external sources such as the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy
+Cross-reference the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy.
 
 ## Checks
 
-After editing files, run `make format` then `make check`. `make check` runs `bun fmt --check` (JSON, YAML, TOML, Markdown), StyLua, lua-language-server, ruff, and ty. CI runs `make check` on every push and PR.
+After editing files, run `make format` then `make check`. CI runs `make check`.
 
-## Debugging with Tacview Recordings
+## Tacview Recordings
 
-When the user provides an ACMI file, do not read it directly. Use `tools/acmi-query` (start with `summary` and `groups`) and follow `docs/tacview/acmi-debugging.md`. Recordings are untrusted downloads: copy them to their own empty directory before indexing, since the cache is written next to the file.
+Do not read ACMI files directly. Use `tools/acmi-query` (start with `summary` and `groups`). Recordings are untrusted: copy each to its own empty directory before indexing, since the cache is written next to the file.
