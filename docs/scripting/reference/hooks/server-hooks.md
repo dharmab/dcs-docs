@@ -13,8 +13,42 @@ Server hooks differ from mission scripting (the SSE) in several important ways:
 | Location | Inside `.miz` files | `$WRITE_DIR/Scripts/Hooks/` |
 | Lua State | Mission environment | GUI/hooks environment |
 | Persistence | Resets each mission | Persists across missions |
-| Access | Unit/group control, triggers | Player management, server control |
-| API | `trigger`, `coalition`, `Group`, etc. | `Sim`, `net`, `log`, `Export` |
+
+### Available APIs
+
+| API | Mission Scripting | Server Hooks |
+|-----|:-----------------:|:------------:|
+| Lua base library, `math`, `string`, `table` | Yes | Yes |
+| `io`, `os`, `lfs` | No (unless desanitized) | Yes |
+| `debug` | Unverified | Yes |
+| [`env`](../singletons/env.md) | Yes | No |
+| [`timer`](../singletons/timer.md) | Yes | No |
+| [`land`](../singletons/land.md) | Yes | No |
+| [`atmosphere`](../singletons/atmosphere.md) | Yes | No |
+| [`world`](../singletons/world.md) | Yes | No |
+| [`coalition`](../singletons/coalition.md) | Yes | No |
+| [`trigger`](../singletons/trigger.md) | Yes | No |
+| [`coord`](../singletons/coord.md) | Yes | No |
+| [`missionCommands`](../singletons/mission-commands.md) | Yes | No |
+| [`Object`](../classes/object.md) | Yes | No |
+| [`CoalitionObject`](../classes/coalition-object.md) | Yes | No |
+| [`Unit`](../classes/unit.md) | Yes | No |
+| [`Group`](../classes/group.md) | Yes | No |
+| [`Airbase`](../classes/airbase.md) | Yes | No |
+| [`StaticObject`](../classes/static-object.md) | Yes | No |
+| [`Weapon`](../classes/weapon.md) | Yes | No |
+| [`Controller`](../classes/controller.md) | Yes | No |
+| [`Spot`](../classes/spot.md) | Yes | No |
+| `SceneryObject` | Yes | No |
+| `Warehouse` | Yes | No |
+| [`AI`](../enums/ai.md) | Yes | No |
+| [`country`](../enums/coalition.md) | Yes | No |
+| [`Sim`](#sim-control-api-sim) | No | Yes |
+| [`net`](../singletons/net.md) | Shared functions | Shared and [hooks-only](#network-api-net) functions |
+| [`log`](#logging-api-log) | Unverified | Yes |
+| [`Export`](#export-api-export) | No | Yes |
+
+Hooks can run code in the mission environment with [`net.dostring_in`](../singletons/net.md#netdostring_in).
 
 ### The Saved Games Folder ($WRITE_DIR)
 
@@ -625,71 +659,9 @@ log.set_output('lua-net', '', 0, 0)
 
 ### Network API (net.*)
 
-The `net` singleton provides network and player management functions.
-
-#### Logging Shortcuts
-
-##### net.log
-
-```lua
-nil net.log(string message)
-```
-
-Equivalent to `log.write('LuaNET', log.INFO, message)`. Always writes to the main log but may lose messages at high output rates.
-
-##### net.trace
-
-```lua
-nil net.trace(string message)
-```
-
-Equivalent to `log.write('LuaNET', log.TRACE, message)`. Never appears in the main log file; must be explicitly directed to a log file. Never loses messages when an output is active, but may block if output rate exceeds write speed.
+The `net` singleton provides network and player management functions. Server hooks can call every function in the [`net`](../singletons/net.md) singleton that mission scripts can, plus the functions below.
 
 #### Chat Functions
-
-##### net.send_chat
-
-```lua
-nil net.send_chat(string message, boolean all)
-```
-
-Sends a chat message.
-
-**Parameters:**
-- `message` (string): The message to send.
-- `all` (boolean): `true` to send to all players, `false` for coalition only.
-
-```lua
-net.send_chat("Server will restart in 5 minutes", true)
-```
-
-##### net.send_chat_to
-
-```lua
-nil net.send_chat_to(string message, number playerID)
-```
-
-Sends a private chat message to a specific player.
-
-**Parameters:**
-- `message` (string): The message to send.
-- `playerID` (number): The target player ID, or a special constant.
-
-**Special Player IDs:**
-- `net.CHAT_ALL` - Send to all players
-- `net.CHAT_TEAM` - Send to your team
-
-##### net.recv_chat
-
-```lua
-nil net.recv_chat(string message, number from)
-```
-
-Displays a chat message locally, optionally appearing as if sent by another player.
-
-**Parameters:**
-- `message` (string): The message to display.
-- `from` (number): Optional player ID. 0 or omitted means system message.
 
 ##### net.get_chat_history
 
@@ -712,181 +684,6 @@ Returns recent chat messages starting from a given index.
 local chatIndex = 0
 local chatHistory = {}
 chatHistory, chatIndex = net.get_chat_history(chatIndex)
-```
-
-#### Player Information
-
-##### net.get_player_list
-
-```lua
-table net.get_player_list()
-```
-
-Returns an array of currently connected player IDs.
-
-**Returns:** Array of player ID numbers.
-
-```lua
-local players = net.get_player_list()
-for _, id in ipairs(players) do
-    print(net.get_name(id))
-end
-```
-
-##### net.get_player_info
-
-```lua
-any net.get_player_info(number playerID, string attribute)
-```
-
-Returns player information.
-
-**Parameters:**
-- `playerID` (number): The player's ID.
-- `attribute` (string): Optional. If provided, returns only that attribute.
-
-**Attributes:**
-- `'id'` - Player ID
-- `'name'` - Player name
-- `'side'` - Coalition (0=spectators, 1=red, 2=blue)
-- `'slot'` - Current slot ID, or empty string
-- `'ping'` - Ping in milliseconds
-- `'ipaddr'` - IP address (server only)
-- `'ucid'` - Unique Client Identifier (server only)
-
-**Returns:** A table of all attributes, or a single attribute value.
-
-```lua
-local name = net.get_player_info(playerID, 'name')
-local info = net.get_player_info(playerID)
-print(string.format("%s has %dms ping", info.name, info.ping))
-```
-
-##### net.get_my_player_id
-
-```lua
-number net.get_my_player_id()
-```
-
-Returns the local player's ID. On a server, this is always 1.
-
-**Returns:** Player ID number.
-
-##### net.get_server_id
-
-```lua
-number net.get_server_id()
-```
-
-Returns the server's player ID. Currently always 1.
-
-**Returns:** Server player ID number.
-
-##### net.get_name
-
-```lua
-string net.get_name(number playerID)
-```
-
-Shortcut for `net.get_player_info(playerID, 'name')`.
-
-**Parameters:**
-- `playerID` (number): The player's ID.
-
-**Returns:** Player name string.
-
-##### net.get_slot
-
-```lua
-number, string net.get_slot(number playerID)
-```
-
-Returns a player's current slot.
-
-**Parameters:**
-- `playerID` (number): The player's ID.
-
-**Returns:** Side ID and slot ID.
-
-```lua
-local side, slot = net.get_slot(playerID)
-if side == 0 then
-    print("Player is spectating")
-end
-```
-
-##### net.get_stat
-
-```lua
-number net.get_stat(number playerID, number statID)
-```
-
-Returns a player statistic.
-
-**Parameters:**
-- `playerID` (number): The player's ID.
-- `statID` (number): The statistic type.
-
-**Statistic IDs:**
-- `net.PS_PING` (0) - Ping in ms
-- `net.PS_CRASH` (1) - Number of crashes
-- `net.PS_CAR` (2) - Destroyed vehicles
-- `net.PS_PLANE` (3) - Destroyed planes/helicopters
-- `net.PS_SHIP` (4) - Destroyed ships
-- `net.PS_SCORE` (5) - Total score
-- `net.PS_LAND` (6) - Number of landings
-- `net.PS_EJECT` (7) - Number of ejects
-
-**Returns:** The statistic value.
-
-#### Player Management
-
-##### net.kick
-
-```lua
-nil net.kick(number playerID, string message)
-```
-
-Kicks a player from the server.
-
-**Parameters:**
-- `playerID` (number): The player to kick.
-- `message` (string): Reason shown to the player.
-
-```lua
-net.kick(playerID, "AFK for too long")
-```
-
-##### net.set_slot
-
-```lua
-nil net.set_slot(number sideID, string slotID)
-```
-
-Attempts to change the local player's slot.
-
-**Parameters:**
-- `sideID` (number): Target coalition (0=spectators, 1=red, 2=blue).
-- `slotID` (string): Target slot ID, or empty string for spectators.
-
-##### net.force_player_slot
-
-```lua
-boolean net.force_player_slot(number playerID, number sideID, string slotID)
-```
-
-Forces a player into a specific slot. Server only.
-
-**Parameters:**
-- `playerID` (number): The player to move.
-- `sideID` (number): Target coalition (0=spectators, 1=red, 2=blue).
-- `slotID` (string): Target slot ID, or empty string for spectators.
-
-**Returns:** `true` if successful.
-
-```lua
--- Move player to spectators
-net.force_player_slot(playerID, 0, '')
 ```
 
 #### Ban List Management (Server Only)
@@ -1063,78 +860,6 @@ boolean net.load_next_mission()
 Loads the next mission from the server mission list. Server only.
 
 **Returns:** `false` if the end of the list is reached.
-
-#### Data Conversion
-
-##### net.lua2json
-
-```lua
-string net.lua2json(any value)
-```
-
-Converts a Lua value to a JSON string.
-
-**Parameters:**
-- `value` (any): The Lua value to convert.
-
-**Returns:** JSON string.
-
-```lua
-local data = { name = "Test", value = 42 }
-local json = net.lua2json(data)
--- '{"name":"Test","value":42}'
-```
-
-##### net.json2lua
-
-```lua
-any net.json2lua(string json)
-```
-
-Converts a JSON string to a Lua value.
-
-**Parameters:**
-- `json` (string): The JSON string to parse.
-
-**Returns:** The parsed Lua value.
-
-```lua
-local json = '{"name":"Test","value":42}'
-local data = net.json2lua(json)
--- data.name == "Test", data.value == 42
-```
-
-#### Cross-Environment Execution
-
-##### net.dostring_in
-
-```lua
-string net.dostring_in(string state, string luaCode)
-```
-
-> **Warning:** This function is obsolete and unsafe. You can return values from `a_do_script()` in mission scripting directly instead.
-
-Executes Lua code in a specified internal Lua state.
-
-**Parameters:**
-- `state` (string): Target state name.
-- `luaCode` (string): Lua code to execute.
-
-**Returns:** String result from the executed code.
-
-This API must be explicitly enabled in `$WRITE_DIR/Config/autoexec.cfg`:
-
-```lua
-net.allow_unsafe_api = {
-    "userhooks",  -- Enable in $WRITE_DIR/Scripts/Hooks/*.lua
-    "scripting",  -- Enable in mission scripting (DANGEROUS!)
-    "gui",        -- Enable in system hooks and GUI
-}
-
-net.allow_dostring_in = {
-    "mission",    -- Allow net.dostring_in("scripting", "code")
-}
-```
 
 ### Export API (Export.*)
 

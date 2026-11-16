@@ -23,7 +23,7 @@ The `docs/` directory contains the following documentation:
   - `simulator-scripting-engine.md` - The SSE Lua scripting API for programmatic mission control
   - `lua-basics.md` - Lua language basics for DCS scripting
   - `reference/` - API reference documentation:
-    - `singletons/` - Global namespace objects (world, trigger, coalition, timer, env, coord, land, atmosphere, mission-commands)
+    - `singletons/` - Global namespace objects (world, trigger, coalition, timer, env, coord, land, atmosphere, mission-commands, net)
     - `classes/` - Object types (Unit, Group, Object, Airbase, Weapon, Controller, Spot, StaticObject, CoalitionObject)
     - `events/` - Event system reference
     - `ai/` - AI control system (tasks, commands, options)

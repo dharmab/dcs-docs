@@ -27,7 +27,7 @@ DCS World provides two distinct Lua scripting environments that serve different 
 
 **Server hooks** run outside the simulation in a separate Lua state that persists across mission changes. Server hooks can manage player connections, moderate chat, control mission rotation, and access server administration functions. Unlike mission scripts, server hooks have full access to filesystem and operating system functions. See [Server Hooks](reference/hooks/server-hooks.md) for documentation on server-side scripting.
 
-These two environments cannot directly share variables or call each other's functions. They use different APIs and have different security models. When reading this documentation, be aware of which environment a feature applies to.
+These two environments cannot directly share variables. They use mostly different APIs and have different security models. Both can call the [`net`](reference/singletons/net.md) API, but server hooks can call extra `net` functions; see [Available APIs](reference/hooks/server-hooks.md#available-apis). Server hooks can run code in the mission environment with [`net.dostring_in`](reference/singletons/net.md#netdostring_in). When reading this documentation, be aware of which environment a feature applies to.
 
 ## Lua Basics
 
@@ -91,6 +91,7 @@ The main singletons are:
 | [`trigger`](reference/singletons/trigger.md) | Trigger zones and trigger-style actions like messages |
 | [`coord`](reference/singletons/coord.md) | Coordinate conversions (lat/long to game coordinates) |
 | [`missionCommands`](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
+| [`net`](reference/singletons/net.md) | Chat, player information, and slot control |
 
 ### Objects and Functions
 
@@ -371,6 +372,7 @@ The reference documentation is organized into the [reference/](reference/) direc
 | [world](reference/singletons/world.md) | Event handlers, object searches, and world queries |
 | [coalition](reference/singletons/coalition.md) | Coalition-specific operations, group spawning, and queries |
 | [missionCommands](reference/singletons/mission-commands.md) | F10 radio menu manipulation |
+| [net](reference/singletons/net.md) | Chat, player information, and slot control |
 | [coord](reference/singletons/coord.md) | Coordinate conversions (lat/long, MGRS, game coordinates) |
 | [land](reference/singletons/land.md) | Terrain queries (height, surface type, line of sight, pathfinding) |
 | [atmosphere](reference/singletons/atmosphere.md) | Weather conditions (wind, temperature, pressure) |
