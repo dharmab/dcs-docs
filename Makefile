@@ -1,41 +1,49 @@
 LUA_FILES := $(shell git ls-files '*.lua')
 PY_TOOLS := $(patsubst %/pyproject.toml,%,$(wildcard tools/*/pyproject.toml))
+MISSIONS := $(abspath $(wildcard missions/*/src))
 
 # scipy has no wheels for newer Pythons yet
 export UV_PYTHON := 3.14
 
-.PHONY: format check bun-format bun-format-check lua-format lua-format-check lua-lint python-format python-format-check python-lint python-typecheck
+.DEFAULT_GOAL := help
 
-format: bun-format lua-format python-format
+.PHONY: help format check format-bun check-format-bun format-lua check-format-lua lint-lua format-python check-format-python lint-python typecheck-python check-missions
 
-check: bun-format-check lua-format-check lua-lint python-format-check python-lint python-typecheck
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*## "} /^[a-z-]+:.*## / {printf "  %-22s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-# JSON, YAML, TOML, and Markdown
-bun-format:
+format: format-bun format-lua format-python ## Format all files
+
+check: check-format-bun check-format-lua lint-lua check-format-python lint-python typecheck-python check-missions ## Run all checks (CI)
+
+format-bun: ## Format JSON, YAML, TOML, and Markdown
 	bun fmt
 
-bun-format-check:
+check-format-bun: ## Check JSON, YAML, TOML, and Markdown formatting
 	bun fmt --check
 
-lua-format:
+format-lua: ## Format Lua
 	stylua $(LUA_FILES)
 
-lua-format-check:
+check-format-lua: ## Check Lua formatting
 	stylua --check $(LUA_FILES)
 
-lua-lint:
+lint-lua: ## Lint Lua
 	lua-language-server --check . --checklevel=Warning
 
-python-format:
+format-python: ## Format Python
 	uv run ruff format .
 
-python-format-check:
+check-format-python: ## Check Python formatting
 	uv run ruff format --check .
 
-python-lint:
+lint-python: ## Lint Python
 	uv run ruff check .
 
 # Each tool is a separate uv project, so ty runs in each tool's own environment
-python-typecheck:
+typecheck-python: ## Type check Python
 	uv run ty check scripts missions
 	set -e; for dir in $(PY_TOOLS); do uv run --directory $$dir ty check; done
+
+check-missions: ## Validate mission sources
+	set -e; for dir in $(MISSIONS); do uv run --directory tools/mission-check check-mission check $$dir; done
