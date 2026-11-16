@@ -50,7 +50,7 @@ def stop_server(timeout: int) -> Path | None:
     if not procs:
         print("    No running server found")
         return None
-    exe = Path(procs[0].info["exe"])
+    exe = Path(procs[0].info["exe"])  # ty: ignore[missing-attribute]
     for proc in procs:
         proc.kill()
     _, alive = psutil.wait_procs(procs, timeout=timeout)

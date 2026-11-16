@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "Lua 5.1",
+  "diagnostics.globals": [
+    "AI",
+    "Airbase",
+    "atmosphere",
+    "coalition",
+    "CoalitionObject",
+    "Controller",
+    "coord",
+    "country",
+    "env",
+    "Group",
+    "land",
+    "lfs",
+    "missionCommands",
+    "net",
+    "Object",
+    "SceneryObject",
+    "Spot",
+    "StaticObject",
+    "timer",
+    "trigger",
+    "Unit",
+    "Weapon",
+    "world"
+  ],
+  "diagnostics.disable": ["need-check-nil", "undefined-field"]
+}

@@ -9,7 +9,6 @@ The script reads from the src/ directory and produces a .miz file.
 """
 
 import argparse
-import os
 import sys
 import zipfile
 from pathlib import Path
@@ -137,7 +136,10 @@ def list_contents(miz_path: Path) -> None:
             compressed = info.compress_size
             uncompressed = info.file_size
             ratio = (1 - compressed / uncompressed) * 100 if uncompressed > 0 else 0
-            print(f"  {info.filename:<40} {uncompressed:>8} bytes ({ratio:.0f}% compression)")
+            print(
+                f"  {info.filename:<40} {uncompressed:>8} bytes "
+                f"({ratio:.0f}% compression)"
+            )
 
 
 def main() -> int:

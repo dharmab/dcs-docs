@@ -20,7 +20,7 @@ def build_filename_map(index_path: Path) -> dict[str, str]:
     mapping = {}
 
     # Match patterns like [A-10A](a-10a.md) in table rows
-    pattern = r'\[([^\]]+)\]\(([^)]+\.md)\)'
+    pattern = r"\[([^\]]+)\]\(([^)]+\.md)\)"
     for match in re.finditer(pattern, content):
         aircraft_name = match.group(1)
         filename = match.group(2)
@@ -33,7 +33,8 @@ def extract_aircraft_sections(planes_path: Path) -> dict[str, str]:
     """
     Parse planes.md and extract each aircraft section.
 
-    Returns dict mapping aircraft name to its content (still with original heading levels).
+    Returns dict mapping aircraft name to its content (still with original heading
+    levels).
     """
     content = planes_path.read_text()
 
@@ -50,11 +51,11 @@ def extract_aircraft_sections(planes_path: Path) -> dict[str, str]:
         print("Could not find TOC separator")
         return {}
 
-    aircraft_content = content[toc_end + 5:]  # Skip past the first ---
+    aircraft_content = content[toc_end + 5 :]  # Skip past the first ---
 
     # Split into sections by finding ## headers (not ### or ####)
     # Use regex to split on "\n## " but keep the delimiter with the following section
-    parts = re.split(r'\n(?=## [^#])', aircraft_content)
+    parts = re.split(r"\n(?=## [^#])", aircraft_content)
 
     for part in parts:
         part = part.strip()
@@ -66,7 +67,7 @@ def extract_aircraft_sections(planes_path: Path) -> dict[str, str]:
             part = part[:-3].rstrip()
 
         # Extract aircraft name from first line
-        first_line = part.split('\n')[0]
+        first_line = part.split("\n")[0]
         if first_line.startswith("## "):
             aircraft_name = first_line[3:].strip()
             sections[aircraft_name] = part
@@ -81,7 +82,7 @@ def transform_headings(content: str) -> str:
     - ### -> ##
     - #### -> ###
     """
-    lines = content.split('\n')
+    lines = content.split("\n")
     result = []
 
     for line in lines:
@@ -94,7 +95,7 @@ def transform_headings(content: str) -> str:
         else:
             result.append(line)
 
-    return '\n'.join(result)
+    return "\n".join(result)
 
 
 def main():
@@ -141,8 +142,8 @@ def main():
         transformed = transform_headings(content)
 
         # Ensure trailing newline
-        if not transformed.endswith('\n'):
-            transformed += '\n'
+        if not transformed.endswith("\n"):
+            transformed += "\n"
 
         # Write file
         output_path = planes_dir / filename
@@ -151,7 +152,7 @@ def main():
         created += 1
 
     # Summary
-    print(f"\nSummary:")
+    print("\nSummary:")
     print(f"  Created: {created}")
     print(f"  Skipped (existing): {skipped}")
     print(f"  Errors: {len(errors)}")

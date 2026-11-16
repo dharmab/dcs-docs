@@ -1,0 +1,23 @@
+# Repo-wide ruff, plus the ty environment for standalone scripts outside tools/.
+# Each tool under tools/ is its own uv project.
+[project]
+name = "dcs-docs"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["psutil", "ruff", "ty"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.environment]
+python-version = "3.14"

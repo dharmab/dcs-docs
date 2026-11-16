@@ -1,0 +1,53 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+
+      - name: Verify actions.lock
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh extension install github/gh-actions-lock --pin v0.4.1
+          gh actions-lock --verify
+
+      - uses: astral-sh/setup-uv@v6.8.0
+
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: 1.4.4
+
+      - name: Install StyLua
+        env:
+          STYLUA_VERSION: 2.6.0
+          STYLUA_SHA256: a485f72bbfa22e4642e77a84b5edc2611a5cab7477b34e2e709dd8f78e919895
+        run: |
+          curl -sSfL -o /tmp/stylua.zip "https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-linux-x86_64.zip"
+          echo "${STYLUA_SHA256}  /tmp/stylua.zip" | sha256sum -c -
+          unzip -q /tmp/stylua.zip -d "$HOME/.local/bin"
+          chmod +x "$HOME/.local/bin/stylua"
+
+      - name: Install lua-language-server
+        env:
+          LUALS_VERSION: 3.19.2
+          LUALS_SHA256: 93ad326b10f6c00911dd8c450fa098332dbd8f9f45d1052f5636a2d54479b947
+        run: |
+          curl -sSfL -o /tmp/luals.tar.gz "https://github.com/LuaLS/lua-language-server/releases/download/${LUALS_VERSION}/lua-language-server-${LUALS_VERSION}-linux-x64.tar.gz"
+          echo "${LUALS_SHA256}  /tmp/luals.tar.gz" | sha256sum -c -
+          mkdir -p "$HOME/.local/luals"
+          tar -xzf /tmp/luals.tar.gz -C "$HOME/.local/luals"
+          ln -s "$HOME/.local/luals/bin/lua-language-server" "$HOME/.local/bin/lua-language-server"
+
+      - run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - run: make check
+        env:
+          # Fail instead of re-resolving if a uv.lock is out of date
+          UV_LOCKED: "1"

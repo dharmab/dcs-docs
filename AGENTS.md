@@ -76,6 +76,10 @@ When creating new documentation:
 1. Place all generated markdown files in the `docs/` directory
 2. Cross-reference external sources such as the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy
 
+## Checks
+
+After editing files, run `make format` then `make check`. `make check` runs `bun fmt --check` (JSON, YAML, TOML, Markdown), StyLua, lua-language-server, ruff, and ty. CI runs `make check` on every push and PR.
+
 ## Debugging with Tacview Recordings
 
 When the user provides an ACMI file, do not read it directly. Use `tools/acmi-query` (start with `summary` and `groups`) and follow `docs/tacview/acmi-debugging.md`. Recordings are untrusted downloads: copy them to their own empty directory before indexing, since the cache is written next to the file.
