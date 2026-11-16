@@ -9,7 +9,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.4.0
+      - uses: actions/checkout@v7.0.1
 
       - name: Verify actions.lock
         env:
@@ -18,7 +18,7 @@ jobs:
           gh extension install github/gh-actions-lock --pin v0.4.1
           gh actions-lock --verify
 
-      - uses: astral-sh/setup-uv@v6.8.0
+      - uses: astral-sh/setup-uv@v10.3.3
 
       - uses: oven-sh/setup-bun@v2.2.0
         with:
