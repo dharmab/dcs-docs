@@ -288,6 +288,9 @@ OperationInfinity.state = {
     -- Player tracking
     knownPlayers = {},
 
+    -- Group IDs with per-group F10 items, keyed by group name
+    menuGroups = {},
+
     -- Marker counter
     markerCounter = 1000,
 
@@ -735,7 +738,7 @@ function OperationInfinity:formatCoordinates(pos)
     return llStr, mgrsStr
 end
 
-function OperationInfinity:displayCoordinates()
+function OperationInfinity:displayCoordinates(groupId)
     if not self.state.missionGenerated then
         return
     end
@@ -764,7 +767,12 @@ function OperationInfinity:displayCoordinates()
         self.state.difficulty
     )
 
-    trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 30)
+    -- No group means the generation-complete announcement, which goes to everyone
+    if groupId then
+        trigger.action.outTextForGroup(groupId, msg, 30)
+    else
+        trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 30)
+    end
 end
 
 -- Callsigns and frequencies of all support assets, one per line
@@ -787,20 +795,27 @@ function OperationInfinity:getSupportAssetText()
     return table.concat(lines, "\n")
 end
 
-function OperationInfinity:setupMissionInfoMenu()
-    missionCommands.addCommandForCoalition(
-        coalition.side.BLUE,
+function OperationInfinity:addMissionInfoMenu(groupId)
+    missionCommands.removeItemForGroup(groupId, { "Mission Info" })
+    missionCommands.addCommandForGroup(
+        groupId,
         "Mission Info",
         nil,
-        function() OperationInfinity:displayCoordinates() end
+        function() OperationInfinity:displayCoordinates(groupId) end
     )
+end
+
+function OperationInfinity:setupMissionInfoMenu()
+    for _, groupId in pairs(self.state.menuGroups) do
+        self:addMissionInfoMenu(groupId)
+    end
 end
 
 -- =============================================================================
 -- COMMS PLAN DISPLAY
 -- =============================================================================
 
-function OperationInfinity:displayCommsPlan()
+function OperationInfinity:displayCommsPlan(groupId)
     local msg = [[=== COMMUNICATIONS PLAN ===
 Radio 1 to talk, radio 2 on SkyEye
 
@@ -842,16 +857,30 @@ GUARD
   Military: 243.0 MHz AM
   Civil: 121.5 MHz VHF]]
 
-    trigger.action.outTextForCoalition(coalition.side.BLUE, msg, 45)
+    trigger.action.outTextForGroup(groupId, msg, 45)
 end
 
-function OperationInfinity:setupCommsPlanMenu()
-    missionCommands.addCommandForCoalition(
-        coalition.side.BLUE,
+-- Comms Plan and Mission Info are per-group so replies go only to the
+-- requesting group. Called for every player group by checkForNewPlayers.
+function OperationInfinity:setupGroupMenus(group)
+    local groupName = group:getName()
+    if self.state.menuGroups[groupName] then
+        return
+    end
+    local groupId = group:getID()
+    self.state.menuGroups[groupName] = groupId
+
+    -- Dynamic spawn can reuse a group ID, so clear any items left from an earlier group
+    missionCommands.removeItemForGroup(groupId, { "Comms Plan" })
+    missionCommands.addCommandForGroup(
+        groupId,
         "Comms Plan",
         nil,
-        function() OperationInfinity:displayCommsPlan() end
+        function() OperationInfinity:displayCommsPlan(groupId) end
     )
+    if self.state.missionGenerated then
+        self:addMissionInfoMenu(groupId)
+    end
 end
 
 -- =============================================================================
@@ -1035,8 +1064,14 @@ function OperationInfinity:checkForNewPlayers()
 
     for _, player in ipairs(players) do
         if player and player:isExist() then
+            local group = player:getGroup()
+            if group then
+                self:setupGroupMenus(group)
+            end
+
             local name = player:getName()
-            if not self.state.knownPlayers[name] then
+            if group and not self.state.knownPlayers[name] then
+                local groupId = group:getID()
                 self.state.knownPlayers[name] = true
                 log("New player joined: " .. name)
 
@@ -1044,10 +1079,10 @@ function OperationInfinity:checkForNewPlayers()
                 timer.scheduleFunction(function()
                     if OperationInfinity.state.missionGenerated then
                         -- Mission already generated - show coordinates
-                        OperationInfinity:displayCoordinates()
+                        OperationInfinity:displayCoordinates(groupId)
                     else
                         -- Mission not yet generated - show welcome message with instructions
-                        trigger.action.outTextForCoalition(coalition.side.BLUE,
+                        trigger.action.outTextForGroup(groupId,
                             "=== OPERATION INFINITY ===\n\n" ..
                             "Welcome to Operation Infinity!\n\n" ..
                             "Use the F10 menu to select:\n" ..
@@ -1147,7 +1182,6 @@ function OperationInfinity:init()
 
     -- Setup F10 menus
     self:setupMenu()
-    self:setupCommsPlanMenu()
 
     -- Start mission time limit countdown
     self:startMissionTimer()

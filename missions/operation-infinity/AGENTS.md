@@ -293,13 +293,15 @@ F10 Other
 │       ├── 45 Minutes (Western Caucasus)
 │       ├── 90 Minutes (Central Caucasus)
 │       └── 180 Minutes (Eastern Caucasus)
-├── Comms Plan
-└── Mission Info              (added after generation)
+├── Comms Plan                (per group)
+└── Mission Info              (per group, added after generation)
 ```
+
+Settings items are coalition-wide; their confirmations go to the whole coalition. Comms Plan and Mission Info are added per player group by the late-joiner loop and reply only to that group.
 
 ## Late Joiner Support
 
-A timer checks every 5 seconds for new players. Each new player triggers a coalition-wide message: the welcome text before generation, or the target area and support assets after it. Planned, not implemented: EPLRS datalink membership for late joiners.
+A timer checks every 5 seconds for new players. Each new player gets a message sent only to their group: the welcome text before generation, or the target area and support assets after it. The same loop adds the per-group F10 items. Planned, not implemented: EPLRS datalink membership for late joiners.
 
 ## Mission Time Limit
 
