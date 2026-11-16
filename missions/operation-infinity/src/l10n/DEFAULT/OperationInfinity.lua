@@ -819,20 +819,27 @@ function OperationInfinity:displayCommsPlan(groupId)
     local msg = [[=== COMMUNICATIONS PLAN ===
 Radio 1 to talk, radio 2 on SkyEye
 
-MAIN RADIO PRESETS (UHF, all aircraft)
-  1 Strike 255.1 / 2 SkyEye 255.3
-  3-6 Home block:
-    Krymsk: 3 Tower 254.1 / 4 Ground 254.3 / 5 Radar 254.5 / 6 Stennis 254.7
-    Stennis: 3 Stennis 254.7 / 4 Tower 254.1 / 5 Radar 254.5 / 6 Ground 254.3
-  7-8 Tankers:
-    Boom (F-4E, F-16, F-15E, A-10): 7 Texaco 270.5 / 8 Shell 270.7
-    Probe (F/A-18, F-14, M-2000C, F1, JF-17): 7 Arco 1-1 270.1 / 8 Arco 2-1 270.3
-  9-13 Red 1-5: 260.1-260.9 (.2 steps)
-  14-18 Blue 1-5: 261.1-261.9 (.2 steps)
-  19 Guard 243.0 / 20 Green 1 262.1 (F-4E has presets 1-18 only)
+PRIMARY PRESETS
+NAME          FREQ          SHORE CH   CVN-74 CH
+Strike        255.1         1          1
+SkyEye        255.3         2          2
+Krymsk TWR    254.1         3          4
+Krymsk GND    254.3         4          6
+Krymsk RDR    254.5         5          5
+Stennis       254.7         6          3
+Texaco 1-1    270.5         7          -
+Shell 1-1     270.7         8          -
+Arco 1-1      270.1         7          7
+Arco 2-1      270.3         8          8
+Red 1-5       260.1-260.9   9-13       9-13
+Blue 1-5      261.1-261.9   14-18      14-18
+Guard         243.0         19         19
+Green 1       262.1         20         20
 
-SECOND RADIO PRESETS
-  V/UHF radios: 1 SkyEye 124.1 VHF, 2-20 = main 1-19
+Note: F-4E has presets 1-18 only.
+
+AUX PRESETS
+  V/UHF radios: 1 SkyEye 124.1 VHF, 2-20 = PRIMARY 1-19
   F-16 COMM2: 1 SkyEye 124.1, 2 SkyEye 32.1 FM,
     3 Civil Guard 121.5, 4-8 Yellow 1-5, 9-13 Orange 1-5
   A-10 FM: 1 SkyEye 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
@@ -846,15 +853,15 @@ FM INTERFLIGHT: Yellow 1-5 30.1-30.9, Orange 1-5 31.1-31.9
 CVN-74 STENNIS (~50 nm SW of Krymsk)
   TACAN 74X STN, ICLS 4, Link 4 336.0, ACLS
 
-SUPPORT
-  AWACS (Magic): datalink only, no voice
-  Arco (basket): TACAN 101X, 21,000 ft, 250 KIAS
-  Texaco (boom): TACAN 100X, 25,000 ft, 280 KIAS
-  Shell (slow boom): TACAN 102X, 15,000 ft, 200 KIAS
-  Arco 2-1 (S-3B basket): TACAN 103X, 8,000 ft, 250 KIAS over the carrier area
+TANKERS
+CALLSIGN   TYPE        NOTE        TACAN
+Texaco 1-1 KC-135      Fast boom   100X
+Arco 1-1   KC-135MPRS  Basket      101X
+Shell 1-1  KC-135      Slow boom   102X
+Arco 2-1   S-3B        Recovery    103X
 
-GUARD
-  Military: 243.0 MHz AM
+Note: Due to a DCS bug, Arco 1-1 and Arco 2-1 both show as Arco 1 in the radio menu.
+
   Civil: 121.5 MHz VHF]]
 
     trigger.action.outTextForGroup(groupId, msg, 45)
