@@ -198,6 +198,37 @@ timer.scheduleFunction(showTimeMessage, nil, timer.getTime() + 10)
 
 The scheduled function can return a number to reschedule itself at that mission time, or return nothing (nil) to stop running.
 
+### Startup and Long-Running Work
+
+The scripting engine is unreliable right after mission start while assets are still loading. Delay mission scripts by at least 5 seconds after start, longer for players on slow machines.
+
+Scripts run on the simulation thread, so long blocking calls freeze or stutter the game. Freezes usually show up in `dcs.log` as this pair of lines:
+
+```
+ModelTimeQuantizer: ANTIFREEZE ENABLED
+ModelTimeQuantizer: SAME MODEL TIME
+```
+
+ED hasn't documented these messages. They appear during freezes from many causes, including mods, `Export.lua` hooks, and heavy mission scripts. If they show up while your script is running, the script is probably blocking too long.
+
+Spread large jobs across frames with a batch scheduler. Operation Infinity's [`BatchScheduler.lua`](../../missions/operation-infinity/src/l10n/DEFAULT/BatchScheduler.lua) is a reference implementation with two functions:
+
+- `BatchScheduler:processArray` calls a callback for each array item, stops when the per-frame time budget is spent, and reschedules itself for the next frame until done.
+- `BatchScheduler:runSequence` runs async steps in order. Each step receives a `done(err)` callback and the next step starts on the following frame.
+
+```lua
+BatchScheduler:processArray({
+    array = groupsToSpawn,
+    callback = function(groupData, index, context)
+        coalition.addGroup(context.country, Group.Category.GROUND, groupData)
+    end,
+    onComplete = function(context)
+        env.info("Spawned " .. #groupsToSpawn .. " groups")
+    end,
+    context = { country = country.id.RUSSIA },
+})
+```
+
 ## Adding Scripts to Missions
 
 Scripts can be embedded in missions through several mechanisms in the Mission Editor:

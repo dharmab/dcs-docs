@@ -505,6 +505,12 @@ Convoys that are stopped and resumed may move at reduced speed.
 
 **Workaround:** Avoid stopping convoys mid-route. If you need timed arrivals, use `start_time` or late activation instead.
 
+### Vehicle Ignores Waypoint With Matching Heading
+
+A vehicle may not move if its target waypoint heading exactly matches its current heading.
+
+**Workaround:** Offset the waypoint heading slightly, typically by -1 degree.
+
 ## Placement Tips
 
 ### Vehicle Spacing

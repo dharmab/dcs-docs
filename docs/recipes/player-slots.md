@@ -313,6 +313,21 @@ The waypoint `type` and `action` fields determine how the aircraft spawns:
 | Hot on ramp | `"TakeOffParkingHot"` | `"From Parking Area Hot"` |
 | On runway | `"TakeOff"` | `"From Runway"` |
 
+## Spawn Known Issues
+
+**AI parking starts are unreliable.** AI aircraft starting from parking at airfields, FARPs, or carriers often get stuck taxiing, hit obstacles, or never reach the runway. Use runway or catapult starts for AI and reserve parking starts for players, who can sort out problems themselves.
+
+**Carrier spawns deadlock at time zero.** Aircraft set to spawn on a carrier at exactly mission time 0 can deadlock on deck. Set `start_time` to 1 instead.
+
+**Large aircraft need large parking slots.** Aircraft with wingspans over about 40 m (such as the C-130) may fail to spawn in standard slots. When assigning parking programmatically, try large spots first, then fall back to standard ramp slots.
+
+**Some parking slots are broken:**
+
+- **Nevatim (Sinai):** Only slots 55-66 work reliably.[^nevatim-bugs]
+- **Ramon (Sinai):** Slots 1-6, 13-18, and 61 are broken.[^ramon-bugs]
+
+**In-flight spawn altitude is MSL.** Account for terrain elevation. Kerman (Persian Gulf) sits at about 5,700 ft MSL, so an aircraft spawned at 2,000 m there is underground.
+
 ---
 
 ## Traditional Slot Examples
@@ -645,3 +660,8 @@ When adding player slots, verify:
 - [Mission Editor Guide](../mission-editor.md) - GUI-based mission creation
 - [Aircraft Reference](../units/planes.md) - Aircraft type strings and loadouts
 - [DCS Forum: Dynamic Spawn Guide](https://forum.dcs.world/topic/352814-dynamic-spawn-guide/) - Official ED guide
+## References
+
+[^nevatim-bugs]: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).
+
+[^ramon-bugs]: [Ramon Airbase taxiways and parking spots](https://forum.dcs.world/topic/343531-ramon-airbase-taxiways-and-parking-spots/) and [Sticky Tarmac at Ramon Airbase](https://forum.dcs.world/topic/364031-sticky-tarmac-at-ramon-airbase/).

@@ -249,6 +249,8 @@ For polygon zones (quad-point zones), the returned table contains:
 
 The `point` field contains the center position of the zone. The `verticies` field contains an array of Vec3 values representing the corner points. The API uses "verticies" (misspelled) rather than "vertices."
 
+Vertex order follows how the zone was drawn, so it may be clockwise or counter-clockwise. Geometry code that needs a specific orientation (such as triangulation) should check the signed area and reverse the points if needed.
+
 ```lua
 local zone = trigger.misc.getZone("LandingZone")
 if zone then
