@@ -164,9 +164,10 @@ Re-export after a DCS update that changes terrains, and review the
 
 ```bash
 cd tools/terrain-geodata
-uv run terrain-geodata export --dcs-path "<DCS World folder>" --out ../../docs/data/terrains
+uv run terrain-geodata export --out ../../docs/data/terrains
 ```
 
-`terrain.json` records the DCS version the files came from.
+On Windows the install is found through the registry; elsewhere pass
+`--dcs-path`. `terrain.json` records the DCS version the files came from.
 
 [^proj]: Fitted by the export tool against `Beacons.lua` (`position` and `positionGeo` of each beacon) and the Mission Editor town labels paired with `Map/towns.lua`. The Caucasus and Syria parameters match pydcs's `dcs/terrain/projections`.

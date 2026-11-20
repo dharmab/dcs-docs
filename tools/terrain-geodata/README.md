@@ -9,14 +9,15 @@ for what the output contains and how to use it.
 
 ```bash
 cd tools/terrain-geodata
-uv run terrain-geodata list --dcs-path "D:/games/dcs/DCS World"
-uv run terrain-geodata export --dcs-path "D:/games/dcs/DCS World"
-uv run terrain-geodata export --dcs-path "D:/games/dcs/DCS World" --terrain Caucasus
+uv run terrain-geodata list
+uv run terrain-geodata export --out ../../docs/data/terrains
+uv run terrain-geodata export --out ../../docs/data/terrains --terrain Caucasus
 ```
 
-`--dcs-path` can also come from the `DCS_PATH` environment variable. `--out`
-defaults to `docs/data/terrains` relative to the current directory, so pass
-`--out ../../docs/data/terrains` when running from this folder. `--resolution`
+On Windows the install folder is read from the registry (standalone or Steam).
+Elsewhere, or to use a different install, pass `--dcs-path` or set the
+`DCS_PATH` environment variable. `--out` defaults to `docs/data/terrains`
+relative to the current directory. `--resolution`
 sets the land cover pixel size (default 100 m). A full export of every terrain
 takes several minutes; GermanyCW and Kola are the slowest.
 
