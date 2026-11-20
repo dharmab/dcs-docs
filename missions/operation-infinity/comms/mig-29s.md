@@ -43,7 +43,3 @@ No mission presets. Tune these in SRS.
 | 31.9 FM  | Orange 5    |
 | 243.0 AM | Guard       |
 | 121.5 AM | Civil Guard |
-
-## CVN-74 Stennis
-
-254.7 AM, TACAN 74X STN
