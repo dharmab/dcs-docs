@@ -210,7 +210,7 @@ local function channelOf(radio, freq)
     return nil
 end
 
-local function render(env, template, plan, title)
+local function render(env, template, plan, title, carrierCapable)
     local unit = template.data.units[1]
     local info = CommsCards.aircraft[unit.type]
     local out = { "# " .. title, "" }
@@ -293,20 +293,18 @@ local function render(env, template, plan, title)
     local sys = CarrierOps.config.systems
     out[#out + 1] = "## CVN-74 Stennis"
     out[#out + 1] = ""
-    out[#out + 1] = string.format(
-        "%s, TACAN %d%s %s, ICLS %d, Link 4 %.1f, ACLS",
+    local line = string.format(
+        "%s, TACAN %d%s %s",
         formatFreq(sys.radioFrequency, sys.radioModulation),
         sys.tacanChannel,
         sys.tacanMode,
-        sys.tacanCallsign,
-        sys.iclsChannel,
-        sys.link4Frequency
+        sys.tacanCallsign
     )
-    out[#out + 1] = ""
-    out[#out + 1] = "## Magic"
-    out[#out + 1] = ""
-    out[#out + 1] =
-        "Two stations use the callsign Magic. The Magic presets are SkyEye GCI, which has voice. The in-game E-3A AWACS is datalink only, with no voice."
+    -- Landing aids only matter to types that can recover aboard
+    if carrierCapable then
+        line = line .. string.format(", ICLS %d, Link 4 %.1f, ACLS", sys.iclsChannel, sys.link4Frequency)
+    end
+    out[#out + 1] = line
     return table.concat(out, "\n") .. "\n"
 end
 
@@ -319,11 +317,12 @@ function CommsCards.render(env)
         local unitType = template.data.units[1].type
         local info = assert(CommsCards.aircraft[unitType], "no comms card info for " .. unitType)
         local file, title = info.file, info.name
-        if hasCarrierVariant(templates, unitType) then
+        local carrierCapable = hasCarrierVariant(templates, unitType)
+        if carrierCapable then
             file = file .. "-" .. template.base
             title = title .. (template.base == "carrier" and " (Carrier)" or " (Shore)")
         end
-        cards[file .. ".md"] = render(env, template, plan, title)
+        cards[file .. ".md"] = render(env, template, plan, title, carrierCapable)
     end
     return cards
 end
