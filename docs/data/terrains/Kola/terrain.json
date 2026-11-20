@@ -1,0 +1,61 @@
+{
+  "theatre": "Kola",
+  "terrain_folder": "Kola",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=21 +k_0=0.9996 +x_0=-62702 +y_0=-7543625 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 21,
+    "scale_factor": 0.9996,
+    "false_easting": -62702,
+    "false_northing": -7543625,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 836,
+    "fit_rms_error_m": 0.034,
+    "fit_max_error_m": 0.059
+  },
+  "places": {
+    "count": 787
+  },
+  "features": {
+    "layers": {
+      "places": 787,
+      "roads": 21608,
+      "railways": 1309,
+      "rivers": 0,
+      "power_lines": 0,
+      "borders": 0,
+      "urban_areas": 0,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "Railway/LINELIST/colorIndex=7": "railways",
+      "Railway/TRI/colorIndex=7": "skipped",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Road/TRI/colorIndex=5": "skipped"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 26357,
+    "height": 18856,
+    "extent": {
+      "x_min": -502200.0,
+      "x_max": 1383400.0,
+      "z_min": -1776300.0,
+      "z_max": 859400.0
+    },
+    "area_km2": {
+      "nodata": 187216.5,
+      "land": 377226.0,
+      "field": 655.4,
+      "forest": 306719.5,
+      "town": 941.0,
+      "beach": 108.7,
+      "river": 1063.6,
+      "lake": 40197.4,
+      "sea": 4055689.0,
+      "runway": 58.9
+    }
+  }
+}

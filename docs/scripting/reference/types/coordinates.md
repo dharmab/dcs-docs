@@ -13,7 +13,7 @@ Vec2 = {
 }
 ```
 
-The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the North-South position, where positive values indicate positions to the North.
+The `x` field contains the north-south position, where positive values are to the north. The `y` field contains the east-west position, where positive values are to the east.
 
 ## Vec3
 
@@ -27,7 +27,7 @@ Vec3 = {
 }
 ```
 
-The `x` field contains the East-West position, where positive values indicate positions to the East. The `y` field contains the altitude, where positive values indicate positions above sea level. The `z` field contains the North-South position, where positive values indicate positions to the North.
+The `x` field contains the north-south position, where positive values are to the north. The `y` field contains the altitude, where positive values are above sea level. The `z` field contains the east-west position, where positive values are to the east. A Vec3 `{x, y, z}` corresponds to the Vec2 `{x = x, y = z}`.
 
 ## Position3
 

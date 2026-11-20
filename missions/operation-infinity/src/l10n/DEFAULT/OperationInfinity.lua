@@ -186,7 +186,7 @@ OperationInfinity.config = {
             x = -7000 - (15 * METERS_PER_NM),
             y = 295000,
             trackLength = 50000, -- 50km racetrack
-            heading = 0, -- East-West track
+            heading = 0, -- North-South track
         },
         -- Gudauta/Sukhumi: 50 nm SE of Krymsk (toward the target area)
         central_coast = {
@@ -365,7 +365,7 @@ function OperationInfinity:addFEBAShape()
     end
 
     -- Draw arrows from each ISAF position pointing toward enemy (along approach direction)
-    local approachDir = frontline.approachDir or { x = 0, y = 1 } -- Default to north if not set
+    local approachDir = frontline.approachDir or { x = 0, y = 1 } -- Default to east if not set
     for _, pos in ipairs(positions) do
         self.state.markerCounter = self.state.markerCounter + 1
         local arrowEnd = {

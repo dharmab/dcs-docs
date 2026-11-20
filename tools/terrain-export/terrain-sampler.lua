@@ -71,7 +71,7 @@ TerrainSampler.config = {
     maxChunkTime = 0.01, -- Reduced wall clock time (seconds) per chunk
 
     -- Theatre-specific bounds (approximate, in game coordinates)
-    -- x = East-West, z = North-South
+    -- x = North-South (positive north), z = East-West (positive east)
     theatreBounds = {
         ["Caucasus"] = {
             minX = -400000,
@@ -563,10 +563,10 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
 
     local origin = { x = 0, y = 0 }
     local directions = {
-        { name = "East", dx = 1, dz = 0 },
-        { name = "West", dx = -1, dz = 0 },
-        { name = "North", dx = 0, dz = 1 },
-        { name = "South", dx = 0, dz = -1 },
+        { name = "North", dx = 1, dz = 0 },
+        { name = "South", dx = -1, dz = 0 },
+        { name = "East", dx = 0, dz = 1 },
+        { name = "West", dx = 0, dz = -1 },
     }
     local bounds = { minX = 0, maxX = 0, minZ = 0, maxZ = 0 }
     local minSteps = math.floor((minArea / 2) / stepSize)
@@ -604,22 +604,22 @@ function TerrainSampler:detectBoundsFromOrigin(stepSize, maxDistance, flatThresh
             end
         end
         local dist = lastValid * stepSize
-        if dir.name == "East" then
+        if dir.name == "North" then
             bounds.maxX = origin.x + dist
-            self:log(string.format("Detected East bound at x=%.0f (%s after %d steps)", bounds.maxX, reason, lastValid))
-        elseif dir.name == "West" then
-            bounds.minX = origin.x - dist
-            self:log(string.format("Detected West bound at x=%.0f (%s after %d steps)", bounds.minX, reason, lastValid))
-        elseif dir.name == "North" then
-            bounds.maxZ = origin.y + dist
             self:log(
-                string.format("Detected North bound at z=%.0f (%s after %d steps)", bounds.maxZ, reason, lastValid)
+                string.format("Detected North bound at x=%.0f (%s after %d steps)", bounds.maxX, reason, lastValid)
             )
         elseif dir.name == "South" then
-            bounds.minZ = origin.y - dist
+            bounds.minX = origin.x - dist
             self:log(
-                string.format("Detected South bound at z=%.0f (%s after %d steps)", bounds.minZ, reason, lastValid)
+                string.format("Detected South bound at x=%.0f (%s after %d steps)", bounds.minX, reason, lastValid)
             )
+        elseif dir.name == "East" then
+            bounds.maxZ = origin.y + dist
+            self:log(string.format("Detected East bound at z=%.0f (%s after %d steps)", bounds.maxZ, reason, lastValid))
+        elseif dir.name == "West" then
+            bounds.minZ = origin.y - dist
+            self:log(string.format("Detected West bound at z=%.0f (%s after %d steps)", bounds.minZ, reason, lastValid))
         end
     end
     self:log(

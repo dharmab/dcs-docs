@@ -1,0 +1,60 @@
+{
+  "theatre": "Nevada",
+  "terrain_folder": "Nevada",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=-117 +k_0=0.9996 +x_0=-193996.810 +y_0=-4410028.066 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": -117,
+    "scale_factor": 0.9996,
+    "false_easting": -193996.8103944795,
+    "false_northing": -4410028.066004914,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 262,
+    "fit_rms_error_m": 0.041,
+    "fit_max_error_m": 0.073
+  },
+  "places": {
+    "count": 221
+  },
+  "features": {
+    "layers": {
+      "places": 221,
+      "roads": 164,
+      "railways": 0,
+      "rivers": 0,
+      "power_lines": 368,
+      "borders": 0,
+      "urban_areas": 34,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "ELT/LINELIST/colorIndex=7": "power_lines",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Town/TRI/colorIndex=4": "urban_areas"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 8477,
+    "height": 7616,
+    "extent": {
+      "x_min": -709100.0,
+      "x_max": 52500.0,
+      "z_min": -456000.0,
+      "z_max": 391700.0
+    },
+    "area_km2": {
+      "nodata": 0.1,
+      "land": 642320.7,
+      "field": 536.5,
+      "forest": 0.0,
+      "town": 1352.1,
+      "beach": 22.0,
+      "river": 81.2,
+      "lake": 940.8,
+      "sea": 0.0,
+      "runway": 354.9
+    }
+  }
+}

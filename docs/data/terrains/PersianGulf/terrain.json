@@ -1,0 +1,64 @@
+{
+  "theatre": "PersianGulf",
+  "terrain_folder": "PersianGulf",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=57 +k_0=0.9996 +x_0=75756 +y_0=-2894933 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 57,
+    "scale_factor": 0.9996,
+    "false_easting": 75756,
+    "false_northing": -2894933,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 486,
+    "fit_rms_error_m": 0.039,
+    "fit_max_error_m": 0.072
+  },
+  "places": {
+    "count": 385
+  },
+  "features": {
+    "layers": {
+      "places": 385,
+      "roads": 1126,
+      "railways": 222,
+      "rivers": 0,
+      "power_lines": 2048,
+      "borders": 8,
+      "urban_areas": 946,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "ELT/LINELIST/colorIndex=9": "power_lines",
+      "Lake/TRI/colorIndex=6": "skipped",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Road/LINELIST/colorIndex=9": "railways",
+      "Road/TRI/colorIndex=9": "skipped",
+      "Town/TRI/colorIndex=4": "urban_areas",
+      "Undef/LINELIST/colorIndex=10": "borders"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 19713,
+    "height": 13405,
+    "extent": {
+      "x_min": -474800.0,
+      "x_max": 865700.0,
+      "z_min": -1141400.0,
+      "z_max": 829900.0
+    },
+    "area_km2": {
+      "nodata": 27665.1,
+      "land": 2098921.2,
+      "field": 11790.9,
+      "forest": 0.0,
+      "town": 4339.4,
+      "beach": 31.6,
+      "river": 82.8,
+      "lake": 3144.1,
+      "sea": 496474.2,
+      "runway": 78.4
+    }
+  }
+}

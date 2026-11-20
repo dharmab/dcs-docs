@@ -1,0 +1,58 @@
+{
+  "theatre": "MarianaIslandsWWII",
+  "terrain_folder": "MarianasWWII",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=147 +k_0=0.9996 +x_0=238418 +y_0=-1491840 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 147,
+    "scale_factor": 0.9996,
+    "false_easting": 238418,
+    "false_northing": -1491840,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 22,
+    "fit_rms_error_m": 0.042,
+    "fit_max_error_m": 0.063
+  },
+  "places": {
+    "count": 22
+  },
+  "features": {
+    "layers": {
+      "places": 22,
+      "roads": 0,
+      "railways": 0,
+      "rivers": 0,
+      "power_lines": 0,
+      "borders": 0,
+      "urban_areas": 0,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "Undef/TRI/colorIndex=1": "skipped"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 24898,
+    "height": 18812,
+    "extent": {
+      "x_min": -598200.0,
+      "x_max": 1283000.0,
+      "z_min": -1215900.0,
+      "z_max": 1273900.0
+    },
+    "area_km2": {
+      "nodata": 0.0,
+      "land": 0.3,
+      "field": 40.8,
+      "forest": 805.4,
+      "town": 48.4,
+      "beach": 0.9,
+      "river": 63.5,
+      "lake": 3.3,
+      "sea": 4682835.1,
+      "runway": 14.1
+    }
+  }
+}

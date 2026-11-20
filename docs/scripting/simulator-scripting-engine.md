@@ -68,7 +68,7 @@ The terrain engine does not provide a one-to-one representation of real-world ge
 
 The native coordinate system uses X, Y, and Z axes measured in meters. The [coord](reference/singletons/coord.md) singleton provides conversion functions between this native system and real-world coordinate systems including latitude/longitude (geodetic coordinates) and MGRS (Military Grid Reference System, based on UTM). These conversions allow scripts to work with familiar geographic coordinates while the engine operates in its internal Cartesian space.
 
-Vec2 and Vec3 use different conventions for the "y" axis. In Vec2, `y` is the North-South position. In Vec3, `y` is altitude while `z` is North-South. This difference is a common source of confusion when converting between the two formats. See [Coordinate Types](reference/types/coordinates.md) for formal type definitions.
+Vec2 and Vec3 share the `x` axis (north-south, positive north) but use different conventions for the "y" axis. In Vec2, `y` is the east-west position (positive east). In Vec3, `y` is altitude while `z` is east-west. This difference is a common source of confusion when converting between the two formats. See [Coordinate Types](reference/types/coordinates.md) for formal type definitions.
 
 ### Time Values
 

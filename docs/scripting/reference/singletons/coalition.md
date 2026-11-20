@@ -51,7 +51,7 @@ groupData = {
 }
 ```
 
-The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the East-West position), and `y` (the North-South position using Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number).
+The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the north-south position, positive north), and `y` (the east-west position, positive east, using the Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number).
 
 The optional fields are `groupId` (a custom group ID that is auto-generated if omitted), `start_time` (spawn delay in seconds where 0 means immediate), `lateActivation` (whether to require a trigger to activate), `hidden` (whether to hide from the F10 map), `hiddenOnMFD` (whether to hide from aircraft MFDs), `route` (waypoints and tasks), and `uncontrolled` (for aircraft, whether to spawn inactive).
 

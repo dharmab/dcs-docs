@@ -1,0 +1,65 @@
+{
+  "theatre": "Caucasus",
+  "terrain_folder": "Caucasus",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=33 +k_0=0.9996 +x_0=-99517 +y_0=-4998115 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 33,
+    "scale_factor": 0.9996,
+    "false_easting": -99517,
+    "false_northing": -4998115,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 1809,
+    "fit_rms_error_m": 0.04,
+    "fit_max_error_m": 0.069
+  },
+  "places": {
+    "count": 1759
+  },
+  "features": {
+    "layers": {
+      "places": 1759,
+      "roads": 2190,
+      "railways": 561,
+      "rivers": 2109,
+      "power_lines": 357,
+      "borders": 27,
+      "urban_areas": 2853,
+      "runways": 26
+    },
+    "map_overlay_sources": {
+      "ELT/LINELIST/colorIndex=8": "power_lines",
+      "River/LINELIST/colorIndex=11": "rivers",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Road/LINELIST/colorIndex=8": "railways",
+      "Road/TRI/colorIndex=5": "skipped",
+      "Runway/TRI/colorIndex=7": "runways",
+      "Town/TRI/colorIndex=4": "urban_areas",
+      "Undef/LINELIST/colorIndex=13": "borders"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 15301,
+    "height": 7601,
+    "extent": {
+      "x_min": -490100.0,
+      "x_max": 270000.0,
+      "z_min": -570000.0,
+      "z_max": 960100.0
+    },
+    "area_km2": {
+      "nodata": 0.0,
+      "land": 542710.7,
+      "field": 62460.7,
+      "forest": 75774.8,
+      "town": 13418.9,
+      "beach": 211.5,
+      "river": 2695.6,
+      "lake": 4913.9,
+      "sea": 460804.2,
+      "runway": 38.8
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "theatre": "GermanyCW",
+  "terrain_folder": "GermanyColdWar",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=21 +k_0=0.9996 +x_0=35427.617 +y_0=-6061633.131 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 21,
+    "scale_factor": 0.9996,
+    "false_easting": 35427.61672601121,
+    "false_northing": -6061633.130931277,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 540,
+    "fit_rms_error_m": 0.038,
+    "fit_max_error_m": 0.065
+  },
+  "places": {
+    "count": 127
+  },
+  "features": {
+    "layers": {
+      "places": 127,
+      "roads": 173,
+      "railways": 167,
+      "rivers": 0,
+      "power_lines": 0,
+      "borders": 20,
+      "urban_areas": 27,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "Building/TRI/colorIndex=12": "skipped",
+      "GeoName/TRI/colorIndex=13": "skipped",
+      "Road/LINELIST/colorIndex=11": "railways",
+      "Road/LINELIST/colorIndex=12": "borders",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Town/TRI/colorIndex=4": "urban_areas"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 12194,
+    "height": 10207,
+    "extent": {
+      "x_min": -744800.0,
+      "x_max": 275900.0,
+      "z_min": -1280500.0,
+      "z_max": -61100.0
+    },
+    "area_km2": {
+      "nodata": 111418.9,
+      "land": 586968.9,
+      "field": 66099.1,
+      "forest": 137541.4,
+      "town": 16416.6,
+      "beach": 138.7,
+      "river": 2500.0,
+      "lake": 5863.7,
+      "sea": 317240.7,
+      "runway": 453.6
+    }
+  }
+}
