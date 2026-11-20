@@ -230,6 +230,22 @@ function Terrain:isValidTerrainForUnits(center, options)
     return true, nil
 end
 
+-- Check a single unit's position for forest, water, and off-mesh ground.
+-- Slope, roughness, and scenery are checked once at the group center.
+function Terrain:isValidUnitPosition(pos)
+    return not self:isBlockedLandCover(pos) and self:isValidSurfaceType(pos)
+end
+
+-- Check every unit in a list of units with x and y
+function Terrain:areValidUnitPositions(units)
+    for _, unit in ipairs(units) do
+        if not self:isValidUnitPosition(unit) then
+            return false
+        end
+    end
+    return true
+end
+
 -- Snap a position to the nearest road, returns nil if there is no road
 function Terrain:snapToRoad(pos)
     local ok, roadX, roadY = pcall(land.getClosestPointOnRoads, "roads", pos.x, pos.y)
@@ -239,10 +255,12 @@ function Terrain:snapToRoad(pos)
     return { x = roadX, y = roadY }
 end
 
--- Find a valid point on a road within radius, returns nil if none found.
--- Road points skip the scenery check: roads are clear of buildings, and
--- bridges over rivers are rejected by the land cover mask.
-function Terrain:findRoadPosition(center, radius, maxAttempts)
+-- Find a valid point on a road within radius and lay out a group there with
+-- buildUnits(roadPos), which returns a list of units with x and y. Returns the
+-- road point and units, or nil if no road point fits every unit. Road points
+-- skip the scenery check: roads are clear of buildings, and bridges over rivers
+-- are rejected by the land cover mask.
+function Terrain:findRoadLayout(center, radius, buildUnits, maxAttempts)
     maxAttempts = maxAttempts or self.config.maxSearchAttempts
     local options = { ignoreScenery = true }
 
@@ -250,7 +268,10 @@ function Terrain:findRoadPosition(center, radius, maxAttempts)
         local testPos = attempt == 0 and center or Spatial:randomPointInRadius(center, radius)
         local roadPos = self:snapToRoad(testPos)
         if roadPos and self:isValidTerrainForUnits(roadPos, options) then
-            return roadPos, true
+            local units = buildUnits(roadPos)
+            if #units > 0 and self:areValidUnitPositions(units) then
+                return roadPos, units
+            end
         end
     end
 
@@ -261,7 +282,7 @@ function Terrain:findRoadPosition(center, radius, maxAttempts)
             .. math.floor(center.y)
             .. ") - skipping spawn"
     )
-    return nil, false
+    return nil
 end
 
 -- Unit vector along the road at a road point, or nil if the road is too short
@@ -328,27 +349,20 @@ function Terrain:getRoadColumn(start, count, spacing)
     return column
 end
 
--- Find a valid position within radius, returns nil if none found
-function Terrain:findValidPosition(center, radius, options, maxAttempts)
-    maxAttempts = maxAttempts or self.config.maxSearchAttempts
-    options = options or {}
-
-    -- First, check if center itself is valid
-    local valid, reason = self:isValidTerrainForUnits(center, options)
-    if valid then
-        return center, true
-    end
-
-    -- Try random positions
-    for attempt = 1, maxAttempts do
-        local testPos = Spatial:randomPointInRadius(center, radius)
-        valid, reason = self:isValidTerrainForUnits(testPos, options)
-        if valid then
-            return testPos, true
+-- Search center, then random points within radius, for a position that
+-- passes isValidTerrainForUnits and accept(pos). accept returns a value to
+-- keep, or nil to reject the position.
+local function searchPositions(center, radius, options, maxAttempts, accept)
+    for attempt = 0, maxAttempts do
+        local testPos = attempt == 0 and center or Spatial:randomPointInRadius(center, radius)
+        if Terrain:isValidTerrainForUnits(testPos, options) then
+            local accepted = accept(testPos)
+            if accepted then
+                return testPos, accepted
+            end
         end
     end
 
-    -- Failed to find valid position
     log(
         "WARNING: Could not find valid terrain near ("
             .. math.floor(center.x)
@@ -356,7 +370,30 @@ function Terrain:findValidPosition(center, radius, options, maxAttempts)
             .. math.floor(center.y)
             .. ") - skipping spawn"
     )
-    return nil, false
+    return nil
+end
+
+-- Find a valid position within radius, returns nil if none found
+function Terrain:findValidPosition(center, radius, options, maxAttempts)
+    local pos = searchPositions(center, radius, options or {}, maxAttempts or self.config.maxSearchAttempts, function()
+        return true
+    end)
+    return pos, pos ~= nil
+end
+
+-- Find a valid position within radius and lay out a group there with
+-- buildUnits(pos), which returns a list of units with x and y. The group
+-- center gets the full isValidTerrainForUnits check and every unit gets
+-- isValidUnitPosition, so spread-out groups such as SAM sites do not put
+-- units in forest or water. Returns the position and units, or nil.
+function Terrain:findValidLayout(center, radius, buildUnits, options, maxAttempts)
+    return searchPositions(center, radius, options or {}, maxAttempts or self.config.maxSearchAttempts, function(pos)
+        local units = buildUnits(pos)
+        if self:areValidUnitPositions(units) then
+            return units
+        end
+        return nil
+    end)
 end
 
 if TerrainData then

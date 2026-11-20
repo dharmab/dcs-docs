@@ -41,6 +41,18 @@ local function checkUnitData(env)
     end
 end
 
+-- Every ground unit, not only its group's center, is on open ground
+local function checkGroundPlacement(env)
+    for _, g in ipairs(env.spawnedGroups()) do
+        if g.category == Group.Category.GROUND then
+            for _, u in ipairs(g.units) do
+                local pos = { x = u.x, y = u.z }
+                h.ok(Terrain:isValidUnitPosition(pos), u.name .. " is on forest or water")
+            end
+        end
+    end
+end
+
 local function checkLog(env)
     for _, line in ipairs(env.log) do
         h.ok(not line:find("ERROR") and not line:find("Error"), "error logged: " .. line)
@@ -71,6 +83,7 @@ for _, combo in ipairs(combos) do
                 end
                 checkUniqueIds(env)
                 checkUnitData(env)
+                checkGroundPlacement(env)
                 checkLog(env)
             end
         end)
