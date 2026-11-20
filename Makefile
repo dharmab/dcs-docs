@@ -34,7 +34,9 @@ check-format-lua: ## Check Lua formatting
 lint-lua: ## Lint Lua
 	lua-language-server --check . --checklevel=Warning
 
-# LuaJIT runs Lua 5.1, the version DCS uses
+# We use luajit instead of lua because luajit implements Lua 5.1, the version
+# DCS uses, and newer lua releases break 5.1 code. luajit also accepts some
+# newer syntax; lint-lua catches that.
 test-lua: ## Run mission Lua tests
 	set -e; for dir in $(LUA_TEST_DIRS); do luajit $$dir/run.lua $$dir/*_test.lua; done
 
