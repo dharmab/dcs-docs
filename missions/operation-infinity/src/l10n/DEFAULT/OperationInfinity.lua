@@ -37,20 +37,8 @@ OperationInfinity.config = {
     },
     missionEndFlag = "MISSION_TIME_EXPIRED",
 
-    -- RED aerodrome positions (from Caucasus terrain data)
-    aerodromes = {
-        maykop = { name = "Maykop-Khanskaya", x = -27626, y = 457048 },
-        gudauta = { name = "Gudauta", x = -195651, y = 515899 },
-        sukhumi = { name = "Sukhumi-Babushara", x = -221382, y = 565909 },
-        senaki = { name = "Senaki-Kolkhi", x = -281903, y = 648379 },
-        kobuleti = { name = "Kobuleti", x = -317605, y = 636704 },
-        kutaisi = { name = "Kutaisi", x = -284583, y = 685030 },
-        mozdok = { name = "Mozdok", x = -83330, y = 835635 },
-        tbilisi = { name = "Tbilisi-Lochini", x = -314926, y = 895724 },
-        vaziani = { name = "Vaziani", x = -318192, y = 902332 },
-    },
-
     -- Aerodrome regions - geographic clusters for each playtime
+    -- aerodromes: RED airbase names; positions are read into state.aerodromes at init
     -- spawnConstraints: optional overrides for ISAF spawn positioning
     --   angleMin/angleMax: radians, 0=East, pi/2=North, pi=West, 3pi/2=South
     --   minDistance/maxDistance: meters from aerodrome
@@ -58,13 +46,13 @@ OperationInfinity.config = {
     aerodromeRegions = {
         northwest = {
             name = "Maykop Area",
-            aerodromes = { "maykop" },
+            aerodromes = { "Maykop-Khanskaya" },
             playtimes = { "45" },
             -- Default spawn constraints work well for Maykop
         },
         central_coast = {
             name = "Gudauta/Sukhumi Area",
-            aerodromes = { "gudauta", "sukhumi" },
+            aerodromes = { "Gudauta", "Sukhumi-Babushara" },
             playtimes = { "45", "90" },
             -- Mountainous terrain unsuitable for frontline - use deep strike targets
             spawnConstraints = {
@@ -86,7 +74,7 @@ OperationInfinity.config = {
         },
         southwest_coast = {
             name = "Kobuleti/Senaki/Kutaisi Area",
-            aerodromes = { "kobuleti", "senaki", "kutaisi" },
+            aerodromes = { "Kobuleti", "Senaki-Kolkhi", "Kutaisi" },
             playtimes = { "90" },
             -- North or northwest of Senaki, looking for flat areas
             spawnConstraints = {
@@ -98,13 +86,13 @@ OperationInfinity.config = {
         },
         northeast = {
             name = "Mozdok Area",
-            aerodromes = { "mozdok" },
+            aerodromes = { "Mozdok" },
             playtimes = { "180" },
             -- Default spawn constraints work well for Mozdok
         },
         southeast = {
             name = "Tbilisi/Vaziani Area",
-            aerodromes = { "tbilisi", "vaziani" },
+            aerodromes = { "Tbilisi-Lochini", "Vaziani" },
             playtimes = { "180" },
             -- Deep strike area - no good frontline positions, focus on defense and logistics
             spawnConstraints = {
@@ -176,43 +164,38 @@ OperationInfinity.config = {
         corridorOffsetMax = 8000,
     },
 
-    -- Krymsk airfield position (player and support aircraft base)
-    krymsk = { x = -7000, y = 295000 },
+    -- Player and support aircraft airbase name. Position is read into state.homeAirbase at init.
+    homeAirbase = "Krymsk",
 
-    -- Support aircraft racetrack positions by region
+    -- Support aircraft racetrack centers by region, as offsets from Krymsk
     supportRacetracks = {
         -- Maykop: 15 nm south of Krymsk
         northwest = {
-            x = -7000 - (15 * METERS_PER_NM),
-            y = 295000,
+            offset = { x = -(15 * METERS_PER_NM), y = 0 },
             trackLength = 50000, -- 50km racetrack
             heading = 0, -- North-South track
         },
-        -- Gudauta/Sukhumi: 50 nm SE of Krymsk (toward the target area)
+        -- Gudauta/Sukhumi: 50 nm SE of Krymsk (~130 degrees, toward the target area)
         central_coast = {
-            x = -7000 - (50 * METERS_PER_NM * 0.64), -- ~130 degrees heading (SE)
-            y = 295000 + (50 * METERS_PER_NM * 0.77),
+            offset = { x = -(50 * METERS_PER_NM * 0.64), y = 50 * METERS_PER_NM * 0.77 },
             trackLength = 60000,
             heading = math.pi * 0.75, -- NW-SE track aligned with route
         },
         -- Kobuleti/Senaki/Kutaisi: 50 nm SE of Krymsk
         southwest_coast = {
-            x = -7000 - (50 * METERS_PER_NM * 0.64),
-            y = 295000 + (50 * METERS_PER_NM * 0.77),
+            offset = { x = -(50 * METERS_PER_NM * 0.64), y = 50 * METERS_PER_NM * 0.77 },
             trackLength = 60000,
             heading = math.pi * 0.75,
         },
-        -- Mozdok: 100 nm east of Krymsk along Krymsk-Mozdok axis
+        -- Mozdok: 100 nm east of Krymsk along the Krymsk-Mozdok axis (~98 degrees)
         northeast = {
-            x = -7000 - (100 * METERS_PER_NM * 0.14), -- ~98 degrees heading (mostly E)
-            y = 295000 + (100 * METERS_PER_NM * 0.99),
+            offset = { x = -(100 * METERS_PER_NM * 0.14), y = 100 * METERS_PER_NM * 0.99 },
             trackLength = 80000,
             heading = 0, -- E-W track
         },
-        -- Tbilisi: 180 nm SE of Krymsk
+        -- Tbilisi: 180 nm SE of Krymsk (~117 degrees)
         southeast = {
-            x = -7000 - (180 * METERS_PER_NM * 0.45), -- ~117 degrees heading
-            y = 295000 + (180 * METERS_PER_NM * 0.89),
+            offset = { x = -(180 * METERS_PER_NM * 0.45), y = 180 * METERS_PER_NM * 0.89 },
             trackLength = 80000,
             heading = math.pi * 0.65, -- NW-SE track
         },
@@ -260,6 +243,10 @@ OperationInfinity.config = {
 OperationInfinity.state = {
     initialized = false,
     missionGenerated = false,
+
+    -- Airbase positions read at init: { name, x, y }
+    homeAirbase = nil,
+    aerodromes = {}, -- Keyed by airbase name
 
     -- Settings (locked when first player selects both)
     difficulty = nil,
@@ -557,11 +544,9 @@ function OperationInfinity:generateBattlefield()
     self.state.battlefield.spawnConstraints = selected.region.spawnConstraints or {}
 
     -- Populate target aerodromes from the selected region
-    for _, key in ipairs(selected.region.aerodromes) do
-        local aerodrome = self.config.aerodromes[key]
-        if aerodrome then
-            self.state.battlefield.targetAerodromes[#self.state.battlefield.targetAerodromes + 1] = aerodrome
-        end
+    for _, name in ipairs(selected.region.aerodromes) do
+        self.state.battlefield.targetAerodromes[#self.state.battlefield.targetAerodromes + 1] =
+            self.state.aerodromes[name]
     end
 
     -- Build virtualization notice for longer missions
@@ -956,7 +941,13 @@ function OperationInfinity:getRacetrackPosition(regionKey)
         log("WARNING: No racetrack config for region '" .. tostring(regionKey) .. "', using default")
         racetrack = self.config.supportRacetracks.northwest
     end
-    return racetrack
+    local homeAirbase = self.state.homeAirbase
+    return {
+        x = homeAirbase.x + racetrack.offset.x,
+        y = homeAirbase.y + racetrack.offset.y,
+        trackLength = racetrack.trackLength,
+        heading = racetrack.heading,
+    }
 end
 
 local METERS_PER_FOOT = 0.3048
@@ -1201,6 +1192,25 @@ end
 -- INITIALIZATION
 -- =============================================================================
 
+local function getAirbasePosition(name)
+    local airbase = Airbase.getByName(name)
+    if not airbase then
+        error("Airbase not found: " .. name)
+    end
+    local p = airbase:getPoint()
+    return { name = name, x = p.x, y = p.z }
+end
+
+-- Read airfield positions from the airbases
+function OperationInfinity:resolveAirbasePositions()
+    self.state.homeAirbase = getAirbasePosition(self.config.homeAirbase)
+    for _, region in pairs(self.config.aerodromeRegions) do
+        for _, name in ipairs(region.aerodromes) do
+            self.state.aerodromes[name] = getAirbasePosition(name)
+        end
+    end
+end
+
 function OperationInfinity:init()
     if self.state.initialized then
         log("Already initialized!")
@@ -1208,6 +1218,8 @@ function OperationInfinity:init()
     end
 
     log("Initializing Operation Infinity...")
+
+    self:resolveAirbasePositions()
 
     -- Random number generator seeding is not required in this environment
 

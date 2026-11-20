@@ -142,37 +142,41 @@ mission = {
                 },
                 [5] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_Terrain",
+                    ["file"] = "ResKey_TerrainData",
                 },
                 [6] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_UnitTemplates",
+                    ["file"] = "ResKey_Terrain",
                 },
                 [7] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_Formations",
+                    ["file"] = "ResKey_UnitTemplates",
                 },
                 [8] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_Virtualization",
+                    ["file"] = "ResKey_Formations",
                 },
                 [9] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_IADS",
+                    ["file"] = "ResKey_Virtualization",
                 },
                 [10] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_AirIntercept",
+                    ["file"] = "ResKey_IADS",
                 },
                 [11] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_BattlefieldGeneration",
+                    ["file"] = "ResKey_AirIntercept",
                 },
                 [12] = {
                     ["predicate"] = "a_do_script_file",
-                    ["file"] = "ResKey_CarrierOps",
+                    ["file"] = "ResKey_BattlefieldGeneration",
                 },
                 [13] = {
+                    ["predicate"] = "a_do_script_file",
+                    ["file"] = "ResKey_CarrierOps",
+                },
+                [14] = {
                     ["predicate"] = "a_do_script_file",
                     ["file"] = "ResKey_OperationInfinity",
                 },
@@ -199,7 +203,7 @@ mission = {
     },
     ["trig"] = {
         ["actions"] = {
-            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_Logging\")); a_do_script_file(getValueResourceByKey(\"ResKey_Units\")); a_do_script_file(getValueResourceByKey(\"ResKey_Spatial\")); a_do_script_file(getValueResourceByKey(\"ResKey_BatchScheduler\")); a_do_script_file(getValueResourceByKey(\"ResKey_Terrain\")); a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Formations\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_BattlefieldGeneration\")); a_do_script_file(getValueResourceByKey(\"ResKey_CarrierOps\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
+            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_Logging\")); a_do_script_file(getValueResourceByKey(\"ResKey_Units\")); a_do_script_file(getValueResourceByKey(\"ResKey_Spatial\")); a_do_script_file(getValueResourceByKey(\"ResKey_BatchScheduler\")); a_do_script_file(getValueResourceByKey(\"ResKey_TerrainData\")); a_do_script_file(getValueResourceByKey(\"ResKey_Terrain\")); a_do_script_file(getValueResourceByKey(\"ResKey_UnitTemplates\")); a_do_script_file(getValueResourceByKey(\"ResKey_Formations\")); a_do_script_file(getValueResourceByKey(\"ResKey_Virtualization\")); a_do_script_file(getValueResourceByKey(\"ResKey_IADS\")); a_do_script_file(getValueResourceByKey(\"ResKey_AirIntercept\")); a_do_script_file(getValueResourceByKey(\"ResKey_BattlefieldGeneration\")); a_do_script_file(getValueResourceByKey(\"ResKey_CarrierOps\")); a_do_script_file(getValueResourceByKey(\"ResKey_OperationInfinity\"));",
             [2] = "a_end_mission(\"blue\", getValueDictByKey(\"DictKey_missionEnd_1\"));",
         },
         ["events"] = {},
