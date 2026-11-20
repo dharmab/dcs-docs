@@ -31,7 +31,3 @@
 | ---------- | ------ | --------- | -------- | ----- | ------ |
 | Texaco 1-1 | KC-135 | Fast boom | 270.5 AM | 100X  | 6      |
 | Shell 1-1  | KC-135 | Slow boom | 270.7 AM | 102X  | 7      |
-
-## CVN-74 Stennis
-
-254.7 AM, TACAN 74X STN

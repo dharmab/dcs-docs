@@ -290,21 +290,23 @@ local function render(env, template, plan, title, carrierCapable)
         out[#out + 1] = ""
     end
 
-    local sys = CarrierOps.config.systems
-    out[#out + 1] = "## CVN-74 Stennis"
-    out[#out + 1] = ""
-    local line = string.format(
-        "%s, TACAN %d%s %s",
-        formatFreq(sys.radioFrequency, sys.radioModulation),
-        sys.tacanChannel,
-        sys.tacanMode,
-        sys.tacanCallsign
-    )
-    -- Landing aids only matter to types that can recover aboard
+    -- Only types that can recover aboard need the carrier
     if carrierCapable then
-        line = line .. string.format(", ICLS %d, Link 4 %.1f, ACLS", sys.iclsChannel, sys.link4Frequency)
+        local sys = CarrierOps.config.systems
+        out[#out + 1] = "## CVN-74 Stennis"
+        out[#out + 1] = ""
+        out[#out + 1] = string.format(
+            "%s, TACAN %d%s %s, ICLS %d, Link 4 %.1f, ACLS",
+            formatFreq(sys.radioFrequency, sys.radioModulation),
+            sys.tacanChannel,
+            sys.tacanMode,
+            sys.tacanCallsign,
+            sys.iclsChannel,
+            sys.link4Frequency
+        )
+    elseif out[#out] == "" then
+        out[#out] = nil
     end
-    out[#out + 1] = line
     return table.concat(out, "\n") .. "\n"
 end
 
