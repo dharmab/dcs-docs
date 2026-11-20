@@ -1,10 +1,19 @@
-"""Read the plain Lua tables a terrain ships with."""
+"""Read the plain Lua tables a terrain ships with.
+
+``Map/towns.lua`` and ``Beacons.lua`` are Lua programs (``dofile``, ``local``,
+``_()`` translation calls, named constants), not bare data, so they are parsed
+to a syntax tree and the table literals are read from it without running
+anything.
+"""
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 from pathlib import Path
+
+from luaparser import ast
+
+from .landscape import FormatError
 
 
 @dataclass(frozen=True)
@@ -25,67 +34,103 @@ class Beacon:
     longitude: float
 
 
-_NUM = r"(-?[\d.]+(?:[eE][-+]?\d+)?)"
-_TOWN_RX = re.compile(
-    r'\[\s*"(?P<key>(?:[^"\\]|\\.)*)"\s*\]\s*=\s*\{\s*latitude\s*=\s*'
-    + _NUM
-    + r"\s*,\s*longitude\s*=\s*"
-    + _NUM
-    + r'\s*,\s*display_name\s*=\s*_\(\s*"(?P<display>(?:[^"\\]|\\.)*)"\s*\)'
-)
-_POSITION_RX = re.compile(
-    r"\bposition\s*=\s*\{\s*" + _NUM + r"\s*,\s*" + _NUM + r"\s*,\s*" + _NUM + r"\s*\}"
-)
-_GEO_RX = re.compile(
-    r"\bpositionGeo\s*=\s*\{\s*latitude\s*=\s*"
-    + _NUM
-    + r"\s*,\s*longitude\s*=\s*"
-    + _NUM
-)
-_NAME_RX = re.compile(r"display_name\s*=\s*_\(\s*'([^']*)'\s*\)")
-_CALLSIGN_RX = re.compile(r"callsign\s*=\s*'([^']*)'")
+def _global_table(path: Path, name: str) -> ast.Table:
+    """The table literal assigned to global ``name`` at the top of the file."""
+    tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"))
+    for statement in tree.body.body:
+        if isinstance(statement, ast.LocalAssign) or not isinstance(
+            statement, ast.Assign
+        ):
+            continue
+        for target, value in zip(statement.targets, statement.values, strict=False):
+            if isinstance(target, ast.Name) and target.id == name:
+                if not isinstance(value, ast.Table):
+                    raise FormatError(f"{path}: {name} is not a table")
+                return value
+    raise FormatError(f"{path}: no {name} table")
 
 
-def _unescape(s: str) -> str:
-    return s.replace('\\"', '"').replace("\\\\", "\\")
+def _fields(table: ast.Table) -> dict[str, ast.Node]:
+    """Named fields of a table (``key = v`` and ``["key"] = v``)."""
+    out: dict[str, ast.Node] = {}
+    for field in table.fields:
+        key = field.key
+        if isinstance(key, ast.Name) and not field.between_brackets:
+            out[key.id] = field.value
+        elif isinstance(key, ast.String):
+            out[_text(key)] = field.value
+    return out
+
+
+def _items(table: ast.Table) -> list[ast.Node]:
+    """Positional entries of a table."""
+    return [
+        f.value for f in table.fields if isinstance(f.key, ast.Number) or f.key is None
+    ]
+
+
+def _text(node: ast.String) -> str:
+    raw = node.s
+    return raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else raw
+
+
+def _string(node: ast.Node | None) -> str | None:
+    """A string literal, or the literal inside a ``_("...")`` translation call."""
+    if isinstance(node, ast.Call) and len(node.args) == 1:
+        node = node.args[0]
+    return _text(node) if isinstance(node, ast.String) else None
+
+
+def _number(node: ast.Node | None) -> float | None:
+    if isinstance(node, ast.UMinusOp):
+        value = _number(node.operand)
+        return None if value is None else -value
+    return float(node.n) if isinstance(node, ast.Number) else None
 
 
 def read_towns(path: Path) -> list[Town]:
-    text = path.read_text(encoding="utf-8", errors="replace")
-    return [
-        Town(
-            _unescape(m.group("key")),
-            _unescape(m.group("display")),
-            float(m.group(2)),
-            float(m.group(3)),
-        )
-        for m in _TOWN_RX.finditer(text)
-    ]
+    towns: list[Town] = []
+    for field in _global_table(path, "towns").fields:
+        if not isinstance(field.key, ast.String) or not isinstance(
+            field.value, ast.Table
+        ):
+            continue
+        entry = _fields(field.value)
+        lat = _number(entry.get("latitude"))
+        lon = _number(entry.get("longitude"))
+        if lat is None or lon is None:
+            continue
+        key = _text(field.key)
+        towns.append(Town(key, _string(entry.get("display_name")) or key, lat, lon))
+    return towns
 
 
 def read_beacons(path: Path) -> list[Beacon]:
     """Beacons that list both a DCS position and a lat/long."""
-    text = path.read_text(encoding="utf-8", errors="replace")
-    positions = list(_POSITION_RX.finditer(text))
     beacons: list[Beacon] = []
-    for i, m in enumerate(positions):
-        # Search only up to the next beacon's position so pairs never cross.
-        block_start = positions[i - 1].end() if i else 0
-        block_end = positions[i + 1].start() if i + 1 < len(positions) else len(text)
-        geo = _GEO_RX.search(text, m.end(), block_end)
-        if geo is None:
+    for item in _items(_global_table(path, "beacons")):
+        if not isinstance(item, ast.Table):
             continue
-        head = text[block_start : m.start()]
-        names = _NAME_RX.findall(head)
-        calls = _CALLSIGN_RX.findall(head)
+        entry = _fields(item)
+        position, geo = entry.get("position"), entry.get("positionGeo")
+        if not isinstance(position, ast.Table) or not isinstance(geo, ast.Table):
+            continue
+        xyz = [_number(v) for v in _items(position)]
+        geo_fields = _fields(geo)
+        lat = _number(geo_fields.get("latitude"))
+        lon = _number(geo_fields.get("longitude"))
+        if len(xyz) != 3 or None in xyz or lat is None or lon is None:
+            continue
+        x, _, z = xyz
+        assert x is not None and z is not None
         beacons.append(
             Beacon(
-                names[-1] if names else "",
-                calls[-1] if calls else "",
-                float(m.group(1)),
-                float(m.group(3)),
-                float(geo.group(1)),
-                float(geo.group(2)),
+                _string(entry.get("display_name")) or "",
+                _string(entry.get("callsign")) or "",
+                x,
+                z,
+                lat,
+                lon,
             )
         )
     return beacons
