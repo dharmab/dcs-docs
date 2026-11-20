@@ -110,8 +110,8 @@ The warehouse is configured for unlimited weapons.
 
 Three tankers orbit on a racetrack between Krymsk and the target area:
 
-- **KC-135 "Texaco"** (boom) at 25,000 ft, 270.5 MHz, TACAN 100X
-- **KC-135MPRS "Arco"** (basket) at 21,000 ft, 270.1 MHz, TACAN 101X
+- **KC-135 "Texaco"** (boom) at 20,000 ft, 270.5 MHz, TACAN 100X
+- **KC-135MPRS "Arco"** (basket) at 18,000 ft, 270.1 MHz, TACAN 101X
 - **KC-135 "Shell"** (slow boom for A-10s) at 15,000 ft, 270.7 MHz, TACAN 102X
 
 A carrier strike group operates in the Black Sea about 50 nm southwest of Krymsk: CVN-74 John C. Stennis with a Ticonderoga-class cruiser, two Arleigh Burke-class destroyers, and an Oliver Hazard Perry-class frigate. The carrier steams into the wind for about 25 knots over the deck, turning back downwind when it reaches the edge of its operating area. An SH-60B plane guard helicopter flies off the carrier's starboard side.

@@ -207,8 +207,8 @@ OperationInfinity.config = {
     -- Each aircraft gets its own altitude block; no per-index offset is added.
     supportAircraft = {
         { name = "Magic", role = "AWACS, datalink only - use SkyEye", altitudeFt = 30000, iasKnots = 280 },
-        { name = "Texaco", altitudeFt = 25000, iasKnots = 280, radio = 270.5, tacan = "100X", tankerType = "boom" },
-        { name = "Arco", altitudeFt = 21000, iasKnots = 250, radio = 270.1, tacan = "101X", tankerType = "drogue" },
+        { name = "Texaco", altitudeFt = 20000, iasKnots = 280, radio = 270.5, tacan = "100X", tankerType = "boom" },
+        { name = "Arco", altitudeFt = 18000, iasKnots = 250, radio = 270.1, tacan = "101X", tankerType = "drogue" },
         { name = "Shell", altitudeFt = 15000, iasKnots = 200, radio = 270.7, tacan = "102X", tankerType = "slow boom" },
     },
 
