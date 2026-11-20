@@ -40,7 +40,7 @@ The mock is flat terrain with no AI. Units only move when a test moves them. Enu
 
 `TerrainData.lua` is generated; do not edit it. It is a 200 m mask of forest, water, and off-mesh ground built from `docs/data/terrains/Caucasus/landcover.tif`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the mission area.
 
-`Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. Convoys use `Terrain:findRoadPosition` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. Airfield positions are read from the airbases at init and support racetracks are offsets from Krymsk.
+`Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. That check covers only one point, so groups are placed with `Terrain:findValidLayout`, which builds the units at each candidate center and also checks every unit's position against the mask and surface type (`isValidUnitPosition`). Convoys use `Terrain:findRoadLayout` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. The generation tests fail if any spawned ground unit is on blocked ground. Airfield positions are read from the airbases at init and support racetracks are offsets from Krymsk.
 
 ## Player Slots
 

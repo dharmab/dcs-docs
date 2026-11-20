@@ -144,13 +144,6 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         y = position.y + approachDir.y * (engageDist / 2),
     }
 
-    -- Find valid terrain for ISAF platoon
-    local isafValidPos, isafValid = Terrain:findValidPosition(isafPos, 100)
-    if not isafValid then
-        log("Skipping ISAF platoon " .. index .. " - no valid terrain")
-        return
-    end
-
     -- Find valid terrain for Erusea platoon
     local eruseaValidPos, eruseaValid = Terrain:findValidPosition(eruseaPos, 100)
     if not eruseaValid then
@@ -158,9 +151,22 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         return
     end
 
-    -- Calculate facing directions (toward each other)
-    local isafFacing = math.atan2(eruseaValidPos.y - isafValidPos.y, eruseaValidPos.x - isafValidPos.x)
-    local eruseaFacing = math.atan2(isafValidPos.y - eruseaValidPos.y, isafValidPos.x - eruseaValidPos.x)
+    -- Select formation
+    local formation = Formations:getRandomFormationType()
+
+    -- Find valid terrain for the ISAF platoon, facing the Erusea platoon
+    local isafTemplate = Formations:randomizeTemplate(UnitTemplates.ISAFPlatoon)
+    local isafValidPos, isafUnits = Terrain:findValidLayout(isafPos, 100, function(candidate)
+        return Formations:buildPlatoonUnits(isafTemplate, candidate, {
+            formation = formation,
+            facing = math.atan2(eruseaValidPos.y - candidate.y, eruseaValidPos.x - candidate.x),
+            widthMultiplier = 2.5,
+        })
+    end)
+    if not isafValidPos then
+        log("Skipping ISAF platoon " .. index .. " - no valid terrain")
+        return
+    end
 
     -- Calculate direction vector for fire offset
     local dx = eruseaValidPos.x - isafValidPos.x
@@ -169,17 +175,6 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
     local dirX = dx / dist
     local dirY = dy / dist
     local fireOffset = config.frontline.fireOffset
-
-    -- Select formation
-    local formation = Formations:getRandomFormationType()
-
-    -- Build ISAF units with formation and facing
-    local isafTemplate = Formations:randomizeTemplate(UnitTemplates.ISAFPlatoon)
-    local isafUnits = Formations:buildPlatoonUnits(isafTemplate, isafValidPos, {
-        formation = formation,
-        facing = isafFacing,
-        widthMultiplier = 2.5,
-    })
 
     -- Register ISAF group (immortal/invisible for visual firefight only)
     Virtualization:registerGroup({
@@ -206,49 +201,52 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
     local spreadRadius = config.frontline.enemySpreadRadius
 
     for e = 1, numEruseaPlatoons do
-        local eruseaSpreadPos
-        if e == 1 then
-            eruseaSpreadPos = eruseaValidPos
-        else
+        -- The first platoon searches around the Erusea position, the rest
+        -- spread out from it
+        local eruseaSearchPos, eruseaSearchRadius = eruseaValidPos, 100
+        if e > 1 then
             local spreadAngle = (e - 1) * (math.pi / 3)
-            eruseaSpreadPos = {
+            eruseaSearchPos = {
                 x = eruseaValidPos.x + spreadRadius * math.cos(spreadAngle),
                 y = eruseaValidPos.y + spreadRadius * 0.5 * math.sin(spreadAngle),
             }
-            local validSpreadPos, spreadValid = Terrain:findValidPosition(eruseaSpreadPos, 50)
-            if spreadValid then
-                eruseaSpreadPos = validSpreadPos
-            else
-                eruseaSpreadPos = eruseaValidPos
-            end
+            eruseaSearchRadius = 50
         end
-
-        local eFacing = math.atan2(isafValidPos.y - eruseaSpreadPos.y, isafValidPos.x - eruseaSpreadPos.x)
 
         local baseEruseaTemplate = UnitTemplates.EruseaPlatoon[diff] or UnitTemplates.EruseaPlatoon.Normal
         local eruseaTemplate = Formations:randomizeTemplate(baseEruseaTemplate)
-        local eruseaUnits = Formations:buildPlatoonUnits(eruseaTemplate, eruseaSpreadPos, {
-            formation = formation,
-            facing = eFacing,
-            widthMultiplier = 2.5,
-        })
+        local eruseaSpreadPos, eruseaUnits = Terrain:findValidLayout(
+            eruseaSearchPos,
+            eruseaSearchRadius,
+            function(candidate)
+                return Formations:buildPlatoonUnits(eruseaTemplate, candidate, {
+                    formation = formation,
+                    facing = math.atan2(isafValidPos.y - candidate.y, isafValidPos.x - candidate.x),
+                    widthMultiplier = 2.5,
+                })
+            end
+        )
 
-        Virtualization:registerGroup({
-            name = "Erusea-F" .. index .. "-" .. e,
-            center = eruseaSpreadPos,
-            units = eruseaUnits,
-            countryId = country.id.CJTF_RED,
-            category = Group.Category.GROUND,
-        }, {
-            immortal = false,
-            invisible = false,
-            fireAtPoint = {
-                x = isafValidPos.x - dirX * fireOffset,
-                y = isafValidPos.y - dirY * fireOffset,
-                radius = FIRE_OFFSET_RADIUS_METERS,
-                expendQty = FIRE_EXPENDITURE_QUANTITY,
-            },
-        })
+        if eruseaSpreadPos then
+            Virtualization:registerGroup({
+                name = "Erusea-F" .. index .. "-" .. e,
+                center = eruseaSpreadPos,
+                units = eruseaUnits,
+                countryId = country.id.CJTF_RED,
+                category = Group.Category.GROUND,
+            }, {
+                immortal = false,
+                invisible = false,
+                fireAtPoint = {
+                    x = isafValidPos.x - dirX * fireOffset,
+                    y = isafValidPos.y - dirY * fireOffset,
+                    radius = FIRE_OFFSET_RADIUS_METERS,
+                    expendQty = FIRE_EXPENDITURE_QUANTITY,
+                },
+            })
+        else
+            log("Skipping Erusea platoon " .. index .. "-" .. e .. " - no valid terrain")
+        end
     end
 end
 
@@ -325,14 +323,15 @@ function BattlefieldGeneration:generateFrontlineSHORAD()
             y = pos.y + approachDir.y * offsetDist,
         }
 
-        local validPos, isValid = Terrain:findValidPosition(shoradPos, 200)
-        if isValid then
-            local template = Formations:randomizeTemplate(shoradTemplate)
-            local units = Formations:buildPlatoonUnits(template, validPos, {
-                formation = Formations:getRandomFormationType(),
+        local template = Formations:randomizeTemplate(shoradTemplate)
+        local formation = Formations:getRandomFormationType()
+        local validPos, units = Terrain:findValidLayout(shoradPos, 200, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = formation,
                 facing = math.atan2(-approachDir.y, -approachDir.x),
             })
-
+        end)
+        if validPos then
             Virtualization:registerGroup({
                 name = "SHORAD-F" .. shoradIndex,
                 center = validPos,
@@ -406,9 +405,8 @@ function BattlefieldGeneration:generateConvoy(index)
     local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
     -- Convoys are placed on a road, in a column following it
-    local pos, valid = Terrain:findRoadPosition(initialPos, 200)
-    local units = valid and buildRoadConvoyUnits(pos) or {}
-    if #units == 0 then
+    local pos, units = Terrain:findRoadLayout(initialPos, 200, buildRoadConvoyUnits)
+    if not pos then
         log("Skipping Convoy-" .. index .. " near " .. aerodrome.name .. " - no valid road")
         return
     end
@@ -433,19 +431,10 @@ function BattlefieldGeneration:generateArtilleryBattery(index)
     local aerodrome = aerodromes[math.random(#aerodromes)]
     local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
-    -- Artillery needs flatter terrain (8 degree max slope)
-    local pos, valid = Terrain:findValidPosition(initialPos, 300, {
-        maxSlope = 8,
-    })
-    if not valid then
-        log("Skipping Artillery-" .. index .. " near " .. aerodrome.name .. " - no valid flat terrain")
-        return
-    end
-
     -- Find a frontline position to fire at
     local frontlinePositions = state.battlefield.frontline.isafPositions
     local fireTarget = nil
-    local facingDirection = math.random() * 2 * math.pi
+    local randomFacing = math.random() * 2 * math.pi
 
     if #frontlinePositions > 0 then
         local targetPos = frontlinePositions[math.random(#frontlinePositions)]
@@ -455,19 +444,32 @@ function BattlefieldGeneration:generateArtilleryBattery(index)
             radius = 100,
             expendQty = 500,
         }
-        -- Face toward the target
-        facingDirection = math.atan2(fireTarget.y - pos.y, fireTarget.x - pos.x)
     end
 
     -- Artillery batteries are homogenous - no unit type substitution
     local template = Formations:randomizeTemplate(UnitTemplates.ArtilleryBattery, {
         skipSubstitutions = true,
     })
-    local units = Formations:buildPlatoonUnits(template, pos, {
-        formation = Formations.FormationType.LINE,
-        facing = facingDirection,
-        spacing = 40, -- Wider spacing for artillery
+
+    -- Artillery needs flatter terrain (8 degree max slope)
+    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
+        -- Face toward the target
+        local facing = randomFacing
+        if fireTarget then
+            facing = math.atan2(fireTarget.y - candidate.y, fireTarget.x - candidate.x)
+        end
+        return Formations:buildPlatoonUnits(template, candidate, {
+            formation = Formations.FormationType.LINE,
+            facing = facing,
+            spacing = 40, -- Wider spacing for artillery
+        })
+    end, {
+        maxSlope = 8,
     })
+    if not pos then
+        log("Skipping Artillery-" .. index .. " near " .. aerodrome.name .. " - no valid flat terrain")
+        return
+    end
 
     Virtualization:registerGroup({
         name = "Artillery-" .. index,
@@ -490,13 +492,6 @@ function BattlefieldGeneration:generatePatrolGroup(index)
     local aerodrome = aerodromes[math.random(#aerodromes)]
     local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
-    -- Find valid terrain for patrol
-    local pos, valid = Terrain:findValidPosition(initialPos, 150)
-    if not valid then
-        log("Skipping Patrol-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
-        return
-    end
-
     -- Get a random scattered patrol type for variety
     local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
     local patrolHeading = math.random() * 2 * math.pi
@@ -507,11 +502,17 @@ function BattlefieldGeneration:generatePatrolGroup(index)
         formation = Formations:getRandomFormationType()
     end
 
-    local units = Formations:buildPlatoonUnits(template, pos, {
-        formation = formation,
-        facing = patrolHeading,
-        spacing = 25,
-    })
+    local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
+        return Formations:buildPlatoonUnits(template, candidate, {
+            formation = formation,
+            facing = patrolHeading,
+            spacing = 25,
+        })
+    end)
+    if not pos then
+        log("Skipping Patrol-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        return
+    end
 
     -- Use patrol type in group name for variety
     local groupName = patrolType .. "-" .. index
@@ -545,26 +546,29 @@ function BattlefieldGeneration:generateSupplyDepot(index)
         y = aerodrome.y + distance * math.sin(angle),
     }
 
-    -- Depots should be near roads and on flat ground
-    local pos, valid = Terrain:findValidPosition(initialPos, 300, {
-        maxSlope = 8,
-        maxRoadDistance = 200,
-    })
-    if not valid then
-        log("Skipping Depot-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
-        return
-    end
-
     -- Supply depot: trucks and cargo containers
     local template = {
         { type = "Ural-375", count = 4 },
         { type = "Ural-375 PBU", count = 2 },
         { type = "KAMAZ Truck", count = 2 },
     }
-    local units = Formations:buildPlatoonUnits(template, pos, {
-        formation = Formations.FormationType.LINE,
-        spacing = 15,
+    local facing = math.random() * 2 * math.pi
+
+    -- Depots should be near roads and on flat ground
+    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
+        return Formations:buildPlatoonUnits(template, candidate, {
+            formation = Formations.FormationType.LINE,
+            facing = facing,
+            spacing = 15,
+        })
+    end, {
+        maxSlope = 8,
+        maxRoadDistance = 200,
     })
+    if not pos then
+        log("Skipping Depot-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        return
+    end
 
     Virtualization:registerGroup({
         name = "Depot-" .. index,
@@ -595,25 +599,28 @@ function BattlefieldGeneration:generateFuelStorage(index)
         y = aerodrome.y + distance * math.sin(angle),
     }
 
-    -- Fuel storage needs flat ground near roads
-    local pos, valid = Terrain:findValidPosition(initialPos, 300, {
-        maxSlope = 5,
-        maxRoadDistance = 300,
-    })
-    if not valid then
-        log("Skipping FuelStorage-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
-        return
-    end
-
     -- Fuel storage: ATZ fuel trucks (highly explosive targets)
     local numTrucks = 3 + math.random(3) -- 3-6 fuel trucks
     local template = {
         { type = "ATZ-10", count = numTrucks },
     }
-    local units = Formations:buildPlatoonUnits(template, pos, {
-        formation = Formations.FormationType.LINE,
-        spacing = 20,
+    local facing = math.random() * 2 * math.pi
+
+    -- Fuel storage needs flat ground near roads
+    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
+        return Formations:buildPlatoonUnits(template, candidate, {
+            formation = Formations.FormationType.LINE,
+            facing = facing,
+            spacing = 20,
+        })
+    end, {
+        maxSlope = 5,
+        maxRoadDistance = 300,
     })
+    if not pos then
+        log("Skipping FuelStorage-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        return
+    end
 
     Virtualization:registerGroup({
         name = "FuelStorage-" .. index,
@@ -893,18 +900,19 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
 
     if item.type == "patrol" then
         -- Use existing scattered patrol system
-        local pos, valid = Terrain:findValidPosition(initialPos, 150)
-        if not valid then
+        local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
+        local facing = math.random() * 2 * math.pi
+        local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = Formations.FormationType.LINE,
+                facing = facing,
+                spacing = 25,
+            })
+        end)
+        if not pos then
             log("Skipping approach route patrol - no valid terrain")
             return
         end
-
-        local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
-        local units = Formations:buildPlatoonUnits(template, pos, {
-            formation = Formations.FormationType.LINE,
-            facing = math.random() * 2 * math.pi,
-            spacing = 25,
-        })
 
         local groupName = groupPrefix .. "-" .. patrolType .. "-" .. item.targetIndex
 
@@ -927,18 +935,20 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         )
     elseif item.type == "armor" then
         -- Use armor patrol template for heavier targets
-        local pos, valid = Terrain:findValidPosition(initialPos, 200)
-        if not valid then
+        local template = UnitTemplates:getRandomArmorPatrol()
+        local formation = Formations:getRandomFormationType()
+        local facing = math.random() * 2 * math.pi
+        local pos, units = Terrain:findValidLayout(initialPos, 200, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = formation,
+                facing = facing,
+                spacing = 30,
+            })
+        end)
+        if not pos then
             log("Skipping approach route armor - no valid terrain")
             return
         end
-
-        local template = UnitTemplates:getRandomArmorPatrol()
-        local units = Formations:buildPlatoonUnits(template, pos, {
-            formation = Formations:getRandomFormationType(),
-            facing = math.random() * 2 * math.pi,
-            spacing = 30,
-        })
 
         local groupName = groupPrefix .. "-Armor-" .. item.targetIndex
 
@@ -953,9 +963,8 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         log("Generated approach route armor at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "convoy" then
         -- Convoys are placed on a road, in a column following it
-        local pos, valid = Terrain:findRoadPosition(initialPos, 200)
-        local units = valid and buildRoadConvoyUnits(pos) or {}
-        if #units == 0 then
+        local pos, units = Terrain:findRoadLayout(initialPos, 200, buildRoadConvoyUnits)
+        if not pos then
             log("Skipping approach route convoy - no valid road")
             return
         end
@@ -973,19 +982,21 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         log("Generated approach route convoy at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "checkpoint" then
         -- Checkpoints near roads
-        local pos, valid = Terrain:findValidPosition(initialPos, 150, {
+        local template = Formations:randomizeTemplate(UnitTemplates.Checkpoint)
+        local facing = math.random() * 2 * math.pi
+        local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = Formations.FormationType.LINE,
+                facing = facing,
+                spacing = 15,
+            })
+        end, {
             maxRoadDistance = 50,
         })
-        if not valid then
+        if not pos then
             log("Skipping approach route checkpoint - no valid terrain near roads")
             return
         end
-
-        local template = Formations:randomizeTemplate(UnitTemplates.Checkpoint)
-        local units = Formations:buildPlatoonUnits(template, pos, {
-            formation = Formations.FormationType.LINE,
-            spacing = 15,
-        })
 
         local groupName = groupPrefix .. "-Checkpoint-" .. item.targetIndex
 
@@ -1006,7 +1017,9 @@ end
 -- =============================================================================
 
 -- Find flat, dry ground for an air defense site minDist-maxDist from center
-local function findAirDefensePosition(center, minDist, maxDist, searchRadius)
+-- and lay out its units there with buildUnits(pos). Returns the position and
+-- units, or nil.
+local function findAirDefenseLayout(center, minDist, maxDist, searchRadius, buildUnits)
     local maxPositionAttempts = 5
 
     for attempt = 1, maxPositionAttempts do
@@ -1018,13 +1031,13 @@ local function findAirDefensePosition(center, minDist, maxDist, searchRadius)
             y = center.y + distance * math.sin(angle),
         }
 
-        local validPos, found = Terrain:findValidPosition(initialPos, searchRadius, {
+        local validPos, units = Terrain:findValidLayout(initialPos, searchRadius, buildUnits, {
             maxSlope = 10,
             maxRoughness = 5,
         })
 
-        if found then
-            return validPos
+        if validPos then
+            return validPos, units
         end
     end
 
@@ -1037,9 +1050,13 @@ end
 function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
     local state = OperationInfinity.state
 
-    local pos = nil
+    local function buildUnits(candidate)
+        return self:buildSAMUnits(template, candidate)
+    end
+
+    local pos, units = nil, nil
     if anchor then
-        pos = findAirDefensePosition(anchor, 1000, 3000, 500)
+        pos, units = findAirDefenseLayout(anchor, 1000, 3000, 500, buildUnits)
         if not pos then
             log("WARNING: Could not find valid terrain for " .. samType .. " near its site - placing at random")
         end
@@ -1058,7 +1075,7 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
             maxDist = 15000 -- Longer range SAMs closer to protect the aerodrome
         end
 
-        pos = findAirDefensePosition(aerodrome, minDist, maxDist, 3000)
+        pos, units = findAirDefenseLayout(aerodrome, minDist, maxDist, 3000, buildUnits)
     end
 
     if not pos then
@@ -1066,7 +1083,6 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
         return nil
     end
 
-    local units = self:buildSAMUnits(template, pos)
     local groupName = samType .. "-" .. index
 
     -- Register as permanent group (always spawned - SAM radars need to be active)
@@ -1266,24 +1282,25 @@ function BattlefieldGeneration:generateEWRsBatched(onComplete)
             local maxDist = 40000
 
             -- EWRs need flat, dry ground
-            local pos = findAirDefensePosition(aerodrome, minDist, maxDist, 3000)
+            local pos, units = findAirDefenseLayout(aerodrome, minDist, maxDist, 3000, function(candidate)
+                local layout = {}
+                for _, def in ipairs(ctx.template) do
+                    for c = 1, def.count do
+                        layout[#layout + 1] = {
+                            type = def.type,
+                            x = candidate.x + (c - 1) * 50,
+                            y = candidate.y,
+                            heading = 0,
+                            skill = "Excellent",
+                        }
+                    end
+                end
+                return layout
+            end)
 
             if not pos then
                 log("WARNING: Could not find valid terrain for EWR near aerodrome - skipping")
                 return
-            end
-
-            local units = {}
-            for _, def in ipairs(ctx.template) do
-                for c = 1, def.count do
-                    units[#units + 1] = {
-                        type = def.type,
-                        x = pos.x + (c - 1) * 50,
-                        y = pos.y,
-                        heading = 0,
-                        skill = "Excellent",
-                    }
-                end
             end
 
             local groupName = "EWR-" .. i
@@ -1317,8 +1334,19 @@ function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
     local minDist = 1000 -- 1 km minimum
     local maxDist = 3000 -- 3 km maximum
 
+    -- Apply template randomization and position in a defensive formation
+    local randomizedTemplate = Formations:randomizeTemplate(template)
+    local facing = math.random() * 2 * math.pi
+    local function buildUnits(candidate)
+        return Formations:buildPlatoonUnits(randomizedTemplate, candidate, {
+            formation = Formations.FormationType.WEDGE,
+            facing = facing,
+            spacing = 40,
+        })
+    end
+
     -- Try multiple positions to find valid terrain
-    local pos = nil
+    local pos, units = nil, nil
     local maxPositionAttempts = 5
 
     for attempt = 1, maxPositionAttempts do
@@ -1331,12 +1359,12 @@ function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
         }
 
         -- Validate terrain - SHORAD needs reasonably flat ground
-        local validPos, found = Terrain:findValidPosition(initialPos, 500, {
+        local validPos, validUnits = Terrain:findValidLayout(initialPos, 500, buildUnits, {
             maxSlope = 12,
         })
 
-        if found then
-            pos = validPos
+        if validPos then
+            pos, units = validPos, validUnits
             break
         end
     end
@@ -1345,13 +1373,6 @@ function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
         log("WARNING: Could not find valid terrain for SHORAD near " .. aerodrome.name .. " - skipping")
         return
     end
-
-    -- Apply template randomization and position in a defensive formation
-    local randomizedTemplate = Formations:randomizeTemplate(template)
-    local units = Formations:buildPlatoonUnits(randomizedTemplate, pos, {
-        formation = Formations.FormationType.WEDGE,
-        spacing = 40,
-    })
 
     -- Create a unique name based on the aerodrome
     local safeName = string.gsub(aerodrome.name, "[^%w]", "")
