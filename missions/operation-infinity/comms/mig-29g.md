@@ -1,4 +1,4 @@
-# MiG-29G Fulcrum (FC)
+# MiG-29G Fulcrum
 
 No mission presets. Tune these in SRS.
 

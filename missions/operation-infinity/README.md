@@ -24,8 +24,8 @@ The following aircraft are available via Dynamic Spawn at Krymsk:
 - F-15C Eagle
 - MiG-29A Fulcrum
 - MiG-29A Fulcrum (FC)
-- MiG-29S Fulcrum (FC)
-- MiG-29G Fulcrum (FC)
+- MiG-29S Fulcrum
+- MiG-29G Fulcrum
 - F/A-18C Hornet
 - A-10C Warthog
 - Mirage 2000C
@@ -56,8 +56,8 @@ The comms card is in the mission briefing and in F10 > Comms Plan. Per-aircraft 
 - [F-15C Eagle](comms/f-15c.md)
 - [MiG-29A Fulcrum](comms/mig-29-fulcrum.md)
 - [MiG-29A Fulcrum (FC)](comms/mig-29a.md)
-- [MiG-29S Fulcrum (FC)](comms/mig-29s.md)
-- [MiG-29G Fulcrum (FC)](comms/mig-29g.md)
+- [MiG-29S Fulcrum](comms/mig-29s.md)
+- [MiG-29G Fulcrum](comms/mig-29g.md)
 - F/A-18C Hornet: [Shore](comms/fa-18c-shore.md), [Carrier](comms/fa-18c-carrier.md)
 - [A-10C Warthog](comms/a-10c.md)
 - [Mirage 2000C](comms/m-2000c.md)

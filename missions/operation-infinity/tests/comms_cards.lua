@@ -21,8 +21,8 @@ CommsCards.aircraft = {
     ["F-15ESE"] = { name = "F-15E Strike Eagle", file = "f-15e", radios = { "Radio 1 UHF", "Radio 2 V/UHF" } },
     ["F-15C"] = { name = "F-15C Eagle", file = "f-15c", refuel = "boom" },
     ["MiG-29A"] = { name = "MiG-29A Fulcrum (FC)", file = "mig-29a" },
-    ["MiG-29S"] = { name = "MiG-29S Fulcrum (FC)", file = "mig-29s" },
-    ["MiG-29G"] = { name = "MiG-29G Fulcrum (FC)", file = "mig-29g" },
+    ["MiG-29S"] = { name = "MiG-29S Fulcrum", file = "mig-29s" },
+    ["MiG-29G"] = { name = "MiG-29G Fulcrum", file = "mig-29g" },
     ["MiG-29 Fulcrum"] = {
         name = "MiG-29A Fulcrum",
         file = "mig-29-fulcrum",
