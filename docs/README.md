@@ -78,6 +78,12 @@ The [units/](units/) directory contains equipment and capability data:
 | [units/planes.md](units/planes.md)   | Fixed-wing aircraft with pylons and loadouts             |
 | [units/weapons.md](units/weapons.md) | Missiles, bombs, rockets                                 |
 
+### Terrain Reference
+
+| Document                                   | Description                                                                      |
+| ------------------------------------------ | -------------------------------------------------------------------------------- |
+| [terrains/geodata.md](terrains/geodata.md) | Projections, land cover rasters, and map features for every terrain as GIS files |
+
 ### Debugging
 
 | Document                                               | Description                                                            |

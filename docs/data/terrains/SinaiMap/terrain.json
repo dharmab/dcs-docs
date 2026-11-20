@@ -1,0 +1,69 @@
+{
+  "theatre": "SinaiMap",
+  "terrain_folder": "Sinai",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=33 +k_0=0.9996 +x_0=169222 +y_0=-3325313 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 33,
+    "scale_factor": 0.9996,
+    "false_easting": 169222,
+    "false_northing": -3325313,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 844,
+    "fit_rms_error_m": 0.041,
+    "fit_max_error_m": 0.074
+  },
+  "places": {
+    "count": 733
+  },
+  "features": {
+    "layers": {
+      "places": 733,
+      "roads": 770,
+      "railways": 109,
+      "rivers": 3,
+      "power_lines": 0,
+      "borders": 0,
+      "urban_areas": 466,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "(unnamed)/LINELIST/colorIndex=12": "skipped",
+      "(unnamed)/LINELIST/colorIndex=13": "skipped",
+      "(unnamed)/TRI/colorIndex=10": "skipped",
+      "(unnamed)/TRI/colorIndex=14": "skipped",
+      "(unnamed)/TRI/colorIndex=2": "skipped",
+      "(unnamed)/TRI/colorIndex=8": "skipped",
+      "Field/TRI/colorIndex=15": "skipped",
+      "Rail/LINELIST/colorIndex=11": "railways",
+      "River/LINELIST/colorIndex=6": "rivers",
+      "River/TRI/colorIndex=6": "skipped",
+      "Road/LINELIST/colorIndex=11": "roads",
+      "Town/TRI/colorIndex=4": "urban_areas"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 15737,
+    "height": 10496,
+    "extent": {
+      "x_min": -524800.0,
+      "x_max": 524800.0,
+      "z_min": -524400.0,
+      "z_max": 1049300.0
+    },
+    "area_km2": {
+      "nodata": 1398.9,
+      "land": 1154664.5,
+      "field": 49915.2,
+      "forest": 5096.4,
+      "town": 16183.9,
+      "beach": 24.6,
+      "river": 2898.3,
+      "lake": 3367.4,
+      "sea": 418045.9,
+      "runway": 160.4
+    }
+  }
+}

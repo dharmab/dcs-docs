@@ -1,0 +1,49 @@
+# terrain-geodata
+
+Reads terrain data straight from a DCS World install and writes standard GIS
+files to `docs/data/terrains/<theatre>/`. No mission or desanitized scripting
+environment is needed. See [docs/terrains/geodata.md](../../docs/terrains/geodata.md)
+for what the output contains and how to use it.
+
+## Usage
+
+```bash
+cd tools/terrain-geodata
+uv run terrain-geodata list --dcs-path "D:/games/dcs/DCS World"
+uv run terrain-geodata export --dcs-path "D:/games/dcs/DCS World"
+uv run terrain-geodata export --dcs-path "D:/games/dcs/DCS World" --terrain Caucasus
+```
+
+`--dcs-path` can also come from the `DCS_PATH` environment variable. `--out`
+defaults to `docs/data/terrains` relative to the current directory, so pass
+`--out ../../docs/data/terrains` when running from this folder. `--resolution`
+sets the land cover pixel size (default 100 m). A full export of every terrain
+takes several minutes; GermanyCW and Kola are the slowest.
+
+Re-run the export after a DCS update that touches terrains, then review the diff
+of each `terrain.json`.
+
+## Sources in the install
+
+| Output                       | Read from                                   |
+| ---------------------------- | ------------------------------------------- |
+| Projection                   | `Beacons.lua`, `Map/towns.lua`, `Map/*.gn4` |
+| `places.csv`, `places` layer | `Map/towns.lua`, `Map/*.gn4`                |
+| Other `features.gpkg` layers | `Map/*.sup5` (Mission Editor map overlay)   |
+| `landcover.tif`              | `Surface/*.surface5` (terrain mesh)         |
+
+The binary layouts are documented in the module docstrings:
+[landscape.py](terrain_geodata/landscape.py) (shared header and streams),
+[sup5.py](terrain_geodata/sup5.py), [surface5.py](terrain_geodata/surface5.py)
+and [geonames.py](terrain_geodata/geonames.py). They were worked out from the
+files themselves; nothing here is published by Eagle Dynamics. If an update
+changes a layout the tool raises `FormatError` rather than writing bad data.
+
+## Adding a terrain
+
+New terrains are picked up automatically. Check the export log for
+`skipped map materials`: these are overlay line or polygon sets the tool could
+not place. Road-like lines (`Road`, `Rail`, `Railway`) are sorted into roads and
+railways by checking which mesh triangles they sit on; anything that matches
+neither can be assigned in `OVERLAY_OVERRIDES` in
+[export.py](terrain_geodata/export.py) after plotting it.

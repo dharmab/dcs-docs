@@ -217,6 +217,12 @@
       "type": "guide",
       "audience": "developer",
       "description": "Tacview ACMI format, DCS recording quirks, and the acmi-query debugging tool"
+    },
+    {
+      "path": "terrains/geodata.md",
+      "type": "data-reference",
+      "audience": "developer",
+      "description": "Terrain projections, land cover rasters, and map features as GIS files in data/terrains/"
     }
   ],
   "learning_path": [

@@ -1,0 +1,62 @@
+{
+  "theatre": "Normandy",
+  "terrain_folder": "Normandy",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=-3 +k_0=0.9996 +x_0=-195526 +y_0=-5484813 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": -3,
+    "scale_factor": 0.9996,
+    "false_easting": -195526,
+    "false_northing": -5484813,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 1267,
+    "fit_rms_error_m": 0.038,
+    "fit_max_error_m": 0.066
+  },
+  "places": {
+    "count": 1297
+  },
+  "features": {
+    "layers": {
+      "places": 1297,
+      "roads": 343,
+      "railways": 484,
+      "rivers": 356,
+      "power_lines": 0,
+      "borders": 0,
+      "urban_areas": 183,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "River/LINELIST/colorIndex=6": "rivers",
+      "River/TRI/colorIndex=6": "skipped",
+      "Road/LINELIST/colorIndex=4": "roads",
+      "Road/LINELIST/colorIndex=8": "railways",
+      "Town/TRI/colorIndex=4": "urban_areas"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 7124,
+    "height": 4958,
+    "extent": {
+      "x_min": -200400.0,
+      "x_max": 295400.0,
+      "z_min": -402100.0,
+      "z_max": 310300.0
+    },
+    "area_km2": {
+      "nodata": 6184.6,
+      "land": 166488.4,
+      "field": 59615.3,
+      "forest": 20853.3,
+      "town": 5676.6,
+      "beach": 57.0,
+      "river": 642.3,
+      "lake": 455.9,
+      "sea": 92554.9,
+      "runway": 679.7
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "theatre": "Syria",
+  "terrain_folder": "Syria",
+  "dcs_version": "2.9.31.29434",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=39 +k_0=0.9996 +x_0=282801 +y_0=-3879866 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 39,
+    "scale_factor": 0.9996,
+    "false_easting": 282801,
+    "false_northing": -3879866,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 1276,
+    "fit_rms_error_m": 0.039,
+    "fit_max_error_m": 0.07
+  },
+  "places": {
+    "count": 1182
+  },
+  "features": {
+    "layers": {
+      "places": 1182,
+      "roads": 1059,
+      "railways": 78,
+      "rivers": 552,
+      "power_lines": 586,
+      "borders": 29,
+      "urban_areas": 321,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "ELT/LINELIST/colorIndex=7": "power_lines",
+      "GeoName/TRI/colorIndex=12": "skipped",
+      "GeoName/TRI/colorIndex=13": "skipped",
+      "GeoName/TRI/colorIndex=14": "skipped",
+      "Rail/LINELIST/colorIndex=11": "railways",
+      "River/LINELIST/colorIndex=6": "rivers",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Town/TRI/colorIndex=4": "urban_areas",
+      "Undef/LINELIST/colorIndex=13": "borders"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 14239,
+    "height": 9709,
+    "extent": {
+      "x_min": -496200.0,
+      "x_max": 474700.0,
+      "z_min": -697200.0,
+      "z_max": 726700.0
+    },
+    "area_km2": {
+      "nodata": 0.0,
+      "land": 972676.0,
+      "field": 37281.6,
+      "forest": 0.0,
+      "town": 10294.7,
+      "beach": 62.3,
+      "river": 3996.3,
+      "lake": 4962.9,
+      "sea": 353031.1,
+      "runway": 159.8
+    }
+  }
+}
