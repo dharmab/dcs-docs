@@ -1,20 +1,21 @@
 LUA_FILES := $(shell git ls-files '*.lua')
 PY_TOOLS := $(patsubst %/pyproject.toml,%,$(wildcard tools/*/pyproject.toml))
 MISSIONS := $(abspath $(wildcard missions/*/src))
+LUA_TEST_DIRS := $(wildcard missions/*/tests)
 
 # scipy has no wheels for newer Pythons yet
 export UV_PYTHON := 3.14
 
 .DEFAULT_GOAL := help
 
-.PHONY: help format check format-bun check-format-bun format-lua check-format-lua lint-lua format-python check-format-python lint-python typecheck-python check-missions
+.PHONY: help format check format-bun check-format-bun format-lua check-format-lua lint-lua test-lua format-python check-format-python lint-python typecheck-python check-missions
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*## "} /^[a-z-]+:.*## / {printf "  %-22s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 format: format-bun format-lua format-python ## Format all files
 
-check: check-format-bun check-format-lua lint-lua check-format-python lint-python typecheck-python check-missions ## Run all checks (CI)
+check: check-format-bun check-format-lua lint-lua test-lua check-format-python lint-python typecheck-python check-missions ## Run all checks (CI)
 
 format-bun: ## Format JSON, YAML, TOML, and Markdown
 	bun fmt
@@ -30,6 +31,10 @@ check-format-lua: ## Check Lua formatting
 
 lint-lua: ## Lint Lua
 	lua-language-server --check . --checklevel=Warning
+
+# LuaJIT runs Lua 5.1, the version DCS uses
+test-lua: ## Run mission Lua tests
+	set -e; for dir in $(LUA_TEST_DIRS); do luajit $$dir/run.lua $$dir/*_test.lua; done
 
 format-python: ## Format Python
 	uv run ruff format .

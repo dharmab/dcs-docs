@@ -45,6 +45,9 @@ jobs:
           tar -xzf /tmp/luals.tar.gz -C "$HOME/.local/luals"
           ln -s "$HOME/.local/luals/bin/lua-language-server" "$HOME/.local/bin/lua-language-server"
 
+      - name: Install LuaJIT
+        run: sudo apt-get update && sudo apt-get install -y luajit
+
       - run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - run: make check
