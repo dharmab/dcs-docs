@@ -21,7 +21,7 @@ Load order (dependencies):
 13. `CarrierOps.lua`
 14. `OperationInfinity.lua`
 
-When adding a script, update all four places: the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`.
+When adding a script, update all five places: `Harness.scripts` in `tests/harness.lua`, the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`.
 
 Style:
 
@@ -29,6 +29,12 @@ Style:
 - Name all magic numbers except -1, 0, and 1 as constants
 - Verbose logging is intentional; DCS has little observability. IADS state changes log with an `[IADS]` prefix.
 - Use `Logging`, `Units`, and `Spatial` for shared functionality
+
+## Tests
+
+`tests/` runs the scripts offline under LuaJIT (Lua 5.1, like DCS): `make test`, or `luajit tests/run.lua tests/*_test.lua` from this directory. `harness.load()` gives each test a fresh `dcs_mock.lua` environment with the mission file's groups and all 14 scripts loaded; `env.advance(seconds)` runs scheduled functions.
+
+The mock is flat terrain with no AI. Units only move when a test moves them. Enum values come from `docs/scripting/reference`. The generation tests fail if a script calls an API the mock lacks; add it to `dcs_mock.lua` with behavior checked against the docs.
 
 ## Terrain Data
 

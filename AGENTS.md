@@ -16,7 +16,7 @@ Documentation for AI agents building tools and content for DCS World.
   - `mission-check/` - Validates a mission directory or `.miz`: `uv run check-mission check <path>`
   - `acmi-query/` - Queries Tacview recordings; see `docs/tacview/acmi-debugging.md`
   - `terrain-geodata/` - Exports terrain GIS files from the DCS install to `docs/data/terrains/`
-- `missions/` - Extracted `.miz` source directories
+- `missions/` - Extracted `.miz` source directories; `missions/*/tests/` hold offline Lua tests (`make test`)
 
 ## Writing Documentation
 
