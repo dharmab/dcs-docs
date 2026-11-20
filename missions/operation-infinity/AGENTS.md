@@ -32,7 +32,7 @@ Style:
 
 ## Tests
 
-`tests/` runs the scripts offline under LuaJIT (Lua 5.1, like DCS): `make test-lua`, or `luajit tests/run.lua tests/*_test.lua` from this directory. `harness.load()` gives each test a fresh `dcs_mock.lua` environment with the mission file's groups and all 14 scripts loaded; `env.advance(seconds)` runs scheduled functions.
+`tests/` runs the scripts offline under LuaJIT (Lua 5.1, like DCS): `make test`, or `luajit tests/run.lua tests/*_test.lua` from this directory. `harness.load()` gives each test a fresh `dcs_mock.lua` environment with the mission file's groups and all 14 scripts loaded; `env.advance(seconds)` runs scheduled functions.
 
 The mock is flat terrain with no AI. Units only move when a test moves them. Enum values come from `docs/scripting/reference`. The generation tests fail if a script calls an API the mock lacks; add it to `dcs_mock.lua` with behavior checked against the docs.
 

@@ -8,14 +8,16 @@ export UV_PYTHON := 3.14
 
 .DEFAULT_GOAL := help
 
-.PHONY: help format check format-bun check-format-bun format-lua check-format-lua lint-lua test-lua format-python check-format-python lint-python typecheck-python check-missions
+.PHONY: help format check test format-bun check-format-bun format-lua check-format-lua lint-lua test-lua format-python check-format-python lint-python typecheck-python check-missions
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*## "} /^[a-z-]+:.*## / {printf "  %-22s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 format: format-bun format-lua format-python ## Format all files
 
-check: check-format-bun check-format-lua lint-lua test-lua check-format-python lint-python typecheck-python check-missions ## Run all checks (CI)
+check: check-format-bun check-format-lua lint-lua test check-format-python lint-python typecheck-python check-missions ## Run all checks (CI)
+
+test: test-lua ## Run all tests
 
 format-bun: ## Format JSON, YAML, TOML, and Markdown
 	bun fmt
