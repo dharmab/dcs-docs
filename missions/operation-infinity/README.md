@@ -43,50 +43,25 @@ The following aircraft can also spawn on the carrier CVN-74 John C. Stennis:
 
 The warehouse is configured for unlimited weapons.
 
-## Radio Frequencies
+## Communications Plan
 
-| Purpose                  | Frequency     |
-| ------------------------ | ------------- |
-| Tower                    | 254.1 MHz AM  |
-| Carrier (CVN-74 Stennis) | 254.7 MHz AM  |
-| Ground                   | 254.3 MHz AM  |
-| Radar                    | 254.5 MHz AM  |
-| Strike                   | 255.1 MHz AM  |
-| GCI UHF                  | 255.3 MHz AM  |
-| GCI VHF                  | 124.1 MHz VHF |
-| GCI FM                   | 32.1 MHz FM   |
-| In-Game AWACS            | 255.5 MHz AM  |
-| Red 1                    | 260.1 MHz AM  |
-| Red 2                    | 260.3 MHz AM  |
-| Red 3                    | 260.5 MHz AM  |
-| Red 4                    | 260.7 MHz AM  |
-| Red 5                    | 260.9 MHz AM  |
-| Blue 1                   | 261.1 MHz AM  |
-| Blue 2                   | 261.3 MHz AM  |
-| Blue 3                   | 261.5 MHz AM  |
-| Blue 4                   | 261.7 MHz AM  |
-| Blue 5                   | 261.9 MHz AM  |
-| Green 1                  | 262.1 MHz AM  |
-| Green 2                  | 262.3 MHz AM  |
-| Green 3                  | 262.5 MHz AM  |
-| Green 4                  | 262.7 MHz AM  |
-| Green 5                  | 262.9 MHz AM  |
-| Yellow 1                 | 30.1 MHz FM   |
-| Yellow 2                 | 30.3 MHz FM   |
-| Yellow 3                 | 30.5 MHz FM   |
-| Yellow 4                 | 30.7 MHz FM   |
-| Yellow 5                 | 30.9 MHz FM   |
-| Orange 1                 | 31.1 MHz FM   |
-| Orange 2                 | 31.3 MHz FM   |
-| Orange 3                 | 31.5 MHz FM   |
-| Orange 4                 | 31.7 MHz FM   |
-| Orange 5                 | 31.9 MHz FM   |
-| Basket Tanker            | 270.1 MHz AM  |
-| Boom Tanker              | 270.5 MHz AM  |
-| Slow Boom Tanker         | 270.7 MHz AM  |
-| Recovery Tanker          | 270.3 MHz AM  |
-| Military Guard           | 243.0 MHz AM  |
-| Civil Guard              | 121.5 MHz VHF |
+The comms card is in the mission briefing and in F10 > Comms Plan. Per-aircraft preset cards:
+
+- [F-4E Phantom II](comms/f-4e.md)
+- [F-16C Viper](comms/f-16c.md)
+- [F-15E Strike Eagle](comms/f-15e.md)
+- [F-15C Eagle](comms/f-15c.md)
+- [MiG-29A Fulcrum](comms/mig-29a.md)
+- F/A-18C Hornet: [Shore](comms/fa-18c-shore.md), [Carrier](comms/fa-18c-carrier.md)
+- [A-10C Warthog](comms/a-10c.md)
+- [Mirage 2000C](comms/m-2000c.md)
+- [Mirage F1](comms/mirage-f1.md)
+- F-14A Tomcat: [Shore](comms/f-14a-shore.md), [Carrier](comms/f-14a-carrier.md)
+- F-14B Tomcat: [Shore](comms/f-14b-shore.md), [Carrier](comms/f-14b-carrier.md)
+- F-14B(U) Tomcat: [Shore](comms/f-14bu-shore.md), [Carrier](comms/f-14bu-carrier.md)
+- [JF-17 Thunder](comms/jf-17.md)
+- [Su-25 Frogfoot](comms/su-25.md)
+- [Su-25T Frogfoot](comms/su-25t.md)
 
 ## Difficulty Levels
 
@@ -121,7 +96,7 @@ A carrier strike group operates in the Black Sea about 50 nm southwest of Krymsk
 
 Aircraft that spawn on the Stennis have the carrier on preset 3 and Krymsk on presets 4-6. Krymsk aircraft have Krymsk on 3-5 and the carrier on 6. Presets 7-8 hold the tankers your aircraft can refuel from.
 
-An E-3A AWACS "Magic" orbits northwest of Krymsk at 30,000 ft with EPLRS datalink enabled. For GCI, use SkyEye on 255.3 MHz, 124.1 VHF, or 32.1 FM.
+An E-3A AWACS "Magic" orbits northwest of Krymsk at 30,000 ft with EPLRS datalink enabled. It is datalink only, with no voice. SkyEye GCI also uses the callsign Magic and has voice on 255.3 MHz, 124.1 VHF, and 32.1 FM.
 
 ## Multiplayer Notes
 

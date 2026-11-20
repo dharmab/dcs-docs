@@ -1,5 +1,6 @@
--- The comms card exists in three places (displayCommsPlan, the blue-task
--- briefing, README.md) and must agree with the radios set in the mission
+-- The comms card exists in two places (displayCommsPlan, the blue-task
+-- briefing) that must be identical and agree with the mission radios. The
+-- README lists only tanker and carrier frequencies.
 local h = require("harness")
 
 local TANKERS = { "Texaco", "Arco", "Shell", "Arco 2" }
@@ -65,21 +66,51 @@ local function findLine(card, prefix)
     return nil
 end
 
-h.test("primary presets are identical in game and in the briefing", function()
+h.test("comms card is identical in game and in the briefing", function()
     local env = h.load()
-    local game = lines(inGameCard(env), "^PRIMARY PRESETS", "^%s*$")
-    local briefing = lines(briefingCard(), "^PRIMARY PRESETS", "^%s*$")
-    h.ok(#game > 10, "preset table not found in game card")
-    h.eq(table.concat(briefing, "\n"), table.concat(game, "\n"))
+    h.eq(briefingCard():match("=== COMMUNICATIONS PLAN ===.*"), inGameCard(env))
 end)
 
-h.test("tanker rows match in game and in the briefing", function()
+-- Every row of the preset table against the main radio of a boom (F-16C) and
+-- probe (FA-18C) Krymsk template and the Stennis Hornet template
+h.test("primary presets match the mission radios", function()
     local env = h.load()
-    local game = lines(inGameCard(env), "^TANKERS", "^%s*$")
-    local briefing = lines(briefingCard(), "^TANKERS", "^%s*$")
-    table.sort(game)
-    table.sort(briefing)
-    h.eq(table.concat(briefing, "\n"), table.concat(game, "\n"))
+    local function channels(name)
+        return missionGroup(env, name).units[1].Radio[1].channels
+    end
+    local shore = { channels("F-16C Template"), channels("FA-18C Template") }
+    local carrier = channels("FA-18C Stennis Template")
+    local STEP = 0.2
+    local rows = 0
+    for _, line in ipairs(lines(inGameCard(env), "^NAME", "^%s*$")) do
+        local name, freq, shoreCh, cvnCh = line:match("^(.-)%s%s+(%S+)%s+(%S+)%s+(%S+)$")
+        if name and name ~= "NAME" and name:sub(1, 4) ~= "F-4E" then
+            rows = rows + 1
+            local first, last = freq:match("^([%d.]+)%-([%d.]+)$")
+            first, last = tonumber(first or freq), tonumber(last or freq)
+            local function check(radios, chText, label)
+                if chText == "-" then
+                    return
+                end
+                local chFirst = tonumber(chText:match("^(%d+)"))
+                local matched = false
+                for _, radio in ipairs(radios) do
+                    local all = true
+                    for i = 0, math.floor((last - first) / STEP + 0.5) do
+                        local ch = radio[chFirst + i]
+                        if not ch or math.abs(ch - (first + i * STEP)) > 0.01 then
+                            all = false
+                        end
+                    end
+                    matched = matched or all
+                end
+                h.ok(matched, name .. " " .. label .. " ch" .. chText)
+            end
+            check(shore, shoreCh, "shore")
+            check({ carrier }, cvnCh, "CVN-74")
+        end
+    end
+    h.ok(rows > 10, "preset table not found")
 end)
 
 h.test("tanker frequencies and TACANs match the mission groups", function()
@@ -136,4 +167,21 @@ h.test("carrier systems appear in every comms card", function()
         h.ok(text:find(string.format("%.1f", sys.link4Frequency), 1, true), source .. ": Link 4")
         h.ok(text:find(string.format("%.1f", sys.radioFrequency), 1, true), source .. ": radio")
     end
+end)
+
+h.test("per-aircraft comms cards match the mission radios", function()
+    local env = h.load()
+    local CommsCards = require("comms_cards")
+    local listing = io.popen("ls '" .. CommsCards.dir .. "'")
+    local onDisk = {}
+    for file in listing:lines() do
+        onDisk[file] = true
+    end
+    listing:close()
+    for file, content in pairs(CommsCards.render(env)) do
+        h.ok(onDisk[file], file .. " missing; run luajit tests/comms_cards.lua")
+        h.eq(h.readFile(CommsCards.dir .. "/" .. file), content, file .. " is stale; run luajit tests/comms_cards.lua")
+        onDisk[file] = nil
+    end
+    h.eq(next(onDisk), nil, "card with no matching template")
 end)

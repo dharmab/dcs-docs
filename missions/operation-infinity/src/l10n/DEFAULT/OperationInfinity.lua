@@ -206,7 +206,12 @@ OperationInfinity.config = {
     -- derived at runtime from IAS and altitude (see indicatedToTrueAirspeed).
     -- Each aircraft gets its own altitude block; no per-index offset is added.
     supportAircraft = {
-        { name = "Magic", role = "AWACS, datalink only - use SkyEye", altitudeFt = 30000, iasKnots = 280 },
+        {
+            name = "Magic",
+            role = "in-game E-3A AWACS, datalink only, no voice",
+            altitudeFt = 30000,
+            iasKnots = 280,
+        },
         { name = "Texaco", altitudeFt = 20000, iasKnots = 280, radio = 270.5, tacan = "100X", tankerType = "boom" },
         { name = "Arco", altitudeFt = 18000, iasKnots = 250, radio = 270.1, tacan = "101X", tankerType = "drogue" },
         { name = "Shell", altitudeFt = 15000, iasKnots = 200, radio = 270.7, tacan = "102X", tankerType = "slow boom" },
@@ -768,7 +773,7 @@ end
 -- Callsigns and frequencies of all support assets, one per line
 function OperationInfinity:getSupportAssetText()
     local lines = {
-        "  GCI (SkyEye): 255.3 MHz AM, 124.1 MHz VHF, 32.1 MHz FM",
+        "  Magic (SkyEye GCI): 255.3 MHz AM, 124.1 MHz VHF, 32.1 MHz FM",
     }
     for _, aircraft in ipairs(self.config.supportAircraft) do
         if aircraft.tankerType then
@@ -810,12 +815,12 @@ end
 
 function OperationInfinity:displayCommsPlan(groupId)
     local msg = [[=== COMMUNICATIONS PLAN ===
-Radio 1 to talk, radio 2 on SkyEye
+Radio 1 to talk, radio 2 on Magic
 
 PRIMARY PRESETS
 NAME          FREQ          SHORE CH   CVN-74 CH
 Strike        255.1         1          1
-SkyEye        255.3         2          2
+Magic         255.3         2          2
 Krymsk TWR    254.1         3          4
 Krymsk GND    254.3         4          6
 Krymsk RDR    254.5         5          5
@@ -828,18 +833,21 @@ Red 1-5       260.1-260.9   9-13       9-13
 Blue 1-5      261.1-261.9   14-18      14-18
 Guard         243.0         19         19
 Green 1       262.1         20         20
-
-Note: F-4E has presets 1-18 only.
+F-4E has presets 1-18 only.
 
 AUX PRESETS
-  V/UHF radios: 1 SkyEye 124.1 VHF, 2-20 = PRIMARY 1-19
-  F-16 COMM2: 1 SkyEye 124.1, 2 SkyEye 32.1 FM,
+  V/UHF radios: 1 Magic 124.1 VHF, 2-20 = PRIMARY 1-19
+    F-14, F-15E, A-10 ARC-210: 21-25 Green 1-5
+    F-14: 26 Magic 32.1 FM, 27-30 Yellow 1-4
+    F-15E: 26 Magic 32.1 FM, 27-31 Yellow 1-5,
+      32-36 Orange 1-5, 37 Civil Guard 121.5
+  F-16 COMM2: 1 Magic 124.1, 2 Magic 32.1 FM,
     3 Civil Guard 121.5, 4-8 Yellow 1-5, 9-13 Orange 1-5
-  A-10 FM: 1 SkyEye 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
+  A-10 FM: 1 Magic 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
   F-4E AUX: 1 Texaco, 2 Shell
   F-15C, MiG-29A, Su-25, Su-25T: tune manually in SRS
 
-SKYEYE GCI: 255.3 AM, 124.1 AM, 32.1 FM (same controller)
+MAGIC (SkyEye GCI): voice on 255.3 AM, 124.1 AM, 32.1 FM
 OVERFLOW INTERFLIGHT: Green 1-5 262.1-262.9
 FM INTERFLIGHT: Yellow 1-5 30.1-30.9, Orange 1-5 31.1-31.9
 
@@ -849,12 +857,15 @@ CVN-74 STENNIS (~50 nm SW of Krymsk)
 TANKERS
 CALLSIGN   TYPE        NOTE        TACAN
 Texaco 1-1 KC-135      Fast boom   100X
-Arco 1-1   KC-135MPRS  Basket      101X
 Shell 1-1  KC-135      Slow boom   102X
+Arco 1-1   KC-135MPRS  Basket      101X
 Arco 2-1   S-3B        Recovery    103X
+Note: DCS bug shows Arco 1-1 and Arco 2-1 both as Arco 1 in the radio menu.
 
-Note: Due to a DCS bug, Arco 1-1 and Arco 2-1 both show as Arco 1 in the radio menu.
+MAGIC (in-game E-3A AWACS): datalink only, no voice
 
+GUARD
+  Military: 243.0 MHz AM
   Civil: 121.5 MHz VHF]]
 
     trigger.action.outTextForGroup(groupId, msg, 45)
