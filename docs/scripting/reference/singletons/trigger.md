@@ -272,6 +272,27 @@ if zone then
 end
 ```
 
+## Lua-Defined Wrappers
+
+These `trigger.action` functions are thin Lua wrappers around other API calls. Calling the underlying function directly is clearer.
+
+| Function                                                                      | What it calls                                                                            |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `trigger.action.activateGroup(group)`                                         | `group:activate()`                                                                       |
+| `trigger.action.deactivateGroup(group)`                                       | `group:destroy()`                                                                        |
+| `trigger.action.setGroupAIOn(group)`                                          | `group:getController():setOnOff(true)`                                                   |
+| `trigger.action.setGroupAIOff(group)`                                         | `group:getController():setOnOff(false)`                                                  |
+| `trigger.action.groupStopMoving(group)`                                       | `group:getController():setCommand({id = 'StopRoute', params = {value = true}})`          |
+| `trigger.action.groupContinueMoving(group)`                                   | `group:getController():setCommand({id = 'StopRoute', params = {value = false}})`         |
+| `trigger.action.addOtherCommand(name, flagName, flagValue)`                   | `missionCommands.addCommand(name, nil, ...)`; the command sets `flagName` to `flagValue` |
+| `trigger.action.removeOtherCommand(name)`                                     | `missionCommands.removeItem({name})`                                                     |
+| `trigger.action.addOtherCommandForCoalition(side, name, flagName, flagValue)` | `missionCommands.addCommandForCoalition(side, name, nil, ...)`                           |
+| `trigger.action.removeOtherCommandForCoalition(side, name)`                   | `missionCommands.removeItemForCoalition(side, {name})`                                   |
+| `trigger.action.addOtherCommandForGroup(groupId, name, flagName, flagValue)`  | `missionCommands.addCommandForGroup(groupId, name, nil, ...)`                            |
+| `trigger.action.removeOtherCommandForGroup(groupId, name)`                    | `missionCommands.removeItemForGroup(groupId, {name})`                                    |
+
+If `flagValue` is omitted, the `addOtherCommand*` functions set the flag to `true`. Note that `deactivateGroup` destroys the group; it cannot be activated again.
+
 ## See Also
 
 - [Coordinate Types](../types/coordinates.md) - Vec3 and coordinate systems

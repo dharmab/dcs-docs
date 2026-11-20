@@ -31,7 +31,7 @@ Server hooks differ from mission scripting (the SSE) in several important ways:
 | [`coord`](../singletons/coord.md)                      |           Yes           |                         No                          |
 | [`missionCommands`](../singletons/mission-commands.md) |           Yes           |                         No                          |
 | [`Object`](../classes/object.md)                       |           Yes           |                         No                          |
-| [`CoalitionObject`](../classes/coalition-object.md)    |           Yes           |                         No                          |
+| [`CoalitionObject`](../classes/coalition-object.md)    | Methods only; no global |                         No                          |
 | [`Unit`](../classes/unit.md)                           |           Yes           |                         No                          |
 | [`Group`](../classes/group.md)                         |           Yes           |                         No                          |
 | [`Airbase`](../classes/airbase.md)                     |           Yes           |                         No                          |
@@ -266,7 +266,7 @@ Returns the absolute path, resolving any symbolic links.
 
 ### Sim Control API (Sim.*)
 
-The `Sim` singleton provides simulation control functions.
+The `Sim` table provides simulation control functions. Older scripts call the same functions through `DCS.*`, which still works.[^sim-dcs]
 
 #### Sim.setUserCallbacks
 
@@ -404,14 +404,14 @@ local coalitions = Sim.getAvailableCoalitions()
 #### Sim.getAvailableSlots
 
 ```lua
-table Sim.getAvailableSlots(number coalitionID)
+table Sim.getAvailableSlots(string coalition)
 ```
 
 Returns available slots for a coalition.
 
 **Parameters:**
 
-- `coalitionID` (number): The coalition ID (1=red, 2=blue).
+- `coalition` (string): `"red"` or `"blue"`.[^slots-arg]
 
 **Returns:** An array of slot tables, each containing:
 
@@ -493,7 +493,7 @@ Returns a property of a unit by its mission ID.
 - `Sim.UNIT_GROUPCATEGORY` - Group category
 - `Sim.UNIT_CALLSIGN` - Unit callsign
 - `Sim.UNIT_HIDDEN` - Mission Editor hidden flag
-- `Sim.UNIT_COALITION` - "blue", "red", or "neutral"
+- `Sim.UNIT_COALITION` - "blue", "red", or "unknown"
 - `Sim.UNIT_COUNTRY_ID` - Country ID
 - `Sim.UNIT_TASK` - Group task
 - `Sim.UNIT_PLAYER_NAME` - Player name for occupied units
@@ -1370,6 +1370,19 @@ nil onRadioCommand(string commandMessage)
 
 Called when a radio command is issued.
 
+### Undocumented Callbacks
+
+These callbacks are undocumented, so they may change between versions.[^undocumented-callbacks]
+
+| Callback                                     | Notes                                                                                                                                                                      |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onPlayerTryChangeCoalition(playerID, side)` | Return `true` to allow the coalition change, or `false` to refuse it. Can also return a reason and a cooldown in seconds: `false, "changeCoalitionCooldown", secondsLeft`. |
+| `onPlayerChangeCoalition(playerID, side)`    | Called after a player changes coalition.                                                                                                                                   |
+| `onActivatePlane(unitType)`                  | Called when the local player's aircraft becomes active.                                                                                                                    |
+| `onCreateAircraftDataNotification(result)`   | Multi-seat slot bookkeeping.                                                                                                                                               |
+
+`require` works in hooks, for example `local net = require('net')`. `Sim.isTrackPlaying()` tells you whether a track is being replayed.
+
 ## Complete Example
 
 Here is a complete server hook script demonstrating common patterns:
@@ -1522,3 +1535,9 @@ Use `print()` for quick debugging; output appears in `dcs.log`.
 - [Simulator Scripting Engine](../../simulator-scripting-engine.md) - Mission scripting (different API from server hooks)
 - [Events](../events/events.md) - Mission scripting events (not available in hooks)
 - [Coalition](../enums/coalition.md) - Coalition enumeration values
+
+[^sim-dcs]: `Sim.*` is the name in ED's current `API/Sim_ControlAPI.md`. DCS's own `Scripts/Hooks/*.lua` and `MissionEditor/GameGUI.lua` still use `DCS.*`.
+
+[^slots-arg]: ED's `API/Sim_ControlAPI.md` names this parameter `coalitionID`, but every call in DCS's own GUI and hook scripts passes the name string, e.g. `DCS.getAvailableSlots("red")`.
+
+[^undocumented-callbacks]: Used by the hook scripts that ship in `Scripts/Hooks/` (`multiplayerCoalitionBlocker.lua`, `multislot.lua`, `common.lua`) but missing from `API/Sim_ControlAPI.md`.

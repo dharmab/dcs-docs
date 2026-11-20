@@ -302,7 +302,7 @@ The TACAN beacon allows aircraft to navigate to the carrier. Use channel **71X**
 
 TACAN frequency calculation for channel 71X:
 
-- X-mode channels 70-126: frequency = 1088 + channel = 1088 + 71 = **1159 MHz** = **1159000000 Hz**
+- X-mode channels 64-126: frequency = 1151 + channel - 64 = 1151 + 71 - 64 = **1158 MHz** = **1158000000 Hz**
 
 ```lua
 {
@@ -318,7 +318,7 @@ TACAN frequency calculation for channel 71X:
                 ["system"] = 3,         -- TACAN system
                 ["name"] = "Stennis",
                 ["callsign"] = "STN",
-                ["frequency"] = 1159000000,  -- 1159 MHz (Channel 71X)
+                ["frequency"] = 1158000000,  -- 1158 MHz (Channel 71X)
                 ["channel"] = 71,
                 ["modeChannel"] = "X",
                 ["AA"] = false,
@@ -394,7 +394,7 @@ Set an easily tuned AM frequency for ATC communications. **127.5 MHz** is a comm
                             ["system"] = 3,
                             ["name"] = "Stennis",
                             ["callsign"] = "STN",
-                            ["frequency"] = 1159000000,
+                            ["frequency"] = 1158000000,
                             ["channel"] = 71,
                             ["modeChannel"] = "X",
                             ["AA"] = false,
@@ -681,7 +681,7 @@ Before finalizing the CSG setup, verify:
 - [ ] Wind `atGround` speed is nonzero (recommended: 8-15 m/s)
 - [ ] Carrier heading matches wind direction (sailing INTO the wind)
 - [ ] Ship speed + wind speed ≈ 30 knots (15.4 m/s) for WOD
-- [ ] TACAN activated with channel 71X, frequency 1159000000 Hz
+- [ ] TACAN activated with channel 71X, frequency 1158000000 Hz
 - [ ] ICLS activated with channel 11
 - [ ] Radio frequency set to easily tuned AM frequency (e.g., 127.5 MHz = 127500000 Hz)
 - [ ] Route forms a closed loop with longest leg into the wind

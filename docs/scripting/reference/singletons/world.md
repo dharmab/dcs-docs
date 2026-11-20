@@ -31,6 +31,23 @@ end
 world.addEventHandler(deathLogger)
 ```
 
+Handler behavior:[^event-handlers]
+
+- Calling `world.addEventHandler` again with the same table has no effect: its `onEvent` still runs once per event.
+- The order in which handlers run is not defined.
+- An error raised in one handler prevents the event from being delivered to any handlers that have not yet run. DCS calls all handlers in a single loop, and an error in one `onEvent` terminates that loop. To protect other scripts' handlers, catch errors inside your own `onEvent` with `pcall`, as below.
+
+```lua
+function deathLogger:onEvent(event)
+    local ok, err = pcall(function()
+        -- handler body
+    end)
+    if not ok then
+        env.error("deathLogger: " .. tostring(err))
+    end
+end
+```
+
 ## world.removeEventHandler
 
 ```lua
@@ -157,3 +174,5 @@ The `world.getMarkPanels` function returns all map markers currently visible.
 - [object](../classes/object.md) - Object categories and base class
 - [coalition](coalition.md) - Coalition-specific object queries
 - [airbase](../classes/airbase.md) - Airbase objects
+
+[^event-handlers]: `Scripts/World/EventHandlers.lua` stores handlers in `world.eventHandlers` keyed by the handler table, and `world.onEvent` calls each with `pairs` and no `pcall`.

@@ -88,12 +88,12 @@ Use `FOR_CONTINUOUS_SEARCH` (3) for CAP and sweep missions. Use `FOR_ATTACK_ONLY
 
 ### RTB Behavior
 
-| Option               | Default | Description                          |
-| -------------------- | ------- | ------------------------------------ |
-| `RTB_ON_BINGO`       | true    | Return to base when fuel low         |
-| `RTB_ON_OUT_OF_AMMO` | true    | Return to base when weapons expended |
+| Option               | Default   | Description                                                                                                                                                                                                  |
+| -------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `RTB_ON_BINGO`       | `true`    | When the group reaches bingo fuel, it refuels from a tanker if one is available, and returns to base if not. `false`: never return for fuel. `2`: at bingo fuel, return to base without looking for a tanker |
+| `RTB_ON_OUT_OF_AMMO` | `0` (off) | [Weapon flags](../scripting/reference/enums/ai.md#weapon-flags) value; RTB when the group runs out of that weapon type, e.g. `264241152` for all air-to-air missiles                                         |
 
-Disable these for fighter sweep missions where completing the route is more important than survival.
+Setting `RTB_ON_BINGO` to `false` and `RTB_ON_OUT_OF_AMMO` to `0` keeps the group fighting instead of heading home. This can make sense when finishing the fight matters more than bringing the aircraft back, such as carrier fighters defending against bombers: if the carrier is lost, they have nowhere to land anyway.
 
 ## Combat Air Patrol (CAP)
 
@@ -451,8 +451,8 @@ This example creates a 4-ship sweep pushing 150 km into enemy territory.
                                     ["action"] = {
                                         ["id"] = "Option",
                                         ["params"] = {
-                                            ["name"] = 10,   -- RTB_ON_OUT_OF_AMMO
-                                            ["value"] = false,
+                                            ["name"] = 10,   -- RTB_ON_OUT_OF_AMMO (weapon flags; 0 = off)
+                                            ["value"] = 0,
                                         },
                                     },
                                 },
@@ -550,7 +550,7 @@ For pre-planned intercepts where the target is known at mission start, use the `
                 ["number"] = 1,
                 ["params"] = {
                     ["groupId"] = 500,  -- Target group ID
-                    ["weaponType"] = 4161536,  -- A2A weapons
+                    ["weaponType"] = 264241152,  -- AAM (all air-to-air missiles)
                 },
             },
             -- ROE: Weapon Free
@@ -607,7 +607,7 @@ if interceptors and target then
         id = 'AttackGroup',
         params = {
             groupId = target:getID(),
-            weaponType = 4161536,  -- A2A weapons
+            weaponType = 264241152,  -- AAM (all air-to-air missiles)
         }
     }
 
@@ -869,7 +869,7 @@ Before finalizing air-to-air configuration, verify:
 ### Fighters Breaking Off Too Easily
 
 - Set REACTION_ON_THREAT to EVADE_FIRE, not ALLOW_ABORT_MISSION
-- Disable RTB_ON_BINGO and RTB_ON_OUT_OF_AMMO
+- If finishing the fight matters more than getting home, disable `RTB_ON_BINGO` and `RTB_ON_OUT_OF_AMMO` (see [RTB Behavior](#rtb-behavior))
 - Check fuel load is sufficient for mission duration
 
 ### Fighters Ignoring Bandits

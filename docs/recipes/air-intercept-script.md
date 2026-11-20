@@ -413,7 +413,7 @@ function AirfieldIntercept:spawnInterceptors(airfield, flightSize, targetUnit)
                     controller:setOption(AI.Option.Air.id.RADAR_USING, AI.Option.Air.val.RADAR_USING.FOR_CONTINUOUS_SEARCH)
                     -- Don't RTB on bingo (fight to the death)
                     controller:setOption(AI.Option.Air.id.RTB_ON_BINGO, false)
-                    controller:setOption(AI.Option.Air.id.RTB_ON_OUT_OF_AMMO, false)
+                    controller:setOption(AI.Option.Air.id.RTB_ON_OUT_OF_AMMO, 0) -- 0 = "No weapon" (off)
                 end
             end
         end, nil, timer.getTime() + 2)
