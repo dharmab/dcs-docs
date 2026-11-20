@@ -68,7 +68,7 @@ Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts 
 
 ### Enabling Dynamic Spawn on a Ship
 
-Carriers (and FARPs) have their own warehouse under `warehouses["warehouses"]`, keyed by the ship's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. This format matches what the DCS 2.9.31 Mission Editor saves (`MissionEditor/modules/me_manager_resource.lua` and `me_mission.lua`), and the multiplayer spawn dialog lists such ships as "Aircraft carrier" bases.
+Carriers (and FARPs) have their own warehouse under `warehouses["warehouses"]`, keyed by the ship's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. The multiplayer spawn dialog lists such ships as "Aircraft carrier" bases.
 
 To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`) keyed by type name. Each stock entry takes `wsType` (required), `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
 

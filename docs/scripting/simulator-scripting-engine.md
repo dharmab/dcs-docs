@@ -35,11 +35,24 @@ For an introduction to the Lua programming language, including variables, tables
 
 ### Standard Library Availability
 
-Mission scripts have access to the Lua standard library, including common modules like `math`, `string`, and `table`. However, the `io`, `lfs` (LuaFileSystem), and `os` libraries are disabled by default in mission scripting. This restriction exists because missions downloaded from multiplayer servers execute automatically, and filesystem or operating system access would allow malicious missions to read, write, or delete files on your computer or execute arbitrary commands.
+Mission scripts have access to most of the Lua standard library, including `math`, `string`, and `table`. Missions are shared online and downloaded from multiplayer servers, and their scripts run without any prompt, so a malicious mission could harm the computer that runs it. To prevent this, `Scripts/MissionScripting.lua` sets six globals to `nil` before any mission script runs: `io`, `lfs`, `os`, `require`, `loadlib`, and `package`. Without `io`, `lfs` (LuaFileSystem), and `os`, a script cannot read, write, or delete files, or start other programs through the operating system shell. Without `require`, `loadlib`, and `package`, a script cannot load Lua modules or DLLs.
 
 Server hooks operate in a different environment with full access to `io`, `lfs`, `os`, and `debug`. See [Server Hooks](reference/hooks/server-hooks.md) for details on server-side scripting capabilities.
 
-Users who want to enable `io`, `lfs`, and `os` in mission scripts for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions. Commenting out or deleting the sanitization lines restores access to these libraries. This process is commonly called "desanitizing" the scripting environment.
+Users who want to enable `io`, `lfs`, and `os` in mission scripts for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions:
+
+```lua
+do
+	sanitizeModule('os')
+	sanitizeModule('io')
+	sanitizeModule('lfs')
+	_G['require'] = nil
+	_G['loadlib'] = nil
+	_G['package'] = nil
+end
+```
+
+Commenting out a line restores that library or function. This process is commonly called "desanitizing" the scripting environment.
 
 Desanitization carries significant security risks. Any mission you load, including missions from multiplayer servers, will gain the ability to access your filesystem. A malicious mission could read sensitive files, install malware, or delete data. Only desanitize if you understand these risks and only play missions from trusted sources.
 

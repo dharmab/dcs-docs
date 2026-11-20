@@ -188,6 +188,7 @@ local attack = {
         weaponType = number,
         expend = string,
         direction = number,
+        directionEnabled = boolean,
         attackQtyLimit = boolean,
         attackQty = number,
         groupAttack = boolean
@@ -195,14 +196,14 @@ local attack = {
 }
 ```
 
-The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a weapon flags bitmask. The `expend` field specifies how much ordnance to use per pass. The `direction` field specifies the attack azimuth in radians. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
+The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a [weapon flags](../enums/ai.md#weapon-flags) bitmask. The `expend` field specifies how much ordnance to use per pass. The `direction` field is the ingress heading in radians: the course the group flies toward the target on its attack run. It takes effect only when `directionEnabled` is `true`. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
 
 ```lua
 local attack = {
     id = 'AttackUnit',
     params = {
         unitId = Unit.getByName("Target"):getID(),
-        weaponType = 4161536,
+        weaponType = 4161536, -- ASM
         expend = "Two",
         attackQtyLimit = true,
         attackQty = 1
@@ -230,7 +231,7 @@ local attack = {
 }
 ```
 
-The `groupId` field is required and contains the unique numeric identifier of the target group; call `group:getID()` on a Group object to obtain this value. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task.
+The `groupId` field is required and contains the unique numeric identifier of the target group; call `group:getID()` on a Group object to obtain this value. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task. The `groupAttack` field works the same as in `AttackUnit`.
 
 ### Bombing
 
@@ -391,6 +392,24 @@ local fire = {
 
 The `point` field contains the target coordinates as a Vec2. The `radius` field specifies the dispersion radius in meters. The `expendQty` field specifies how many rounds to fire when `expendQtyEnabled` is true.
 
+Mission files store the target as `x` and `y` params instead of `point`, and the radius as `zoneRadius`. Setting both forms is safe:
+
+```lua
+local target = trigger.misc.getZone("Arty Target")
+local fire = {
+    id = 'FireAtPoint',
+    params = {
+        point = {x = target.point.x, y = target.point.z},
+        x = target.point.x,
+        y = target.point.z,
+        radius = 100,
+        zoneRadius = 100,
+        expendQtyEnabled = true,
+        expendQty = 20
+    }
+}
+```
+
 ### Land
 
 The `Land` task orders aircraft to land at an airbase or point.
@@ -408,7 +427,9 @@ local land = {
 }
 ```
 
-The `point` field contains the landing point as a Vec2. The `duration` field specifies how long to stay on the ground when `durationFlag` is true.
+The `point` field contains the landing point as a Vec2. The `duration` field specifies how long to stay on the ground, in seconds, when `durationFlag` is true. The default is 300.
+
+Mission files store the landing point as `x` and `y` params instead of `point`.
 
 ### RecoveryTanker
 
@@ -451,7 +472,7 @@ local engage = {
 }
 ```
 
-The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority, where lower values indicate higher priority; the default is 0.
+The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority, where lower values indicate higher priority; the default is 0. The optional `maxDistEnabled` and `maxDist` (meters) fields limit how far from the route the group will go to engage.
 
 ```lua
 local cap = {

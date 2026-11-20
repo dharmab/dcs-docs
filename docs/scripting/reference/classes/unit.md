@@ -155,7 +155,7 @@ local healthPercent = (life / maxLife) * 100
 number unit:getLife0()
 ```
 
-The `unit:getLife0` method returns the unit's initial (maximum) hit points.
+The `unit:getLife0` method returns the unit's initial (maximum) hit points. It is the same as `unit:getDesc().life`.
 
 **Returns:** The initial hit points as a number.
 

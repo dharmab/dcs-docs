@@ -4,6 +4,8 @@ The CoalitionObject class extends Object with coalition and country information.
 
 Inherits from: [Object](object.md)
 
+CoalitionObject is a grouping used in documentation, not a class you can reference in Lua. The methods below are available on `Unit`, `StaticObject`, `Weapon`, and `Airbase` directly.
+
 ## object:getCoalition
 
 ```lua

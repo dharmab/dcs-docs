@@ -201,17 +201,27 @@ The Tanker task activates the aircraft's aerial refueling capability, allowing i
 
 ### TACAN Beacon Configuration
 
-The TACAN beacon allows aircraft to navigate to the tanker using their TACAN receiver. Use the `TACAN_TANKER` system (4) instead of regular `TACAN` (3) to enable air-to-air TACAN mode.
+The TACAN beacon lets receiving aircraft find the tanker with their TACAN. It is an `ActivateBeacon` command on the tanker's first waypoint.
 
-> **Note:** Always use X-mode TACAN channels for tankers. Y-mode is not commonly used for air-to-air refueling operations.
+| Field         | Value                                                                              |
+| ------------- | ---------------------------------------------------------------------------------- |
+| `type`        | `4` (`BEACON_TYPE_TACAN`)                                                          |
+| `system`      | `4` (`TACAN_TANKER_MODE_X`) or `5` (`TACAN_TANKER_MODE_Y`), matching `modeChannel` |
+| `channel`     | `1` to `126`                                                                       |
+| `modeChannel` | `"X"` or `"Y"`                                                                     |
+| `frequency`   | Hz, calculated from the channel and mode (see below)                               |
+| `AA`          | `false`                                                                            |
+| `bearing`     | `true`                                                                             |
+| `callsign`    | Morse identifier, e.g. `"TXC"`                                                     |
 
-**TACAN Frequency Calculation (X-mode):**
+TACAN has two modes, X and Y, each with channels 1 to 126, for 252 channels in total. Channels with the same number in different modes use different frequencies, so 33X and 33Y do not conflict.
 
-- Channels 70-126: frequency = 1088 + channel (MHz)
+**Frequency for X-mode channels:**
 
-For example, channel **100X**:
+- Channels 1-63: 962 + channel - 1 MHz
+- Channels 64-126: 1151 + channel - 64 MHz
 
-- X-mode channel 100: frequency = 1088 + 100 = **1188 MHz** = **1188000000 Hz**
+For example, channel 100X is 1151 + 100 - 64 = 1187 MHz, so `frequency = 1187000000`. See [ActivateBeacon](../scripting/reference/ai/commands.md#activatebeacon) for Y-mode channels.
 
 ```lua
 {
@@ -223,22 +233,20 @@ For example, channel **100X**:
         ["action"] = {
             ["id"] = "ActivateBeacon",
             ["params"] = {
-                ["type"] = 4,           -- BEACON_TYPE_TACAN
-                ["system"] = 4,         -- TACAN_TANKER (air-to-air TACAN)
+                ["type"] = 4,
+                ["system"] = 4,
                 ["name"] = "Texaco",
                 ["callsign"] = "TXC",
-                ["frequency"] = 1188000000,  -- 1188 MHz (Channel 100X)
+                ["frequency"] = 1187000000,  -- Channel 100X
                 ["channel"] = 100,
                 ["modeChannel"] = "X",
-                ["AA"] = true,          -- Air-to-Air mode
+                ["AA"] = false,
                 ["bearing"] = true,
             },
         },
     },
 },
 ```
-
-> **Important:** Set `["system"] = 4` for `TACAN_TANKER` and `["AA"] = true` to enable air-to-air TACAN mode. Ground-based TACAN uses `["system"] = 3` and `["AA"] = false`.
 
 ### Set Frequency Task
 
@@ -337,10 +345,10 @@ Enable unlimited fuel to ensure the tanker can operate for the duration of the m
                             ["system"] = 4,
                             ["name"] = "Texaco",
                             ["callsign"] = "TXC",
-                            ["frequency"] = 1188000000,
+                            ["frequency"] = 1187000000,
                             ["channel"] = 100,
                             ["modeChannel"] = "X",
-                            ["AA"] = true,
+                            ["AA"] = false,
                             ["bearing"] = true,
                         },
                     },
@@ -533,10 +541,10 @@ The KC-130 operates at lower altitudes and speeds, suitable for tactical refueli
                                             ["system"] = 4,
                                             ["name"] = "Arco",
                                             ["callsign"] = "ARC",
-                                            ["frequency"] = 1161000000,  -- Channel 73X
+                                            ["frequency"] = 1160000000,  -- Channel 73X
                                             ["channel"] = 73,
                                             ["modeChannel"] = "X",
-                                            ["AA"] = true,
+                                            ["AA"] = false,
                                             ["bearing"] = true,
                                         },
                                     },
@@ -745,10 +753,10 @@ The Ilyushin Il-78M provides aerial refueling capability for Russian and allied 
                                             ["system"] = 4,
                                             ["name"] = "Midas",
                                             ["callsign"] = "MID",
-                                            ["frequency"] = 1178000000,  -- Channel 90X
+                                            ["frequency"] = 1177000000,  -- Channel 90X
                                             ["channel"] = 90,
                                             ["modeChannel"] = "X",
-                                            ["AA"] = true,
+                                            ["AA"] = false,
                                             ["bearing"] = true,
                                         },
                                     },
@@ -867,11 +875,11 @@ These are typical values. Missions that follow the [standardized comm plan](comm
 
 | Tanker         | Channel | Frequency (Hz) |
 | -------------- | ------- | -------------- |
-| Primary Boom   | 100X    | 1188000000     |
-| Primary Drogue | 101X    | 1189000000     |
-| KC-130         | 73X     | 1161000000     |
-| S-3B           | 75X     | 1163000000     |
-| REDFOR         | 90X     | 1178000000     |
+| Primary Boom   | 100X    | 1187000000     |
+| Primary Drogue | 101X    | 1188000000     |
+| KC-130         | 73X     | 1160000000     |
+| S-3B           | 75X     | 1162000000     |
+| REDFOR         | 90X     | 1177000000     |
 
 ## Unit Conversions
 
@@ -898,7 +906,7 @@ Before finalizing the tanker setup, verify:
 - [ ] Aircraft type matches coalition (KC-135/KC-130/S-3B for Blue, IL-78M for Red)
 - [ ] Aircraft type matches receiver refueling system (boom vs. drogue)
 - [ ] Tanker task is enabled on first waypoint (`["id"] = "Tanker"`)
-- [ ] TACAN beacon uses `["system"] = 4` (TACAN_TANKER) and `["AA"] = true`
+- [ ] TACAN beacon uses `["system"] = 4` (`TACAN_TANKER_MODE_X`), `["AA"] = false`, and a frequency that matches the channel
 - [ ] TACAN channel is unique and doesn't conflict with other beacons
 - [ ] Radio frequency is set via `SetFrequency` action
 - [ ] `SetUnlimitedFuel` is enabled to prevent fuel depletion
@@ -920,8 +928,8 @@ Before finalizing the tanker setup, verify:
 
 ### TACAN Not Appearing
 
-- Verify `["system"] = 4` (TACAN_TANKER) is set, not `3` (TACAN)
-- Check that `["AA"] = true` for air-to-air TACAN mode
+- Verify `["system"] = 4` (`TACAN_TANKER_MODE_X`) or `5` (Y mode) is set, not `3` (`TACAN`)
+- Check that `["frequency"]` matches the channel, mode, and `AA` flag (see [ActivateBeacon](../scripting/reference/ai/commands.md#activatebeacon))
 - Ensure the TACAN channel doesn't conflict with other beacons
 - Verify the `ActivateBeacon` task is on the first waypoint
 

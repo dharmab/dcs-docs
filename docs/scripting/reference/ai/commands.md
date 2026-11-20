@@ -171,50 +171,57 @@ local cmd = {
         system = number,
         name = string,
         callsign = string,
-        frequency = number
+        frequency = number,
+        channel = number,
+        modeChannel = string,
+        AA = boolean,
+        bearing = boolean,
+        unitId = number
     }
 }
 controller:setCommand(cmd)
 ```
 
-The `type` field specifies the beacon type using one of these numeric values (see [Beacon Types](../enums/ai.md#beacon-types)):
+The `type` field specifies the beacon type. TACAN is `4`. See [Beacon Types](../enums/ai.md#beacon-types) for the full list.
 
-| Constant                                | Value |
-| --------------------------------------- | ----- |
-| `BEACON_TYPE_NULL`                      | 0     |
-| `BEACON_TYPE_VOR`                       | 1     |
-| `BEACON_TYPE_DME`                       | 2     |
-| `BEACON_TYPE_VOR_DME`                   | 3     |
-| `BEACON_TYPE_TACAN`                     | 4     |
-| `BEACON_TYPE_VORTAC`                    | 5     |
-| `BEACON_TYPE_HOMER`                     | 8     |
-| `BEACON_TYPE_RSBN`                      | 32    |
-| `BEACON_TYPE_BROADCAST_STATION`         | 1024  |
-| `BEACON_TYPE_AIRPORT_HOMER`             | 4104  |
-| `BEACON_TYPE_AIRPORT_HOMER_WITH_MARKER` | 4136  |
-| `BEACON_TYPE_ILS_FAR_HOMER`             | 16408 |
-| `BEACON_TYPE_ILS_NEAR_HOMER`            | 16456 |
-| `BEACON_TYPE_ILS_LOCALIZER`             | 16640 |
-| `BEACON_TYPE_ILS_GLIDESLOPE`            | 16896 |
-| `BEACON_TYPE_NAUTICAL_HOMER`            | 32776 |
+The `system` field specifies the beacon system (see [Beacon Systems](../enums/ai.md#beacon-systems)). For TACAN, it depends on what kind of unit transmits the beacon:
 
-For example, `type = 4` selects TACAN.
+| Unit            | X mode                       | Y mode                       |
+| --------------- | ---------------------------- | ---------------------------- |
+| Ship            | `3` (`TACAN`)                | `3` (`TACAN`)                |
+| Tanker aircraft | `4` (`TACAN_TANKER_MODE_X`)  | `5` (`TACAN_TANKER_MODE_Y`)  |
+| Ground vehicle  | `18` (`TACAN_MOBILE_MODE_X`) | `19` (`TACAN_MOBILE_MODE_Y`) |
 
-The `system` field specifies the beacon system using one of these numeric values from the `SystemName` enum (see [Beacon Systems](../enums/ai.md#beacon-systems)):
+The `type` and `system` values are separate: a carrier's TACAN uses `type = 4` and `system = 3`.
 
-| Constant                       | Value |
-| ------------------------------ | ----- |
-| `SystemName.PAR_10`            | 1     |
-| `SystemName.RSBN_5`            | 2     |
-| `SystemName.TACAN`             | 3     |
-| `SystemName.TACAN_TANKER`      | 4     |
-| `SystemName.ILS_LOCALIZER`     | 5     |
-| `SystemName.ILS_GLIDESLOPE`    | 6     |
-| `SystemName.BROADCAST_STATION` | 7     |
+The `channel` field is the TACAN channel (1 to 126) and `modeChannel` is `"X"` or `"Y"`. The `AA` field marks an air-to-air TACAN. Set it to `false` for ships and tankers, and `true` for other aircraft. The `bearing` field turns on bearing information. The `unitId` field is the ID of the unit that transmits the beacon. The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign.
 
-For example, `system = 3` selects the TACAN system. The `type` and `system` values are separate: TACAN uses `type = 4` and `system = 3`.
+The `frequency` field is in Hz and must match the channel:
 
-The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign. The `frequency` field specifies the beacon frequency in Hz.
+| Case                   | Channels 1-63            | Channels 64-126           |
+| ---------------------- | ------------------------ | ------------------------- |
+| X mode, `AA = false`   | `962 + channel - 1` MHz  | `1151 + channel - 64` MHz |
+| Y mode, or `AA = true` | `1088 + channel - 1` MHz | `1025 + channel - 64` MHz |
+
+```lua
+--- Returns the frequency for a TACAN channel, for the `frequency` field of `ActivateBeacon`.
+---@param channel integer TACAN channel, 1 to 126
+---@param mode "X"|"Y" Channel mode
+---@param aa boolean Value of the beacon's `AA` field
+---@return number frequency Frequency in Hz
+local function tacanFrequencyHz(channel, mode, aa)
+    local mhz
+    if not aa and mode == "X" then
+        mhz = channel < 64 and (962 + channel - 1) or (1151 + channel - 64)
+    else
+        mhz = channel < 64 and (1088 + channel - 1) or (1025 + channel - 64)
+    end
+    return mhz * 1000000
+end
+
+tacanFrequencyHz(71, "X", false)  -- 1158000000 (carrier, 71X)
+tacanFrequencyHz(100, "X", false) -- 1187000000 (tanker, 100X)
+```
 
 ## DeactivateBeacon
 
@@ -232,14 +239,16 @@ controller:setCommand(cmd)
 
 ## ActivateACLS
 
-The `ActivateACLS` command activates the Automatic Carrier Landing System on a carrier. This command takes no parameters.
+The `ActivateACLS` command activates the Automatic Carrier Landing System on a carrier. Its only parameter is `unitId`, the ID of the carrier.
 
 **For:** Ships (carriers)
 
 ```lua
 local cmd = {
     id = 'ActivateACLS',
-    params = {}
+    params = {
+        unitId = number
+    }
 }
 controller:setCommand(cmd)
 ```
@@ -275,7 +284,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `unitId` field contains the aircraft unit ID. The `frequency` field specifies the Link 4 frequency.
+The `unitId` field is the ID of the ship that transmits Link 4, normally the group's lead unit. The `frequency` field specifies the Link 4 frequency in Hz.
 
 ## DeactivateLink4
 
@@ -301,13 +310,15 @@ The `ActivateICLS` command activates the Instrument Carrier Landing System.
 local cmd = {
     id = 'ActivateICLS',
     params = {
-        channel = number
+        type = 131584,
+        channel = number,
+        unitId = number
     }
 }
 controller:setCommand(cmd)
 ```
 
-The `channel` field specifies the ICLS channel.
+The `type` field is always `131584` (`BEACON_TYPE_ICLS_GLIDESLOPE`). The `channel` field specifies the ICLS channel. The `unitId` field is the ID of the carrier unit.
 
 ## DeactivateICLS
 
@@ -377,15 +388,15 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-## Smoke_On_Off
+## SMOKE_ON_OFF
 
-The `Smoke_On_Off` command toggles a smoke trail on or off.
+The `SMOKE_ON_OFF` command toggles a smoke trail on or off.
 
 **For:** Airplanes (aerobatic aircraft)
 
 ```lua
 local cmd = {
-    id = 'Smoke_On_Off',
+    id = 'SMOKE_ON_OFF',
     params = {
         value = boolean
     }

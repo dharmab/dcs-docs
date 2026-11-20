@@ -108,6 +108,8 @@ The `object:hasAttribute` method checks if the object has a specific attribute, 
 
 **Returns:** True if the object has the attribute, or false otherwise.
 
+`object:getAttributes()` returns the whole attributes table (`getDesc().attributes`), which can be `nil`.
+
 ```lua
 if unit:hasAttribute("SAM related") then
     env.info("This is a SAM unit")
