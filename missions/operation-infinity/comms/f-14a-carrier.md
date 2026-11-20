@@ -72,7 +72,3 @@ DCS shows Arco 1-1 and Arco 2-1 both as Arco 1 in the radio menu.
 ## CVN-74 Stennis
 
 254.7 AM, TACAN 74X STN, ICLS 4, Link 4 336.0, ACLS
-
-## Magic
-
-Two stations use the callsign Magic. The Magic presets are SkyEye GCI, which has voice. The in-game E-3A AWACS is datalink only, with no voice.
