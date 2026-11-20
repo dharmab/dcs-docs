@@ -17,6 +17,7 @@ local SHORAD_OFFSET_BASE_METERS = 1000
 local SHORAD_OFFSET_VARIANCE_METERS = 500
 local FIRE_OFFSET_RADIUS_METERS = 50
 local FIRE_EXPENDITURE_QUANTITY = 200
+local CONVOY_SPACING_METERS = 20
 
 local log = Logging:create("BattlefieldGeneration")
 
@@ -39,9 +40,9 @@ function BattlefieldGeneration:generateFrontline()
     centroid.y = centroid.y / #aerodromes
 
     -- Calculate approach direction from Krymsk to target centroid
-    local krymsk = config.krymsk
-    local dx = centroid.x - krymsk.x
-    local dy = centroid.y - krymsk.y
+    local homeAirbase = OperationInfinity.state.homeAirbase
+    local dx = centroid.x - homeAirbase.x
+    local dy = centroid.y - homeAirbase.y
     local approachDist = math.sqrt(dx * dx + dy * dy)
     local approachDir = { x = dx / approachDist, y = dy / approachDist }
 
@@ -367,6 +368,35 @@ end
 -- BEHIND-LINES TARGETS
 -- =============================================================================
 
+-- Build a logistics convoy as a column following the road from a road point.
+-- Returns an empty list if the road direction cannot be found.
+local function buildRoadConvoyUnits(roadPos)
+    local template = Formations:randomizeTemplate(UnitTemplates.LogisticsConvoy)
+    local unitCount = 0
+    for _, def in ipairs(template) do
+        unitCount = unitCount + def.count
+    end
+
+    local column = Terrain:getRoadColumn(roadPos, unitCount, CONVOY_SPACING_METERS)
+    local units = {}
+    for _, def in ipairs(template) do
+        for _ = 1, def.count do
+            local slot = column[#units + 1]
+            if not slot then
+                return units
+            end
+            units[#units + 1] = {
+                type = def.type,
+                x = slot.x,
+                y = slot.y,
+                heading = slot.heading,
+                skill = "High",
+            }
+        end
+    end
+    return units
+end
+
 function BattlefieldGeneration:generateConvoy(index)
     local state = OperationInfinity.state
 
@@ -375,21 +405,13 @@ function BattlefieldGeneration:generateConvoy(index)
     local aerodrome = aerodromes[math.random(#aerodromes)]
     local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
 
-    -- Convoys should be near roads (within 100m)
-    local pos, valid = Terrain:findValidPosition(initialPos, 200, {
-        maxRoadDistance = 100,
-    })
-    if not valid then
-        log("Skipping Convoy-" .. index .. " near " .. aerodrome.name .. " - no valid terrain near roads")
+    -- Convoys are placed on a road, in a column following it
+    local pos, valid = Terrain:findRoadPosition(initialPos, 200)
+    local units = valid and buildRoadConvoyUnits(pos) or {}
+    if #units == 0 then
+        log("Skipping Convoy-" .. index .. " near " .. aerodrome.name .. " - no valid road")
         return
     end
-
-    -- Apply template randomization and use LINE formation for convoy
-    local template = Formations:randomizeTemplate(UnitTemplates.LogisticsConvoy)
-    local units = Formations:buildPlatoonUnits(template, pos, {
-        formation = Formations.FormationType.LINE,
-        spacing = 20, -- Tighter spacing for convoy
-    })
 
     Virtualization:registerGroup({
         name = "Convoy-" .. index,
@@ -740,9 +762,9 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
     centroid.y = centroid.y / #aerodromes
 
     -- Calculate approach vector from Krymsk to target centroid
-    local krymsk = config.krymsk
-    local dx = centroid.x - krymsk.x
-    local dy = centroid.y - krymsk.y
+    local homeAirbase = OperationInfinity.state.homeAirbase
+    local dx = centroid.x - homeAirbase.x
+    local dy = centroid.y - homeAirbase.y
     local totalDistance = math.sqrt(dx * dx + dy * dy)
     local approachDir = { x = dx / totalDistance, y = dy / totalDistance }
 
@@ -771,8 +793,8 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
         else
             waypointIndex = waypointIndex + 1
             local waypointCenter = {
-                x = krymsk.x + approachDir.x * waypointDistance,
-                y = krymsk.y + approachDir.y * waypointDistance,
+                x = homeAirbase.x + approachDir.x * waypointDistance,
+                y = homeAirbase.y + approachDir.y * waypointDistance,
             }
 
             log(
@@ -930,20 +952,13 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
 
         log("Generated approach route armor at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "convoy" then
-        -- Position convoy near roads
-        local pos, valid = Terrain:findValidPosition(initialPos, 200, {
-            maxRoadDistance = 100,
-        })
-        if not valid then
-            log("Skipping approach route convoy - no valid terrain near roads")
+        -- Convoys are placed on a road, in a column following it
+        local pos, valid = Terrain:findRoadPosition(initialPos, 200)
+        local units = valid and buildRoadConvoyUnits(pos) or {}
+        if #units == 0 then
+            log("Skipping approach route convoy - no valid road")
             return
         end
-
-        local template = Formations:randomizeTemplate(UnitTemplates.LogisticsConvoy)
-        local units = Formations:buildPlatoonUnits(template, pos, {
-            formation = Formations.FormationType.LINE,
-            spacing = 20,
-        })
 
         local groupName = groupPrefix .. "-Convoy-" .. item.targetIndex
 

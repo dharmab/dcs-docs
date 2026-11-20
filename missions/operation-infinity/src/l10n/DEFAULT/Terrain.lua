@@ -15,11 +15,86 @@ Terrain = {}
 Terrain.config = {
     defaultMaxSlope = 15, -- Degrees
     defaultMaxRoughness = 5, -- Meters standard deviation
-    maxSearchAttempts = 10, -- Attempts to find valid position
+    maxSearchAttempts = 20, -- Attempts to find valid position; land cover rejects most bad points cheaply
     sampleRadius = 50, -- Meters for slope sampling
+    sceneryClearance = 100, -- Meters around a position that must be free of buildings and other scenery
+    roadProbeDistance = 60, -- Meters from a road point to probe for the road's direction
+    roadProbeDirections = 8, -- Evenly spaced probes when looking for the road's direction
 }
 
 local log = Logging:create("Terrain")
+
+-- Loaded by TerrainData.lua, which is too large for the Lua language server to index
+local TerrainData = _G.TerrainData
+
+-- Decoded land cover mask rows, keyed by row index. Each row is a list of
+-- cumulative run ends; odd runs are open ground, even runs are blocked.
+local landCoverRows = {}
+
+local function getLandCoverRow(rowIndex)
+    local row = landCoverRows[rowIndex]
+    if row then
+        return row
+    end
+
+    row = {}
+    local columnEnd = 0
+    for runLength in TerrainData.rows[rowIndex]:gmatch("%d+") do
+        columnEnd = columnEnd + tonumber(runLength)
+        row[#row + 1] = columnEnd
+    end
+    landCoverRows[rowIndex] = row
+    return row
+end
+
+-- Check the generated land cover mask (TerrainData.lua) for forest, water, or
+-- ground off the terrain mesh. DCS scripting cannot detect forest, so this is
+-- the only forest check. Positions outside the mask are not blocked.
+function Terrain:isBlockedLandCover(pos)
+    if not TerrainData then
+        return false
+    end
+
+    local rowIndex = math.floor((TerrainData.northX - pos.x) / TerrainData.cellSize) + 1
+    local column = math.floor((pos.y - TerrainData.westZ) / TerrainData.cellSize) + 1
+    if rowIndex < 1 or rowIndex > #TerrainData.rows or column < 1 or column > TerrainData.columns then
+        return false
+    end
+
+    -- Binary search for the first run that ends at or after this column
+    local row = getLandCoverRow(rowIndex)
+    local low, high = 1, #row
+    while low < high do
+        local middle = math.floor((low + high) / 2)
+        if row[middle] >= column then
+            high = middle
+        else
+            low = middle + 1
+        end
+    end
+    return low % 2 == 0
+end
+
+-- Check for buildings, bridges, power line towers and other scenery objects
+-- near a position. The land cover "town" class only says buildings are likely,
+-- so buildings are checked here at runtime instead.
+function Terrain:hasSceneryNearby(pos, radius)
+    radius = radius or self.config.sceneryClearance
+
+    local found = false
+    local volume = {
+        id = world.VolumeType.SPHERE,
+        params = {
+            point = { x = pos.x, y = land.getHeight({ x = pos.x, y = pos.y }), z = pos.y },
+            radius = radius,
+        },
+    }
+    world.searchObjects(Object.Category.SCENERY, volume, function()
+        found = true
+        return false
+    end)
+    return found
+end
 
 -- Calculate maximum slope around a position by sampling 8 points
 function Terrain:calculateMaxSlope(center, sampleRadius)
@@ -115,6 +190,12 @@ function Terrain:isValidTerrainForUnits(center, options)
     local maxSlope = options.maxSlope or self.config.defaultMaxSlope
     local maxRoughness = options.maxRoughness or self.config.defaultMaxRoughness
     local maxRoadDistance = options.maxRoadDistance -- nil means no road requirement
+    local ignoreScenery = options.ignoreScenery -- true for units placed on a road
+
+    -- Check land cover first; it is a table lookup and rejects about half the map
+    if self:isBlockedLandCover(center) then
+        return false, "forest or water"
+    end
 
     -- Check surface type
     if not self:isValidSurfaceType(center) then
@@ -141,7 +222,110 @@ function Terrain:isValidTerrainForUnits(center, options)
         end
     end
 
+    -- Check buildings last; it searches the world
+    if not ignoreScenery and self:hasSceneryNearby(center) then
+        return false, "buildings or other scenery nearby"
+    end
+
     return true, nil
+end
+
+-- Snap a position to the nearest road, returns nil if there is no road
+function Terrain:snapToRoad(pos)
+    local ok, roadX, roadY = pcall(land.getClosestPointOnRoads, "roads", pos.x, pos.y)
+    if not ok or not roadX then
+        return nil
+    end
+    return { x = roadX, y = roadY }
+end
+
+-- Find a valid point on a road within radius, returns nil if none found.
+-- Road points skip the scenery check: roads are clear of buildings, and
+-- bridges over rivers are rejected by the land cover mask.
+function Terrain:findRoadPosition(center, radius, maxAttempts)
+    maxAttempts = maxAttempts or self.config.maxSearchAttempts
+    local options = { ignoreScenery = true }
+
+    for attempt = 0, maxAttempts do
+        local testPos = attempt == 0 and center or Spatial:randomPointInRadius(center, radius)
+        local roadPos = self:snapToRoad(testPos)
+        if roadPos and self:isValidTerrainForUnits(roadPos, options) then
+            return roadPos, true
+        end
+    end
+
+    log(
+        "WARNING: Could not find a valid road near ("
+            .. math.floor(center.x)
+            .. ", "
+            .. math.floor(center.y)
+            .. ") - skipping spawn"
+    )
+    return nil, false
+end
+
+-- Unit vector along the road at a road point, or nil if the road is too short
+function Terrain:getRoadDirection(roadPos)
+    local probe = self.config.roadProbeDistance
+    local best, bestLength = nil, 0
+
+    local directions = self.config.roadProbeDirections
+    local startAngle = math.random() * 2 * math.pi
+    for i = 1, directions do
+        local angle = startAngle + i * 2 * math.pi / directions
+        local snapped = self:snapToRoad({
+            x = roadPos.x + probe * math.cos(angle),
+            y = roadPos.y + probe * math.sin(angle),
+        })
+        if snapped then
+            local dx, dy = snapped.x - roadPos.x, snapped.y - roadPos.y
+            local length = math.sqrt(dx * dx + dy * dy)
+            if length > bestLength then
+                best, bestLength = { x = dx / length, y = dy / length }, length
+            end
+        end
+    end
+
+    -- A probe that snaps back near the start crossed the road instead of following it
+    if bestLength < probe / 2 then
+        return nil
+    end
+    return best
+end
+
+-- Positions and headings for a column of vehicles following a road from a
+-- road point. Each step snaps to the road, so the column follows curves.
+-- Returns fewer than count positions if the road ends.
+function Terrain:getRoadColumn(start, count, spacing)
+    local direction = self:getRoadDirection(start)
+    if not direction then
+        return {}
+    end
+
+    local column = {}
+    local current = start
+    for i = 1, count do
+        column[i] = { x = current.x, y = current.y, heading = math.atan2(direction.y, direction.x) }
+        if i == count then
+            break
+        end
+
+        local nextPos = self:snapToRoad({
+            x = current.x + direction.x * spacing,
+            y = current.y + direction.y * spacing,
+        })
+        if not nextPos then
+            break
+        end
+        local dx, dy = nextPos.x - current.x, nextPos.y - current.y
+        local length = math.sqrt(dx * dx + dy * dy)
+        if length < spacing / 2 then
+            break -- Road ended or turned back
+        end
+        direction = { x = dx / length, y = dy / length }
+        current = nextPos
+    end
+    return column
 end
 
 -- Find a valid position within radius, returns nil if none found
@@ -173,6 +357,12 @@ function Terrain:findValidPosition(center, radius, options, maxAttempts)
             .. ") - skipping spawn"
     )
     return nil, false
+end
+
+if TerrainData then
+    log("Land cover mask: " .. TerrainData.theatre .. ", " .. #TerrainData.rows .. " rows")
+else
+    log("WARNING: TerrainData not loaded, land cover checks disabled")
 end
 
 env.info("[Terrain] Loaded successfully")

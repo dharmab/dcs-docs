@@ -10,15 +10,16 @@ Load order (dependencies):
 2. `Units.lua`
 3. `Spatial.lua`
 4. `BatchScheduler.lua`
-5. `Terrain.lua`
-6. `UnitTemplates.lua`
-7. `Formations.lua`
-8. `Virtualization.lua`
-9. `IADS.lua`
-10. `AirIntercept.lua`
-11. `BattlefieldGeneration.lua`
-12. `CarrierOps.lua`
-13. `OperationInfinity.lua`
+5. `TerrainData.lua`
+6. `Terrain.lua`
+7. `UnitTemplates.lua`
+8. `Formations.lua`
+9. `Virtualization.lua`
+10. `IADS.lua`
+11. `AirIntercept.lua`
+12. `BattlefieldGeneration.lua`
+13. `CarrierOps.lua`
+14. `OperationInfinity.lua`
 
 When adding a script, update all four places: the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`.
 
@@ -28,6 +29,12 @@ Style:
 - Name all magic numbers except -1, 0, and 1 as constants
 - Verbose logging is intentional; DCS has little observability. IADS state changes log with an `[IADS]` prefix.
 - Use `Logging`, `Units`, and `Spatial` for shared functionality
+
+## Terrain Data
+
+`TerrainData.lua` is generated; do not edit it. It is a 200 m mask of forest, water, and off-mesh ground built from `docs/data/terrains/Caucasus/landcover.tif`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the mission area.
+
+`Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. Convoys use `Terrain:findRoadPosition` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. Airfield positions are read from the airbases at init and support racetracks are offsets from Krymsk.
 
 ## Player Slots
 

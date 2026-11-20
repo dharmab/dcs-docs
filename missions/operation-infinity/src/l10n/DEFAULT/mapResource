@@ -3,6 +3,7 @@ mapResource = {
     ["ResKey_Units"] = "Units.lua",
     ["ResKey_Spatial"] = "Spatial.lua",
     ["ResKey_BatchScheduler"] = "BatchScheduler.lua",
+    ["ResKey_TerrainData"] = "TerrainData.lua",
     ["ResKey_Terrain"] = "Terrain.lua",
     ["ResKey_UnitTemplates"] = "UnitTemplates.lua",
     ["ResKey_Formations"] = "Formations.lua",

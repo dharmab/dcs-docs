@@ -2,25 +2,7 @@
 
 This roadmap tracks planned documentation improvements to better support AI-assisted mission generation.
 
-## Phase 1: Map and Terrain Data
-
-Create `docs/maps/` directory with theatre-specific documentation. Each file should include:
-
-- Airfield locations with coordinates (lat/lon and DCS internal)
-- Runway headings and lengths
-- Parking positions and capacities
-- Navigation aids (TACAN channels, ILS frequencies, NDB)
-- Key geographic features and strategic locations
-- Approximate map boundaries
-
-### Files
-
-- [ ] `docs/maps/caucasus.md`
-- [ ] `docs/maps/nevada.md`
-- [ ] `docs/maps/syria.md`
-- [ ] `docs/maps/germany.md`
-
-## Phase 2: Radio and Communications Reference
+## Phase 1: Radio and Communications Reference
 
 Create standard frequency allocation reference for AI to auto-configure radio presets.
 
@@ -35,7 +17,7 @@ Create standard frequency allocation reference for AI to auto-configure radio pr
 
 - [x] `docs/recipes/comm-plan.md` - Standardized communications plan with frequency allocations
 
-## Phase 3: Faction Naval Units
+## Phase 2: Faction Naval Units
 
 Expand faction files to include naval units for carrier operations and naval scenarios. Reference `docs/units/sea.md` for available ship types.
 
@@ -50,7 +32,7 @@ Expand faction files to include naval units for carrier operations and naval sce
 - [x] `docs/factions/belka-1995.md` - Add Naval Units section
 - [x] `docs/factions/allied-forces-1995.md` - Add Naval Units section
 
-## Phase 4: Additional Recipes
+## Phase 3: Additional Recipes
 
 Create new recipes covering both Lua file editing and SSE scripting approaches where applicable.
 
@@ -62,7 +44,7 @@ Create new recipes covering both Lua file editing and SSE scripting approaches w
 - [x] `docs/recipes/weather-time.md` - Season, cloud layers, visibility settings
 - [ ] `docs/recipes/trigger-patterns.md` - Common trigger patterns (zone entry, unit destruction, time-based)
 
-## Phase 5: Route and Waypoint Patterns
+## Phase 4: Route and Waypoint Patterns
 
 Document standard route patterns for AI to generate realistic flight plans.
 
@@ -78,7 +60,7 @@ Document standard route patterns for AI to generate realistic flight plans.
 
 - [ ] `docs/recipes/route-patterns.md`
 
-## Phase 6: Livery Reference
+## Phase 5: Livery Reference
 
 Document available unit liveries for visual consistency within factions.
 
