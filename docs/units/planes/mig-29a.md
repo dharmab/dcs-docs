@@ -6,7 +6,7 @@
 
 **Playable:** Yes
 
-**Deprecated:** Yes — superseded by MiG-29A Fulcrum
+**Usage Notes:** For AI MiG-29As, use the full-fidelity [`MiG-29 Fulcrum`](mig-29a-fulcrum.md) type.
 
 ## Background
 

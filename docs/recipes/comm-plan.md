@@ -74,18 +74,19 @@ All operational frequencies avoid the guard frequencies (243.0 MHz military, 121
 
 Ranges and preset counts below come from each type's `panelRadio` table in Quaggles' DCS Lua Datamine (`_G/db/Units/Planes/Plane/<type>.lua`). The `Radio` table in a mission unit is indexed in `panelRadio` order, which is the "Mission index" column. Each `Radio[n]` entry has parallel `channels` (MHz) and `modulations` (0 = AM, 1 = FM) arrays. Radios whose `panelRadio` channels set `editableName = true` (in DCS 2.9.27, only the A-10C II ARC-210) also take a `channelsNames` array of preset names (`[1] = "STRIKE"`), which the Mission Editor writes beside `channels`.
 
-| Aircraft (type)                     | Mission index: radio, range, presets                                                                            |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| F-4E-45MC                           | [1] ARC-164 UHF 225-399.95, **18**; [2] aux receiver 265-284.9, 20                                              |
-| F-16C_50                            | [1] COMM1 ARC-164 UHF 225-399.975, 20; [2] COMM2 ARC-222 VHF AM 116-155.975 + FM 30-87.975 (no UHF), 20         |
-| FA-18C_hornet                       | [1] COMM1 ARC-210 30-399.975, 20; [2] COMM2 ARC-210 30-399.975, 20                                              |
-| F-15ESE                             | [1] UHF Radio 1 225-399.975, 20; [2] V/UHF Radio 2 30-399.975, 40                                               |
-| F-14A-135-GR / F-14B / F-14BU       | [1] ARC-159 UHF 225-399.975 (pilot), 20; [2] ARC-182 V/UHF 30-399.975 (RIO), 30                                 |
-| A-10C_2                             | [1] ARC-210 30-399.975, 25; [2] ARC-164 UHF 225-399.975, 20; [3] ARC-186 FM 30-87.995, 20                       |
-| M-2000C                             | [1] UHF 225-400, 20; [2] V/UHF 118-400, 20                                                                      |
-| Mirage-F1CE                         | [1] TRAP-136 V/UHF 118-399.975, 20; [2] TRAP-137B UHF 225-399.975, 20                                           |
-| JF-17                               | [1] one 20-preset list shared by COMM1 and COMM2, both 30-399.975                                               |
-| F-15C, MiG-29A, Su-25, Su-25T (FC3) | No `panelRadio`; mission presets are not possible. With SRS, players tune UHF/VHF/FM radios in the SRS overlay. |
+| Aircraft (type)                                       | Mission index: radio, range, presets                                                                            |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| F-4E-45MC                                             | [1] ARC-164 UHF 225-399.95, **18**; [2] aux receiver 265-284.9, 20                                              |
+| F-16C_50                                              | [1] COMM1 ARC-164 UHF 225-399.975, 20; [2] COMM2 ARC-222 VHF AM 116-155.975 + FM 30-87.975 (no UHF), 20         |
+| FA-18C_hornet                                         | [1] COMM1 ARC-210 30-399.975, 20; [2] COMM2 ARC-210 30-399.975, 20                                              |
+| F-15ESE                                               | [1] UHF Radio 1 225-399.975, 20; [2] V/UHF Radio 2 30-399.975, 40                                               |
+| F-14A-135-GR / F-14B / F-14BU                         | [1] ARC-159 UHF 225-399.975 (pilot), 20; [2] ARC-182 V/UHF 30-399.975 (RIO), 30                                 |
+| A-10C_2                                               | [1] ARC-210 30-399.975, 25; [2] ARC-164 UHF 225-399.975, 20; [3] ARC-186 FM 30-87.995, 20                       |
+| M-2000C                                               | [1] UHF 225-400, 20; [2] V/UHF 118-400, 20                                                                      |
+| Mirage-F1CE                                           | [1] TRAP-136 V/UHF 118-399.975, 20; [2] TRAP-137B UHF 225-399.975, 20                                           |
+| JF-17                                                 | [1] one 20-preset list shared by COMM1 and COMM2, both 30-399.975                                               |
+| MiG-29 Fulcrum                                        | [1] R-862 V/UHF 100-149.975 + 220-399.975, 20 (cockpit channels 0-19); [2] ARK-19 ADF                           |
+| F-15C, MiG-29A, MiG-29S, MiG-29G, Su-25, Su-25T (FC3) | No `panelRadio`; mission presets are not possible. With SRS, players tune UHF/VHF/FM radios in the SRS overlay. |
 
 Not yet verified against the datamine:
 

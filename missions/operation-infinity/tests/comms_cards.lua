@@ -13,13 +13,22 @@ local STEP = 0.2
 local GROUP_SIZE = 5
 local FREQ_TOLERANCE = 0.001
 
--- Display name, file name, and radio names in mission index order
+-- Display name, file name, and radio names in mission index order.
+-- firstChannel is the cockpit number of mission channel 1 (default 1).
 CommsCards.aircraft = {
     ["F-4E-45MC"] = { name = "F-4E Phantom II", file = "f-4e", radios = { "ARC-164 UHF", "Aux receiver" } },
     ["F-16C_50"] = { name = "F-16C Viper", file = "f-16c", radios = { "COMM1 ARC-164 UHF", "COMM2 ARC-222 VHF/FM" } },
     ["F-15ESE"] = { name = "F-15E Strike Eagle", file = "f-15e", radios = { "Radio 1 UHF", "Radio 2 V/UHF" } },
     ["F-15C"] = { name = "F-15C Eagle", file = "f-15c", refuel = "boom" },
-    ["MiG-29A"] = { name = "MiG-29A Fulcrum", file = "mig-29a" },
+    ["MiG-29A"] = { name = "MiG-29A Fulcrum (FC)", file = "mig-29a" },
+    ["MiG-29S"] = { name = "MiG-29S Fulcrum (FC)", file = "mig-29s" },
+    ["MiG-29G"] = { name = "MiG-29G Fulcrum (FC)", file = "mig-29g" },
+    ["MiG-29 Fulcrum"] = {
+        name = "MiG-29A Fulcrum",
+        file = "mig-29-fulcrum",
+        radios = { "R-862 V/UHF" },
+        firstChannel = 0,
+    },
     ["FA-18C_hornet"] = { name = "F/A-18C Hornet", file = "fa-18c", radios = { "COMM1 ARC-210", "COMM2 ARC-210" } },
     ["A-10C_2"] = {
         name = "A-10C Warthog",
@@ -159,7 +168,7 @@ local function addTable(out, header, rows)
     end
 end
 
-local function radioTable(out, plan, radio)
+local function radioTable(out, plan, radio, firstChannel)
     local rows = {}
     local skipped = false
     local count = 0
@@ -171,7 +180,7 @@ local function radioTable(out, plan, radio)
         local name = freq and nameOf(plan, freq)
         if name then
             local modulation = radio.modulations and radio.modulations[ch]
-            rows[#rows + 1] = { tostring(ch), formatFreq(freq, modulation), name }
+            rows[#rows + 1] = { tostring(ch - 1 + firstChannel), formatFreq(freq, modulation), name }
         elseif freq then
             skipped = true
         end
@@ -206,6 +215,7 @@ local function render(env, template, plan, title)
     local info = CommsCards.aircraft[unit.type]
     local out = { "# " .. title, "" }
     local presetFreqs = {}
+    local firstChannel = info.firstChannel or 1
 
     if not unit.Radio then
         out[#out + 1] = "No mission presets. Tune these in SRS."
@@ -223,7 +233,7 @@ local function render(env, template, plan, title)
         for i, radio in ipairs(unit.Radio) do
             out[#out + 1] = "## " .. info.radios[i]
             out[#out + 1] = ""
-            skipped = radioTable(out, plan, radio) or skipped
+            skipped = radioTable(out, plan, radio, firstChannel) or skipped
             out[#out + 1] = ""
             for _, freq in pairs(radio.channels) do
                 presetFreqs[#presetFreqs + 1] = freq
@@ -259,7 +269,8 @@ local function render(env, template, plan, title)
                 tacan(g),
             }
             if main then
-                row[#row + 1] = tostring(assert(channelOf(main, g.frequency), "tanker not on main radio"))
+                local ch = assert(channelOf(main, g.frequency), "tanker not on main radio")
+                row[#row + 1] = tostring(ch - 1 + firstChannel)
             end
             rows[#rows + 1] = row
         end

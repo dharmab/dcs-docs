@@ -7,7 +7,7 @@ Inspired by the Soviet Union and Russia, with Soviet/Russian military equipment.
 ## Aircraft
 
 - [MiG-21Bis](../units/planes/mig-21bis.md)
-- [MiG-29A](../units/planes/mig-29a.md)
+- [MiG-29A Fulcrum](../units/planes/mig-29a-fulcrum.md)
 - [MiG-31](../units/planes/mig-31.md)
 - [Su-27](../units/planes/su-27.md)
 - [Su-34](../units/planes/su-34.md)

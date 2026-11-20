@@ -44,7 +44,7 @@ The mock is flat terrain with no AI. Units only move when a test moves them. Enu
 
 ## Player Slots
 
-Dynamic spawn at Krymsk (airdromeId 15) and on the Stennis (ship warehouse keyed by unitId 20, carrier types only). Templates only apply when the warehouse stock entry links them with `linkDynTempl`, so both bases stock each type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`). Krymsk templates are groups 1-14 and 29; Stennis templates are 25-28.
+Dynamic spawn at Krymsk (airdromeId 15) and on the Stennis (ship warehouse keyed by unitId 20, carrier types only). Templates only apply when the warehouse stock entry links them with `linkDynTempl`, so both bases stock each type explicitly (`unlimitedAircrafts = false`, per-type `unlimited = true`). Krymsk templates are groups 1-14, 29, and 31-33; Stennis templates are 25-28.
 
 `F-14BU` is a real type string (Quaggles' datamine, `F-14BU.lua`, display name "F-14B(U)").
 

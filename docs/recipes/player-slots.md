@@ -100,16 +100,17 @@ warehouses = {
 
 **Every aircraft stock entry needs `wsType`.** The sim matches stock to aircraft types by this 4-number type ID, not by the type-name key. An entry without `wsType` counts as zero, so in the multiplayer spawn dialog every type shows `(0)` and is greyed out, at airfields and on carriers alike. The ME always writes `wsType` (and, when `dynamicSpawn = true`, writes the full stock list even with `unlimitedAircrafts = true`). Copy the values from an ME-saved `warehouses` file, such as a stock mission under `Mods/aircraft/*/Missions`. Some values for DCS 2.9:
 
-| Type            | wsType       | Type          | wsType       |
-| --------------- | ------------ | ------------- | ------------ |
-| `A-10C_2`       | 1, 1, 6, 264 | `F-15C`       | 1, 1, 1, 6   |
-| `F-14A-135-GR`  | 1, 1, 1, 279 | `F-15ESE`     | 1, 1, 1, 327 |
-| `F-14B`         | 1, 1, 1, 278 | `F-16C_50`    | 1, 1, 1, 275 |
-| `F-14BU`        | 1, 1, 1, 351 | `F-4E-45MC`   | 1, 1, 1, 328 |
-| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17`       | 1, 1, 1, 271 |
-| `M-2000C`       | 1, 1, 1, 284 | `Mirage-F1CE` | 1, 1, 1, 302 |
-| `MiG-29A`       | 1, 1, 1, 2   | `Su-25`       | 1, 1, 6, 16  |
-| `Su-25T`        | 1, 1, 6, 54  |               |              |
+| Type            | wsType       | Type             | wsType       |
+| --------------- | ------------ | ---------------- | ------------ |
+| `A-10C_2`       | 1, 1, 6, 264 | `F-15C`          | 1, 1, 1, 6   |
+| `F-14A-135-GR`  | 1, 1, 1, 279 | `F-15ESE`        | 1, 1, 1, 327 |
+| `F-14B`         | 1, 1, 1, 278 | `F-16C_50`       | 1, 1, 1, 275 |
+| `F-14BU`        | 1, 1, 1, 351 | `F-4E-45MC`      | 1, 1, 1, 328 |
+| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17`          | 1, 1, 1, 271 |
+| `M-2000C`       | 1, 1, 1, 284 | `Mirage-F1CE`    | 1, 1, 1, 302 |
+| `MiG-29A`       | 1, 1, 1, 2   | `Su-25`          | 1, 1, 6, 16  |
+| `MiG-29G`       | 1, 1, 1, 49  | `Su-25T`         | 1, 1, 6, 54  |
+| `MiG-29S`       | 1, 1, 1, 50  | `MiG-29 Fulcrum` | 1, 1, 1, 343 |
 
 Module aircraft get the fourth number assigned at load time (`WSTYPE_PLACEHOLDER`), so re-check it against a fresh ME save after a major DCS update. `mission-check` fails any stock entry missing `wsType`.
 
