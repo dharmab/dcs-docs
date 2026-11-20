@@ -2,6 +2,7 @@ LUA_FILES := $(shell git ls-files '*.lua')
 PY_TOOLS := $(patsubst %/pyproject.toml,%,$(wildcard tools/*/pyproject.toml))
 MISSIONS := $(abspath $(wildcard missions/*/src))
 LUA_TEST_DIRS := $(wildcard missions/*/tests)
+LUA ?= luajit
 
 # scipy has no wheels for newer Pythons yet
 export UV_PYTHON := 3.14
@@ -36,9 +37,10 @@ lint-lua: ## Lint Lua
 
 # We use luajit instead of lua because luajit implements Lua 5.1, the version
 # DCS uses, and newer lua releases break 5.1 code. luajit also accepts some
-# newer syntax; lint-lua catches that.
+# Lua 5.2 syntax (e.g. goto) that Lua 5.1 rejects; lint-lua, configured for
+# Lua 5.1, reports such syntax.
 test-lua: ## Run mission Lua tests
-	set -e; for dir in $(LUA_TEST_DIRS); do luajit $$dir/run.lua $$dir/*_test.lua; done
+	set -e; for dir in $(LUA_TEST_DIRS); do $(LUA) $$dir/run.lua $$dir/*_test.lua; done
 
 format-python: ## Format Python
 	uv run ruff format .

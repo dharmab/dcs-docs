@@ -45,8 +45,8 @@ jobs:
           tar -xzf /tmp/luals.tar.gz -C "$HOME/.local/luals"
           ln -s "$HOME/.local/luals/bin/lua-language-server" "$HOME/.local/bin/lua-language-server"
 
-      - name: Install LuaJIT
-        run: sudo apt-get update && sudo apt-get install -y luajit
+      - name: Install LuaJIT and Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y luajit lua5.1
 
       - run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
@@ -54,3 +54,7 @@ jobs:
         env:
           # Fail instead of re-resolving if a uv.lock is out of date
           UV_LOCKED: "1"
+
+      # make check runs the Lua tests with LuaJIT; also run them on stock Lua 5.1
+      - name: Run Lua tests on Lua 5.1
+        run: make test-lua LUA=lua5.1
