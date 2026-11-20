@@ -681,19 +681,12 @@ Wraps a single action command.
 
 ## Coordinate System
 
-DCS uses a flat Cartesian coordinate system in meters, measured from a
-theatre-specific origin:
+DCS uses a flat Cartesian coordinate system in meters, measured from a theatre-specific origin:
 
 - `x` - North-South axis (positive = North)
 - `y` - East-West axis (positive = East)
 - `alt` - Altitude above sea level, a separate field
 
-In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds
-altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3
-`{x = x, y = alt, z = y}`.
+In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3 `{x = x, y = alt, z = y}`.
 
-Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre
-is listed in [Terrain Geodata](../terrains/geodata.md#coordinate-system).
-
-
-
+Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [Terrain Geodata](../terrains/geodata.md#coordinate-system).
