@@ -35,9 +35,9 @@ The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/
 
 **Parameters:**
 
-- `x` (number): The X coordinate representing the East-West position.
+- `x` (number): The X coordinate representing the north-south position (positive = north).
 - `y` (number): The Y coordinate representing altitude.
-- `z` (number): The Z coordinate representing the North-South position.
+- `z` (number): The Z coordinate representing the east-west position (positive = east).
 
 **Returns:** Three numbers representing the latitude, longitude, and altitude.
 

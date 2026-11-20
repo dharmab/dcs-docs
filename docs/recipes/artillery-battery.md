@@ -170,8 +170,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
             ["name"] = "Msta-2",
             ["type"] = "SAU Msta",
             ["skill"] = "High",
-            ["x"] = -100030,
-            ["y"] = 500000,
+            ["x"] = -100000,
+            ["y"] = 499970,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -180,8 +180,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
             ["name"] = "Msta-3",
             ["type"] = "SAU Msta",
             ["skill"] = "High",
-            ["x"] = -100060,
-            ["y"] = 500000,
+            ["x"] = -100000,
+            ["y"] = 499940,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -190,8 +190,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
             ["name"] = "Msta-4",
             ["type"] = "SAU Msta",
             ["skill"] = "High",
-            ["x"] = -100090,
-            ["y"] = 500000,
+            ["x"] = -100000,
+            ["y"] = 499910,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -200,8 +200,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
             ["name"] = "Ammo-1",
             ["type"] = "M30_CC",
             ["skill"] = "Average",
-            ["x"] = -100015,
-            ["y"] = 499950,
+            ["x"] = -100050,
+            ["y"] = 499985,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -210,8 +210,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
             ["name"] = "Ammo-2",
             ["type"] = "M30_CC",
             ["skill"] = "Average",
-            ["x"] = -100075,
-            ["y"] = 499950,
+            ["x"] = -100050,
+            ["y"] = 499925,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -239,8 +239,8 @@ A 4-gun battery of 2S19 Msta howitzers with ammunition support, firing at a dist
                                 ["id"] = "FireAtPoint",
                                 ["number"] = 1,
                                 ["params"] = {
-                                    ["x"] = -100000,
-                                    ["y"] = 515000,     -- 15km north of battery
+                                    ["x"] = -85000,      -- 15km north of battery
+                                    ["y"] = 500000,
                                     ["radius"] = 200,
                                     ["expendQty"] = 9999,
                                     ["expendQtyEnabled"] = true,
@@ -326,8 +326,8 @@ An M270 MLRS battery for spectacular rocket salvos.
                                 ["id"] = "FireAtPoint",
                                 ["number"] = 1,
                                 ["params"] = {
-                                    ["x"] = -70000,     -- 20km east of battery
-                                    ["y"] = 480000,
+                                    ["x"] = -90000,
+                                    ["y"] = 500000,     -- 20km east of battery
                                     ["radius"] = 500,   -- Larger dispersion for rockets
                                     ["expendQty"] = 9999,
                                     ["expendQtyEnabled"] = true,
@@ -369,16 +369,16 @@ Multiple batteries can fire at different points within the same general area:
 
 ```lua
 -- Battery 1 target
-["x"] = -100000,
-["y"] = 515000,
+["x"] = -85000,
+["y"] = 500000,
 
 -- Battery 2 target (offset 500m)
-["x"] = -100500,
-["y"] = 515200,
+["x"] = -84800,
+["y"] = 499500,
 
 -- Battery 3 target (offset 500m other direction)
-["x"] = -99500,
-["y"] = 514800,
+["x"] = -85200,
+["y"] = 500500,
 ```
 
 ## SEAD/DEAD Mission Integration
@@ -402,16 +402,16 @@ Place SHORAD in a **separate group** without FireAtPoint task so they engage air
     ["start_time"] = 0,
     ["visible"] = false,
     ["hidden"] = false,
-    ["x"] = -100050,
-    ["y"] = 500100,
+    ["x"] = -99900,
+    ["y"] = 499950,
     ["units"] = {
         [1] = {
             ["unitId"] = 510,
             ["name"] = "Tunguska-1",
             ["type"] = "2S6 Tunguska",
             ["skill"] = "High",
-            ["x"] = -100050,
-            ["y"] = 500100,
+            ["x"] = -99900,
+            ["y"] = 499950,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -420,8 +420,8 @@ Place SHORAD in a **separate group** without FireAtPoint task so they engage air
             ["name"] = "Strela-1",
             ["type"] = "Strela-10M3",
             ["skill"] = "High",
-            ["x"] = -99950,
-            ["y"] = 500100,
+            ["x"] = -99900,
+            ["y"] = 500050,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -429,8 +429,8 @@ Place SHORAD in a **separate group** without FireAtPoint task so they engage air
     ["route"] = {
         ["points"] = {
             [1] = {
-                ["x"] = -100050,
-                ["y"] = 500100,
+                ["x"] = -99900,
+                ["y"] = 499950,
                 ["alt"] = 0,
                 ["alt_type"] = "BARO",
                 ["type"] = "Turning Point",
@@ -457,7 +457,7 @@ Place SHORAD in a **separate group** without FireAtPoint task so they engage air
     Target Area (15km north)
     ┌─────────────────────────────────────┐
     │                                     │
-    │      ╳ ╳ ╳   Impact points          │  Y = 515000
+    │      ╳ ╳ ╳   Impact points          │  X = -85000
     │        (radius = 200m)              │
     │                                     │
     └─────────────────────────────────────┘
@@ -466,14 +466,14 @@ Place SHORAD in a **separate group** without FireAtPoint task so they engage air
               │
               │
     ┌─────────────────────────────────────┐
-    │  [Tunguska]       [Strela]          │  Y = 500100 (SHORAD - separate group)
+    │  [Tunguska]       [Strela]          │  X = -99900 (SHORAD - separate group)
     │                                     │
-    │  [Msta] [Msta] [Msta] [Msta]        │  Y = 500000 (artillery battery)
-    │     [Ammo]        [Ammo]            │  Y = 499950 (ammo carriers)
+    │  [Msta] [Msta] [Msta] [Msta]        │  X = -100000 (artillery battery)
+    │     [Ammo]        [Ammo]            │  X = -100050 (ammo carriers)
     └─────────────────────────────────────┘
     
-    Artillery Position (Y = 500000)
-    X = -100000 to -100090 (30m spacing)
+    Artillery Position (X = -100000)
+    Y = 500000 to 499910 (30m spacing)
 ```
 
 ## Night Operations

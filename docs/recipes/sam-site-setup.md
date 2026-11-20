@@ -355,8 +355,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
             ["name"] = "SA-10-LN1",
             ["type"] = "S-300PS 5P85C ln",
             ["skill"] = "High",
-            ["x"] = -148500,
-            ["y"] = 550000,  -- 1.5 km east
+            ["x"] = -148500,  -- 1.5 km north
+            ["y"] = 550000,
             ["heading"] = 3.14159,
             ["playerCanDrive"] = false,
         },
@@ -365,8 +365,8 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
             ["name"] = "SA-10-LN2",
             ["type"] = "S-300PS 5P85C ln",
             ["skill"] = "High",
-            ["x"] = -151500,
-            ["y"] = 550000,  -- 1.5 km west
+            ["x"] = -151500,  -- 1.5 km south
+            ["y"] = 550000,
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },
@@ -376,7 +376,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
             ["type"] = "S-300PS 5P85D ln",
             ["skill"] = "High",
             ["x"] = -150000,
-            ["y"] = 551500,  -- 1.5 km north
+            ["y"] = 551500,  -- 1.5 km east
             ["heading"] = 3.14159,
             ["playerCanDrive"] = false,
         },
@@ -386,7 +386,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
             ["type"] = "S-300PS 5P85D ln",
             ["skill"] = "High",
             ["x"] = -150000,
-            ["y"] = 548500,  -- 1.5 km south
+            ["y"] = 548500,  -- 1.5 km west
             ["heading"] = 0,
             ["playerCanDrive"] = false,
         },

@@ -857,11 +857,11 @@ class TerrainProcessor:
         mid_z = (bounds["minZ"] + bounds["maxZ"]) / 2
 
         directions = []
-        if z > mid_z:
+        if x > mid_x:
             directions.append("North")
         else:
             directions.append("South")
-        if x > mid_x:
+        if z > mid_z:
             directions.append("East")
         else:
             directions.append("West")
@@ -940,8 +940,8 @@ This document provides terrain and airport data for the {theatre} map in DCS Wor
         for r in regions:
             class_counts[r.classification] += 1
 
-        width_km = (bounds["maxX"] - bounds["minX"]) / 1000
-        height_km = (bounds["maxZ"] - bounds["minZ"]) / 1000
+        width_km = (bounds["maxZ"] - bounds["minZ"]) / 1000
+        height_km = (bounds["maxX"] - bounds["minX"]) / 1000
 
         theatre = self.metadata["theatre"]
         return f"""## Overview
@@ -962,8 +962,8 @@ and {height_km:.0f} km north-south.
 
 | Axis | Minimum | Maximum |
 |------|---------|---------|
-| X (East-West) | {bounds["minX"]:,.0f} | {bounds["maxX"]:,.0f} |
-| Z (North-South) | {bounds["minZ"]:,.0f} | {bounds["maxZ"]:,.0f} |"""
+| X (North-South) | {bounds["minX"]:,.0f} | {bounds["maxX"]:,.0f} |
+| Z (East-West) | {bounds["minZ"]:,.0f} | {bounds["maxZ"]:,.0f} |"""
 
     def _airports(self, airbases: list[Airbase]) -> str:
         if not airbases:
@@ -1157,12 +1157,12 @@ and {height_km:.0f} km north-south.
 
 DCS World uses a Transverse Mercator projection with coordinates in meters:
 
-- **X axis (East-West):** Positive = east, negative = west
-- **Z axis (North-South):** Positive = north, negative = south
+- **X axis (North-South):** Positive = north, negative = south
+- **Z axis (East-West):** Positive = east, negative = west
 - **Y axis (Altitude):** Meters above sea level
 
 Mission files use Vec2 format `{x = number, y = number}` where `y` is the
-north-south position (equivalent to Z in 3D coordinates).
+east-west position (equivalent to Z in 3D coordinates).
 
 **Parking Spot Fields:**
 - `Term_Index` maps to `parking_id` in mission.lua unit definitions
