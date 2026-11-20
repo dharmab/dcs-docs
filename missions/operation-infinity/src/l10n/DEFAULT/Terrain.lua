@@ -20,6 +20,12 @@ Terrain.config = {
     sceneryClearance = 100, -- Meters around a position that must be free of buildings and other scenery
     roadProbeDistance = 60, -- Meters from a road point to probe for the road's direction
     roadProbeDirections = 8, -- Evenly spaced probes when looking for the road's direction
+    unitSampleRadius = 15, -- Meters for slope sampling around a single unit
+    unitSceneryClearance = 25, -- Meters around a single unit that must be free of scenery
+    unitProbeStep = 10, -- Meters between rings when probing for a better spot for one unit
+    unitProbeRings = 3, -- Rings probed around a unit before rejecting the layout
+    unitProbeDirections = 8, -- Evenly spaced probes per ring
+    minUnitSeparation = 8, -- Meters a moved unit must keep from every other unit
 }
 
 local log = Logging:create("Terrain")
@@ -230,17 +236,83 @@ function Terrain:isValidTerrainForUnits(center, options)
     return true, nil
 end
 
--- Check a single unit's position for forest, water, and off-mesh ground.
--- Slope, roughness, and scenery are checked once at the group center.
-function Terrain:isValidUnitPosition(pos)
+-- Check a single unit's position for forest, water, and off-mesh ground
+function Terrain:isOpenGround(pos)
     return not self:isBlockedLandCover(pos) and self:isValidSurfaceType(pos)
 end
 
--- Check every unit in a list of units with x and y
-function Terrain:areValidUnitPositions(units)
+-- Check every unit in a list of units with x and y for open ground
+function Terrain:isAllOpenGround(units)
     for _, unit in ipairs(units) do
-        if not self:isValidUnitPosition(unit) then
+        if not self:isOpenGround(unit) then
             return false
+        end
+    end
+    return true
+end
+
+-- Check a single unit's position: open ground, slope within maxSlope over
+-- unitSampleRadius, and no scenery within unitSceneryClearance unless
+-- options.ignoreScenery. Roughness is a group-scale measure and is checked
+-- only at the group center.
+function Terrain:isValidUnitPosition(pos, options)
+    options = options or {}
+    local maxSlope = options.maxSlope or self.config.defaultMaxSlope
+    if not self:isOpenGround(pos) then
+        return false
+    end
+    if self:calculateMaxSlope(pos, self.config.unitSampleRadius) > maxSlope then
+        return false
+    end
+    return options.ignoreScenery or not self:hasSceneryNearby(pos, self.config.unitSceneryClearance)
+end
+
+-- True if pos is at least minUnitSeparation from every unit except skip
+local function isClearOfUnits(pos, units, skip, minSeparation)
+    for i, unit in ipairs(units) do
+        if i ~= skip then
+            local dx, dy = unit.x - pos.x, unit.y - pos.y
+            if dx * dx + dy * dy < minSeparation * minSeparation then
+                return false
+            end
+        end
+    end
+    return true
+end
+
+-- Probe rings around a unit for a valid position clear of the other units.
+-- Returns the position, or nil if every probe fails.
+function Terrain:findNearbyUnitPosition(units, index, options)
+    local cfg = self.config
+    local unit = units[index]
+    for ring = 1, cfg.unitProbeRings do
+        local distance = ring * cfg.unitProbeStep
+        local startAngle = math.random() * 2 * math.pi
+        for i = 1, cfg.unitProbeDirections do
+            local angle = startAngle + i * 2 * math.pi / cfg.unitProbeDirections
+            local probe = { x = unit.x + distance * math.cos(angle), y = unit.y + distance * math.sin(angle) }
+            if
+                isClearOfUnits(probe, units, index, cfg.minUnitSeparation)
+                and self:isValidUnitPosition(probe, options)
+            then
+                return probe
+            end
+        end
+    end
+    return nil
+end
+
+-- Check every unit with isValidUnitPosition and move each failing unit to a
+-- nearby valid position. Modifies units in place. Returns false if a unit
+-- has no valid position nearby.
+function Terrain:placeUnits(units, options)
+    for index, unit in ipairs(units) do
+        if not self:isValidUnitPosition(unit, options) then
+            local pos = self:findNearbyUnitPosition(units, index, options)
+            if not pos then
+                return false
+            end
+            unit.x, unit.y = pos.x, pos.y
         end
     end
     return true
@@ -269,7 +341,7 @@ function Terrain:findRoadLayout(center, radius, buildUnits, maxAttempts)
         local roadPos = self:snapToRoad(testPos)
         if roadPos and self:isValidTerrainForUnits(roadPos, options) then
             local units = buildUnits(roadPos)
-            if #units > 0 and self:areValidUnitPositions(units) then
+            if #units > 0 and self:isAllOpenGround(units) then
                 return roadPos, units
             end
         end
@@ -383,13 +455,16 @@ end
 
 -- Find a valid position within radius and lay out a group there with
 -- buildUnits(pos), which returns a list of units with x and y. The group
--- center gets the full isValidTerrainForUnits check and every unit gets
--- isValidUnitPosition, so spread-out groups such as SAM sites do not put
--- units in forest or water. Returns the position and units, or nil.
+-- center gets the full isValidTerrainForUnits check. Every unit is checked
+-- with placeUnits, which moves a unit on forest, water, a steep slope, or
+-- next to a building to a nearby valid spot, so spread-out groups such as
+-- SAM sites keep their layout. The position is rejected if a unit has no
+-- valid spot nearby. Returns the position and units, or nil.
 function Terrain:findValidLayout(center, radius, buildUnits, options, maxAttempts)
-    return searchPositions(center, radius, options or {}, maxAttempts or self.config.maxSearchAttempts, function(pos)
+    options = options or {}
+    return searchPositions(center, radius, options, maxAttempts or self.config.maxSearchAttempts, function(pos)
         local units = buildUnits(pos)
-        if self:areValidUnitPositions(units) then
+        if self:placeUnits(units, options) then
             return units
         end
         return nil

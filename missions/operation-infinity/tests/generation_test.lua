@@ -47,7 +47,7 @@ local function checkGroundPlacement(env)
         if g.category == Group.Category.GROUND then
             for _, u in ipairs(g.units) do
                 local pos = { x = u.x, y = u.z }
-                h.ok(Terrain:isValidUnitPosition(pos), u.name .. " is on forest or water")
+                h.ok(Terrain:isOpenGround(pos), u.name .. " is on forest or water")
             end
         end
     end

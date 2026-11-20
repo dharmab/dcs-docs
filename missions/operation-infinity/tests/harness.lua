@@ -54,7 +54,7 @@ end
 
 -- Load the mission into a fresh environment and return the mock state.
 -- options.seed: math.randomseed value (default 1)
--- options.surfaceAt, options.wind: passed to the mock
+-- options.surfaceAt, options.heightAt, options.wind: passed to the mock
 -- options.quiet: keep env.info output out of the console (default true)
 function Harness.load(options)
     options = options or {}

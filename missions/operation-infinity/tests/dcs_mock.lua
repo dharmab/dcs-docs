@@ -29,6 +29,11 @@ local AIRBASES = {
 
 local BLUE_COUNTRIES = { [2] = true, [80] = true }
 
+-- Flat terrain everywhere
+local function defaultHeight(_x, _z)
+    return TERRAIN_HEIGHT
+end
+
 -- Rough Black Sea coastline: open water southwest of Anapa. Enough for the
 -- carrier operating area; everything else is land.
 local function defaultSurface(x, z)
@@ -83,6 +88,7 @@ function Mock.install(options)
         eventHandlers = {},
         unknown = {},
         surfaceAt = options.surfaceAt or defaultSurface,
+        heightAt = options.heightAt or defaultHeight,
         wind = options.wind or { x = 0, z = 0 },
         nextObjectId = AUTO_ID_START,
     }
@@ -626,8 +632,8 @@ function Mock.install(options)
 
     namespace(env, "land", {
         SurfaceType = { LAND = 1, SHALLOW_WATER = 2, WATER = 3, ROAD = 4, RUNWAY = 5 },
-        getHeight = function()
-            return TERRAIN_HEIGHT
+        getHeight = function(p)
+            return env.heightAt(p.x, p.y)
         end,
         getSurfaceType = function(p)
             return env.surfaceAt(p.x, p.y)

@@ -163,6 +163,58 @@ h.test("land cover mask decodes run lengths", function()
     h.ok(not Terrain:isBlockedLandCover({ x = TerrainData.northX + cell, y = TerrainData.westZ }), "outside mask")
 end)
 
+-- A point in row 1 of the land cover mask, where columns 50-93 are open
+local function openGroundPoint()
+    local cell = TerrainData.cellSize
+    return { x = TerrainData.northX - 0.5 * cell, y = TerrainData.westZ + 70.5 * cell }
+end
+
+h.test("a unit on a steep spot moves to nearby flat ground", function()
+    local spike = nil
+    local spikeRadius, spikeHeight = 12, 100
+    h.load({
+        heightAt = function(x, z)
+            local d = math.sqrt((x - spike.x) ^ 2 + (z - spike.y) ^ 2)
+            return math.max(0, spikeHeight * (1 - d / spikeRadius))
+        end,
+    })
+    spike = openGroundPoint()
+    local units = {
+        { type = "SNR_75V", x = spike.x, y = spike.y },
+        { type = "S_75M_Volhov", x = spike.x, y = spike.y + 30 },
+    }
+    h.ok(not Terrain:isValidUnitPosition(units[1]), "spike should be too steep")
+    h.ok(Terrain:placeUnits(units), "units should be placed")
+
+    local moved = math.sqrt((units[1].x - spike.x) ^ 2 + (units[1].y - spike.y) ^ 2)
+    local maxMove = Terrain.config.unitProbeStep * Terrain.config.unitProbeRings
+    h.ok(moved > 0 and moved <= maxMove + 1e-6, "moved " .. moved)
+    h.ok(Terrain:isValidUnitPosition(units[1]), "moved unit should be on flat ground")
+    local gap = math.sqrt((units[1].x - units[2].x) ^ 2 + (units[1].y - units[2].y) ^ 2)
+    h.ok(gap >= Terrain.config.minUnitSeparation, "moved unit is " .. gap .. " m from its neighbor")
+    h.eq(units[2].y, spike.y + 30, "unit on flat ground should not move")
+end)
+
+h.test("a layout is rejected when a unit has no flat ground nearby", function()
+    -- Flat around the group center, a 45 degree ramp from 100 m east of it
+    local center = nil
+    h.load({
+        heightAt = function(_, z)
+            return math.max(0, z - center.y - 100)
+        end,
+    })
+    center = openGroundPoint()
+    h.ok(Terrain:isValidTerrainForUnits(center), "group center should be valid")
+    local function buildUnits(pos)
+        return {
+            { type = "SNR_75V", x = pos.x, y = pos.y },
+            { type = "S_75M_Volhov", x = pos.x, y = pos.y + 200 },
+        }
+    end
+    local pos = Terrain:findValidLayout(center, 0, buildUnits, nil, 0)
+    h.eq(pos, nil)
+end)
+
 h.test("aerodrome spawn points respect region constraints", function()
     h.load()
     local aerodrome = { x = 0, y = 0 }
