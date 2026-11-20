@@ -4,9 +4,9 @@
 
 **Type ID:** `MiG-29 Fulcrum`
 
-**Playable:** No
+**Playable:** Yes
 
-**Supersedes:** MiG-29A
+**Usage Notes:** Preferred type for AI MiG-29As over the FC3 `MiG-29A`.
 
 ## Background
 

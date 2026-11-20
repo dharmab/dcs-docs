@@ -834,6 +834,7 @@ Blue 1-5      261.1-261.9   14-18      14-18
 Guard         243.0         19         19
 Green 1       262.1         20         20
 F-4E has presets 1-18 only.
+MiG-29A (full fidelity) R-862 numbers presets 0-19.
 
 AUX PRESETS
   V/UHF radios: 1 Magic 124.1 VHF, 2-20 = PRIMARY 1-19
@@ -845,7 +846,7 @@ AUX PRESETS
     3 Civil Guard 121.5, 4-8 Yellow 1-5, 9-13 Orange 1-5
   A-10 FM: 1 Magic 32.1, 2-6 Yellow 1-5, 7-11 Orange 1-5
   F-4E AUX: 1 Texaco, 2 Shell
-  F-15C, MiG-29A, Su-25, Su-25T: tune manually in SRS
+  F-15C, MiG-29A/S/G (FC), Su-25, Su-25T: tune manually in SRS
 
 MAGIC (SkyEye GCI): voice on 255.3 AM, 124.1 AM, 32.1 FM
 OVERFLOW INTERFLIGHT: Green 1-5 262.1-262.9
