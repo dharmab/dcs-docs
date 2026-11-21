@@ -29,7 +29,9 @@ Formations.config = {
 
 local log = Logging:create("Formations")
 
--- Get relative positions for a formation
+-- Get relative positions for a formation, in the platoon's frame:
+-- x is forward along the facing, y is to the right. rotatePosition maps this
+-- frame onto the map (x north, y east, heading clockwise from north).
 function Formations:getFormationPositions(unitCount, formationType, spacing, widthMultiplier)
     spacing = spacing or 30
     widthMultiplier = widthMultiplier or 1.0
@@ -40,8 +42,8 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
         local startOffset = -((unitCount - 1) * spacing) / 2
         for i = 1, unitCount do
             positions[#positions + 1] = {
-                x = startOffset + (i - 1) * spacing,
-                y = 0,
+                x = 0,
+                y = startOffset + (i - 1) * spacing,
             }
         end
     elseif formationType == self.FormationType.WEDGE then
@@ -51,22 +53,24 @@ function Formations:getFormationPositions(unitCount, formationType, spacing, wid
             local row = math.ceil((i - 1) / 2)
             local side = ((i - 1) % 2 == 0) and 1 or -1
             positions[#positions + 1] = {
-                x = side * row * spacing * widthMultiplier,
-                y = -row * spacing,
+                x = -row * spacing,
+                y = side * row * spacing * widthMultiplier,
             }
         end
     elseif formationType == self.FormationType.ECHELON_LEFT then
+        -- Each unit behind and to the left of the one before
         for i = 1, unitCount do
             positions[#positions + 1] = {
-                x = -(i - 1) * spacing * widthMultiplier,
-                y = -(i - 1) * spacing * 0.7,
+                x = -(i - 1) * spacing * 0.7,
+                y = -(i - 1) * spacing * widthMultiplier,
             }
         end
     elseif formationType == self.FormationType.ECHELON_RIGHT then
+        -- Each unit behind and to the right of the one before
         for i = 1, unitCount do
             positions[#positions + 1] = {
-                x = (i - 1) * spacing * widthMultiplier,
-                y = -(i - 1) * spacing * 0.7,
+                x = -(i - 1) * spacing * 0.7,
+                y = (i - 1) * spacing * widthMultiplier,
             }
         end
     else
