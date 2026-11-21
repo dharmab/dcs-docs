@@ -188,6 +188,109 @@ The `trigger.action.explosion` function creates an explosion at the specified po
 trigger.action.explosion({x = 100000, y = 100, z = 200000}, 100)
 ```
 
+## trigger.action.markToAll
+
+```lua
+nil trigger.action.markToAll(number id, string text, Vec3 position, boolean readOnly, string message)
+```
+
+The `trigger.action.markToAll` function adds a labelled mark point to the F10 map for all players.[^markers]
+
+**Parameters:**
+
+- `id` (number): A unique ID for the mark. Marks and drawings share one ID space, so an ID already used by either is rejected.
+- `text` (string): The label shown on the mark.
+- `position` (Vec3): The world position of the mark.
+- `readOnly` (boolean): Optional. If true, players cannot edit or delete the mark.
+- `message` (string): Optional. Text for an on-screen message box shown when the mark is added. The text does not appear on the F10 map.
+
+```lua
+trigger.action.markToAll(1000, "BULLSEYE", {x = -280000, y = 0, z = 650000}, true, "")
+```
+
+## trigger.action.markToCoalition
+
+```lua
+nil trigger.action.markToCoalition(number id, string text, Vec3 position, number coalitionId, boolean readOnly, string message)
+```
+
+The `trigger.action.markToCoalition` function adds a labelled mark point to the F10 map for one coalition.[^markers]
+
+**Parameters:**
+
+- `id` (number): A unique ID for the mark. Marks and drawings share one ID space, so an ID already used by either is rejected.
+- `text` (string): The label shown on the mark.
+- `position` (Vec3): The world position of the mark.
+- `coalitionId` (number): The coalition that can see the mark, from `coalition.side`.
+- `readOnly` (boolean): Optional. If true, players cannot edit or delete the mark.
+- `message` (string): Optional. Text for an on-screen message box shown when the mark is added. The text does not appear on the F10 map.
+
+```lua
+trigger.action.markToCoalition(1001, "SUPPLY DEPOT", {x = -280000, y = 0, z = 650000}, coalition.side.BLUE, true, "")
+```
+
+## trigger.action.markToGroup
+
+```lua
+nil trigger.action.markToGroup(number id, string text, Vec3 position, number groupId, boolean readOnly, string message)
+```
+
+The `trigger.action.markToGroup` function adds a labelled mark point to the F10 map for one group.[^markers]
+
+**Parameters:**
+
+- `id` (number): A unique ID for the mark. Marks and drawings share one ID space, so an ID already used by either is rejected.
+- `text` (string): The label shown on the mark.
+- `position` (Vec3): The world position of the mark.
+- `groupId` (number): The group that can see the mark. Call `group:getID()` on a Group object to obtain this value.
+- `readOnly` (boolean): Optional. If true, players cannot edit or delete the mark.
+- `message` (string): Optional. Text for an on-screen message box shown when the mark is added. The text does not appear on the F10 map.
+
+```lua
+local group = Group.getByName("Player Flight")
+if group then
+    trigger.action.markToGroup(1003, "TARGET", {x = -280000, y = 0, z = 650000}, group:getID(), true, "")
+end
+```
+
+## trigger.action.circleToAll
+
+```lua
+nil trigger.action.circleToAll(number coalitionId, number id, Vec3 center, number radius, table color, table fillColor, number lineType, boolean readOnly, string message)
+```
+
+The `trigger.action.circleToAll` function draws a circle on the F10 map.[^markers]
+
+**Parameters:**
+
+- `coalitionId` (number): The coalition that can see the circle, from `coalition.side`, or -1 for all coalitions.
+- `id` (number): A unique ID, shared with marks.
+- `center` (Vec3): The world position of the circle center.
+- `radius` (number): The radius in meters.
+- `color` (table): The outline color as `{r, g, b, a}`, each 0 to 1.
+- `fillColor` (table): The fill color as `{r, g, b, a}`, each 0 to 1.
+- `lineType` (number): 0 no line, 1 solid, 2 dashed, 3 dotted, 4 dot dash, 5 long dash, 6 two dash.
+- `readOnly` (boolean): Optional. If true, players cannot edit or delete the circle.
+- `message` (string): Optional. Text for an on-screen message box shown when the circle is added. The text does not appear on the F10 map.
+
+`lineToAll`, `arrowToAll`, and `textToAll` follow the same pattern: coalition first, then ID, then shape-specific arguments.
+
+```lua
+trigger.action.circleToAll(-1, 1002, {x = -280000, y = 0, z = 650000}, 1500, {1, 0, 0, 1}, {1, 0, 0, 0.15}, 2, true, "")
+```
+
+## trigger.action.removeMark
+
+```lua
+nil trigger.action.removeMark(number id)
+```
+
+The `trigger.action.removeMark` function removes the mark or drawing with the given ID from the F10 map.[^markers]
+
+```lua
+trigger.action.removeMark(1002)
+```
+
 ## trigger.action.setUserFlag
 
 ```lua
@@ -299,3 +402,5 @@ If `flagValue` is omitted, the `addOtherCommand*` functions set the flag to `tru
 - [coalition](coalition.md) - Coalition identifiers
 - [group](../classes/group.md) - Group objects and IDs
 - [unit](../classes/unit.md) - Unit objects and IDs
+
+[^markers]: Hoggit Wiki, [DCS func markToAll](https://wiki.hoggitworld.com/view/DCS_func_markToAll), [DCS func markToCoalition](https://wiki.hoggitworld.com/view/DCS_func_markToCoalition), [DCS func markToGroup](https://wiki.hoggitworld.com/view/DCS_func_markToGroup), [DCS func circleToAll](https://wiki.hoggitworld.com/view/DCS_func_circleToAll), and [DCS func removeMark](https://wiki.hoggitworld.com/view/DCS_func_removeMark). These functions are engine-side; no installed Lua file defines them.
