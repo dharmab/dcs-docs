@@ -176,29 +176,11 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
     local dirY = dy / dist
     local fireOffset = config.frontline.fireOffset
 
-    -- Register ISAF group (immortal/invisible for visual firefight only)
-    Virtualization:registerGroup({
-        name = "ISAF-F" .. index,
-        center = isafValidPos,
-        units = isafUnits,
-        countryId = country.id.CJTF_BLUE,
-        category = Group.Category.GROUND,
-    }, {
-        immortal = true,
-        invisible = true,
-        holdFire = true,
-        fireAtPoint = {
-            x = eruseaValidPos.x + dirX * fireOffset,
-            y = eruseaValidPos.y + dirY * fireOffset,
-            radius = FIRE_OFFSET_RADIUS_METERS,
-            expendQty = FIRE_EXPENDITURE_QUANTITY,
-        },
-    })
-
     -- Build multiple Erusea platoons
     local numEruseaPlatoons = math.random(config.frontline.enemyPlatoonsMin, config.frontline.enemyPlatoonsMax)
     local diff = state.difficulty
     local spreadRadius = config.frontline.enemySpreadRadius
+    local eruseaGroups = {}
 
     for e = 1, numEruseaPlatoons do
         -- The first platoon searches around the Erusea position, the rest
@@ -228,7 +210,11 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         )
 
         if eruseaSpreadPos then
-            Virtualization:registerGroup({
+            -- Invisible so the ISAF platoon cannot target it: WEAPON_HOLD does
+            -- not stop ground units from engaging targets while a FireAtPoint
+            -- task runs. Players still see and attack it, and its air defense
+            -- still engages aircraft.
+            eruseaGroups[#eruseaGroups + 1] = Virtualization:registerGroup({
                 name = "Erusea-F" .. index .. "-" .. e,
                 center = eruseaSpreadPos,
                 units = eruseaUnits,
@@ -236,7 +222,7 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
                 category = Group.Category.GROUND,
             }, {
                 immortal = false,
-                invisible = false,
+                invisible = true,
                 fireAtPoint = {
                     x = isafValidPos.x - dirX * fireOffset,
                     y = isafValidPos.y - dirY * fireOffset,
@@ -248,6 +234,65 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
             log("Skipping Erusea platoon " .. index .. "-" .. e .. " - no valid terrain")
         end
     end
+
+    if #eruseaGroups == 0 then
+        log("Skipping ISAF platoon " .. index .. " - no Erusea platoons to fire at")
+        return
+    end
+
+    -- ISAF group is scenery: immortal and invisible, firing past the Erusea
+    -- platoons so players get the kills
+    local isafGroup = Virtualization:registerGroup({
+        name = "ISAF-F" .. index,
+        center = isafValidPos,
+        units = isafUnits,
+        countryId = country.id.CJTF_BLUE,
+        category = Group.Category.GROUND,
+    }, {
+        immortal = true,
+        invisible = true,
+        holdFire = true,
+        fireAtPoint = {
+            x = eruseaValidPos.x + dirX * fireOffset,
+            y = eruseaValidPos.y + dirY * fireOffset,
+            radius = FIRE_OFFSET_RADIUS_METERS,
+            expendQty = FIRE_EXPENDITURE_QUANTITY,
+        },
+    })
+    -- updateFireTargets ceases fire once all of these are destroyed
+    isafGroup.fireTargets = eruseaGroups
+end
+
+-- True when every Erusea platoon an ISAF platoon fires at is destroyed
+local function allFireTargetsDestroyed(vGroup)
+    for _, target in ipairs(vGroup.fireTargets) do
+        if not target.destroyed then
+            return false
+        end
+    end
+    return true
+end
+
+-- Stop an ISAF platoon firing once its Erusea platoons are gone, so it does
+-- not shell empty ground. Clearing fireAtPoint also keeps it off on respawn.
+local function ceaseFireIfTargetsDestroyed(vGroup)
+    if not vGroup.fireTargets or not vGroup.options.fireAtPoint then
+        return
+    end
+    if not allFireTargetsDestroyed(vGroup) then
+        return
+    end
+    vGroup.options.fireAtPoint = nil
+    log("Cease fire for " .. vGroup.name .. " - all its Erusea platoons are destroyed")
+    if vGroup.isSpawned then
+        local group = Group.getByName(vGroup.spawnedGroupName)
+        if group and group:isExist() then
+            local controller = group:getController()
+            if controller then
+                controller:resetTask()
+            end
+        end
+    end
 end
 
 function BattlefieldGeneration:updateFireTargets()
@@ -256,6 +301,7 @@ function BattlefieldGeneration:updateFireTargets()
     local updated = 0
 
     for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
+        ceaseFireIfTargetsDestroyed(vGroup)
         -- Only update spawned frontline groups with fireAtPoint
         if vGroup.isSpawned and vGroup.options.fireAtPoint then
             local groupName = vGroup.spawnedGroupName
@@ -332,13 +378,15 @@ function BattlefieldGeneration:generateFrontlineSHORAD()
             })
         end)
         if validPos then
+            -- Invisible so ISAF platoons in gun range cannot target it, like
+            -- the Erusea platoons
             Virtualization:registerGroup({
                 name = "SHORAD-F" .. shoradIndex,
                 center = validPos,
                 units = units,
                 countryId = country.id.CJTF_RED,
                 category = Group.Category.GROUND,
-            }, {})
+            }, { invisible = true })
         end
     end
 end
