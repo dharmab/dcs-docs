@@ -759,6 +759,7 @@ function Mock.install(options)
             markToCoalition = function(id, text, pos)
                 env.markers[#env.markers + 1] = { id = id, text = text, pos = pos }
             end,
+            -- Marks and drawings share one ID space; drawings take the ID second
             removeMark = function(id)
                 for i, m in ipairs(env.markers) do
                     if m.id == id then
@@ -766,7 +767,14 @@ function Mock.install(options)
                         return
                     end
                 end
+                for i, d in ipairs(env.drawings) do
+                    if d.args[2] == id then
+                        table.remove(env.drawings, i)
+                        return
+                    end
+                end
             end,
+            circleToAll = draw("circle"),
             lineToAll = draw("line"),
             arrowToAll = draw("arrow"),
             textToAll = draw("text"),
