@@ -142,6 +142,16 @@ OperationInfinity.config = {
         fuelTankCount = { 4, 8 }, -- Fuel storage
     },
 
+    -- F10 map hints for groups registered with a hint label (artillery, depots,
+    -- fuel storage). Each hint is a circle of this radius placed so the target
+    -- is inside it but off center. Removed when the group is destroyed.
+    targetHints = {
+        radius = 1500,
+        -- The target is at most this fraction of the radius from the circle
+        -- center, leaving room for the group's own spread inside the circle
+        maxOffsetFraction = 0.8,
+    },
+
     -- Approach route targets - enemies along flight path to deep strike zones
     -- Only applies to regions with noFrontline = true
     approachRoute = {
@@ -296,6 +306,9 @@ OperationInfinity.state = {
 -- Named constants
 local FEBA_ARROW_LENGTH_METERS = 400
 local FEBA_LABEL_OFFSET_METERS = 200
+local HINT_LINE_COLOR = { 0.9, 0.2, 0.2, 1.0 }
+local HINT_FILL_COLOR = { 0.9, 0.2, 0.2, 0.15 }
+local LINE_TYPE_DASHED = 2
 
 local log = Logging:create("OperationInfinity")
 
@@ -310,6 +323,42 @@ function OperationInfinity:addMarker(text, pos)
         true, -- readOnly (players cannot delete)
         "" -- no announcement message
     )
+end
+
+-- Draw a hint circle that contains the group somewhere inside it, plus a
+-- labelled mark at the circle center. Both are removed when the group dies.
+function OperationInfinity:addTargetHint(vGroup)
+    local cfg = self.config.targetHints
+    -- sqrt spreads the offset evenly over the disc instead of bunching it at the center
+    local offset = cfg.radius * cfg.maxOffsetFraction * math.sqrt(math.random())
+    local angle = math.random() * 2 * math.pi
+    local center = {
+        x = vGroup.center.x + offset * math.cos(angle),
+        y = vGroup.center.y + offset * math.sin(angle),
+    }
+
+    self.state.markerCounter = self.state.markerCounter + 1
+    local circleId = self.state.markerCounter
+    trigger.action.circleToAll(
+        coalition.side.BLUE,
+        circleId,
+        { x = center.x, y = land.getHeight(center), z = center.y },
+        cfg.radius,
+        HINT_LINE_COLOR,
+        HINT_FILL_COLOR,
+        LINE_TYPE_DASHED,
+        true, -- readOnly
+        ""
+    )
+    self:addMarker(vGroup.hint, center)
+    local markId = self.state.markerCounter
+
+    vGroup.hintCenter = center
+    vGroup.onDestroyed = function()
+        trigger.action.removeMark(circleId)
+        trigger.action.removeMark(markId)
+        log("Removed hint for destroyed group " .. vGroup.name)
+    end
 end
 
 function OperationInfinity:addFEBAShape()
@@ -922,11 +971,24 @@ function OperationInfinity:generateMapMarkersBatched(onComplete)
         }
     end
 
+    -- Fuzzed hints for groups registered with a hint label
+    for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
+        if vGroup.hint and not vGroup.destroyed then
+            markerItems[#markerItems + 1] = {
+                type = "target_hint",
+                vGroup = vGroup,
+            }
+        end
+    end
+
     BatchScheduler:processArray({
         array = markerItems,
         callback = function(item)
             if item.type == "feba_shape" then
                 OperationInfinity:addFEBAShape()
+            elseif item.type == "target_hint" then
+                OperationInfinity:addTargetHint(item.vGroup)
+                log("Added target hint: " .. item.vGroup.hint .. " for " .. item.vGroup.name)
             else
                 OperationInfinity:addMarker(item.label, item.pos)
                 log("Added " .. item.type .. " marker: " .. item.label)

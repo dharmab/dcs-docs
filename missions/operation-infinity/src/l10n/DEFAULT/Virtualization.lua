@@ -56,6 +56,11 @@ function Virtualization:registerGroup(groupData, options)
         units = groupData.units,
         isSpawned = false,
         spawnedGroupName = nil,
+        -- Map hint label; the group gets a fuzzed hint marker when set
+        hint = options.hint,
+        -- Called once when the last unit dies
+        onDestroyed = nil,
+        destroyed = false,
         options = {
             immortal = options.immortal or false,
             invisible = options.invisible or false,
@@ -293,6 +298,8 @@ function Virtualization:despawnGroup(vGroup)
                 vUnit.health = 0
             end
         end
+        -- Catches deaths whose events were missed
+        self:checkGroupDestroyed(vGroup)
 
         group:destroy()
         log("Despawned group: " .. vGroup.spawnedGroupName)
@@ -499,6 +506,23 @@ function Virtualization.eventHandler:onEvent(event)
     end
 end
 
+-- Mark the group destroyed and call its onDestroyed once all units are dead
+function Virtualization:checkGroupDestroyed(vGroup)
+    if vGroup.destroyed then
+        return
+    end
+    for _, vUnit in ipairs(vGroup.units) do
+        if vUnit.health == nil or vUnit.health > 0 then
+            return
+        end
+    end
+    vGroup.destroyed = true
+    log("Group destroyed: " .. vGroup.name)
+    if vGroup.onDestroyed then
+        vGroup.onDestroyed(vGroup)
+    end
+end
+
 function Virtualization:handleUnitDeath(unitName)
     -- Unit names are "<spawnedGroupName>-Unit-<index>". Parse them exactly;
     -- substring matching let "Unit-1" match "Unit-10" through "Unit-19".
@@ -514,6 +538,7 @@ function Virtualization:handleUnitDeath(unitName)
             if vUnit then
                 vUnit.health = 0
                 log("Unit killed: " .. unitName)
+                self:checkGroupDestroyed(vGroup)
             end
             return
         end
