@@ -235,13 +235,20 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         end
     end
 
-    if #eruseaGroups == 0 then
-        log("Skipping ISAF platoon " .. index .. " - no Erusea platoons to fire at")
-        return
-    end
-
     -- ISAF group is scenery: immortal and invisible, firing past the Erusea
-    -- platoons so players get the kills
+    -- platoons so players get the kills. With no Erusea platoons it is
+    -- still placed for ambiance but holds fire.
+    local fireAtPoint
+    if #eruseaGroups > 0 then
+        fireAtPoint = {
+            x = eruseaValidPos.x + dirX * fireOffset,
+            y = eruseaValidPos.y + dirY * fireOffset,
+            radius = FIRE_OFFSET_RADIUS_METERS,
+            expendQty = FIRE_EXPENDITURE_QUANTITY,
+        }
+    else
+        log("ISAF platoon " .. index .. " has no Erusea platoons; it will not fire")
+    end
     local isafGroup = Virtualization:registerGroup({
         name = "ISAF-F" .. index,
         center = isafValidPos,
@@ -252,12 +259,7 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         immortal = true,
         invisible = true,
         holdFire = true,
-        fireAtPoint = {
-            x = eruseaValidPos.x + dirX * fireOffset,
-            y = eruseaValidPos.y + dirY * fireOffset,
-            radius = FIRE_OFFSET_RADIUS_METERS,
-            expendQty = FIRE_EXPENDITURE_QUANTITY,
-        },
+        fireAtPoint = fireAtPoint,
     })
     -- updateFireTargets ceases fire once all of these are destroyed
     isafGroup.fireTargets = eruseaGroups

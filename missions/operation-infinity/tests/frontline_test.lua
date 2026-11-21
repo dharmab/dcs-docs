@@ -23,7 +23,7 @@ local function killGroup(env, vGroup)
     end
 end
 
-h.test("every ISAF platoon has Erusea platoons, and none can be targeted by AI", function()
+h.test("ISAF platoons are scenery and Erusea frontline groups cannot be targeted by AI", function()
     for _, seed in ipairs(SEEDS) do
         local env = h.load({ seed = seed })
         h.generate(env, "Normal", "180", "northeast")
@@ -31,11 +31,20 @@ h.test("every ISAF platoon has Erusea platoons, and none can be targeted by AI",
         h.ok(#isaf > 0, "no ISAF platoons (seed " .. seed .. ")")
         for _, vGroup in ipairs(isaf) do
             h.ok(vGroup.options.invisible and vGroup.options.immortal, vGroup.name .. " is not immortal and invisible")
-            h.ok(#vGroup.fireTargets > 0, vGroup.name .. " has no Erusea platoons")
-            for _, target in ipairs(vGroup.fireTargets) do
-                h.ok(target.options.invisible, target.name .. " is visible to the ISAF platoon")
-                h.ok(not target.options.immortal, target.name .. " is immortal")
-            end
+            h.eq(
+                vGroup.options.fireAtPoint ~= nil,
+                #vGroup.fireTargets > 0,
+                vGroup.name .. " fires only when it has Erusea platoons"
+            )
+        end
+        local erusea = frontlineGroups("Erusea%-F")
+        for _, vGroup in ipairs(frontlineGroups("SHORAD%-F")) do
+            erusea[#erusea + 1] = vGroup
+        end
+        h.ok(#erusea > 0, "no Erusea frontline groups (seed " .. seed .. ")")
+        for _, vGroup in ipairs(erusea) do
+            h.ok(vGroup.options.invisible, vGroup.name .. " is visible to the ISAF platoons")
+            h.ok(not vGroup.options.immortal, vGroup.name .. " is immortal")
         end
     end
 end)
@@ -43,7 +52,11 @@ end)
 h.test("ISAF platoon ceases fire once its Erusea platoons are destroyed", function()
     local env = h.load()
     h.generate(env, "Normal", "180", "northeast")
-    local isafGroup = frontlineGroups("ISAF%-F")[1]
+    local isafGroup
+    for _, vGroup in ipairs(frontlineGroups("ISAF%-F")) do
+        isafGroup = isafGroup or (#vGroup.fireTargets > 0 and vGroup) or nil
+    end
+    h.ok(isafGroup ~= nil, "no ISAF platoon with Erusea platoons")
 
     env.addPlayer("Spawner", isafGroup.center.x, isafGroup.center.y)
     env.advance(120)
