@@ -51,8 +51,26 @@ end)
 h.test("unknown formation falls back to a line", function()
     h.load()
     local positions = Formations:getFormationPositions(3, "BOGUS", 10)
-    h.eq(positions[1].x, -10)
-    h.eq(positions[3].x, 10)
+    h.eq(positions[1].y, -10)
+    h.eq(positions[3].y, 10)
+end)
+
+h.test("formations are oriented along the facing", function()
+    h.load()
+    local east = math.pi / 2
+    local noJitter = { jitterMin = 0, jitterMax = 0, facing = east }
+    -- A line facing east spreads north-south
+    noJitter.formation = "LINE"
+    local line = Formations:buildPlatoonUnits({ { type = "M1A2", count = 4 } }, { x = 0, y = 0 }, noJitter)
+    h.near(line[1].y, 0, 1e-9)
+    h.ok(math.abs(line[4].x - line[1].x) > 50, "line not spread across the facing")
+    -- A wedge facing east trails west of its lead
+    noJitter.formation = "WEDGE"
+    local wedge = Formations:buildPlatoonUnits({ { type = "M1A2", count = 3 } }, { x = 0, y = 0 }, noJitter)
+    h.ok(wedge[2].y < wedge[1].y and wedge[3].y < wedge[1].y, "wedge trails ahead of its lead")
+    for _, u in ipairs(wedge) do
+        h.near(u.heading, east, math.rad(10) + 1e-9)
+    end
 end)
 
 h.test("rotation preserves distance", function()
