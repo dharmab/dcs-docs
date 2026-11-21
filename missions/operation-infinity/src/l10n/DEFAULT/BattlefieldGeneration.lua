@@ -481,6 +481,7 @@ function BattlefieldGeneration:generateArtilleryBattery(index)
         immortal = false,
         invisible = false,
         fireAtPoint = fireTarget,
+        hint = "ARTILLERY",
     })
 end
 
@@ -579,6 +580,7 @@ function BattlefieldGeneration:generateSupplyDepot(index)
     }, {
         immortal = false,
         invisible = false,
+        hint = "SUPPLY DEPOT",
     })
 
     log("Generated supply depot at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
@@ -631,6 +633,7 @@ function BattlefieldGeneration:generateFuelStorage(index)
     }, {
         immortal = false,
         invisible = false,
+        hint = "FUEL STORAGE",
     })
 
     log("Generated fuel storage at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")

@@ -87,6 +87,10 @@ The comms card is in the mission briefing and in F10 > Comms Plan. Per-aircraft 
 
 **180 Minutes (Eastern Caucasus):** Long transit, tanker support recommended.
 
+## Map Hints
+
+The F10 map marks each target aerodrome, the FEBA, and red circles around artillery batteries, supply depots, and fuel storage. Each circle has its target somewhere inside it, but not at the center, and is removed once the target is destroyed. Patrols, convoys, and air defenses are not marked.
+
 ## Support Assets
 
 Three tankers orbit on a racetrack between Krymsk and the target area:
