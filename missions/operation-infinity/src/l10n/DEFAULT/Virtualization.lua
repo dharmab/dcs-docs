@@ -25,6 +25,8 @@ Virtualization.config = {
     spawnDistance = SPAWN_DISTANCE_NM * METERS_PER_NM, -- 100 nm in meters
     despawnDistance = DESPAWN_DISTANCE_NM * METERS_PER_NM, -- 120 nm in meters (hysteresis)
     updateInterval = 15, -- Seconds between update checks
+    -- registerGroup rejects groups past this many total virtual units; nil means no cap
+    maxVirtualUnits = nil,
     debug = true,
 }
 
@@ -44,8 +46,27 @@ local log = Logging:create("Virtualization")
 -- GROUP REGISTRATION
 -- =============================================================================
 
+function Virtualization:getRegisteredUnitCount()
+    local count = 0
+    for _, vGroup in ipairs(self.state.virtualGroups) do
+        count = count + #vGroup.units
+    end
+    return count
+end
+
+-- Returns the registered group, or nil when it would exceed config.maxVirtualUnits
 function Virtualization:registerGroup(groupData, options)
     options = options or {}
+
+    local maxUnits = self.config.maxVirtualUnits
+    if maxUnits then
+        local projectedUnits = self:getRegisteredUnitCount() + #groupData.units
+        local overBudget = projectedUnits > maxUnits
+        if overBudget then
+            log("Unit budget reached (" .. maxUnits .. "); skipping group " .. groupData.name)
+            return nil
+        end
+    end
 
     local vGroup = {
         name = groupData.name,

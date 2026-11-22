@@ -53,6 +53,19 @@ local function checkGroundPlacement(env)
     end
 end
 
+-- Virtual and permanent groups together fit the mission's unit budget
+local function checkUnitBudget()
+    local config = OperationInfinity.config
+    local virtualUnits = Virtualization:getRegisteredUnitCount()
+    local permanentUnits = 0
+    for _, pGroup in ipairs(Virtualization.state.permanentGroups) do
+        permanentUnits = permanentUnits + #pGroup.units
+    end
+    h.ok(permanentUnits <= config.airDefenseUnitReserve, permanentUnits .. " permanent units exceed the reserve")
+    local totalUnits = virtualUnits + permanentUnits
+    h.ok(totalUnits <= config.maxSpawnedUnits, totalUnits .. " units exceed maxSpawnedUnits")
+end
+
 local function checkLog(env)
     for _, line in ipairs(env.log) do
         h.ok(not line:find("ERROR") and not line:find("Error"), "error logged: " .. line)
@@ -74,6 +87,7 @@ for _, combo in ipairs(combos) do
                 local env = h.load({ seed = seed })
                 h.generate(env, difficulty, combo.playtime, combo.region)
                 h.ok(env.logContains(GENERATION_COMPLETE), "generation did not complete (seed " .. seed .. ")")
+                checkUnitBudget()
                 spawnEverything(env)
                 for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
                     h.ok(vGroup.isSpawned, vGroup.name .. " did not spawn with a player overhead")

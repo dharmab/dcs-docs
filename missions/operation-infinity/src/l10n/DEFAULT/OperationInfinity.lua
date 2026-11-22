@@ -23,7 +23,12 @@ OperationInfinity = {}
 local METERS_PER_NM = 1852
 
 OperationInfinity.config = {
-    maxSpawnedUnits = 800,
+    -- Ground unit budget. The scripting engine becomes unreliable above about
+    -- 1000 units (docs/wisdom.md), and aircraft, ships, and weapons also count.
+    maxSpawnedUnits = 600,
+    -- Part of maxSpawnedUnits held back for permanent air defense groups,
+    -- which are generated after the virtualized target groups
+    airDefenseUnitReserve = 100,
     debug = true,
 
     -- Mission time limit (8 hours)
@@ -127,17 +132,21 @@ OperationInfinity.config = {
 
     -- Behind-lines targets (normal frontline operations)
     behindLines = {
-        convoyCount = { 2, 4 }, -- Min/max convoys
-        artilleryCount = { 1, 3 }, -- Min/max artillery batteries
-        patrolCount = { 8, 12 }, -- Min/max patrol groups (scattered single targets)
+        convoyCount = { 3, 5 }, -- Min/max convoys
+        artilleryCount = { 3, 5 }, -- Min/max artillery batteries
+        patrolCount = { 16, 22 }, -- Min/max patrol groups (scattered small groups)
+        depotCount = { 3, 5 }, -- Supply depots in the rear area
+        -- Depots are placed between a target aerodrome and this far behind
+        -- the frontline (min/max meters)
+        depotRearOffset = { 2 * METERS_PER_NM, 5 * METERS_PER_NM },
     },
 
     -- Deep strike targets (noFrontline regions like Tbilisi)
     -- More logistics and defense targets to compensate for no frontline
     deepStrike = {
         convoyCount = { 6, 10 }, -- More logistics convoys
-        artilleryCount = { 3, 5 }, -- More artillery
-        patrolCount = { 16, 24 }, -- More scattered patrols (single targets)
+        artilleryCount = { 4, 6 }, -- More artillery
+        patrolCount = { 24, 32 }, -- More scattered patrols
         depotCount = { 3, 5 }, -- Supply depots
         fuelTankCount = { 4, 8 }, -- Fuel storage
     },
@@ -276,6 +285,7 @@ OperationInfinity.state = {
         regionKey = nil, -- Key of the selected region (for racetrack lookup)
         targetAerodromes = {}, -- Aerodromes in the selected region
         frontline = {
+            ---@type Vec2?
             center = nil, -- Center point of the frontline
             axis = nil, -- Direction vector along the frontline
             ---@type Vec2?
@@ -621,6 +631,8 @@ function OperationInfinity:generateBattlefield()
             .. ", Region: "
             .. selected.region.name
     )
+
+    Virtualization.config.maxVirtualUnits = self.config.maxSpawnedUnits - self.config.airDefenseUnitReserve
 
     -- Store context for async generation
     local genContext = {

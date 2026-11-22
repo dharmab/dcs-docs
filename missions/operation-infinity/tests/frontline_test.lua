@@ -80,3 +80,28 @@ h.test("ISAF platoon ceases fire once its Erusea platoons are destroyed", functi
     h.eq(#controllerRecord.tasks, 0, "FireAtPoint task not reset")
     h.ok(env.logContains("Cease fire for " .. isafGroup.name:gsub("%-", "%%-")), "cease fire not logged")
 end)
+
+h.test("supply depots spread across the rear area behind the frontline", function()
+    local minRearOffset = OperationInfinity.config.behindLines.depotRearOffset[1]
+    for _, combo in ipairs(h.regionPlaytimes()) do
+        for _, seed in ipairs(SEEDS) do
+            local env = h.load({ seed = seed })
+            h.generate(env, "Normal", combo.playtime, combo.region)
+            local frontline = OperationInfinity.state.battlefield.frontline
+            if #frontline.isafPositions > 0 then
+                local depots = frontlineGroups("Depot%-")
+                local label = combo.region .. " seed " .. seed
+                h.ok(#depots > 0, "no depots in " .. label)
+                for _, depot in ipairs(depots) do
+                    local dx = depot.center.x - frontline.center.x
+                    local dy = depot.center.y - frontline.center.y
+                    local behind = dx * frontline.approachDir.x + dy * frontline.approachDir.y
+                    h.ok(
+                        behind >= minRearOffset,
+                        depot.name .. " is " .. math.floor(behind) .. " m behind the front in " .. label
+                    )
+                end
+            end
+        end
+    end
+end)

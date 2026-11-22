@@ -18,8 +18,74 @@ local SHORAD_OFFSET_VARIANCE_METERS = 500
 local FIRE_OFFSET_RADIUS_METERS = 50
 local FIRE_EXPENDITURE_QUANTITY = 200
 local CONVOY_SPACING_METERS = 20
+-- Anchor points tried per target group. The layout search only covers a few
+-- hundred meters around each anchor, and anchors near the coast or in forest
+-- often have no valid ground in that radius.
+local PLACEMENT_ATTEMPTS = 8
 
 local log = Logging:create("BattlefieldGeneration")
+
+-- Calls place(anchor) with a new anchor from pickAnchor() until place returns
+-- a position. Returns place's position and units, or nil.
+local function placeWithRetries(pickAnchor, place)
+    for _ = 1, PLACEMENT_ATTEMPTS do
+        local pos, units = place(pickAnchor())
+        if pos then
+            return pos, units
+        end
+    end
+    return nil
+end
+
+-- Random point minDist-maxDist meters from a random aerodrome in the list
+local function randomPointNearRandomAerodrome(aerodromes, minDist, maxDist)
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local angle = math.random() * 2 * math.pi
+    local distance = minDist + math.random() * (maxDist - minDist)
+    return {
+        x = aerodrome.x + distance * math.cos(angle),
+        y = aerodrome.y + distance * math.sin(angle),
+    }
+end
+
+-- Random anchor for a behind-lines target near one of the target aerodromes
+local function randomBehindLinesAnchor()
+    local battlefield = OperationInfinity.state.battlefield
+    local aerodromes = battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    return OperationInfinity:randomPointNearAerodrome(aerodrome, battlefield.spawnConstraints)
+end
+
+-- Meters pos is behind the frontline on the Erusean side; negative is in front
+local function distanceBehindFrontline(pos)
+    local frontline = OperationInfinity.state.battlefield.frontline
+    local dx = pos.x - frontline.center.x
+    local dy = pos.y - frontline.center.y
+    return dx * frontline.approachDir.x + dy * frontline.approachDir.y
+end
+
+-- Random point on the line from a target aerodrome to a few miles behind a
+-- random frontline platoon, so depots spread across the Erusean rear area
+local function randomRearAreaAnchor()
+    local battlefield = OperationInfinity.state.battlefield
+    local frontline = battlefield.frontline
+    local rearOffsetRange = OperationInfinity.config.behindLines.depotRearOffset
+
+    local aerodromes = battlefield.targetAerodromes
+    local aerodrome = aerodromes[math.random(#aerodromes)]
+    local platoon = frontline.isafPositions[math.random(#frontline.isafPositions)]
+    local rearOffset = rearOffsetRange[1] + math.random() * (rearOffsetRange[2] - rearOffsetRange[1])
+    local rearEnd = {
+        x = platoon.x + frontline.approachDir.x * rearOffset,
+        y = platoon.y + frontline.approachDir.y * rearOffset,
+    }
+
+    local fraction = math.random()
+    return {
+        x = aerodrome.x + fraction * (rearEnd.x - aerodrome.x),
+        y = aerodrome.y + fraction * (rearEnd.y - aerodrome.y),
+    }
+end
 
 -- =============================================================================
 -- FRONTLINE GENERATION
@@ -262,7 +328,9 @@ function BattlefieldGeneration:generateFrontlinePlatoon(position, index)
         fireAtPoint = fireAtPoint,
     })
     -- updateFireTargets ceases fire once all of these are destroyed
-    isafGroup.fireTargets = eruseaGroups
+    if isafGroup then
+        isafGroup.fireTargets = eruseaGroups
+    end
 end
 
 -- True when every Erusea platoon an ISAF platoon fires at is destroyed
@@ -447,17 +515,12 @@ local function buildRoadConvoyUnits(roadPos)
 end
 
 function BattlefieldGeneration:generateConvoy(index)
-    local state = OperationInfinity.state
-
-    -- Pick a random target aerodrome and position convoy near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
-
     -- Convoys are placed on a road, in a column following it
-    local pos, units = Terrain:findRoadLayout(initialPos, 200, buildRoadConvoyUnits)
+    local pos, units = placeWithRetries(randomBehindLinesAnchor, function(anchor)
+        return Terrain:findRoadLayout(anchor, 200, buildRoadConvoyUnits)
+    end)
     if not pos then
-        log("Skipping Convoy-" .. index .. " near " .. aerodrome.name .. " - no valid road")
+        log("Skipping Convoy-" .. index .. " - no valid road")
         return
     end
 
@@ -476,11 +539,6 @@ end
 function BattlefieldGeneration:generateArtilleryBattery(index)
     local state = OperationInfinity.state
 
-    -- Pick a random target aerodrome and position artillery near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
-
     -- Find a frontline position to fire at
     local frontlinePositions = state.battlefield.frontline.isafPositions
     local fireTarget = nil
@@ -497,27 +555,29 @@ function BattlefieldGeneration:generateArtilleryBattery(index)
     end
 
     -- Artillery batteries are homogenous - no unit type substitution
-    local template = Formations:randomizeTemplate(UnitTemplates.ArtilleryBattery, {
+    local template = Formations:randomizeTemplate(UnitTemplates:getRandomArtilleryBattery(), {
         skipSubstitutions = true,
     })
 
     -- Artillery needs flatter terrain (8 degree max slope)
-    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
-        -- Face toward the target
-        local facing = randomFacing
-        if fireTarget then
-            facing = math.atan2(fireTarget.y - candidate.y, fireTarget.x - candidate.x)
-        end
-        return Formations:buildPlatoonUnits(template, candidate, {
-            formation = Formations.FormationType.LINE,
-            facing = facing,
-            spacing = 40, -- Wider spacing for artillery
+    local pos, units = placeWithRetries(randomBehindLinesAnchor, function(anchor)
+        return Terrain:findValidLayout(anchor, 300, function(candidate)
+            -- Face toward the target
+            local facing = randomFacing
+            if fireTarget then
+                facing = math.atan2(fireTarget.y - candidate.y, fireTarget.x - candidate.x)
+            end
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = Formations.FormationType.LINE,
+                facing = facing,
+                spacing = 40, -- Wider spacing for artillery
+            })
+        end, {
+            maxSlope = 8,
         })
-    end, {
-        maxSlope = 8,
-    })
+    end)
     if not pos then
-        log("Skipping Artillery-" .. index .. " near " .. aerodrome.name .. " - no valid flat terrain")
+        log("Skipping Artillery-" .. index .. " - no valid flat terrain")
         return
     end
 
@@ -536,13 +596,6 @@ function BattlefieldGeneration:generateArtilleryBattery(index)
 end
 
 function BattlefieldGeneration:generatePatrolGroup(index)
-    local state = OperationInfinity.state
-
-    -- Pick a random target aerodrome and position patrol near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-    local initialPos = OperationInfinity:randomPointNearAerodrome(aerodrome, state.battlefield.spawnConstraints)
-
     -- Get a random scattered patrol type for variety
     local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
     local patrolHeading = math.random() * 2 * math.pi
@@ -553,15 +606,17 @@ function BattlefieldGeneration:generatePatrolGroup(index)
         formation = Formations:getRandomFormationType()
     end
 
-    local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
-        return Formations:buildPlatoonUnits(template, candidate, {
-            formation = formation,
-            facing = patrolHeading,
-            spacing = 25,
-        })
+    local pos, units = placeWithRetries(randomBehindLinesAnchor, function(anchor)
+        return Terrain:findValidLayout(anchor, 150, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = formation,
+                facing = patrolHeading,
+                spacing = 25,
+            })
+        end)
     end)
     if not pos then
-        log("Skipping Patrol-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        log("Skipping Patrol-" .. index .. " - no valid terrain")
         return
     end
 
@@ -585,17 +640,16 @@ end
 function BattlefieldGeneration:generateSupplyDepot(index)
     local state = OperationInfinity.state
 
-    -- Pick a random target aerodrome and position depot near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-
-    -- Position depots 5-20km from aerodrome
-    local angle = math.random() * 2 * math.pi
-    local distance = 5000 + math.random() * 15000
-    local initialPos = {
-        x = aerodrome.x + distance * math.cos(angle),
-        y = aerodrome.y + distance * math.sin(angle),
-    }
+    -- With a frontline, depots spread across the rear area up to a few miles
+    -- behind it. Without one, they are 5-20 km from a target aerodrome.
+    local hasFrontline = #state.battlefield.frontline.isafPositions > 0
+    local function pickAnchor()
+        if hasFrontline then
+            return randomRearAreaAnchor()
+        end
+        return randomPointNearRandomAerodrome(state.battlefield.targetAerodromes, 5000, 20000)
+    end
+    local minRearOffset = OperationInfinity.config.behindLines.depotRearOffset[1]
 
     -- Supply depot: trucks and cargo containers
     local template = {
@@ -606,18 +660,28 @@ function BattlefieldGeneration:generateSupplyDepot(index)
     local facing = math.random() * 2 * math.pi
 
     -- Depots should be near roads and on flat ground
-    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
-        return Formations:buildPlatoonUnits(template, candidate, {
-            formation = Formations.FormationType.LINE,
-            facing = facing,
-            spacing = 15,
+    local pos, units = placeWithRetries(pickAnchor, function(anchor)
+        local candidatePos, candidateUnits = Terrain:findValidLayout(anchor, 300, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = Formations.FormationType.LINE,
+                facing = facing,
+                spacing = 15,
+            })
+        end, {
+            maxSlope = 8,
+            maxRoadDistance = 200,
         })
-    end, {
-        maxSlope = 8,
-        maxRoadDistance = 200,
-    })
+        -- Snapping to a road can move a depot toward the front
+        local tooCloseToFront = candidatePos ~= nil
+            and hasFrontline
+            and distanceBehindFrontline(candidatePos) < minRearOffset
+        if tooCloseToFront then
+            return nil
+        end
+        return candidatePos, candidateUnits
+    end)
     if not pos then
-        log("Skipping Depot-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        log("Skipping Depot-" .. index .. " - no valid terrain")
         return
     end
 
@@ -639,17 +703,10 @@ end
 function BattlefieldGeneration:generateFuelStorage(index)
     local state = OperationInfinity.state
 
-    -- Pick a random target aerodrome and position fuel storage near it
-    local aerodromes = state.battlefield.targetAerodromes
-    local aerodrome = aerodromes[math.random(#aerodromes)]
-
-    -- Position fuel storage 3-15km from aerodrome
-    local angle = math.random() * 2 * math.pi
-    local distance = 3000 + math.random() * 12000
-    local initialPos = {
-        x = aerodrome.x + distance * math.cos(angle),
-        y = aerodrome.y + distance * math.sin(angle),
-    }
+    -- Position fuel storage 3-15km from a random target aerodrome
+    local function pickAnchor()
+        return randomPointNearRandomAerodrome(state.battlefield.targetAerodromes, 3000, 15000)
+    end
 
     -- Fuel storage: ATZ fuel trucks (highly explosive targets)
     local numTrucks = 3 + math.random(3) -- 3-6 fuel trucks
@@ -659,18 +716,20 @@ function BattlefieldGeneration:generateFuelStorage(index)
     local facing = math.random() * 2 * math.pi
 
     -- Fuel storage needs flat ground near roads
-    local pos, units = Terrain:findValidLayout(initialPos, 300, function(candidate)
-        return Formations:buildPlatoonUnits(template, candidate, {
-            formation = Formations.FormationType.LINE,
-            facing = facing,
-            spacing = 20,
+    local pos, units = placeWithRetries(pickAnchor, function(anchor)
+        return Terrain:findValidLayout(anchor, 300, function(candidate)
+            return Formations:buildPlatoonUnits(template, candidate, {
+                formation = Formations.FormationType.LINE,
+                facing = facing,
+                spacing = 20,
+            })
+        end, {
+            maxSlope = 5,
+            maxRoadDistance = 300,
         })
-    end, {
-        maxSlope = 5,
-        maxRoadDistance = 300,
-    })
+    end)
     if not pos then
-        log("Skipping FuelStorage-" .. index .. " near " .. aerodrome.name .. " - no valid terrain")
+        log("Skipping FuelStorage-" .. index .. " - no valid terrain")
         return
     end
 
@@ -704,8 +763,8 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
     local numArtillery = math.random(cfg.artilleryCount[1], cfg.artilleryCount[2])
     local numPatrols = math.random(cfg.patrolCount[1], cfg.patrolCount[2])
 
-    -- Deep strike adds supply depots and fuel tanks
-    local numDepots = isDeepStrike and math.random(cfg.depotCount[1], cfg.depotCount[2]) or 0
+    local numDepots = math.random(cfg.depotCount[1], cfg.depotCount[2])
+    -- Deep strike adds fuel tanks
     local numFuelTanks = isDeepStrike and math.random(cfg.fuelTankCount[1], cfg.fuelTankCount[2]) or 0
 
     -- Build work items array
@@ -726,6 +785,13 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
         workItems[#workItems + 1] = { type = "fuel", index = i }
     end
 
+    -- Shuffle so that if the unit budget runs out, the skipped groups are a
+    -- random mix instead of every group of the last type
+    for i = #workItems, 2, -1 do
+        local j = math.random(i)
+        workItems[i], workItems[j] = workItems[j], workItems[i]
+    end
+
     local logMsg = "Generating "
         .. (isDeepStrike and "deep strike" or "behind-lines")
         .. " targets (batched): "
@@ -734,9 +800,11 @@ function BattlefieldGeneration:generateBehindLinesTargetsBatched(onComplete)
         .. numArtillery
         .. " artillery, "
         .. numPatrols
-        .. " patrols"
+        .. " patrols, "
+        .. numDepots
+        .. " depots"
     if isDeepStrike then
-        logMsg = logMsg .. ", " .. numDepots .. " depots, " .. numFuelTanks .. " fuel tanks"
+        logMsg = logMsg .. ", " .. numFuelTanks .. " fuel tanks"
     end
     log(logMsg)
 
@@ -938,15 +1006,16 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
     local config = OperationInfinity.config
     local approachConfig = self:getApproachRouteConfig()
 
-    -- Calculate position within waypoint area with lateral offset toward coast
-    local lateralOffset = approachConfig.corridorOffsetMin
-        + math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
-    local longitudinalOffset = (math.random() - 0.5) * 2 * approachConfig.waypointRadius
-
-    local initialPos = {
-        x = item.waypointCenter.x + item.approachDir.x * longitudinalOffset + item.perpDir.x * lateralOffset,
-        y = item.waypointCenter.y + item.approachDir.y * longitudinalOffset + item.perpDir.y * lateralOffset,
-    }
+    -- Random position within the waypoint area with lateral offset toward coast
+    local function pickAnchor()
+        local lateralOffset = approachConfig.corridorOffsetMin
+            + math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
+        local longitudinalOffset = (math.random() - 0.5) * 2 * approachConfig.waypointRadius
+        return {
+            x = item.waypointCenter.x + item.approachDir.x * longitudinalOffset + item.perpDir.x * lateralOffset,
+            y = item.waypointCenter.y + item.approachDir.y * longitudinalOffset + item.perpDir.y * lateralOffset,
+        }
+    end
 
     -- Group naming: AR = Approach Route
     local groupPrefix = "AR-W" .. item.waypointIndex
@@ -955,12 +1024,14 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         -- Use existing scattered patrol system
         local template, patrolType = UnitTemplates:getRandomScatteredPatrol()
         local facing = math.random() * 2 * math.pi
-        local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
-            return Formations:buildPlatoonUnits(template, candidate, {
-                formation = Formations.FormationType.LINE,
-                facing = facing,
-                spacing = 25,
-            })
+        local pos, units = placeWithRetries(pickAnchor, function(anchor)
+            return Terrain:findValidLayout(anchor, 150, function(candidate)
+                return Formations:buildPlatoonUnits(template, candidate, {
+                    formation = Formations.FormationType.LINE,
+                    facing = facing,
+                    spacing = 25,
+                })
+            end)
         end)
         if not pos then
             log("Skipping approach route patrol - no valid terrain")
@@ -991,12 +1062,14 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         local template = UnitTemplates:getRandomArmorPatrol()
         local formation = Formations:getRandomFormationType()
         local facing = math.random() * 2 * math.pi
-        local pos, units = Terrain:findValidLayout(initialPos, 200, function(candidate)
-            return Formations:buildPlatoonUnits(template, candidate, {
-                formation = formation,
-                facing = facing,
-                spacing = 30,
-            })
+        local pos, units = placeWithRetries(pickAnchor, function(anchor)
+            return Terrain:findValidLayout(anchor, 200, function(candidate)
+                return Formations:buildPlatoonUnits(template, candidate, {
+                    formation = formation,
+                    facing = facing,
+                    spacing = 30,
+                })
+            end)
         end)
         if not pos then
             log("Skipping approach route armor - no valid terrain")
@@ -1016,7 +1089,9 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         log("Generated approach route armor at (" .. math.floor(pos.x) .. ", " .. math.floor(pos.y) .. ")")
     elseif item.type == "convoy" then
         -- Convoys are placed on a road, in a column following it
-        local pos, units = Terrain:findRoadLayout(initialPos, 200, buildRoadConvoyUnits)
+        local pos, units = placeWithRetries(pickAnchor, function(anchor)
+            return Terrain:findRoadLayout(anchor, 200, buildRoadConvoyUnits)
+        end)
         if not pos then
             log("Skipping approach route convoy - no valid road")
             return
@@ -1037,15 +1112,17 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
         -- Checkpoints near roads
         local template = Formations:randomizeTemplate(UnitTemplates.Checkpoint)
         local facing = math.random() * 2 * math.pi
-        local pos, units = Terrain:findValidLayout(initialPos, 150, function(candidate)
-            return Formations:buildPlatoonUnits(template, candidate, {
-                formation = Formations.FormationType.LINE,
-                facing = facing,
-                spacing = 15,
+        local pos, units = placeWithRetries(pickAnchor, function(anchor)
+            return Terrain:findValidLayout(anchor, 150, function(candidate)
+                return Formations:buildPlatoonUnits(template, candidate, {
+                    formation = Formations.FormationType.LINE,
+                    facing = facing,
+                    spacing = 15,
+                })
+            end, {
+                maxRoadDistance = 50,
             })
-        end, {
-            maxRoadDistance = 50,
-        })
+        end)
         if not pos then
             log("Skipping approach route checkpoint - no valid terrain near roads")
             return
