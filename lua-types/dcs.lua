@@ -645,7 +645,7 @@ function Controller:setTask(task) end
 -- docs/scripting/reference/singletons/coord.md
 ---@param latitude number
 ---@param longitude number
----@param altitude number
+---@param altitude? number
 ---@return Vec3
 function coord.LLtoLO(latitude, longitude, altitude) end
 

@@ -16,11 +16,11 @@ The `coord.LLtoLO` function converts Latitude/Longitude/Altitude to the game's X
 
 - `latitude` (number): The latitude in decimal degrees, where positive values indicate North.
 - `longitude` (number): The longitude in decimal degrees, where positive values indicate East.
-- `altitude` (number): The altitude in meters above mean sea level.
+- `altitude` (number): Optional. The altitude in meters above mean sea level.
 
-**Returns:** A Vec3 with the game coordinates, where y is altitude.
+**Returns:** A Vec3 with the game coordinates, where y is altitude.[^lltolo]
 
-<!-- TODO: QA - Verify in DCS that coord.LLtoLO returns a Vec3 (Hoggit wiki says vec3) -->
+<!-- TODO: QA - Verify in DCS that coord.LLtoLO returns a Vec3 and that altitude is optional (MOOSE and MIST rely on both; no installed DCS Lua calls it) -->
 
 ```lua
 local position = coord.LLtoLO(41.657, 41.597, 0)
@@ -36,9 +36,7 @@ The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/
 
 **Parameters:**
 
-- `point` (Vec3): The game coordinates, where y is altitude.
-
-<!-- TODO: QA - Verify in DCS that coord.LOtoLL takes a Vec3 (Hoggit wiki and Operation Infinity both pass a Vec3) -->
+- `point` (Vec3): The game coordinates, where y is altitude.[^lotoll]
 
 **Returns:** Three numbers representing the latitude, longitude, and altitude.
 
@@ -88,3 +86,7 @@ The `coord.MGRStoLL` function converts MGRS coordinates to Latitude/Longitude.
 
 - [Coordinate Types](../types/coordinates.md) - Vec2, Vec3, and coordinate systems
 - [land](land.md) - Terrain height queries
+
+[^lltolo]: [MOOSE `Core/Point.lua`](https://github.com/FlightControl-Master/MOOSE/blob/master/Moose%20Development/Moose/Core/Point.lua) (`COORDINATE:NewFromLLDD`, `COORDINATE:GetNorthCorrectionRadians`) and [MIST](https://github.com/mrSkortch/MissionScriptingTools/blob/master/mist.lua) (`mist.getNorthCorrection`) call `coord.LLtoLO(lat, lon)` and read `.x` and `.z` from the result.
+
+[^lotoll]: `Scripts/Speech/NATO.lua` in the DCS install calls `coord.LOtoLL(point)` with a single point table.
