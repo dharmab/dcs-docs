@@ -28,6 +28,17 @@ local AMMO_TRUCK_ROW_OFFSET_METERS = 60
 -- hundred meters around each anchor, and anchors near the coast or in forest
 -- often have no valid ground in that radius.
 local PLACEMENT_ATTEMPTS = 8
+-- Max deviation of each SAM unit's heading from the site's threat facing
+local SAM_HEADING_VARIANCE_RADIANS = math.rad(45)
+-- SAM site layout: launchers on an outer ring (UnitTemplates.SAMLauncherRings),
+-- radars and command posts on an inner ring around the center
+local SAM_LAUNCHER_ANGLE_JITTER_RADIANS = math.rad(10)
+-- Tries per launcher to land on open ground within its ring slot
+local SAM_LAUNCHER_PLACEMENT_ATTEMPTS = 6
+-- Fraction of the ring radius each retry pulls a launcher in by, so the last
+-- try is at 60% of the rolled radius
+local SAM_LAUNCHER_RETRY_SHRINK = 0.08
+local SAM_CORE_RING_RADIUS_METERS = 40
 
 local log = Logging:create("BattlefieldGeneration")
 
@@ -1254,7 +1265,7 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
     local state = OperationInfinity.state
 
     local function buildUnits(candidate)
-        return self:buildSAMUnits(template, candidate)
+        return self:buildSAMUnits(samType, template, candidate)
     end
 
     local pos, units = nil, nil
@@ -1314,26 +1325,87 @@ function BattlefieldGeneration:generateSAMSite(samType, template, index, anchor)
     return pos
 end
 
-function BattlefieldGeneration:buildSAMUnits(template, center)
-    local units = {}
-    local unitIndex = 1
+-- Heading (radians) from pos toward the threat axis: across the frontline
+-- toward ISAF, or toward the home airbase in regions without a frontline
+function BattlefieldGeneration:threatFacing(pos)
+    local state = OperationInfinity.state
+    local approachDir = state.battlefield.frontline.approachDir
+    if approachDir then
+        return math.atan2(-approachDir.y, -approachDir.x)
+    end
+    local home = state.homeAirbase
+    return math.atan2(home.y - pos.y, home.x - pos.x)
+end
 
-    for _, def in ipairs(template) do
-        for c = 1, def.count do
-            -- Arrange in a circular pattern
-            local angle = (unitIndex - 1) * (2 * math.pi / 8)
-            local radius = 50 + (unitIndex - 1) * 30
-
-            units[#units + 1] = {
-                type = def.type,
-                x = center.x + radius * math.cos(angle),
-                y = center.y + radius * math.sin(angle),
-                heading = angle, -- Face outward
-                skill = "Excellent",
-            }
-            unitIndex = unitIndex + 1
+-- Spread count positions evenly on a circle of radius around center, from a
+-- random start angle, each nudged by up to the given jitter. A position on
+-- forest or water is re-rolled up to attempts times, each retry pulled in by
+-- shrink (a fraction of the radius) toward the open ground the site center
+-- was validated on; findValidLayout rejects the layout if one is still invalid.
+local function ringPositions(center, count, radius, radiusJitter, angleJitter, attempts, shrink)
+    local positions = {}
+    local startAngle = math.random() * 2 * math.pi
+    for i = 1, count do
+        local slotAngle = startAngle + (i - 1) * 2 * math.pi / count
+        for attempt = 1, attempts or 1 do
+            local scale = 1 - (attempt - 1) * (shrink or 0)
+            local angle = slotAngle + (math.random() - 0.5) * 2 * angleJitter
+            local r = (radius + (math.random() - 0.5) * 2 * radiusJitter) * scale
+            positions[i] = { x = center.x + r * math.cos(angle), y = center.y + r * math.sin(angle) }
+            if Terrain:isValidUnitPosition(positions[i]) then
+                break
+            end
         end
     end
+    return positions
+end
+
+-- Launchers (launcher = true in the template) ring the site at the radius in
+-- UnitTemplates.SAMLauncherRings; radars and command posts cluster at its center
+function BattlefieldGeneration:buildSAMUnits(samType, template, center)
+    local launcherTypes, coreTypes = {}, {}
+    for _, def in ipairs(template) do
+        local list = def.launcher and launcherTypes or coreTypes
+        for _ = 1, def.count do
+            list[#list + 1] = def.type
+        end
+    end
+
+    -- First core unit at the center, the rest on a small inner ring
+    local corePositions = { { x = center.x, y = center.y } }
+    local innerRing = ringPositions(center, #coreTypes - 1, SAM_CORE_RING_RADIUS_METERS, 0, 0)
+    for _, p in ipairs(innerRing) do
+        corePositions[#corePositions + 1] = p
+    end
+    local launcherPositions = {}
+    if #launcherTypes > 0 then
+        local ring = UnitTemplates.SAMLauncherRings[samType]
+        launcherPositions = ringPositions(
+            center,
+            #launcherTypes,
+            ring.radius,
+            ring.jitter,
+            SAM_LAUNCHER_ANGLE_JITTER_RADIANS,
+            SAM_LAUNCHER_PLACEMENT_ATTEMPTS,
+            SAM_LAUNCHER_RETRY_SHRINK
+        )
+    end
+
+    local units = {}
+    local facing = self:threatFacing(center)
+    local function addUnits(types, positions)
+        for i, unitType in ipairs(types) do
+            units[#units + 1] = {
+                type = unitType,
+                x = positions[i].x,
+                y = positions[i].y,
+                heading = facing + (math.random() - 0.5) * 2 * SAM_HEADING_VARIANCE_RADIANS,
+                skill = "Excellent",
+            }
+        end
+    end
+    addUnits(coreTypes, corePositions)
+    addUnits(launcherTypes, launcherPositions)
 
     return units
 end
@@ -1470,7 +1542,7 @@ function BattlefieldGeneration:generateAirbaseSHORADSite(aerodrome, template)
 
     -- Apply template randomization and position in a defensive formation
     local randomizedTemplate = Formations:randomizeTemplate(template)
-    local facing = math.random() * 2 * math.pi
+    local facing = BattlefieldGeneration:threatFacing(aerodrome)
     local function buildUnits(candidate)
         return Formations:buildPlatoonUnits(randomizedTemplate, candidate, {
             formation = Formations.FormationType.WEDGE,

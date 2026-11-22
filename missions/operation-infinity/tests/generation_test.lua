@@ -60,6 +60,23 @@ local function checkGroundPlacement(env)
     end
 end
 
+-- Erusean air defense units face the ISAF side: toward Krymsk, give or take
+-- the frontline's angle and per-unit variance
+local function checkAirDefenseFacing()
+    local home = OperationInfinity.state.homeAirbase
+    for _, pGroup in ipairs(Virtualization.state.permanentGroups) do
+        if not pGroup.name:find("^EWR%-") then
+            local dx = home.x - pGroup.center.x
+            local dy = home.y - pGroup.center.y
+            local dist = math.sqrt(dx * dx + dy * dy)
+            for _, u in ipairs(pGroup.units) do
+                local cosine = (math.cos(u.heading) * dx + math.sin(u.heading) * dy) / dist
+                h.ok(cosine > 0, pGroup.name .. " " .. u.type .. " faces away from ISAF")
+            end
+        end
+    end
+end
+
 -- Ground unit types on the ISAF faction lists, read from the docs so the
 -- check follows them
 local function isafGroundTypes()
@@ -127,6 +144,7 @@ for _, combo in ipairs(combos) do
                 h.ok(env.logContains(GENERATION_COMPLETE), "generation did not complete (seed " .. seed .. ")")
                 checkUnitBudget()
                 checkNoIsafTypesInRedGroups()
+                checkAirDefenseFacing()
                 spawnEverything(env)
                 for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
                     h.ok(vGroup.isSpawned, vGroup.name .. " did not spawn with a player overhead")
