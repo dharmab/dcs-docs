@@ -25,7 +25,7 @@ Terrain.config = {
 local log = Logging:create("Terrain")
 
 -- Loaded by TerrainData.lua, which is too large for the Lua language server to index
-local TerrainData = _G.TerrainData
+local TerrainData = rawget(_G, "TerrainData")
 
 -- Decoded land cover mask rows, keyed by row index. Each row is a list of
 -- cumulative run ends; odd runs are open ground, even runs are blocked.

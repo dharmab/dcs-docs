@@ -260,6 +260,7 @@ OperationInfinity.state = {
     missionGenerated = false,
 
     -- Airbase positions read at init: { name, x, y }
+    ---@type { name: string, x: number, y: number }?
     homeAirbase = nil,
     aerodromes = {}, -- Keyed by airbase name
 
@@ -270,12 +271,14 @@ OperationInfinity.state = {
 
     -- Generated battlefield
     battlefield = {
+        ---@type { name: string }?
         region = nil, -- Selected aerodrome region
         regionKey = nil, -- Key of the selected region (for racetrack lookup)
         targetAerodromes = {}, -- Aerodromes in the selected region
         frontline = {
             center = nil, -- Center point of the frontline
             axis = nil, -- Direction vector along the frontline
+            ---@type Vec2?
             approachDir = nil, -- Direction vector from Krymsk toward enemy
             isafPositions = {}, -- ISAF platoon positions for FEBA visualization
         },

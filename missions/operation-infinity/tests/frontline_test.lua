@@ -54,7 +54,11 @@ h.test("ISAF platoon ceases fire once its Erusea platoons are destroyed", functi
     h.generate(env, "Normal", "180", "northeast")
     local isafGroup
     for _, vGroup in ipairs(frontlineGroups("ISAF%-F")) do
-        isafGroup = isafGroup or (#vGroup.fireTargets > 0 and vGroup) or nil
+        local hasFireTargets = #vGroup.fireTargets > 0
+        if hasFireTargets then
+            isafGroup = vGroup
+            break
+        end
     end
     h.ok(isafGroup ~= nil, "no ISAF platoon with Erusea platoons")
 

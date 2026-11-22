@@ -17,6 +17,7 @@ Documentation for AI agents building tools and content for DCS World.
   - `acmi-query/` - Queries Tacview recordings; see `docs/tacview/acmi-debugging.md`
   - `terrain-geodata/` - Exports terrain GIS files from the DCS install to `docs/data/terrains/`
 - `missions/` - Extracted `.miz` source directories; `missions/*/tests/` hold offline Lua tests (`make test`)
+- `lua-types/dcs.lua` - lua-language-server stubs for the SSE API. `make lint-lua` checks mission Lua against them
 
 ## Writing Documentation
 
@@ -25,6 +26,8 @@ Cross-reference the Hoggit Wiki and Quaggles' DCS Lua Datamine for accuracy.
 ## Checks
 
 After editing files, run `make format` then `make check`. CI runs `make check`.
+
+When you change an SSE API signature, enum, or type in `docs/scripting/reference/`, update `lua-types/dcs.lua` to match.
 
 ## Tacview Recordings
 
