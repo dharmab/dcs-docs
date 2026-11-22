@@ -864,7 +864,6 @@ end
 
 function OperationInfinity:displayCommsPlan(groupId)
     local msg = [[=== COMMUNICATIONS PLAN ===
-Radio 1 to talk, radio 2 on Magic
 
 PRIMARY PRESETS
 NAME          FREQ          SHORE CH   CVN-74 CH
