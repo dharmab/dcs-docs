@@ -201,11 +201,13 @@ h.test("every region has a support racetrack", function()
     end
 end)
 
+-- Senaki from docs/data/terrains/Caucasus/places.csv: 42.285411 N,
+-- 42.045822 E. The MGRS value is from the Python mgrs package.
 h.test("coordinates format as degrees and decimal minutes", function()
     h.load()
-    local ll, mgrs = OperationInfinity:formatCoordinates({ x = 0, y = 0 })
-    h.eq(ll, "45*00.000'N 033*00.000'E")
-    h.eq(mgrs, "37TEK 12345 67890")
+    local ll, mgrs = OperationInfinity:formatCoordinates({ x = -276848.2, y = 646568.0 })
+    h.eq(ll, "42*17.125'N 042*02.749'E")
+    h.eq(mgrs, "38TKM 56427 85692")
 end)
 
 -- Open ground near Gudauta where a generated depot was placed

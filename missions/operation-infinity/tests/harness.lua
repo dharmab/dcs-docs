@@ -5,6 +5,7 @@
 -- =============================================================================
 
 local Mock = require("dcs_mock")
+local TerrainModel = require("terrain_model")
 
 local Harness = {}
 
@@ -33,6 +34,32 @@ Harness.scripts = {
 Harness.missionDir = missionDir
 Harness.scriptsDir = scriptsDir
 
+-- Built on first use and shared by every test; it is read-only
+local terrain
+
+-- Globals that Scripts/MissionScripting.lua sets to nil before mission
+-- scripts run (docs/scripting/simulator-scripting-engine.md)
+Harness.sanitizedGlobals = { "io", "lfs", "os", "require", "loadlib", "package" }
+local sanitized = {}
+for _, name in ipairs(Harness.sanitizedGlobals) do
+    sanitized[name] = true
+end
+
+-- Mission scripts get their own global table: a copy of _G, which by then
+-- holds the mock, minus the sanitized globals. Test code keeps the full
+-- standard library and reads the scripts' globals through _G's __index.
+local function newScriptEnvironment()
+    local scriptEnv = {}
+    for k, v in pairs(_G) do
+        if not sanitized[k] then
+            scriptEnv[k] = v
+        end
+    end
+    scriptEnv._G = scriptEnv
+    setmetatable(_G, { __index = scriptEnv })
+    return scriptEnv
+end
+
 local baselineGlobals = {}
 for k in pairs(_G) do
     baselineGlobals[k] = true
@@ -60,10 +87,15 @@ function Harness.load(options)
     options = options or {}
     resetGlobals()
     math.randomseed(options.seed or 1)
+    terrain = terrain or TerrainModel.new(dofile(testsDir .. "/mock_terrain.lua"))
+    options.terrain = terrain
     local env = Mock.install(options)
     env.mission = env.loadMission(missionDir .. "/mission")
+    local scriptEnv = newScriptEnvironment()
     for _, name in ipairs(Harness.scripts) do
-        dofile(scriptsDir .. "/" .. name .. ".lua")
+        local chunk = assert(loadfile(scriptsDir .. "/" .. name .. ".lua"))
+        setfenv(chunk, scriptEnv)
+        chunk()
     end
     return env
 end

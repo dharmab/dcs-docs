@@ -31,15 +31,6 @@ local AIRBASES = {
 
 local BLUE_COUNTRIES = { [2] = true, [80] = true }
 
--- Rough Black Sea coastline: open water southwest of Anapa. Enough for the
--- carrier operating area; everything else is land.
-local function defaultSurface(x, z)
-    if x < -30000 and z < 260000 then
-        return 3
-    end
-    return 1
-end
-
 -- Any field read from a namespace that the mock does not define is recorded
 -- in env.unknown and returns another recording stub, so a script never
 -- crashes on a missing mock but tests can fail on unmocked API use.
@@ -64,8 +55,11 @@ local function namespace(env, name, tbl)
 end
 
 -- Install a fresh mock environment into _G and return its state table.
+-- options.terrain: a TerrainModel for surface, road, and coordinate queries
+-- options.surfaceAt: function(x, z) overriding the terrain's surface type
 function Mock.install(options)
     options = options or {}
+    local terrain = assert(options.terrain, "Mock.install needs options.terrain")
 
     local env = {
         now = 0,
@@ -84,7 +78,9 @@ function Mock.install(options)
         detections = {}, -- Group name -> array of detected objects
         eventHandlers = {},
         unknown = {},
-        surfaceAt = options.surfaceAt or defaultSurface,
+        surfaceAt = options.surfaceAt or function(x, z)
+            return terrain:surfaceAt(x, z)
+        end,
         wind = options.wind or { x = 0, z = 0 },
         nextObjectId = AUTO_ID_START,
     }
@@ -634,9 +630,10 @@ function Mock.install(options)
         getSurfaceType = function(p)
             return env.surfaceAt(p.x, p.y)
         end,
-        -- Every point is 50 m north of an east-west road
-        getClosestPointOnRoads = function(_, x, y)
-            return x - 50, y
+        getClosestPointOnRoads = function(roadType, x, y)
+            assert(roadType == "roads", "the mock has no " .. tostring(roadType) .. " network")
+            local roadX, roadY = terrain:closestRoadPoint(x, y)
+            return roadX, roadY
         end,
         isVisible = function()
             return true
@@ -681,16 +678,17 @@ function Mock.install(options)
         end,
     })
 
-    -- Linear approximation; only text formatting depends on it
     namespace(env, "coord", {
         LOtoLL = function(p)
-            return 45 + p.x / 111000, 33 + p.z / 79000, 0
+            local lat, lon = terrain:toLatLon(p.x, p.z)
+            return lat, lon, p.y
         end,
-        LLtoLO = function(lat, lon)
-            return { x = (lat - 45) * 111000, y = 0, z = (lon - 33) * 79000 }
+        LLtoLO = function(lat, lon, alt)
+            local x, z = terrain:fromLatLon(lat, lon)
+            return { x = x, y = alt or 0, z = z }
         end,
-        LLtoMGRS = function()
-            return { UTMZone = "37T", MGRSDigraph = "EK", Easting = 12345, Northing = 67890 }
+        LLtoMGRS = function(lat, lon)
+            return terrain.toMGRS(lat, lon)
         end,
     })
 
