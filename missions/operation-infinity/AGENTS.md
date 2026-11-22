@@ -61,7 +61,7 @@ Follow `docs/recipes/comm-plan.md`. Mission-specific rules:
 - A-10 ARC-210 preset names go in `channelsNames` beside `channels`; it is the only radio with editable names.
 - FC3 aircraft get no presets.
 - The in-game AWACS has `communication = false` (datalink only). Voice GCI is SkyEye.
-- The comms card exists in two places that must match: `displayCommsPlan` in `OperationInfinity.lua` and the blue-task briefing in `dictionary`. `comms/*.md` are per-aircraft preset cards generated from the mission by `luajit tests/comms_cards.lua`; regenerate after changing presets, tankers, or carrier systems. `tests/comms_plan_test.lua` fails if they are stale.
+- The comms card exists in two places that must match: `displayCommsPlan` in `OperationInfinity.lua` and the shared briefing (`DictKey_descriptionText_1`) in `dictionary`. `comms/*.md` are per-aircraft preset cards generated from the mission by `luajit tests/comms_cards.lua`; regenerate after changing presets, tankers, or carrier systems. `tests/comms_plan_test.lua` fails if they are stale.
 
 ## Factions
 
