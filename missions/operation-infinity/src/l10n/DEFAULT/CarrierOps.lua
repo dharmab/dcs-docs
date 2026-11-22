@@ -758,7 +758,8 @@ function CarrierOps:updateRecoveryTanker(legStart, legEnd)
     local current = self.state.recoveryTrack
     if current then
         local center = { x = (point1.x + point2.x) / 2, y = (point1.y + point2.y) / 2 }
-        local currentCenter = { x = (current.point1.x + current.point2.x) / 2, y = (current.point1.y + current.point2.y) / 2 }
+        local currentCenter =
+            { x = (current.point1.x + current.point2.x) / 2, y = (current.point1.y + current.point2.y) / 2 }
         if
             distance2D(center, currentCenter) < cfg.retaskDistance
             and angleDifference(course, current.course) < cfg.retaskAngle

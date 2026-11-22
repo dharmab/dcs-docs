@@ -861,7 +861,8 @@ function OperationInfinity:getSupportAssetText()
     end
     lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
     -- Arco 2-1 is a mission-file group steered by CarrierOps, not on the regional racetrack
-    lines[#lines + 1] = "  Arco 2-1 (S-3B basket): 270.3 MHz AM, TACAN 103X, 8000 ft, 250 KIAS beside the carrier's into-wind leg"
+    lines[#lines + 1] =
+        "  Arco 2-1 (S-3B basket): 270.3 MHz AM, TACAN 103X, 8000 ft, 250 KIAS beside the carrier's into-wind leg"
     return table.concat(lines, "\n")
 end
 
