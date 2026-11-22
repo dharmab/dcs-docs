@@ -30,9 +30,10 @@ local TACAN_X_LOW_BASE_MHZ = 962
 local TACAN_HIGH_CHANNEL_START = 64
 local HZ_PER_MHZ = 1000000
 
--- DCS beacon enums: BEACON_TYPE_TACAN and SystemName.TACAN
+-- DCS beacon enums: BEACON_TYPE_TACAN, SystemName.TACAN, and SystemName.TACAN_TANKER_MODE_X
 local BEACON_TYPE_TACAN = 4
 local BEACON_SYSTEM_TACAN = 3
+local BEACON_SYSTEM_TACAN_TANKER_X = 4
 local BEACON_TYPE_ICLS_GLIDESLOPE = 131584
 
 -- =============================================================================
@@ -132,6 +133,38 @@ CarrierOps.config = {
         updateInterval = 3,
         respawnDelay = 120,
     },
+
+    -- S-3B recovery tanker: flies a racetrack parallel to the carrier's
+    -- into-wind leg, offset toward the shore so it stays clear of the Case I
+    -- pattern and closer to aircraft arriving from Krymsk
+    recoveryTanker = {
+        groupName = "Arco 2",
+        altitude = 8000 * FEET_TO_METERS,
+        -- TAS for 250 KIAS at 8,000 ft
+        speed = 145,
+        -- Lateral distance from the carrier's leg to the racetrack
+        offset = 5 * METERS_PER_NM,
+        -- Legs shorter than this are extended around their midpoint
+        minTrackLength = 15 * METERS_PER_NM,
+        -- Halve the offset up to this many times if a track end is over land
+        offsetHalvings = 3,
+        -- Keep the current racetrack unless the new one moves this much
+        retaskDistance = 3 * METERS_PER_NM,
+        retaskAngle = math.rad(10),
+        -- The racetrack goes on the side of the leg nearest this point (Anapa)
+        shoreReference = { x = -13670, y = 239630 },
+        -- Must match waypoint 1 of Arco 2 in the mission file and the comms plan
+        beacon = {
+            type = BEACON_TYPE_TACAN,
+            system = BEACON_SYSTEM_TACAN_TANKER_X,
+            name = "Arco 2",
+            callsign = "AR2",
+            channel = 103,
+            modeChannel = "X",
+            AA = false,
+            bearing = true,
+        },
+    },
 }
 
 -- =============================================================================
@@ -148,6 +181,7 @@ CarrierOps.state = {
     plannedWindFrom = nil,
     plannedWindSpeed = nil,
     planeGuardRespawnAt = nil,
+    recoveryTrack = nil, -- {point1, point2, course} of the recovery tanker's racetrack
 }
 
 -- =============================================================================
@@ -412,6 +446,7 @@ function CarrierOps:startIntoWindLeg(carrierUnit)
 
     carrierUnit:getGroup():getController():setTask(shipRoute(pos, legEnd, speed))
     self:activateCarrierSystems(carrierUnit)
+    self:updateRecoveryTanker(pos, legEnd)
 
     log(
         string.format(
@@ -447,6 +482,8 @@ function CarrierOps:startRepositionLeg(carrierUnit)
 
     carrierUnit:getGroup():getController():setTask(shipRoute(pos, target, cfg.repositionSpeed))
     self:activateCarrierSystems(carrierUnit)
+    -- Put the tanker beside the next into-wind leg, which starts at the target
+    self:updateRecoveryTanker(target, offsetPoint(area, axis, area.radius - area.margin, 0))
 
     log(
         string.format(
@@ -670,6 +707,124 @@ function CarrierOps:updatePlaneGuard()
         id = "Mission",
         params = { route = { points = { point(heloPos), point(aimPoint) } } },
     })
+end
+
+-- =============================================================================
+-- RECOVERY TANKER
+-- =============================================================================
+
+local function distance2D(a, b)
+    local dx = b.x - a.x
+    local dy = b.y - a.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+-- Racetrack endpoints parallel to the leg from legStart to legEnd, on the
+-- shore side and over water
+function CarrierOps:computeRecoveryTrack(legStart, legEnd)
+    local cfg = self.config.recoveryTanker
+    local course = normalizeAngle(math.atan2(legEnd.y - legStart.y, legEnd.x - legStart.x))
+    local mid = { x = (legStart.x + legEnd.x) / 2, y = (legStart.y + legEnd.y) / 2 }
+    local halfLength = math.max(distance2D(legStart, legEnd), cfg.minTrackLength) / 2
+
+    local right = offsetPoint(mid, course, 0, 1)
+    local left = offsetPoint(mid, course, 0, -1)
+    local side = distance2D(right, cfg.shoreReference) < distance2D(left, cfg.shoreReference) and 1 or -1
+
+    local offset = cfg.offset
+    for _ = 0, cfg.offsetHalvings do
+        local point1 = offsetPoint(mid, course, -halfLength, side * offset)
+        local point2 = offsetPoint(mid, course, halfLength, side * offset)
+        if isDeepWater(point1) and isDeepWater(point2) then
+            return point1, point2, course
+        end
+        offset = offset / 2
+    end
+    log("WARNING: Recovery tanker track is over land on the shore side; flying it along the leg")
+    return offsetPoint(mid, course, -halfLength, 0), offsetPoint(mid, course, halfLength, 0), course
+end
+
+-- Send the recovery tanker to a racetrack beside the into-wind leg that runs
+-- from legStart to legEnd. Keeps the current track if the new one is close.
+function CarrierOps:updateRecoveryTanker(legStart, legEnd)
+    local cfg = self.config.recoveryTanker
+    local group = Group.getByName(cfg.groupName)
+    local unit = group and group:getUnit(1)
+    if not unit or not unit:isExist() then
+        return
+    end
+
+    local point1, point2, course = self:computeRecoveryTrack(legStart, legEnd)
+    local current = self.state.recoveryTrack
+    if current then
+        local center = { x = (point1.x + point2.x) / 2, y = (point1.y + point2.y) / 2 }
+        local currentCenter = { x = (current.point1.x + current.point2.x) / 2, y = (current.point1.y + current.point2.y) / 2 }
+        if
+            distance2D(center, currentCenter) < cfg.retaskDistance
+            and angleDifference(course, current.course) < cfg.retaskAngle
+        then
+            return
+        end
+    end
+    self.state.recoveryTrack = { point1 = point1, point2 = point2, course = course }
+
+    local pos = getUnitPosition2D(unit)
+    local controller = group:getController()
+    controller:setTask({
+        id = "Mission",
+        params = {
+            route = {
+                points = {
+                    {
+                        x = pos.x,
+                        y = pos.y,
+                        alt = cfg.altitude,
+                        alt_type = "BARO",
+                        type = "Turning Point",
+                        action = "Turning Point",
+                        speed = cfg.speed,
+                        speed_locked = true,
+                        task = {
+                            id = "ComboTask",
+                            params = {
+                                tasks = {
+                                    { id = "Tanker", params = {} },
+                                    {
+                                        id = "Orbit",
+                                        params = {
+                                            pattern = "Race-Track",
+                                            point = point1,
+                                            point2 = point2,
+                                            altitude = cfg.altitude,
+                                            speed = cfg.speed,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    })
+
+    -- A new route can drop the beacon, as it does on ships
+    local beacon = {}
+    for key, value in pairs(cfg.beacon) do
+        beacon[key] = value
+    end
+    beacon.frequency = tacanFrequency(beacon.channel, beacon.modeChannel)
+    controller:setCommand({ id = "ActivateBeacon", params = beacon })
+
+    log(
+        string.format(
+            "Recovery tanker racetrack: course %03d, %.1f nm long, center (%d, %d)",
+            toDegrees(course),
+            distance2D(point1, point2) / METERS_PER_NM,
+            math.floor((point1.x + point2.x) / 2),
+            math.floor((point1.y + point2.y) / 2)
+        )
+    )
 end
 
 -- =============================================================================

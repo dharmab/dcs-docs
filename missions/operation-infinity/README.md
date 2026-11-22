@@ -102,7 +102,7 @@ Three tankers orbit on a racetrack between Krymsk and the target area:
 A carrier strike group operates in the Black Sea about 50 nm southwest of Krymsk: CVN-74 John C. Stennis with a Ticonderoga-class cruiser, two Arleigh Burke-class destroyers, and an Oliver Hazard Perry-class frigate. The carrier steams into the wind for about 25 knots over the deck, turning back downwind when it reaches the edge of its operating area. An SH-60B plane guard helicopter flies off the carrier's starboard side.
 
 - **Carrier:** 254.7 MHz AM, TACAN 74X (STN), ICLS 4, Link 4 336.0 MHz, ACLS
-- **S-3B "Arco 2-1"** (basket recovery tanker): orbits over the carrier's operating area at 8,000 ft, 270.3 MHz, TACAN 103X
+- **S-3B "Arco 2-1"** (basket recovery tanker): flies a racetrack beside the carrier's into-wind leg, on the shore side, at 8,000 ft, 270.3 MHz, TACAN 103X
 
 Aircraft that spawn on the Stennis have the carrier on preset 3 and Krymsk on presets 4-6. Krymsk aircraft have Krymsk on 3-5 and the carrier on 6. Presets 7-8 hold the tankers your aircraft can refuel from.
 

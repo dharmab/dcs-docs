@@ -72,7 +72,8 @@ Follow `docs/recipes/comm-plan.md`. Mission-specific rules:
 
 - Interceptors read their spawn point from the airbase at runtime. A route point off the airdrome makes DCS air-start the group.
 - Interceptor removal can fire DEAD, CRASH, UNIT_LOST, and LAND for one aircraft; removals are de-duplicated by unit name.
-- The S-3B recovery tanker (`Arco 2`) shares the Arco callsign because DCS has only three tanker callsigns. It is not in `supportAircraft`; it starts at mission load with its tasks on waypoint 1, and `getSupportAssetText` lists it with a hardcoded line.
+- The S-3B recovery tanker (`Arco 2`) shares the Arco callsign because DCS has only three tanker callsigns. It is not in `supportAircraft`; it starts at mission load with its tasks on waypoint 1, `CarrierOps` re-tasks it to a racetrack beside each into-wind leg (offset toward Anapa, re-activating its TACAN), and `getSupportAssetText` lists it with a hardcoded line.
+- The `supportAircraft` groups air-start over Krymsk when activated. From parking stands 01-04 they never spawned (server test, 2026-11-22).
 - `supportAircraft` stores altitude in feet and IAS in knots; Orbit TAS is computed at runtime.
 - `CarrierOps.lua` starts at mission load, independent of F10 settings. Carrier radio/TACAN/ICLS/Link 4 are set on waypoint 1 and must be re-applied after every route change.
 - Per-group F10 items (Comms Plan, Mission Info) are added by the late-joiner loop and reply only to that group. Settings items are coalition-wide.

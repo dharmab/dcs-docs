@@ -860,8 +860,8 @@ function OperationInfinity:getSupportAssetText()
         end
     end
     lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
-    -- Arco 2-1 is a mission-file group over the carrier area, not on the regional racetrack
-    lines[#lines + 1] = "  Arco 2-1 (S-3B basket): 270.3 MHz AM, TACAN 103X, 8000 ft, 250 KIAS over the carrier area"
+    -- Arco 2-1 is a mission-file group steered by CarrierOps, not on the regional racetrack
+    lines[#lines + 1] = "  Arco 2-1 (S-3B basket): 270.3 MHz AM, TACAN 103X, 8000 ft, 250 KIAS beside the carrier's into-wind leg"
     return table.concat(lines, "\n")
 end
 
@@ -1142,7 +1142,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
             end
         end
 
-        -- Start polling after initial delay (60 sec for engine start)
+        -- Start polling after an initial delay; the groups air-start over Krymsk
         timer.scheduleFunction(checkAndPushOrbit, nil, timer.getTime() + 60)
 
         log(

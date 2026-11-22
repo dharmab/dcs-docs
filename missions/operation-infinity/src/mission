@@ -2345,7 +2345,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- AWACS: E-3A Magic (late activation, spawned by script)
+                            -- AWACS: E-3A Magic (late activation, air start over Krymsk, spawned by script)
                             [15] = {
                                 ["groupId"] = 15,
                                 ["name"] = "Magic",
@@ -2368,13 +2368,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = -6800,
                                         ["y"] = 293500,
-                                        ["alt"] = 20,
+                                        ["alt"] = 9144,
                                         ["alt_type"] = "BARO",
-                                        ["speed"] = 180,
+                                        ["speed"] = 150,
                                         ["heading"] = 0,
                                         ["psi"] = 0,
-                                        ["parking"] = "01",
-                                        ["parking_id"] = "01",
                                         ["onboard_num"] = "001",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -2395,17 +2393,16 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 20,
+                                            ["alt"] = 9144,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "TakeOffParking",
-                                            ["action"] = "From Parking Area",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
                                             ["x"] = -6800,
                                             ["y"] = 293500,
-                                            ["speed"] = 180,
+                                            ["speed"] = 150,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -2507,7 +2504,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Texaco (Boom) (late activation, spawned by script)
+                            -- Tanker: KC-135 Texaco (Boom) (late activation, air start over Krymsk, spawned by script)
                             [16] = {
                                 ["groupId"] = 16,
                                 ["name"] = "Texaco",
@@ -2530,13 +2527,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = -6900,
                                         ["y"] = 293600,
-                                        ["alt"] = 20,
+                                        ["alt"] = 6096,
                                         ["alt_type"] = "BARO",
-                                        ["speed"] = 180,
+                                        ["speed"] = 150,
                                         ["heading"] = 0,
                                         ["psi"] = 0,
-                                        ["parking"] = "02",
-                                        ["parking_id"] = "02",
                                         ["onboard_num"] = "002",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -2557,17 +2552,16 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 20,
+                                            ["alt"] = 6096,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "TakeOffParking",
-                                            ["action"] = "From Parking Area",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
                                             ["x"] = -6900,
                                             ["y"] = 293600,
-                                            ["speed"] = 180,
+                                            ["speed"] = 150,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -2690,7 +2684,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135MPRS Arco (Drogue) (late activation, spawned by script)
+                            -- Tanker: KC-135MPRS Arco (Drogue) (late activation, air start over Krymsk, spawned by script)
                             [17] = {
                                 ["groupId"] = 17,
                                 ["name"] = "Arco",
@@ -2713,13 +2707,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = -7000,
                                         ["y"] = 293700,
-                                        ["alt"] = 20,
+                                        ["alt"] = 5486,
                                         ["alt_type"] = "BARO",
-                                        ["speed"] = 180,
+                                        ["speed"] = 150,
                                         ["heading"] = 0,
                                         ["psi"] = 0,
-                                        ["parking"] = "03",
-                                        ["parking_id"] = "03",
                                         ["onboard_num"] = "003",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -2740,17 +2732,16 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 20,
+                                            ["alt"] = 5486,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "TakeOffParking",
-                                            ["action"] = "From Parking Area",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
                                             ["x"] = -7000,
                                             ["y"] = 293700,
-                                            ["speed"] = 180,
+                                            ["speed"] = 150,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -2873,7 +2864,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Tanker: KC-135 Shell (Slow for A-10s) (late activation, spawned by script)
+                            -- Tanker: KC-135 Shell (Slow for A-10s) (late activation, air start over Krymsk, spawned by script)
                             [18] = {
                                 ["groupId"] = 18,
                                 ["name"] = "Shell",
@@ -2896,13 +2887,11 @@ mission = {
                                         ["skill"] = "Excellent",
                                         ["x"] = -7100,
                                         ["y"] = 293800,
-                                        ["alt"] = 20,
+                                        ["alt"] = 4572,
                                         ["alt_type"] = "BARO",
-                                        ["speed"] = 105,
+                                        ["speed"] = 150,
                                         ["heading"] = 0,
                                         ["psi"] = 0,
-                                        ["parking"] = "04",
-                                        ["parking_id"] = "04",
                                         ["onboard_num"] = "004",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
@@ -2923,17 +2912,16 @@ mission = {
                                 ["route"] = {
                                     ["points"] = {
                                         [1] = {
-                                            ["alt"] = 20,
+                                            ["alt"] = 4572,
                                             ["alt_type"] = "BARO",
-                                            ["type"] = "TakeOffParking",
-                                            ["action"] = "From Parking Area",
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
                                             ["x"] = -7100,
                                             ["y"] = 293800,
-                                            ["speed"] = 105,
+                                            ["speed"] = 150,
                                             ["speed_locked"] = true,
                                             ["ETA"] = 0,
                                             ["ETA_locked"] = true,
-                                            ["airdromeId"] = 15,
                                             ["formation_template"] = "",
                                             ["task"] = {
                                                 ["id"] = "ComboTask",
@@ -3967,7 +3955,7 @@ mission = {
                                     },
                                 },
                             },
-                            -- Recovery tanker: S-3B Arco 2-1 (air start at mission load, orbits the carrier operating area)
+                            -- Recovery tanker: S-3B Arco 2-1 (air start at mission load; CarrierOps sets its racetrack beside the into-wind leg)
                             [24] = {
                                 ["groupId"] = 30,
                                 ["name"] = "Arco 2",
