@@ -128,3 +128,54 @@ h.test("plane guard spawns with unlimited fuel and weapons hold", function()
     h.eq(angel.commands[1].id, "SetUnlimitedFuel")
     h.eq(angel.options[AI.Option.Air.id.ROE], AI.Option.Air.val.ROE.WEAPON_HOLD)
 end)
+
+-- Signed distance of `p` to the right of the line through `origin` along `course`
+local function rightOf(p, origin, course)
+    return -(p.x - origin.x) * math.sin(course) + (p.y - origin.y) * math.cos(course)
+end
+
+local function lastOrbit(env)
+    local tasks = env.groupsByName[CarrierOps.config.recoveryTanker.groupName].tasks
+    for _, task in ipairs(tasks[#tasks].params.route.points[1].task.params.tasks) do
+        if task.id == "Orbit" then
+            return task.params
+        end
+    end
+end
+
+h.test("recovery tanker races beside the into-wind leg on the shore side", function()
+    local env = h.load({ wind = windFrom(0, 10 * KNOTS) })
+    moveCarrierTo(env, CarrierOps.state.legEnd)
+    env.advance(CarrierOps.config.carrier.checkInterval)
+    h.eq(CarrierOps.state.phase, "INTO_WIND")
+
+    local cfg = CarrierOps.config.recoveryTanker
+    local orbit = lastOrbit(env)
+    h.eq(orbit.pattern, "Race-Track")
+    local course = CarrierOps.state.legCourse
+    local trackCourse = math.atan2(orbit.point2.y - orbit.point.y, orbit.point2.x - orbit.point.x)
+    h.ok(angleBetween(trackCourse, course) < 0.001, "track not parallel to the leg")
+
+    local legEnd = CarrierOps.state.legEnd
+    local offset1 = rightOf(orbit.point, legEnd, course)
+    local offset2 = rightOf(orbit.point2, legEnd, course)
+    h.near(math.abs(offset1), cfg.offset, 1, "track offset")
+    h.near(offset1, offset2, 1, "track ends offset differently")
+    h.ok(offset1 * rightOf(cfg.shoreReference, legEnd, course) > 0, "track not on the shore side")
+
+    local commands = env.groupsByName[cfg.groupName].commands
+    h.eq(commands[#commands].params.frequency, 1190 * 1e6, "TACAN 103X frequency")
+end)
+
+h.test("recovery tanker keeps its racetrack when the next leg runs along it", function()
+    local env = h.load({ wind = windFrom(0, 10 * KNOTS) })
+    local tasks = env.groupsByName[CarrierOps.config.recoveryTanker.groupName].tasks
+    local count = #tasks
+    moveCarrierTo(env, CarrierOps.state.legEnd)
+    env.advance(CarrierOps.config.carrier.checkInterval)
+    h.eq(#tasks, count, "recovery tanker retasked for the same track")
+
+    env.wind = windFrom(40, 10 * KNOTS)
+    env.advance(CarrierOps.config.carrier.checkInterval)
+    h.eq(#tasks, count + 1, "recovery tanker not retasked after the wind shift")
+end)
