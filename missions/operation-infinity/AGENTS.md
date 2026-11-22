@@ -21,7 +21,7 @@ Load order (dependencies):
 13. `CarrierOps.lua`
 14. `OperationInfinity.lua`
 
-When adding a script, update all five places: `Harness.scripts` in `tests/harness.lua`, the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`.
+When adding a script, update all five places: `Harness.scripts` in `tests/harness.lua`, the "Load Mission Scripts" trigger (`trigrules` and `trig.actions` in `src/mission`), `src/l10n/DEFAULT/mapResource`, and both file lists in `pack_mission.py`. `tests/script_list_test.lua` fails if they disagree.
 
 Style:
 
@@ -32,13 +32,17 @@ Style:
 
 ## Tests
 
-`tests/` runs the scripts offline under LuaJIT (Lua 5.1, like DCS): `make test`, or `luajit tests/run.lua tests/*_test.lua` from this directory. `harness.load()` gives each test a fresh `dcs_mock.lua` environment with the mission file's groups and all 14 scripts loaded; `env.advance(seconds)` runs scheduled functions.
+`tests/` runs the scripts offline under LuaJIT (Lua 5.1, like DCS): `make test`, or `luajit tests/run.lua tests/*_test.lua` from this directory. `harness.load()` gives each test a fresh `dcs_mock.lua` environment with the mission file's groups and all 14 scripts loaded; `env.advance(seconds)` runs scheduled functions. `generation_test.lua` runs seeds 1-3 for every region, playtime, and difficulty; set `GENERATION_SEEDS=N` to run seeds 1-N (about 0.6 s per seed).
 
-The mock is flat terrain with no AI. Units only move when a test moves them. Enum values come from `docs/scripting/reference`. The generation tests fail if a script calls an API the mock lacks; add it to `dcs_mock.lua` with behavior checked against the docs.
+Scripts run in their own global table without `io`, `lfs`, `os`, `require`, `loadlib`, and `package`, as in DCS. Test code keeps the full standard library and reads script globals through `_G`.
+
+The mock has no AI. Units only move when a test moves them. Enum values come from `docs/scripting/reference`. The generation tests fail if a script calls an API the mock lacks; add it to `dcs_mock.lua` with behavior checked against the docs.
+
+`tests/terrain_model.lua` answers `land.getSurfaceType`, `land.getClosestPointOnRoads`, and `coord.LOtoLL`/`LLtoLO`/`LLtoMGRS` from the terrain export. Surface types come from the 100 m land cover; ROAD is within 5 m of a road line. Height is flat because the export has no elevation. The roads are the Mission Editor map overlay, which has fewer roads than the 3D terrain, so road placement fails more often offline than in DCS. Only the `roads` network exists.
 
 ## Terrain Data
 
-`TerrainData.lua` is generated; do not edit it. It is a 200 m mask of forest, water, and off-mesh ground built from `docs/data/terrains/Caucasus/landcover.tif`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the mission area.
+`TerrainData.lua` is generated; do not edit it. It is a 200 m mask of forest, water, and off-mesh ground built from `docs/data/terrains/Caucasus/landcover.tif`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the mission area. The generator also writes `tests/mock_terrain.lua`, the test mock's terrain, which the mission does not load.
 
 `Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. That check covers only one point, so groups are placed with `Terrain:findValidLayout`, which builds the units at each candidate center and also checks every unit's position against the mask and surface type (`isValidUnitPosition`). Convoys use `Terrain:findRoadLayout` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. The generation tests fail if any spawned ground unit is on blocked ground. Airfield positions are read from the airbases at init and support racetracks are offsets from Krymsk.
 

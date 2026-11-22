@@ -2,7 +2,14 @@
 local h = require("harness")
 
 local DIFFICULTIES = { "VeryEasy", "Easy", "Normal", "Hard" }
-local SEEDS = { 1, 2, 3 }
+local DEFAULT_SEED_COUNT = 3
+-- GENERATION_SEEDS=N runs seeds 1 through N, for longer soak runs
+local seedCount = tonumber(os.getenv("GENERATION_SEEDS") or DEFAULT_SEED_COUNT)
+assert(seedCount and seedCount >= 1, "GENERATION_SEEDS must be a positive number")
+local SEEDS = {}
+for seed = 1, seedCount do
+    SEEDS[seed] = seed
+end
 local GENERATION_COMPLETE = "Battlefield generation complete"
 
 -- Put a player over every target aerodrome and every virtual group so all
