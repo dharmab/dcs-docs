@@ -421,17 +421,23 @@ UnitTemplates.LogisticsConvoy = {
 -- ARTILLERY BATTERY
 -- =============================================================================
 
+-- guns: the firing line. escort: may be missing like other platoon units.
+-- Ammo trucks are added separately so a battery never runs dry; see
+-- BattlefieldGeneration:generateArtilleryBattery.
 UnitTemplates.ArtilleryBattery = {
-    { type = "SAU Akatsia", count = 4 },
-    { type = "Ural-375", count = 1 },
-    { type = "BRDM-2", count = 1 },
+    guns = { { type = "SAU Akatsia", count = 4 } },
+    escort = { { type = "BRDM-2", count = 1 } },
 }
 
 UnitTemplates.RocketBattery = {
-    { type = "Grad-URAL", count = 4 },
-    { type = "Ural-375", count = 2 },
-    { type = "BRDM-2", count = 1 },
+    guns = { { type = "Grad-URAL", count = 4 } },
+    escort = { { type = "BRDM-2", count = 1 } },
 }
+
+-- Cargo trucks with the warehouse attribute rearm nearby units (docs/units/ground.md)
+UnitTemplates.AmmoTruck = "Ural-375"
+-- Guns served by each ammo truck
+UnitTemplates.GunsPerAmmoTruck = 2
 
 -- Chance an artillery battery is a rocket battery instead of tube artillery
 local ROCKET_BATTERY_CHANCE = 0.35
