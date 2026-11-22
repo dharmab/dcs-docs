@@ -1,4 +1,4 @@
--- The comms card exists in two places (displayCommsPlan, the shared
+-- The comms card exists in two places (displayCommsPlan, the blue-task
 -- briefing) that must be identical and agree with the mission radios. The
 -- README lists only tanker and carrier frequencies.
 local h = require("harness")
@@ -15,7 +15,7 @@ local function briefingCard()
     local sandbox = {}
     setfenv(chunk, sandbox)
     chunk()
-    return sandbox.dictionary.DictKey_descriptionText_1
+    return sandbox.dictionary.DictKey_descriptionBlueTask_1
 end
 
 -- Lines from the one matching startPattern up to the next matching

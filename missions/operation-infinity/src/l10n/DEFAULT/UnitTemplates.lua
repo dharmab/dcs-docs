@@ -75,7 +75,6 @@ UnitTemplates.SHORAD = {
 
 -- =============================================================================
 -- SAM SITE COMPOSITIONS BY DIFFICULTY
--- launcher = true units ring the site; the rest cluster at its center
 -- =============================================================================
 
 UnitTemplates.SAMSites = {
@@ -85,7 +84,7 @@ UnitTemplates.SAMSites = {
         SA2Incomplete = {
             { type = "p-19 s-125 sr", count = 1 },
             { type = "SNR_75V", count = 1 },
-            { type = "S_75M_Volhov", count = 3, launcher = true },
+            { type = "S_75M_Volhov", count = 3 },
         },
         SA9 = {
             { type = "Strela-1 9P31", count = 2 },
@@ -98,16 +97,16 @@ UnitTemplates.SAMSites = {
         SA2 = {
             { type = "p-19 s-125 sr", count = 1 },
             { type = "SNR_75V", count = 1 },
-            { type = "S_75M_Volhov", count = 6, launcher = true },
+            { type = "S_75M_Volhov", count = 6 },
         },
         SA3 = {
             { type = "p-19 s-125 sr", count = 1 },
             { type = "snr s-125 tr", count = 1 },
-            { type = "5p73 s-125 ln", count = 4, launcher = true },
+            { type = "5p73 s-125 ln", count = 4 },
         },
         SA6 = {
             { type = "Kub 1S91 str", count = 1 },
-            { type = "Kub 2P25 ln", count = 4, launcher = true },
+            { type = "Kub 2P25 ln", count = 4 },
         },
         SA8 = {
             { type = "Osa 9A33 ln", count = 2 },
@@ -121,18 +120,18 @@ UnitTemplates.SAMSites = {
             { type = "S-300PS 40B6MD sr", count = 1 },
             { type = "S-300PS 64H6E sr", count = 1 },
             { type = "S-300PS 40B6M tr", count = 1 },
-            { type = "S-300PS 5P85C ln", count = 4, launcher = true },
-            { type = "S-300PS 5P85D ln", count = 2, launcher = true },
+            { type = "S-300PS 5P85C ln", count = 4 },
+            { type = "S-300PS 5P85D ln", count = 2 },
             { type = "S-300PS 54K6 cp", count = 1 },
         },
         SA11 = {
             { type = "SA-11 Buk SR 9S18M1", count = 1 },
             { type = "SA-11 Buk CC 9S470M1", count = 1 },
-            { type = "SA-11 Buk LN 9A310M1", count = 4, launcher = true },
+            { type = "SA-11 Buk LN 9A310M1", count = 4 },
         },
         SA6 = {
             { type = "Kub 1S91 str", count = 1 },
-            { type = "Kub 2P25 ln", count = 4, launcher = true },
+            { type = "Kub 2P25 ln", count = 4 },
         },
         SA15 = {
             { type = "Tor 9A331", count = 2 },
@@ -142,19 +141,6 @@ UnitTemplates.SAMSites = {
             { type = "55G6 EWR", count = 1 },
         },
     },
-}
-
--- Launcher ring radius around the site center by SAM type, in meters, from
--- the launcher distances in docs/recipes/sam-site-setup.md. Each launcher's
--- radius varies by up to jitter. SA-11 is 1-2 km between TELARs, which is
--- about 0.7-1.4 km from the center with four on the ring.
-UnitTemplates.SAMLauncherRings = {
-    SA2 = { radius = 1500, jitter = 500 },
-    SA2Incomplete = { radius = 1500, jitter = 500 },
-    SA3 = { radius = 1000, jitter = 500 },
-    SA6 = { radius = 1000, jitter = 500 },
-    SA10 = { radius = 2000, jitter = 1000 },
-    SA11 = { radius = 1050, jitter = 350 },
 }
 
 -- =============================================================================

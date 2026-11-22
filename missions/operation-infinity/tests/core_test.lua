@@ -73,48 +73,6 @@ h.test("formations are oriented along the facing", function()
     end
 end)
 
-h.test("SAM launchers ring the site around its radars", function()
-    h.load()
-    OperationInfinity.state.battlefield.frontline.approachDir = { x = 0, y = 1 }
-    local template = UnitTemplates.SAMSites.Hard.SA10
-    local launcherTypes = {}
-    for _, def in ipairs(template) do
-        if def.launcher then
-            launcherTypes[def.type] = true
-        end
-    end
-    h.ok(next(launcherTypes) ~= nil, "SA10 template marks no launchers")
-    local center = { x = 1000, y = 2000 }
-    local ring = UnitTemplates.SAMLauncherRings.SA10
-    local units = BattlefieldGeneration:buildSAMUnits("SA10", template, center)
-    local launcherCount = 0
-    for _, u in ipairs(units) do
-        local dist = math.sqrt((u.x - center.x) ^ 2 + (u.y - center.y) ^ 2)
-        if launcherTypes[u.type] then
-            launcherCount = launcherCount + 1
-            local onRing = math.abs(dist - ring.radius) <= ring.jitter + 1e-6
-            h.ok(onRing, u.type .. " is " .. dist .. " m from the center, not on the ring")
-        else
-            h.ok(dist < 50, u.type .. " is " .. dist .. " m from the center, outside the core")
-        end
-    end
-    h.eq(launcherCount, 6)
-end)
-
-h.test("every SAM site with launchers has a launcher ring", function()
-    h.load()
-    for difficulty, sites in pairs(UnitTemplates.SAMSites) do
-        for samType, template in pairs(sites) do
-            for _, def in ipairs(template) do
-                if def.launcher then
-                    local ring = UnitTemplates.SAMLauncherRings[samType]
-                    h.ok(ring, difficulty .. " " .. samType .. " has no launcher ring")
-                end
-            end
-        end
-    end
-end)
-
 h.test("rotation preserves distance", function()
     h.load()
     local p = Formations:rotatePosition({ x = 30, y = 40 }, 1.234)
