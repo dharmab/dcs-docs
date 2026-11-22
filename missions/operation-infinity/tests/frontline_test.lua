@@ -80,3 +80,62 @@ h.test("ISAF platoon ceases fire once its Erusea platoons are destroyed", functi
     h.eq(#controllerRecord.tasks, 0, "FireAtPoint task not reset")
     h.ok(env.logContains("Cease fire for " .. isafGroup.name:gsub("%-", "%%-")), "cease fire not logged")
 end)
+
+h.test("supply depots spread across the rear area behind the frontline", function()
+    local minRearOffset = OperationInfinity.config.behindLines.depotRearOffset[1]
+    for _, combo in ipairs(h.regionPlaytimes()) do
+        for _, seed in ipairs(SEEDS) do
+            local env = h.load({ seed = seed })
+            h.generate(env, "Normal", combo.playtime, combo.region)
+            local frontline = OperationInfinity.state.battlefield.frontline
+            if #frontline.isafPositions > 0 then
+                local depots = frontlineGroups("Depot%-")
+                local label = combo.region .. " seed " .. seed
+                h.ok(#depots > 0, "no depots in " .. label)
+                for _, depot in ipairs(depots) do
+                    local dx = depot.center.x - frontline.center.x
+                    local dy = depot.center.y - frontline.center.y
+                    local behind = dx * frontline.approachDir.x + dy * frontline.approachDir.y
+                    h.ok(
+                        behind >= minRearOffset,
+                        depot.name .. " is " .. math.floor(behind) .. " m behind the front in " .. label
+                    )
+                end
+            end
+        end
+    end
+end)
+
+h.test("artillery batteries have an ammo truck near every gun", function()
+    local maxTruckDistance = 100
+    for _, combo in ipairs(h.regionPlaytimes()) do
+        for _, seed in ipairs(SEEDS) do
+            local env = h.load({ seed = seed })
+            h.generate(env, "Normal", combo.playtime, combo.region)
+            for _, battery in ipairs(frontlineGroups("Artillery%-")) do
+                local guns, trucks = {}, {}
+                for _, unit in ipairs(battery.units) do
+                    if unit.type == UnitTemplates.AmmoTruck then
+                        trucks[#trucks + 1] = unit
+                    elseif unit.type ~= "BRDM-2" then
+                        guns[#guns + 1] = unit
+                    end
+                end
+                local label = battery.name .. " in " .. combo.region .. " seed " .. seed
+                h.ok(#guns > 0, label .. " has no guns")
+                local trucksNeeded = math.ceil(#guns / UnitTemplates.GunsPerAmmoTruck)
+                h.ok(#trucks >= trucksNeeded, label .. " has " .. #trucks .. " ammo trucks for " .. #guns .. " guns")
+                for _, gun in ipairs(guns) do
+                    local nearest = math.huge
+                    for _, truck in ipairs(trucks) do
+                        nearest = math.min(nearest, Spatial:getDistance2D(gun, truck))
+                    end
+                    h.ok(
+                        nearest <= maxTruckDistance,
+                        label .. " gun is " .. math.floor(nearest) .. " m from an ammo truck"
+                    )
+                end
+            end
+        end
+    end
+end)

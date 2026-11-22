@@ -99,3 +99,24 @@ h.test("group with every unit destroyed never respawns", function()
     h.ok(not vGroup.isSpawned)
     h.eq(#env.groups, groupCount)
 end)
+
+h.test("registerGroup rejects groups past the unit budget", function()
+    local _, vGroup = setup()
+    Virtualization.config.maxVirtualUnits = 4
+    local rejected = Virtualization:registerGroup({
+        name = "Test-Overflow",
+        center = CENTER,
+        units = {
+            { type = "BRDM-2", x = CENTER.x, y = CENTER.y },
+            { type = "BRDM-2", x = CENTER.x + 30, y = CENTER.y },
+        },
+    })
+    h.eq(rejected, nil)
+    local accepted = Virtualization:registerGroup({
+        name = "Test-Fits",
+        center = CENTER,
+        units = { { type = "BRDM-2", x = CENTER.x, y = CENTER.y } },
+    })
+    h.ok(accepted, "group within the budget was rejected")
+    h.eq(Virtualization:getRegisteredUnitCount(), #vGroup.units + 1)
+end)

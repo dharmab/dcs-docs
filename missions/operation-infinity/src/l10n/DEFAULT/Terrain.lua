@@ -20,6 +20,7 @@ Terrain.config = {
     sceneryClearance = 100, -- Meters around a position that must be free of buildings and other scenery
     roadProbeDistance = 60, -- Meters from a road point to probe for the road's direction
     roadProbeDirections = 8, -- Evenly spaced probes when looking for the road's direction
+    maxRoadSnapDistance = 5000, -- Meters a road-bound group may move from its anchor to the nearest road
 }
 
 local log = Logging:create("Terrain")
@@ -386,8 +387,25 @@ end
 -- center gets the full isValidTerrainForUnits check and every unit gets
 -- isValidUnitPosition, so spread-out groups such as SAM sites do not put
 -- units in forest or water. Returns the position and units, or nil.
+--
+-- With options.maxRoadDistance, the search starts from the road point nearest
+-- center and covers only maxRoadDistance around it. A random center is
+-- usually kilometers from a road, so searching around it rarely finds a
+-- position close enough. Returns nil if the nearest road is more than
+-- config.maxRoadSnapDistance from center.
 function Terrain:findValidLayout(center, radius, buildUnits, options, maxAttempts)
-    return searchPositions(center, radius, options or {}, maxAttempts or self.config.maxSearchAttempts, function(pos)
+    options = options or {}
+    if options.maxRoadDistance then
+        local roadPos = self:snapToRoad(center)
+        local roadIsReachable = roadPos ~= nil
+            and Spatial:getDistance2D(center, roadPos) <= self.config.maxRoadSnapDistance
+        if not roadIsReachable then
+            return nil
+        end
+        center = roadPos
+        radius = math.min(radius, options.maxRoadDistance)
+    end
+    return searchPositions(center, radius, options, maxAttempts or self.config.maxSearchAttempts, function(pos)
         local units = buildUnits(pos)
         if self:areValidUnitPositions(units) then
             return units

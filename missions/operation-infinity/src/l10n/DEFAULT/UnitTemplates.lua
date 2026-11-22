@@ -421,27 +421,52 @@ UnitTemplates.LogisticsConvoy = {
 -- ARTILLERY BATTERY
 -- =============================================================================
 
+-- guns: the firing line. escort: may be missing like other platoon units.
+-- Ammo trucks are added separately so a battery never runs dry; see
+-- BattlefieldGeneration:generateArtilleryBattery.
 UnitTemplates.ArtilleryBattery = {
-    { type = "SAU Akatsia", count = 4 },
-    { type = "Ural-375", count = 1 },
-    { type = "BRDM-2", count = 1 },
+    guns = { { type = "SAU Akatsia", count = 4 } },
+    escort = { { type = "BRDM-2", count = 1 } },
 }
+
+UnitTemplates.RocketBattery = {
+    guns = { { type = "Grad-URAL", count = 4 } },
+    escort = { { type = "BRDM-2", count = 1 } },
+}
+
+-- Cargo trucks with the warehouse attribute rearm nearby units (docs/units/ground.md)
+UnitTemplates.AmmoTruck = "Ural-375"
+-- Guns served by each ammo truck
+UnitTemplates.GunsPerAmmoTruck = 2
+
+-- Chance an artillery battery is a rocket battery instead of tube artillery
+local ROCKET_BATTERY_CHANCE = 0.35
+
+function UnitTemplates:getRandomArtilleryBattery()
+    local isRocketBattery = math.random() < ROCKET_BATTERY_CHANCE
+    if isRocketBattery then
+        return self.RocketBattery
+    end
+    return self.ArtilleryBattery
+end
 
 -- =============================================================================
 -- SCATTERED PATROL TYPES
--- Small groups of units spread across the battlefield for fun single targets
+-- Small groups of units spread across the battlefield
 -- =============================================================================
 
 UnitTemplates.ScatteredPatrols = {
-    -- Tank patrols - pair of MBTs
+    -- Tank patrols - MBT sections, some with an IFV escort
     TankPatrol = {
-        weight = 15, -- Relative spawn weight
+        weight = 20, -- Relative spawn weight
         templates = {
-            { { type = "Leclerc", count = 2 } },
-            { { type = "Leopard-2", count = 2 } },
+            { { type = "Leclerc", count = 3 } },
+            { { type = "Leopard-2", count = 3 } },
             { { type = "Challenger2", count = 2 } },
-            { { type = "T-80UD", count = 2 } },
-            { { type = "T-72B", count = 2 } },
+            { { type = "T-80UD", count = 3 } },
+            { { type = "T-72B", count = 4 } },
+            { { type = "Leclerc", count = 2 }, { type = "Marder", count = 2 } },
+            { { type = "T-72B", count = 2 }, { type = "BMP-2", count = 2 } },
         },
     },
 
@@ -457,25 +482,31 @@ UnitTemplates.ScatteredPatrols = {
         },
     },
 
-    -- APC/IFV patrols - pair of APCs or IFVs
+    -- APC/IFV patrols - sections of APCs or IFVs
     APCPatrol = {
         weight = 20,
         templates = {
-            { { type = "Marder", count = 2 } },
-            { { type = "BMP-2", count = 2 } },
+            { { type = "Marder", count = 3 } },
+            { { type = "BMP-2", count = 3 } },
             { { type = "BMP-3", count = 2 } },
-            { { type = "BTR-80", count = 2 } },
+            { { type = "BTR-80", count = 3 } },
             { { type = "Warrior", count = 2 } },
         },
     },
 
-    -- Scout patrols - light recon vehicles
+    -- Scout patrols - light recon and ATGM vehicles. No HMMWVs: ISAF uses
+    -- them, so players could not tell friend from foe from the air.
     ScoutPatrol = {
-        weight = 15,
+        weight = 25,
         templates = {
             { { type = "BRDM-2", count = 2 } },
-            { { type = "BTR-80", count = 1 }, { type = "BRDM-2", count = 1 } },
-            { { type = "BRDM-2", count = 1 } },
+            { { type = "BRDM-2", count = 3 } },
+            { { type = "BTR-80", count = 1 }, { type = "BRDM-2", count = 2 } },
+            { { type = "BRDM-2", count = 1 }, { type = "BRDM-2_malyutka", count = 2 } },
+            { { type = "VAB_Mephisto", count = 3 } },
+            { { type = "BRDM-2", count = 2 }, { type = "VAB_Mephisto", count = 2 } },
+            { { type = "Cobra", count = 2 } },
+            { { type = "Cobra", count = 2 }, { type = "BRDM-2", count = 1 } },
         },
     },
 

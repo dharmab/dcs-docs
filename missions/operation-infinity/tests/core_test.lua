@@ -207,3 +207,37 @@ h.test("coordinates format as degrees and decimal minutes", function()
     h.eq(ll, "45*00.000'N 033*00.000'E")
     h.eq(mgrs, "37TEK 12345 67890")
 end)
+
+-- Open ground near Gudauta where a generated depot was placed
+local OPEN_GROUND = { x = -195445, y = 528525 }
+
+-- Replace the mock's road lookup; rawset keeps the type checker from
+-- reporting a redefinition of the stubbed API
+local function setNearestRoad(x, y)
+    rawset(land, "getClosestPointOnRoads", function()
+        return x, y
+    end)
+end
+
+local function buildOneUnit(pos)
+    return { { type = "Ural-375", x = pos.x, y = pos.y } }
+end
+
+h.test("road-bound layouts are placed near the road nearest the anchor", function()
+    h.load()
+    local road = { x = OPEN_GROUND.x - 3000, y = OPEN_GROUND.y }
+    setNearestRoad(road.x, road.y)
+    local maxRoadDistance = 200
+    local anchor = { x = road.x + 3000, y = road.y }
+    local pos = Terrain:findValidLayout(anchor, 300, buildOneUnit, { maxRoadDistance = maxRoadDistance })
+    h.ok(pos, "no position found")
+    h.ok(Spatial:getDistance2D(pos, road) <= maxRoadDistance, "position is too far from the road")
+end)
+
+h.test("road-bound layouts are skipped when the nearest road is too far", function()
+    h.load()
+    local farAway = OPEN_GROUND.x - Terrain.config.maxRoadSnapDistance - 1000
+    setNearestRoad(farAway, OPEN_GROUND.y)
+    local pos = Terrain:findValidLayout(OPEN_GROUND, 300, buildOneUnit, { maxRoadDistance = 200 })
+    h.eq(pos, nil)
+end)
