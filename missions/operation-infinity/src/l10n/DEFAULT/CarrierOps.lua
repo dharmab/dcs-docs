@@ -140,6 +140,7 @@ CarrierOps.config = {
 
 CarrierOps.state = {
     phase = nil, -- "INTO_WIND" or "REPOSITION"
+    ---@type Vec2?
     legEnd = nil, -- {x, y} end of the current leg
     legCourse = nil, -- radians, course of the current leg
     legSpeed = nil, -- m/s, carrier speed on the current leg

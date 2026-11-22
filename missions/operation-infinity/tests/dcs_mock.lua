@@ -1,3 +1,5 @@
+-- The mock replaces DCS API functions that lua-types/ declares
+---@diagnostic disable: duplicate-set-field
 -- =============================================================================
 -- DCS MOCK
 -- A small stateful stand-in for the DCS mission scripting environment.

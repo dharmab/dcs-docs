@@ -7,7 +7,7 @@ Coordinate conversion functions may fail or return undefined results for coordin
 ## coord.LLtoLO
 
 ```lua
-number, number, number coord.LLtoLO(number latitude, number longitude, number altitude)
+Vec3 coord.LLtoLO(number latitude, number longitude, number altitude)
 ```
 
 The `coord.LLtoLO` function converts Latitude/Longitude/Altitude to the game's XYZ coordinate system.
@@ -18,32 +18,33 @@ The `coord.LLtoLO` function converts Latitude/Longitude/Altitude to the game's X
 - `longitude` (number): The longitude in decimal degrees, where positive values indicate East.
 - `altitude` (number): The altitude in meters above mean sea level.
 
-**Returns:** Three numbers representing the x, y, and z game coordinates, where y is altitude.
+**Returns:** A Vec3 with the game coordinates, where y is altitude.
+
+<!-- TODO: QA - Verify in DCS that coord.LLtoLO returns a Vec3 (Hoggit wiki says vec3) -->
 
 ```lua
-local x, y, z = coord.LLtoLO(41.657, 41.597, 0)
-local position = {x = x, y = y, z = z}
+local position = coord.LLtoLO(41.657, 41.597, 0)
 ```
 
 ## coord.LOtoLL
 
 ```lua
-number, number, number coord.LOtoLL(number x, number y, number z)
+number, number, number coord.LOtoLL(Vec3 point)
 ```
 
 The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/Altitude.
 
 **Parameters:**
 
-- `x` (number): The X coordinate representing the north-south position (positive = north).
-- `y` (number): The Y coordinate representing altitude.
-- `z` (number): The Z coordinate representing the east-west position (positive = east).
+- `point` (Vec3): The game coordinates, where y is altitude.
+
+<!-- TODO: QA - Verify in DCS that coord.LOtoLL takes a Vec3 (Hoggit wiki and Operation Infinity both pass a Vec3) -->
 
 **Returns:** Three numbers representing the latitude, longitude, and altitude.
 
 ```lua
 local pos = unit:getPoint()
-local lat, lon, alt = coord.LOtoLL(pos.x, pos.y, pos.z)
+local lat, lon, alt = coord.LOtoLL(pos)
 env.info(string.format("Position: %.4f, %.4f", lat, lon))
 ```
 

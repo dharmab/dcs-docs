@@ -32,6 +32,7 @@ format-lua: ## Format Lua
 check-format-lua: ## Check Lua formatting
 	stylua --check $(LUA_FILES)
 
+# Checks DCS API calls against the stubs in lua-types/
 lint-lua: ## Lint Lua
 	lua-language-server --check . --checklevel=Warning
 
