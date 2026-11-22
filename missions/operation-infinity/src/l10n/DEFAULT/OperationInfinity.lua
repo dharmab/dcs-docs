@@ -74,6 +74,10 @@ OperationInfinity.config = {
                         convoyCount = { 0, 1 },
                         checkpointCount = { 1, 2 },
                     },
+                    -- Positive offsets are southwest of this route, toward the
+                    -- coastal lowlands. Inland of the route is mountains.
+                    corridorOffsetMin = -5000,
+                    corridorOffsetMax = 8000,
                 },
             },
         },
@@ -178,8 +182,9 @@ OperationInfinity.config = {
             convoyCount = { 0, 1 },
             checkpointCount = { 1, 2 },
         },
-        -- Lateral offset from approach corridor (positive = toward coast)
-        corridorOffsetMin = -5000,
+        -- Lateral offset from the approach corridor in meters. Positive is to
+        -- the right of the route as seen from Krymsk.
+        corridorOffsetMin = -8000,
         corridorOffsetMax = 8000,
     },
 

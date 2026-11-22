@@ -53,6 +53,37 @@ local function checkGroundPlacement(env)
     end
 end
 
+-- Ground unit types on the ISAF faction lists, read from the docs so the
+-- check follows them
+local function isafGroundTypes()
+    local types = {}
+    for _, year in ipairs({ "2004", "2005" }) do
+        local doc = h.readFile(h.missionDir .. "/../../../docs/factions/isaf-" .. year .. ".md")
+        local groundSection = doc:match("## Ground Units\n(.-)\n## ")
+        for unitType in groundSection:gmatch("%- %[([^%]]+)%]") do
+            types[unitType] = true
+        end
+    end
+    return types
+end
+
+-- Erusean groups use no ISAF vehicles, so players can tell friend from foe
+local function checkNoIsafTypesInRedGroups()
+    local isafTypes = isafGroundTypes()
+    h.ok(next(isafTypes) ~= nil, "no ISAF ground types read from docs/factions")
+    local groupLists = { Virtualization.state.virtualGroups, Virtualization.state.permanentGroups }
+    for _, groups in ipairs(groupLists) do
+        for _, group in ipairs(groups) do
+            local isRed = group.countryId == country.id.CJTF_RED
+            if isRed then
+                for _, unit in ipairs(group.units) do
+                    h.ok(not isafTypes[unit.type], group.name .. " uses ISAF type " .. unit.type)
+                end
+            end
+        end
+    end
+end
+
 -- Virtual and permanent groups together fit the mission's unit budget
 local function checkUnitBudget()
     local config = OperationInfinity.config
@@ -88,6 +119,7 @@ for _, combo in ipairs(combos) do
                 h.generate(env, difficulty, combo.playtime, combo.region)
                 h.ok(env.logContains(GENERATION_COMPLETE), "generation did not complete (seed " .. seed .. ")")
                 checkUnitBudget()
+                checkNoIsafTypesInRedGroups()
                 spawnEverything(env)
                 for _, vGroup in ipairs(Virtualization.state.virtualGroups) do
                     h.ok(vGroup.isSpawned, vGroup.name .. " did not spawn with a player overhead")

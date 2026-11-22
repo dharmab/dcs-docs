@@ -494,7 +494,8 @@ UnitTemplates.ScatteredPatrols = {
         },
     },
 
-    -- Scout patrols - light recon and ATGM vehicles
+    -- Scout patrols - light recon and ATGM vehicles. No HMMWVs: ISAF uses
+    -- them, so players could not tell friend from foe from the air.
     ScoutPatrol = {
         weight = 25,
         templates = {
@@ -502,10 +503,10 @@ UnitTemplates.ScatteredPatrols = {
             { { type = "BRDM-2", count = 3 } },
             { { type = "BTR-80", count = 1 }, { type = "BRDM-2", count = 2 } },
             { { type = "BRDM-2", count = 1 }, { type = "BRDM-2_malyutka", count = 2 } },
-            { { type = "M1043 HMMWV Armament", count = 3 } },
-            { { type = "M1043 HMMWV Armament", count = 2 }, { type = "M1045 HMMWV TOW", count = 2 } },
+            { { type = "VAB_Mephisto", count = 3 } },
+            { { type = "BRDM-2", count = 2 }, { type = "VAB_Mephisto", count = 2 } },
             { { type = "Cobra", count = 2 } },
-            { { type = "Cobra", count = 2 }, { type = "M1043 HMMWV Armament", count = 1 } },
+            { { type = "Cobra", count = 2 }, { type = "BRDM-2", count = 1 } },
         },
     },
 

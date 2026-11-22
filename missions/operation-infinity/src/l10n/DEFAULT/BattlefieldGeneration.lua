@@ -865,7 +865,7 @@ function BattlefieldGeneration:generateApproachRouteTargetsBatched(onComplete)
     local totalDistance = math.sqrt(dx * dx + dy * dy)
     local approachDir = { x = dx / totalDistance, y = dy / totalDistance }
 
-    -- Perpendicular direction for lateral offsets (toward coast is positive)
+    -- Perpendicular direction for lateral offsets: right of the route as seen from Krymsk
     local perpDir = { x = -approachDir.y, y = approachDir.x }
 
     log("Approach route: Krymsk to centroid, total distance " .. math.floor(totalDistance / 1000) .. " km")
@@ -975,7 +975,7 @@ function BattlefieldGeneration:generateApproachRouteTarget(item)
     local config = OperationInfinity.config
     local approachConfig = self:getApproachRouteConfig()
 
-    -- Random position within the waypoint area with lateral offset toward coast
+    -- Random position within the waypoint area, offset sideways from the route
     local function pickAnchor()
         local lateralOffset = approachConfig.corridorOffsetMin
             + math.random() * (approachConfig.corridorOffsetMax - approachConfig.corridorOffsetMin)
