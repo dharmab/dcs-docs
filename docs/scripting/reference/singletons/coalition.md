@@ -1,8 +1,8 @@
 # coalition
 
-The coalition singleton provides functions to query and spawn groups and static objects.
+The coalition singleton contains functions to query and spawn groups and static objects.
 
-Functions that accept coordinate parameters for spawning (such as `addGroup`, `addStaticObject`, and `addRefPoint`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+Functions that accept coordinate parameters for spawning (such as `addGroup`, `addStaticObject`, and `addRefPoint`) may fail or return wrong results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## coalition.addGroup
 
@@ -10,7 +10,7 @@ Functions that accept coordinate parameters for spawning (such as `addGroup`, `a
 Group coalition.addGroup(number countryId, number groupCategory, table groupData)
 ```
 
-The `coalition.addGroup` function dynamically spawns a group into the mission. This function is one of the most powerful scripting functions, enabling dynamic spawning of any unit type.
+The `coalition.addGroup` function spawns a group of any unit type into the mission.
 
 You must add a delay before accessing the group's controller after spawning, because issuing tasks immediately can crash the game. If a group or unit name matches an existing object, the game destroys the existing object. You cannot spawn aircraft with skill "Client" but can use "Player" in single-player, which destroys the current player aircraft. Spawn FARPs with `groupCategory = -1`.
 
@@ -51,9 +51,36 @@ groupData = {
 }
 ```
 
-The required fields are `name` (a unique group name), `task` (the main task such as "Ground Nothing", "CAP", or "CAS"), and `units` (an array of unit definitions). Each unit definition requires `name` (a unique unit name), `type` (the unit type such as "M1A2" or "F-16C_50"), `x` (the north-south position, positive north), and `y` (the east-west position, positive east, using the Vec2 convention). Aircraft also require `alt` (altitude in meters), `alt_type` ("BARO" or "RADIO"), `speed` (speed in m/s), `payload` (weapons and fuel), and `callsign` (a table with name_index, number, and flight_number).
+Required group fields:
 
-The optional fields are `groupId` (a custom group ID that is auto-generated if omitted), `start_time` (spawn delay in seconds where 0 means immediate), `lateActivation` (whether to require a trigger to activate), `hidden` (whether to hide from the F10 map), `hiddenOnMFD` (whether to hide from aircraft MFDs), `route` (waypoints and tasks), and `uncontrolled` (for aircraft, whether to spawn inactive).
+- `name` (string): Unique group name.
+- `task` (string): Main task, such as `"Ground Nothing"`, `"CAP"`, or `"CAS"`.
+- `units` (table): Array of unit definitions.
+
+Required unit fields:
+
+- `name` (string): Unique unit name.
+- `type` (string): Unit type, such as `"M1A2"` or `"F-16C_50"`.
+- `x` (number): North-south position, positive north.
+- `y` (number): East-west position, positive east (Vec2 convention).
+
+Aircraft units also require:
+
+- `alt` (number): Altitude in meters.
+- `alt_type` (string): `"BARO"` or `"RADIO"`.
+- `speed` (number): Speed in m/s.
+- `payload` (table): Weapons and fuel.
+- `callsign` (table): `name_index`, `number`, and `flight_number`.
+
+Optional group fields:
+
+- `groupId` (number): Group ID. Generated if omitted.
+- `start_time` (number): Spawn delay in seconds; 0 is immediate.
+- `lateActivation` (boolean): Wait for a trigger to activate.
+- `hidden` (boolean): Hide from the F10 map.
+- `hiddenOnMFD` (boolean): Hide from aircraft MFDs.
+- `route` (table): Waypoints and tasks.
+- `uncontrolled` (boolean): Aircraft only. Spawn inactive.
 
 ```lua
 local groupData = {

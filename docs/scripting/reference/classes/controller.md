@@ -1,6 +1,6 @@
 # Controller
 
-The Controller class is the AI control interface. You obtain controllers from groups or units and use them to issue tasks, commands, and options.
+A Controller object controls the AI of a group or unit. `group:getController()` and `unit:getController()` return a controller, which issues tasks, commands, and options.
 
 The `Controller.Detection` enum defines the detection types:
 
@@ -21,7 +21,7 @@ Controller.Detection = {
 nil controller:setTask(table task)
 ```
 
-The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, delay task assignment by at least 2 seconds using `timer.scheduleFunction()` before calling `setTask`. This is separate from confirming the group exists—even after a group is accessible, its controller may not be ready for immediate task assignment. Calling `setTask` immediately after spawning can fail silently.
+The `controller:setTask` method sets the group's main task, replacing any existing task. For newly spawned groups, delay task assignment by at least 2 seconds using `timer.scheduleFunction()` before calling `setTask`. The controller may not be ready even after the group is accessible, and an early `setTask` can fail silently.
 
 **Parameters:**
 

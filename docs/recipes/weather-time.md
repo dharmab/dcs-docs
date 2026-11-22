@@ -1,8 +1,8 @@
 # Weather and Time Configuration
 
-This recipe describes how to configure weather, fog, haze, and time settings by directly editing the mission Lua file. Weather significantly affects gameplay, visual atmosphere, and AI behavior.
+This recipe sets weather, fog, haze, and time by editing the mission Lua file. Weather affects gameplay, visuals, and AI behavior.
 
-This recipe uses the static weather system with cloud presets, which provides the modern volumetric cloud visuals introduced in DCS 2.7. Do not use the dynamic weather system with cyclones.
+This recipe uses the static weather system with cloud presets, which provides the volumetric clouds added in DCS 2.7. Do not use the dynamic weather system with cyclones.
 
 ## Mission File Structure
 
@@ -59,7 +59,7 @@ The `start_time` field specifies the mission start time in seconds since midnigh
 ["start_time"] = 28800,  -- 08:00:00
 ```
 
-**Note on sunrise and sunset:** The actual times of sunrise and sunset depend on the mission date, the map's latitude, and longitude. Northern maps like Caucasus have shorter winter days and longer summer days than southern maps like Persian Gulf. Consult real-world sunrise/sunset tables for the map's geographic location and date to determine appropriate start times for dawn, dusk, or night missions.
+**Note on sunrise and sunset:** Sunrise and sunset depend on the date and the map's latitude and longitude. Northern maps such as Caucasus have shorter winter days and longer summer days than southern maps such as Persian Gulf. Use real sunrise/sunset tables for the map's location and date to pick start times for dawn, dusk, or night.
 
 ---
 
@@ -127,7 +127,7 @@ Lower pressure indicates stormy conditions; higher pressure indicates fair weath
 
 ## Wind
 
-Wind is configured at three altitude bands. Each band specifies speed in meters per second and direction in degrees (the direction the wind is blowing FROM).
+Wind is configured in three altitude bands. Each band has a speed in meters per second and a direction in degrees, which is the direction the wind blows FROM.
 
 ```lua
 ["wind"] = {
@@ -167,19 +167,19 @@ Wind is configured at three altitude bands. Each band specifies speed in meters 
 
 Wind direction is an important mission design decision that affects multiple gameplay systems:
 
-- **AI runway selection:** AI aircraft choose runways based on wind direction to take off and land into the wind. Setting wind direction determines which runways will be active.
-- **Carrier operations:** Aircraft carriers turn into the wind for launch and recovery operations. Wind direction affects the carrier's heading during flight operations.
+- **AI runway selection:** AI aircraft take off and land into the wind, so wind direction sets the active runways.
+- **Carrier operations:** Carriers turn into the wind for launch and recovery, so wind direction sets the carrier's heading during flight operations.
 - **Aerial refueling:** Tanker patterns may need adjustment based on wind to maintain stable refueling tracks.
 - **Helicopter operations:** Strong crosswinds affect helicopter hover and landing capabilities.
 - **Weapons delivery:** Wind affects unguided bomb and rocket accuracy.
 
-When generating missions, confirm the desired wind direction with the mission designer to ensure runways and carrier operations function as intended.
+When generating missions, confirm the wind direction with the mission designer so runways and carrier operations work as intended.
 
 ---
 
 ## Ground Turbulence
 
-The `groundTurbulence` field controls low-level turbulence intensity in meters per second. This creates buffeting effects during flight.
+The `groundTurbulence` field sets low-level turbulence intensity in meters per second, which buffets aircraft in flight.
 
 ```lua
 ["groundTurbulence"] = 5,  -- Moderate turbulence
@@ -218,7 +218,7 @@ Base visibility distance is set in meters. This is the maximum visibility when f
 
 ### Cloud Presets
 
-DCS provides pre-configured cloud presets that create realistic multi-layer volumetric cloud configurations. Using presets is required for the modern cloud visuals.
+Cloud presets define multi-layer volumetric cloud configurations. Missions must use a preset to get the modern cloud visuals.
 
 ```lua
 ["clouds"] = {
@@ -275,7 +275,7 @@ The `iprecptns` field controls precipitation type. Available options depend on t
 
 ### Thunderstorms Without Preset
 
-To create thunderstorms with lightning effects without using a rainy preset, omit the preset field and set density to 9 or 10:
+To create thunderstorms with lightning without using a rainy preset, omit the preset field and set density to 9 or 10:
 
 ```lua
 ["clouds"] = {
@@ -290,7 +290,7 @@ To create thunderstorms with lightning effects without using a rainy preset, omi
 
 ## Fog
 
-The volumetric fog system affects AI detection and creates atmospheric visual effects, particularly at dawn and dusk.
+Volumetric fog affects AI detection and adds visual atmosphere, especially at dawn and dusk.
 
 ### Enabling Fog
 
@@ -334,13 +334,13 @@ Fog blocks visual detection for AI:
 | AI aircraft visual detection | Yes - blocked             |
 | Radar systems                | No - radar penetrates fog |
 
-Fog creates tactical opportunities for low-level ingress against optically-guided threats. SAM systems that rely on optical tracking (IR SAMs, optically-guided AAA) are degraded by fog, while radar-guided systems remain fully effective.
+Fog lets players ingress at low level past optically guided threats. It degrades SAMs and AAA that rely on optical tracking, such as IR SAMs and optically guided guns, while radar-guided systems are unaffected.
 
 ---
 
 ## Dust and Haze
 
-Dust creates a yellow-brown atmospheric haze, simulating desert or dusty conditions. Unlike fog, dust maintains a fixed altitude above ground level.
+Dust is a yellow-brown haze that simulates desert or dusty conditions. Unlike fog, dust stays at a fixed height above ground level.
 
 ```lua
 ["enable_dust"] = true,
@@ -352,7 +352,7 @@ Dust creates a yellow-brown atmospheric haze, simulating desert or dusty conditi
 | `enable_dust`  | boolean    | Enables/disables dust         |
 | `dust_density` | 300-3000 m | Visibility through dust layer |
 
-Dust always extends approximately 700 meters (2,300 ft) above ground level. On high-elevation maps, dust effects may be less visible.
+Dust extends about 700 meters (2,300 ft) above ground level. On high-elevation maps, dust may be less visible.
 
 ---
 
@@ -560,7 +560,7 @@ Dust always extends approximately 700 meters (2,300 ft) above ground level. On h
 
 ## Weather and AI Sensor Summary
 
-Understanding which weather phenomena affect AI systems helps create balanced scenarios.
+This table shows which weather affects AI sensors.
 
 | Weather | AI Visual Detection | Radar Systems | Optical/IR SAMs   |
 | ------- | ------------------- | ------------- | ----------------- |
@@ -570,7 +570,7 @@ Understanding which weather phenomena affect AI systems helps create balanced sc
 | Rain    | No effect           | No effect     | No effect         |
 | Night   | Reduced             | No effect     | Reduced (optical) |
 
-Radar systems (SAMs, AWACS, fighter radar) are unaffected by any weather or visibility conditions. Fog is the most tactically significant weather element for degrading optically-guided threats.
+Fog blocks AI visual detection and degrades optical and IR SAMs. Clouds and rain do not affect AI sensors at all, and no weather affects radar.
 
 ---
 

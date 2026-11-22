@@ -1,6 +1,6 @@
 # env
 
-The env singleton provides logging, mission information, and warning systems.
+The env singleton contains functions for logging, mission information, and warnings.
 
 ## env.info
 
@@ -8,7 +8,7 @@ The env singleton provides logging, mission information, and warning systems.
 nil env.info(string message, boolean showMessageBox)
 ```
 
-The `env.info` function logs an informational message to `dcs.log`. This function is the primary debugging tool for mission scripts.
+The `env.info` function logs an informational message to `dcs.log`. It is the main debugging tool for mission scripts.
 
 **Parameters:**
 
@@ -80,7 +80,7 @@ env.setErrorMessageBoxEnabled(false)
 string env.getValueDictByKey(string key)
 ```
 
-The `env.getValueDictByKey` function returns a localized string from the mission's dictionary. This function is used for internationalization.
+The `env.getValueDictByKey` function returns a localized string from the mission's dictionary.
 
 **Parameters:**
 
@@ -90,7 +90,7 @@ The `env.getValueDictByKey` function returns a localized string from the mission
 
 ## env.mission
 
-The `env.mission` field is a table containing the complete mission data as loaded from the MIZ file. This table includes all groups, units, triggers, and other mission elements in their raw format.
+The `env.mission` field is the raw mission table loaded from the MIZ file, including all groups, units, and triggers.
 
 ```lua
 local startTime = env.mission.start_time

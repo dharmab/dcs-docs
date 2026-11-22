@@ -1,6 +1,6 @@
 # Weapon
 
-The Weapon class represents a weapon in flight: missiles, bombs, rockets, and shells.
+A Weapon object is a weapon in flight, such as a missile, bomb, rocket, or shell.
 
 Inherits from: [Object](object.md), [CoalitionObject](coalition-object.md)
 

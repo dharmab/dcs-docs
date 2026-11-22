@@ -1,6 +1,6 @@
 # DCS World Weapons
 
-This document provides comprehensive information about weapons in DCS World, including air-to-air missiles, air-to-ground missiles, guided and unguided bombs, and rockets.
+This document covers DCS World weapons: air-to-air missiles, air-to-ground missiles, guided and unguided bombs, and rockets.
 
 ## Table of Contents
 

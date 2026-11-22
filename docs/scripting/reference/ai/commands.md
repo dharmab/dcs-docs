@@ -20,7 +20,9 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `frequency` field specifies the frequency in Hz; for example, 251000000 represents 251 MHz. The `modulation` field specifies the modulation type, where 0 is AM and 1 is FM. The `power` field specifies the transmission power in watts; 10 is a typical value.
+- `frequency` (number): Frequency in Hz. For example, 251000000 is 251 MHz.
+- `modulation` (number): 0 is AM, 1 is FM.
+- `power` (number): Transmit power in watts. 10 is typical.
 
 ```lua
 local cmd = {
@@ -86,7 +88,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `value` field sets the unlimited fuel state: `true` enables unlimited fuel, while `false` disables it if it is already enabled.
+The `value` field sets the unlimited fuel state: `true` turns unlimited fuel on, `false` turns it off.
 
 ## Start
 
@@ -119,7 +121,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `fromWaypointIndex` field specifies the starting waypoint index. The `goToWaypointIndex` field specifies the destination waypoint index.
+The `fromWaypointIndex` field is the starting waypoint index. The `goToWaypointIndex` field is the destination waypoint index.
 
 ## StopRoute
 
@@ -137,7 +139,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to stop the route; set to true to stop route following.
+The `value` field sets whether to stop the route; set to true to stop route following.
 
 ## SwitchAction
 
@@ -155,7 +157,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `actionIndex` field specifies the index of the action to switch to.
+The `actionIndex` field is the index of the action to switch to.
 
 ## ActivateBeacon
 
@@ -182,9 +184,9 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `type` field specifies the beacon type. TACAN is `4`. See [Beacon Types](../enums/ai.md#beacon-types) for the full list.
+The `type` field is the beacon type. TACAN is `4`. See [Beacon Types](../enums/ai.md#beacon-types) for the full list.
 
-The `system` field specifies the beacon system (see [Beacon Systems](../enums/ai.md#beacon-systems)). For TACAN, it depends on what kind of unit transmits the beacon:
+The `system` field is the beacon system (see [Beacon Systems](../enums/ai.md#beacon-systems)). For TACAN, it depends on what kind of unit transmits the beacon:
 
 | Unit            | X mode                       | Y mode                       |
 | --------------- | ---------------------------- | ---------------------------- |
@@ -194,7 +196,13 @@ The `system` field specifies the beacon system (see [Beacon Systems](../enums/ai
 
 The `type` and `system` values are separate: a carrier's TACAN uses `type = 4` and `system = 3`.
 
-The `channel` field is the TACAN channel (1 to 126) and `modeChannel` is `"X"` or `"Y"`. The `AA` field marks an air-to-air TACAN. Set it to `false` for ships and tankers, and `true` for other aircraft. The `bearing` field turns on bearing information. The `unitId` field is the ID of the unit that transmits the beacon. The `name` field is optional and specifies a display name for the beacon. The `callsign` field specifies the Morse code callsign.
+- `channel` (number): TACAN channel, 1 to 126.
+- `modeChannel` (string): `"X"` or `"Y"`.
+- `AA` (boolean): Air-to-air TACAN. `false` for ships and tankers, `true` for other aircraft.
+- `bearing` (boolean): Transmit bearing information.
+- `unitId` (number): ID of the unit that transmits the beacon.
+- `name` (string): Optional display name.
+- `callsign` (string): Morse code callsign.
 
 The `frequency` field is in Hz and must match the channel:
 
@@ -284,7 +292,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `unitId` field is the ID of the ship that transmits Link 4, normally the group's lead unit. The `frequency` field specifies the Link 4 frequency in Hz.
+The `unitId` field is the ID of the ship that transmits Link 4, normally the group's lead unit. The `frequency` field is the Link 4 frequency in Hz.
 
 ## DeactivateLink4
 
@@ -318,7 +326,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `type` field is always `131584` (`BEACON_TYPE_ICLS_GLIDESLOPE`). The `channel` field specifies the ICLS channel. The `unitId` field is the ID of the carrier unit.
+The `type` field is always `131584` (`BEACON_TYPE_ICLS_GLIDESLOPE`). The `channel` field is the ICLS channel. The `unitId` field is the ID of the carrier unit.
 
 ## DeactivateICLS
 
@@ -351,7 +359,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `value` field specifies whether to enable EPLRS. The `groupId` field is optional and specifies the group to link with.
+The `value` field sets whether to enable EPLRS. The `groupId` field is optional and specifies the group to link with.
 
 ## TransmitMessage
 
@@ -372,7 +380,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `file` field specifies the sound file path. The `duration` field specifies the message duration. The `subtitle` field specifies the subtitle text. The `loop` field specifies whether to loop the message.
+The `file` field is the sound file path. The `duration` field is the message duration. The `subtitle` field is the subtitle text. The `loop` field sets whether to loop the message.
 
 ## StopTransmission
 
@@ -404,7 +412,7 @@ local cmd = {
 controller:setCommand(cmd)
 ```
 
-The `value` field sets the smoke trail state: `true` enables the smoke trail, while `false` disables it.
+The `value` field sets the smoke trail state: `true` turns the smoke trail on, `false` turns it off.
 
 ## See Also
 

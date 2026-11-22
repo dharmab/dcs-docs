@@ -1,6 +1,6 @@
 # DCS World Documentation
 
-This repository contains documentation for DCS World mission design and scripting. The documentation is structured to serve two audiences: novice mission designers learning the tools, and developers (including AI agents) building automation and content.
+This repository contains documentation for DCS World mission design and scripting. It is written for two audiences: novice mission designers learning the tools, and developers (including AI agents) building automation and content.
 
 ## Learning Path
 

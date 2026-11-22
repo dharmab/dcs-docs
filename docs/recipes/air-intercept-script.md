@@ -1,22 +1,22 @@
 # Dynamic Air Intercept Script
 
-This recipe describes how to create a dynamic air intercept script that spawns enemy aircraft from red airfields in response to blue aircraft entering a defense zone. The script scales the response to the number of trespassing aircraft and supports customizable interceptor types, loadouts, and spawn limits.
+This recipe builds a script that spawns red interceptors from red airfields when blue aircraft enter a defense zone. The script scales the response to the number of intruders and supports configurable interceptor types, loadouts, and spawn limits.
 
-For static pre-placed AI fighters configured in the mission file (CAP, Fighter Sweep, Escort), see [AI Air-to-Air Fighter Configuration](air-to-air-setup.md). This recipe focuses on scripted dynamic spawning where interceptors are created at runtime in response to player actions.
+For static pre-placed AI fighters configured in the mission file (CAP, Fighter Sweep, Escort), see [AI Air-to-Air Fighter Configuration](air-to-air-setup.md). This recipe spawns interceptors at runtime in response to player actions.
 
 ## Overview
 
 The air intercept system provides:
 
 - **Zone-based detection** - Monitor circular defense zones around red airfields
-- **Scaled response** - Spawn interceptors proportional to intruder count (erring on the easier side)
+- **Scaled response** - Spawn interceptors in proportion to the number of intruders, erring toward fewer
 - **Customizable interceptors** - Configure aircraft type, loadout, and skill level per airfield
 - **Spawn control** - Support for infinite respawns with airborne limits or finite interceptor pools
 - **Cooldown system** - Prevent spam-spawning with configurable delays
 
 ## Design Philosophy
 
-Most DCS players are not experts at air combat. Even skilled pilots can be overwhelmed by multiple bandits, especially when flying complex multirole aircraft focused on ground attack. This script errs on the easier side:
+Most DCS players are not experts at air combat. Even skilled pilots can be overwhelmed by several bandits, especially when flying multirole aircraft on ground attack sorties. The script errs on the easier side:
 
 - 1-2 intruders spawn 1 interceptor
 - 3 intruders spawn 2 interceptors

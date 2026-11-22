@@ -1,12 +1,12 @@
 # Lua Basics for DCS Scripting
 
-This document covers just enough Lua to start writing DCS World scripts. Lua is a small language that you can learn as you go; most of its features are intuitive once you see them in action.
+This document covers enough Lua to start writing DCS World scripts.
 
 DCS uses Lua 5.1. Features from newer versions of the language are not available.
 
 ## Variables and Basic Types
 
-Variables store values. Use `local` to declare a variable, which limits its visibility to the current scope. Variables without `local` become global and can accidentally interfere with other scripts.
+Use `local` to declare a variable scoped to the current block. Variables without `local` are global and can collide with other scripts.
 
 ```lua
 local callsign = "Viper 1-1"        -- a string (text)
@@ -15,11 +15,11 @@ local isAlive = true                -- a boolean (true or false)
 local target = nil                  -- nil means "no value" or "nothing"
 ```
 
-Lua does not distinguish between integers and floating-point numbers; everything is just a number. Strings can use single or double quotes interchangeably.
+Lua 5.1 has one number type for integers and floats. Strings use single or double quotes.
 
 ## Tables
 
-Tables are Lua's only data structure, but they are versatile enough to serve as arrays, dictionaries, objects, and more.
+Tables are Lua's only data structure. They are used as arrays, dictionaries, and objects.
 
 As an array (ordered list of values):
 
@@ -50,14 +50,14 @@ local unit = {
 local description = unit["unit name"]    -- bracket access required
 ```
 
-You can also use brackets with a variable to access keys dynamically:
+Brackets also take a variable:
 
 ```lua
 local key = "fuel"
 local value = aircraft[key]   -- same as aircraft.fuel
 ```
 
-You can add and modify entries at any time:
+Entries can be added and changed at any time:
 
 ```lua
 aircraft.speed = 450          -- adds a new key
@@ -170,7 +170,7 @@ Join strings with the `..` operator:
 local message = "Unit " .. unitName .. " destroyed at " .. time .. " seconds"
 ```
 
-Convert numbers to strings automatically through concatenation, or explicitly with `tostring()`.
+Concatenation converts numbers to strings. `tostring()` converts explicitly.
 
 ## Comments
 
@@ -192,9 +192,9 @@ Multi-line comments use bracket notation:
 
 ## Nil and Truthiness
 
-In Lua, `nil` represents the absence of a value. Variables that have not been assigned are `nil`. Functions that do not explicitly return a value return `nil`.
+In Lua, `nil` is the absence of a value. Variables that have not been assigned are `nil`. Functions that do not explicitly return a value return `nil`.
 
-When evaluating conditions, `nil` and `false` are considered false; everything else (including zero and empty strings) is considered true:
+In conditions, `nil` and `false` are false. Everything else, including zero and empty strings, is true:
 
 ```lua
 local unit = Unit.getByName("Bandit 1")
@@ -205,4 +205,4 @@ else
 end
 ```
 
-This pattern appears constantly in DCS scripting because functions like `getByName` return `nil` when objects do not exist.
+This pattern is common in DCS scripts because functions such as `getByName` return `nil` when the object does not exist.

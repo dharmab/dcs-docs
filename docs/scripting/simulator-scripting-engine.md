@@ -1,6 +1,12 @@
 # Simulator Scripting Engine
 
-The Simulator Scripting Engine (SSE) provides mission designers with programmatic access to the DCS World simulation. Through Lua scripting, mission builders can monitor and control nearly every aspect of a running mission, from spawning units dynamically to tracking combat statistics to creating sophisticated campaign logic that would be impossible with the Mission Editor's trigger system alone.
+The Simulator Scripting Engine (SSE) runs Lua scripts inside a DCS World mission and provides the functions those scripts use to read and control the simulation. For example, scripts can:
+
+- Spawn groups during the mission
+- React to events such as shots, kills, and takeoffs
+- Give AI groups new tasks
+- Add player commands to the F10 radio menu
+- Draw lines, shapes, and text on the F10 map
 
 ## Contents
 
@@ -17,17 +23,19 @@ The Simulator Scripting Engine (SSE) provides mission designers with programmati
 
 ## Overview
 
-The SSE exposes the games's internal data and state through Lua, a lightweight programming language designed for embedding in applications. Scripts can read information about the game world and modify it. Scripts can do things like dynamically spawn units based on player actions or game state, execute conditions and event handlers more complex than can be done through Triggers alone, and add custom menus and submenus to the F10 radio menu.
+DCS scripts are written in Lua, a scripting language that many games use for mods and in-game scripting. Lua is easy to learn, and you can pick it up as you go. If you are new to Lua, start with [Lua Basics](lua-basics.md).
 
 ## Scripting Environments
 
-DCS World provides two distinct Lua scripting environments that serve different purposes and have different capabilities.
+DCS World runs Lua scripts in two separate environments: mission scripts and server hooks. This document covers mission scripts.
 
-**Mission scripting** runs inside the simulation as part of a `.miz` mission file. Mission scripts can control units, respond to events, spawn groups, display messages, and manipulate the game world. This document focuses primarily on mission scripting. Mission scripts run in a sandboxed environment with restricted access to the filesystem and operating system for security reasons, since missions downloaded from multiplayer servers execute automatically.
+**Mission scripts** are stored in a mission's `.miz` file, and they run while that mission runs. Mission scripts work with the game world: units, groups, events, triggers, and the F10 map. By default, mission scripts cannot access the filesystem or operating system, because a mission downloaded from the internet runs its scripts automatically.
 
-**Server hooks** run outside the simulation in a separate Lua state that persists across mission changes. Server hooks can manage player connections, moderate chat, control mission rotation, and access server administration functions. Unlike mission scripts, server hooks have full access to filesystem and operating system functions. See [Server Hooks](reference/hooks/server-hooks.md) for documentation on server-side scripting.
+**Server hooks** are Lua files in the `Scripts/Hooks` folder in the DCS Saved Games directory. DCS loads them at startup, and they keep running as missions load and end. Hooks can access the filesystem and operating system. Multiplayer servers use hooks to manage players, chat, and mission rotation. See [Server Hooks](reference/hooks/server-hooks.md).
 
-These two environments cannot directly share variables. They use mostly different APIs and have different security models. Both can call the [`net`](reference/singletons/net.md) API, but server hooks can call extra `net` functions; see [Available APIs](reference/hooks/server-hooks.md#available-apis). Server hooks can run code in the mission environment with [`net.dostring_in`](reference/singletons/net.md#netdostring_in). When reading this documentation, be aware of which environment a feature applies to.
+Use a mission script for behavior specific to one mission. Use a server hook for behavior that applies to every mission on a server, or that needs the filesystem or operating system.
+
+The two environments do not share variables, and most functions are available in only one of them. Most of this documentation, including the `coalition`, `trigger`, and `world` singletons, applies only to mission scripts. The [Available APIs](reference/hooks/server-hooks.md#available-apis) table lists which APIs each environment can call.
 
 ## Lua Basics
 
@@ -37,9 +45,9 @@ For an introduction to the Lua programming language, including variables, tables
 
 Mission scripts have access to most of the Lua standard library, including `math`, `string`, and `table`. Missions are shared online and downloaded from multiplayer servers, and their scripts run without any prompt, so a malicious mission could harm the computer that runs it. To prevent this, `Scripts/MissionScripting.lua` sets six globals to `nil` before any mission script runs: `io`, `lfs`, `os`, `require`, `loadlib`, and `package`. Without `io`, `lfs` (LuaFileSystem), and `os`, a script cannot read, write, or delete files, or start other programs through the operating system shell. Without `require`, `loadlib`, and `package`, a script cannot load Lua modules or DLLs.
 
-Server hooks operate in a different environment with full access to `io`, `lfs`, `os`, and `debug`. See [Server Hooks](reference/hooks/server-hooks.md) for details on server-side scripting capabilities.
+Server hooks have full access to `io`, `lfs`, `os`, and `debug`. See [Server Hooks](reference/hooks/server-hooks.md).
 
-Users who want to enable `io`, `lfs`, and `os` in mission scripts for local development or trusted environments can modify `Scripts/MissionScripting.lua` in their DCS installation folder. This file contains lines that sanitize the scripting environment by removing dangerous functions:
+To enable `io`, `lfs`, and `os` in mission scripts for local development, edit `Scripts/MissionScripting.lua` in the DCS installation folder. These lines remove the libraries:
 
 ```lua
 do
@@ -54,29 +62,46 @@ end
 
 Commenting out a line restores that library or function. This process is commonly called "desanitizing" the scripting environment.
 
-Desanitization carries significant security risks. Any mission you load, including missions from multiplayer servers, will gain the ability to access your filesystem. A malicious mission could read sensitive files, install malware, or delete data. Only desanitize if you understand these risks and only play missions from trusted sources.
+Desanitizing is a security risk. Every mission you load, including missions from multiplayer servers, can then access your filesystem, so a malicious mission could read files, install malware, or delete data. Only desanitize if you play only trusted missions.
 
-Additionally, DCS updates typically overwrite `Scripts/MissionScripting.lua`, which resets any desanitization changes. After each DCS update, you must re-apply your modifications if you want to continue using `io`, `lfs`, and `os` in mission scripts.
+DCS updates usually overwrite `Scripts/MissionScripting.lua`. Re-apply the changes after each update.
 
 ## Data Types
 
 ### Coordinate Systems
 
-DCS World simulates a flat earth model using a Transverse Mercator projection for each theater. Each map has its own projection origin point, and the simulation uses a Cartesian coordinate system measured in meters from that origin. This approach trades global accuracy for local precision, which is appropriate for the scale of combat operations depicted in the simulation.
+DCS World uses a flat earth with a Transverse Mercator projection per theater. Each map has its own origin, and positions are Cartesian coordinates in meters from that origin. This trades global accuracy for local precision.
 
-The terrain engine does not provide a one-to-one representation of real-world geography. Maps are composites assembled from multiple time periods and may include features that have been added, removed, or modified to improve gameplay or engine performance. Features like buildings, roads, and vegetation do not necessarily match their real-world counterparts in location, appearance, or presence. Scripts that rely on real-world geographic data should account for these discrepancies.
+Maps do not match real geography exactly. They are composites from several time periods, with features added, removed, or changed for gameplay or performance. Buildings, roads, and vegetation may differ from the real world in location, appearance, or presence. Scripts that use real-world geographic data must allow for this.
 
-The native coordinate system uses X, Y, and Z axes measured in meters. The [coord](reference/singletons/coord.md) singleton provides conversion functions between this native system and real-world coordinate systems including latitude/longitude (geodetic coordinates) and MGRS (Military Grid Reference System, based on UTM). These conversions allow scripts to work with familiar geographic coordinates while the engine operates in its internal Cartesian space.
+Native coordinates are X, Y, and Z in meters. The [coord](reference/singletons/coord.md) singleton converts between native coordinates, latitude/longitude, and MGRS (Military Grid Reference System, based on UTM).
 
-Vec2 and Vec3 share the `x` axis (north-south, positive north) but use different conventions for the "y" axis. In Vec2, `y` is the east-west position (positive east). In Vec3, `y` is altitude while `z` is east-west. This difference is a common source of confusion when converting between the two formats. See [Coordinate Types](reference/types/coordinates.md) for formal type definitions.
+Vec2 and Vec3 share the `x` axis (north-south, positive north) but use different conventions for the "y" axis. In Vec2, `y` is the east-west position (positive east). In Vec3, `y` is altitude while `z` is east-west. This difference is a common source of bugs. See [Coordinate Types](reference/types/coordinates.md) for formal type definitions.
 
 ### Time Values
 
-The DCS scripting engine measures mission time in seconds as a floating-point number with millisecond precision. The [timer](reference/singletons/timer.md) singleton provides time-related functions. The [`timer.getTime()`](reference/singletons/timer.md#timergettime) function returns mission time, which is the number of seconds since the mission started and pauses when the game is paused. The [`timer.getAbsTime()`](reference/singletons/timer.md#timergetabstime) function returns absolute time, which is the number of seconds since midnight of the mission date. The [`timer.getTime0()`](reference/singletons/timer.md#timergettime0) function returns the mission start time expressed as absolute time.
+DCS scripts work with two kinds of time. Both are in seconds, as floating-point numbers with millisecond precision.
+
+- **Mission time** is the number of seconds since the mission started. It stops while the game is paused. The [`timer.getTime()`](reference/singletons/timer.md#timergettime) function returns mission time.
+- **Absolute time** is the time of day in the mission, as the number of seconds since midnight on the mission date. The [`timer.getAbsTime()`](reference/singletons/timer.md#timergetabstime) function returns absolute time, and the [`timer.getTime0()`](reference/singletons/timer.md#timergettime0) function returns the absolute time when the mission started.
+
+Use mission time to measure durations, such as how long ago an event happened. Use absolute time when the time of day matters. All three functions are in the [timer](reference/singletons/timer.md) singleton.
 
 ### Distance and Angles
 
-All distances in the DCS scripting engine are measured in meters. All angles are measured in radians unless otherwise noted. To convert between degrees and radians:
+The DCS scripting engine measures all distances in meters and all angles in radians, unless a function's documentation says otherwise. Many cockpits and briefings use feet, nautical miles, and degrees instead, so scripts often need to convert values.
+
+To convert between meters and feet or nautical miles:
+
+```lua
+local meters = feet * 0.3048
+local feet = meters / 0.3048
+
+local meters = nauticalMiles * 1852
+local nauticalMiles = meters / 1852
+```
+
+To convert between degrees and radians:
 
 ```lua
 local radians = degrees * math.pi / 180
@@ -89,7 +114,7 @@ Headings use true north as 0 and increase clockwise: East is π/2, South is π, 
 
 ### Singletons
 
-A singleton is a global object that provides access to a category of game functionality. You access singletons by their name, then call functions on them. For example, [`timer.getTime()`](reference/singletons/timer.md#timergettime) calls the [`getTime`](reference/singletons/timer.md#timergettime) function on the [`timer`](reference/singletons/timer.md) singleton.
+A singleton is a global object that groups related game functions. For example, [`timer.getTime()`](reference/singletons/timer.md#timergettime) calls the [`getTime`](reference/singletons/timer.md#timergettime) function on the [`timer`](reference/singletons/timer.md) singleton.
 
 The main singletons are:
 
@@ -108,7 +133,7 @@ The main singletons are:
 
 ### Objects and Functions
 
-The game world contains objects: aircraft, ground units, ships, airbases, weapons, and scenery. Scripts can get references to these objects and then call functions on them to get information or make changes.
+Objects in the game world include aircraft, ground units, ships, airbases, weapons, and scenery. Scripts obtain references to objects and call functions on them.
 
 For example, use [`Unit.getByName()`](reference/classes/unit.md#unitgetbyname) to get a unit, [`Unit:getFuel()`](reference/classes/unit.md#unitgetfuel) to check its remaining fuel, and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to display the result:
 
@@ -125,7 +150,7 @@ if eagle then
 end
 ```
 
-Note the colon (`:`) when calling functions on objects: [`eagle:getFuel()`](reference/classes/unit.md#unitgetfuel). This is Lua syntax for calling a function that belongs to an object. The singleton functions use a dot (`.`) instead: [`timer.getTime()`](reference/singletons/timer.md#timergettime).
+Object methods use a colon (`:`): [`eagle:getFuel()`](reference/classes/unit.md#unitgetfuel). Singleton functions use a dot (`.`): [`timer.getTime()`](reference/singletons/timer.md#timergettime).
 
 Common object types and some of their functions:
 
@@ -154,7 +179,9 @@ Common object types and some of their functions:
 
 ### Events
 
-The event system notifies your scripts when things happen in the simulation. You create an event handler and register it with [`world.addEventHandler()`](reference/singletons/world.md#worldaddeventhandler), then your handler function gets called whenever events occur. This example uses [`getName()`](reference/classes/object.md#objectgetname) and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to announce a destroyed unit.
+DCS creates an event each time something happens in the simulation, such as an aircraft taking off, a unit firing a weapon, or a unit being destroyed. Scripts react to events with an event handler, which is a table containing an `onEvent` function. After a script registers the handler with [`world.addEventHandler()`](reference/singletons/world.md#worldaddeventhandler), DCS calls the handler's `onEvent` function for every event. DCS passes the function a table describing the event, and the function checks the event's `id` to decide whether to act.
+
+This example uses [`getName()`](reference/classes/object.md#objectgetname) and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to announce a destroyed unit.
 
 ```lua
 -- Create a table to serve as our event handler
@@ -193,11 +220,11 @@ Common events include:
 | `S_EVENT_KILL`              | One unit kills another           |
 | `S_EVENT_MARK_ADDED`        | A map marker is created          |
 
-The event table passed to your handler contains different information depending on the event type. Most events include `id` (which event occurred), `time` (mission time), and `initiator` (the object involved).
+The event table's fields depend on the event type. Most events include `id` (which event occurred), `time` (mission time), and `initiator` (the object involved).
 
 ### Scheduled Functions
 
-You can tell the game to run a function at a specific time in the future with [`timer.scheduleFunction()`](reference/singletons/timer.md#timerschedulefunction). This is useful for periodic checks, delayed actions, or creating repeating behaviors. This example reads the mission time with [`timer.getTime()`](reference/singletons/timer.md#timergettime) and displays it with [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext).
+[`timer.scheduleFunction()`](reference/singletons/timer.md#timerschedulefunction) runs a function at a future mission time, for periodic checks, delayed actions, or repeating behavior. This example reads the mission time with [`timer.getTime()`](reference/singletons/timer.md#timergettime) and displays it with [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext).
 
 ```lua
 local function showTimeMessage()
@@ -248,31 +275,31 @@ BatchScheduler:processArray({
 
 ## Adding Scripts to Missions
 
-Scripts can be embedded in missions through several mechanisms in the Mission Editor:
+The Mission Editor can add scripts to a mission in several ways:
 
 ### Initialization Script
 
-The initialization script runs as the mission loads, before any units spawn or triggers evaluate. It is the earliest point at which scripting code executes. Access this through the Triggers panel by selecting the initialization slot.
+The initialization script runs as the mission loads, before units spawn or triggers evaluate. It is the earliest point scripts run. Set it in the Triggers panel's initialization slot.
 
-Use the initialization script to set up global variables, define functions that will be used later, or configure settings that need to be in place before the mission begins.
+Use the initialization script to set up global variables, define functions for later use, and configure settings that must be in place before the mission begins.
 
 ### Trigger Actions
 
-The trigger system provides two actions for running scripts:
+Two trigger actions run scripts:
 
-**Do Script** embeds Lua code directly in the mission file. You type or paste your code into a text box, and it becomes part of the mission data. This approach has significant drawbacks: the text box has size limitations, no syntax highlighting, and the code becomes embedded inside the mission's Lua data structure where external tools cannot easily work with it.
+**Do Script** embeds Lua code in the mission file from a text box. The text box has a size limit and no syntax highlighting, and the code ends up inside the mission's Lua data where external tools cannot easily work with it.
 
-**Do Script File** references a separate Lua file. When you select a file, the Mission Editor copies it into the mission archive. This approach is strongly preferred for new missions because it keeps your code in standalone `.lua` files. Code editors provide syntax highlighting, autocompletion, and error detection. Language servers can analyze your code for problems. Autoformatters like StyLua can keep your code consistently styled. AI coding assistants can read and modify your scripts. None of these tools can easily help you with code embedded via Do Script.
+**Do Script File** references a Lua file, which the Mission Editor copies into the mission archive. The code stays in standalone `.lua` files, so editors, language servers, formatters such as StyLua, and AI coding assistants can work with it.
 
-New missions should use Do Script File exclusively. Reserve Do Script only for trivial one-liners where creating a separate file would be overkill.
+New missions should use Do Script File. Reserve Do Script for trivial one-liners.
 
-Both actions execute the script when their trigger conditions become true. The code runs once per trigger activation. Triggers may activate either once or repeatedly depending on how they are configured in the Mission Editor.
+Both actions run the script once each time the trigger activates. A trigger activates once or repeatedly depending on its type.
 
 ### Group Actions
 
-Scripts can be attached to individual groups through waypoint actions and triggered actions. These scripts run in the context of that specific group.
+Scripts can be attached to a group through waypoint actions and triggered actions.
 
-Within a group action script, a special variable written as `...` (three dots) refers to the group the script is attached to. You can use this to write generic scripts that work with any group:
+In a group action script, `...` (three dots) is the group the script is attached to. This lets you write one script that works for any group:
 
 ```lua
 -- Within a group action, ... refers to the current group
@@ -281,22 +308,24 @@ local groupName = thisGroup:getName()
 trigger.action.outText("Group " .. groupName .. " is doing something", 10)
 ```
 
-This example uses [`Group:getName()`](reference/classes/group.md#groupgetname) to get the group's name and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) to display a message. This feature lets you write one script and attach it to multiple groups without having to change the group name in the code each time.
+This example uses [`Group:getName()`](reference/classes/group.md#groupgetname) and [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext).
 
 ### Group Spawn Condition
 
-Each group can have a spawn condition script that runs during mission loading. This script must return either `true` or `false` to determine whether the group spawns into the mission.
+A group can have a spawn condition script that runs during mission loading and returns `true` or `false`.
 
 ```lua
 -- 50% chance to spawn this group
 return math.random() < 0.5
 ```
 
-If the script returns `true`, the group spawns normally. If it returns `false`, the group does not appear in the mission at all.
+If it returns `false`, the group does not appear in the mission.
 
 ### LUA Predicate Condition
 
-Triggers can use the LUA PREDICATE condition type to evaluate custom Lua code. The script must return `true` or `false`. This enables complex conditions that the built-in trigger conditions cannot express, such as checking for a group with [`Group.getByName()`](reference/classes/group.md#groupgetbyname):
+The LUA PREDICATE trigger condition runs Lua code that returns `true` or `false`. Use it for conditions that the built-in conditions cannot express.
+
+For example, built-in conditions such as GROUP ALIVE only recognize groups placed in the Mission Editor. To check for a group that a script spawned, use [`Group.getByName()`](reference/classes/group.md#groupgetbyname) in a LUA PREDICATE:
 
 ```lua
 -- Check if a group named 'reinforcements' exists
@@ -307,11 +336,9 @@ else
 end
 ```
 
-One important limitation: the built-in trigger conditions (like GROUP ALIVE) only recognize groups placed in the Mission Editor. If you spawn groups dynamically through scripting, you must use LUA PREDICATE conditions to check their state.
-
 ## Script Execution Order
 
-Understanding when scripts execute is critical when scripts depend on each other. For example, if script B uses a function defined in script A, script A must run first.
+Execution order matters when scripts depend on each other. If script B uses a function defined in script A, script A must run first.
 
 The execution order is:
 
@@ -325,19 +352,19 @@ The execution order is:
 
 Within a single trigger, conditions and actions evaluate top to bottom in the order they appear in the editor. If trigger A is above trigger B in the trigger list and both execute at the same time, trigger A runs first.
 
-This ordering allows a single trigger to load multiple dependent scripts in sequence:
+This order lets a single trigger load dependent scripts in sequence:
 
 ```
 Once > Time More than 3 > Do Script File(A.lua) AND Do Script File(B.lua) AND Do Script File(C.lua)
 ```
 
-If script C depends on B and B depends on A, this trigger correctly loads them in order because actions execute left to right.
+If script C depends on B and B depends on A, this trigger loads them in order, because actions run left to right.
 
 ## MIZ File Storage
 
-Understanding how scripts are stored in mission files helps when troubleshooting or when you want to update scripts without opening the Mission Editor.
+Knowing how scripts are stored lets you update them without the Mission Editor.
 
-MIZ files are ZIP archives that you can open with any archive utility. When you use **Do Script**, your code is embedded directly in the `mission` file as text within the trigger data.
+MIZ files are ZIP archives. **Do Script** code is stored as text in the trigger data in the `mission` file.
 
 When you use **Do Script File**, the Lua file is:
 
@@ -345,11 +372,11 @@ When you use **Do Script File**, the Lua file is:
 2. Registered in the `l10n/DEFAULT/mapResource` file
 3. Referenced by the trigger action
 
-This means you can extract a MIZ file with a tool like 7-Zip, edit the Lua files in a text editor, and repack it to update your mission logic without opening the Mission Editor.
+You can extract a MIZ file, edit the Lua files, and repack it without opening the Mission Editor.
 
 ## Debugging
 
-When scripts do not work as expected, logging helps you understand what is happening. The [`env`](reference/singletons/env.md) singleton provides logging functions: [`env.info()`](reference/singletons/env.md#envinfo), [`env.warning()`](reference/singletons/env.md#envwarning), and [`env.error()`](reference/singletons/env.md#enverror).
+The [`env`](reference/singletons/env.md) singleton contains logging functions: [`env.info()`](reference/singletons/env.md#envinfo), [`env.warning()`](reference/singletons/env.md#envwarning), and [`env.error()`](reference/singletons/env.md#enverror).
 
 ```lua
 env.info("This is an information message")
@@ -357,9 +384,9 @@ env.warning("This is a warning")
 env.error("This is an error")
 ```
 
-These messages appear in `dcs.log` in your DCS Saved Games directory (typically `C:\Users\[YourName]\Saved Games\DCS` or `DCS.openbeta`). Open this file in a text editor to see your messages along with any errors the game encountered.
+Messages go to `dcs.log` in the DCS Saved Games directory (typically `C:\Users\[YourName]\Saved Games\DCS` or `DCS.openbeta`), along with game errors.
 
-You can also display messages in-game with [`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) for quick feedback while developing:
+[`trigger.action.outText()`](reference/singletons/trigger.md#triggeractionouttext) displays messages in-game:
 
 ```lua
 trigger.action.outText("Debug: reached this point in the code", 5)
@@ -369,7 +396,7 @@ The number at the end (5) is how many seconds the message stays on screen.
 
 ## API Reference
 
-The reference documentation is organized into the [reference/](reference/) directory.
+Reference pages are in [reference/](reference/).
 
 ### Types and Enums
 

@@ -1,12 +1,12 @@
 # MIZ File Format
 
-A MIZ file is the mission file format used by DCS World. It is a standard ZIP archive containing several files that together define a complete mission.
+A MIZ file is a DCS World mission. It is a ZIP archive containing the files that define the mission.
 
 ## Archive Contents
 
 ### mission
 
-A Lua table containing the primary mission data. This is the core of the mission file. See [Mission File Schema](mission-file-schema.md) for complete documentation of every key and data structure.
+A Lua table containing the main mission data. See [Mission File Schema](mission-file-schema.md).
 
 The mission file defines:
 
@@ -20,29 +20,29 @@ The mission file defines:
 - **Navigation points**: Named waypoints that can be referenced by units and triggers
 - **Ground control**: Settings for Combined Arms roles like artillery commander and forward observer
 
-The mission file also contains embedded Lua scripts within trigger actions. Complex missions frequently embed community scripting frameworks like MIST and MOOSE to enable advanced mission logic.
+Trigger actions can embed Lua scripts.
 
 ### theatre
 
-A plain text file containing the name of the map (theatre) the mission is designed for. Examples include "Caucasus", "Nevada", "PersianGulf", "Syria", and other DCS World maps. This value also appears within the mission Lua table.
+A plain text file containing the map (theatre) name, such as "Caucasus", "Nevada", "PersianGulf", or "Syria". The top-level `theatre` key in the [`mission`](mission-file-schema.md) table has the same value.
 
 ### warehouses
 
-A Lua table defining the supply levels for each warehouse in the mission. Warehouses represent airbases, FARPs, and other logistics points where aircraft can rearm and refuel. Each airbase entry specifies quantities of fuel, ammunition, weapons, and other supplies. The exact structure of this file varies depending on the theatre, as different maps have different default airbase and warehouse configurations.
+A Lua table containing the supply levels for each warehouse. Warehouses are airbases, FARPs, and other points where aircraft rearm and refuel. Each entry sets quantities of fuel, ammunition, weapons, and other supplies. The structure varies by theatre, since maps have different default airbases and warehouses.
 
 Key fields for each airbase entry include `coalition`, `unlimitedAircrafts`, `unlimitedFuel`, `unlimitedMunitions`, `dynamicSpawn` (enables dynamic spawn at the airfield), `allowHotStart` (permits players to choose hot or cold start), `speed`, `periodicity`, `size`, `suppliers`, `dynamicCargo`, `aircrafts` (aircraft inventory), and `weapons`.
 
 ### options
 
-A Lua table containing mission-specific difficulty settings that may override the player's global difficulty options when the mission is loaded. This file also contains residual data from the global options of the player who last saved the mission in the Mission Editor, including graphics settings and the player's username. Most of this extra data is not used when loading the mission and can be considered noise.
+A Lua table containing mission difficulty settings that can override the player's options. It also contains leftover global options from whoever last saved the mission, including graphics settings and username. DCS ignores most of this extra data.
 
 ### l10n Directory
 
-The `l10n` directory contains localized resources for the mission. While the system supports multiple languages, most missions are created for a single language and contain only a `DEFAULT` subdirectory.
+The `l10n` directory contains localized resources. Most missions have one language and only a `DEFAULT` subdirectory.
 
 #### l10n/DEFAULT/dictionary
 
-A Lua table that maps dictionary keys to their actual text values. Keys follow naming conventions like `DictKey_ActionText_112` or `DictKey_descriptionBlueTask_3`. These keys are referenced throughout the mission file and resolved at runtime. The dictionary contains mission briefing text, radio transmissions, trigger messages, and other localized strings.
+A Lua table that maps dictionary keys to their actual text values. Keys follow naming conventions like `DictKey_ActionText_112` or `DictKey_descriptionBlueTask_3`. The mission file references these keys, and DCS resolves them at runtime. The dictionary contains briefing text, radio transmissions, trigger messages, and other localized strings.
 
 #### l10n/DEFAULT/mapResource
 
@@ -64,7 +64,7 @@ Common asset types include:
 
 ## Working with MIZ Files
 
-Since MIZ files are ZIP archives, they can be extracted and repacked using standard archive utilities. This allows for programmatic manipulation of mission data outside of the DCS Mission Editor.
+MIZ files can be extracted and repacked with standard archive tools, so programs can edit mission data without the Mission Editor.
 
 When repacking a MIZ file, ensure that:
 

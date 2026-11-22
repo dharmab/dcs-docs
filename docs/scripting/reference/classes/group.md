@@ -1,8 +1,8 @@
 # Group
 
-The Group class represents a group of units. Groups are the primary unit of control for AI.
+A Group object is a group of units. AI is controlled per group.
 
-You can obtain Group objects using `Group.getByName("name")` to get a group by its Mission Editor name, `unit:getGroup()` to get the group from a unit, or `coalition.getGroups(coalitionId)` to get all groups for a coalition.
+`Group.getByName("name")` (Mission Editor name), `unit:getGroup()`, and `coalition.getGroups(coalitionId)` (all groups of a coalition) return Group objects.
 
 The `Group.Category` enum defines the group categories:
 
@@ -104,7 +104,7 @@ The `group:getName` method returns the group's name.
 number group:getID()
 ```
 
-The `group:getID` method returns the group's unique numeric ID. This ID is used for group-specific menu commands and messages.
+The `group:getID` method returns the group's unique numeric ID. Group-specific menu commands and messages take this ID.
 
 **Returns:** The group ID as a number.
 
@@ -180,7 +180,7 @@ local losses = initial - current
 Controller group:getController()
 ```
 
-The `group:getController` method returns the group's AI controller. This method is the primary way to control AI behavior.
+The `group:getController` method returns the group's AI controller. Use it to control AI behavior.
 
 **Returns:** A Controller object.
 
@@ -203,7 +203,7 @@ The `group:enableEmission` method enables or disables radar and radio emissions 
 
 ## Spawning Notes
 
-**Spawn Operations Are Asynchronous:** When spawning groups via `coalition.addGroup()`, the spawn operation is asynchronous. The function returns immediately, but the group may not be accessible for a brief period afterward. Do not attempt to access or manipulate a newly spawned group in the same script block that spawned it. Use `timer.scheduleFunction()` to defer follow-up operations by at least one second:
+**Spawn Operations Are Asynchronous:** `coalition.addGroup()` returns immediately, but the group may not be accessible for a short time. Don't use a new group in the same script block that spawned it. Defer follow-up work by at least one second with `timer.scheduleFunction()`:
 
 ```lua
 local groupData = {
@@ -224,7 +224,7 @@ timer.scheduleFunction(function()
 end, nil, timer.getTime() + 1)
 ```
 
-**Generic Crash Model Objects:** When units are destroyed, DCS creates "GENERIC_CRASH_MODEL" objects representing the wreckage. Scripts that iterate over all objects in the world or track object counts should filter out objects with this type name to avoid counting destroyed units as living objects:
+**Generic Crash Model Objects:** DCS creates a "GENERIC_CRASH_MODEL" object for the wreckage of a destroyed unit. Scripts that iterate over or count world objects should filter out this type name:
 
 ```lua
 local function isValidUnit(object)

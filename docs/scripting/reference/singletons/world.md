@@ -1,8 +1,8 @@
 # world
 
-The world singleton provides event handling and object searching capabilities. See the [Events](../events/events.md) documentation for event handling details.
+The world singleton contains functions that register event handlers and search for objects. See [Events](../events/events.md).
 
-Functions that accept search volumes with coordinate parameters (such as `searchObjects` and `removeJunk`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+Functions that accept search volumes with coordinate parameters (such as `searchObjects` and `removeJunk`) may fail or return wrong results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## world.addEventHandler
 
@@ -66,7 +66,7 @@ The `world.removeEventHandler` function unregisters a previously registered even
 Unit world.getPlayer()
 ```
 
-The `world.getPlayer` function returns the player's unit in single-player missions. This function only works in single-player; in multiplayer, use `coalition.getPlayers()` instead.
+The `world.getPlayer` function returns the player's unit in single-player missions. In multiplayer, use `coalition.getPlayers()`.
 
 **Returns:** The player's Unit object, or nil in multiplayer.
 
@@ -166,7 +166,15 @@ table world.getMarkPanels()
 
 The `world.getMarkPanels` function returns all map markers currently visible.
 
-**Returns:** An array of marker tables. Each marker table contains the following fields: `idx` (the marker ID), `time` (the creation time), `initiator` (the Unit that created the marker), `coalition` (the coalition the marker is visible to, or -1 for all coalitions), `groupID` (the group the marker is visible to, or -1 for all groups), `text` (the marker text), and `pos` (the marker position as a Vec3).
+**Returns:** An array of marker tables with these fields:
+
+- `idx` (number): Marker ID.
+- `time` (number): Creation time.
+- `initiator`: The Unit that created the marker.
+- `coalition` (number): Coalition that can see the marker, or -1 for all.
+- `groupID` (number): Group that can see the marker, or -1 for all.
+- `text` (string): Marker text.
+- `pos` (Vec3): Marker position.
 
 ## See Also
 

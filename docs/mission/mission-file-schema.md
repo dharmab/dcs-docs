@@ -1,8 +1,8 @@
 # Mission File Schema
 
-The `mission` file is a Lua table containing the complete mission definition. This document describes every top-level key and their nested structures.
+The `mission` file is a Lua table containing the complete mission definition. This page documents every top-level key and its nested structures.
 
-> **Important:** When programmatically generating mission files, all top-level keys listed below must be present, even if empty. DCS will fail to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use empty tables `{}` for unused sections rather than omitting them entirely.
+> **Important:** Generated mission files must include every top-level key below, even if empty. DCS fails to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use `{}` for unused sections.
 
 ## Top-Level Keys
 
@@ -42,7 +42,7 @@ The `mission` file is a Lua table containing the complete mission definition. Th
 
 ## coalition
 
-Contains the actual unit placements organized by coalition side. Each coalition has a bullseye reference point, navigation points, and countries containing unit groups.
+Contains the unit placements, organized by coalition. Each coalition has a bullseye, navigation points, and countries containing groups.
 
 ```lua
 coalition = {
@@ -343,7 +343,7 @@ Trigger rules system with conditions and actions.
 
 ## trig
 
-Legacy/compiled trigger system. Contains the same information as `trigrules` but in a different format with pre-compiled action strings.
+Legacy/compiled trigger system. Contains the same information as `trigrules`, with pre-compiled action strings.
 
 | Field         | Type  | Description                        |
 | ------------- | ----- | ---------------------------------- |
@@ -427,7 +427,7 @@ Number representing ground turbulence intensity (meters/second).
 | `qnh`          | number  | QNH pressure (mmHg)                                                               |
 | `cyclones`     | table   | Cyclone/storm definitions (legacy); should be an empty table `{}` in new missions |
 
-**Note:** The `cyclones` field is part of the legacy non-dynamic weather system and should not be used in new missions. New missions should use weather presets instead and leave `cyclones` as an empty table.
+**Note:** `cyclones` is part of the legacy weather system. New missions use weather presets and leave `cyclones` empty.
 
 ---
 

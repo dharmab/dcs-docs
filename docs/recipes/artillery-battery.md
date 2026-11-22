@@ -1,8 +1,8 @@
 # Artillery Battery Setup
 
-This recipe describes how to create a dramatic artillery battery firing continuously at a distant point on the ground. The purpose is visual spectacle—muzzle flashes, smoke, and distant explosions—while providing gameplay opportunities for players hunting the battery by its fire signature.
+This recipe creates an artillery battery that fires continuously at a distant point on the ground. The muzzle flashes, smoke, and distant explosions are good scenery, and players can hunt the battery by its fire signature.
 
-> **Note:** All artillery units can run out of ammunition. Position ammunition carriers (M30 Cargo Carrier) within 100 meters of firing units to sustain prolonged bombardment. Without resupply, artillery will exhaust their ammunition and cease firing.
+> **Note:** All artillery units can run out of ammunition. Position ammunition carriers (M30 Cargo Carrier) within 100 meters of firing units to sustain prolonged bombardment. Without resupply, artillery units run out of ammunition and stop firing.
 
 ## Overview
 
@@ -31,7 +31,7 @@ An effective artillery spectacle requires:
 
 ### Multiple Rocket Launchers
 
-MRLs fire in salvos rather than continuously, creating different visual effects—spectacular bursts followed by reload pauses.
+MRLs fire in salvos rather than continuously, so they produce a different visual effect: large bursts of rockets followed by pauses while they reload.
 
 | Unit                 | Type ID        | Caliber | Country | Notes                              |
 | -------------------- | -------------- | ------- | ------- | ---------------------------------- |
@@ -44,7 +44,7 @@ MRLs fire in salvos rather than continuously, creating different visual effects�
 
 ### Towed Artillery and Mortars
 
-Towed pieces lack the dramatic vehicle silhouette but can be effective for infantry support scenarios.
+Towed guns and mortars are less visually impressive than self-propelled artillery, but they fit scenes where artillery supports infantry.
 
 | Unit           | Type ID       | Caliber | Notes                                  |
 | -------------- | ------------- | ------- | -------------------------------------- |
@@ -83,7 +83,7 @@ Artillery units are placed in `coalition.[side].country[n].vehicle.group`. For v
 
 ## FireAtPoint Task Structure
 
-The `FireAtPoint` task orders ground units to fire at a specific map location. For artillery spectacle, the target should be a distant, empty area—dramatic to watch but harmless.
+The `FireAtPoint` task orders ground units to fire at a specific map location. When the artillery is only scenery, target a distant, empty area so the fire is visible but harmless.
 
 ```lua
 ["task"] = {
@@ -112,15 +112,15 @@ The `FireAtPoint` task orders ground units to fire at a specific map location. F
 
 **Key Parameters:**
 
-| Parameter          | Type    | Description                                                          |
-| ------------------ | ------- | -------------------------------------------------------------------- |
-| `x`                | number  | Target X coordinate (meters)                                         |
-| `y`                | number  | Target Y coordinate (meters)                                         |
-| `radius`           | number  | Dispersion radius for impacts (meters, 100-500 typical)              |
-| `expendQty`        | number  | Number of rounds to fire—set very high (500-9999) for sustained fire |
-| `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure                              |
+| Parameter          | Type    | Description                                                           |
+| ------------------ | ------- | --------------------------------------------------------------------- |
+| `x`                | number  | Target X coordinate (meters)                                          |
+| `y`                | number  | Target Y coordinate (meters)                                          |
+| `radius`           | number  | Dispersion radius for impacts (meters, 100-500 typical)               |
+| `expendQty`        | number  | Number of rounds to fire; set very high (500-9999) for sustained fire |
+| `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure                               |
 
-> **Tip:** For sustained bombardment, set `expendQty` to a very high number (1000+) and include ammunition carriers. The carriers will continuously resupply the guns.
+> **Tip:** For sustained bombardment, set `expendQty` to a very high number (1000+) and include ammunition carriers. The carriers resupply the guns.
 
 ## Target Point Selection
 
@@ -521,7 +521,7 @@ Before finalizing your artillery battery:
 - Increase `expendQty` value (try 9999)
 - Add more ammunition carriers
 - Position ammo carriers closer to artillery (within 100m)
-- For MLRS, reload time is significant—fire will resume after reloading
+- For MLRS, a long pause after the first salvo is normal: the launcher is reloading and will fire again when it finishes
 
 ### Rounds Landing in Wrong Location
 

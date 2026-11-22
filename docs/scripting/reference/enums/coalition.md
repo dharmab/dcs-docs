@@ -4,7 +4,7 @@ This document describes the coalition-related enumerations used in the DCS World
 
 ## coalition.side
 
-Countries are identified by numeric IDs from the `country.id` enum. The game determines coalition membership based on the country. The three coalitions are represented by the `coalition.side` enum:
+Countries are identified by numeric IDs from the `country.id` enum. A unit's country determines its coalition. The `coalition.side` enum lists the three coalitions:
 
 ```lua
 coalition.side = {
@@ -14,7 +14,7 @@ coalition.side = {
 }
 ```
 
-Some functions such as `markupToAll` accept a coalition value of -1, which represents "all coalitions."
+Some functions such as `markupToAll` accept a coalition value of -1, which means "all coalitions."
 
 ## See Also
 

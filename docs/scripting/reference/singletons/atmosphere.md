@@ -1,8 +1,8 @@
 # atmosphere
 
-The atmosphere singleton provides weather information.
+The atmosphere singleton contains functions that return weather information.
 
-All functions in this singleton that accept coordinate parameters may fail or return undefined results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+All functions in this singleton that accept coordinate parameters may fail or return undefined results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## atmosphere.getWind
 

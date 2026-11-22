@@ -1,8 +1,8 @@
 # JTAC Setup Guide
 
-This recipe describes how to configure AI Joint Terminal Attack Controllers (JTACs) and Forward Air Controllers (FACs) by directly editing the mission Lua file. A properly configured JTAC provides target coordinates, laser designation, and smoke marking for Close Air Support operations.
+This recipe configures AI Joint Terminal Attack Controllers (JTACs) and Forward Air Controllers (FACs) by editing the mission Lua file. A JTAC provides target coordinates, laser designation, and smoke marks for Close Air Support (CAS).
 
-> **Note:** JTAC setup in DCS can be finicky. Line of sight, range, and unit selection all affect reliability. Ground units require clear sightlines to targets, while UAVs provide more consistent results from altitude. Expect some experimentation to achieve reliable designation.
+> **Note:** JTAC setup in DCS can be finicky. Line of sight, range, and unit selection all affect reliability. Ground units need a clear line of sight to targets, while UAVs are more consistent because they operate from altitude. Expect some experimentation to get reliable designation.
 
 ## Overview
 
@@ -26,11 +26,11 @@ Ground JTACs must be armed vehicles with optical targeting systems. Unarmed vehi
 | M1134 Stryker ATGM | `M1134 Stryker ATGM`   | Superior optics, recommended for night ops |
 | M1043 HMMWV        | `M1043 HMMWV Armament` | Armed Humvee, shorter range                |
 
-> **Night Operations:** For night missions requiring IR pointer designation, use the M1134 Stryker ATGM. Other ground units have unreliable night capability.
+> **Night Operations:** For night missions requiring IR pointer designation, use the M1134 Stryker ATGM. Other ground units are unreliable at night.
 
 ### UAV Units
 
-UAVs provide the most reliable JTAC capability due to altitude advantage and consistent line of sight. Set the aircraft task to **AFAC** (Armed Forward Air Controller) when placing the unit.
+UAVs are the most reliable JTACs because their altitude keeps targets in line of sight. Set the aircraft task to **AFAC** (Armed Forward Air Controller).
 
 | Unit           | Type ID          | Notes                                  |
 | -------------- | ---------------- | -------------------------------------- |
@@ -235,7 +235,7 @@ The first waypoint must include:
 
 ## UAV JTAC Setup
 
-UAVs provide more reliable JTAC functionality due to altitude advantage. The key difference from ground JTACs is that you must set the aircraft task to **AFAC** and configure an orbit pattern.
+UAVs are more reliable JTACs because of their altitude. Unlike ground JTACs, you must set the aircraft task to **AFAC** and configure an orbit.
 
 ### Group Definition
 
@@ -304,7 +304,7 @@ UAVs provide more reliable JTAC functionality due to altitude advantage. The key
 
 ### Waypoint Tasks for UAV JTAC
 
-UAV JTACs should include an orbit task to maintain station over the target area. Position the orbit within 5 km of targets at 2-3 km altitude for optimal sensor performance.
+UAV JTACs should have an orbit task to stay over the target area. Place the orbit within 5 km of targets at 2-3 km altitude for the best sensor performance.
 
 ```lua
 ["task"] = {
@@ -396,7 +396,7 @@ To have a UAV transit to the target area before activating as a JTAC:
 
 1. Remove the FAC task from waypoint 0
 2. Add the FAC task to the waypoint over the target area
-3. The UAV will fly its route normally, then activate JTAC capability upon reaching the designated waypoint
+3. The UAV flies its route normally, then starts acting as a JTAC when it reaches that waypoint
 
 ---
 
@@ -406,7 +406,7 @@ DCS provides two FAC task types with different behaviors:
 
 ### FAC-Engage Group
 
-`FAC_EngageGroup` directs the JTAC to designate a specific enemy group. The JTAC will automatically cycle through units in the group.
+`FAC_EngageGroup` directs the JTAC to designate a specific enemy group. The JTAC cycles through the units in the group automatically.
 
 ```lua
 {
@@ -425,7 +425,7 @@ DCS provides two FAC task types with different behaviors:
 
 ### FAC-Assign Group
 
-`FAC_AssignGroup` allows dynamic target assignment. The JTAC responds to radio commands to designate targets.
+`FAC_AssignGroup` allows dynamic target assignment. The JTAC designates targets in response to radio commands.
 
 ```lua
 {
@@ -462,7 +462,7 @@ The `designation` parameter controls how the JTAC marks targets:
 
 DCS JTACs use a fixed laser code of **1688**. This cannot be changed through the mission editor.
 
-> **Workaround:** For missions requiring multiple JTACs with different laser codes, use third-party scripts like JTAC Autolase or Ciribob's CTLD, which allow configurable laser codes.
+> **Workaround:** For multiple JTACs with different laser codes, use a third-party script with configurable codes, such as JTAC Autolase or Ciribob's CTLD.
 
 Configure your aircraft's laser-guided weapons to code 1688:
 
@@ -506,7 +506,7 @@ Ground JTAC callsigns use a different set than aircraft. The `callname` paramete
 | 134.000 MHz AM | JTAC Alternate         |
 | 252.000 MHz AM | JTAC Tertiary          |
 
-Ground units support both FM (30-88 MHz) and AM (110-150 MHz). For aircraft like the A-10C that have separate FM and UHF radios, FM frequencies in the 30 MHz range often work well.
+Ground units support both FM (30-88 MHz) and AM (110-150 MHz). For aircraft with separate FM and UHF radios, such as the A-10C, FM frequencies in the 30 MHz range often work well.
 
 ---
 
@@ -514,7 +514,7 @@ Ground units support both FM (30-88 MHz) and AM (110-150 MHz). For aircraft like
 
 ### Ground JTACs
 
-Ground JTACs require **line of sight** to targets for laser and IR designation. Poor positioning is the most common cause of JTAC failures.
+Ground JTACs require **line of sight** to targets for laser and IR designation. Poor positioning is the most common cause of JTAC failure.
 
 **Placement Guidelines:**
 
@@ -678,7 +678,7 @@ UAVs are more forgiving with positioning but still have constraints:
 
 ## CAS Procedure with JTAC
 
-Once the JTAC is configured, players communicate via radio to receive target information and request designation.
+Once the JTAC is configured, players use the radio to receive target information and request designation.
 
 ### Radio Menu Flow
 
@@ -693,7 +693,7 @@ Once the JTAC is configured, players communicate via radio to receive target inf
 9. **Call "Rifle/Pickle"** - Report weapon release
 10. **Call "Off [direction]"** - Report egress
 
-> **Note:** You must make the "Laser On" and "Spot" calls for the JTAC to actively lase the target. Without these calls, the nine-line may report "No Mark" even if laser designation was configured.
+> **Note:** You must make the "Laser On" and "Spot" calls for the JTAC to lase the target. Without these calls, the nine-line may report "No Mark" even if laser designation is configured.
 
 ---
 

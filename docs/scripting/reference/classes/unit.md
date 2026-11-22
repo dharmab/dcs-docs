@@ -1,10 +1,10 @@
 # Unit
 
-The Unit class represents controllable units: aircraft, helicopters, ground vehicles, ships, and armed structures.
+A Unit object is a controllable unit: an aircraft, helicopter, ground vehicle, ship, or armed structure.
 
 Inherits from: [Object](object.md), [CoalitionObject](coalition-object.md)
 
-You can obtain Unit objects using `Unit.getByName("name")` to get a unit by its Mission Editor name, `group:getUnits()` to get all units in a group, or `event.initiator` to get the unit from an event.
+`Unit.getByName("name")` (Mission Editor name) and `group:getUnits()` return Unit objects, and `event.initiator` contains the unit that caused an event.
 
 The `Unit.Category` enum defines the unit categories:
 
@@ -201,7 +201,7 @@ end
 Controller unit:getController()
 ```
 
-The `unit:getController` method returns the unit's AI controller. For aircraft, you can control individual units. For ground and ship units, use the group controller instead.
+The `unit:getController` method returns the unit's AI controller. Aircraft can be controlled per unit. For ground units and ships, use the group controller.
 
 **Returns:** A Controller object.
 

@@ -1,6 +1,6 @@
 # Server Hooks
 
-Server hooks provide a scripting environment for DCS World servers that operates independently of any specific mission. Unlike mission scripts that are bundled with `.miz` files, server hook scripts persist across mission changes and provide control over player connections, chat moderation, mission rotation, and server administration.
+Server hooks are a scripting environment for DCS World servers, independent of any mission. Unlike mission scripts in `.miz` files, server hooks persist across mission changes. They control player connections, chat moderation, mission rotation, and server administration.
 
 ## Overview
 
@@ -114,7 +114,7 @@ For these callbacks:
 
 - Returning a value breaks the callback chain and uses that result
 - Returning nothing (or `nil`) continues to the next hook in the chain
-- If no hook returns a value, a default allow-all behavior is used
+- If no hook returns a value, DCS allows the action
 
 ## Lua API Reference
 
@@ -134,7 +134,7 @@ All standard Lua 5.1 libraries are available:
 
 ### Lua File System (lfs)
 
-The `lfs` module provides file system access.
+The `lfs` module contains file system functions.
 
 #### lfs.currentdir
 
@@ -266,7 +266,7 @@ Returns the absolute path, resolving any symbolic links.
 
 ### Sim Control API (Sim.*)
 
-The `Sim` table provides simulation control functions. Older scripts call the same functions through `DCS.*`, which still works.[^sim-dcs]
+The `Sim` table contains simulation control functions. Older scripts call the same functions through `DCS.*`, which still works.[^sim-dcs]
 
 #### Sim.setUserCallbacks
 
@@ -600,7 +600,7 @@ Reads a value from the configuration state.
 
 ### Logging API (log.*)
 
-The logging API provides structured logging with subsystems and levels.
+The logging API writes structured logs with subsystems and levels.
 
 #### Log Levels
 
@@ -682,7 +682,7 @@ log.set_output('lua-net', '', 0, 0)
 
 ### Network API (net.*)
 
-The `net` singleton provides network and player management functions. Server hooks can call every function in the [`net`](../singletons/net.md) singleton that mission scripts can, plus the functions below.
+The `net` singleton contains network and player management functions. Server hooks can call every function in the [`net`](../singletons/net.md) singleton that mission scripts can, plus the functions below.
 
 #### Chat Functions
 
@@ -899,7 +899,7 @@ Loads the next mission from the server mission list. Server only.
 
 ### Export API (Export.*)
 
-The Export API provides access to simulation data for external applications. In hooks, these functions are in the `Export` namespace rather than global.
+The Export API exposes simulation data to external applications. In hooks, these functions are in the `Export` namespace rather than global.
 
 See `$DCS_INSTALL/Scripts/Export.lua` for full documentation.
 
@@ -1049,7 +1049,7 @@ Called when the simulation stops.
 nil onSimulationFrame()
 ```
 
-Called every simulation frame. Use sparingly as this impacts performance.
+Called every simulation frame. Keep it fast; it affects performance.
 
 #### onSimulationPause
 
@@ -1073,7 +1073,7 @@ Called when the simulation resumes.
 nil onGameEvent(string eventName, ...)
 ```
 
-Called for various game events. Arguments vary by event type.
+Called for game events. Arguments vary by event type.
 
 **Event Types and Arguments:**
 

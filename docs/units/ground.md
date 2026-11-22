@@ -1,6 +1,6 @@
 # DCS World Ground Units
 
-This document provides comprehensive information about ground units in DCS World, including identification, real-world context, and operational requirements.
+This document covers DCS World ground units: identification, real-world background, and operating requirements.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This document provides comprehensive information about ground units in DCS World
 
 ## Categories
 
-DCS World organizes ground units into the following categories:
+DCS World organizes ground units into these categories:
 
 | Category            | Count | Description                                                  |
 | ------------------- | ----- | ------------------------------------------------------------ |
@@ -33,7 +33,7 @@ DCS World organizes ground units into the following categories:
 
 ## SAM System Compositions
 
-Many SAM systems in DCS require multiple vehicles to function properly. The launcher typically requires a tracking radar, and the radar may require a command post or search radar. Understanding these dependencies is critical for mission designers.
+Many SAM systems need several vehicles. The launcher usually needs a tracking radar, and the radar may need a command post or search radar.
 
 ### S-300PS (SA-10 Grumble)
 
@@ -283,7 +283,7 @@ These vehicles automatically refuel nearby ground units when positioned close to
 
 ### Ammunition Carriers
 
-Ammunition resupply is provided by cargo trucks with the `warehouse` attribute. When positioned near units, these vehicles automatically reload nearby units. Most cargo trucks have this capability, including:
+Cargo trucks with the `warehouse` attribute reload nearby units. Most cargo trucks have it, including:
 
 | Name                     | Type ID          | Origin         |
 | ------------------------ | ---------------- | -------------- |
@@ -308,7 +308,7 @@ Ammunition resupply is provided by cargo trucks with the `warehouse` attribute. 
 
 Anti-aircraft artillery remains a significant threat to low-flying aircraft and helicopters despite the proliferation of guided missiles. While lacking the range and accuracy of SAMs, AAA provides high-volume fire that requires no lock-on or guidance, making it effective against maneuvering targets and resistant to electronic countermeasures. The psychological impact of heavy AAA fire should not be underestimated—even experienced pilots will alter tactics to avoid the streams of tracer fire from concentrated anti-aircraft positions.
 
-**Scripting Note:** Radar-guided AAA units (such as the ZSU-23-4 Shilka) do not expose a maximum firing height parameter in their DCS unit definitions. When scripts need to estimate AAA engagement envelopes or create threat zone calculations, use the weapon's vertical range (slant range capability) as a substitute for the missing parameter.
+**Scripting Note:** Radar-guided AAA units such as the ZSU-23-4 Shilka have no maximum firing height parameter in their DCS unit definitions. To estimate AAA engagement envelopes in scripts, use the weapon's slant range instead.
 
 #### Modern AAA
 
@@ -958,7 +958,7 @@ Defensive structures and buildings:
 
 ### Payload/Loadout Vehicles
 
-These units represent missiles or payload stored for transport or loading:
+These units are missiles or payloads stored for transport or loading:
 
 | Name            | Type ID          | Notes               |
 | --------------- | ---------------- | ------------------- |

@@ -1,8 +1,8 @@
 # AI Air-to-Air Fighter Configuration
 
-This recipe describes how to configure AI fighter aircraft for air-to-air combat roles by directly editing the mission Lua file. It covers four operational scenarios: Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort.
+This recipe configures AI fighters for air-to-air roles by editing the mission Lua file. It covers Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort.
 
-For dynamic spawning of interceptors in response to player actions, see the [Dynamic Air Intercept Script](air-intercept-script.md). This recipe focuses on static mission file configuration where AI fighters are pre-placed in the mission.
+For dynamic spawning of interceptors in response to player actions, see the [Dynamic Air Intercept Script](air-intercept-script.md). This recipe covers AI fighters placed in the mission file.
 
 ## Overview
 
@@ -93,11 +93,11 @@ Use `FOR_CONTINUOUS_SEARCH` (3) for CAP and sweep missions. Use `FOR_ATTACK_ONLY
 | `RTB_ON_BINGO`       | `true`    | When the group reaches bingo fuel, it refuels from a tanker if one is available, and returns to base if not. `false`: never return for fuel. `2`: at bingo fuel, return to base without looking for a tanker |
 | `RTB_ON_OUT_OF_AMMO` | `0` (off) | [Weapon flags](../scripting/reference/enums/ai.md#weapon-flags) value; RTB when the group runs out of that weapon type, e.g. `264241152` for all air-to-air missiles                                         |
 
-Setting `RTB_ON_BINGO` to `false` and `RTB_ON_OUT_OF_AMMO` to `0` keeps the group fighting instead of heading home. This can make sense when finishing the fight matters more than bringing the aircraft back, such as carrier fighters defending against bombers: if the carrier is lost, they have nowhere to land anyway.
+Setting `RTB_ON_BINGO` to `false` and `RTB_ON_OUT_OF_AMMO` to `0` keeps the group fighting instead of heading home. Use this when finishing the fight matters more than bringing the aircraft back, such as carrier fighters defending against bombers: if the carrier is lost, they have nowhere to land.
 
 ## Combat Air Patrol (CAP)
 
-CAP aircraft orbit a designated zone and engage any hostile aircraft that enter detection range. This is the most common air defense configuration.
+CAP aircraft orbit a zone and engage hostile aircraft that enter detection range. CAP is the most common air defense configuration.
 
 ### Key Components
 
@@ -326,7 +326,7 @@ To restrict engagement to a specific area, use `EngageTargetsInZone` instead of 
 
 ## Fighter Sweep
 
-Fighter sweep aircraft fly a linear route through enemy territory, engaging any hostile aircraft encountered. Unlike CAP, sweep flights do not loiter—they push forward aggressively.
+Fighter sweep aircraft fly a route through enemy territory and engage any hostile aircraft they encounter. Unlike CAP, sweep flights do not loiter in one area; they continue along their route.
 
 ### Key Components
 
@@ -532,7 +532,7 @@ This example creates a 4-ship sweep pushing 150 km into enemy territory.
 
 ## Intercept
 
-Intercept missions send fighters directly at a known threat. Unlike CAP (which waits for targets) or sweep (which searches an area), intercept is a focused attack on a specific group or unit.
+Intercept sends fighters directly at a known group or unit. Unlike CAP, which waits for targets, or sweep, which searches an area, intercept attacks a specific target.
 
 ### Using AttackGroup
 
@@ -623,7 +623,7 @@ end
 
 ## Strike Escort
 
-Escort fighters protect a designated strike package from enemy aircraft. They maintain formation relative to the protected group and engage threats within a specified range.
+Escort fighters protect a strike package from enemy aircraft. They maintain formation relative to the protected group and engage threats within a specified range.
 
 ### Escort Task Structure
 
@@ -792,7 +792,7 @@ Escort fighters protect a designated strike package from enemy aircraft. They ma
 
 ## AI Skill and Difficulty
 
-Air-to-air combat is challenging for most players. A few enemy fighters (2-4 aircraft) provides a meaningful challenge; a dozen will overwhelm even experienced pilots. Bias toward easier encounters to give players room to recover from mistakes.
+Most players find air-to-air combat difficult. Two to four enemy fighters are a fair challenge for a typical group, while a dozen will overwhelm even experienced pilots. Lean toward easier encounters so players have room to recover from mistakes.
 
 ### Skill Levels
 
@@ -803,7 +803,7 @@ Air-to-air combat is challenging for most players. A few enemy fighters (2-4 air
 | High      | Aggressive, accurate          | Challenging opponents |
 | Excellent | Expert-level performance      | Elite enemy aces      |
 
-Avoid the "Random" skill level—it can produce erratic behavior. Mixing skill levels within a flight (e.g., lead at High, wingmen at Good) creates natural variety.
+Avoid the "Random" skill level; it can produce erratic behavior. Mix skill levels within a flight (for example, lead at High, wingmen at Good) for variety.
 
 ### Flight Size Guidelines
 
@@ -840,7 +840,7 @@ To get weapon CLSIDs for the `pylons` table:
 Alternatively, examine loadout `.lua` files in:
 `Saved Games\DCS\MissionEditor\UnitPayloads\`
 
-The [Dynamic Air Intercept Script](air-intercept-script.md) contains example CLSID configurations for MiG-29A and Su-27 loadouts that can be adapted.
+The [Dynamic Air Intercept Script](air-intercept-script.md) recipe contains example CLSID configurations for MiG-29A and Su-27 loadouts.
 
 ## Checklist
 

@@ -1,6 +1,6 @@
 # DCS World Aircraft
 
-This document provides comprehensive information about all aircraft in DCS World, including identification, available tasks, hardpoints, and compatible weapons.
+This document covers DCS World aircraft: identification, tasks, hardpoints, and compatible weapons.
 
 ## Aircraft Index
 

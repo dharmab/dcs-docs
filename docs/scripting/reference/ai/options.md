@@ -5,8 +5,6 @@ Options configure AI behavior settings. They are set using `controller:setOption
 - `optionId` identifies **which option** to change. Constants under `AI.Option.<domain>.id` are numeric IDs.
 - `value` specifies **the setting** for that option. Depending on the option, this is a boolean (`true` or `false`), an enum value, or another number.
 
-The `AI.Option.<domain>.id.<option> = number` snippets below document existing ID constants; they are not assignments you need to execute or examples of setting an option.
-
 ```lua
 controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_FREE)
 ```
@@ -21,9 +19,7 @@ The calls in each example block show alternative settings: choose the one you ne
 
 The `ROE` option controls when AI aircraft will engage targets.
 
-```lua
-AI.Option.Air.id.ROE = 0
-```
+**ID:** `AI.Option.Air.id.ROE` (`0`)
 
 Values in `AI.Option.Air.val.ROE`:
 
@@ -47,9 +43,7 @@ controller:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.WEAPON_HOLD)   
 
 The `REACTION_ON_THREAT` option defines how aircraft respond to threats.
 
-```lua
-AI.Option.Air.id.REACTION_ON_THREAT = 1
-```
+**ID:** `AI.Option.Air.id.REACTION_ON_THREAT` (`1`)
 
 Values in `AI.Option.Air.val.REACTION_ON_THREAT`:
 
@@ -77,9 +71,7 @@ controller:setOption(AI.Option.Air.id.REACTION_ON_THREAT, 5) -- AAA_EVADE_FIRE: 
 
 The `RADAR_USING` option controls radar usage.
 
-```lua
-AI.Option.Air.id.RADAR_USING = 3
-```
+**ID:** `AI.Option.Air.id.RADAR_USING` (`3`)
 
 Values in `AI.Option.Air.val.RADAR_USING`:
 
@@ -101,9 +93,7 @@ controller:setOption(AI.Option.Air.id.RADAR_USING, AI.Option.Air.val.RADAR_USING
 
 The `FLARE_USING` option controls flare and chaff deployment.
 
-```lua
-AI.Option.Air.id.FLARE_USING = 4
-```
+**ID:** `AI.Option.Air.id.FLARE_USING` (`4`)
 
 Values in `AI.Option.Air.val.FLARE_USING`:
 
@@ -127,9 +117,7 @@ controller:setOption(AI.Option.Air.id.FLARE_USING, AI.Option.Air.val.FLARE_USING
 
 The `Formation` option sets the flight formation. The value is a formation index number.
 
-```lua
-AI.Option.Air.id.Formation = 5
-```
+**ID:** `AI.Option.Air.id.Formation` (`5`)
 
 ### RTB_ON_BINGO
 
@@ -158,8 +146,9 @@ The ID `6` goes in the first argument; the setting goes in the second. Use `true
 
 The `SILENCE` option disables radio communications. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.SILENCE` (`7`)
+
 ```lua
--- Option ID: 7
 controller:setOption(AI.Option.Air.id.SILENCE, true)  -- Disable radio communications
 controller:setOption(AI.Option.Air.id.SILENCE, false) -- Allow radio communications
 ```
@@ -168,8 +157,9 @@ controller:setOption(AI.Option.Air.id.SILENCE, false) -- Allow radio communicati
 
 The `RTB_ON_OUT_OF_AMMO` option sends the group home when it runs out of a type of weapon. The value is a weapon flags number (see [Weapon Flags](../enums/ai.md#weapon-flags)) naming the weapon type the group needs to keep fighting, from `0` (off, the default) to `4294967295` (all weapons).
 
+**ID:** `AI.Option.Air.id.RTB_ON_OUT_OF_AMMO` (`10`)
+
 ```lua
--- Option ID: 10
 controller:setOption(AI.Option.Air.id.RTB_ON_OUT_OF_AMMO, 0)          -- Off (default)
 controller:setOption(AI.Option.Air.id.RTB_ON_OUT_OF_AMMO, 4294967295) -- RTB when out of all weapons
 ```
@@ -178,9 +168,7 @@ controller:setOption(AI.Option.Air.id.RTB_ON_OUT_OF_AMMO, 4294967295) -- RTB whe
 
 The `ECM_USING` option controls ECM (Electronic Counter Measures) usage.
 
-```lua
-AI.Option.Air.id.ECM_USING = 13
-```
+**ID:** `AI.Option.Air.id.ECM_USING` (`13`)
 
 Values in `AI.Option.Air.val.ECM_USING`:
 
@@ -202,8 +190,9 @@ controller:setOption(AI.Option.Air.id.ECM_USING, AI.Option.Air.val.ECM_USING.ALW
 
 The `PROHIBIT_AA` option prohibits air-to-air attacks. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.PROHIBIT_AA` (`14`)
+
 ```lua
--- Option ID: 14
 controller:setOption(AI.Option.Air.id.PROHIBIT_AA, true)  -- Prohibit air-to-air attacks
 controller:setOption(AI.Option.Air.id.PROHIBIT_AA, false) -- Allow air-to-air attacks
 ```
@@ -212,8 +201,9 @@ controller:setOption(AI.Option.Air.id.PROHIBIT_AA, false) -- Allow air-to-air at
 
 The `PROHIBIT_JETT` option prohibits jettisoning stores. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.PROHIBIT_JETT` (`15`)
+
 ```lua
--- Option ID: 15
 controller:setOption(AI.Option.Air.id.PROHIBIT_JETT, true)  -- Prohibit jettisoning stores
 controller:setOption(AI.Option.Air.id.PROHIBIT_JETT, false) -- Allow jettisoning stores
 ```
@@ -222,8 +212,9 @@ controller:setOption(AI.Option.Air.id.PROHIBIT_JETT, false) -- Allow jettisoning
 
 The `PROHIBIT_AB` option prohibits afterburner use. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.PROHIBIT_AB` (`16`)
+
 ```lua
--- Option ID: 16
 controller:setOption(AI.Option.Air.id.PROHIBIT_AB, true)  -- Prohibit afterburner use
 controller:setOption(AI.Option.Air.id.PROHIBIT_AB, false) -- Allow afterburner use
 ```
@@ -232,8 +223,9 @@ controller:setOption(AI.Option.Air.id.PROHIBIT_AB, false) -- Allow afterburner u
 
 The `PROHIBIT_AG` option prohibits air-to-ground attacks. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.PROHIBIT_AG` (`17`)
+
 ```lua
--- Option ID: 17
 controller:setOption(AI.Option.Air.id.PROHIBIT_AG, true)  -- Prohibit air-to-ground attacks
 controller:setOption(AI.Option.Air.id.PROHIBIT_AG, false) -- Allow air-to-ground attacks
 ```
@@ -242,9 +234,7 @@ controller:setOption(AI.Option.Air.id.PROHIBIT_AG, false) -- Allow air-to-ground
 
 The `MISSILE_ATTACK` option controls missile launch range behavior.
 
-```lua
-AI.Option.Air.id.MISSILE_ATTACK = 18
-```
+**ID:** `AI.Option.Air.id.MISSILE_ATTACK` (`18`)
 
 Values in `AI.Option.Air.val.MISSILE_ATTACK`:
 
@@ -268,8 +258,9 @@ controller:setOption(AI.Option.Air.id.MISSILE_ATTACK, AI.Option.Air.val.MISSILE_
 
 The `PROHIBIT_WP_PASS_REPORT` option disables waypoint passage radio calls. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.PROHIBIT_WP_PASS_REPORT` (`19`)
+
 ```lua
--- Option ID: 19
 controller:setOption(AI.Option.Air.id.PROHIBIT_WP_PASS_REPORT, true)  -- Disable waypoint passage radio calls
 controller:setOption(AI.Option.Air.id.PROHIBIT_WP_PASS_REPORT, false) -- Allow waypoint passage radio calls
 ```
@@ -278,8 +269,9 @@ controller:setOption(AI.Option.Air.id.PROHIBIT_WP_PASS_REPORT, false) -- Allow w
 
 The `JETT_TANKS_IF_EMPTY` option causes the aircraft to jettison external fuel tanks when empty. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.JETT_TANKS_IF_EMPTY` (`25`)
+
 ```lua
--- Option ID: 25
 controller:setOption(AI.Option.Air.id.JETT_TANKS_IF_EMPTY, true)  -- Enable jettisoning empty external tanks
 controller:setOption(AI.Option.Air.id.JETT_TANKS_IF_EMPTY, false) -- Disable jettisoning empty external tanks
 ```
@@ -288,8 +280,9 @@ controller:setOption(AI.Option.Air.id.JETT_TANKS_IF_EMPTY, false) -- Disable jet
 
 The `FORCED_ATTACK` option forces the AI to continue attacking regardless of threats. The value is a boolean.
 
+**ID:** `AI.Option.Air.id.FORCED_ATTACK` (`26`)
+
 ```lua
--- Option ID: 26
 controller:setOption(AI.Option.Air.id.FORCED_ATTACK, true)  -- Enable forced attack despite threats
 controller:setOption(AI.Option.Air.id.FORCED_ATTACK, false) -- Disable forced attack
 ```
@@ -298,8 +291,9 @@ controller:setOption(AI.Option.Air.id.FORCED_ATTACK, false) -- Disable forced at
 
 The `PREFER_VERTICAL` option is for helicopters. When `true`, helicopters take off and land vertically where possible, instead of making rolling takeoffs and landings like an airplane. The value is a boolean and defaults to `false`.
 
+**ID:** `AI.Option.Air.id.PREFER_VERTICAL` (`32`)
+
 ```lua
--- Option ID: 32
 controller:setOption(AI.Option.Air.id.PREFER_VERTICAL, true)  -- Take off and land vertically when possible
 controller:setOption(AI.Option.Air.id.PREFER_VERTICAL, false) -- Use normal rolling takeoffs and landings
 ```
@@ -308,8 +302,9 @@ controller:setOption(AI.Option.Air.id.PREFER_VERTICAL, false) -- Use normal roll
 
 The `ALLOW_FORMATION_SIDE_SWAP` option allows wingmen to switch formation sides when the leader turns. The value is a boolean and defaults to `true`.
 
+**ID:** `AI.Option.Air.id.ALLOW_FORMATION_SIDE_SWAP` (`35`)
+
 ```lua
--- Option ID: 35
 controller:setOption(AI.Option.Air.id.ALLOW_FORMATION_SIDE_SWAP, true)  -- Allow wingmen to switch formation sides
 controller:setOption(AI.Option.Air.id.ALLOW_FORMATION_SIDE_SWAP, false) -- Prevent wingmen from switching formation sides
 ```
@@ -362,9 +357,7 @@ controller:setOption(38, 1)
 
 The `ROE` option for ground units controls when they will engage targets.
 
-```lua
-AI.Option.Ground.id.ROE = 0
-```
+**ID:** `AI.Option.Ground.id.ROE` (`0`)
 
 Values in `AI.Option.Ground.val.ROE`:
 
@@ -386,9 +379,7 @@ Ground and naval units default to `0`, which is `AI.Option.Air.val.ROE.WEAPON_FR
 
 The `ALARM_STATE` option sets the group's alert level.
 
-```lua
-AI.Option.Ground.id.ALARM_STATE = 9
-```
+**ID:** `AI.Option.Ground.id.ALARM_STATE` (`9`)
 
 Values in `AI.Option.Ground.val.ALARM_STATE`:
 
@@ -409,18 +400,20 @@ controller:setOption(AI.Option.Ground.id.ALARM_STATE, AI.Option.Ground.val.ALARM
 
 The `DISPERSE_ON_ATTACK` option lets ground units scatter when attacked from the air. The value is how long the units stay dispersed, in seconds. The default is `600`; `0` turns dispersal off.
 
+**ID:** `AI.Option.Ground.id.DISPERSE_ON_ATTACK` (`8`)
+
 ```lua
--- Option ID: 8
 controller:setOption(AI.Option.Ground.id.DISPERSE_ON_ATTACK, 600) -- Disperse for 10 minutes when attacked
 controller:setOption(AI.Option.Ground.id.DISPERSE_ON_ATTACK, 0)   -- Never disperse
 ```
 
 ### ENGAGE_AIR_WEAPONS
 
-The `ENGAGE_AIR_WEAPONS` option lets air defense shoot at weapons in flight, such as missiles and bombs, not only at aircraft. The value is a boolean and defaults to `true`. It applies to vehicles and ships.
+The `ENGAGE_AIR_WEAPONS` option lets air defense shoot at weapons in flight, such as missiles and bombs, as well as aircraft. The value is a boolean and defaults to `true`. It applies to vehicles and ships.
+
+**ID:** `AI.Option.Ground.id.ENGAGE_AIR_WEAPONS` (`20`)
 
 ```lua
--- Option ID: 20
 controller:setOption(AI.Option.Ground.id.ENGAGE_AIR_WEAPONS, true)  -- Enable engagement of airborne weapons
 controller:setOption(AI.Option.Ground.id.ENGAGE_AIR_WEAPONS, false) -- Disable engagement of airborne weapons
 ```
@@ -429,16 +422,15 @@ controller:setOption(AI.Option.Ground.id.ENGAGE_AIR_WEAPONS, false) -- Disable e
 
 The `AC_ENGAGEMENT_RANGE_RESTRICTION` option limits the engagement range for air defense units. The value is a percentage of maximum range from 0 to 100, defaulting to 100. It applies to vehicles and ships.
 
-```lua
-AI.Option.Ground.id.AC_ENGAGEMENT_RANGE_RESTRICTION = 24
-```
+**ID:** `AI.Option.Ground.id.AC_ENGAGEMENT_RANGE_RESTRICTION` (`24`)
 
 ### EVASION_OF_ARM
 
 The `EVASION_OF_ARM` option controls SAM behavior when targeted by anti-radiation missiles. The value is a boolean and defaults to `true`; when true, the unit shuts down its radar when an anti-radiation missile is detected.
 
+**ID:** `AI.Option.Ground.id.EVASION_OF_ARM` (`31`)
+
 ```lua
--- Option ID: 31
 controller:setOption(AI.Option.Ground.id.EVASION_OF_ARM, true)  -- Enable radar shutdown in response to anti-radiation missiles
 controller:setOption(AI.Option.Ground.id.EVASION_OF_ARM, false) -- Disable this radar-shutdown behavior
 ```
@@ -480,9 +472,7 @@ controller:setOption(30, 50)
 
 The `ROE` option for naval units controls when they will engage targets.
 
-```lua
-AI.Option.Naval.id.ROE = 0
-```
+**ID:** `AI.Option.Naval.id.ROE` (`0`)
 
 Values in `AI.Option.Naval.val.ROE`:
 

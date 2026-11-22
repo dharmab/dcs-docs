@@ -1,6 +1,6 @@
 # Sea Units
 
-This document describes the naval units available in DCS World, organized by vessel class. Each entry includes the DCS display name, type ID for mission files, operational role, and real-world background.
+This document lists DCS World naval units by vessel class. Each entry contains the DCS display name, the mission file type ID, the role, and real-world background.
 
 ## Ship Classifications
 
