@@ -1,6 +1,6 @@
 # Carrier Strike Group Setup
 
-This recipe describes how to create a U.S. Navy Carrier Strike Group (CSG) by directly editing the mission Lua file. The CSG will feature the CVN-74 John C. Stennis as the centerpiece, escorted by Ticonderoga-class cruisers, Arleigh Burke-class destroyers, and a plane guard rescue helicopter.
+This recipe creates a U.S. Navy Carrier Strike Group (CSG) by editing the mission Lua file. The CSG is built around the CVN-74 John C. Stennis, escorted by Ticonderoga-class cruisers, Arleigh Burke-class destroyers, and a plane guard rescue helicopter.
 
 ## Overview
 
@@ -11,7 +11,7 @@ A typical CSG consists of:
 - **2-3 Arleigh Burke-class Destroyers** - DDG Arleigh Burke IIa (`USS_Arleigh_Burke_IIa`)
 - **1 Rescue Helicopter** - UH-60A Black Hawk (`UH-60A`) with "Golden Angels" livery
 
-The carrier should be at the formation center with escorts positioned 5-12 nautical miles (9-22 km) around it.
+The carrier should be at the center of the formation, with escorts positioned 5-12 nautical miles (9-22 km) around it.
 
 ## Unit Type Strings
 
@@ -22,11 +22,11 @@ The carrier should be at the formation center with escorts positioned 5-12 nauti
 | DDG Arleigh Burke IIa  | `USS_Arleigh_Burke_IIa` | -               |
 | UH-60A Black Hawk      | `UH-60A`                | `Golden Angels` |
 
-> **Note:** The Stennis is recommended because it is freely available to all DCS users without requiring the Supercarrier DLC.
+> **Note:** The Stennis is recommended because it is free to all DCS users and does not require the Supercarrier DLC.
 
 ## Wind and Course Calculation
 
-Aircraft carriers must steam into the wind during flight operations to maximize wind over deck (WOD) for safe launch and recovery. The effective WOD should be approximately **30 knots (15.4 m/s)**.
+Carriers steam into the wind during flight operations to maximize wind over deck (WOD) for safe launch and recovery. The WOD should be about **30 knots (15.4 m/s)**.
 
 ### Formula
 
@@ -106,7 +106,7 @@ Ships are placed in `coalition.[side].country[n].ship.group`. Each ship group co
 
 ## Complete CSG Group Definition
 
-The following example places a CSG with the carrier at position (x, y) with escorts surrounding it. All ships share the same route to maintain formation.
+This example places the carrier at (x, y) with escorts around it. All ships share the same route to hold formation.
 
 ```lua
 [1] = {
@@ -188,7 +188,7 @@ The following example places a CSG with the carrier at position (x, y) with esco
 
 ## Route Configuration
 
-The carrier group needs a looped route with the longest leg oriented into the wind for flight operations. The route should form a racetrack or box pattern.
+The carrier group needs a looped route, such as a racetrack or box, with the longest leg oriented into the wind.
 
 ### Waypoint Structure
 
@@ -298,7 +298,7 @@ Configure TACAN, ICLS, and radio frequency as waypoint tasks on the first waypoi
 
 ### TACAN Configuration
 
-The TACAN beacon allows aircraft to navigate to the carrier. Use channel **71X** (matching CVN-71's convention, easily memorable).
+Aircraft use the carrier's TACAN beacon to find the ship. TACAN shows the bearing and distance to the carrier. Use channel **71X**, following the CVN-71 convention.
 
 TACAN frequency calculation for channel 71X:
 
@@ -331,7 +331,7 @@ TACAN frequency calculation for channel 71X:
 
 ### ICLS Configuration
 
-The Instrument Carrier Landing System provides glideslope and localizer guidance. Use channel **11**.
+The Instrument Carrier Landing System (ICLS) provides glideslope and localizer guidance. ICLS channels range from 1 to 20; this recipe uses channel **11**.
 
 ```lua
 {
@@ -353,7 +353,7 @@ The Instrument Carrier Landing System provides glideslope and localizer guidance
 
 ### Radio Frequency Configuration
 
-Set an easily tuned AM frequency for ATC communications. **127.5 MHz** is a common, easy-to-remember frequency.
+Set an easily tuned AM frequency for ATC. **127.5 MHz** is common and easy to remember.
 
 ```lua
 {
@@ -490,7 +490,7 @@ The following diagram illustrates escort positioning relative to the carrier:
 
 ## Rescue Helicopter (Plane Guard)
 
-During flight operations, a rescue helicopter maintains station on the carrier's port side to recover aircrew in case of a mishap. Per NAVAIR 00-80T-105, during recovery of aircraft with forward-firing ordnance, the plane guard helicopter shall not be positioned on the starboard side from 360° to 090° relative bearing within 5 nm of the carrier.
+During flight operations, a rescue helicopter holds station on the carrier's port side to recover aircrew in case of a mishap. Per NAVAIR 00-80T-105, during recovery of aircraft with forward-firing ordnance, the plane guard helicopter shall not be positioned on the starboard side from 360° to 090° relative bearing within 5 nm of the carrier.
 
 ### Helicopter Position
 
@@ -502,9 +502,9 @@ The rescue helicopter should maintain:
 
 ### Following the Carrier
 
-DCS does not have a native "follow ship" task for helicopters. To make the rescue helicopter follow the carrier, create a helicopter group with waypoints that mirror the carrier's route, offset to the port side. The helicopter must fly at the same speed as the carrier group.
+DCS does not have a "follow ship" task for helicopters. To make the rescue helicopter follow the carrier, create a helicopter group whose waypoints mirror the carrier's route, offset to the port side. The helicopter must fly at the same speed as the carrier group.
 
-Since the helicopter will be airborne for the duration of flight operations (potentially hours), it must have **unlimited fuel** enabled via a `SetUnlimitedFuel` command on its first waypoint.
+The helicopter stays airborne for the whole of flight operations, which can last hours, so it needs a `SetUnlimitedFuel` command on its first waypoint.
 
 ### Helicopter Group Definition
 
@@ -522,8 +522,8 @@ Place the helicopter group in `coalition.[side].country[n].helicopter.group`:
             ["name"] = "Angel 1",
             ["type"] = "UH-60A",
             ["skill"] = "Excellent",
-            ["x"] = -200000 + 141,         -- 200m ahead (at 45° heading)
-            ["y"] = 500000 - 341,          -- 200m port + 200m ahead offset
+            ["x"] = -200000 + 283,         -- 200m ahead + 200m port (at 45° heading)
+            ["y"] = 500000,
             ["alt"] = 70,
             ["alt_type"] = "RADIO",
             ["speed"] = 5.4,               -- Match carrier speed
@@ -546,8 +546,8 @@ Place the helicopter group in `coalition.[side].country[n].helicopter.group`:
             },
         },
     },
-    ["x"] = -200000 + 141,
-    ["y"] = 500000 - 341,
+    ["x"] = -200000 + 283,
+    ["y"] = 500000,
     ["communication"] = true,
     ["frequency"] = 127.5,
     ["modulation"] = 0,
@@ -562,41 +562,22 @@ Place the helicopter group in `coalition.[side].country[n].helicopter.group`:
 
 ### Helicopter Route Waypoints
 
-Each waypoint must mirror the carrier's waypoints with the port-side offset applied. The offset depends on the carrier's heading at each waypoint.
+Each helicopter waypoint is the matching carrier waypoint plus a port-side offset. The offset depends on the carrier's heading at that waypoint.
 
-For a carrier heading of 045° (northeast into the wind), the port offset of 200m translates to:
+**Offset Formula:**
 
-- X offset: +141m (200 × cos(45°) for ahead) + (-141m for port) = 0m net, but we want ahead+port
-- Y offset: +141m (200 × sin(45°) for ahead) + (-141m for port side)
-
-**Offset Calculation Formula:**
-
-For a given carrier waypoint at (x, y) with heading θ (radians), and desired offset of `ahead` meters forward and `port` meters to port:
+`x` is north and `y` is east. For a carrier waypoint at (x, y) with heading θ (radians, clockwise from north), an offset of `ahead` meters forward and `port` meters to port is:
 
 ```
-helo_x = carrier_x + (ahead × cos(θ)) - (port × sin(θ))
-helo_y = carrier_y + (ahead × sin(θ)) + (port × cos(θ))
+helo_x = carrier_x + (ahead × cos(θ)) + (port × sin(θ))
+helo_y = carrier_y + (ahead × sin(θ)) - (port × cos(θ))
 ```
 
-For 200m ahead and 200m port at 45° heading:
+At heading 045°, the forward vector is (0.707, 0.707) (northeast) and the port vector is (0.707, -0.707) (northwest). For 200 m ahead and 200 m port:
 
 ```
-helo_x = carrier_x + (200 × 0.707) - (200 × 0.707) = carrier_x
-helo_y = carrier_y + (200 × 0.707) + (200 × 0.707) = carrier_y + 283
-```
-
-Wait—port side at 045° heading means we go to the aircraft's left, which is northwest. Let's recalculate:
-
-At heading 045°:
-
-- Forward vector: (cos(45°), sin(45°)) = (0.707, 0.707)
-- Port vector (90° left of heading): (cos(135°), sin(135°)) = (-0.707, 0.707)
-
-For 200m ahead and 200m port:
-
-```
-helo_x = carrier_x + 200×0.707 + 200×(-0.707) = carrier_x
-helo_y = carrier_y + 200×0.707 + 200×0.707 = carrier_y + 283
+helo_x = carrier_x + 200×0.707 + 200×0.707 = carrier_x + 283
+helo_y = carrier_y + 200×0.707 - 200×0.707 = carrier_y
 ```
 
 ### Complete Helicopter Waypoint Example
@@ -611,8 +592,8 @@ helo_y = carrier_y + 200×0.707 + 200×0.707 = carrier_y + 283
             ["alt_type"] = "RADIO",
             ["type"] = "Turning Point",
             ["action"] = "Turning Point",
-            ["x"] = -200000,              -- Same X (offset cancels out at 45°)
-            ["y"] = 500000 + 283,         -- 283m port-forward offset
+            ["x"] = -200000 + 283,        -- 200m ahead + 200m port
+            ["y"] = 500000,               -- Same Y (offset cancels out at 45°)
             ["speed"] = 5.4,
             ["speed_locked"] = true,
             ["ETA"] = 0,
@@ -645,8 +626,8 @@ helo_y = carrier_y + 200×0.707 + 200×0.707 = carrier_y + 283
             ["alt_type"] = "RADIO",
             ["type"] = "Turning Point",
             ["action"] = "Turning Point",
-            ["x"] = -200000 + 65000,
-            ["y"] = 500000 + 65000 + 283,
+            ["x"] = -200000 + 65000 + 283,
+            ["y"] = 500000 + 65000,
             ["speed"] = 5.4,
             ["speed_locked"] = true,
             ["ETA"] = 0,
@@ -666,7 +647,7 @@ helo_y = carrier_y + 200×0.707 + 200×0.707 = carrier_y + 283
 
 ### Alternative: MOOSE Framework
 
-For dynamic rescue helicopter behavior that automatically follows the carrier regardless of its movements, consider using the MOOSE framework's `RESCUEHELO` class. This Lua script can be loaded via a mission trigger and provides:
+For a rescue helicopter that follows the carrier wherever it goes, consider the MOOSE framework's `RESCUEHELO` class, loaded by a mission trigger. It provides:
 
 - Automatic station-keeping relative to the carrier
 - Configurable altitude and offset

@@ -1,8 +1,8 @@
 # AI Tasks
 
-The AI control system allows scripts to direct AI behavior through tasks, commands, and options. These are issued through the Controller object obtained from groups or units.
+Scripts direct AI with tasks, commands, and options, issued through a group's or unit's Controller.
 
-Tasks that accept coordinate parameters (such as `Orbit`, `Bombing`, `CarpetBombing`, `FireAtPoint`, `Land`, and `EngageTargetsInZone`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When constructing tasks with dynamically calculated positions, validate that coordinates remain within reasonable bounds before issuing the task.
+Tasks that accept coordinate parameters (such as `Orbit`, `Bombing`, `CarpetBombing`, `FireAtPoint`, `Land`, and `EngageTargetsInZone`) may fail or return wrong results for coordinates outside the map. Check computed positions are in bounds before issuing the task.
 
 ## Overview
 
@@ -12,7 +12,7 @@ AI behavior is controlled through three mechanisms:
 - **Commands** are instant actions that execute immediately (set frequency, activate beacon, etc.). They do not enter the task queue.
 - **Options** configure AI behavior settings (ROE, reaction to threat, formation, etc.).
 
-Tasks are issued via `controller:setTask()`, `controller:pushTask()`, or `controller:popTask()`. Commands use `controller:setCommand()`. Options use `controller:setOption()`. After spawning a group with `coalition.addGroup()`, you must add a delay before issuing tasks to the controller, because issuing tasks immediately after spawning can crash the game. Use `timer.scheduleFunction()` to delay by at least 1 second.
+Tasks are issued via `controller:setTask()`, `controller:pushTask()`, or `controller:popTask()`. Commands use `controller:setCommand()`. Options use `controller:setOption()`. After `coalition.addGroup()`, wait at least 1 second (with `timer.scheduleFunction()`) before issuing tasks; tasking immediately after spawning can crash the game.
 
 ## Task Structure
 
@@ -39,7 +39,7 @@ Tasks are divided into:
 
 ### ComboTask
 
-The `ComboTask` wrapper is a container that holds multiple tasks to be executed in sequence. This is the default task format used by the Mission Editor for groups with multiple waypoint tasks.
+The `ComboTask` wrapper contains tasks that run in sequence. The Mission Editor uses it for waypoints with multiple tasks.
 
 ```lua
 local combo = {
@@ -54,7 +54,7 @@ local combo = {
 }
 ```
 
-The `tasks` field contains an array of task definitions that will be executed in order.
+The `tasks` field is an array of tasks, run in order.
 
 ### ControlledTask
 
@@ -84,7 +84,16 @@ local controlled = {
 }
 ```
 
-The `task` field contains the inner task to be controlled. The `condition` field contains start conditions that are evaluated once when the task is reached: `time` specifies a mission time in seconds, `condition` contains Lua code returning true or false, `userFlag` specifies a flag name to check, `userFlagValue` specifies the expected flag value, and `probability` specifies a 0-100 chance of execution. The `stopCondition` field contains stop conditions that are evaluated continuously: `duration` specifies seconds to run before stopping, and `lastWaypoint` specifies the waypoint index at which to stop.
+- `task` (table): The inner task.
+- `condition` (table): Start conditions, checked once when the task is reached.
+  - `time` (number): Mission time in seconds.
+  - `condition` (string): Lua code that returns true or false.
+  - `userFlag` (string): Flag name to check.
+  - `userFlagValue` (boolean): Expected flag value.
+  - `probability` (number): Chance of running, 0-100.
+- `stopCondition` (table): Stop conditions, checked continuously. Takes the same `time`, `condition`, `userFlag`, and `userFlagValue` fields, plus:
+  - `duration` (number): Seconds to run before stopping.
+  - `lastWaypoint` (number): Waypoint index at which to stop.
 
 ```lua
 -- Task with 70% chance that runs for 15 minutes
@@ -130,7 +139,7 @@ local wrapped = {
 }
 ```
 
-The `action` field contains the command or option to be wrapped.
+The `action` field is the command or option to be wrapped.
 
 ## Main Tasks
 
@@ -159,7 +168,16 @@ local orbit = {
 }
 ```
 
-The `pattern` field specifies the orbit pattern: "Circle", "Race-Track", or "Anchored". The `point` field contains the center point as a Vec2; if omitted, the aircraft uses the current waypoint. The `point2` field specifies a second point for Race-Track patterns. The `speed` field specifies the orbit speed in meters per second; if omitted, the aircraft defaults to approximately 1.5 times its stall speed. The `altitude` field specifies the orbit altitude in meters. For the Anchored pattern only, the `hotLegDir` field specifies the heading in radians for the return leg, the `legLength` field specifies the distance in meters before turning, the `width` field specifies the orbit diameter in meters, and the `clockWise` field specifies whether to orbit clockwise (defaults to false).
+- `pattern` (string): `"Circle"`, `"Race-Track"`, or `"Anchored"`.
+- `point` (Vec2): Center point. If omitted, the aircraft uses the current waypoint.
+- `point2` (Vec2): Second point for Race-Track.
+- `speed` (number): Orbit speed in m/s. If omitted, about 1.5 times stall speed.
+- `altitude` (number): Orbit altitude in meters.
+- Anchored only:
+  - `hotLegDir` (number): Return leg heading in radians.
+  - `legLength` (number): Leg length in meters before turning.
+  - `width` (number): Orbit diameter in meters.
+  - `clockWise` (boolean): Orbit clockwise. Defaults to `false`.
 
 ```lua
 local orbit = {
@@ -196,7 +214,13 @@ local attack = {
 }
 ```
 
-The `unitId` field is required and contains the unique numeric identifier of the target unit; call `unit:getID()` on a Unit object to obtain this value. The `weaponType` field specifies a [weapon flags](../enums/ai.md#weapon-flags) bitmask. The `expend` field specifies how much ordnance to use per pass. The `direction` field is the ingress heading in radians: the course the group flies toward the target on its attack run. It takes effect only when `directionEnabled` is `true`. The `attackQtyLimit` field enables limiting the number of attack passes. The `attackQty` field specifies how many attack passes to make when `attackQtyLimit` is true. The `groupAttack` field, when set to true, causes all aircraft in the group to attack the same target simultaneously; use this when attacking heavily defended targets like ships that require multiple simultaneous hits.
+- `unitId` (number): Required. The target unit's ID, from `unit:getID()`.
+- `weaponType` (number): A [weapon flags](../enums/ai.md#weapon-flags) bitmask.
+- `expend` (string): How much ordnance to use per pass.
+- `direction` (number): Ingress heading in radians, the course flown toward the target on the attack run. Used only when `directionEnabled` is `true`.
+- `attackQtyLimit` (boolean): Limit the number of attack passes.
+- `attackQty` (number): Number of attack passes when `attackQtyLimit` is `true`.
+- `groupAttack` (boolean): All aircraft in the group attack the same target at once. Use for heavily defended targets, such as ships, that need simultaneous hits.
 
 ```lua
 local attack = {
@@ -231,7 +255,7 @@ local attack = {
 }
 ```
 
-The `groupId` field is required and contains the unique numeric identifier of the target group; call `group:getID()` on a Group object to obtain this value. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task. The `groupAttack` field works the same as in `AttackUnit`.
+The required `groupId` field is the target group's ID, from `group:getID()`. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, `attackQty`, and `groupAttack` fields work as in `AttackUnit`.
 
 ### Bombing
 
@@ -255,7 +279,7 @@ local bomb = {
 }
 ```
 
-The `point` field is required and contains the target coordinates as a Vec2. The `altitude` field specifies the attack altitude in meters. The `attackType` field specifies the attack profile, such as "Dive" for dive bombing or horizontal for level bombing. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work the same as in the `AttackUnit` task.
+The required `point` field is the target position as a Vec2. The `altitude` field is the attack altitude in meters. The `attackType` field is the attack profile, such as "Dive" for dive bombing or horizontal for level bombing. The `weaponType`, `expend`, `direction`, `attackQtyLimit`, and `attackQty` fields work as in `AttackUnit`.
 
 ### BombingRunway
 
@@ -275,7 +299,7 @@ local bomb = {
 }
 ```
 
-The `runwayId` field contains the airbase ID. The `weaponType`, `expend`, and `direction` fields work the same as in the `AttackUnit` task.
+The `runwayId` field is the airbase ID. The `weaponType`, `expend`, and `direction` fields work as in `AttackUnit`.
 
 ### CarpetBombing
 
@@ -297,7 +321,7 @@ local carpet = {
 }
 ```
 
-The `point` field contains the start point as a Vec2. The `carpetLength` field specifies the length of the carpet in meters. The `weaponType`, `expend`, `direction`, and `attackQty` fields work the same as in the `AttackUnit` task.
+The `point` field is the start point as a Vec2. The `carpetLength` field is the length of the carpet in meters. The `weaponType`, `expend`, `direction`, and `attackQty` fields work as in `AttackUnit`.
 
 ### Escort
 
@@ -319,7 +343,7 @@ local escort = {
 }
 ```
 
-The `groupId` field contains the ID of the group to escort. The `engagementDistMax` field specifies the maximum engagement range in meters. The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `pos` field specifies the position offset from the escorted group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the escort task ends.
+The `groupId` field is the ID of the group to escort. The `engagementDistMax` field is the maximum engagement range in meters. The `targetTypes` field is an array of attribute names specifying which target types to engage. The `pos` field is the position offset from the escorted group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the escort task ends.
 
 ### Follow
 
@@ -339,7 +363,7 @@ local follow = {
 }
 ```
 
-The `groupId` field contains the ID of the group to follow. The `pos` field specifies the position offset from the followed group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the follow task ends.
+The `groupId` field is the ID of the group to follow. The `pos` field is the position offset from the followed group as a Vec3. The `lastWptIndexFlag` and `lastWptIndex` fields control when the follow task ends.
 
 ### GoToWaypoint
 
@@ -357,7 +381,7 @@ local goto = {
 }
 ```
 
-The `fromWaypointIndex` field specifies the starting waypoint index. The `goToWaypointIndex` field specifies the destination waypoint index.
+The `fromWaypointIndex` field is the starting waypoint index. The `goToWaypointIndex` field is the destination waypoint index.
 
 ### Hold
 
@@ -390,7 +414,7 @@ local fire = {
 }
 ```
 
-The `point` field contains the target coordinates as a Vec2. The `radius` field specifies the dispersion radius in meters. The `expendQty` field specifies how many rounds to fire when `expendQtyEnabled` is true.
+The `point` field is the target coordinates as a Vec2. The `radius` field is the dispersion radius in meters. The `expendQty` field sets how many rounds to fire when `expendQtyEnabled` is true.
 
 Mission files store the target as `x` and `y` params instead of `point`, and the radius as `zoneRadius`. Setting both forms is safe:
 
@@ -427,7 +451,7 @@ local land = {
 }
 ```
 
-The `point` field contains the landing point as a Vec2. The `duration` field specifies how long to stay on the ground, in seconds, when `durationFlag` is true. The default is 300.
+The `point` field is the landing point as a Vec2. The `duration` field sets how long to stay on the ground, in seconds, when `durationFlag` is true. The default is 300.
 
 Mission files store the landing point as `x` and `y` params instead of `point`.
 
@@ -450,7 +474,7 @@ local recovery = {
 }
 ```
 
-The `groupId` field contains the carrier group ID. The `speed` field specifies the tanker's orbit speed. The `altitude` field specifies the orbit altitude. The `lastWptIndexFlag` and `lastWptIndex` fields control when the task ends.
+The `groupId` field is the carrier group ID. The `speed` field is the tanker's orbit speed. The `altitude` field is the orbit altitude. The `lastWptIndexFlag` and `lastWptIndex` fields control when the task ends.
 
 ## En-route Tasks
 
@@ -472,7 +496,7 @@ local engage = {
 }
 ```
 
-The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority, where lower values indicate higher priority; the default is 0. The optional `maxDistEnabled` and `maxDist` (meters) fields limit how far from the route the group will go to engage.
+The `targetTypes` field is an array of attribute names specifying which target types to engage. The `priority` field is the task priority, where lower values indicate higher priority; the default is 0. The optional `maxDistEnabled` and `maxDist` (meters) fields limit how far from the route the group will go to engage.
 
 ```lua
 local cap = {
@@ -502,7 +526,7 @@ local engage = {
 }
 ```
 
-The `point` field contains the zone center as a Vec2. The `zoneRadius` field specifies the zone radius in meters. The `targetTypes` field contains an array of attribute names specifying which target types to engage. The `priority` field specifies the task priority.
+The `point` field is the zone center as a Vec2. The `zoneRadius` field is the zone radius in meters. The `targetTypes` field is an array of attribute names specifying which target types to engage. The `priority` field is the task priority.
 
 ### EngageGroup
 
@@ -522,7 +546,7 @@ local engage = {
 }
 ```
 
-The `groupId` field contains the target group ID. The `weaponType` and `expend` fields work the same as in the `AttackUnit` task. The `priority` field specifies the task priority.
+The `groupId` field is the target group ID. The `weaponType` and `expend` fields work as in `AttackUnit`. The `priority` field is the task priority.
 
 ### EngageUnit
 
@@ -543,7 +567,7 @@ local engage = {
 }
 ```
 
-The `unitId` field contains the target unit ID. The `weaponType`, `expend`, and `groupAttack` fields work the same as in the `AttackUnit` task. The `priority` field specifies the task priority.
+The `unitId` field is the target unit ID. The `weaponType`, `expend`, and `groupAttack` fields work as in `AttackUnit`. The `priority` field is the task priority.
 
 ### AWACS
 
@@ -589,7 +613,7 @@ local fac = {
 }
 ```
 
-The `frequency` field specifies the radio frequency in Hz. The `modulation` field specifies the modulation type, where 0 is AM and 1 is FM. The `callname` field specifies the FAC callsign index. The `number` field specifies the FAC number.
+The `frequency` field is the radio frequency in Hz. The `modulation` field is the modulation type, where 0 is AM and 1 is FM. The `callname` field is the FAC callsign index. The `number` field is the FAC number.
 
 ### FAC_EngageGroup
 
@@ -613,7 +637,7 @@ local facEngage = {
 }
 ```
 
-The `groupId` field contains the target group ID. The `weaponType` field specifies the weapon flags bitmask. The `designation` field specifies the designation method from the `AI.Task.Designation` enum. The `datalink` field specifies whether to use datalink. The `frequency`, `modulation`, `callname`, and `number` fields work the same as in the `FAC` task.
+The `groupId` field is the target group ID. The `weaponType` field is the weapon flags bitmask. The `designation` field is the designation method from the `AI.Task.Designation` enum. The `datalink` field sets whether to use datalink. The `frequency`, `modulation`, `callname`, and `number` fields work the same as in the `FAC` task.
 
 ### EWR
 

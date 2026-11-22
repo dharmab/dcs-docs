@@ -1,6 +1,6 @@
 # timer
 
-The timer singleton provides mission time information and function scheduling.
+The timer singleton contains functions that return mission time and schedule functions to run later.
 
 ## timer.getTime
 
@@ -40,7 +40,7 @@ end
 number timer.getTime0()
 ```
 
-The `timer.getTime0` function returns the mission's start time as seconds since midnight. This value represents the "start time" configured in the Mission Editor.
+The `timer.getTime0` function returns the mission's start time as seconds since midnight. This is the start time set in the Mission Editor.
 
 **Returns:** The mission start time as absolute time in seconds since midnight.
 
@@ -55,7 +55,7 @@ local hours = math.floor(currentTimeOfDay / 3600) % 24
 functionId timer.scheduleFunction(function callback, any argument, number runTime)
 ```
 
-The `timer.scheduleFunction` function schedules a function to run at a specific mission time. The callback receives the provided argument and the scheduled time as its parameters. If the callback returns a number, the game will reschedule the callback for that mission time. If you schedule a function for a time that has already passed, the game runs it immediately on the next simulation frame.
+The `timer.scheduleFunction` function schedules a function to run at a specific mission time. The callback receives the provided argument and the scheduled time as its parameters. If the callback returns a number, the game reschedules it for that mission time. A function scheduled for a past time runs on the next simulation frame.
 
 **Parameters:**
 
@@ -89,7 +89,7 @@ timer.scheduleFunction(delayedMessage, {message = "5 minutes elapsed!", duration
 nil timer.removeFunction(functionId id)
 ```
 
-The `timer.removeFunction` function removes a scheduled function so it will not run. This function has no effect if the function has already run or was already removed.
+The `timer.removeFunction` function removes a scheduled function so it will not run. It has no effect if the function already ran or was removed.
 
 **Parameters:**
 
@@ -106,7 +106,7 @@ timer.removeFunction(funcId)
 nil timer.setFunctionTime(functionId id, number newTime)
 ```
 
-The `timer.setFunctionTime` function changes when a scheduled function will run. This function is useful for delaying or advancing scheduled tasks.
+The `timer.setFunctionTime` function changes when a scheduled function will run.
 
 **Parameters:**
 

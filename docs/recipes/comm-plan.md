@@ -1,6 +1,6 @@
 # Standardized Communications Plan
 
-This document defines a standardized frequency allocation for DCS World missions. All frequencies are in the UHF military band (225.0-399.975 MHz AM) to ensure compatibility with aircraft that have limited radio tuning ranges, such as the F-4E Phantom II (225.0-399.95 MHz primary, 265.0-284.9 MHz auxiliary) and F-16C Viper (225.0-399.975 MHz on COM1).
+This document defines a standard frequency plan for DCS World missions. All frequencies are in the UHF military band (225.0-399.975 MHz AM) so that aircraft with limited tuning ranges can use them, such as the F-4E Phantom II (225.0-399.95 MHz primary, 265.0-284.9 MHz auxiliary) and F-16C Viper (225.0-399.975 MHz on COM1).
 
 ## Frequency Allocation Table
 
@@ -62,13 +62,13 @@ This document defines a standardized frequency allocation for DCS World missions
 
 ## Design Rationale
 
-The frequency plan uses whole and half MHz values for easy memorization and radio tuning. Frequencies are grouped by function with gaps between groups to allow expansion.
+The plan uses whole and half MHz values, which are easy to remember and tune. Frequencies are grouped by function, with gaps between groups to allow expansion.
 
 ATC frequencies are grouped in the 254 MHz range. Strike and GCI frequencies use the 255 MHz range. Fighter flight tactical frequencies use the 260-263 MHz range. Tanker frequencies use the 270 MHz range. The 265.0-284.9 MHz range is reserved for future expansion.
 
-FM frequencies (30-88 MHz) are allocated for A-10 and helicopter flights. These aircraft have three radios including FM capability, so using FM for internal flight comms leaves their UHF radio free for strike coordination, JTAC, and package-level traffic. Aircraft with only UHF radios cannot monitor FM, so mixed packages should coordinate on UHF frequencies.
+FM frequencies (30-88 MHz) are allocated for A-10 and helicopter flights. These aircraft have three radios, including an FM radio, so using FM for internal flight communication leaves their UHF radio free for strike coordination, JTAC, and package traffic. Aircraft with only UHF radios cannot monitor FM, so mixed packages should coordinate on UHF.
 
-All operational frequencies avoid the guard frequencies (243.0 MHz military, 121.5 MHz civil) and stay well within the 225-400 MHz UHF band supported by all military aircraft in DCS. The 250-252 MHz range is avoided because it is heavily used by airfield ATC frequencies on the Syria, Caucasus, Nevada, and other maps.
+All frequencies avoid guard (243.0 MHz military, 121.5 MHz civil) and stay inside the 225-400 MHz band that all DCS military aircraft support. The plan avoids 250-252 MHz because many airfields on the Syria, Caucasus, Nevada, and other maps use ATC frequencies in that range.
 
 ## Aircraft Radio Compatibility
 
@@ -115,4 +115,4 @@ The list can vary in two blocks while every other channel keeps its number acros
 
 Operation Infinity (`missions/operation-infinity/AGENTS.md`) has a complete worked layout.
 
-A-10 and helicopter flights should use FM frequencies for internal flight communications, leaving UHF free for strike coordination, JTAC, and other package-level traffic.
+A-10 and helicopter flights should use FM for internal flight communication, leaving UHF free for strike coordination, JTAC, and other package traffic.

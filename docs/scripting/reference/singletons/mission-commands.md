@@ -1,6 +1,6 @@
 # missionCommands
 
-The missionCommands singleton allows you to add and remove entries in the F10 "Other" radio menu.
+The missionCommands singleton adds and removes entries in the F10 "Other" radio menu.
 
 ## missionCommands.addCommand
 
@@ -116,7 +116,7 @@ The `missionCommands.removeItemForCoalition` function removes a coalition-specif
 table missionCommands.addCommandForGroup(number groupId, string name, table path, function handler, any argument)
 ```
 
-The `missionCommands.addCommandForGroup` function adds a command visible only to players in a specific group. This function is the most common way to create player-specific menus.
+The `missionCommands.addCommandForGroup` function adds a command visible only to players in a specific group. It is the usual way to create per-player menus.
 
 **Parameters:**
 

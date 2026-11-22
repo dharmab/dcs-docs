@@ -1,6 +1,8 @@
 # Events
 
-The event system notifies your scripts when things happen in the simulation. You create an event handler and register it with the game, then your handler function gets called whenever events occur.
+DCS creates an event each time something happens in the simulation, such as an aircraft taking off, a unit firing a weapon, or a unit being destroyed. An event is a table that describes what happened, including the event type, the time, and usually the object that caused it.
+
+Scripts receive events through event handlers. An event handler is a table containing an `onEvent` function. After a script registers a handler with [`world.addEventHandler()`](../singletons/world.md#worldaddeventhandler), DCS calls the handler's `onEvent` function for every event.
 
 ## Event System Overview
 
@@ -23,13 +25,13 @@ All events contain at least:
 - `id` (number): Event type from `world.event`
 - `time` (number): Mission time when the event occurred
 
-Many events include `initiator`, which is typically the Unit that caused the event. Always nil-check `initiator` as it may be nil in some edge cases (especially in multiplayer).
+Many events include `initiator`, which is typically the Unit that caused the event. Nil-check `initiator`; it can be nil, especially in multiplayer.
 
 ## Event Handler Pitfalls
 
 Event handlers have several known issues that scripts must handle defensively.
 
-**Group Access May Fail:** Within event handlers, calling `unit:getGroup()` or `Group.getByName()` for a unit's group sometimes returns nil even when the group should exist. This appears to be a timing or caching issue in the DCS scripting engine. Always check for nil before accessing group methods:
+**Group Access May Fail:** In event handlers, `unit:getGroup()` or `Group.getByName()` sometimes returns nil for a group that exists, apparently from a timing or caching issue. Check for nil:
 
 ```lua
 function handler:onEvent(event)
@@ -46,7 +48,7 @@ function handler:onEvent(event)
 end
 ```
 
-**Destroyed Unit Properties Crash Scripts:** Accessing properties of units that have been destroyed can crash the scripting engine. Within death-related events (`S_EVENT_DEAD`, `S_EVENT_CRASH`, `S_EVENT_UNIT_LOST`), the `initiator` unit may already be partially destroyed. Use `unit:isExist()` checks and wrap property access in protected calls when working with potentially destroyed units.
+**Destroyed Unit Properties Crash Scripts:** Reading properties of destroyed units can crash the scripting engine. In death events (`S_EVENT_DEAD`, `S_EVENT_CRASH`, `S_EVENT_UNIT_LOST`), the `initiator` may be partly destroyed. Check `unit:isExist()` and wrap property access in `pcall`.
 
 ```lua
 function handler:onEvent(event)
@@ -120,7 +122,7 @@ The `S_EVENT_SHOT` event fires when a unit fires a weapon such as a missile, bom
 }
 ```
 
-The `initiator` field contains the Unit object that fired the weapon. The `weapon` field contains the Weapon object representing the projectile in flight.
+The `initiator` field is the Unit that fired the weapon. The `weapon` field is the Weapon of the projectile in flight.
 
 ```lua
 function handler:onEvent(event)
@@ -150,7 +152,7 @@ The `S_EVENT_HIT` event fires when a weapon hits a target. In multiplayer, the `
 }
 ```
 
-The `initiator` field contains the Unit object that fired the weapon. The `weapon` field contains the Weapon object that hit the target. The `target` field contains the Object that was struck.
+The `initiator` field is the Unit that fired the weapon. The `weapon` field is the Weapon that hit the target. The `target` field is the Object that was struck.
 
 ### S_EVENT_SHOOTING_START
 
@@ -167,7 +169,7 @@ The `S_EVENT_SHOOTING_START` event fires when a unit begins firing guns or other
 }
 ```
 
-The `initiator` field contains the Unit object that is firing. The `weapon_name` field contains the type name of the weapon being fired.
+The `initiator` field is the Unit that is firing. The `weapon_name` field is the type name of the weapon being fired.
 
 ### S_EVENT_SHOOTING_END
 
@@ -184,7 +186,7 @@ The `S_EVENT_SHOOTING_END` event fires when a unit stops firing guns.
 }
 ```
 
-The `initiator` field contains the Unit object that stopped firing. The `weapon_name` field contains the type name of the weapon that was being fired.
+The `initiator` field is the Unit that stopped firing. The `weapon_name` field is the type name of the weapon that was being fired.
 
 ### S_EVENT_KILL
 
@@ -203,7 +205,7 @@ The `S_EVENT_KILL` event fires when a unit kills another unit.
 }
 ```
 
-The `initiator` field contains the Unit object that scored the kill. The `target` field contains the Unit object that was killed. The `weapon` field contains the Weapon object used in the kill. The `weapon_name` field contains the type name of the weapon.
+The `initiator` field is the Unit that scored the kill. The `target` field is the Unit that was killed. The `weapon` field is the Weapon used in the kill. The `weapon_name` field is the type name of the weapon.
 
 ## Death and Damage Events
 
@@ -221,7 +223,7 @@ The `S_EVENT_DEAD` event fires when a unit is destroyed and its hit points reach
 }
 ```
 
-The `initiator` field contains the Object that was destroyed.
+The `initiator` field is the Object that was destroyed.
 
 ```lua
 function handler:onEvent(event)
@@ -248,7 +250,7 @@ The `S_EVENT_CRASH` event fires when an aircraft crashes into the ground and is 
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that crashed.
+The `initiator` field is the Unit of the aircraft that crashed.
 
 ### S_EVENT_PILOT_DEAD
 
@@ -264,7 +266,7 @@ The `S_EVENT_PILOT_DEAD` event fires when a pilot dies, which is tracked separat
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft whose pilot died.
+The `initiator` field is the Unit of the aircraft whose pilot died.
 
 ### S_EVENT_UNIT_LOST
 
@@ -280,7 +282,7 @@ The `S_EVENT_UNIT_LOST` event fires when any unit is lost from the mission for a
 }
 ```
 
-The `initiator` field contains the Unit object that was lost.
+The `initiator` field is the Unit that was lost.
 
 ### S_EVENT_HUMAN_FAILURE
 
@@ -296,7 +298,7 @@ The `S_EVENT_HUMAN_FAILURE` event fires when a player-controlled aircraft experi
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that experienced the failure.
+The `initiator` field is the Unit of the aircraft that experienced the failure.
 
 ### S_EVENT_DETAILED_FAILURE
 
@@ -312,13 +314,13 @@ The `S_EVENT_DETAILED_FAILURE` event fires with detailed information about syste
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that experienced the failure.
+The `initiator` field is the Unit of the aircraft that experienced the failure.
 
 ## Flight Events
 
 ### S_EVENT_TAKEOFF
 
-The `S_EVENT_TAKEOFF` event fires when an aircraft takes off from an airbase, FARP, or ship. This event fires several seconds after liftoff, after the aircraft has been airborne for a short period of time. Use `S_EVENT_RUNWAY_TAKEOFF` if you need to detect the exact moment of liftoff.
+The `S_EVENT_TAKEOFF` event fires when an aircraft takes off from an airbase, FARP, or ship. It fires several seconds after liftoff. Use `S_EVENT_RUNWAY_TAKEOFF` for the moment of liftoff.
 
 **Event Table:**
 
@@ -332,11 +334,11 @@ The `S_EVENT_TAKEOFF` event fires when an aircraft takes off from an airbase, FA
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that took off. The `place` field contains the Airbase object representing the airport, FARP, or ship from which the aircraft departed. The `subPlace` field contains a sub-location identifier.
+The `initiator` field is the aircraft's Unit. The `place` field is the Airbase (airport, FARP, or ship) it departed from. The `subPlace` field is a sub-location identifier.
 
 ### S_EVENT_LAND
 
-The `S_EVENT_LAND` event fires when an aircraft lands at an airbase, FARP, or ship and sufficiently slows down. This event fires after the aircraft has fully stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
+The `S_EVENT_LAND` event fires when an aircraft lands at an airbase, FARP, or ship and has stopped. Use `S_EVENT_RUNWAY_TOUCH` for the moment of touchdown.
 
 **Event Table:**
 
@@ -350,11 +352,11 @@ The `S_EVENT_LAND` event fires when an aircraft lands at an airbase, FARP, or sh
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that landed. The `place` field contains the Airbase object where the aircraft landed. The `subPlace` field contains a sub-location identifier.
+The `initiator` field is the aircraft's Unit. The `place` field is the Airbase where it landed. The `subPlace` field is a sub-location identifier.
 
 ### S_EVENT_RUNWAY_TAKEOFF
 
-The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, the 3D terrain of the runway may cause this event to fire prematurely as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_TAKEOFF` for most purposes unless you specifically need the exact moment of liftoff.
+The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves the ground. On some maps, runway terrain makes the aircraft bounce and fire this event early. Prefer `S_EVENT_TAKEOFF` unless you need the moment of liftoff.
 
 **Event Table:**
 
@@ -367,11 +369,11 @@ The `S_EVENT_RUNWAY_TAKEOFF` event fires at the exact moment an aircraft leaves 
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft. The `place` field contains the Airbase object.
+The `initiator` field is the Unit of the aircraft. The `place` field is the Airbase.
 
 ### S_EVENT_RUNWAY_TOUCH
 
-The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, the 3D terrain of the runway may cause this event to fire multiple times as the aircraft "bounces" on the runway surface. Prefer `S_EVENT_LAND` for most purposes unless you specifically need the exact moment of touchdown.
+The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches the ground after being airborne. On some maps, runway terrain makes the aircraft bounce and fire this event several times. Prefer `S_EVENT_LAND` unless you need the moment of touchdown.
 
 **Event Table:**
 
@@ -384,7 +386,7 @@ The `S_EVENT_RUNWAY_TOUCH` event fires at the exact moment an aircraft touches t
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft. The `place` field contains the Airbase object.
+The `initiator` field is the Unit of the aircraft. The `place` field is the Airbase.
 
 ### S_EVENT_REFUELING
 
@@ -400,7 +402,7 @@ The `S_EVENT_REFUELING` event fires when an aircraft connects with a tanker and 
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft receiving fuel.
+The `initiator` field is the Unit of the aircraft receiving fuel.
 
 ### S_EVENT_REFUELING_STOP
 
@@ -416,11 +418,11 @@ The `S_EVENT_REFUELING_STOP` event fires when an aircraft disconnects from a tan
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that disconnected from the tanker.
+The `initiator` field is the Unit of the aircraft that disconnected from the tanker.
 
 ### S_EVENT_EJECTION
 
-The `S_EVENT_EJECTION` event fires when a pilot ejects from an aircraft. For aircraft with ejector seats, the `target` field contains the seat object rather than the pilot; wait for `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` to get the pilot. The pilot object is special and most scripting functions do not work on it.
+The `S_EVENT_EJECTION` event fires when a pilot ejects from an aircraft. For aircraft with ejector seats, the `target` field is the seat object rather than the pilot; wait for `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` to get the pilot. The pilot object is special and most scripting functions do not work on it.
 
 **Event Table:**
 
@@ -433,7 +435,7 @@ The `S_EVENT_EJECTION` event fires when a pilot ejects from an aircraft. For air
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft from which the pilot ejected. The `target` field contains the ejector seat or pilot object.
+The `initiator` field is the aircraft's Unit. The `target` field is the ejector seat or pilot object.
 
 ### S_EVENT_DISCARD_CHAIR_AFTER_EJECTION
 
@@ -450,7 +452,7 @@ The `S_EVENT_DISCARD_CHAIR_AFTER_EJECTION` event fires when the ejector seat sep
 }
 ```
 
-The `initiator` field contains the Unit object representing the original aircraft. The `target` field contains the pilot object.
+The `initiator` field is the Unit of the original aircraft. The `target` field is the pilot object.
 
 ### S_EVENT_LANDING_AFTER_EJECTION
 
@@ -467,7 +469,7 @@ The `S_EVENT_LANDING_AFTER_EJECTION` event fires when an ejected pilot lands aft
 }
 ```
 
-The `initiator` field contains the Unit object representing the original aircraft. The `target` field contains the pilot object.
+The `initiator` field is the Unit of the original aircraft. The `target` field is the pilot object.
 
 ### S_EVENT_ENGINE_STARTUP
 
@@ -483,7 +485,7 @@ The `S_EVENT_ENGINE_STARTUP` event fires when an aircraft starts its engines.
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that started its engines.
+The `initiator` field is the Unit of the aircraft that started its engines.
 
 ### S_EVENT_ENGINE_SHUTDOWN
 
@@ -499,7 +501,7 @@ The `S_EVENT_ENGINE_SHUTDOWN` event fires when an aircraft shuts down its engine
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that shut down its engines.
+The `initiator` field is the Unit of the aircraft that shut down its engines.
 
 ### S_EVENT_LANDING_QUALITY_MARK
 
@@ -517,13 +519,13 @@ The `S_EVENT_LANDING_QUALITY_MARK` event fires for carrier landings and includes
 }
 ```
 
-The `initiator` field contains the Unit object representing the aircraft that landed. The `place` field contains the Airbase object representing the carrier. The `comment` field contains the LSO grade comments.
+The `initiator` field is the aircraft's Unit. The `place` field is the carrier's Airbase. The `comment` field contains the LSO grade comments.
 
 ## Player Events
 
 ### S_EVENT_BIRTH
 
-The `S_EVENT_BIRTH` event fires when any unit spawns into the mission. This is the preferred event for tracking player respawns and slot-ins for aircraft and helicopters, as `S_EVENT_PLAYER_ENTER_UNIT` only fires for Combined Arms ground vehicles.
+The `S_EVENT_BIRTH` event fires when any unit spawns into the mission. Use it to track players entering aircraft and helicopters; `S_EVENT_PLAYER_ENTER_UNIT` only fires for Combined Arms ground vehicles.
 
 **Event Table:**
 
@@ -535,7 +537,7 @@ The `S_EVENT_BIRTH` event fires when any unit spawns into the mission. This is t
 }
 ```
 
-The `initiator` field contains the Unit object that was spawned.
+The `initiator` field is the Unit that was spawned.
 
 ```lua
 -- Set up player menus when they spawn or respawn
@@ -565,7 +567,7 @@ To track players entering aircraft or helicopters (respawns, slot-ins), use `S_E
 }
 ```
 
-The `initiator` field contains the Unit object that the player is now controlling.
+The `initiator` field is the Unit that the player is now controlling.
 
 ```lua
 -- Track Combined Arms vehicle control
@@ -592,7 +594,7 @@ The `S_EVENT_PLAYER_LEAVE_UNIT` event fires when a player leaves a unit, whether
 }
 ```
 
-The `initiator` field contains the Unit object that the player left.
+The `initiator` field is the Unit that the player left.
 
 ### S_EVENT_PLAYER_COMMENT
 
@@ -609,7 +611,7 @@ The `S_EVENT_PLAYER_COMMENT` event fires when a player sends a chat message.
 }
 ```
 
-The `initiator` field contains the Unit object representing the player who sent the message. The `comment` field contains the chat message text.
+The `initiator` field is the Unit of the player who sent the message. The `comment` field is the chat message text.
 
 ## Mission Events
 
@@ -654,7 +656,7 @@ The `S_EVENT_BASE_CAPTURED` event fires when an airbase changes coalition.
 }
 ```
 
-The `initiator` field contains the Unit object that captured the base. The `place` field contains the Airbase object that was captured.
+The `initiator` field is the Unit that captured the base. The `place` field is the Airbase that was captured.
 
 ### S_EVENT_AI_ABORT_MISSION
 
@@ -670,7 +672,7 @@ The `S_EVENT_AI_ABORT_MISSION` event fires when an AI group aborts its mission.
 }
 ```
 
-The `initiator` field contains the Unit object representing a unit from the group that aborted its mission.
+The `initiator` field is a Unit from the group that aborted its mission.
 
 ## Marker Events
 
@@ -695,7 +697,12 @@ The `S_EVENT_MARK_ADDED` event fires when a mark or shape is added to the map.
 }
 ```
 
-The `initiator` field contains the Unit object that created the mark, or nil if the mark was created by a script. The `idx` field contains a unique marker ID. The `coalition` field contains the coalition the marker is visible to, or -1 if visible to all coalitions. The `groupID` field contains the group the marker is visible to, or -1 if visible to all groups in the coalition. The `text` field contains the marker text. The `pos` field contains the marker position as a Vec3.
+- `initiator`: The Unit that created the mark, or nil if a script created it.
+- `idx` (number): Unique marker ID.
+- `coalition` (number): Coalition that can see the marker, or -1 for all.
+- `groupID` (number): Group that can see the marker, or -1 for all groups in the coalition.
+- `text` (string): Marker text.
+- `pos` (Vec3): Marker position.
 
 ```lua
 -- React to player placing marks with keywords
@@ -766,7 +773,7 @@ The `S_EVENT_WEAPON_ADD` event fires when a weapon is added to a unit, such as d
 }
 ```
 
-The `initiator` field contains the Unit object that received the weapon. The `weapon_name` field contains the type name of the weapon that was added.
+The `initiator` field is the Unit that received the weapon. The `weapon_name` field is the type name of the weapon that was added.
 
 ## See Also
 

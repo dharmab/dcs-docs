@@ -1,8 +1,8 @@
 # Ground Firefight Setup
 
-This recipe describes how to create a dramatic front-line firefight between ground AI forces by directly editing the mission Lua file. The groups fire at points near each other rather than directly engaging, creating a sustained visual spectacle without immediate destruction.
+This recipe creates a front-line firefight between AI ground forces by editing the mission Lua file. The groups fire at points near each other instead of at each other, so the fight lasts without destroying either side.
 
-> **Note:** All ground units can run out of ammunition. Position ammunition carriers (M30 Cargo Carrier) within 100 meters of any units you want to sustain prolonged fire. Without resupply, units will exhaust their ammunition and cease firing.
+> **Note:** All ground units can run out of ammunition. Position ammunition carriers (M30 Cargo Carrier) within 100 meters of any units you want to sustain prolonged fire. Without resupply, units run out and stop firing.
 
 ## Overview
 
@@ -11,7 +11,7 @@ A dramatic firefight requires:
 - **Multiple Firing Groups** - AI tasks are set at the group level, so use separate small groups for different FireAtPoint targets
 - **Ammunition Carriers** - Keep firing units supplied (include one per firing group)
 - **FireAtPoint Tasks** - Direct fire at coordinates near (not at) enemies
-- **Immortal and Invisible Settings** - Friendly forces persist and aren't targeted by enemy SHORAD
+- **Immortal and Invisible Settings** - Friendly forces survive and enemy AI doesn't target them
 - **Separate Air Defense Group** - SHORAD units in their own group with no FireAtPoint task, so they engage aircraft
 
 ## Unit Type Strings
@@ -41,7 +41,7 @@ A dramatic firefight requires:
 
 ### Short-Range Air Defense
 
-Early Cold War and simpler systems are often more fun to fight against—they're dangerous but defeatable with good tactics.
+Early Cold War systems are often more fun to fight against. They are dangerous but can be defeated with good tactics.
 
 **Gun-Based (No Missiles)**
 
@@ -82,7 +82,7 @@ Early Cold War and simpler systems are often more fun to fight against—they're
 
 ## Mission File Structure
 
-Ground units are placed in `coalition.[side].country[n].vehicle.group`. Since each group can only have one task, you need multiple groups for varied fire effects.
+Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each group can have only one task, so you need multiple groups for varied fire.
 
 ```lua
 ["coalition"] = {
@@ -121,7 +121,7 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. Since ea
 
 ## FireAtPoint Task Structure
 
-The `FireAtPoint` task orders ground units to fire at a specific map location. By targeting points _near_ the enemy rather than the enemy units themselves, you create sustained suppressive fire without immediately destroying targets.
+The `FireAtPoint` task orders ground units to fire at a specific map location. Targeting points _near_ the enemy, rather than the enemy units themselves, produces sustained suppressive fire without immediately destroying the targets.
 
 ```lua
 ["task"] = {
@@ -158,11 +158,11 @@ The `FireAtPoint` task orders ground units to fire at a specific map location. B
 | `expendQty`        | number  | Number of rounds to fire                |
 | `expendQtyEnabled` | boolean | Whether to limit ammunition expenditure |
 
-> **Tip:** Set the target point 20-100 meters offset from the actual enemy position. This creates near-misses and dramatic incoming fire without quickly destroying targets.
+> **Tip:** Set the target point 20-100 meters offset from the actual enemy position. This produces near-misses and incoming fire without quickly destroying targets.
 
 ## SetImmortal and SetInvisible Actions
 
-The player-side forces should be both immortal (invulnerable to damage) and invisible (enemy AI won't target them). This prevents the enemy SHORAD from wasting missiles on invincible targets.
+Set the player-side forces to be both immortal and invisible. Immortal units cannot be destroyed, so the Blue line survives the whole mission. Invisible units are never targeted by enemy AI, so Red units only fire at their assigned points instead of engaging Blue units directly.
 
 ```lua
 {
@@ -530,7 +530,7 @@ The player side uses three separate groups, each firing at a different point nea
 
 ## Complete Example: Red Forces (Enemy Side - Vulnerable)
 
-The enemy side has firing groups plus a **separate** SHORAD group. The SHORAD group has no FireAtPoint task, so it will engage aircraft normally.
+The enemy side has firing groups plus a **separate** SHORAD group. The SHORAD group has no FireAtPoint task, so it engages aircraft.
 
 ### Red Firing Group 1 (Tanks)
 
@@ -714,9 +714,9 @@ The enemy side has firing groups plus a **separate** SHORAD group. The SHORAD gr
 
 ### Red SHORAD Group (Separate - No FireAtPoint)
 
-This group has **no FireAtPoint task**. It will automatically engage any aircraft that enter its engagement envelope, providing air defense for the Red position.
+This group has **no FireAtPoint task**. It engages any aircraft that enter its engagement envelope, providing air defense for the Red position.
 
-This example uses Cold War era systems (Shilka, SA-9, ZU-23) that are dangerous but defeatable—more fun for players than modern systems like Tor or Tunguska.
+This example uses Cold War systems (Shilka, SA-9, ZU-23). They are dangerous, but easier to defeat with good tactics than modern systems such as Tor or Tunguska, which makes them more fun for most players.
 
 ```lua
 [3] = {
@@ -903,7 +903,7 @@ Before finalizing your firefight setup:
 
 ### SHORAD Shooting at Ground
 
-- SHORAD should not fire at ground targets—verify it's in a separate group
+- Verify that the SHORAD units are in their own group, with no `FireAtPoint` task. If they share a group with firing units, they inherit that group's `FireAtPoint` task and shoot at the ground.
 - Ensure the SHORAD group has no FireAtPoint task
 - Check that Blue forces have `SetInvisible` so SHORAD ignores them
 

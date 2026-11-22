@@ -1,8 +1,8 @@
 # land
 
-The land singleton provides terrain information and pathfinding.
+The land singleton contains functions that return terrain information and find paths.
 
-All functions in this singleton that accept coordinate parameters may fail or return undefined results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+All functions in this singleton that accept coordinate parameters may fail or return undefined results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## land.getHeight
 
@@ -28,7 +28,7 @@ local height = land.getHeight({x = 100000, y = 200000})
 number land.getSurfaceHeightWithSeabed(Vec2 position)
 ```
 
-The `land.getSurfaceHeightWithSeabed` function returns the height including the seabed. This function returns negative values for underwater terrain.
+The `land.getSurfaceHeightWithSeabed` function returns the height including the seabed. It is negative for underwater terrain.
 
 **Parameters:**
 
@@ -77,7 +77,7 @@ end
 boolean land.isVisible(Vec3 origin, Vec3 destination)
 ```
 
-The `land.isVisible` function checks if there is line-of-sight between two points. This function only considers terrain and ignores objects.
+The `land.isVisible` function checks if there is line-of-sight between two points. It considers terrain only, not objects.
 
 **Parameters:**
 

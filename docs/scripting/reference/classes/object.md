@@ -1,6 +1,6 @@
 # Object
 
-The Object class is the base class for all objects with a physical presence in the game world. This is an abstract class; you work with its subclasses such as Unit, Weapon, and StaticObject.
+The Object class is the abstract base class of all physical objects in the game world. Scripts use its subclasses, such as Unit, Weapon, and StaticObject.
 
 The `Object.Category` enum defines the object categories:
 
@@ -21,7 +21,7 @@ Object.Category = {
 boolean object:isExist()
 ```
 
-The `object:isExist` method returns whether the object currently exists in the mission. Objects cease to exist when destroyed. Always check `isExist()` before calling other methods on objects obtained from stored references, as the object may have been destroyed since you acquired the reference.
+The `object:isExist` method returns whether the object currently exists in the mission. Destroyed objects do not exist. Check `isExist()` before calling methods on a stored reference, since the object may have been destroyed since.
 
 **Returns:** True if the object exists, or false otherwise.
 
@@ -38,7 +38,7 @@ end
 nil object:destroy()
 ```
 
-The `object:destroy` method destroys the object, removing it from the mission. For units, this method kills them instantly without any death animation or explosion.
+The `object:destroy` method destroys the object, removing it from the mission. Units are removed instantly, with no death animation or explosion.
 
 ```lua
 local debris = StaticObject.getByName("wreckage")
@@ -85,7 +85,7 @@ env.info("Unit type: " .. typeName)
 table object:getDesc()
 ```
 
-The `object:getDesc` method returns a description table with detailed information about the object type. The contents of the table vary by object type.
+The `object:getDesc` method returns a description table for the object type. Its contents vary by object type.
 
 **Returns:** A description table that contains at minimum the `life` and `box` fields.
 
@@ -199,7 +199,8 @@ end
 ## See Also
 
 - [coalition-object](coalition-object.md) - Coalition and country information (extends Object)
-- [unit](unit.md) - Unit class (extends Object and CoalitionObject)
-- [static-object](static-object.md) - Static object class (extends Object and CoalitionObject)
-- [weapon](weapon.md) - Weapon class (extends Object and CoalitionObject)
+- [unit](unit.md) - Unit class (extends CoalitionObject)
+- [static-object](static-object.md) - Static object class (extends CoalitionObject)
+- [weapon](weapon.md) - Weapon class (extends CoalitionObject)
+- [airbase](airbase.md) - Airbase class (extends CoalitionObject)
 - [Coordinate Types](../types/coordinates.md) - Vec3 and Position3 coordinate systems

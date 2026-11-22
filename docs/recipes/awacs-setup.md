@@ -1,8 +1,8 @@
 # AWACS/AEW&C Aircraft Setup
 
-This recipe describes how to create an Airborne Warning and Control System (AWACS) or Airborne Early Warning & Control (AEW&C) aircraft by directly editing the mission Lua file. A properly configured AWACS provides radar coverage, broadcasts on datalink, and responds to player radio requests for bogey dope and vectors.
+This recipe creates an Airborne Warning and Control System (AWACS) or Airborne Early Warning & Control (AEW&C) aircraft by editing the mission Lua file. An AWACS provides radar coverage, broadcasts on datalink, and answers player radio requests for bogey dope and vectors.
 
-> **Note on In-Game AWACS Limitations:** The built-in DCS AWACS radio communication system is widely considered inadequate—it provides limited information, uses non-standard brevity, and lacks situational awareness features that real-world or competitive players expect. For multiplayer servers, consider using an external GCI/AWACS bot such as [SkyEye](https://github.com/dharmab/skyeye/) on a separate frequency. The in-game AWACS aircraft remains valuable for **datalink (Link-16) contacts** via EPLRS, even when voice communications are handled externally.
+> **Note on In-Game AWACS Limitations:** The built-in DCS AWACS radio provides limited information, uses non-standard brevity, and lacks the situational awareness features that many players expect. For multiplayer servers, consider an external GCI/AWACS bot such as [SkyEye](https://github.com/dharmab/skyeye/) on a separate frequency. The in-game AWACS aircraft is still useful for **datalink (Link-16) contacts** via EPLRS.
 
 ## Overview
 
@@ -23,17 +23,17 @@ An AWACS aircraft requires:
 | A-50 Mainstay         | `A-50`      | Red (Russia) | 30,000 ft (9,144 m)  |
 | KJ-2000               | `KJ-2000`   | Red (China)  | 30,000 ft (9,144 m)  |
 
-> **Note:** The E-2D uses type ID `E-2C` in the mission file despite being the Advanced Hawkeye variant.
+> **Note:** The E-2D (Advanced Hawkeye) uses type ID `E-2C` in the mission file.
 
 ## Orbit Pattern Selection
 
-**Always use a Race-Track pattern instead of a Circle pattern.** DCS has a known simulation quirk where the AI's notching logic causes AWACS aircraft to intermittently lose track of contacts when flying perpendicular (90°) to them. In a circular orbit, the aircraft continuously passes through these perpendicular aspects, causing unreliable radar coverage.
+**Always use a Race-Track pattern instead of a Circle pattern.** DCS notching logic causes AWACS aircraft to intermittently lose track of contacts when flying perpendicular (90°) to them. In a circular orbit, the aircraft constantly passes through these aspects, so radar coverage is unreliable.
 
-A long-legged racetrack pattern minimizes time spent at perpendicular aspects and provides consistent radar coverage toward the threat axis.
+A long-legged racetrack minimizes time spent at perpendicular aspects and keeps radar coverage consistent toward the threat axis.
 
 ### Racetrack Orientation
 
-Orient the racetrack legs **perpendicular to the expected threat direction** so the AWACS radar points toward the threat area during most of the orbit. For example, if threats come from the north, orient the racetrack east-west.
+Orient the racetrack legs **perpendicular to the threat axis** so the radar faces the threat for most of the orbit. For example, if threats come from the north, orient the racetrack east-west.
 
 ## Mission File Structure
 
@@ -112,7 +112,7 @@ The following example creates an E-3A AWACS orbiting at 30,000 feet on a racetra
 
 ## Route Configuration
 
-The route should start at the orbit position with all tasks assigned to the first waypoint. Use two waypoints to define the racetrack pattern.
+Start the route at the orbit position, with all tasks on the first waypoint, and use two waypoints to define the racetrack.
 
 ### Route Structure
 
@@ -173,7 +173,7 @@ All tasks are assigned on the first waypoint using a `ComboTask` container. The 
 
 ### AWACS Task
 
-The AWACS task activates the aircraft's early warning radar and enables it to broadcast contacts to friendly units.
+The AWACS task turns on the early warning radar and broadcasts contacts to friendly units.
 
 ```lua
 {
@@ -187,7 +187,7 @@ The AWACS task activates the aircraft's early warning radar and enables it to br
 
 ### EPLRS Task
 
-The EPLRS (Enhanced Position Location Reporting System) task enables Link-16 datalink, allowing the AWACS to share radar contacts with datalink-equipped aircraft.
+The EPLRS (Enhanced Position Location Reporting System) task turns on Link-16, which shares radar contacts with datalink-equipped aircraft.
 
 ```lua
 {
@@ -232,7 +232,7 @@ Sets the radio frequency players use to communicate with AWACS for bogey dope an
 
 ### Orbit Task (Race-Track)
 
-The orbit task defines the patrol pattern. Use `Race-Track` pattern with `point` and `point2` defining the leg endpoints.
+The orbit task defines the patrol pattern. Use `Race-Track`, with `point` and `point2` as the leg endpoints.
 
 ```lua
 {
@@ -327,7 +327,7 @@ The orbit task defines the patrol pattern. Use `Race-Track` pattern with `point`
 
 ## E-2D Hawkeye Example
 
-The E-2D operates at lower altitude due to its smaller airframe. Use 20,000 feet (6,096 m) and approximately 260 knots (134 m/s).
+The E-2D flies lower because of its smaller airframe. Use 20,000 feet (6,096 m) and approximately 260 knots (134 m/s).
 
 ```lua
 [1] = {

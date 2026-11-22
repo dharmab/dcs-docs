@@ -1,6 +1,6 @@
 # DCS World Helicopters
 
-This document provides comprehensive information about all helicopters in DCS World, including identification, available tasks, hardpoints, and compatible weapons.
+This document covers DCS World helicopters: identification, tasks, hardpoints, and compatible weapons.
 
 ## Helicopter Index
 

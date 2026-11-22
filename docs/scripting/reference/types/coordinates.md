@@ -4,7 +4,7 @@ This document describes the coordinate and position types used throughout the DC
 
 ## Vec2
 
-**Vec2** represents a 2D point on the map surface:
+**Vec2** is a 2D point on the map surface:
 
 ```lua
 Vec2 = {
@@ -13,11 +13,11 @@ Vec2 = {
 }
 ```
 
-The `x` field contains the north-south position, where positive values are to the north. The `y` field contains the east-west position, where positive values are to the east.
+The `x` field is the north-south position, where positive values are to the north. The `y` field is the east-west position, where positive values are to the east.
 
 ## Vec3
 
-**Vec3** represents a 3D point in world space:
+**Vec3** is a 3D point in world space:
 
 ```lua
 Vec3 = {
@@ -27,11 +27,11 @@ Vec3 = {
 }
 ```
 
-The `x` field contains the north-south position, where positive values are to the north. The `y` field contains the altitude, where positive values are above sea level. The `z` field contains the east-west position, where positive values are to the east. A Vec3 `{x, y, z}` corresponds to the Vec2 `{x = x, y = z}`.
+The `x` field is the north-south position, where positive values are to the north. The `y` field is the altitude, where positive values are above sea level. The `z` field is the east-west position, where positive values are to the east. A Vec3 `{x, y, z}` corresponds to the Vec2 `{x = x, y = z}`.
 
 ## Position3
 
-**Position3** represents both position and orientation in 3D space:
+**Position3** is both position and orientation in 3D space:
 
 ```lua
 Position3 = {
@@ -42,7 +42,7 @@ Position3 = {
 }
 ```
 
-The `p` field contains the world position as a Vec3. The `x` field contains the forward unit vector, pointing out of the object's nose. The `y` field contains the up unit vector, pointing out of the object's top. The `z` field contains the right unit vector, pointing out of the object's right side. These orientation vectors form an orthonormal basis. You can calculate heading and pitch from a Position3 value:
+The `p` field is the world position as a Vec3. The `x` field is the forward unit vector, pointing out of the object's nose. The `y` field is the up unit vector, pointing out of the object's top. The `z` field is the right unit vector, pointing out of the object's right side. These orientation vectors form an orthonormal basis. You can calculate heading and pitch from a Position3 value:
 
 ```lua
 local pos = unit:getPosition()
@@ -50,13 +50,13 @@ local heading = math.atan2(pos.x.z, pos.x.x)
 local pitch = math.asin(pos.x.y)
 ```
 
-The heading calculation returns radians where 0 represents North. The pitch calculation returns radians where positive values indicate the nose is pointing up.
+Heading is in radians, 0 is north. Pitch is in radians, positive is nose up.
 
 ## Map Bounds
 
-Many SSE functions that accept Vec2 or Vec3 parameters may fail or return undefined results if the coordinates fall outside the current map's boundaries. Each theater has different dimensions, and coordinates valid on one map may be invalid on another.
+Many SSE functions that take a Vec2 or Vec3 may fail or return undefined results for coordinates outside the map. Each theater has different bounds.
 
-When working with dynamically calculated positions, validate that coordinates remain within reasonable bounds before passing them to functions like `land.getHeight()`, `atmosphere.getWind()`, or coordinate conversion functions. Consider wrapping calls to these functions in `pcall()` when the input coordinates are not guaranteed to be within bounds.
+Check computed positions are in bounds before passing them to functions such as `land.getHeight()`, `atmosphere.getWind()`, or coordinate conversions, or wrap the calls in `pcall()`.
 
 ## See Also
 

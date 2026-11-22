@@ -1,6 +1,6 @@
 # DCS World Mission Editor
 
-The Mission Editor (ME) is the graphical interface for creating mission scenarios in DCS World. It enables mission designers to build standalone missions, campaign missions, training missions, and multiplayer missions with complex game logic using triggers, AI tasking, and environmental controls.
+The Mission Editor (ME) is the DCS World GUI for building standalone, campaign, training, and multiplayer missions. Mission designers control mission behavior with triggers, AI tasks, environment settings, and Lua scripts.
 
 ## Contents
 
@@ -21,31 +21,33 @@ The Mission Editor (ME) is the graphical interface for creating mission scenario
 
 ## Primary Components
 
-The Mission Editor consists of seven primary elements:
+The Mission Editor contains these main components:
 
-1. **Interactive mapping system** - The World Map displaying topography, units, routes, and mission elements
-2. **Unit placement tools** - For placing aircraft, helicopters, ground vehicles, ships, and static objects
-3. **Weather editor** - Static and dynamic weather configuration
-4. **File management system** - Mission saving, loading, and export
-5. **Goal creation tool** - Victory/failure condition definition
-6. **Trigger system** - Event-driven scripting for dynamic mission behavior
-7. **Additional specialized panels** - Briefing, options, resource management, and more
+- **Map** - Shows the terrain, units, routes, and other mission elements.
+- **Unit placement tools** - Place aircraft, helicopters, ground vehicles, ships, and static objects.
+- **Weather editor** - Configures static and dynamic weather.
+- **File management** - Saves, loads, and exports missions.
+- **Goals** - Define victory and failure conditions.
+- **Trigger system** - Runs actions when conditions are true.
+- **Briefing panel** - Sets the mission title, situation text, coalition tasks, and briefing images.
+- **Mission options** - Enforces realism and assistance settings on players.
+- **Resource Manager** - Sets aircraft, fuel, and equipment stocks in warehouses.
 
 ## Interface Layout
 
-The Mission Editor screen is divided into four primary areas:
+The Mission Editor screen has four areas:
 
-**World Map**: The central area displaying the topographic map with units, routes, and mission elements. Navigate by holding the right mouse button and dragging to pan, or scrolling the mouse wheel to zoom.
+**World Map**: The central area shows the topographic map with units, routes, and mission elements. Drag with the right mouse button to pan, and scroll to zoom.
 
-**Tool Bar**: Located along the left side, providing quick access to unit placement, triggers, zones, goals, and file management functions.
+**Tool Bar**: The tool bar along the left side contains buttons for unit placement, triggers, zones, goals, and file management.
 
-**System Bar**: Along the top of the screen with pull-down menus for File, Edit, Flight, Campaign, Customize, Mission Generator, and Misc functions.
+**System Bar**: The system bar along the top contains menus for File, Edit, Flight, Campaign, Customize, Mission Generator, and Misc.
 
-**Mission and Map Bar**: Along the bottom, displaying the mission name, cursor coordinates/altitude, map mode, and current time.
+**Mission and Map Bar**: The bar along the bottom shows the mission name, cursor coordinates and altitude, map mode, and current time.
 
 ## Creating a New Mission
 
-When creating a new mission, you first select the theater (map) and assign countries to coalitions. The coalition system supports three configurations:
+A new mission starts with choosing the theater (map) and assigning countries to coalitions. There are three coalition presets:
 
 - **Custom**: Manually assign countries to coalitions
 - **Modern**: Based on contemporary geopolitical alliances
@@ -53,22 +55,22 @@ When creating a new mission, you first select the theater (map) and assign count
 
 Countries can be assigned to RED or BLUE coalitions, or left unassigned (neutral).
 
-Always use Custom coalitions when creating new missions. Coalition assignments cannot be changed after mission creation, and the Modern and WWII presets offer no advantages over manually selecting the countries you need. Custom coalitions give you complete control over which countries appear on each side from the start.
+Always use Custom coalitions. Coalition assignments cannot change after mission creation, and the Modern and WWII presets have no advantage over choosing countries yourself.
 
-When selecting countries for your coalitions, use only "Combined Joint Task Force Blue" for the blue coalition and "Combined Joint Task Force Red" for the red coalition. These fictional countries have unrestricted access to all equipment and liveries in the game. Real-world countries in DCS carry legacy restrictions that limit which aircraft, weapons, and paint schemes are available based on historical accuracy considerations. These restrictions create unnecessary complications when building missions and offer no gameplay benefit. Using the CJTF countries eliminates these issues entirely and gives mission designers full access to all game content.
+Use only "Combined Joint Task Force Blue" for blue and "Combined Joint Task Force Red" for red. These fictional countries can use all equipment and liveries. Real-world countries have legacy restrictions on aircraft, weapons, and liveries that complicate mission building and add nothing to gameplay.
 
-GPS navigation has two restrictions. First, GPS only functions in missions set after March 28, 1994, when the real-world GPS constellation became fully operational. Second, DCS limits GPS functionality to coalitions that include the United States. If players need GPS capability in their aircraft, ensure your mission date is after March 1994 and that your coalition includes the USA or uses CJTF countries.
+GPS has two restrictions. First, GPS only works in missions dated after March 28, 1994, when the real GPS constellation became fully operational. Second, DCS limits GPS to coalitions that include the United States. If players need GPS, set the mission date after March 1994 and include the USA or use CJTF countries.
 
 ## Unit Placement
 
 ### Aircraft and Helicopters
 
-Aircraft groups consist of one to four units. Each group has configurable properties including:
+Aircraft groups consist of one to four units. Group properties include:
 
 - **Name**: Unique identifier for trigger references
 - **Country**: Owning country within the coalition (use CJTF countries for unrestricted aircraft access) <!-- TODO: QA - Verify that CJTF countries have unrestricted access to all liveries and weapons in current DCS version -->
 - **Task**: Primary mission type affecting AI behavior and available actions
-- **Skill**: AI competency level (Average, Good, High, Excellent, Random) or player slot designation (Client or Player). The Client skill marks the aircraft as an available selectable player slot in both singleplayer and multiplayer. The Player skill marks the aircraft as the sole and default slot available in a singleplayer mission.
+- **Skill**: AI skill (Average, Good, High, Excellent, Random) or player slot (Client or Player). Player makes the aircraft the default slot in a singleplayer mission. A mission can have only one Player aircraft. Client makes the aircraft a selectable player slot in singleplayer and multiplayer. To let the player choose between several aircraft in a singleplayer mission, use Client slots.
 - **Callsign**: Radio identification
 - **Hidden on Map/Planner**: Visibility on F10 map and mission planner
 - **Late Activation**: Group spawns only when triggered
@@ -79,81 +81,91 @@ Available aircraft tasks include:
 
 ### Ground and Naval Units
 
-Ground vehicles and ships are placed similarly to aircraft, with group-based organization and route planning. Ground units can capture airfields and FARPs by proximity (within 2000 meters).
+Ground vehicles and ships are placed in groups with routes. Ground units need flat, clear terrain, and ships need water deep enough for their draft. Ground units capture airfields and FARPs by coming within 2000 meters.
 
 ### Static Objects
 
-Static objects are non-moving scenery elements including buildings, fortifications, cargo, and decorative items. They can be configured with late activation for dynamic mission content.
+Static objects are non-moving objects such as buildings, fortifications, cargo, and decorations. They can use late activation to appear during the mission.
 
 ## Route Planning
 
-Routes define the movement paths for unit groups using a series of waypoints. Each waypoint represents a position on the map with associated properties that control how the unit navigates to and behaves at that location. Actions can be attached to waypoints to script AI behavior at specific points along the route.
+A route is a list of waypoints. Each waypoint is a map position with properties that control how the group navigates to it and behaves there. Actions attached to a waypoint control AI behavior at that point.
 
 ### Waypoint Management
 
-The waypoint control panel provides three mode buttons for route editing:
+The waypoint panel contains three mode buttons:
 
 - **ADD**: Left-clicking on the map adds a new waypoint to the route (default mode when opening group properties)
 - **EDIT**: Select existing waypoints on the map to modify their properties
 - **DEL**: Delete the selected waypoint from the route
 
-Each waypoint can be assigned a unique name that appears on the map next to its marker. The waypoint selector allows cycling through waypoints using arrow buttons or by clicking directly on the map.
+A waypoint can have a name, shown next to its marker on the map. Select waypoints with the arrow buttons or by clicking on the map.
 
 ### Waypoint Types
 
 #### Aircraft Waypoints
 
-**Turning Point** is the most common waypoint type and results in the aircraft performing a lead turn ahead of the actual waypoint location to complete the turn on course for the following waypoint. This produces smooth, efficient navigation but means the aircraft passes near rather than directly over the waypoint coordinates.
+**Turning Point** is the most common type. The aircraft starts its turn before the waypoint so it rolls out on course for the next one. As a result, it passes near the waypoint rather than over it.
 
-**Fly Over Point** works like a turning point but requires the aircraft to pass directly over the waypoint location before beginning its turn to the next waypoint. This results in a course correction after the waypoint but guarantees the aircraft crosses the exact position specified.
+**Fly Over Point** is like a turning point, but the aircraft passes directly over the waypoint before it starts its turn to the next waypoint. Because the turn starts late, the aircraft overshoots the line to the next waypoint and then turns back onto it.
 
-**Takeoff from Runway** is only available for waypoint 1 and spawns the aircraft on the runway threshold with all systems running and ready for immediate takeoff. The waypoint automatically snaps to the nearest airfield or FARP.
+**Takeoff from Runway** (waypoint 1 only) spawns the aircraft on the runway threshold with systems running. The waypoint snaps to the nearest airfield or FARP.
 
-**Takeoff from Ramp** is only available for waypoint 1 and spawns the aircraft on the parking apron with systems shut down. AI aircraft will perform a cold start sequence before taxiing to the runway. The waypoint snaps to the nearest parking area.
+**Takeoff from Ramp** (waypoint 1 only) spawns the aircraft cold on the parking apron. AI aircraft perform a cold start before taxiing to the runway. The waypoint snaps to the nearest parking area.
 
-**Takeoff from Parking Hot** is only available for waypoint 1 and spawns the aircraft on the parking apron with all systems already running. This saves time compared to the cold start sequence while still requiring the aircraft to taxi to the runway.
+**Takeoff from Parking Hot** (waypoint 1 only) spawns the aircraft on the parking apron with systems running. This skips the cold start, but the aircraft still taxis to the runway.
 
-**Takeoff from Ground** and **Takeoff from Ground Hot** are only available for waypoint 1 and allow helicopters and VTOL aircraft to spawn at arbitrary ground locations rather than at airfields. The "hot" variant has systems already running.
+**Takeoff from Ground** and **Takeoff from Ground Hot** (waypoint 1 only) spawn helicopters and VTOL aircraft anywhere on the ground. The hot variant has systems running.
 
-**Landing** is only available for the final waypoint in the route and causes the aircraft to land at the nearest airfield or FARP. The waypoint automatically snaps to a valid landing location.
+**Landing** (final waypoint only) lands the aircraft at the nearest airfield or FARP. The waypoint snaps to a valid landing location.
 
-**LandingReFuAr** can be placed at any waypoint other than waypoint 1 and causes the aircraft to land, refuel, and rearm before continuing along its route. This enables designing missions where aircraft fly multiple sorties without despawning. <!-- TODO: MISSING - Document the fuel/weapon states after LandingReFuAr - does the aircraft always refuel to 100%? Can you configure partial refueling or selective rearming? -->
+**LandingReFuAr** (any waypoint except 1) lands, refuels, and rearms the aircraft, then continues the route. Aircraft can fly several sorties without despawning. <!-- TODO: MISSING - Document the fuel/weapon states after LandingReFuAr - does the aircraft always refuel to 100%? Can you configure partial refueling or selective rearming? -->
 
 #### Ground Unit Waypoints
 
-Ground units navigate using simpler waypoint types that control their relationship with the road network:
+Ground units use simpler waypoint types that control how they use the road network:
 
-**On Road** waypoints cause the unit to follow the road network to reach the destination. The AI pathfinding system calculates a route using available roads.
+**On Road** waypoints make the unit pathfind along roads to the waypoint.
 
-**Off Road** waypoints cause the unit to move directly toward the destination, ignoring roads and crossing terrain in a straight line.
+**Off Road** waypoints make the unit drive straight to the waypoint, ignoring roads.
 
-**Rank** waypoints control formation positioning for units within the group.
+**Rank** waypoints control formation positions within the group.
 
 #### Naval Unit Waypoints
 
-Ships use standard turning point waypoints and navigate directly between positions on the water, subject to water depth constraints.
+Ships use turning point waypoints and sail directly between them, subject to water depth.
 
 ### Speed and ETA System
 
-Each waypoint has a speed setting (the desired ground speed when traveling toward that waypoint) and an ETA setting (the estimated time of arrival at that waypoint). Both values have lock checkboxes that control whether the mission designer specifies the value manually or allows the editor to calculate it automatically.
+Each waypoint has a speed and an ETA. The speed is the ground speed toward that waypoint. Each value has a lock checkbox. The designer sets a locked value, and the editor keeps it fixed. The editor calculates each unlocked value from the locked values on the route, and recalculates it when the route changes.
 
-The fundamental rule is that every route must have at least one waypoint with a locked ETA to serve as a time reference. The initial waypoint's ETA lock controls the group's spawn time in the mission. Locking the ETA for later waypoints creates timing constraints that the AI attempts to meet by adjusting its speed.
+Every route needs at least one waypoint with a locked ETA as a time reference. The first waypoint's ETA is the group's spawn time.
 
-When speed is locked and ETA is unlocked, the AI maintains the specified speed and the editor calculates when the aircraft will arrive. When ETA is locked and speed is unlocked, the AI adjusts its speed to arrive at the designated time and the editor calculates the required speed. When both are unlocked for intermediate waypoints, the editor calculates both values based on the constraints of surrounding locked waypoints.
+Choose locks based on what the waypoint requires:
 
-Invalid route configurations occur when the editor cannot find a valid solution for the lock settings. When this happens, the speed and ETA checkboxes are framed in red to indicate an error. Common causes include locking incompatible combinations (such as locking speed for all waypoints while also locking ETA for start and end) or specifying ETAs that require speeds outside the aircraft's flight envelope.
+- **Lock the speed** when the group must fly a leg at a specific speed. The AI holds that speed, and the editor calculates when the group arrives.
+- **Lock the ETA** when the group must arrive at a specific time, such as a time on target or a rendezvous with a tanker or escort. The AI adjusts its speed to arrive on time, and the editor calculates the required speed.
+- **Leave both unlocked** on intermediate waypoints with no speed or timing requirement. The editor calculates both from the surrounding locked waypoints.
+
+If the editor cannot find speeds and ETAs that satisfy every lock, the route is invalid. The editor shows this error by framing the speed and ETA checkboxes in red. Common causes of this error are conflicting locks (speed locked on every waypoint plus ETA locked at start and end) and ETAs that need speeds outside the aircraft's envelope.
 
 ### Altitude Settings
 
-Aircraft waypoints include altitude configuration with two reference systems:
+Each aircraft waypoint altitude is measured either from mean sea level (MSL) or from the ground directly below the aircraft (AGL).
 
-**MSL (Mean Sea Level)** sets the altitude as a constant height above sea level. The aircraft maintains level flight at the specified altitude regardless of terrain below. This is appropriate for high-altitude cruise flight but can result in terrain collisions if the MSL altitude is set below the terrain elevation along the route.
+**MSL (Mean Sea Level)** altitude is a constant height above sea level. The aircraft flies level at that altitude regardless of the terrain below. Use MSL for high-altitude cruise, where the aircraft stays well above the terrain. If the terrain along the route is higher than the MSL altitude, the aircraft can fly into the terrain.
 
-**AGL (Above Ground Level)** sets the altitude as a height above the terrain directly below the aircraft. This creates terrain-following flight where the aircraft climbs and descends to maintain a consistent clearance above the ground. AGL altitude is appropriate for low-level flight through varied terrain.
+**AGL (Above Ground Level)** altitude is a height above the terrain directly below the aircraft. The aircraft climbs and descends to keep that clearance above the ground. Use AGL for low-level flight through varied terrain.
 
 ## Trigger System
 
-The trigger system enables event-driven scripting using a condition-action model. Triggers do not fire on events directly but rather when conditions evaluate to TRUE. For programmatic access to trigger functionality, see the [trigger singleton](scripting/reference/singletons/trigger.md) reference.
+Triggers make a mission respond to what happens during play without Lua scripting. For example, a trigger can show a message when a player enters a zone, or activate an enemy group when another group is destroyed.
+
+Each trigger has a type, a list of conditions, and a list of actions. The game checks the conditions during the mission. When the conditions are true, the trigger runs its actions. The trigger type controls when the game checks the conditions and how often the actions can run.
+
+Events such as a unit being shot do not run triggers by themselves. A trigger runs only when its conditions are true. The trigger's event setting (see [Trigger Events](#trigger-events)) limits when the game checks the conditions.
+
+For programmatic access to trigger functionality, see the [trigger singleton](scripting/reference/singletons/trigger.md) reference.
 
 ### Trigger Types
 
@@ -284,15 +296,13 @@ Fixed weather conditions throughout the mission:
 
 ### Dynamic Weather
 
-Weather generated from atmospheric pressure systems:
+Dynamic weather is the legacy weather system. It generates weather from cyclones and anticyclones (baric systems) placed on the map:
 
 - **Baric System**: Cyclone (low pressure), Anticyclone (high pressure), or None
 - **Systems Quantity**: Number of pressure systems on the map
 - **Pressure Deviation**: Pressure difference from ISA in Pascals
 
-Dynamic weather creates evolving wind and cloud conditions based on pressure system interactions.
-
-**Note:** The Cyclone/Anticyclone baric system settings are part of the legacy non-dynamic weather system and should not be used in new missions. New missions should use weather presets instead. <!-- TODO: UNCLEAR - Clarify the relationship between Dynamic Weather section heading and this legacy note - the section is titled "Dynamic Weather" but describes baric systems as legacy -->
+Do not use dynamic weather in new missions. Use static weather with cloud presets instead, as described in [Weather and Time Configuration](recipes/weather-time.md).
 
 ## Mission Goals
 
@@ -306,47 +316,53 @@ Each goal has a name, point score, and assignment (Offline/Player, RED, or BLUE)
 
 ## Resource Manager
 
-The Resource Manager controls aircraft, fuel, and equipment availability at airbases and independent warehouses:
+The Resource Manager sets the aircraft, fuel, and equipment stocks in warehouses. Each airbase has its own warehouse, and a mission can also contain independent warehouses that do not belong to an airbase. Each warehouse contains:
 
 - **Aircraft inventory**: Available aircraft types and quantities
 - **Fuel**: Available fuel in tons
 - **Equipment**: Weapons, pods, fuel tanks
 
-Warehouses can be linked in supply chains with configurable supply speed, periodicity, and delivery size. When resources fall to an operating level percentage, the warehouse requests resupply from linked suppliers.
+Warehouses can be linked in supply chains with a supply speed, period, and delivery size. When stock falls to the operating level percentage, the warehouse requests resupply from linked suppliers.
 
 ## AI Task Planning
 
-Mission building involves two fundamental approaches to controlling AI behavior. The simple approach relies on placing units and routes with minimal configuration, allowing the AI to behave according to its default programming based on unit type and proximity to enemies. The advanced approach uses the Advanced Actions Panel to manually configure specific tasks, enroute tasks, commands, and options for precise control over AI behavior.
+There are three ways to control AI:
 
-Actions are set for entire groups rather than individual units within a group. The group leader determines when actions activate based on reaching waypoints or satisfying trigger conditions. Understanding the four categories of actions is essential for effective AI scripting.
+- **Default behavior**: Place units and routes, and the AI uses its default behavior for its unit type and nearby enemies.
+- **Advanced Actions Panel**: Configure tasks, enroute tasks, commands, and options for each group in the Mission Editor.
+- **Lua scripting**: A script assigns tasks, commands, and options through a group's [controller](scripting/reference/classes/controller.md) while the mission runs. See [Further Reference](#further-reference).
+
+The rest of this section covers the Advanced Actions Panel.
+
+Actions apply to whole groups, not units. They activate when the group leader reaches a waypoint or a trigger condition is met. There are four action types.
 
 ### Action Types
 
-**Perform Task** actions are primary combat engagements, targeting operations, and maneuvering behaviors. When a Perform Task is set, the AI executes a specific combat function such as orbiting at a location, attacking a designated target, or acting as a forward air controller. Tasks have the highest execution priority and are generally used to set the primary group action for each waypoint. The AI performs multiple tasks sequentially according to their order or priority setting. Task execution ends either automatically (for example, when all designated targets are destroyed) or according to stop conditions set by the mission designer.
+**Perform Task** actions handle combat, targeting, and maneuvering, such as orbiting, attacking a target, or acting as a FAC. Tasks have the highest priority and usually set the group's main action at each waypoint. The AI runs multiple tasks in order or by priority. A task ends on its own (for example, when all targets are destroyed) or at a stop condition.
 
-**Start Enroute Task** actions are similar to Perform Tasks in that they involve targeting or engagement, but they remain active for the duration of the group's route rather than executing once at a waypoint. Enroute Tasks handle "pop-up" situations where the AI should respond to targets of opportunity as they are detected along the route. The key distinction is that Perform Tasks involve known, pre-set targets while Enroute Tasks allow uncertainty in target type or location. Multiple Enroute Tasks can be active simultaneously, but only one executes at a time based on priority when conditions for several are true. Perform Tasks always take priority over concurrent Enroute Tasks unless manually overridden.
+**Start Enroute Task** actions also target or engage, but stay active for the rest of the route instead of running once at a waypoint. They handle targets of opportunity detected along the route. Perform Tasks have known targets; Enroute Tasks have targets of unknown type or location. Several Enroute Tasks can be active, but only the highest-priority eligible one runs. Perform Tasks take priority over Enroute Tasks unless overridden.
 
-**Perform Command** actions are instantaneous group actions executed immediately upon activation. Examples include changing the group's radio frequency or switching navigation lights. Commands do not involve sustained behavior; they simply apply a change and complete.
+**Perform Command** actions are instantaneous, such as changing the group's radio frequency or switching navigation lights.
 
-**Set Option** actions establish rules and limitations for the group that persist for the mission duration or until changed. Options control behaviors such as formation, radar usage, weapons release authority, and reaction to threats. They use a variable-value format such as setting Formation to Trail or Radar Use to Never.
+**Set Option** actions set rules that last until changed, such as formation, radar use, weapons release authority, and threat reaction. Each is a name and value, such as Formation = Trail or Radar Use = Never.
 
 ### Action Priority
 
-The priority system determines which action the AI executes when multiple actions are available. Priority is expressed as a whole number starting with 0 as the highest priority. When conditions for multiple tasks are satisfied, the AI selects the one with the lowest priority number.
+Priority is a whole number, with 0 as the highest priority. When several tasks are eligible, the AI runs the one with the lowest number.
 
-Perform Tasks always take precedence over Enroute Tasks by default. An Enroute Task can be interrupted by a Perform Task and resumed after the task completes. Triggered tasks (set through the trigger menu rather than at waypoints) have higher priority than waypoint tasks.
+By default, Perform Tasks take precedence over Enroute Tasks. A Perform Task interrupts an Enroute Task, which resumes afterward. Triggered tasks (set from the trigger menu) have higher priority than waypoint tasks.
 
 ### Action Activation
 
-Waypoint-based actions activate when the group leader reaches the associated waypoint. Actions are then performed sequentially based on their order in the action list or their priority settings. Actions can also be activated independently of waypoints through the trigger menu, in which case they execute when the trigger conditions are met rather than at a specific route position.
+Waypoint actions activate when the group leader reaches the waypoint, then run in list order or by priority. Actions set from the trigger menu run when the trigger conditions are met, independent of waypoints.
 
 ### Start/Stop Conditions
 
-All actions support conditions that control when they begin and end. Start conditions include mission time (the action activates at a specific time), flag state (the action activates when a flag is true or false), activation probability (a percentage chance the action activates), and Lua predicates (custom scripting logic). Stop conditions include duration time limits, mission time limits, flag states, and reaching the last waypoint. If no stop conditions are set for an Enroute Task, it remains active for the duration of the group's existence in the mission.
+All actions support start and stop conditions. Start conditions include mission time, flag state, activation probability, and Lua predicates. Stop conditions include duration, mission time, flag state, and reaching the last waypoint. An Enroute Task with no stop condition stays active while the group exists.
 
 ### Aircraft Tasks
 
-Aircraft groups have the most extensive task options. The group-level task setting (Nothing, AFAC, Anti-ship Strike, AWACS, CAP, CAS, Escort, Fighter Sweep, Ground Attack, Intercept, Pinpoint Strike, Reconnaissance, Refueling, Runway Attack, SEAD, Transport) serves as a filter that determines which actions are available in the Advanced Actions Panel and which default payload packages are offered.
+Aircraft have the most tasks. The group task (Nothing, AFAC, Anti-ship Strike, AWACS, CAP, CAS, Escort, Fighter Sweep, Ground Attack, Intercept, Pinpoint Strike, Reconnaissance, Refueling, Runway Attack, SEAD, Transport) filters the actions in the Advanced Actions Panel and the default payloads.
 
 Common Perform Tasks for aircraft include Orbit (hold position in a pattern), Attack Group and Attack Unit (engage specified targets), Bombing and Carpet Bombing (attack ground targets), Escort and Follow (accompany another group), Ground Escort (protect ground units), FAC - Assign Group (act as forward air controller for a unit), Land (land at a location), and Refueling (refuel from a tanker).
 
@@ -354,7 +370,7 @@ Common Enroute Tasks for aircraft include the Search Then Engage variants (autom
 
 ### Ground Unit Tasks
 
-Ground units have a more limited but still useful set of tasks. Perform Tasks include Hold (stop movement and hold position), Fire at Point (engage a map location), FAC - Assign Group (designate targets as a forward air controller), and Go to Waypoint (proceed to a specific waypoint out of sequence).
+Ground units have fewer tasks. Perform Tasks include Hold (stop movement and hold position), Fire at Point (engage a map location), FAC - Assign Group (designate targets as a forward air controller), and Go to Waypoint (proceed to a specific waypoint out of sequence).
 
 Enroute Tasks for ground units include FAC and FAC - Engage Group for forward air controller operations during movement.
 
@@ -364,7 +380,7 @@ Naval units support Perform Tasks including Fire at Point and Attack Group for e
 
 ### Further Reference
 
-The tasks, commands, and options available in the Mission Editor can also be assigned dynamically through Lua scripting. See the AI control reference documentation for detailed coverage: [Tasks](scripting/reference/ai/tasks.md), [Commands](scripting/reference/ai/commands.md), and [Options](scripting/reference/ai/options.md).
+Lua scripts can assign the same tasks, commands, and options. See [Tasks](scripting/reference/ai/tasks.md), [Commands](scripting/reference/ai/commands.md), and [Options](scripting/reference/ai/options.md).
 
 ## Briefing Creation
 
@@ -380,25 +396,25 @@ Custom kneeboard cards can be added by placing images in the `Saved Games\DCS\Kn
 
 ## Mission Options
 
-Mission-level options can be enforced on players. These settings control gameplay realism, assistance features, and environmental factors.
+Mission-level options can be enforced on players. These settings control realism, assistance features, and environmental factors.
 
 ### Easy Communication
 
-Always disable Easy Communication. This option simplifies radio communication by automatically tuning frequencies and bypassing proper radio procedures, but it breaks many scripting features and third-party tools that rely on proper radio simulation. Scripts that monitor radio frequencies, trigger events based on radio calls, or implement custom ATC systems will malfunction when Easy Communication is enabled. Even casual players encounter problems with this setting enabled, as popular mods and server-side features depend on the standard radio behavior.
+Always disable Easy Communication. It tunes frequencies automatically and skips radio procedures, which breaks scripts and third-party tools that depend on radio simulation, such as frequency monitors, radio-call triggers, and custom ATC. Popular mods and server features also depend on standard radio behavior.
 
 ### Civilian Traffic
 
-This setting controls the density of civilian vehicles on roads. Civilian traffic in DCS is entirely oblivious to combat operations, which creates immersion problems in mission scenarios. Civilian cars will drive directly through tank columns, appear on thermal imaging alongside military targets, and generally ignore the fact that a war is happening around them. Disable civilian traffic in combat missions to avoid these immersion-breaking situations. The option is suitable only for peacetime scenarios or missions where ground combat is not a factor.
+This setting turns civilian road traffic on or off. Civilian traffic has no awareness of military vehicles or combat. Civilian cars do not stop for or steer around military vehicles, and they clip through them: a car can drive through the middle of a tank column, passing through the tank models. They also show up on thermal imaging next to military targets. Disable it except in peacetime missions or missions without ground combat.
 
 ### Bird Strikes
 
-Disable bird strikes. Despite the name, DCS does not render flocks of birds that pilots could see and avoid. Instead, this option simply applies a random chance of engine failure at low altitudes with no visual indication of what caused it. The result feels like arbitrary bad luck rather than a realistic hazard, since there is nothing the pilot could have done differently to prevent it.
+Disable bird strikes. Despite the name, DCS does not render birds that pilots could see and avoid. The option only adds a random chance of engine failure at low altitude with no visible cause, so the pilot can do nothing to prevent it.
 
 ### Other Options
 
-Additional mission options include:
+Other mission options include:
 
-- **Permit Crash Recovery**: Allow players to respawn after crashes
+- **Permit Crash Recovery**: In singleplayer, lets the player continue the mission after a crash. Without it, a crash ends the mission and opens the debriefing screen.
 - **External Views**: Enable third-person camera views
 - **F10 View Options**: Control what appears on the map view
 - **Labels**: Show floating name labels above units
@@ -415,23 +431,23 @@ Additional mission options include:
 
 ### MIZ Files
 
-Mission file format stored as a ZIP archive containing mission data and resources. See [MIZ File Format](mission/miz-file-format.md) for complete documentation of the archive structure and contents.
+A mission is a ZIP archive of mission data and resources. See [MIZ File Format](mission/miz-file-format.md).
 
 ### TRK Files (Track Recordings)
 
-Track files record gameplay sessions for later playback. Their primary design purpose is reproducing bugs in bug reports to help developers diagnose issues, rather than perfectly capturing gameplay footage or preserving mission recordings.
+Track files record sessions for playback. They exist mainly to reproduce bugs for developers, not to preserve an exact record of a flight.
 
-A .trk file internally contains a complete copy of the MIZ file from which it was generated. This means track files can be opened directly in the Mission Editor to examine the mission setup that produced the recording.
+A .trk file contains a copy of its MIZ file, so the Mission Editor can open it to show the mission setup.
 
-Track files do not store the actual events that occurred during gameplay. Instead, they record the inputs provided by players and AI, then replay the mission from the beginning using those inputs. Because the simulation contains non-deterministic elements (random numbers, floating-point timing variations, AI decision-making), replayed tracks can diverge from what actually happened during the original session. A missile that hit its target in the original flight might miss during playback, or an AI aircraft might make different tactical decisions.
+Track files store player and AI inputs, not events, and replay the mission from the start with those inputs. The simulation is non-deterministic (random numbers, floating-point timing, AI decisions), so playback can diverge from the original session. For example, a missile that hit its target in the original session might miss during playback, or an AI aircraft might make different tactical decisions.
 
-This divergence accumulates over time. Tracks typically remain reasonably accurate for the first few minutes but become increasingly unreliable the longer they run. A track recording of an hour-long mission will likely show significant differences from the original flight by the end.
+Divergence grows over time. Tracks are usually accurate for the first few minutes; by the end of an hour-long mission they likely differ significantly.
 
 Multiplayer track files generated by dedicated servers tend to be more reliable than those recorded in singleplayer.
 
 ## Further Reading
 
-For advanced mission scripting capabilities beyond the GUI editor, see the [Simulator Scripting Engine](scripting/simulator-scripting-engine.md) documentation which covers Lua-based mission scripting for complex scenarios that cannot be achieved through the Mission Editor alone.
+For Lua scripting beyond what the Mission Editor can do, see [Simulator Scripting Engine](scripting/simulator-scripting-engine.md).
 
 <!-- TODO: MISSING - Document common mission testing/debugging workflows -->
 

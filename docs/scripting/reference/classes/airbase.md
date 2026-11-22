@@ -1,10 +1,10 @@
 # Airbase
 
-The Airbase class represents airports, FARPs (Forward Arming and Refueling Points), and ships with flight decks.
+An Airbase object is an airport, a FARP (Forward Arming and Refueling Point), or a ship with a flight deck.
 
 Inherits from: [Object](object.md), [CoalitionObject](coalition-object.md)
 
-You can obtain Airbase objects using `Airbase.getByName("name")` to get an airbase by name, `coalition.getAirbases(coalitionId)` to get all airbases for a coalition, or `world.getAirbases()` to get all airbases in the mission.
+`Airbase.getByName("name")`, `coalition.getAirbases(coalitionId)` (all airbases of a coalition), and `world.getAirbases()` (all airbases) return Airbase objects.
 
 The `Airbase.Category` enum defines the airbase categories:
 

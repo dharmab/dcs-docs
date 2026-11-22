@@ -1,8 +1,8 @@
 # Convoy Route Setup
 
-This recipe describes how to create ground vehicle convoys that travel along roads by directly editing the mission Lua file. Convoys can be used for supply lines, troop movements, or interdiction targets.
+This recipe creates ground convoys that drive on roads by editing the mission Lua file. Use convoys for supply lines, troop movements, or interdiction targets.
 
-> **Note:** DCS ground AI pathfinding has known quirks. Vehicles may occasionally deviate from roads, especially at complex intersections or when resuming from a hold command. The techniques in this guide help minimize these issues but cannot eliminate them entirely.
+> **Note:** DCS ground AI pathfinding has known quirks. Vehicles sometimes leave roads, especially at complex intersections or when resuming from a hold command. The techniques in this guide reduce these problems but cannot eliminate them.
 
 ## Overview
 
@@ -94,7 +94,7 @@ Ground units are placed in `coalition.[side].country[n].vehicle.group`. All vehi
 
 ## Waypoint Structure for Road Movement
 
-Each waypoint uses `action = "On Road"` to follow the road network. The AI pathfinding calculates a route using available roads between waypoints.
+Each waypoint uses `action = "On Road"` to follow the road network. The AI pathfinds along roads between waypoints.
 
 ```lua
 ["route"] = {
@@ -153,7 +153,7 @@ Each waypoint uses `action = "On Road"` to follow the road network. The AI pathf
 
 ## Speed Recommendations
 
-Ground unit speed affects both realism and AI behavior stability. Higher speeds can cause erratic pathfinding.
+Ground unit speed affects how reliably the AI pathfinds. Higher speeds can cause erratic pathfinding.
 
 | Speed (m/s) | Speed (km/h) | Use Case                                        |
 | ----------- | ------------ | ----------------------------------------------- |
@@ -162,7 +162,7 @@ Ground unit speed affects both realism and AI behavior stability. Higher speeds 
 | 5-8         | 18-29        | Slow, cautious movement through contested areas |
 | 20+         | 72+          | Not recommended; causes pathfinding issues      |
 
-> **Tip:** Use slower speeds (8-10 m/s) for more reliable pathfinding behavior. Higher speeds can cause the lead vehicle to make erratic turns at intersections.
+> **Tip:** Use 8-10 m/s for more reliable pathfinding. At higher speeds, the lead vehicle can make erratic turns at intersections.
 
 ## Complete Example: Supply Convoy
 
@@ -306,7 +306,7 @@ This example creates a six-vehicle supply convoy with an escort.
 
 ## Looping Convoy Route
 
-To create a convoy that continuously patrols a route, add a `GoToWaypoint` task on the final waypoint that returns to an earlier waypoint.
+For a convoy that patrols a route in a loop, add a `GoToWaypoint` task on the final waypoint that returns to an earlier waypoint.
 
 ```lua
 -- On the final waypoint, add this task:
@@ -485,13 +485,13 @@ On some maps (notably Caucasus), ground units with both waypoints set to "On Roa
 
 The lead vehicle may make unexpected turns at intersections, especially at higher speeds.
 
-**Workaround:** Reduce convoy speed to 8-10 m/s. Adding an intermediate waypoint at lower speed (5 m/s) before complex intersections can help stabilize pathfinding.
+**Workaround:** Reduce convoy speed to 8-10 m/s. Adding a waypoint at a lower speed (5 m/s) before a complex intersection can help stabilize pathfinding.
 
 ### Vehicles Stacking After Hold Command
 
 When a convoy is stopped with a Hold command and then resumed, vehicles may attempt to close formation by cutting across terrain.
 
-**Workaround:** Avoid using Hold/Resume commands on convoys. Instead, design routes that don't require stopping, or use triggers to spawn new convoy groups at different times.
+**Workaround:** Avoid Hold/Resume commands on convoys. Design routes that don't require stopping, or use triggers to spawn new convoy groups at different times.
 
 ### Off-Road Deviation
 
@@ -523,7 +523,7 @@ When placing vehicles in the Mission Editor or Lua file, use consistent spacing 
 
 ### Initial Heading
 
-Set the `heading` field to align with the road direction at the spawn point. Misaligned headings cause vehicles to turn in place before moving, which can trigger pathfinding issues.
+Set the `heading` field to align with the road direction at the spawn point. A misaligned vehicle turns in place before moving, which can cause pathfinding problems.
 
 ```lua
 ["heading"] = 0.5,  -- Radians; 0 = North, π/2 = East, π = South

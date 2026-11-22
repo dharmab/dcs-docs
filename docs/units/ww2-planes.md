@@ -1,6 +1,6 @@
 # DCS World WW2 Aircraft
 
-This document provides comprehensive information about World War II aircraft in DCS World, including identification, available tasks, hardpoints, and compatible weapons.
+This document covers DCS World World War II aircraft: identification, tasks, hardpoints, and compatible weapons.
 
 ## Table of Contents
 

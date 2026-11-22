@@ -1,6 +1,6 @@
 # Aerial Refueling Tanker Setup
 
-This recipe describes how to create aerial refueling tanker aircraft by directly editing the mission Lua file. A properly configured tanker flies a racetrack pattern, broadcasts a TACAN beacon for navigation, and provides fuel to requesting aircraft.
+This recipe creates tankers by editing the mission Lua file. A tanker flies a racetrack pattern, broadcasts a TACAN beacon for navigation, and refuels aircraft that request it.
 
 ## Overview
 
@@ -15,14 +15,14 @@ A tanker aircraft requires:
 
 ## Refueling System Compatibility
 
-DCS models two distinct aerial refueling systems. Aircraft must use a tanker compatible with their refueling system:
+DCS models two aerial refueling systems. Each aircraft must use a tanker that matches its refueling system:
 
 | Refueling System          | Tanker Aircraft                         | Receiver Aircraft                                                              |
 | ------------------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
 | Probe-and-Drogue (Basket) | KC-130, KC-135MPRS, S-3B Tanker, IL-78M | F/A-18, AV-8B, A-6, Mirage, Rafale, Su-27/33, MiG-29, Tornado, all helicopters |
 | Flying Boom               | KC-135                                  | F-15, F-16, A-10, F-4, B-52                                                    |
 
-> **Note:** The KC-135MPRS (Multi-Point Refueling System) is a KC-135 variant equipped with wing-mounted drogue pods, allowing it to refuel probe-equipped aircraft. Use this tanker when you need to support Navy/Marine aircraft with a boom-equipped tanker airframe.
+> **Note:** The KC-135MPRS (Multi-Point Refueling System) is a KC-135 variant with wing-mounted drogue pods. The real aircraft also has a functioning boom, but in DCS the KC-135MPRS refuels only probe-equipped aircraft. Use a standard KC-135 for boom receivers.
 
 ## Unit Type Strings
 
@@ -34,18 +34,18 @@ DCS models two distinct aerial refueling systems. Aircraft must use a tanker com
 | S-3B Viking Tanker  | `S-3B Tanker` | Blue (NATO)  | Probe-and-Drogue | 15,000-20,000 ft (4,572-6,096 m) |
 | Il-78M Midas        | `IL-78M`      | Red (Russia) | Probe-and-Drogue | 20,000-25,000 ft (6,096-7,620 m) |
 
-> **Note:** The S-3B Tanker is typically used for carrier-based operations, providing organic tanking capability to the carrier air wing.
+> **Note:** The S-3B Tanker is typically used for carrier operations, giving the carrier air wing its own tanker.
 
-> **Slow Receiver Aircraft:** When supporting slow aircraft like the A-10, configure the tanker to fly significantly slower—between 180 and 250 knots indicated airspeed. The A-10's maximum speed with combat loads may not allow it to catch or maintain formation with a tanker flying at typical jet speeds (350-400 knots).
+> **Slow Receiver Aircraft:** When supporting slow aircraft such as the A-10, configure the tanker to fly much slower, between 180 and 250 knots indicated airspeed. An A-10 with a combat load may not be able to catch or stay in formation with a tanker flying at typical jet speeds (350-400 knots).
 
 ## Orbit Pattern Selection
 
-**Always use a Race-Track pattern for tanker operations.** The racetrack provides predictable, straight refueling legs that make it easier for receiver aircraft to join and maintain formation during fuel transfer. Orient the racetrack legs to provide clear airspace for approach and departure.
+**Always use a Race-Track pattern for tanker operations.** The racetrack's straight refueling legs make it easier for receivers to join and hold formation during fuel transfer. Orient the legs so the approach and departure airspace is clear.
 
 ### Racetrack Orientation
 
 - Orient the racetrack parallel to the expected flow of receiver traffic
-- Consider placing the tanker track perpendicular to the threat axis so receivers can refuel while remaining relatively close to their operating area
+- Consider a track perpendicular to the threat axis so receivers refuel close to their operating area
 - A typical leg length of 30-50 nm provides adequate time for refueling on each leg
 
 ## Mission File Structure
@@ -74,7 +74,7 @@ Tanker aircraft are placed in `coalition.[side].country[n].plane.group`. Each gr
 
 ## Complete KC-135 Tanker Group Definition
 
-The following example creates a KC-135 tanker orbiting at 22,000 feet on a racetrack pattern with TACAN beacon.
+The following example creates a KC-135 tanker on a racetrack at 22,000 feet with a TACAN beacon.
 
 ```lua
 [1] = {
@@ -125,7 +125,7 @@ The following example creates a KC-135 tanker orbiting at 22,000 feet on a racet
 
 ## Route Configuration
 
-The route should start at the orbit position with all tasks assigned to the first waypoint. Use two waypoints to define the racetrack pattern.
+Start the route at the orbit position, with all tasks on the first waypoint, and use two waypoints to define the racetrack.
 
 ### Route Structure
 
@@ -187,7 +187,7 @@ All tasks are assigned on the first waypoint using a `ComboTask` container. The 
 
 ### Tanker Task
 
-The Tanker task activates the aircraft's aerial refueling capability, allowing it to respond to refueling requests.
+The Tanker task turns on the aircraft's refueling capability so it answers refueling requests.
 
 ```lua
 {
@@ -273,7 +273,7 @@ Sets the radio frequency players use to communicate with the tanker for join-up 
 
 ### Orbit Task (Race-Track)
 
-The orbit task defines the tanker's refueling pattern. Use `Race-Track` pattern with `point` and `point2` defining the leg endpoints.
+The orbit task defines the tanker's pattern. Use `Race-Track`, with `point` and `point2` as the leg endpoints.
 
 ```lua
 {
@@ -410,7 +410,7 @@ Enable unlimited fuel to ensure the tanker can operate for the duration of the m
 
 ## KC-135MPRS Example (Drogue-Equipped)
 
-The KC-135MPRS is configured identically to the KC-135 but provides probe-and-drogue refueling for Navy/Marine aircraft.
+The KC-135MPRS is configured the same way as the KC-135. In DCS it provides only probe-and-drogue refueling, so it supports probe-equipped aircraft such as Navy and Marine jets but not boom receivers.
 
 ```lua
 [1] = {
@@ -461,7 +461,7 @@ The KC-135MPRS is configured identically to the KC-135 but provides probe-and-dr
 
 ## KC-130 Example (Tactical Tanker)
 
-The KC-130 operates at lower altitudes and speeds, suitable for tactical refueling of helicopters and slower aircraft.
+The KC-130 flies at lower altitudes and speeds, which suits refueling helicopters and slower aircraft.
 
 ```lua
 [1] = {
@@ -627,7 +627,7 @@ The KC-130 operates at lower altitudes and speeds, suitable for tactical refueli
 
 ## S-3B Tanker Example (Carrier-Based)
 
-The S-3B Tanker provides organic tanking for carrier air wings and typically operates at lower altitudes closer to the carrier.
+The S-3B Tanker serves carrier air wings and usually flies at lower altitudes, close to the carrier.
 
 ```lua
 [1] = {

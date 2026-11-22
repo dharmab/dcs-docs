@@ -1,10 +1,10 @@
 # StaticObject
 
-The StaticObject class represents non-moving objects placed in the mission, such as buildings, cargo, and decorations.
+A StaticObject is a non-moving object placed in the mission, such as a building, cargo, or decoration.
 
 Inherits from: [Object](object.md), [CoalitionObject](coalition-object.md)
 
-You can obtain StaticObject objects using `StaticObject.getByName("name")` to get a static object by name, or `coalition.getStaticObjects(coalitionId)` to get all static objects for a coalition.
+`StaticObject.getByName("name")` and `coalition.getStaticObjects(coalitionId)` (all static objects of a coalition) return StaticObject objects.
 
 ## StaticObject.getByName
 

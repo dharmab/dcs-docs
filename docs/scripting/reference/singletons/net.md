@@ -1,6 +1,6 @@
 # net
 
-The net singleton provides chat, player information, slot control, and data conversion functions. It is available in both mission scripts and [server hooks](../hooks/server-hooks.md). Server hooks can also call extra functions for ban lists, mission lists, mission loading, and chat history, documented in the [server hooks reference](../hooks/server-hooks.md#network-api-net).
+The net singleton contains chat, player information, slot control, and data conversion functions. It is available in both mission scripts and [server hooks](../hooks/server-hooks.md). Server hooks can also call extra functions for ban lists, mission lists, mission loading, and chat history, documented in the [server hooks reference](../hooks/server-hooks.md#network-api-net).
 
 ## Logging Shortcuts
 
@@ -311,7 +311,7 @@ local data = net.json2lua(json)
 string net.dostring_in(string state, string luaCode)
 ```
 
-> **Warning:** This function is obsolete and unsafe. You can return values from `a_do_script()` in mission scripting directly instead.
+> **Warning:** This function is obsolete and unsafe. Return values from `a_do_script()` in mission scripting instead.
 
 Executes Lua code in a specified internal Lua state.
 

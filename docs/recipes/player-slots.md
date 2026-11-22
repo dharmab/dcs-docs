@@ -1,6 +1,6 @@
 # Adding Player Slots at an Airfield
 
-This recipe describes how to create player-controllable aircraft slots at an airfield by directly editing the mission Lua file. Player slots allow human players to fly aircraft in both singleplayer and multiplayer missions.
+This recipe creates player aircraft slots at an airfield by editing the mission Lua file. Player slots let people fly aircraft in both singleplayer and multiplayer missions.
 
 ## Overview
 
@@ -20,7 +20,7 @@ A mission typically uses one approach:
 
 ## Dynamic Spawn System (Recommended for Multiplayer)
 
-The dynamic spawn system, introduced in DCS 2.9, allows players to spawn any aircraft available in the airfield's warehouse without requiring pre-placed slots for every possible aircraft. This dramatically reduces mission file complexity and allows unlimited player capacity.
+The dynamic spawn system, added in DCS 2.9, lets players spawn any aircraft in the airfield's warehouse without a pre-placed slot for every possible aircraft. This makes the mission file much simpler and removes the limit on how many aircraft slots fit at a single airfield.
 
 ### How Dynamic Spawn Works
 
@@ -64,7 +64,7 @@ warehouses = {
 }
 ```
 
-Note: the key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. If you want to restrict specific aircraft types, populate the table with entries like `["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["initialAmount"] = 10, ["unlimited"] = false }` (see the wsType note below).
+The key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. To restrict types, add entries like `["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["initialAmount"] = 10, ["unlimited"] = false }` (see the wsType note below).
 
 ### Enabling Dynamic Spawn on a Ship
 
@@ -132,7 +132,7 @@ The Stennis definition has `numParking = 4`, so only a handful of aircraft can s
 
 ### Dynamic Spawn Template Group
 
-A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. The `lateActivation` flag prevents the template from appearing in the traditional slot selection screen:
+A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. `lateActivation` keeps the template out of the traditional slot selection screen:
 
 ```lua
 [1] = {
@@ -414,7 +414,7 @@ This example places an F-16C at Kobuleti airfield (airdromeId 24) with a cold st
 
 ### Traditional Multiplayer Slots Example
 
-For traditional multiplayer missions without dynamic spawn, use `skill = "Client"` and create multiple units for each available slot:
+For traditional multiplayer missions without dynamic spawn, use `skill = "Client"` and create a unit for each available slot:
 
 ```lua
 [1] = {

@@ -1,22 +1,22 @@
 # DCS World Scripting Documentation
 
-This directory contains documentation for the DCS World Simulator Scripting Engine (SSE).
+This directory documents the DCS World Simulator Scripting Engine (SSE).
 
 ## Getting Started
 
-If you're new to DCS scripting, read these documents in order:
+If you're new to DCS scripting, read these in order:
 
-1. **[lua-basics.md](lua-basics.md)** - Learn the Lua programming language fundamentals
-2. **[simulator-scripting-engine.md](simulator-scripting-engine.md)** - Understand how scripts interact with the simulation
+1. **[lua-basics.md](lua-basics.md)** - Lua fundamentals
+2. **[simulator-scripting-engine.md](simulator-scripting-engine.md)** - How scripts interact with the simulation
 3. **API Reference** - Look up specific functions as needed
 
 ## API Reference
 
-The [reference/](reference/) directory contains detailed documentation for every API element:
+[reference/](reference/) documents every API element:
 
 ### Singletons
 
-Global objects that provide access to game functionality:
+Global objects with game functions:
 
 | Singleton                                                   | Purpose                              |
 | ----------------------------------------------------------- | ------------------------------------ |
@@ -32,7 +32,7 @@ Global objects that provide access to game functionality:
 
 ### Classes
 
-Object types you'll work with in scripts:
+Object types:
 
 | Class                                                    | Description                                   |
 | -------------------------------------------------------- | --------------------------------------------- |
@@ -48,7 +48,7 @@ Object types you'll work with in scripts:
 
 ### AI System
 
-Documentation for controlling AI behavior:
+AI control:
 
 | Document                                | Content                                              |
 | --------------------------------------- | ---------------------------------------------------- |
@@ -68,7 +68,7 @@ Documentation for controlling AI behavior:
 
 ## Scripting Environments
 
-DCS provides two separate scripting environments:
+DCS has two scripting environments:
 
 **Mission Scripts** run inside the simulation sandbox with restricted filesystem access. Most of this documentation covers mission scripting.
 

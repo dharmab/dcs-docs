@@ -1,8 +1,8 @@
 # SAM Site Deployment Guide
 
-This recipe describes how to deploy Surface-to-Air Missile (SAM) sites by directly editing the mission Lua file. Proper SAM deployment requires understanding system compositions, radar dependencies, and tactical placement principles.
+This recipe places Surface-to-Air Missile (SAM) sites by editing the mission Lua file. It covers how each system is composed, which radars it depends on, and where to place it.
 
-> **Note:** Many SAM systems in DCS require multiple vehicles to function. A launcher typically needs a tracking radar, and the radar may need a search radar or command post. Placing a launcher alone will result in a non-functional system.
+> **Note:** Most SAM systems need several vehicles. A launcher usually needs a tracking radar, and the radar may need a search radar or command post. A launcher alone does not work.
 
 ## Overview
 
@@ -15,7 +15,7 @@ A complete SAM site requires:
 
 ## Mission File Structure
 
-Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each group contains multiple units that form the SAM battery.
+Ground units are placed in `coalition.[side].country[n].vehicle.group`. Each group contains the units that form one SAM battery.
 
 ```lua
 ["coalition"] = {
@@ -248,7 +248,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 - Straight Flush at center
 - TELs 500–1500 m away with clear line of sight to radar
 - Suitable for frontline or maneuver warfare scenarios
-- Mobile—can relocate after engagements to avoid SEAD
+- Mobile; can relocate after engagements to avoid SEAD
 
 ---
 
@@ -463,7 +463,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 - Loose dispersion around defended asset
 - Use terrain masking and ambush placement
 - Ideal as last-ditch inner layer defense
-- Passive IR guidance—no radar emission to warn targets
+- Passive IR guidance; no radar emission to warn targets
 
 ---
 
@@ -620,7 +620,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Recommended Layout:**
 
-- **Radar has limited scan sector**—orient toward threat axis
+- **Radar has limited scan sector**; orient toward threat axis
 - Launchers clustered 500 m–2 km from radar
 - Command elements protected but within cable range
 - **Always support with SHORAD** (Avenger, Chaparral)
@@ -758,7 +758,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 - FDC at protected central location
 - Radar positioned for best coverage
 - Launchers can be widely dispersed (networked)
-- Active radar homing missiles—fire and forget
+- Active radar homing missiles; fire and forget
 
 ---
 
@@ -779,7 +779,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 **Recommended Layout:**
 
 - Disperse evenly around defended asset
-- IR-guided—no radar warning for targets
+- IR-guided; no radar warning for targets
 - Limited against fast, maneuvering jets
 
 ---
@@ -800,7 +800,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 **Recommended Layout:**
 
-- Highly mobile—can escort convoys
+- Highly mobile; can escort convoys
 - Disperse around defended asset
 - IR-guided Stingers provide no radar warning
 
@@ -952,7 +952,7 @@ Include the P-19. Forum reports disagree on whether the SNR-75 can acquire targe
 
 ## Early Warning Radars
 
-Early warning radars extend detection range and provide cueing to SAM batteries. Place them several kilometers from SAM sites to avoid single-weapon kills.
+Early warning radars extend detection range and cue SAM batteries. Place them several kilometers from SAM sites so one weapon can't kill both.
 
 | Radar          | Type ID         | Notes                    |
 | -------------- | --------------- | ------------------------ |
@@ -993,13 +993,13 @@ Early Warning:
   └── P-19 radar (offset 5+ km)
 ```
 
-> **Gameplay Note:** The outer layer (SA-5, SA-10 at long range) is often excluded from missions. DCS lacks the strategic assets (B-52s, cruise missiles, dedicated SEAD packages) and operational scale needed to realistically counter these systems. Very long-range SAMs tend to create frustrating gameplay where players are engaged before they can meaningfully respond. For enjoyable SEAD/DEAD missions, consider starting with the middle layer as your longest-range threat.
+> **Gameplay Note:** Missions often leave out the outer layer (SA-5, SA-10 at long range). DCS lacks the strategic assets (B-52s, cruise missiles, dedicated SEAD packages) and operational scale needed to counter these systems realistically. Very long-range SAMs tend to engage players before they can respond, which is frustrating. For SEAD/DEAD missions, consider making the middle layer the longest-range threat.
 >
-> Cold War-era systems (SA-2, SA-3, SA-5, SA-6, SA-8) often provide more engaging gameplay than modern systems, even in contemporary settings. Their longer radar scan times, slower missile performance, and exploitable limitations give players more opportunities for tactical maneuvering and counterplay. Many real-world conflicts still feature these legacy systems, so their inclusion remains plausible.
+> Cold War systems (SA-2, SA-3, SA-5, SA-6, SA-8) often make for better gameplay than modern systems, even in modern settings. Their longer radar scan times, slower missiles, and exploitable limitations leave players more opportunities to maneuver against them. Many real conflicts still involve these systems, so including them remains plausible.
 
 ### Basic IADS Script
 
-The following script implements emission control for a layered IADS. Early warning radars stay on continuously to detect threats. Search radars pulse at medium intervals when the EWR detects hostiles in the general area. Track radars activate only when targets enter effective engagement range.
+The following script runs emission control for a layered IADS. Early warning radars stay on continuously to detect threats. Search radars pulse at intervals when the EWRs detect hostiles in the general area. Track radars turn on only when targets are within engagement range.
 
 **Group naming convention:** The script expects groups to be named with prefixes:
 
@@ -1186,9 +1186,9 @@ timer.scheduleFunction(function(_, time) return IADS:update(_, time) end, nil, t
 
 1. **EWR groups** (prefixed `EWR-`) remain active throughout the mission, providing continuous surveillance.
 
-2. **Search radar groups** (prefixed `SAM-Search-`) pulse on/off when EWRs detect hostiles within 80 km. The default pattern is 15 seconds on, 45 seconds off. This reduces exposure to SEAD aircraft while maintaining situational awareness.
+2. **Search radar groups** (prefixed `SAM-Search-`) pulse on/off when EWRs detect hostiles within 80 km. The default pattern is 15 seconds on, 45 seconds off. This reduces exposure to SEAD aircraft while keeping the site aware of the threat.
 
-3. **Track radar groups** (prefixed `SAM-Track-`) activate when hostiles enter 40 km, providing fire control for engagements.
+3. **Track radar groups** (prefixed `SAM-Track-`) turn on when hostiles come within 40 km, providing fire control for engagements.
 
 **Example group setup:**
 

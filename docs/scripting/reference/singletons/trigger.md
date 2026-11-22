@@ -1,8 +1,8 @@
 # trigger
 
-The trigger singleton provides access to trigger zones, user flags, and trigger-style actions like messages, sounds, radio transmissions, smoke, explosions, and F10 map drawings. The singleton is divided into two sub-tables: `trigger.action` for actions and `trigger.misc` for utilities.
+The trigger singleton contains functions for trigger zones, user flags, and trigger actions such as messages, sounds, radio transmissions, smoke, explosions, and F10 map drawings. It contains two sub-tables: `trigger.action` for actions and `trigger.misc` for utilities.
 
-Functions that accept position parameters (such as `smoke`, `explosion`, `illuminationBomb`, and `signalFlare`) may fail or produce unexpected results if the coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+Functions that accept position parameters (such as `smoke`, `explosion`, `illuminationBomb`, and `signalFlare`) may fail or return wrong results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## trigger.action.outText
 
@@ -339,7 +339,7 @@ trigger.action.ctfColorTag("Display Lead", trigger.smokeColor.Red + 1)
 nil trigger.action.explosion(Vec3 position, number power)
 ```
 
-The `trigger.action.explosion` function creates an explosion at the specified position. Very large explosions can cause performance issues, so values above 1000 should be used carefully.
+The `trigger.action.explosion` function creates an explosion at the specified position. Values above 1000 can hurt performance.
 
 **Parameters:**
 
@@ -659,7 +659,7 @@ For circular zones, the returned table contains:
 }
 ```
 
-The `point` field contains the center position of the zone. The `radius` field contains the radius of the zone in meters.
+The `point` field is the center position of the zone. The `radius` field is the zone radius in meters.
 
 For polygon zones (quad-point zones), the returned table contains:
 
@@ -670,7 +670,7 @@ For polygon zones (quad-point zones), the returned table contains:
 }
 ```
 
-The `point` field contains the center position of the zone. The `verticies` field contains an array of Vec3 values representing the corner points. The API uses "verticies" (misspelled) rather than "vertices."
+The `point` field is the center position of the zone. The `verticies` field (misspelled in the API) is an array of Vec3 corner points.
 
 Vertex order follows how the zone was drawn, so it may be clockwise or counter-clockwise. Geometry code that needs a specific orientation (such as triangulation) should check the signed area and reverse the points if needed.
 
@@ -750,7 +750,7 @@ These `trigger.action` functions are thin Lua wrappers around other API calls. C
 | `trigger.action.addOtherCommandForGroup(groupId, name, flagName, flagValue)`  | `missionCommands.addCommandForGroup(groupId, name, nil, ...)`                            |
 | `trigger.action.removeOtherCommandForGroup(groupId, name)`                    | `missionCommands.removeItemForGroup(groupId, {name})`                                    |
 
-If `flagValue` is omitted, the `addOtherCommand*` functions set the flag to `true`. Note that `deactivateGroup` destroys the group; it cannot be activated again.
+If `flagValue` is omitted, the `addOtherCommand*` functions set the flag to `true`. `deactivateGroup` destroys the group; it cannot be activated again.
 
 ## See Also
 

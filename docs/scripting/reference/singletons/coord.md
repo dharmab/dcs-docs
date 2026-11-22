@@ -1,8 +1,8 @@
 # coord
 
-The coord singleton provides coordinate conversion between the game's internal XYZ system, Latitude/Longitude, and MGRS.
+The coord singleton contains functions that convert coordinates between the game's internal XYZ system, Latitude/Longitude, and MGRS.
 
-Coordinate conversion functions may fail or return undefined results if the input coordinates fall outside the current map's boundaries. When calling these functions with dynamically calculated positions, consider using `pcall()` to handle potential errors gracefully.
+Coordinate conversion functions may fail or return undefined results for coordinates outside the map. Wrap calls with computed positions in `pcall()`.
 
 ## coord.LLtoLO
 
