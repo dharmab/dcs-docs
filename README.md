@@ -11,7 +11,7 @@ This repository contains documentation for AI agents and developers working with
 
 ## Who This Is For
 
-**AI agents** building tools, generating missions, or automating tasks in DCS World. The structured reference documentation and machine-readable index (`docs/index.json`) support programmatic consumption.
+**AI agents** building tools, generating missions, or automating tasks in DCS World. The structured reference documentation supports programmatic consumption.
 
 **Novice mission designers** learning to create scenarios. The tutorial documents explain concepts progressively without assuming prior programming experience.
 
@@ -29,7 +29,7 @@ The [recipes](docs/recipes/) directory contains step-by-step guides for common m
 
 ### For AI Agents
 
-The documentation index at [docs/index.json](docs/index.json) provides a structured manifest of all files with metadata including type, audience, and description.
+Start with the documentation index at [docs/README.md](docs/README.md).
 
 Reference documentation follows consistent patterns:
 
@@ -42,7 +42,6 @@ Reference documentation follows consistent patterns:
 ```
 docs/
 ├── README.md                 # Documentation index
-├── index.json                # Machine-readable file manifest
 ├── mission-editor.md         # Mission Editor tutorial
 ├── mission/                  # File format specifications
 ├── scripting/                # Scripting documentation
