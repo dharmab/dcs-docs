@@ -298,12 +298,12 @@ Set `point` to the ARCP, at the end of the hot leg. Putting the ARCP at the star
 width = 2 × TAS² / (g × tan(bank))      TAS in m/s, g = 9.81 m/s²
 ```
 
-| Tanker and speed                       | TAS     | Width for 20° bank |
-| -------------------------------------- | ------- | ------------------ |
-| KC-135 at 280 KIAS, 20,000 ft          | 197 m/s | ~12 nm (21.7 km)   |
-| KC-135MPRS at 250 KIAS, 18,000 ft      | 171 m/s | ~9 nm (16.4 km)    |
-| KC-135 at 200 KIAS, 15,000 ft (A-10s)  | 130 m/s | ~5 nm (9.5 km)     |
-| S-3B at 250 KIAS, 8,000 ft             | 145 m/s | ~6.5 nm (11.8 km)  |
+| Tanker and speed                      | TAS     | Width for 20° bank |
+| ------------------------------------- | ------- | ------------------ |
+| KC-135 at 280 KIAS, 20,000 ft         | 197 m/s | ~12 nm (21.7 km)   |
+| KC-135MPRS at 250 KIAS, 18,000 ft     | 171 m/s | ~9 nm (16.4 km)    |
+| KC-135 at 200 KIAS, 15,000 ft (A-10s) | 130 m/s | ~5 nm (9.5 km)     |
+| S-3B at 250 KIAS, 8,000 ft            | 145 m/s | ~6.5 nm (11.8 km)  |
 
 The examples here use rounder widths. Whether DCS AI banks exactly to fit `width` has not been measured.
 
