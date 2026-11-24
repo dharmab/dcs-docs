@@ -191,39 +191,54 @@ OperationInfinity.config = {
     -- Player and support aircraft airbase name. Position is read into state.homeAirbase at init.
     homeAirbase = "Krymsk",
 
-    -- Support aircraft racetrack centers by region, as offsets from Krymsk
+    -- Support aircraft tracks by region. Each is an Anchored orbit: `offset`
+    -- (from Krymsk) is the middle of the hot leg, flown on `hotLegHeading`
+    -- (radians true) into the ARCP at its far end. The hot legs point toward
+    -- the target area so receivers come off the tanker heading for the fight.
+    -- See docs/scripting/reference/ai/tasks.md#anchored-pattern-geometry.
     supportRacetracks = {
         -- Maykop: 15 nm south of Krymsk
         northwest = {
             offset = { x = -(15 * METERS_PER_NM), y = 0 },
-            trackLength = 50000, -- 50km racetrack
-            heading = 0, -- North-South track
+            legLength = 50000,
+            hotLegHeading = math.pi, -- southbound
         },
         -- Gudauta/Sukhumi: 50 nm SE of Krymsk (~130 degrees, toward the target area)
         central_coast = {
             offset = { x = -(50 * METERS_PER_NM * 0.64), y = 50 * METERS_PER_NM * 0.77 },
-            trackLength = 60000,
-            heading = math.pi * 0.75, -- NW-SE track aligned with route
+            legLength = 60000,
+            hotLegHeading = math.pi * 0.75, -- 135, along the route
         },
         -- Kobuleti/Senaki/Kutaisi: 50 nm SE of Krymsk
         southwest_coast = {
             offset = { x = -(50 * METERS_PER_NM * 0.64), y = 50 * METERS_PER_NM * 0.77 },
-            trackLength = 60000,
-            heading = math.pi * 0.75,
+            legLength = 60000,
+            hotLegHeading = math.pi * 0.75,
         },
         -- Mozdok: 100 nm east of Krymsk along the Krymsk-Mozdok axis (~98 degrees)
         northeast = {
             offset = { x = -(100 * METERS_PER_NM * 0.14), y = 100 * METERS_PER_NM * 0.99 },
-            trackLength = 80000,
-            heading = 0, -- E-W track
+            legLength = 80000,
+            hotLegHeading = math.pi / 2, -- eastbound
         },
         -- Tbilisi: 180 nm SE of Krymsk (~117 degrees)
         southeast = {
             offset = { x = -(180 * METERS_PER_NM * 0.45), y = 180 * METERS_PER_NM * 0.89 },
-            trackLength = 80000,
-            heading = math.pi * 0.65, -- NW-SE track
+            legLength = 80000,
+            hotLegHeading = math.pi * 0.65, -- 117, along the route
         },
     },
+
+    -- Bank angle of the turns at each end of a support track. Each track's
+    -- width is the turn diameter at this bank and the aircraft's orbit TAS
+    -- (about 12 nm for Texaco), so receivers can stay connected through the
+    -- turns.
+    supportTrackBank = math.rad(20),
+    -- Each support aircraft's track is shifted this far right of the previous
+    -- one; altitude blocks keep them apart where the ovals overlap
+    supportTrackSpacing = 5000,
+    -- Turn direction of every support track (false = left turns)
+    supportTrackClockwise = false,
 
     -- Support aircraft group names, orbit altitudes (feet MSL) and target
     -- indicated airspeeds (knots). The Orbit task takes TAS in m/s, which is
@@ -839,14 +854,30 @@ function OperationInfinity:displayCoordinates(groupId)
     end
 end
 
--- Callsigns and frequencies of all support assets, one per line
+-- Whole degrees in [0, 360) for a heading in radians
+local function headingDegrees(radians)
+    return math.floor(math.deg(radians) + 0.5) % 360
+end
+
+-- Bearing (degrees true) and range (nm) of `point` from Krymsk, as "112/45"
+function OperationInfinity:formatFromHome(point)
+    local home = self.state.homeAirbase
+    local dx = point.x - home.x
+    local dy = point.y - home.y
+    local rangeNm = math.floor(math.sqrt(dx * dx + dy * dy) / METERS_PER_NM + 0.5)
+    return string.format("%03d/%d", headingDegrees(math.atan2(dy, dx)), rangeNm)
+end
+
+-- Callsigns and frequencies of all support assets, one per line. Once a
+-- region is selected, also the tanker track and each tanker's ARCP.
 function OperationInfinity:getSupportAssetText()
+    local regionKey = self.state.battlefield.regionKey
     local lines = {
         "  Magic (SkyEye GCI): 255.3 MHz AM, 124.1 MHz VHF, 32.1 MHz FM",
     }
-    for _, aircraft in ipairs(self.config.supportAircraft) do
+    for i, aircraft in ipairs(self.config.supportAircraft) do
         if aircraft.tankerType then
-            lines[#lines + 1] = string.format(
+            local line = string.format(
                 "  %s (%s): %.1f MHz AM, TACAN %s, %d ft, %d KIAS",
                 aircraft.name,
                 aircraft.tankerType,
@@ -855,9 +886,22 @@ function OperationInfinity:getSupportAssetText()
                 aircraft.altitudeFt,
                 aircraft.iasKnots
             )
+            if regionKey then
+                line = line .. ", ARCP " .. self:formatFromHome(self:getSupportOrbit(regionKey, i).arcp) .. " Krymsk"
+            end
+            lines[#lines + 1] = line
         else
             lines[#lines + 1] = string.format("  %s (%s)", aircraft.name, aircraft.role)
         end
+    end
+    if regionKey then
+        local orbit = self:getSupportOrbit(regionKey, 1)
+        lines[#lines + 1] = string.format(
+            "  Tanker tracks: hot leg %03dT ends at the ARCP, %s turns, %d nm legs",
+            headingDegrees(orbit.hotLegDir),
+            orbit.clockWise and "right" or "left",
+            math.floor(orbit.legLength / METERS_PER_NM + 0.5)
+        )
     end
     lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
     -- Arco 2-1 is a mission-file group steered by CarrierOps, not on the regional racetrack
@@ -1027,7 +1071,8 @@ end
 -- SUPPORT AIRCRAFT ACTIVATION
 -- =============================================================================
 
--- Get the racetrack position for the selected region
+-- Get the support track for the selected region: the middle of the hot leg,
+-- its heading, and its length
 function OperationInfinity:getRacetrackPosition(regionKey)
     local racetrack = self.config.supportRacetracks[regionKey]
     if not racetrack then
@@ -1039,8 +1084,8 @@ function OperationInfinity:getRacetrackPosition(regionKey)
     return {
         x = homeAirbase.x + racetrack.offset.x,
         y = homeAirbase.y + racetrack.offset.y,
-        trackLength = racetrack.trackLength,
-        heading = racetrack.heading,
+        legLength = racetrack.legLength,
+        hotLegHeading = racetrack.hotLegHeading,
     }
 end
 
@@ -1049,6 +1094,7 @@ local MPS_PER_KNOT = 0.514444
 local ISA_SEA_LEVEL_DENSITY = 1.225 -- kg/m^3
 local ISA_LAPSE_FACTOR = 2.25577e-5 -- per meter, troposphere
 local ISA_DENSITY_EXPONENT = 4.25588
+local GRAVITY = 9.81 -- m/s^2
 
 -- Convert indicated airspeed to true airspeed (both m/s) using the ISA
 -- troposphere density model (valid below 11 km). Treats IAS as EAS.
@@ -1057,16 +1103,53 @@ local function indicatedToTrueAirspeed(iasMps, altitudeMeters)
     return iasMps * math.sqrt(ISA_SEA_LEVEL_DENSITY / density)
 end
 
+-- Diameter (m) of a level turn at `trueAirspeed` (m/s) and `bank` (radians)
+local function turnDiameter(trueAirspeed, bank)
+    return 2 * trueAirspeed * trueAirspeed / (GRAVITY * math.tan(bank))
+end
+
+-- Orbit altitude (m) and true airspeed (m/s) of a supportAircraft entry
+local function supportOrbitAltitudeAndSpeed(aircraft)
+    local altitude = aircraft.altitudeFt * METERS_PER_FOOT
+    return altitude, indicatedToTrueAirspeed(aircraft.iasKnots * MPS_PER_KNOT, altitude)
+end
+
+-- Anchored orbit geometry for the support aircraft at `index` in
+-- config.supportAircraft. Each aircraft's hot leg is shifted right of the
+-- previous one by supportTrackSpacing, and its width is its turn diameter at
+-- supportTrackBank. Returns the ARCP (end of the hot leg) and the Orbit
+-- task's Anchored parameters.
+function OperationInfinity:getSupportOrbit(regionKey, index)
+    local track = self:getRacetrackPosition(regionKey)
+    local heading = track.hotLegHeading
+    local right = (index - 1) * self.config.supportTrackSpacing
+    local forward = track.legLength / 2
+    local _, speed = supportOrbitAltitudeAndSpeed(self.config.supportAircraft[index])
+    return {
+        arcp = {
+            x = track.x + forward * math.cos(heading) - right * math.sin(heading),
+            y = track.y + forward * math.sin(heading) + right * math.cos(heading),
+        },
+        hotLegDir = heading,
+        legLength = track.legLength,
+        width = turnDiameter(speed, self.config.supportTrackBank),
+        clockWise = self.config.supportTrackClockwise,
+    }
+end
+
 -- Activate support aircraft and set their orbit positions based on selected region
 function OperationInfinity:activateSupportAircraft(regionKey)
     local racetrack = self:getRacetrackPosition(regionKey)
 
     log("Activating support aircraft for region: " .. tostring(regionKey))
-    log("Racetrack center: (" .. math.floor(racetrack.x) .. ", " .. math.floor(racetrack.y) .. ")")
-
-    -- Calculate racetrack endpoints based on heading and track length
-    local halfTrack = racetrack.trackLength / 2
-    local heading = racetrack.heading or 0
+    log(
+        string.format(
+            "Support track hot leg center (%d, %d), hot leg %03d",
+            math.floor(racetrack.x),
+            math.floor(racetrack.y),
+            headingDegrees(racetrack.hotLegHeading)
+        )
+    )
 
     for i, aircraft in ipairs(self.config.supportAircraft) do
         -- Activate late activation group (spawns the aircraft)
@@ -1081,42 +1164,29 @@ function OperationInfinity:activateSupportAircraft(regionKey)
             log("WARNING: Could not find group to activate: " .. aircraft.name)
         end
 
-        -- Offset each aircraft's racetrack laterally; altitude separation comes
-        -- from each aircraft's own altitudeFt block
-        local lateralOffset = (i - 1) * 5000 -- 5km lateral separation
+        -- Each aircraft's track is shifted right of the previous one; altitude
+        -- separation comes from each aircraft's own altitudeFt block
+        local orbit = self:getSupportOrbit(regionKey, i)
 
-        -- Calculate this aircraft's racetrack center (offset perpendicular to track)
-        local perpHeading = heading + math.pi / 2
-        local centerX = racetrack.x + lateralOffset * math.cos(perpHeading)
-        local centerY = racetrack.y + lateralOffset * math.sin(perpHeading)
-
-        -- Calculate racetrack endpoints
-        local point1 = {
-            x = centerX - halfTrack * math.cos(heading),
-            y = centerY - halfTrack * math.sin(heading),
-        }
-        local point2 = {
-            x = centerX + halfTrack * math.cos(heading),
-            y = centerY + halfTrack * math.sin(heading),
-        }
-
-        local orbitAltitude = aircraft.altitudeFt * METERS_PER_FOOT
-        local orbitSpeed = indicatedToTrueAirspeed(aircraft.iasKnots * MPS_PER_KNOT, orbitAltitude)
+        local orbitAltitude, orbitSpeed = supportOrbitAltitudeAndSpeed(aircraft)
 
         -- Schedule orbit task to be pushed once aircraft is airborne
         local orbitTask = {
             id = "Orbit",
             params = {
-                pattern = "Race-Track",
-                point = point1,
-                point2 = point2,
+                pattern = "Anchored",
+                point = orbit.arcp,
+                hotLegDir = orbit.hotLegDir,
+                legLength = orbit.legLength,
+                width = orbit.width,
+                clockWise = orbit.clockWise,
                 altitude = orbitAltitude,
                 speed = orbitSpeed,
             },
         }
         local groupName = aircraft.name
-        local logCenterX = math.floor(centerX)
-        local logCenterY = math.floor(centerY)
+        local logArcpX = math.floor(orbit.arcp.x)
+        local logArcpY = math.floor(orbit.arcp.y)
 
         -- Poll until aircraft is airborne, then push orbit task
         local function checkAndPushOrbit()
@@ -1135,7 +1205,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
                 local ctrl = grp:getController()
                 if ctrl then
                     ctrl:pushTask(orbitTask)
-                    log("Pushed orbit task to " .. groupName .. " at (" .. logCenterX .. ", " .. logCenterY .. ")")
+                    log("Pushed orbit task to " .. groupName .. " with ARCP (" .. logArcpX .. ", " .. logArcpY .. ")")
                 end
                 return nil -- Done, stop polling
             else
@@ -1155,10 +1225,10 @@ function OperationInfinity:activateSupportAircraft(regionKey)
                 .. aircraft.iasKnots
                 .. " KIAS ("
                 .. math.floor(orbitSpeed)
-                .. " m/s TAS), center ("
-                .. logCenterX
+                .. " m/s TAS), ARCP ("
+                .. logArcpX
                 .. ", "
-                .. logCenterY
+                .. logArcpY
                 .. ")"
         )
     end

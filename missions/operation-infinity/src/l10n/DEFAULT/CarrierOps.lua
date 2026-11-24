@@ -20,6 +20,7 @@ local KNOTS_TO_MPS = 0.514444
 local METERS_PER_NM = 1852
 local FEET_TO_METERS = 0.3048
 local TWO_PI = 2 * math.pi
+local GRAVITY = 9.81 -- m/s^2
 
 -- Height at which wind over the deck is sampled (roughly flight deck height)
 local DECK_HEIGHT = 20
@@ -134,24 +135,30 @@ CarrierOps.config = {
         respawnDelay = 120,
     },
 
-    -- S-3B recovery tanker: flies a racetrack parallel to the carrier's
+    -- S-3B recovery tanker: flies an Anchored track parallel to the carrier's
     -- into-wind leg, offset toward the shore so it stays clear of the Case I
-    -- pattern and closer to aircraft arriving from Krymsk
+    -- pattern and closer to aircraft arriving from Krymsk. The hot leg runs
+    -- with the carrier and the turns go away from it.
     recoveryTanker = {
         groupName = "Arco 2",
         altitude = 8000 * FEET_TO_METERS,
         -- TAS for 250 KIAS at 8,000 ft
         speed = 145,
-        -- Lateral distance from the carrier's leg to the racetrack
+        -- Lateral distance from the carrier's leg to the hot leg
         offset = 5 * METERS_PER_NM,
+        -- Bank angle of the end turns. The track's width (hot leg to return
+        -- leg, farther from the carrier) is the turn diameter at this bank
+        -- and `speed`, about 6.4 nm, so receivers can stay connected through
+        -- the turns.
+        bank = math.rad(20),
         -- Legs shorter than this are extended around their midpoint
         minTrackLength = 15 * METERS_PER_NM,
-        -- Halve the offset up to this many times if a track end is over land
+        -- Halve the offset up to this many times if any part of the track is over land
         offsetHalvings = 3,
-        -- Keep the current racetrack unless the new one moves this much
+        -- Keep the current track unless the new one moves this much
         retaskDistance = 3 * METERS_PER_NM,
         retaskAngle = math.rad(10),
-        -- The racetrack goes on the side of the leg nearest this point (Anapa)
+        -- The track goes on the side of the leg nearest this point (Anapa)
         shoreReference = { x = -13670, y = 239630 },
         -- Must match waypoint 1 of Arco 2 in the mission file and the comms plan
         beacon = {
@@ -181,7 +188,7 @@ CarrierOps.state = {
     plannedWindFrom = nil,
     plannedWindSpeed = nil,
     planeGuardRespawnAt = nil,
-    recoveryTrack = nil, -- {point1, point2, course} of the recovery tanker's racetrack
+    recoveryTrack = nil, -- Recovery tanker's Anchored track, from computeRecoveryTrack
 }
 
 -- =============================================================================
@@ -719,10 +726,60 @@ local function distance2D(a, b)
     return math.sqrt(dx * dx + dy * dy)
 end
 
--- Racetrack endpoints parallel to the leg from legStart to legEnd, on the
--- shore side and over water
+-- Anchored track whose hot leg runs along `course` beside the leg midpoint
+-- `mid`, `hotOffset` meters to the right (negative is left), with the return
+-- leg at `returnOffset`. The ARCP is the forward end of the hot leg.
+local function anchoredTrack(mid, course, halfLength, hotOffset, returnOffset)
+    return {
+        arcp = offsetPoint(mid, course, halfLength, hotOffset),
+        center = offsetPoint(mid, course, 0, hotOffset),
+        course = course,
+        legLength = 2 * halfLength,
+        width = math.abs(returnOffset - hotOffset),
+        -- Right turns put the return leg on the right of the hot leg
+        clockWise = returnOffset > hotOffset,
+    }
+end
+
+-- True if both legs' ends and both turns' outer edges are over water
+local function isTrackOverWater(mid, course, halfLength, hotOffset, returnOffset)
+    local turnOffset = (hotOffset + returnOffset) / 2
+    local turnReach = halfLength + math.abs(returnOffset - hotOffset) / 2
+    local checks = {
+        offsetPoint(mid, course, -halfLength, hotOffset),
+        offsetPoint(mid, course, halfLength, hotOffset),
+        offsetPoint(mid, course, -halfLength, returnOffset),
+        offsetPoint(mid, course, halfLength, returnOffset),
+        offsetPoint(mid, course, -turnReach, turnOffset),
+        offsetPoint(mid, course, turnReach, turnOffset),
+    }
+    for _, point in ipairs(checks) do
+        if not isDeepWater(point) then
+            return false
+        end
+    end
+    return true
+end
+
+-- Diameter (m) of a level turn at `trueAirspeed` (m/s) and `bank` (radians)
+local function turnDiameter(trueAirspeed, bank)
+    return 2 * trueAirspeed * trueAirspeed / (GRAVITY * math.tan(bank))
+end
+
+-- Width of the recovery tanker's track: its turn diameter at its orbit
+-- speed and bank
+function CarrierOps:getRecoveryTrackWidth()
+    local cfg = self.config.recoveryTanker
+    return turnDiameter(cfg.speed, cfg.bank)
+end
+
+-- Anchored track beside the leg from legStart to legEnd: the hot leg runs
+-- with the carrier on the shore side, and the tanker turns away from the
+-- carrier so the return leg is farther toward shore. The whole oval is over
+-- water.
 function CarrierOps:computeRecoveryTrack(legStart, legEnd)
     local cfg = self.config.recoveryTanker
+    local width = self:getRecoveryTrackWidth()
     local course = normalizeAngle(math.atan2(legEnd.y - legStart.y, legEnd.x - legStart.x))
     local mid = { x = (legStart.x + legEnd.x) / 2, y = (legStart.y + legEnd.y) / 2 }
     local halfLength = math.max(distance2D(legStart, legEnd), cfg.minTrackLength) / 2
@@ -733,18 +790,18 @@ function CarrierOps:computeRecoveryTrack(legStart, legEnd)
 
     local offset = cfg.offset
     for _ = 0, cfg.offsetHalvings do
-        local point1 = offsetPoint(mid, course, -halfLength, side * offset)
-        local point2 = offsetPoint(mid, course, halfLength, side * offset)
-        if isDeepWater(point1) and isDeepWater(point2) then
-            return point1, point2, course
+        local hotOffset = side * offset
+        local returnOffset = side * (offset + width)
+        if isTrackOverWater(mid, course, halfLength, hotOffset, returnOffset) then
+            return anchoredTrack(mid, course, halfLength, hotOffset, returnOffset)
         end
         offset = offset / 2
     end
-    log("WARNING: Recovery tanker track is over land on the shore side; flying it along the leg")
-    return offsetPoint(mid, course, -halfLength, 0), offsetPoint(mid, course, halfLength, 0), course
+    log("WARNING: Recovery tanker track is over land on the shore side; flying it along the leg, turning seaward")
+    return anchoredTrack(mid, course, halfLength, 0, -side * width)
 end
 
--- Send the recovery tanker to a racetrack beside the into-wind leg that runs
+-- Send the recovery tanker to an Anchored track beside the into-wind leg that runs
 -- from legStart to legEnd. Keeps the current track if the new one is close.
 function CarrierOps:updateRecoveryTanker(legStart, legEnd)
     local cfg = self.config.recoveryTanker
@@ -754,20 +811,16 @@ function CarrierOps:updateRecoveryTanker(legStart, legEnd)
         return
     end
 
-    local point1, point2, course = self:computeRecoveryTrack(legStart, legEnd)
+    local track = self:computeRecoveryTrack(legStart, legEnd)
     local current = self.state.recoveryTrack
-    if current then
-        local center = { x = (point1.x + point2.x) / 2, y = (point1.y + point2.y) / 2 }
-        local currentCenter =
-            { x = (current.point1.x + current.point2.x) / 2, y = (current.point1.y + current.point2.y) / 2 }
-        if
-            distance2D(center, currentCenter) < cfg.retaskDistance
-            and angleDifference(course, current.course) < cfg.retaskAngle
-        then
-            return
-        end
+    if
+        current
+        and distance2D(track.center, current.center) < cfg.retaskDistance
+        and angleDifference(track.course, current.course) < cfg.retaskAngle
+    then
+        return
     end
-    self.state.recoveryTrack = { point1 = point1, point2 = point2, course = course }
+    self.state.recoveryTrack = track
 
     local pos = getUnitPosition2D(unit)
     local controller = group:getController()
@@ -793,9 +846,12 @@ function CarrierOps:updateRecoveryTanker(legStart, legEnd)
                                     {
                                         id = "Orbit",
                                         params = {
-                                            pattern = "Race-Track",
-                                            point = point1,
-                                            point2 = point2,
+                                            pattern = "Anchored",
+                                            point = track.arcp,
+                                            hotLegDir = track.course,
+                                            legLength = track.legLength,
+                                            width = track.width,
+                                            clockWise = track.clockWise,
                                             altitude = cfg.altitude,
                                             speed = cfg.speed,
                                         },
@@ -819,11 +875,13 @@ function CarrierOps:updateRecoveryTanker(legStart, legEnd)
 
     log(
         string.format(
-            "Recovery tanker racetrack: course %03d, %.1f nm long, center (%d, %d)",
-            toDegrees(course),
-            distance2D(point1, point2) / METERS_PER_NM,
-            math.floor((point1.x + point2.x) / 2),
-            math.floor((point1.y + point2.y) / 2)
+            "Recovery tanker track: hot leg %03d, %.1f nm legs, %.1f nm wide, %s turns, ARCP (%d, %d)",
+            toDegrees(track.course),
+            track.legLength / METERS_PER_NM,
+            track.width / METERS_PER_NM,
+            track.clockWise and "right" or "left",
+            math.floor(track.arcp.x),
+            math.floor(track.arcp.y)
         )
     )
 end
