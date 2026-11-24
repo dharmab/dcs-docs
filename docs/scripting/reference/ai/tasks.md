@@ -185,6 +185,14 @@ local orbit = {
 
 #### Anchored pattern geometry
 
+An Anchored orbit is an oval with two straight legs joined by 180° turns:
+
+- **Hot leg** - The straight leg flown on `hotLegDir`, ending at `point`. The mission editor labels its heading "Hot Leg Brg". On a tanker track this is the leg receivers plan to join on. A holding pattern calls it the inbound leg.
+- **Return leg** - The parallel straight leg flown the opposite way, back to the start of the hot leg. It lies `width` meters to one side of the hot leg. A holding pattern calls it the outbound leg, and tanker crews call it the cold leg.
+- **ARCP** - The anchor point, `point`, at the end of the hot leg where the aircraft turns onto the return leg.
+
+DCS AI tankers refuel on either leg, so the hot leg only sets where the track sits and which way it faces.
+
 `point` is the anchor point, which tankers call the ARCP (Air Refueling Control Point). It sits at the **end** of the hot leg, not the start: the aircraft flies the hot leg on `hotLegDir`, reaches `point`, then turns onto the return leg. The oval extends behind `point`, opposite `hotLegDir`. This is the same layout as a holding pattern, where the holding fix is at the end of the inbound leg.[^anchored]
 
 With `clockWise = false` the turns are to the left, so the return leg lies `width` meters to the left of the hot leg. With `clockWise = true` it lies to the right.

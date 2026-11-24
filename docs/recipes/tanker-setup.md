@@ -302,7 +302,7 @@ The orbit task defines the tanker's pattern. Use `Race-Track`, with `point` and 
 
 ### Orbit Task (Anchored)
 
-The Anchored pattern builds the track from one point. `point` is the ARCP (Air Refueling Control Point), at the **end** of the hot (inbound) leg, and the track extends behind it. The tanker flies the hot leg on `hotLegDir` toward the ARCP, turns, and flies the return leg back. `legLength` is each straight leg without the turns, and `width` is the distance between the two legs. With `clockWise = false` the tanker turns left, so the return leg is on the left of the hot leg. See [Anchored pattern geometry](../scripting/reference/ai/tasks.md#anchored-pattern-geometry).
+The Anchored pattern builds the track from one point. The track has two straight legs: the **hot leg**, flown on `hotLegDir` toward the ARCP, where receivers plan to join, and the **return leg** (the cold leg), flown the opposite way back to the start of the hot leg. `point` is the ARCP (Air Refueling Control Point), at the **end** of the hot leg, and the track extends behind it. The tanker flies the hot leg into the ARCP, turns, and flies the return leg back. `legLength` is each straight leg without the turns, and `width` is the distance between the two legs. With `clockWise = false` the tanker turns left, so the return leg is on the left of the hot leg. See [Anchored pattern geometry](../scripting/reference/ai/tasks.md#anchored-pattern-geometry).
 
 In the mission editor these are the Hot Leg Brg, Leg length, Width, and Clockwise fields of the Orbit task with the Anchored pattern.
 
