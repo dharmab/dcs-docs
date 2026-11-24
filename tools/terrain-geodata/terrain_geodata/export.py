@@ -1,4 +1,4 @@
-"""Write one terrain's GIS files."""
+"""Write terrains' GIS files."""
 
 from __future__ import annotations
 
@@ -18,7 +18,8 @@ from pyproj import Transformer
 from rasterio.transform import Affine
 from shapely.geometry.base import BaseGeometry
 
-from . import geonames, luafiles, projection, sup5, surface5
+from . import geonames, luafiles, projection, schedule, sup5, surface5
+from .schedule import Call
 
 
 @dataclass(frozen=True)
@@ -143,17 +144,19 @@ def _write_gpkg_layer(
     )
 
 
-def _write_landcover(path: Path, lc: surface5.LandCover, crs_wkt: str) -> None:
-    height, width = lc.data.shape
-    transform = Affine(lc.resolution, 0, lc.west, 0, -lc.resolution, lc.north)
+def _write_landcover(
+    path: Path, data: np.ndarray, grid: surface5.Grid, crs_wkt: str
+) -> None:
+    transform = Affine(grid.resolution, 0, grid.west, 0, -grid.resolution, grid.north)
     # The COG driver can only copy, so rasterio stages the raster in memory and
-    # builds the tiled, overviewed file when the dataset closes.
+    # builds the tiled, overviewed file when the dataset closes. Blocks are
+    # compressed independently, so threads do not change the output.
     with rasterio.open(
         path,
         "w",
         driver="COG",
-        width=width,
-        height=height,
+        width=grid.width,
+        height=grid.height,
         count=1,
         dtype="uint8",
         crs=crs_wkt,
@@ -163,30 +166,107 @@ def _write_landcover(path: Path, lc: surface5.LandCover, crs_wkt: str) -> None:
         level=9,
         overview_resampling="mode",
         blocksize=512,
+        num_threads="ALL_CPUS",
     ) as dst:
-        dst.write(lc.data, 1)
+        dst.write(data, 1)
         dst.write_colormap(1, {c.value: (*c.color, 255) for c in surface5.CLASSES})
         dst.set_band_description(1, "land cover class")
         dst.update_tags(1, **{f"CLASS_{c.value}": c.name for c in surface5.CLASSES})
 
 
-def export_terrain(
+def _read_places(
+    src: TerrainSource,
+) -> tuple[list[luafiles.Town], list[geonames.Label], projection.Projection]:
+    towns = luafiles.read_towns(src.towns)
+    labels = geonames.read_labels(src.geonames) if src.geonames else []
+    proj = projection.fit(_reference_points(src, towns, labels))
+    return towns, labels, proj
+
+
+# Land cover work is cut into runs of tiles holding about this much metadata
+# (a few seconds each), and finer for small terrains so they still spread over
+# every worker.
+_CHUNK_BYTES = 4_000_000
+_CHUNKS_PER_WORKER = 3
+
+
+def _chunks(spans: list[tuple[int, int]], workers: int) -> list[list[tuple[int, int]]]:
+    total = spans[-1][1] - spans[0][0]
+    target = min(_CHUNK_BYTES, total / (workers * _CHUNKS_PER_WORKER))
+    chunks: list[list[tuple[int, int]]] = []
+    run: list[tuple[int, int]] = []
+    size = 0
+    for span in spans:
+        run.append(span)
+        size += span[1] - span[0]
+        if size >= target:
+            chunks.append(run)
+            run, size = [], 0
+    if run:
+        chunks.append(run)
+    return chunks
+
+
+def _work_estimate(src: TerrainSource) -> int:
+    """Rough relative cost of exporting a terrain, to start the largest first.
+
+    Export time tracks the size of the whole surface5 file (although only its
+    most detailed tiles are read) plus the overlay, which costs about 25 times
+    as much per byte to parse.
+    """
+    size = 25 * src.map_overlay.stat().st_size if src.map_overlay else 0
+    if src.surface is not None:
+        size += src.surface.stat().st_size
+    return size
+
+
+def export_terrains(
+    terrains: list[TerrainSource],
+    out_root: Path,
+    resolution: float,
+    version: str | None,
+    workers: int,
+) -> None:
+    """Export every terrain, sharing ``workers`` processes between them.
+
+    Each terrain's single-threaded steps (reading the overlay, the final
+    GeoTIFF write) go ahead of land cover tiles, and larger terrains ahead of
+    smaller ones, so that no long step is left running alone at the end.
+    """
+    ranked = sorted(terrains, key=_work_estimate, reverse=True)
+    schedule.run(
+        [
+            _export_job(src, out_root, resolution, version, workers, rank)
+            for rank, src in enumerate(ranked)
+        ],
+        workers,
+    )
+
+
+def _export_job(
     src: TerrainSource,
     out_root: Path,
     resolution: float,
     version: str | None,
-    log=print,
-) -> Path:
+    workers: int,
+    rank: int,
+) -> schedule.Job:
+    urgent, bulk = (0, rank), (1, rank)
     out = out_root / src.theatre
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
     started = time.monotonic()
+    lines = [f"{src.theatre} ({src.folder.name})"]
+    log = lines.append
 
-    towns = luafiles.read_towns(src.towns)
-    labels = geonames.read_labels(src.geonames) if src.geonames else []
-    points = _reference_points(src, towns, labels)
-    proj = projection.fit(points)
+    calls = {"places": Call(urgent, _read_places, (src,))}
+    if src.map_overlay is not None:
+        calls["sets"] = Call(urgent, sup5.read_line_sets, (src.map_overlay,))
+    if src.surface is not None:
+        calls["plan"] = Call(urgent, surface5.plan_tiles, (src.surface, resolution))
+    got = yield calls
+    towns, labels, proj = got["places"]
     crs = proj.crs(src.theatre)
     crs_wkt = crs.to_wkt()
     log(
@@ -227,20 +307,48 @@ def export_terrain(
             "longitude": np.array([r[2] for r in place_rows]),
         },
     )
-    lc = (
-        surface5.rasterize_landcover(src.surface, resolution)
-        if src.surface is not None
-        else None
-    )
 
-    layer_counts: dict[str, int] = {"places": len(place_rows)}
+    lc: surface5.LandCover | None = None
+    plan: surface5.TilePlan | None = got.get("plan")
+    if plan is not None:
+        assert src.surface is not None
+        chunks = _chunks(plan.spans, workers)
+        rasters = yield {
+            i: Call(
+                bulk,
+                surface5.rasterize_tiles,
+                (src.surface, plan.data_offset, plan.grid, chunk),
+            )
+            for i, chunk in enumerate(chunks)
+        }
+        lc = surface5.assemble(
+            plan.grid,
+            [r for i in range(len(chunks)) for r in rasters[i]],
+            len(plan.spans),
+        )
+
+    final: dict[str, Call] = {}
+    if plan is not None and lc is not None:
+        final["landcover.tif"] = Call(
+            urgent,
+            _write_landcover,
+            (out / "landcover.tif", lc.data, plan.grid, crs_wkt),
+        )
     decisions: dict[str, str] = {}
-    if src.map_overlay is not None:
-        layers, decisions = sup5.read_layers(
-            src.map_overlay,
+    if "sets" in got:
+        parts_by_layer, decisions = sup5.assign_layers(
+            got["sets"],
             classify=lc.mask_fractions if lc is not None else None,
             overrides=OVERLAY_OVERRIDES.get(src.theatre),
         )
+        for layer, parts in parts_by_layer.items():
+            final[layer] = Call(
+                urgent, sup5.build_geometry, (sup5.LAYERS[layer], parts)
+            )
+    layers = yield final
+
+    layer_counts: dict[str, int] = {"places": len(place_rows)}
+    if src.map_overlay is not None:
         for layer, primitive in sup5.LAYERS.items():
             geoms = layers.get(layer, [])
             layer_counts[layer] = len(geoms)
@@ -280,7 +388,6 @@ def export_terrain(
     }
 
     if lc is not None:
-        _write_landcover(out / "landcover.tif", lc, crs_wkt)
         height, width = lc.data.shape
         meta["landcover"] = {
             "resolution_m": resolution,
@@ -300,4 +407,4 @@ def export_terrain(
         json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     log(f"  done in {time.monotonic() - started:.0f} s")
-    return out
+    print("\n".join(lines), flush=True)

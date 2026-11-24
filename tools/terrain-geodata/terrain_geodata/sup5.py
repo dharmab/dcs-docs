@@ -204,7 +204,8 @@ def _primitives(bulk: BulkData, rec: MapRecord) -> np.ndarray:
     return en[idx]
 
 
-def _build_geometry(primitive: str, parts: list[np.ndarray]) -> list[BaseGeometry]:
+def build_geometry(primitive: str, parts: list[np.ndarray]) -> list[BaseGeometry]:
+    """Merge primitives into lines or polygons."""
     prims = np.concatenate(parts)
     if primitive == "LINELIST":
         lines = shapely.linestrings(prims)
@@ -217,47 +218,62 @@ def _build_geometry(primitive: str, parts: list[np.ndarray]) -> list[BaseGeometr
     return [g for g in shapely.get_parts(merged) if g.geom_type == "Polygon"]
 
 
-def read_layers(
-    path: Path,
-    classify: LineClassifier | None = None,
-    overrides: dict[tuple[str, str], str] | None = None,
-) -> tuple[dict[str, list[BaseGeometry]], dict[str, str]]:
-    """Read the map overlay as shapely geometry in DCS (easting=z, northing=x).
+@dataclass
+class LineSet:
+    """Every primitive of one material and colour, from the finest group."""
 
-    ``overrides`` maps ``(material, colorIndex)`` to a layer for line sets the
-    mesh check cannot place. Returns ``(layers, decisions)``, where
-    ``decisions`` records which layer each material/colour set went to, or
-    ``"skipped"``.
-    """
+    material: str
+    primitive: str
+    color_index: str
+    parts: list[np.ndarray]  # (n, k, 2) arrays of (easting, northing) = (z, x)
+
+    @property
+    def label(self) -> str:
+        material = self.material or "(unnamed)"
+        return f"{material}/{self.primitive}/colorIndex={self.color_index}"
+
+
+def read_line_sets(path: Path) -> list[LineSet]:
+    """Read the map overlay's line and polygon sets in DCS (easting=z, northing=x),
+    leaving out the MGRS grid and graticule."""
     data_offset, records = read_records(path)
     by_key: dict[tuple[str, str, str], list[MapRecord]] = defaultdict(list)
     for rec in records:
         if rec.material not in ("MGRS", "Line"):  # grid and graticule
             by_key[(rec.material, rec.primitive, rec.color_index)].append(rec)
 
-    parts_by_layer: dict[str, list[np.ndarray]] = defaultdict(list)
-    decisions: dict[str, str] = {}
+    sets: list[LineSet] = []
     with BulkData(path, data_offset) as bulk:
         for (material, primitive, color), recs in sorted(by_key.items()):
             finest = min(r.group for r in recs)
             parts = [_primitives(bulk, r) for r in recs if r.group == finest]
             parts = [p for p in parts if len(p)]
-            if not parts:
-                continue
-            layer = (overrides or {}).get((material, color)) or _layer_for(
-                material, primitive, parts, classify
-            )
-            label = f"{material or '(unnamed)'}/{primitive}/colorIndex={color}"
-            if layer is None or LAYERS[layer] != primitive:
-                decisions[label] = "skipped"
-                continue
-            decisions[label] = layer
-            parts_by_layer[layer].extend(parts)
+            if parts:
+                sets.append(LineSet(material, primitive, color, parts))
+    return sets
 
-    layers = {
-        layer: _build_geometry(prim, parts_by_layer[layer])
-        if parts_by_layer[layer]
-        else []
-        for layer, prim in LAYERS.items()
-    }
-    return layers, decisions
+
+def assign_layers(
+    sets: list[LineSet],
+    classify: LineClassifier | None = None,
+    overrides: dict[tuple[str, str], str] | None = None,
+) -> tuple[dict[str, list[np.ndarray]], dict[str, str]]:
+    """Sort line sets into output layers.
+
+    ``overrides`` maps ``(material, colorIndex)`` to a layer for line sets the
+    mesh check cannot place. Returns ``(parts by layer, decisions)``, where
+    ``decisions`` records which layer each material/colour set went to, or
+    ``"skipped"``. Pass each layer's parts to ``build_geometry``.
+    """
+    parts_by_layer: dict[str, list[np.ndarray]] = defaultdict(list)
+    decisions: dict[str, str] = {}
+    for s in sets:
+        layer = (overrides or {}).get((s.material, s.color_index)) or _layer_for(
+            s.material, s.primitive, s.parts, classify
+        )
+        if layer is None or LAYERS[layer] != s.primitive:
+            decisions[s.label] = "skipped"
+            continue
+        decisions[s.label] = layer
+        parts_by_layer[layer].extend(s.parts)
+    return dict(parts_by_layer), decisions

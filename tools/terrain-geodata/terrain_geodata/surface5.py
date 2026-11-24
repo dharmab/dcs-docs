@@ -201,8 +201,40 @@ def _scan_tile(seg: bytes, tile: Tile) -> None:
     tile.pbase = pending.get("Pbase")
 
 
-def read_tiles(path: Path) -> tuple[int, list[Tile]]:
-    """Index the most detailed tile group. Returns ``(data_offset, tiles)``."""
+@dataclass(frozen=True)
+class Grid:
+    """The land cover raster: pixel size, top-left corner and size in pixels."""
+
+    west: float  # easting (DCS z) of the left edge
+    north: float  # northing (DCS x) of the top edge
+    resolution: float
+    width: int
+    height: int
+
+
+@dataclass(frozen=True)
+class TilePlan:
+    """Where the most detailed tiles sit in a surface5 file, for splitting work."""
+
+    data_offset: int
+    grid: Grid
+    # Byte range of each tile's node in the metadata, in file order.
+    spans: list[tuple[int, int]]
+
+
+@dataclass
+class TileRaster:
+    """One tile drawn on its own small canvas, to be composited in tile order."""
+
+    row: int
+    col: int
+    img: np.ndarray
+    road: np.ndarray
+    rail: np.ndarray
+
+
+def plan_tiles(path: Path, resolution: float) -> TilePlan:
+    """Index the most detailed tile group and the raster grid that covers it."""
     data_offset, type_name = read_header(path)
     if type_name != "landscape5::Surface5File":
         raise FormatError(f"{path} is {type_name}, not a surface5 file")
@@ -214,20 +246,30 @@ def read_tiles(path: Path) -> tuple[int, list[Tile]]:
     count = struct.unpack_from("<I", meta, nodes[0] - 8)[0]
     if not 0 < count <= len(nodes):
         raise FormatError(f"implausible tile count {count} in {path}")
-    tiles: list[Tile] = []
-    for i in range(count):
-        start = nodes[i]
-        end = nodes[i + 1] if i + 1 < len(nodes) else len(meta)
-        matrix = struct.unpack_from("<16f", meta, start)
-        bbox = struct.unpack_from("<6f", meta, start + 64)
-        tile = Tile((matrix[12], matrix[13], matrix[14]), bbox)
-        _scan_tile(meta[start:end], tile)
-        tiles.append(tile)
+    spans = [
+        (nodes[i], nodes[i + 1] if i + 1 < len(nodes) else len(meta))
+        for i in range(count)
+    ]
+    tiles = [_tile_node(meta, start) for start, _ in spans]
     # Kola repeats one tile; many repeats would mean the group count is wrong.
     duplicates = len(tiles) - len({t.translation for t in tiles})
     if duplicates > len(tiles) // 100:
         raise FormatError(f"{duplicates} duplicate tiles in the first group")
-    return data_offset, tiles
+    west, south, east, north = _extent(tiles, resolution)
+    grid = Grid(
+        west,
+        north,
+        resolution,
+        round((east - west) / resolution),
+        round((north - south) / resolution),
+    )
+    return TilePlan(data_offset, grid, spans)
+
+
+def _tile_node(meta: bytes, start: int) -> Tile:
+    matrix = struct.unpack_from("<16f", meta, start)
+    bbox = struct.unpack_from("<6f", meta, start + 64)
+    return Tile((matrix[12], matrix[13], matrix[14]), bbox)
 
 
 def _extent(tiles: list[Tile], res: float) -> tuple[float, float, float, float]:
@@ -249,67 +291,130 @@ def _max_edge(tris: np.ndarray) -> np.ndarray:
     return np.sqrt((d**2).sum(axis=2)).max(axis=1)
 
 
-def rasterize_landcover(path: Path, resolution: float) -> LandCover:
-    data_offset, tiles = read_tiles(path)
-    west, south, east, north = _extent(tiles, resolution)
-    width = round((east - west) / resolution)
-    height = round((north - south) / resolution)
-    img = np.zeros((height, width), np.uint8)
-    road_mask = np.zeros((height, width), np.uint8)
-    rail_mask = np.zeros((height, width), np.uint8)
-    shift = 4  # sub-pixel bits for cv2.fillPoly
-
-    def fill(target: np.ndarray, tris_en: np.ndarray, value: int) -> None:
-        if not len(tris_en):
-            return
-        # OpenCV puts pixel centres on integer coordinates.
-        px = np.empty(tris_en.shape, np.int32)
-        px[..., 0] = np.round(((tris_en[..., 0] - west) / resolution - 0.5) * 16)
-        px[..., 1] = np.round(((north - tris_en[..., 1]) / resolution - 0.5) * 16)
-        cv2.fillPoly(target, list(px.reshape(-1, 3, 1, 2)), value, shift=shift)
-
-    def draw(tris_en: np.ndarray, cls: str) -> None:
-        if cls in _SIZE_FILTERED and len(tris_en):
-            tris_en = tris_en[_max_edge(tris_en) <= _MAX_FEATURE_EDGE_M]
-        fill(img, tris_en, CLASS_VALUE[cls])
-
+def rasterize_tiles(
+    path: Path, data_offset: int, grid: Grid, spans: list[tuple[int, int]]
+) -> list[TileRaster]:
+    """Draw a run of consecutive tiles from ``TilePlan.spans``, each on its own
+    canvas. Compositing every run in order with ``assemble`` gives the same
+    raster as drawing all tiles onto one canvas."""
+    first, last = spans[0][0], spans[-1][1]
+    with path.open("rb") as f:
+        f.seek(first)
+        meta = f.read(last - first)
+    rasters: list[TileRaster] = []
     with BulkData(path, data_offset) as bulk:
-        for tile in tiles:
-            base = next((r for r in tile.records if "TRITYPE" in r.streams), None)
-            if tile.pbase is None or base is None:
-                continue
-            pos = bulk.positions(tile.pbase)
-            en = np.stack(
-                [pos[:, 2] + tile.translation[2], pos[:, 0] + tile.translation[0]],
-                axis=1,
-            )
-            tri = bulk.indices(base.streams["TRI"])
-            types = bulk.array(base.streams["TRITYPE"], "<u4")
-            if len(types) != len(tri) or (len(tri) and tri.max() >= len(en)):
-                raise FormatError("base mesh streams disagree; layout changed?")
-            tris_en = en[tri]
-            forest = _forest_triangles(bulk, tile, en)
-            draw(tris_en, "land")
-            for cls, bit in _BIT_CLASSES:
-                if cls == "town":
-                    draw(forest, "forest")  # over fields, under towns
-                draw(tris_en[(types & bit) != 0], cls)
-            fill(road_mask, tris_en[(types & ROAD) != 0], 1)
-            fill(rail_mask, tris_en[(types & RAIL) != 0], 1)
+        for start, end in spans:
+            seg = meta[start - first : end - first]
+            tile = _tile_node(seg, 0)
+            _scan_tile(seg, tile)
+            raster = _rasterize_tile(bulk, tile, grid)
+            if raster is not None:
+                rasters.append(raster)
+    return rasters
+
+
+_IMG, _ROAD, _RAIL = range(3)
+
+
+def _rasterize_tile(bulk: BulkData, tile: Tile, grid: Grid) -> TileRaster | None:
+    base = next((r for r in tile.records if "TRITYPE" in r.streams), None)
+    if tile.pbase is None or base is None:
+        return None
+    pos = bulk.positions(tile.pbase)
+    en = np.stack(
+        [pos[:, 2] + tile.translation[2], pos[:, 0] + tile.translation[0]], axis=1
+    )
+    tri = bulk.indices(base.streams["TRI"])
+    types = bulk.array(base.streams["TRITYPE"], "<u4")
+    if len(types) != len(tri) or (len(tri) and tri.max() >= len(en)):
+        raise FormatError("base mesh streams disagree; layout changed?")
+    px = _to_px(en, grid)
+    forest_en, forest_px = _forest_triangles(bulk, tile, en, px, grid)
+
+    # Fills in draw order, as (canvas, triangle pixel coordinates, value).
+    # Vertices are converted to pixels once and triangles index into them.
+    fills: list[tuple[int, np.ndarray, int]] = []
+
+    def fill(canvas: int, tris_px: np.ndarray, value: int) -> None:
+        if len(tris_px):
+            fills.append((canvas, tris_px, value))
+
+    def draw(cls: str, tris_px: np.ndarray, tris_en: np.ndarray | None) -> None:
+        if cls in _SIZE_FILTERED and len(tris_px):
+            assert tris_en is not None
+            tris_px = tris_px[_max_edge(tris_en) <= _MAX_FEATURE_EDGE_M]
+        fill(_IMG, tris_px, CLASS_VALUE[cls])
+
+    fill(_IMG, px[tri], CLASS_VALUE["land"])
+    for cls, bit in _BIT_CLASSES:
+        if cls == "town":
+            draw("forest", forest_px, forest_en)  # over fields, under towns
+        sel = tri[(types & bit) != 0]
+        draw(cls, px[sel], en[sel] if cls in _SIZE_FILTERED else None)
+    fill(_ROAD, px[tri[(types & ROAD) != 0]], 1)
+    fill(_RAIL, px[tri[(types & RAIL) != 0]], 1)
+    if not fills:
+        return None
+
+    # Pixels any fill can touch, clipped to the grid. Every fill is a subset of
+    # the base mesh or of the forest. Shifting by whole pixels leaves the
+    # rasterization unchanged.
+    used = np.concatenate([px[np.unique(tri)], forest_px.reshape(-1, 2)])
+    lo, hi = used.min(axis=0), used.max(axis=0)
+    col0 = max(int(lo[0]) // 16 - 1, 0)
+    row0 = max(int(lo[1]) // 16 - 1, 0)
+    col1 = min(int(hi[0]) // 16 + 2, grid.width)
+    row1 = min(int(hi[1]) // 16 + 2, grid.height)
+    if col0 >= col1 or row0 >= row1:
+        return None
+    canvases = [np.zeros((row1 - row0, col1 - col0), np.uint8) for _ in range(3)]
+    offset = np.array([col0, row0], np.int32) * 16
+    for canvas, tris_px, value in fills:
+        # OpenCV reads each row of an (n, 3) two-channel array as one polygon.
+        cv2.fillPoly(canvases[canvas], tris_px - offset, value, shift=4)
+    return TileRaster(row0, col0, *canvases)
+
+
+def assemble(grid: Grid, rasters: list[TileRaster], tile_count: int) -> LandCover:
+    """Composite tile rasters, given in tile order, into the land cover."""
+    img = np.zeros((grid.height, grid.width), np.uint8)
+    road_mask = np.zeros_like(img)
+    rail_mask = np.zeros_like(img)
+    for r in rasters:
+        h, w = r.img.shape
+        window = (slice(r.row, r.row + h), slice(r.col, r.col + w))
+        # Every class value is non-zero, so a zero pixel is one the tile left alone.
+        np.copyto(img[window], r.img, where=r.img != 0)
+        road_mask[window] |= r.road
+        rail_mask[window] |= r.rail
     kernel = np.ones((3, 3), np.uint8)
     return LandCover(
         img,
-        west,
-        north,
-        resolution,
-        len(tiles),
+        grid.west,
+        grid.north,
+        grid.resolution,
+        tile_count,
         cv2.dilate(road_mask, kernel),
         cv2.dilate(rail_mask, kernel),
     )
 
 
-def _forest_triangles(bulk: BulkData, tile: Tile, en: np.ndarray) -> np.ndarray:
-    parts: list[np.ndarray] = [np.empty((0, 3, 2))]
+def _to_px(en: np.ndarray, grid: Grid) -> np.ndarray:
+    """(easting, northing) to pixel coordinates with 4 sub-pixel bits.
+
+    OpenCV puts pixel centres on integer coordinates."""
+    px = np.empty(en.shape, np.int32)
+    px[..., 0] = np.round(((en[..., 0] - grid.west) / grid.resolution - 0.5) * 16)
+    px[..., 1] = np.round(((grid.north - en[..., 1]) / grid.resolution - 0.5) * 16)
+    return px
+
+
+def _forest_triangles(
+    bulk: BulkData, tile: Tile, en: np.ndarray, px: np.ndarray, grid: Grid
+) -> tuple[np.ndarray, np.ndarray]:
+    """Forest triangles as ``(n, 3, 2)`` arrays in metres and in pixels."""
+    parts_en: list[np.ndarray] = [np.empty((0, 3, 2))]
+    parts_px: list[np.ndarray] = [np.empty((0, 3, 2), np.int32)]
     for rec in tile.records:
         if rec.material != "Forest" or "TRI" not in rec.streams:
             continue
@@ -318,18 +423,20 @@ def _forest_triangles(bulk: BulkData, tile: Tile, en: np.ndarray) -> np.ndarray:
             base_index = bulk.array(rec.streams["baseIndex"], "<u4")
             if len(base_index) and base_index.max() >= len(en):
                 continue
-            verts = en[base_index]
+            verts, verts_px = en[base_index], px[base_index]
         elif "P" in rec.streams:
             p = bulk.positions(rec.streams["P"])
             verts = np.stack(
                 [p[:, 2] + tile.translation[2], p[:, 0] + tile.translation[0]],
                 axis=1,
             )
+            verts_px = _to_px(verts, grid)
         else:
-            verts = en
+            verts, verts_px = en, px
         if len(tri) and tri.max() < len(verts):
-            parts.append(verts[tri])
-    return np.concatenate(parts)
+            parts_en.append(verts[tri])
+            parts_px.append(verts_px[tri])
+    return np.concatenate(parts_en), np.concatenate(parts_px)
 
 
 def class_stats(lc: LandCover) -> dict[str, float]:

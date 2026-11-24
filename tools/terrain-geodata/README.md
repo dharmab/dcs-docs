@@ -18,8 +18,16 @@ On Windows the install folder is read from the registry (standalone or Steam).
 Elsewhere, or to use a different install, pass `--dcs-path` or set the
 `DCS_PATH` environment variable. `--out` defaults to `docs/data/terrains`
 relative to the current directory. `--resolution`
-sets the land cover pixel size (default 100 m). A full export of every terrain
-takes several minutes; GermanyCW and Kola are the slowest.
+sets the land cover pixel size (default 100 m).
+
+Terrains are exported together on one pool of worker processes (`--jobs`,
+default one per CPU). Land cover is drawn in small runs of tiles that any free
+worker picks up, while each terrain's single-threaded steps (parsing the map
+overlay, merging its geometry, writing the GeoTIFF) go first, largest terrain
+first, so the pool stays busy to the end. A full export of every terrain takes
+about three minutes on 12 cores; the work is bound by memory bandwidth, so
+hyperthreads add little. `--jobs 1` runs everything in one process, which is
+easier to profile.
 
 Re-run the export after a DCS update that touches terrains, then review the diff
 of each `terrain.json`.

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import time
 from pathlib import Path
 
 from . import export
@@ -86,6 +87,12 @@ def main(argv: list[str] | None = None) -> None:
         default=100.0,
         help="Land cover pixel size in metres (default: 100)",
     )
+    p_export.add_argument(
+        "--jobs",
+        type=int,
+        default=os.process_cpu_count() or 1,
+        help="Worker processes shared by all terrains (default: one per CPU)",
+    )
 
     args = parser.parse_args(argv)
     dcs_path = _dcs_path(args.dcs_path)
@@ -106,9 +113,11 @@ def main(argv: list[str] | None = None) -> None:
         if not terrains:
             sys.exit(f"no terrain matches {args.terrain}")
     version = export.dcs_version(dcs_path)
-    for t in terrains:
-        print(f"{t.theatre} ({t.folder.name})")
-        export.export_terrain(t, args.out, args.resolution, version)
+    started = time.monotonic()
+    export.export_terrains(
+        terrains, args.out, args.resolution, version, max(args.jobs, 1)
+    )
+    print(f"exported {len(terrains)} terrains in {time.monotonic() - started:.0f} s")
 
 
 if __name__ == "__main__":
