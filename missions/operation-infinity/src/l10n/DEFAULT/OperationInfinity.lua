@@ -229,13 +229,15 @@ OperationInfinity.config = {
         },
     },
 
-    -- Distance between the hot and return legs of every support track. About
-    -- the turn diameter of a KC-135 at 280 KIAS and 20,000 ft.
-    supportTrackWidth = 10 * METERS_PER_NM,
+    -- Bank angle of the turns at each end of a support track. Each track's
+    -- width is the turn diameter at this bank and the aircraft's orbit TAS
+    -- (about 12 nm for Texaco), so receivers can stay connected through the
+    -- turns.
+    supportTrackBank = math.rad(20),
     -- Each support aircraft's track is shifted this far right of the previous
     -- one; altitude blocks keep them apart where the ovals overlap
     supportTrackSpacing = 5000,
-    -- Left turns put the return legs on the side away from the shifted tracks
+    -- Turn direction of every support track (false = left turns)
     supportTrackClockwise = false,
 
     -- Support aircraft group names, orbit altitudes (feet MSL) and target
@@ -895,11 +897,10 @@ function OperationInfinity:getSupportAssetText()
     if regionKey then
         local orbit = self:getSupportOrbit(regionKey, 1)
         lines[#lines + 1] = string.format(
-            "  Tanker tracks: hot leg %03dT ends at the ARCP, %s turns, %d nm legs, %d nm wide",
+            "  Tanker tracks: hot leg %03dT ends at the ARCP, %s turns, %d nm legs",
             headingDegrees(orbit.hotLegDir),
             orbit.clockWise and "right" or "left",
-            math.floor(orbit.legLength / METERS_PER_NM + 0.5),
-            math.floor(orbit.width / METERS_PER_NM + 0.5)
+            math.floor(orbit.legLength / METERS_PER_NM + 0.5)
         )
     end
     lines[#lines + 1] = "  CVN-74 Stennis: 254.7 MHz AM, TACAN 74X STN, ICLS 4, Link 4 336.0"
@@ -1088,15 +1089,42 @@ function OperationInfinity:getRacetrackPosition(regionKey)
     }
 end
 
+local METERS_PER_FOOT = 0.3048
+local MPS_PER_KNOT = 0.514444
+local ISA_SEA_LEVEL_DENSITY = 1.225 -- kg/m^3
+local ISA_LAPSE_FACTOR = 2.25577e-5 -- per meter, troposphere
+local ISA_DENSITY_EXPONENT = 4.25588
+local GRAVITY = 9.81 -- m/s^2
+
+-- Convert indicated airspeed to true airspeed (both m/s) using the ISA
+-- troposphere density model (valid below 11 km). Treats IAS as EAS.
+local function indicatedToTrueAirspeed(iasMps, altitudeMeters)
+    local density = ISA_SEA_LEVEL_DENSITY * (1 - ISA_LAPSE_FACTOR * altitudeMeters) ^ ISA_DENSITY_EXPONENT
+    return iasMps * math.sqrt(ISA_SEA_LEVEL_DENSITY / density)
+end
+
+-- Diameter (m) of a level turn at `trueAirspeed` (m/s) and `bank` (radians)
+local function turnDiameter(trueAirspeed, bank)
+    return 2 * trueAirspeed * trueAirspeed / (GRAVITY * math.tan(bank))
+end
+
+-- Orbit altitude (m) and true airspeed (m/s) of a supportAircraft entry
+local function supportOrbitAltitudeAndSpeed(aircraft)
+    local altitude = aircraft.altitudeFt * METERS_PER_FOOT
+    return altitude, indicatedToTrueAirspeed(aircraft.iasKnots * MPS_PER_KNOT, altitude)
+end
+
 -- Anchored orbit geometry for the support aircraft at `index` in
 -- config.supportAircraft. Each aircraft's hot leg is shifted right of the
--- previous one by supportTrackSpacing. Returns the ARCP (end of the hot leg)
--- and the Orbit task's Anchored parameters.
+-- previous one by supportTrackSpacing, and its width is its turn diameter at
+-- supportTrackBank. Returns the ARCP (end of the hot leg) and the Orbit
+-- task's Anchored parameters.
 function OperationInfinity:getSupportOrbit(regionKey, index)
     local track = self:getRacetrackPosition(regionKey)
     local heading = track.hotLegHeading
     local right = (index - 1) * self.config.supportTrackSpacing
     local forward = track.legLength / 2
+    local _, speed = supportOrbitAltitudeAndSpeed(self.config.supportAircraft[index])
     return {
         arcp = {
             x = track.x + forward * math.cos(heading) - right * math.sin(heading),
@@ -1104,22 +1132,9 @@ function OperationInfinity:getSupportOrbit(regionKey, index)
         },
         hotLegDir = heading,
         legLength = track.legLength,
-        width = self.config.supportTrackWidth,
+        width = turnDiameter(speed, self.config.supportTrackBank),
         clockWise = self.config.supportTrackClockwise,
     }
-end
-
-local METERS_PER_FOOT = 0.3048
-local MPS_PER_KNOT = 0.514444
-local ISA_SEA_LEVEL_DENSITY = 1.225 -- kg/m^3
-local ISA_LAPSE_FACTOR = 2.25577e-5 -- per meter, troposphere
-local ISA_DENSITY_EXPONENT = 4.25588
-
--- Convert indicated airspeed to true airspeed (both m/s) using the ISA
--- troposphere density model (valid below 11 km). Treats IAS as EAS.
-local function indicatedToTrueAirspeed(iasMps, altitudeMeters)
-    local density = ISA_SEA_LEVEL_DENSITY * (1 - ISA_LAPSE_FACTOR * altitudeMeters) ^ ISA_DENSITY_EXPONENT
-    return iasMps * math.sqrt(ISA_SEA_LEVEL_DENSITY / density)
 end
 
 -- Activate support aircraft and set their orbit positions based on selected region
@@ -1153,8 +1168,7 @@ function OperationInfinity:activateSupportAircraft(regionKey)
         -- separation comes from each aircraft's own altitudeFt block
         local orbit = self:getSupportOrbit(regionKey, i)
 
-        local orbitAltitude = aircraft.altitudeFt * METERS_PER_FOOT
-        local orbitSpeed = indicatedToTrueAirspeed(aircraft.iasKnots * MPS_PER_KNOT, orbitAltitude)
+        local orbitAltitude, orbitSpeed = supportOrbitAltitudeAndSpeed(aircraft)
 
         -- Schedule orbit task to be pushed once aircraft is airborne
         local orbitTask = {

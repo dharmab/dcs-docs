@@ -20,6 +20,7 @@ local KNOTS_TO_MPS = 0.514444
 local METERS_PER_NM = 1852
 local FEET_TO_METERS = 0.3048
 local TWO_PI = 2 * math.pi
+local GRAVITY = 9.81 -- m/s^2
 
 -- Height at which wind over the deck is sampled (roughly flight deck height)
 local DECK_HEIGHT = 20
@@ -145,9 +146,11 @@ CarrierOps.config = {
         speed = 145,
         -- Lateral distance from the carrier's leg to the hot leg
         offset = 5 * METERS_PER_NM,
-        -- Distance from the hot leg to the return leg, farther from the
-        -- carrier. About an S-3B's turn diameter at 250 KIAS.
-        width = 5 * METERS_PER_NM,
+        -- Bank angle of the end turns. The track's width (hot leg to return
+        -- leg, farther from the carrier) is the turn diameter at this bank
+        -- and `speed`, about 6.4 nm, so receivers can stay connected through
+        -- the turns.
+        bank = math.rad(20),
         -- Legs shorter than this are extended around their midpoint
         minTrackLength = 15 * METERS_PER_NM,
         -- Halve the offset up to this many times if any part of the track is over land
@@ -758,12 +761,25 @@ local function isTrackOverWater(mid, course, halfLength, hotOffset, returnOffset
     return true
 end
 
+-- Diameter (m) of a level turn at `trueAirspeed` (m/s) and `bank` (radians)
+local function turnDiameter(trueAirspeed, bank)
+    return 2 * trueAirspeed * trueAirspeed / (GRAVITY * math.tan(bank))
+end
+
+-- Width of the recovery tanker's track: its turn diameter at its orbit
+-- speed and bank
+function CarrierOps:getRecoveryTrackWidth()
+    local cfg = self.config.recoveryTanker
+    return turnDiameter(cfg.speed, cfg.bank)
+end
+
 -- Anchored track beside the leg from legStart to legEnd: the hot leg runs
 -- with the carrier on the shore side, and the tanker turns away from the
 -- carrier so the return leg is farther toward shore. The whole oval is over
 -- water.
 function CarrierOps:computeRecoveryTrack(legStart, legEnd)
     local cfg = self.config.recoveryTanker
+    local width = self:getRecoveryTrackWidth()
     local course = normalizeAngle(math.atan2(legEnd.y - legStart.y, legEnd.x - legStart.x))
     local mid = { x = (legStart.x + legEnd.x) / 2, y = (legStart.y + legEnd.y) / 2 }
     local halfLength = math.max(distance2D(legStart, legEnd), cfg.minTrackLength) / 2
@@ -775,14 +791,14 @@ function CarrierOps:computeRecoveryTrack(legStart, legEnd)
     local offset = cfg.offset
     for _ = 0, cfg.offsetHalvings do
         local hotOffset = side * offset
-        local returnOffset = side * (offset + cfg.width)
+        local returnOffset = side * (offset + width)
         if isTrackOverWater(mid, course, halfLength, hotOffset, returnOffset) then
             return anchoredTrack(mid, course, halfLength, hotOffset, returnOffset)
         end
         offset = offset / 2
     end
     log("WARNING: Recovery tanker track is over land on the shore side; flying it along the leg, turning seaward")
-    return anchoredTrack(mid, course, halfLength, 0, -side * cfg.width)
+    return anchoredTrack(mid, course, halfLength, 0, -side * width)
 end
 
 -- Send the recovery tanker to an Anchored track beside the into-wind leg that runs

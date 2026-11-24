@@ -264,8 +264,10 @@ h.test("support tracks are anchored with the ARCP at the end of the hot leg", fu
             h.near(ahead, track.legLength / 2, 1, key .. " ARCP not at the end of the hot leg")
             h.near(right, (i - 1) * cfg.supportTrackSpacing, 1, key .. " track " .. i .. " spacing")
             h.eq(orbit.hotLegDir, heading)
-            h.eq(orbit.width, cfg.supportTrackWidth)
         end
+        -- Texaco (280 KIAS, 20,000 ft, ~197 m/s TAS) at a 20 degree bank turns in ~21.7 km
+        h.eq(cfg.supportAircraft[2].name, "Texaco")
+        h.near(OperationInfinity:getSupportOrbit(key, 2).width, 21700, 300, key .. " Texaco track width")
     end
     -- Mozdok's track runs along the Krymsk-Mozdok axis, not across it
     h.near(cfg.supportRacetracks.northeast.hotLegHeading, math.pi / 2, 1e-9, "Mozdok track not east-west")

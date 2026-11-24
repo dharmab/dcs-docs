@@ -160,7 +160,7 @@ h.test("recovery tanker anchors beside the into-wind leg, turning toward shore",
     h.eq(orbit.pattern, "Anchored")
     local course = CarrierOps.state.legCourse
     h.ok(angleBetween(orbit.hotLegDir, course) < 0.001, "hot leg not along the carrier's course")
-    h.near(orbit.width, cfg.width, 1, "track width")
+    h.near(orbit.width, 2 * cfg.speed ^ 2 / (9.81 * math.tan(cfg.bank)), 1, "track width is not the turn diameter")
     h.ok(orbit.legLength >= cfg.minTrackLength - 1, "track shorter than minTrackLength")
 
     -- The ARCP ends the hot leg, level with the end of the carrier's leg or
