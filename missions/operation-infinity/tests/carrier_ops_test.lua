@@ -143,25 +143,36 @@ local function lastOrbit(env)
     end
 end
 
-h.test("recovery tanker races beside the into-wind leg on the shore side", function()
+-- Distance of `p` ahead of `origin` along `course`
+local function aheadOf(p, origin, course)
+    return (p.x - origin.x) * math.cos(course) + (p.y - origin.y) * math.sin(course)
+end
+
+h.test("recovery tanker anchors beside the into-wind leg, turning toward shore", function()
     local env = h.load({ wind = windFrom(0, 10 * KNOTS) })
     moveCarrierTo(env, CarrierOps.state.legEnd)
     env.advance(CarrierOps.config.carrier.checkInterval)
     h.eq(CarrierOps.state.phase, "INTO_WIND")
+    h.ok(not env.logContains("Recovery tanker track is over land"), "track fell back to the carrier's leg")
 
     local cfg = CarrierOps.config.recoveryTanker
     local orbit = lastOrbit(env)
-    h.eq(orbit.pattern, "Race-Track")
+    h.eq(orbit.pattern, "Anchored")
     local course = CarrierOps.state.legCourse
-    local trackCourse = math.atan2(orbit.point2.y - orbit.point.y, orbit.point2.x - orbit.point.x)
-    h.ok(angleBetween(trackCourse, course) < 0.001, "track not parallel to the leg")
+    h.ok(angleBetween(orbit.hotLegDir, course) < 0.001, "hot leg not along the carrier's course")
+    h.near(orbit.width, cfg.width, 1, "track width")
+    h.ok(orbit.legLength >= cfg.minTrackLength - 1, "track shorter than minTrackLength")
 
+    -- The ARCP ends the hot leg, level with the end of the carrier's leg or
+    -- beyond it when the leg was extended to minTrackLength
     local legEnd = CarrierOps.state.legEnd
-    local offset1 = rightOf(orbit.point, legEnd, course)
-    local offset2 = rightOf(orbit.point2, legEnd, course)
-    h.near(math.abs(offset1), cfg.offset, 1, "track offset")
-    h.near(offset1, offset2, 1, "track ends offset differently")
-    h.ok(offset1 * rightOf(cfg.shoreReference, legEnd, course) > 0, "track not on the shore side")
+    h.ok(aheadOf(orbit.point, legEnd, course) > -1, "ARCP behind the end of the carrier's leg")
+
+    local shoreSide = rightOf(cfg.shoreReference, legEnd, course) > 0 and 1 or -1
+    local hotOffset = rightOf(orbit.point, legEnd, course) * shoreSide
+    h.ok(hotOffset > 0 and hotOffset <= cfg.offset + 1, "hot leg not on the shore side within offset")
+    -- Right turns put the return leg on the right: turn toward shore, away from the carrier
+    h.eq(orbit.clockWise, shoreSide > 0, "tanker turns toward the carrier")
 
     local commands = env.groupsByName[cfg.groupName].commands
     h.eq(commands[#commands].params.frequency, 1190 * 1e6, "TACAN 103X frequency")

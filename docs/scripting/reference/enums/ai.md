@@ -28,7 +28,7 @@ AI.Task.OrbitPattern = {
 }
 ```
 
-The "Anchored" pattern is also valid but is not included in this enum.
+The "Anchored" pattern is also valid but is not included in this enum. See [Orbit](../ai/tasks.md#orbit) for its parameters.
 
 ### AI.Task.WeaponExpend
 

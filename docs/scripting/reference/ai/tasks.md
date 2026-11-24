@@ -169,15 +169,56 @@ local orbit = {
 ```
 
 - `pattern` (string): `"Circle"`, `"Race-Track"`, or `"Anchored"`.
-- `point` (Vec2): Center point. If omitted, the aircraft uses the current waypoint.
+- `pattern` values:
+  - `"Circle"` orbits around `point`.
+  - `"Race-Track"` flies back and forth between `point` and `point2`, turning at each end.
+  - `"Anchored"` flies a fixed oval of set length and width hung off `point`, like an air refueling anchor or holding pattern.
+- `point` (Vec2): Center point for Circle, first leg endpoint for Race-Track, and the anchor point for Anchored. If omitted, the aircraft uses the current waypoint.
 - `point2` (Vec2): Second point for Race-Track.
 - `speed` (number): Orbit speed in m/s. If omitted, about 1.5 times stall speed.
 - `altitude` (number): Orbit altitude in meters.
 - Anchored only:
-  - `hotLegDir` (number): Return leg heading in radians.
-  - `legLength` (number): Leg length in meters before turning.
-  - `width` (number): Orbit diameter in meters.
-  - `clockWise` (boolean): Orbit clockwise. Defaults to `false`.
+  - `hotLegDir` (number): Heading of the hot (inbound) leg in radians, flown toward `point`.
+  - `legLength` (number): Length of each straight leg in meters, not counting the turns.
+  - `width` (number): Distance in meters between the hot leg and the return leg, which is also the diameter of the end turns.
+  - `clockWise` (boolean): Turn right (clockwise) instead of left. Defaults to `false`.
+
+#### Anchored pattern geometry
+
+`point` is the anchor point, which tankers call the ARCP (Air Refueling Control Point). It sits at the **end** of the hot leg, not the start: the aircraft flies the hot leg on `hotLegDir`, reaches `point`, then turns onto the return leg. The oval extends behind `point`, opposite `hotLegDir`. This is the same layout as a holding pattern, where the holding fix is at the end of the inbound leg.[^anchored]
+
+With `clockWise = false` the turns are to the left, so the return leg lies `width` meters to the left of the hot leg. With `clockWise = true` it lies to the right.
+
+```text
+hotLegDir = 090° (east), clockWise = false, legLength = 50 nm, width = 20 nm
+
+      <────────────── return leg (270°) ──────────────┐
+    ╭                                                 ╮
+    │                                                 │  width 20 nm
+    ╰                                                 ╯
+      ─────────────── hot leg (090°) ───────────> ARCP (point)
+      |<──────────────── legLength 50 nm ───────────>|
+```
+
+To put a tanker's hot leg on a given segment, place `point` at the downstream end of the segment and set `hotLegDir` to the segment's heading.
+
+```lua
+local anchored = {
+    id = 'Orbit',
+    params = {
+        pattern = 'Anchored',
+        point = {x = 100000, y = 200000},   -- ARCP: end of the hot leg
+        speed = 220,
+        altitude = 7620,
+        hotLegDir = math.rad(90),            -- hot leg flown east into the ARCP
+        legLength = 50 * 1852,               -- 50 nm
+        width = 20 * 1852,                   -- 20 nm
+        clockWise = false                    -- left turns, return leg to the north
+    }
+}
+```
+
+[^anchored]: ED Forums, ["I Don't Understand the 'Anchored' Orbit"](https://forum.dcs.world/topic/372349-i-dont-understand-the-anchored-orbit/), with a mission editor screenshot of the Anchored fields (Hot Leg Brg, Leg length, Width, Clockwise) and the resulting pattern on the F10 map.
 
 ```lua
 local orbit = {

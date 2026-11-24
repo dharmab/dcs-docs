@@ -44,7 +44,7 @@ The mock has no AI. Units only move when a test moves them. Enum values come fro
 
 `TerrainData.lua` is generated; do not edit it. It is a 200 m mask of forest, water, and off-mesh ground built from `docs/data/terrains/Caucasus/landcover.tif`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the mission area. The generator also writes `tests/mock_terrain.lua`, the test mock's terrain, which the mission does not load.
 
-`Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. That check covers only one point, so groups are placed with `Terrain:findValidLayout`, which builds the units at each candidate center and also checks every unit's position against the mask and surface type (`isValidUnitPosition`). Convoys use `Terrain:findRoadLayout` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. The generation tests fail if any spawned ground unit is on blocked ground. Airfield positions are read from the airbases at init and support racetracks are offsets from Krymsk.
+`Terrain:isValidTerrainForUnits` checks the mask first, then surface type, slope, roughness, and road distance, then scenery (buildings, bridges, pylons) within `sceneryClearance`. The land cover `town` class is too loose to reject on, so buildings are only checked at runtime. That check covers only one point, so groups are placed with `Terrain:findValidLayout`, which builds the units at each candidate center and also checks every unit's position against the mask and surface type (`isValidUnitPosition`). Convoys use `Terrain:findRoadLayout` instead: snapped onto a road, laid out as a column along it, and exempt from the scenery check. The generation tests fail if any spawned ground unit is on blocked ground. Airfield positions are read from the airbases at init and support tracks are offsets from Krymsk.
 
 ## Player Slots
 
@@ -72,9 +72,10 @@ Follow `docs/recipes/comm-plan.md`. Mission-specific rules:
 
 - Interceptors read their spawn point from the airbase at runtime. A route point off the airdrome makes DCS air-start the group.
 - Interceptor removal can fire DEAD, CRASH, UNIT_LOST, and LAND for one aircraft; removals are de-duplicated by unit name.
-- The S-3B recovery tanker (`Arco 2`) shares the Arco callsign because DCS has only three tanker callsigns. It is not in `supportAircraft`; it starts at mission load with its tasks on waypoint 1, `CarrierOps` re-tasks it to a racetrack beside each into-wind leg (offset toward Anapa, re-activating its TACAN), and `getSupportAssetText` lists it with a hardcoded line.
+- The S-3B recovery tanker (`Arco 2`) shares the Arco callsign because DCS has only three tanker callsigns. It is not in `supportAircraft`; it starts at mission load with its tasks on waypoint 1, `CarrierOps` re-tasks it to an Anchored track beside each into-wind leg (offset toward Anapa, turning toward shore, re-activating its TACAN), and `getSupportAssetText` lists it with a hardcoded line.
 - The `supportAircraft` groups air-start over Krymsk when activated. From parking stands 01-04 they never spawned (server test, 2026-11-22).
 - `supportAircraft` stores altitude in feet and IAS in knots; Orbit TAS is computed at runtime.
+- Support and recovery tankers fly `Anchored` orbits, where `point` is the ARCP at the end of the hot leg, not the start (see `docs/scripting/reference/ai/tasks.md#anchored-pattern-geometry`). `supportRacetracks[region].offset` is the middle of the hot leg. Anchored has not been checked in a server test yet.
 - `CarrierOps.lua` starts at mission load, independent of F10 settings. Carrier radio/TACAN/ICLS/Link 4 are set on waypoint 1 and must be re-applied after every route change.
 - Per-group F10 items (Comms Plan, Mission Info) are added by the late-joiner loop and reply only to that group. Settings items are coalition-wide.
 

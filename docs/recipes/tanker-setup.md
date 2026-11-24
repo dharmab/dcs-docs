@@ -40,7 +40,10 @@ DCS models two aerial refueling systems. Each aircraft must use a tanker that ma
 
 ## Orbit Pattern Selection
 
-**Always use a Race-Track pattern for tanker operations.** The racetrack's straight refueling legs make it easier for receivers to join and hold formation during fuel transfer. Orient the legs so the approach and departure airspace is clear.
+**Use a Race-Track or Anchored pattern for tanker operations, never Circle.** The straight refueling legs make it easier for receivers to join and hold formation during fuel transfer. Orient the legs so the approach and departure airspace is clear.
+
+- **Race-Track** - Two points define the ends of the legs. Use it when you want to place both ends exactly.
+- **Anchored** - One point (the ARCP) plus a hot leg heading, leg length, width, and turn direction. Use it to build a track from a published refueling anchor, or when you want fixed leg length and width. See [Orbit Task (Anchored)](#orbit-task-anchored).
 
 ### Racetrack Orientation
 
@@ -296,6 +299,38 @@ The orbit task defines the tanker's pattern. Use `Race-Track`, with `point` and 
     },
 },
 ```
+
+### Orbit Task (Anchored)
+
+The Anchored pattern builds the track from one point. `point` is the ARCP (Air Refueling Control Point), at the **end** of the hot (inbound) leg, and the track extends behind it. The tanker flies the hot leg on `hotLegDir` toward the ARCP, turns, and flies the return leg back. `legLength` is each straight leg without the turns, and `width` is the distance between the two legs. With `clockWise = false` the tanker turns left, so the return leg is on the left of the hot leg. See [Anchored pattern geometry](../scripting/reference/ai/tasks.md#anchored-pattern-geometry).
+
+In the mission editor these are the Hot Leg Brg, Leg length, Width, and Clockwise fields of the Orbit task with the Anchored pattern.
+
+This example puts the ARCP at the east end of a 50 nm hot leg flown east, with the return leg 20 nm to the north.
+
+```lua
+{
+    ["enabled"] = true,
+    ["auto"] = false,
+    ["id"] = "Orbit",
+    ["number"] = 4,
+    ["params"] = {
+        ["pattern"] = "Anchored",
+        ["point"] = {                 -- ARCP: end of the hot leg
+            ["x"] = -120000,
+            ["y"] = 550000,
+        },
+        ["hotLegDir"] = 1.5707963,    -- 90° in radians: hot leg flown east into the ARCP
+        ["legLength"] = 92600,        -- 50 nm in meters, turns not included
+        ["width"] = 37040,            -- 20 nm in meters between the legs
+        ["clockWise"] = false,        -- left turns: return leg 20 nm north of the hot leg
+        ["speed"] = 154,              -- m/s (~300 knots)
+        ["altitude"] = 6706,          -- 22,000 feet in meters
+    },
+},
+```
+
+Place the waypoint carrying the Orbit task at the ARCP, or set `point` to it. Putting the ARCP at the start of the intended hot leg is a common mistake: the whole track then sits one leg length too far upstream.
 
 ### Unlimited Fuel Task
 
@@ -910,8 +945,9 @@ Before finalizing the tanker setup, verify:
 - [ ] TACAN channel is unique and doesn't conflict with other beacons
 - [ ] Radio frequency is set via `SetFrequency` action
 - [ ] `SetUnlimitedFuel` is enabled to prevent fuel depletion
-- [ ] Orbit pattern is `Race-Track` (not `Circle`)
+- [ ] Orbit pattern is `Race-Track` or `Anchored` (not `Circle`)
 - [ ] Racetrack leg length is at least 30-50 nm (55-93 km)
+- [ ] For `Anchored`, `point` is the ARCP at the end of the hot leg, and `hotLegDir` is in radians
 - [ ] Altitude is realistic for aircraft type (15,000-25,000 ft typical)
 - [ ] Speed is appropriate for aircraft and expected receivers (~275-350 kts for KC-135 with fast jets, ~180-250 kts when supporting slow aircraft like A-10, ~300 kts for KC-130, ~250 kts for S-3B)
 - [ ] Waypoint 1 altitude/speed matches Orbit task altitude/speed

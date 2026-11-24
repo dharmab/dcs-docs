@@ -249,6 +249,37 @@ h.test("every region has a support racetrack", function()
     end
 end)
 
+h.test("support tracks are anchored with the ARCP at the end of the hot leg", function()
+    h.load()
+    local cfg = OperationInfinity.config
+    for key in pairs(cfg.supportRacetracks) do
+        local track = OperationInfinity:getRacetrackPosition(key)
+        for i = 1, #cfg.supportAircraft do
+            local orbit = OperationInfinity:getSupportOrbit(key, i)
+            local dx = orbit.arcp.x - track.x
+            local dy = orbit.arcp.y - track.y
+            local heading = track.hotLegHeading
+            local ahead = dx * math.cos(heading) + dy * math.sin(heading)
+            local right = -dx * math.sin(heading) + dy * math.cos(heading)
+            h.near(ahead, track.legLength / 2, 1, key .. " ARCP not at the end of the hot leg")
+            h.near(right, (i - 1) * cfg.supportTrackSpacing, 1, key .. " track " .. i .. " spacing")
+            h.eq(orbit.hotLegDir, heading)
+            h.eq(orbit.width, cfg.supportTrackWidth)
+        end
+    end
+    -- Mozdok's track runs along the Krymsk-Mozdok axis, not across it
+    h.near(cfg.supportRacetracks.northeast.hotLegHeading, math.pi / 2, 1e-9, "Mozdok track not east-west")
+end)
+
+h.test("support asset text briefs the tanker ARCPs once a region is selected", function()
+    h.load()
+    h.ok(not OperationInfinity:getSupportAssetText():find("ARCP"), "ARCP briefed before a region is selected")
+    OperationInfinity.state.battlefield.regionKey = "northeast"
+    local text = OperationInfinity:getSupportAssetText()
+    h.ok(text:find("Texaco %(boom%).-ARCP %d%d%d/%d+ Krymsk"), "no Texaco ARCP in:\n" .. text)
+    h.ok(text:find("hot leg 090T ends at the ARCP, left turns"), "no track line in:\n" .. text)
+end)
+
 -- Senaki from docs/data/terrains/Caucasus/places.csv: 42.285411 N,
 -- 42.045822 E. The MGRS value is from the Python mgrs package.
 h.test("coordinates format as degrees and decimal minutes", function()
