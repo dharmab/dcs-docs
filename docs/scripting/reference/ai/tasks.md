@@ -180,7 +180,7 @@ local orbit = {
 - Anchored only:
   - `hotLegDir` (number): Heading of the hot (inbound) leg in radians, flown toward `point`.
   - `legLength` (number): Length of each straight leg in meters, not counting the turns.
-  - `width` (number): Distance in meters between the hot leg and the return leg, which is also the diameter of the end turns.
+  - `width` (number): Distance in meters between the hot leg and the return leg, which is also the diameter of the end turns. A narrower width means a steeper bank; see [Track Width](../../../recipes/tanker-setup.md#track-width).
   - `clockWise` (boolean): Turn right (clockwise) instead of left. Defaults to `false`.
 
 #### Anchored pattern geometry
@@ -200,12 +200,13 @@ With `clockWise = false` the turns are to the left, so the return leg lies `widt
 ```text
 hotLegDir = 090° (east), clockWise = false, legLength = 50 nm, width = 20 nm
 
-      <────────────── return leg (270°) ──────────────┐
-    ╭                                                 ╮
-    │                                                 │  width 20 nm
-    ╰                                                 ╯
-      ─────────────── hot leg (090°) ───────────> ARCP (point)
-      |<──────────────── legLength 50 nm ───────────>|
+          ╭───────◀─────── return leg (270°) ───────◀───────╮   ┬
+          │                                                 │   │
+          ▼                                                 ▲   │ width
+          │                                                 │   │ 20 nm
+          ╰───────▶──────── hot leg (090°) ────────▶────────●   ┴
+                                                           ARCP (point)
+          ├──────────────── legLength 50 nm ────────────────┤
 ```
 
 To put a tanker's hot leg on a given segment, place `point` at the downstream end of the segment and set `hotLegDir` to the segment's heading.
