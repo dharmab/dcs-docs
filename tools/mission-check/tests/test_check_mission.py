@@ -391,16 +391,45 @@ def test_warehouse_unknown_stock_field(run) -> None:
     assert "'amount'" in out
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="luadata parses airport IDs 1..n as a Lua sequence (a Python list)",
-)
 def test_warehouse_airports_starting_at_one(run) -> None:
     mission = make_mission()
     blue_group(mission)["route"]["points"][0]["airdromeId"] = 1
     warehouses = {"airports": {1: {"coalition": "BLUE", "dynamicSpawn": True}}}
     code, out = run(mission, warehouses)
     assert code == 0, out
+
+
+def test_warehouse_airports_sequence_keeps_ids(run) -> None:
+    mission = make_mission()
+    blue_group(mission)["route"]["points"][0]["airdromeId"] = 3
+    airports: dict[int, dict[str, Any]] = {i: {"coalition": "BLUE"} for i in (1, 2, 3)}
+    airports[2]["bogus"] = 1
+    code, out = run(mission, {"airports": airports})
+    assert code == 1
+    assert "warehouses.airports[2]: unknown field 'bogus'" in out
+    assert "not found in warehouse airports" not in out
+
+
+def test_warehouse_airport_not_in_sequence(run) -> None:
+    mission = make_mission()
+    blue_group(mission)["route"]["points"][0]["airdromeId"] = 4
+    airports = {i: {"coalition": "BLUE"} for i in (1, 2, 3)}
+    _, out = run(mission, {"airports": airports})
+    assert "airdromeId 4 not found in warehouse airports" in out
+
+
+def test_unit_warehouses_starting_at_one(run) -> None:
+    warehouses = make_warehouses()
+    warehouses["warehouses"] = {1: {"coalition": "BLUE"}, 2: {"bogus": 1}}
+    _, out = run(warehouses=warehouses)
+    assert "warehouses.warehouses[2]: unknown field 'bogus'" in out
+    assert "warehouses.warehouses[2]: missing required field 'coalition'" in out
+
+
+def test_normalize_warehouses() -> None:
+    warehouses: dict[str, Any] = {"airports": [{"a": 1}, {"b": 2}], "warehouses": {}}
+    cm.normalize_warehouses(warehouses)
+    assert warehouses == {"airports": {1: {"a": 1}, 2: {"b": 2}}, "warehouses": {}}
 
 
 # ---------------------------------------------------------------------------
@@ -505,6 +534,14 @@ def add_carrier(mission: dict[str, Any], unit_id: int = 100) -> None:
 
 def test_valid_template_passes(run) -> None:
     code, out = run(make_template_mission(), make_stocked_warehouses(linkDynTempl=1))
+    assert code == 0, out
+
+
+def test_template_at_airport_one_passes(run) -> None:
+    mission = make_template_mission()
+    blue_group(mission)["route"]["points"][0]["airdromeId"] = 1
+    warehouses = {"airports": {1: {"coalition": "BLUE", "dynamicSpawn": True}}}
+    code, out = run(mission, warehouses)
     assert code == 0, out
 
 

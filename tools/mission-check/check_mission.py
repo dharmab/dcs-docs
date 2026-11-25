@@ -334,6 +334,18 @@ def _check_warehouse_entry(
                     diag.fail(f"{path}.aircrafts.{category}[{type_name}]", msg)
 
 
+def normalize_warehouses(warehouses: dict[str, Any]) -> None:
+    """Key ``airports`` and ``warehouses`` by ID when luadata parsed them as lists.
+
+    luadata parses a Lua table keyed 1..n as a sequence (a Python list). Warehouse
+    tables are keyed by airport ID or unit ID, so convert them back.
+    """
+    for key in ("airports", "warehouses"):
+        value = warehouses.get(key)
+        if isinstance(value, list):
+            warehouses[key] = dict(enumerate(value, start=1))
+
+
 def check_warehouse_schema(
     warehouses: dict[str, Any], diag: DiagnosticCollector
 ) -> set[int]:
@@ -909,6 +921,7 @@ def run_checks(mission_dir: Path) -> int:
 
     warehouse_ids: set[int] = set()
     if isinstance(warehouses_data, dict):
+        normalize_warehouses(warehouses_data)
         warehouse_ids = check_warehouse_schema(warehouses_data, diag)
 
     if isinstance(mission_data, dict):
