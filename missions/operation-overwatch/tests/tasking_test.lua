@@ -39,8 +39,50 @@ h.test("Check In creates a tasking and sends the brief", function()
     local tasking = checkIn(env, "Viper")
     h.ok(tasking, "tasking")
     h.ok(#tasking.spawned.enemyUnitNames > 0, "enemy spawned")
-    h.ok(hasMessage(env, "^Axeman, 256.10 AM"), "brief")
+    local slot = tasking.slot
+    h.ok(hasMessage(env, "^" .. slot.callsign .. ", " .. string.format("%.2f", slot.frequency) .. " AM"), "brief")
     h.eq(#env.smokes, 2, "smoke marks")
+end)
+
+h.test("the first tasking's JTAC varies between missions", function()
+    local seen = {}
+    for seed = 1, 30 do
+        local env = h.load({ seed = seed })
+        local tasking = checkIn(env, "Viper")
+        seen[tasking.slotIndex] = true
+    end
+    local slotCount = #OperationOverwatch.config.jtacSlots
+    for index = 1, slotCount do
+        h.ok(seen[index], "slot " .. index .. " never chosen first")
+    end
+end)
+
+h.test("consecutive solo taskings never reuse the JTAC", function()
+    for seed = 1, 10 do
+        local env = h.load({ seed = seed })
+        local flightCategory = checkIn(env, "Viper").flightCategory
+        local previous = nil
+        for _ = 1, 10 do
+            local tasking = Tasking:create(flightCategory)
+            if previous then
+                h.ok(tasking.slotIndex ~= previous, "seed " .. seed .. ": slot " .. previous .. " reused")
+            end
+            previous = tasking.slotIndex
+            Tasking:finish(tasking, Tasking.EndReason.ABANDONED)
+        end
+    end
+end)
+
+h.test("the last free slot is used even if it was the previous JTAC", function()
+    local env = h.load()
+    local slotCount = #OperationOverwatch.config.jtacSlots
+    local taskings = {}
+    for i = 1, slotCount do
+        taskings[i] = checkIn(env, "Flight" .. i)
+    end
+    local last = taskings[slotCount]
+    Tasking:finish(last, Tasking.EndReason.ABANDONED)
+    h.eq(Tasking:freeSlot(), last.slotIndex)
 end)
 
 h.test("the enemy is 400-900 m from the friendlies", function()

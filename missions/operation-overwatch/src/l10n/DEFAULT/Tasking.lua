@@ -35,6 +35,7 @@ Tasking.state = {
     nextId = 1,
     taskings = {}, -- id -> tasking
     slots = {}, -- slot index -> tasking id
+    lastSlotIndex = nil, -- slot of the most recently created tasking
     flights = {}, -- group name -> flight
     lastFireUpdate = 0,
 }
@@ -122,14 +123,27 @@ function Tasking:activeCount()
     return #self:activeList()
 end
 
+-- A random free slot, so the JTAC varies between taskings. Avoids the slot of
+-- the most recent tasking unless it is the only free one.
 function Tasking:freeSlot()
     local slotCount = #OperationOverwatch.config.jtacSlots
+    local free = {}
+    local fresh = {}
     for index = 1, slotCount do
-        if not self.state.slots[index] then
-            return index
+        local slotIsFree = not self.state.slots[index]
+        if slotIsFree then
+            free[#free + 1] = index
+            local slotWasUsedLast = index == self.state.lastSlotIndex
+            if not slotWasUsedLast then
+                fresh[#fresh + 1] = index
+            end
         end
     end
-    return nil
+    local candidates = #fresh > 0 and fresh or free
+    if #candidates == 0 then
+        return nil
+    end
+    return candidates[math.random(#candidates)]
 end
 
 -- "Axeman: Troops in Contact, 41R QQ 12345 67890"
@@ -349,6 +363,7 @@ function Tasking:create(flightCategory)
     self.state.nextId = self.state.nextId + 1
     self.state.taskings[tasking.id] = tasking
     self.state.slots[slotIndex] = tasking.id
+    self.state.lastSlotIndex = slotIndex
     log("Created tasking " .. tasking.id .. " in slot " .. slotIndex .. " for " .. flightCategory)
     self:updateLaser(tasking)
     onTaskingsChanged()
