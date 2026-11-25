@@ -310,6 +310,14 @@ def test_warehouse_unknown_field_with_suggestion(run) -> None:
     ) in out
 
 
+def test_warehouse_voip_field_passes(run) -> None:
+    warehouses = make_warehouses()
+    warehouses["airports"][16]["voip"] = False
+    warehouses["warehouses"] = {500: {"coalition": "BLUE", "voip": False}}
+    code, out = run(warehouses=warehouses)
+    assert code == 0, out
+
+
 def test_warehouse_missing_coalition(run) -> None:
     warehouses = make_warehouses()
     del warehouses["airports"][16]["coalition"]

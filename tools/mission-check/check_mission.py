@@ -249,6 +249,7 @@ KNOWN_WAREHOUSE_FIELDS: set[str] = {
     "size",
     "suppliers",
     "dynamicCargo",
+    "voip",
     "aircrafts",
     "weapons",
     "gasoline",
