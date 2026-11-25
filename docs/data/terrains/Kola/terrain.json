@@ -57,5 +57,10 @@
       "sea": 4055689.0,
       "runway": 58.9
     }
+  },
+  "elevation": {
+    "resolution_m": 1000.0,
+    "min_m": 0.0,
+    "max_m": 1979.5
   }
 }
