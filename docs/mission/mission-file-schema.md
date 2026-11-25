@@ -570,6 +570,8 @@ Groups are containers for one or more units that share a common route and task.
 | `livery_id` | string | Livery/skin name               |
 | `rate`      | string | (Unsure - possibly spawn rate) | <!-- TODO: QA - Verify what the rate field means for static objects --> |
 
+Static objects have no `skill`.[^static-skill]
+
 ---
 
 ## Route Schema
@@ -690,3 +692,5 @@ DCS uses a flat Cartesian coordinate system in meters, measured from a theatre-s
 In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3 `{x = x, y = alt, z = y}`.
 
 Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [Terrain Geodata](../terrains/geodata.md#coordinate-system).
+
+[^static-skill]: `unload_static_groups` in `MissionEditor/modules/me_mission.lua` saves static units without a `skill` field, and none of the 265,749 static units in the missions bundled with DCS World has one.
