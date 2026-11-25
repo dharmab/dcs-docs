@@ -8,7 +8,6 @@ You must use [uv](https://docs.astral.sh/uv/) to run this script. Trying to run 
 with just `python generate_clsid_lookup.py` will not work.
 
 ```bash
-cd tools/clsid-export
 # Regenerate docs/data/clsid-lookup.json from the latest datamine
 uv run generate-clsid-lookup
 ```

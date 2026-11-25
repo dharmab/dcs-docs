@@ -6,21 +6,20 @@ Upstream spec: [ACMI flight recordings 2.2](https://raia-software-inc.gitbook.io
 
 ## Usage
 
+Recordings are too large for an AI agent's context window (a 7-hour multiplayer session is 160 MB zipped, 400 MB of text). The first query against a recording builds a SQLite cache next to the file (`<file>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later queries are fast. The tool reads and writes `<file>.db` next to the recording, so copy each recording to its own empty directory before querying it. Otherwise a `.db` file shipped alongside a recording is used as the cache.
+
 You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
 `python acmi_query.py`.
 
-Recordings are too large for an AI agent's context window (a 7-hour multiplayer session is 160 MB zipped, 400 MB of text). The first query against a recording builds a SQLite cache next to the file (`<file>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later queries are fast. The tool reads and writes `<file>.db` next to the recording, so copy each recording to its own empty directory before querying it. Otherwise a `.db` file shipped alongside a recording is used as the cache.
-
 ```bash
-cd tools/acmi-query
 # Show the mission, DCS version, duration, and object counts
-uv run acmi-query summary ~/tacview/session1/Tacview-example.zip.acmi
+uv run acmi-query summary Tacview-example.zip.acmi
 # Show when each group spawned and how many units it lost
-uv run acmi-query groups ~/tacview/session1/Tacview-example.zip.acmi
+uv run acmi-query groups Tacview-example.zip.acmi
 # Show missile and bomb launches by one group
-uv run acmi-query shots ~/tacview/session1/Tacview-example.zip.acmi --launcher "SA-11 Site 1"
+uv run acmi-query shots Tacview-example.zip.acmi --launcher "SA-11 Site 1"
 # Rebuild the cache
-uv run acmi-query index ~/tacview/session1/Tacview-example.zip.acmi --force
+uv run acmi-query index Tacview-example.zip.acmi --force
 ```
 
 ### Commands

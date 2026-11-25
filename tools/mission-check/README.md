@@ -16,7 +16,6 @@ You must use [uv](https://docs.astral.sh/uv/) to run this tool. Trying to run it
 with just `python check_mission.py` will not work.
 
 ```bash
-cd tools/mission-check
 # Check an extracted mission directory
 uv run check-mission check ../../missions/operation-infinity/src
 # Check a packed .miz file
