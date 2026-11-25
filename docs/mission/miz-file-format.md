@@ -30,7 +30,7 @@ A plain text file containing the map (theatre) name, such as "Caucasus", "Nevada
 
 A Lua table containing the supply levels for each warehouse. Warehouses are airbases, FARPs, and other points where aircraft rearm and refuel. Each entry sets quantities of fuel, ammunition, weapons, and other supplies. The structure varies by theatre, since maps have different default airbases and warehouses.
 
-Key fields for each airbase entry include `coalition`, `unlimitedAircrafts`, `unlimitedFuel`, `unlimitedMunitions`, `dynamicSpawn` (enables dynamic spawn at the airfield), `allowHotStart` (permits players to choose hot or cold start), `speed`, `periodicity`, `size`, `suppliers`, `dynamicCargo`, `aircrafts` (aircraft inventory), and `weapons`.
+Key fields for each airbase entry include `coalition`, `unlimitedAircrafts`, `unlimitedFuel`, `unlimitedMunitions`, `dynamicSpawn` (enables dynamic spawn at the airfield), `allowHotStart` (permits players to choose hot or cold start), `speed`, `periodicity`, `size`, `suppliers`, `dynamicCargo`, `voip` (a setting for DCS's built-in VoIP), `aircrafts` (aircraft inventory), and `weapons`.
 
 ### options
 
