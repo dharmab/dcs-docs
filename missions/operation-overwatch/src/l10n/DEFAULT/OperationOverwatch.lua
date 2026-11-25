@@ -143,15 +143,9 @@ function OperationOverwatch:buildJoinEntries(groupName)
         return
     end
     for _, tasking in ipairs(active) do
-        missionCommands.addCommandForGroup(
-            flight.groupId,
-            Tasking:describe(tasking),
-            menus.join,
-            function(args)
-                OperationOverwatch:join(args)
-            end,
-            { groupName = groupName, taskingId = tasking.id }
-        )
+        missionCommands.addCommandForGroup(flight.groupId, Tasking:describe(tasking), menus.join, function(args)
+            OperationOverwatch:join(args)
+        end, { groupName = groupName, taskingId = tasking.id })
     end
 end
 

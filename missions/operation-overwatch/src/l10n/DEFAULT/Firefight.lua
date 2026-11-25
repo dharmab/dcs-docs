@@ -397,8 +397,7 @@ function Firefight:spawn(tasking)
 
     local manpadsSpecs = specsForRoles(tasking.force, { Role.MANPADS })
     if #manpadsSpecs > 0 then
-        local manpadsCenter =
-            Sites:pickPointNear(enemyCenter, MANPADS_DISTANCE_MIN_METERS, MANPADS_DISTANCE_MAX_METERS)
+        local manpadsCenter = Sites:pickPointNear(enemyCenter, MANPADS_DISTANCE_MIN_METERS, MANPADS_DISTANCE_MAX_METERS)
         if manpadsCenter then
             local data = buildGroundGroup(prefix .. "-Enemy-MANPADS", manpadsCenter, 0, 0, manpadsSpecs, {
                 invisible = true,
