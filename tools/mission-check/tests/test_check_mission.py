@@ -187,6 +187,47 @@ def test_parse_lua_assignment() -> None:
     assert parsed == {"a": 1, "b": [1, 2]}
 
 
+@pytest.mark.parametrize(
+    ("lua", "expected"),
+    [
+        ("3.055902197933e-11", 3.055902197933e-11),
+        ("1e5", 1e5),
+        ("1E5", 1e5),
+        ("-2.5e+3", -2.5e3),
+        ("2.e-3", 2e-3),
+        (".5e1", 5.0),
+        ("1.7976931348623157e308", 1.7976931348623157e308),
+    ],
+)
+def test_parse_lua_assignment_exponent(lua: str, expected: float) -> None:
+    parsed = cm.parse_lua_assignment(f'mission = {{ ["heading"] = {lua}, }}')
+    assert isinstance(parsed, dict)
+    assert isinstance(parsed["heading"], float)
+    assert parsed["heading"] == expected
+
+
+def test_parse_lua_assignment_keeps_exponents_in_strings() -> None:
+    lua = (
+        'mission = { ["a"] = "x 1e5 \\" 2e3", ["b"] = \'3e2\', ["DictKey_1e5"] = 1e5 }'
+    )
+    parsed = cm.parse_lua_assignment(lua)
+    assert parsed == {"a": 'x 1e5 " 2e3', "b": "3e2", "DictKey_1e5": 1e5}
+
+
+def test_mission_with_exponent_passes(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    mission_dir = write_mission_dir(tmp_path)
+    path = mission_dir / "mission"
+    text = path.read_text(encoding="utf-8")
+    path.write_text(
+        text.replace("heading=0", "heading=3.055902197933e-11", 1),
+        encoding="utf-8",
+    )
+    assert "3.055902197933e-11" in path.read_text(encoding="utf-8")
+    assert cm.run_checks(mission_dir) == 0, capsys.readouterr().out
+
+
 def test_iter_groups_paths_and_categories() -> None:
     mission = make_mission()
     vehicle = {"groupId": 2, "name": "Tanks", "units": []}

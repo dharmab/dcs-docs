@@ -9,6 +9,7 @@ import sys
 import tempfile
 import zipfile
 from collections.abc import Generator
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -46,10 +47,36 @@ class DiagnosticCollector:
 # ---------------------------------------------------------------------------
 
 
+# A Lua string literal, or a number with an exponent outside one
+_LUA_STRING_OR_EXPONENT_RE = re.compile(
+    r"""(?P<string>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')"""
+    r"|(?<![\w.])(?P<number>(?:\d+\.?\d*|\.\d+)[eE][+-]?\d+)(?![\w.])",
+    re.DOTALL,
+)
+
+
+def _expand_exponent(match: re.Match[str]) -> str:
+    number = match.group("number")
+    if number is None:
+        return match.group(0)
+    # Fixed-point text parses to the same float as the exponent form
+    text = format(Decimal(number), "f")
+    return text if "." in text else text + ".0"
+
+
+def expand_exponents(content: str) -> str:
+    """Rewrite numbers like ``1.5e-11`` in fixed-point form, which luadata accepts.
+
+    luadata rejects exponents, but Lua accepts them and the Mission Editor writes
+    them. String literals are left unchanged.
+    """
+    return _LUA_STRING_OR_EXPONENT_RE.sub(_expand_exponent, content)
+
+
 def parse_lua_assignment(content: str) -> dict[str, Any] | list[Any]:
     """Parse a DCS Lua file that uses assignment format (e.g. ``mission = { ... }``)."""
     idx = content.index("{")
-    raw = content[idx:]
+    raw = expand_exponents(content[idx:])
     return luadata.unserialize(raw)
 
 
