@@ -11,7 +11,6 @@ You must use [uv](https://docs.astral.sh/uv/) to run this tool. Trying to run it
 with just `python terrain_geodata/cli.py` will not work.
 
 ```bash
-# Enter the tool's project directory
 cd tools/terrain-geodata
 # List the terrains found in the DCS install
 uv run terrain-geodata list

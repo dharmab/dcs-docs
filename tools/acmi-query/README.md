@@ -12,7 +12,6 @@ You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
 Recordings are too large for an AI agent's context window (a 7-hour multiplayer session is 160 MB zipped, 400 MB of text). The first query against a recording builds a SQLite cache next to the file (`<file>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later queries are fast. The tool reads and writes `<file>.db` next to the recording, so copy each recording to its own empty directory before querying it. Otherwise a `.db` file shipped alongside a recording is used as the cache.
 
 ```bash
-# Enter the tool's project directory
 cd tools/acmi-query
 # Show the mission, DCS version, duration, and object counts
 uv run acmi-query summary ~/tacview/session1/Tacview-example.zip.acmi

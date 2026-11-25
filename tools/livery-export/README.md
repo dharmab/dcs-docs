@@ -9,7 +9,6 @@ You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
 `python extract_liveries.py`.
 
 ```bash
-# Enter the tool's project directory
 cd tools/livery-export
 # Find the DCS install automatically and write to docs/liveries
 uv run extract-liveries --output-dir ../../docs/liveries
