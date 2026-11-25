@@ -2,41 +2,45 @@
 
 The `mission` file is a Lua table containing the complete mission definition. This page documents every top-level key and its nested structures.
 
-> **Important:** Generated mission files should include every top-level key below, even if empty. DCS fails to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use `{}` for unused sections.
+> **Important:** DCS fails to load a mission that omits a required key. Use `{}` for an unused required table, such as `goals` in a mission without scoring.[^required]
 
 ## Top-Level Keys
 
-| Key                       | Type   | Description                                                  |
-| ------------------------- | ------ | ------------------------------------------------------------ |
-| `coalition`               | table  | Unit placement organized by coalition (blue/red/neutrals)    |
-| `coalitions`              | table  | Country ID assignments to each coalition                     |
-| `currentKey`              | number | Internal counter for generating unique IDs                   |
-| `date`                    | table  | Mission date (Year, Month, Day)                              |
-| `descriptionBlueTask`     | string | Dictionary key for blue coalition briefing text              |
-| `descriptionNeutralsTask` | string | Dictionary key for neutral coalition briefing text. Optional |
-| `descriptionRedTask`      | string | Dictionary key for red coalition briefing text               |
-| `descriptionText`         | string | Dictionary key for main mission description                  |
-| `drawings`                | table  | F10 map drawings and annotations                             |
-| `failures`                | table  | Aircraft system failure configurations                       |
-| `forcedOptions`           | table  | Mission-enforced difficulty settings                         |
-| `goals`                   | table  | Mission scoring goals and objectives                         |
-| `groundControl`           | table  | Combined Arms role settings                                  |
-| `map`                     | table  | Mission Editor map view settings                             |
-| `maxDictId`               | number | Highest dictionary key ID used                               |
-| `pictureFileNameB`        | table  | Briefing images for blue coalition                           |
-| `pictureFileNameN`        | table  | Briefing images for neutral coalition                        |
-| `pictureFileNameR`        | table  | Briefing images for red coalition                            |
-| `pictureFileNameServer`   | table  | Briefing images for server (multiplayer)                     |
-| `requiredModules`         | table  | List of required DLC modules                                 |
-| `result`                  | table  | Mission result conditions and scoring                        |
-| `sortie`                  | string | Dictionary key for mission sortie name                       |
-| `start_time`              | number | Mission start time in seconds from midnight                  |
-| `theatre`                 | string | Map/theatre name (e.g., "Syria", "Caucasus")                 |
-| `trig`                    | table  | Legacy trigger system (compiled actions)                     |
-| `triggers`                | table  | Trigger zones defined in the mission                         |
-| `trigrules`               | table  | Trigger rules with conditions and actions                    |
-| `version`                 | number | Mission file format version                                  |
-| `weather`                 | table  | Weather configuration                                        |
+| Key                       | Type   | Required          | Description                                                                  |
+| ------------------------- | ------ | ----------------- | ---------------------------------------------------------------------------- |
+| `coalition`               | table  | Yes               | Unit placement organized by coalition (blue/red/neutrals)                    |
+| `coalitions`              | table  | Yes               | Country ID assignments to each coalition                                     |
+| `currentKey`              | number | Yes               | Internal counter for generating unique IDs                                   |
+| `date`                    | table  | No                | Mission date (Year, Month, Day)                                              |
+| `descriptionBlueTask`     | string | Yes[^unconfirmed] | Dictionary key for blue coalition briefing text                              |
+| `descriptionNeutralsTask` | string | No                | Dictionary key for neutral coalition briefing text                           |
+| `descriptionRedTask`      | string | Yes[^unconfirmed] | Dictionary key for red coalition briefing text                               |
+| `descriptionText`         | string | Yes[^unconfirmed] | Dictionary key for main mission description                                  |
+| `drawings`                | table  | No                | F10 map drawings and annotations                                             |
+| `failures`                | table  | No                | Aircraft system failure configurations                                       |
+| `forcedOptions`           | table  | No                | Mission-enforced difficulty settings                                         |
+| `goals`                   | table  | Yes               | Mission scoring goals and objectives                                         |
+| `groundControl`           | table  | No                | Combined Arms role settings                                                  |
+| `map`                     | table  | No                | Mission Editor map view settings                                             |
+| `maxDictId`               | number | No                | Highest dictionary key ID used                                               |
+| `pictureFileNameB`        | table  | No                | Briefing images for blue coalition                                           |
+| `pictureFileNameN`        | table  | No                | Briefing images for neutral coalition                                        |
+| `pictureFileNameR`        | table  | No                | Briefing images for red coalition                                            |
+| `pictureFileNameServer`   | table  | No                | Briefing images for server (multiplayer)                                     |
+| `requiredModules`         | table  | No                | List of required DLC modules                                                 |
+| `result`                  | table  | Yes               | Mission result conditions and scoring                                        |
+| `sortie`                  | string | No                | Dictionary key for mission sortie name                                       |
+| `start_time`              | number | Yes               | Mission start time in seconds from midnight                                  |
+| `theatre`                 | string | No                | Map/theatre name (e.g., "Syria", "Caucasus"). DCS loads Caucasus when absent |
+| `trig`                    | table  | Yes               | Legacy trigger system (compiled actions)                                     |
+| `triggers`                | table  | No                | Trigger zones defined in the mission                                         |
+| `trigrules`               | table  | No                | Trigger rules with conditions and actions                                    |
+| `version`                 | number | Yes               | Mission file format version                                                  |
+| `weather`                 | table  | Yes               | Weather configuration                                                        |
+
+[^required]: `goals`, `result`, and `trig` are needed to run the mission. The mission loader in `MissionEditor/modules/me_mission.lua` raises a Lua error when `coalition`, `coalitions`, `currentKey`, `start_time`, `version`, or `weather` is nil. Each key marked No either has a default in the loader or is missing from some of the missions bundled with DCS World.
+
+[^unconfirmed]: Every mission bundled with DCS World has this key. The loader passes it to `textToME`, whose source isn't in the install, so whether a mission loads without it is unconfirmed.
 
 ---
 
