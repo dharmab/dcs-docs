@@ -5,10 +5,19 @@ Validates a DCS MIZ file or unpacked MIZ directory. Validation includes:
 - The required files exist and parse as Lua
 - The `mission` table matches the schema
 - Warehouse entries for airfields, ships, and FARPs are valid
-- Groups and units have the required fields
+- Groups and units have the required fields, and valid `skill` and `alt_type`
+  values
 - Dynamic spawn templates are valid
 - Group and unit IDs are unique
 - Airfield references are consistent
+- Each country is assigned to the coalition it is placed under, and to only one
+  coalition
+- Units starting from airfield parking have string `parking` and `parking_id`
+- TACAN beacons have a valid channel and mode, a `system` that matches the
+  mode, and a frequency that matches the channel
+- Every `DictKey_*` and `ResKey_*` in the mission exists in `dictionary` and
+  `mapResource`, every `mapResource` file exists, and no dictionary ID is
+  greater than `maxDictId`
 
 ## Usage
 
@@ -28,8 +37,10 @@ The tool exits with status 0 when the mission passes, 1 when a check fails, and
 ## Development
 
 ```bash
-# Install the tool and the dev dependencies (ruff, ty)
+# Install the tool and the dev dependencies (ruff, ty, pytest)
 uv sync --group dev
+# Run the tests
+uv run pytest
 # Lint the code
 uv run ruff check .
 # Type check the code
