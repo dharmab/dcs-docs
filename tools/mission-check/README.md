@@ -1,0 +1,42 @@
+# mission-check
+
+Validates a DCS mission directory or `.miz` file. CI runs it on every mission in
+`missions/` through `make check`.
+
+## Usage
+
+You must use [uv](https://docs.astral.sh/uv/) to run this tool. Trying to run it
+with just `python check_mission.py` will not work.
+
+```bash
+# Enter the tool's project directory
+cd tools/mission-check
+# Check an extracted mission directory
+uv run check-mission check ../../missions/operation-infinity/src
+# Check a packed .miz file
+uv run check-mission check ~/Saved\ Games/DCS/Missions/example.miz
+```
+
+The tool exits with status 0 when the mission passes, 1 when a check fails, and
+2 when the path is missing or is not a directory or `.miz` file.
+
+## Checks
+
+- The required files exist and parse as Lua
+- The `mission` table matches the schema
+- Warehouse entries for airfields, ships, and FARPs are valid
+- Groups and units have the required fields
+- Dynamic spawn templates are valid
+- Group and unit IDs are unique
+- Airfield references are consistent
+
+## Development
+
+```bash
+# Install the tool and the dev dependencies (ruff, ty)
+uv sync --group dev
+# Lint the code
+uv run ruff check .
+# Type check the code
+uv run ty check
+```
