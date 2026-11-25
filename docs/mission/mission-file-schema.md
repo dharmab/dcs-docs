@@ -2,41 +2,41 @@
 
 The `mission` file is a Lua table containing the complete mission definition. This page documents every top-level key and its nested structures.
 
-> **Important:** Generated mission files must include every top-level key below, even if empty. DCS fails to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use `{}` for unused sections.
+> **Important:** Generated mission files should include every top-level key below, even if empty. DCS fails to load missions that omit required fields such as `goals`, `result`, `trig`, or `weather`. Use `{}` for unused sections.
 
 ## Top-Level Keys
 
-| Key                       | Type   | Description                                               |
-| ------------------------- | ------ | --------------------------------------------------------- |
-| `coalition`               | table  | Unit placement organized by coalition (blue/red/neutrals) |
-| `coalitions`              | table  | Country ID assignments to each coalition                  |
-| `currentKey`              | number | Internal counter for generating unique IDs                |
-| `date`                    | table  | Mission date (Year, Month, Day)                           |
-| `descriptionBlueTask`     | string | Dictionary key for blue coalition briefing text           |
-| `descriptionNeutralsTask` | string | Dictionary key for neutral coalition briefing text        |
-| `descriptionRedTask`      | string | Dictionary key for red coalition briefing text            |
-| `descriptionText`         | string | Dictionary key for main mission description               |
-| `drawings`                | table  | F10 map drawings and annotations                          |
-| `failures`                | table  | Aircraft system failure configurations                    |
-| `forcedOptions`           | table  | Mission-enforced difficulty settings                      |
-| `goals`                   | table  | Mission scoring goals and objectives                      |
-| `groundControl`           | table  | Combined Arms role settings                               |
-| `map`                     | table  | Mission Editor map view settings                          |
-| `maxDictId`               | number | Highest dictionary key ID used                            |
-| `pictureFileNameB`        | table  | Briefing images for blue coalition                        |
-| `pictureFileNameN`        | table  | Briefing images for neutral coalition                     |
-| `pictureFileNameR`        | table  | Briefing images for red coalition                         |
-| `pictureFileNameServer`   | table  | Briefing images for server (multiplayer)                  |
-| `requiredModules`         | table  | List of required DLC modules                              |
-| `result`                  | table  | Mission result conditions and scoring                     |
-| `sortie`                  | string | Dictionary key for mission sortie name                    |
-| `start_time`              | number | Mission start time in seconds from midnight               |
-| `theatre`                 | string | Map/theatre name (e.g., "Syria", "Caucasus")              |
-| `trig`                    | table  | Legacy trigger system (compiled actions)                  |
-| `triggers`                | table  | Trigger zones defined in the mission                      |
-| `trigrules`               | table  | Trigger rules with conditions and actions                 |
-| `version`                 | number | Mission file format version                               |
-| `weather`                 | table  | Weather configuration                                     |
+| Key                       | Type   | Description                                                  |
+| ------------------------- | ------ | ------------------------------------------------------------ |
+| `coalition`               | table  | Unit placement organized by coalition (blue/red/neutrals)    |
+| `coalitions`              | table  | Country ID assignments to each coalition                     |
+| `currentKey`              | number | Internal counter for generating unique IDs                   |
+| `date`                    | table  | Mission date (Year, Month, Day)                              |
+| `descriptionBlueTask`     | string | Dictionary key for blue coalition briefing text              |
+| `descriptionNeutralsTask` | string | Dictionary key for neutral coalition briefing text. Optional |
+| `descriptionRedTask`      | string | Dictionary key for red coalition briefing text               |
+| `descriptionText`         | string | Dictionary key for main mission description                  |
+| `drawings`                | table  | F10 map drawings and annotations                             |
+| `failures`                | table  | Aircraft system failure configurations                       |
+| `forcedOptions`           | table  | Mission-enforced difficulty settings                         |
+| `goals`                   | table  | Mission scoring goals and objectives                         |
+| `groundControl`           | table  | Combined Arms role settings                                  |
+| `map`                     | table  | Mission Editor map view settings                             |
+| `maxDictId`               | number | Highest dictionary key ID used                               |
+| `pictureFileNameB`        | table  | Briefing images for blue coalition                           |
+| `pictureFileNameN`        | table  | Briefing images for neutral coalition                        |
+| `pictureFileNameR`        | table  | Briefing images for red coalition                            |
+| `pictureFileNameServer`   | table  | Briefing images for server (multiplayer)                     |
+| `requiredModules`         | table  | List of required DLC modules                                 |
+| `result`                  | table  | Mission result conditions and scoring                        |
+| `sortie`                  | string | Dictionary key for mission sortie name                       |
+| `start_time`              | number | Mission start time in seconds from midnight                  |
+| `theatre`                 | string | Map/theatre name (e.g., "Syria", "Caucasus")                 |
+| `trig`                    | table  | Legacy trigger system (compiled actions)                     |
+| `triggers`                | table  | Trigger zones defined in the mission                         |
+| `trigrules`               | table  | Trigger rules with conditions and actions                    |
+| `version`                 | number | Mission file format version                                  |
+| `weather`                 | table  | Weather configuration                                        |
 
 ---
 
@@ -107,6 +107,8 @@ coalitions = {
     neutrals = { 70, 83, 23, ... }
 }
 ```
+
+`neutrals` is optional. A country in neither `blue` nor `red` is neutral.
 
 ---
 
