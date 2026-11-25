@@ -119,8 +119,9 @@ uv run terrain-geodata export --out /tmp/terrains --terrain Caucasus --elevation
 
 Things to keep in mind:
 
-- Sea and lakes are masked out (nodata). The mesh under them is the bed, not
-  the water surface, and reaches thousands of metres below sea level.
+- Sea and lakes are masked out (nodata) to keep the files small. The mesh
+  under them is the bed, which reaches thousands of metres below sea level and
+  was a large share of the file on maps with deep sea.
 - Rivers are not masked. A river is tens of metres wide, so a pixel only
   lands on one when its centre falls on the river surface, and then it holds
   the height of the river bed. Masking rivers
