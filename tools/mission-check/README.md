@@ -12,7 +12,8 @@ Validates a DCS MIZ file or unpacked MIZ directory. Validation includes:
 - Airfield references are consistent
 - Each country is assigned to the coalition it is placed under, and to only one
   coalition
-- Units starting from airfield parking have string `parking` and `parking_id`
+- Units starting from airfield parking have `parking` (a string or integer) and
+  a string `parking_id`
 - TACAN beacons have a valid channel and mode, a `system` that matches the
   mode, and a frequency that matches the channel
 - Every `DictKey_*` and `ResKey_*` in the mission exists in `dictionary` and
