@@ -129,8 +129,11 @@ Things to keep in mind:
 - A pixel is the height at one point, not the average or peak of the square
   kilometre around it. Ridgelines, cliffs and narrow valleys between pixel
   centres do not show up.
-- The overviews inside the file are averaged, so zoomed-out reads give the mean
-  height of each block, not its peak.
+- `elevation.tif` also contains overviews: copies at 2, 4 and on the larger
+  terrains 8 km pixels, which GIS tools read when zoomed out. Each overview
+  pixel is the mean of the pixels it covers, so zoomed-out views show average
+  heights and flatten peaks. Reads at full resolution, such as `sample` or
+  `read(1)`, are unaffected.
 
 Sample a height, and find the places above 1,500 m:
 
