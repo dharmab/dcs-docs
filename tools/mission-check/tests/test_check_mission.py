@@ -269,9 +269,33 @@ def test_missing_date_key(run) -> None:
 
 def test_missing_coalitions_key(run) -> None:
     mission = make_mission()
-    del mission["coalitions"]["neutrals"]
+    del mission["coalitions"]["red"]
     _, out = run(mission)
-    assert "mission.coalitions: missing required key 'neutrals'" in out
+    assert "mission.coalitions: missing required key 'red'" in out
+
+
+def test_mission_without_neutrals_passes(run) -> None:
+    mission = make_mission()
+    del mission["descriptionNeutralsTask"]
+    del mission["coalitions"]["neutrals"]
+    code, out = run(mission)
+    assert code == 0, out
+
+
+def test_unassigned_country_is_neutral(run) -> None:
+    mission = make_mission()
+    mission["coalition"]["neutrals"]["country"].append({"id": 71})
+    code, out = run(mission)
+    assert code == 0, out
+
+
+def test_red_country_placed_under_neutrals(run) -> None:
+    mission = make_mission()
+    mission["coalition"]["neutrals"]["country"].append({"id": 0})
+    _, out = run(mission)
+    assert (
+        "coalition.neutrals.country[1]: country 0 is not in mission.coalitions.neutrals"
+    ) in out
 
 
 def test_missing_coalition_side(run) -> None:
@@ -657,6 +681,15 @@ def test_country_in_two_coalitions(run) -> None:
     mission["coalitions"]["red"] = [0, 2]
     _, out = run(mission)
     assert "mission.coalitions.red: country 2 is also assigned to 'blue'" in out
+
+
+def test_unassigned_country_under_blue(run) -> None:
+    mission = make_mission()
+    mission["coalitions"]["blue"] = [21]
+    _, out = run(mission)
+    assert "coalition.blue.country[0]: country 2 is not in mission.coalitions.blue" in (
+        out
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -180,7 +180,6 @@ MISSION_REQUIRED_KEYS = {
     "descriptionText",
     "descriptionBlueTask",
     "descriptionRedTask",
-    "descriptionNeutralsTask",
     "map",
     "coalitions",
     "weather",
@@ -208,7 +207,8 @@ def check_mission_schema(
 
     coalitions = mission.get("coalitions")
     if isinstance(coalitions, dict):
-        for ck in ("blue", "red", "neutrals"):
+        # neutrals is optional: countries in neither blue nor red are neutral
+        for ck in ("blue", "red"):
             if ck not in coalitions:
                 diag.fail("mission.coalitions", f"missing required key '{ck}'")
 
@@ -696,7 +696,8 @@ def check_coalition_countries(
             if not isinstance(country, dict):
                 continue
             country_id = country.get("id")
-            if owner.get(country_id) != side:
+            # Countries in neither blue nor red are neutral
+            if owner.get(country_id, "neutrals") != side:
                 diag.fail(
                     f"coalition.{side}.country[{ci}]",
                     f"country {country_id} is not in mission.coalitions.{side}",
