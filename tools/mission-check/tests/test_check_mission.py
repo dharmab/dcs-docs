@@ -921,6 +921,24 @@ def test_ship_tacan_system_valid_in_both_modes(run, mode: str, mhz: int) -> None
     assert code == 0, out
 
 
+@pytest.mark.parametrize(("system", "mode"), [(13, "X"), (14, "Y")])
+def test_air_to_air_tacan_passes(run, system: int, mode: str) -> None:
+    mission = make_beacon_mission(
+        system=system, modeChannel=mode, AA=True, frequency=1061000000
+    )
+    code, out = run(mission)
+    assert code == 0, out
+
+
+@pytest.mark.parametrize(("system", "mode"), [(13, "Y"), (14, "X")])
+def test_air_to_air_tacan_system_mismatch(run, system: int, mode: str) -> None:
+    mission = make_beacon_mission(
+        system=system, modeChannel=mode, AA=True, frequency=1061000000
+    )
+    _, out = run(mission)
+    assert f"TACAN 100{mode} has system {system}, not valid for mode {mode}" in out
+
+
 def test_tacan_frequency_mismatch(run) -> None:
     _, out = run(make_beacon_mission(channel=101))
     assert (
