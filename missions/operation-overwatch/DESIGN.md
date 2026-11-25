@@ -108,6 +108,8 @@ The first version has one scenario type: troops in contact (firefight). The othe
 
 Rotary, Fixed. A friendly patrol is pinned by insurgents in a compound or treeline. The two sides trade fire with AI-controlled tracers and RPGs, so the fight is visible from altitude. The success rule is the default (key units or 70% of the enemy).
 
+The enemy is 400-900 m from the friendlies, spread over about 150 m. Afghanistan firefights were long range: about half of engagements were beyond 300 m, and insurgents often fired from 500 m or more off high ground, where troops could not see who was shooting at them (Ehrhart, "Increasing Small Arms Lethality in Afghanistan: Taking Back the Infantry Half-Kilometer", 2009). The JTAC's brief reflects this: the enemy count and range are estimates, the friendlies cannot see the shooters, and the smoke marks the approximate enemy position. Finding the enemy is part of the task.
+
 #### Troops in Contact: Convoy Ambush
 
 Rotary, Fixed. A friendly convoy is stopped on a road after an IED disables the lead vehicle. The enemy is on high ground or in compounds along the road (`docs/recipes/convoy-route.md`). After the tasking succeeds, the convoy resumes its route, and the tasking ends when the convoy reaches its destination. Variant: the ambush starts after check-in, and the flight is already overhead escorting the convoy.
@@ -192,7 +194,7 @@ Dynamically generated transport taskings for the CH-47F, using the same check-in
 
 ## Communications
 
-Follow `docs/recipes/comm-plan.md`. Each of the 4 tasking slots has a fixed JTAC frequency, preset in every player aircraft. The tasking's check-in brief names its frequency.
+Follow `docs/recipes/comm-plan.md`, except for JTACs. Each of the 4 tasking slots has a fixed JTAC frequency on UHF AM (256.1, 256.3, 256.5, 256.7), preset in every player aircraft. The recipe puts JTACs on FM, which the M-2000C cannot tune, and fixed-wing CAS check-ins of the period were on UHF. The tasking's check-in brief names its frequency.
 
 ## Technical Notes
 

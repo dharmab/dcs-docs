@@ -16,7 +16,7 @@ Documentation for AI agents building tools and content for DCS World.
   - `acmi-query/` - Queries Tacview recordings; see `tools/acmi-query/README.md`
   - `terrain-geodata/` - Exports terrain GIS files from the DCS install to `docs/data/terrains/`. Its README documents the output: projection, places, map features, land cover, elevation
 - `missions/` - Extracted `.miz` source directories; `missions/*/tests/` hold offline Lua tests (`make test`)
-- `lua-types/dcs.lua` - lua-language-server stubs for the SSE API. `make lint-lua` checks mission Lua against them
+- `lua-types/dcs.lua` - lua-language-server stubs for the SSE API. `make lint-lua` checks mission Lua against them, one mission at a time; each mission needs a `.luarc.json`
 
 ## Writing Documentation
 
