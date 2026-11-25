@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 import tempfile
 import zipfile
@@ -186,6 +187,9 @@ MISSION_REQUIRED_KEYS = {
     "forcedOptions",
     "groundControl",
     "coalition",
+    "goals",
+    "result",
+    "trig",
 }
 
 
@@ -348,6 +352,17 @@ AIRCRAFT_GROUP_FIELDS = {"task", "uncontrolled"}
 REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "skill", "x", "y", "heading"}
 AIRCRAFT_UNIT_FIELDS = {"alt", "alt_type", "speed", "psi", "payload"}
 
+VALID_SKILLS = {"Average", "Good", "High", "Excellent", "Random", "Client", "Player"}
+VALID_ALT_TYPES = {"BARO", "RADIO"}
+
+
+def _check_alt_type(
+    path: str, table: dict[str, Any], diag: DiagnosticCollector
+) -> None:
+    alt_type = table.get("alt_type")
+    if alt_type is not None and alt_type not in VALID_ALT_TYPES:
+        diag.fail(path, f"alt_type '{alt_type}' must be 'BARO' or 'RADIO'")
+
 
 def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
     for _side, category, _ci, _gi, path, group in iter_groups(mission):
@@ -358,6 +373,12 @@ def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -
             if field not in group:
                 diag.fail(path, f"missing required group field '{field}'")
 
+        route = group.get("route")
+        if isinstance(route, dict):
+            for wi, wp in _items(route.get("points") or {}):
+                if isinstance(wp, dict):
+                    _check_alt_type(f"{path}.route.points[{wi}]", wp, diag)
+
         units = group.get("units")
         if units is None:
             continue
@@ -365,6 +386,10 @@ def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -
             if not isinstance(unit, dict):
                 continue
             upath = f"{path}.units[{ui}]"
+            _check_alt_type(upath, unit, diag)
+            skill = unit.get("skill")
+            if skill is not None and skill not in VALID_SKILLS:
+                diag.fail(upath, f"unknown skill '{skill}'")
             ureq = set(REQUIRED_UNIT_FIELDS)
             if category in AIRCRAFT_CATEGORIES:
                 ureq |= AIRCRAFT_UNIT_FIELDS
@@ -640,6 +665,204 @@ def check_airfield_consistency(
 
 
 # ---------------------------------------------------------------------------
+# 8. Coalition country assignment
+# ---------------------------------------------------------------------------
+
+
+def check_coalition_countries(
+    mission: dict[str, Any], diag: DiagnosticCollector
+) -> None:
+    coalitions = mission.get("coalitions")
+    coalition = mission.get("coalition")
+    if not isinstance(coalitions, dict) or not isinstance(coalition, dict):
+        return
+
+    owner: dict[Any, str] = {}
+    for side in ("blue", "red", "neutrals"):
+        for _, country_id in _items(coalitions.get(side) or {}):
+            if country_id in owner:
+                diag.fail(
+                    f"mission.coalitions.{side}",
+                    f"country {country_id} is also assigned to '{owner[country_id]}'",
+                )
+            else:
+                owner[country_id] = side
+
+    for side in ("blue", "red", "neutrals"):
+        side_data = coalition.get(side)
+        if not isinstance(side_data, dict):
+            continue
+        for ci, country in _items(side_data.get("country") or {}):
+            if not isinstance(country, dict):
+                continue
+            country_id = country.get("id")
+            if owner.get(country_id) != side:
+                diag.fail(
+                    f"coalition.{side}.country[{ci}]",
+                    f"country {country_id} is not in mission.coalitions.{side}",
+                )
+
+
+# ---------------------------------------------------------------------------
+# 9. Airfield parking starts
+# ---------------------------------------------------------------------------
+
+PARKING_WAYPOINT_TYPES = {"TakeOffParking", "TakeOffParkingHot"}
+
+
+def check_parking_starts(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
+    """Units starting from airfield parking need string parking and parking_id."""
+    for _side, _cat, _ci, _gi, path, group in iter_groups(mission):
+        route = group.get("route")
+        if not isinstance(route, dict):
+            continue
+        first_wp = next((wp for _, wp in _items(route.get("points") or {})), None)
+        if not isinstance(first_wp, dict):
+            continue
+        is_parking_start = first_wp.get("type") in PARKING_WAYPOINT_TYPES
+        is_airfield_start = first_wp.get("airdromeId") is not None
+        if not (is_parking_start and is_airfield_start):
+            continue
+        for ui, unit in _items(group.get("units") or {}):
+            if not isinstance(unit, dict):
+                continue
+            upath = f"{path}.units[{ui}]"
+            for field in ("parking", "parking_id"):
+                value = unit.get(field)
+                if value is None:
+                    diag.fail(upath, f"airfield parking start needs '{field}'")
+                elif not isinstance(value, str):
+                    diag.fail(upath, f"'{field}' must be a string, got {value!r}")
+
+
+# ---------------------------------------------------------------------------
+# 10. TACAN beacons
+# ---------------------------------------------------------------------------
+
+BEACON_TYPE_TACAN = 4
+# system values by channel mode: ship, tanker, ground vehicle
+TACAN_SYSTEMS = {"X": {3, 4, 18}, "Y": {3, 5, 19}}
+
+
+def tacan_frequency_hz(channel: int, mode: str, aa: bool) -> int:
+    """Return the ActivateBeacon frequency for a TACAN channel."""
+    if mode == "X" and not aa:
+        mhz = 962 + channel - 1 if channel < 64 else 1151 + channel - 64
+    else:
+        mhz = 1088 + channel - 1 if channel < 64 else 1025 + channel - 64
+    return mhz * 1_000_000
+
+
+def _iter_actions(obj: Any, action_id: str) -> Generator[dict[str, Any]]:
+    """Yield every table with the given ``id`` nested anywhere in obj."""
+    if isinstance(obj, dict):
+        if obj.get("id") == action_id:
+            yield obj
+        for value in obj.values():
+            yield from _iter_actions(value, action_id)
+    elif isinstance(obj, list):
+        for value in obj:
+            yield from _iter_actions(value, action_id)
+
+
+def check_tacan_beacons(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
+    for _side, _cat, _ci, _gi, path, group in iter_groups(mission):
+        for action in _iter_actions(group.get("route"), "ActivateBeacon"):
+            params = action.get("params")
+            if not isinstance(params, dict):
+                continue
+            if params.get("type") != BEACON_TYPE_TACAN:
+                continue
+            channel = params.get("channel")
+            mode = params.get("modeChannel")
+            channel_is_valid = isinstance(channel, int) and 1 <= channel <= 126
+            if not channel_is_valid:
+                diag.fail(path, f"TACAN channel {channel!r} must be 1 to 126")
+            if mode not in TACAN_SYSTEMS:
+                diag.fail(path, f"TACAN modeChannel {mode!r} must be 'X' or 'Y'")
+            if not channel_is_valid or mode not in TACAN_SYSTEMS:
+                continue
+            assert isinstance(channel, int)
+            label = f"TACAN {channel}{mode}"
+
+            system = params.get("system")
+            if system not in TACAN_SYSTEMS[mode]:
+                diag.fail(
+                    path, f"{label} has system {system!r}, not valid for mode {mode}"
+                )
+
+            expected = tacan_frequency_hz(channel, mode, bool(params.get("AA")))
+            frequency = params.get("frequency")
+            if frequency != expected:
+                diag.fail(
+                    path,
+                    f"{label} frequency {frequency!r} does not match channel, "
+                    f"expected {expected}",
+                )
+
+
+# ---------------------------------------------------------------------------
+# 11. Dictionary and resource references
+# ---------------------------------------------------------------------------
+
+DICT_KEY_RE = re.compile(r"DictKey_\w+")
+RES_KEY_RE = re.compile(r"ResKey_\w+")
+DICT_ID_RE = re.compile(r"^DictKey_.*_(\d+)$")
+
+
+def _iter_strings(obj: Any) -> Generator[str]:
+    if isinstance(obj, str):
+        yield obj
+    elif isinstance(obj, dict):
+        for value in obj.values():
+            yield from _iter_strings(value)
+    elif isinstance(obj, list):
+        for value in obj:
+            yield from _iter_strings(value)
+
+
+def check_references(
+    mission_dir: Path,
+    mission: dict[str, Any],
+    dictionary: Any,
+    map_resource: Any,
+    diag: DiagnosticCollector,
+) -> None:
+    dict_keys = set(dictionary) if isinstance(dictionary, dict) else set()
+    res_keys = set(map_resource) if isinstance(map_resource, dict) else set()
+
+    used_dict_keys: set[str] = set()
+    used_res_keys: set[str] = set()
+    for text in _iter_strings(mission):
+        used_dict_keys.update(DICT_KEY_RE.findall(text))
+        used_res_keys.update(RES_KEY_RE.findall(text))
+
+    for key in sorted(used_dict_keys - dict_keys):
+        diag.fail("mission", f"'{key}' is not in l10n/DEFAULT/dictionary")
+    for key in sorted(used_res_keys - res_keys):
+        diag.fail("mission", f"'{key}' is not in l10n/DEFAULT/mapResource")
+
+    if isinstance(map_resource, dict):
+        l10n = mission_dir / "l10n" / "DEFAULT"
+        for key, filename in sorted(map_resource.items()):
+            if not isinstance(filename, str) or not (l10n / filename).is_file():
+                diag.fail(
+                    f"mapResource.{key}",
+                    f"file '{filename}' is missing from l10n/DEFAULT",
+                )
+
+    max_dict_id = mission.get("maxDictId")
+    if isinstance(max_dict_id, int):
+        for key in sorted(dict_keys):
+            match = DICT_ID_RE.match(str(key))
+            if match and int(match.group(1)) > max_dict_id:
+                diag.fail(
+                    f"dictionary.{key}",
+                    f"ID {match.group(1)} is greater than maxDictId {max_dict_id}",
+                )
+
+
+# ---------------------------------------------------------------------------
 # CLI entry point
 # ---------------------------------------------------------------------------
 
@@ -667,6 +890,16 @@ def run_checks(mission_dir: Path) -> int:
             check_dyn_spawn_templates(mission_data, warehouses_data, diag)
         check_id_uniqueness(mission_data, diag)
         check_airfield_consistency(mission_data, warehouse_ids, diag)
+        check_coalition_countries(mission_data, diag)
+        check_parking_starts(mission_data, diag)
+        check_tacan_beacons(mission_data, diag)
+        check_references(
+            mission_dir,
+            mission_data,
+            parsed.get(os.path.join("l10n", "DEFAULT", "dictionary")),
+            parsed.get(os.path.join("l10n", "DEFAULT", "mapResource")),
+            diag,
+        )
 
     diag.print_report()
     return 1 if diag.has_failures() else 0

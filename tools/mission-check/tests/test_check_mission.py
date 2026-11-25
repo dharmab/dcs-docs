@@ -73,6 +73,9 @@ def make_mission() -> dict[str, Any]:
         "weather": {"atmosphere_type": 0},
         "forcedOptions": {"labels": 0},
         "groundControl": {"isPilotControlVehicles": False},
+        "goals": {},
+        "result": {"total": 0},
+        "trig": {"funcStartup": {}},
         "coalition": {
             "blue": {"country": [{"id": 2, "plane": {"group": [group]}}]},
             "red": {"country": [{"id": 0}]},
@@ -91,6 +94,17 @@ def make_warehouses() -> dict[str, Any]:
     }
 
 
+def make_dictionary() -> dict[str, str]:
+    keys = [
+        "sortie",
+        "descriptionText",
+        "descriptionBlueTask",
+        "descriptionRedTask",
+        "descriptionNeutralsTask",
+    ]
+    return {f"DictKey_{key}": "" for key in keys}
+
+
 def write_lua(path: Path, name: str, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(f"{name} = {luadata.serialize(data)}\n", encoding="utf-8")
@@ -107,8 +121,9 @@ def write_mission_dir(
     write_lua(root / "options", "options", {"difficulty": {}})
     (root / "theatre").write_text(theatre, encoding="utf-8")
     l10n = root / "l10n" / "DEFAULT"
-    write_lua(l10n / "dictionary", "dictionary", {"DictKey_sortie": ""})
-    write_lua(l10n / "mapResource", "mapResource", {"ResKey": ""})
+    write_lua(l10n / "dictionary", "dictionary", make_dictionary())
+    write_lua(l10n / "mapResource", "mapResource", {"ResKey_Script": "Script.lua"})
+    (l10n / "Script.lua").write_text("", encoding="utf-8")
     return root
 
 
@@ -586,6 +601,242 @@ def test_waypoint_airdrome_not_in_warehouses(run) -> None:
     assert (
         f"{GROUP_PATH}.route.points[1]: airdromeId 99 not found in warehouse airports"
     ) in out
+
+
+# ---------------------------------------------------------------------------
+# Required keys and values
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("key", ["goals", "result", "trig"])
+def test_missing_load_critical_key(run, key: str) -> None:
+    mission = make_mission()
+    del mission[key]
+    _, out = run(mission)
+    assert f"mission: missing required key '{key}'" in out
+
+
+def test_unknown_skill(run) -> None:
+    mission = make_mission()
+    blue_group(mission)["units"][0]["skill"] = "Veteran"
+    _, out = run(mission)
+    assert f"{GROUP_PATH}.units[0]: unknown skill 'Veteran'" in out
+
+
+def test_unit_alt_type(run) -> None:
+    mission = make_mission()
+    blue_group(mission)["units"][0]["alt_type"] = "AGL"
+    _, out = run(mission)
+    assert f"{GROUP_PATH}.units[0]: alt_type 'AGL' must be 'BARO' or 'RADIO'" in out
+
+
+def test_waypoint_alt_type(run) -> None:
+    mission = make_mission()
+    blue_group(mission)["route"]["points"][0]["alt_type"] = "baro"
+    _, out = run(mission)
+    assert f"{GROUP_PATH}.route.points[0]: alt_type 'baro' must be" in out
+
+
+# ---------------------------------------------------------------------------
+# 8. Coalition countries
+# ---------------------------------------------------------------------------
+
+
+def test_country_not_in_its_coalition(run) -> None:
+    mission = make_mission()
+    mission["coalitions"]["blue"] = [21]
+    mission["coalitions"]["red"] = [0, 2]
+    _, out = run(mission)
+    assert "coalition.blue.country[0]: country 2 is not in mission.coalitions.blue" in (
+        out
+    )
+
+
+def test_country_in_two_coalitions(run) -> None:
+    mission = make_mission()
+    mission["coalitions"]["red"] = [0, 2]
+    _, out = run(mission)
+    assert "mission.coalitions.red: country 2 is also assigned to 'blue'" in out
+
+
+# ---------------------------------------------------------------------------
+# 9. Parking starts
+# ---------------------------------------------------------------------------
+
+
+def make_parking_mission(**unit_fields: Any) -> dict[str, Any]:
+    mission = make_mission()
+    group = blue_group(mission)
+    group["route"]["points"][0]["type"] = "TakeOffParking"
+    group["units"][0].update(unit_fields)
+    return mission
+
+
+def test_parking_start_passes(run) -> None:
+    code, out = run(make_parking_mission(parking="55", parking_id="36"))
+    assert code == 0, out
+
+
+def test_parking_start_missing_parking_id(run) -> None:
+    _, out = run(make_parking_mission(parking="55"))
+    assert f"{GROUP_PATH}.units[0]: airfield parking start needs 'parking_id'" in out
+
+
+def test_parking_start_missing_parking(run) -> None:
+    _, out = run(make_parking_mission(parking_id="36"))
+    assert f"{GROUP_PATH}.units[0]: airfield parking start needs 'parking'" in out
+
+
+def test_hot_parking_start_is_checked(run) -> None:
+    mission = make_parking_mission()
+    blue_group(mission)["route"]["points"][0]["type"] = "TakeOffParkingHot"
+    _, out = run(mission)
+    assert "airfield parking start needs 'parking'" in out
+
+
+def test_parking_id_must_be_string(run) -> None:
+    _, out = run(make_parking_mission(parking="55", parking_id=36))
+    assert "'parking_id' must be a string, got 36" in out
+
+
+def test_ship_parking_start_needs_no_parking(run) -> None:
+    mission = make_mission()
+    add_carrier(mission)
+    blue_group(mission)["route"]["points"] = [
+        {"type": "TakeOffParking", "linkUnit": 100, "helipadId": 100}
+    ]
+    code, out = run(mission)
+    assert code == 0, out
+
+
+# ---------------------------------------------------------------------------
+# 10. TACAN beacons
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("channel", "mode", "aa", "mhz"),
+    [
+        (1, "X", False, 962),
+        (63, "X", False, 1024),
+        (64, "X", False, 1151),
+        (100, "X", False, 1187),
+        (1, "Y", False, 1088),
+        (100, "Y", False, 1061),
+        (100, "X", True, 1061),
+    ],
+)
+def test_tacan_frequency_hz(channel: int, mode: str, aa: bool, mhz: int) -> None:
+    assert cm.tacan_frequency_hz(channel, mode, aa) == mhz * 1_000_000
+
+
+def make_beacon_mission(**params: Any) -> dict[str, Any]:
+    beacon: dict[str, Any] = {
+        "type": 4,
+        "system": 4,
+        "channel": 100,
+        "modeChannel": "X",
+        "AA": False,
+        "frequency": 1187000000,
+    }
+    beacon.update(params)
+    task = {
+        "id": "ComboTask",
+        "params": {
+            "tasks": [
+                {
+                    "id": "WrappedAction",
+                    "params": {"action": {"id": "ActivateBeacon", "params": beacon}},
+                }
+            ]
+        },
+    }
+    mission = make_mission()
+    blue_group(mission)["route"]["points"][0]["task"] = task
+    return mission
+
+
+def test_valid_tacan_passes(run) -> None:
+    code, out = run(make_beacon_mission())
+    assert code == 0, out
+
+
+@pytest.mark.parametrize(("mode", "mhz"), [("X", 1187), ("Y", 1061)])
+def test_ship_tacan_system_valid_in_both_modes(run, mode: str, mhz: int) -> None:
+    mission = make_beacon_mission(system=3, modeChannel=mode, frequency=mhz * 10**6)
+    code, out = run(mission)
+    assert code == 0, out
+
+
+def test_tacan_frequency_mismatch(run) -> None:
+    _, out = run(make_beacon_mission(channel=101))
+    assert (
+        "TACAN 101X frequency 1187000000 does not match channel, expected 1188000000"
+    ) in out
+
+
+def test_tacan_system_mismatch(run) -> None:
+    _, out = run(make_beacon_mission(modeChannel="Y", frequency=1061000000))
+    assert "TACAN 100Y has system 4, not valid for mode Y" in out
+
+
+def test_tacan_channel_out_of_range(run) -> None:
+    _, out = run(make_beacon_mission(channel=127))
+    assert "TACAN channel 127 must be 1 to 126" in out
+
+
+def test_tacan_bad_mode(run) -> None:
+    _, out = run(make_beacon_mission(modeChannel="Z"))
+    assert "TACAN modeChannel 'Z' must be 'X' or 'Y'" in out
+
+
+def test_non_tacan_beacon_ignored(run) -> None:
+    code, out = run(make_beacon_mission(type=1, frequency=0))
+    assert code == 0, out
+
+
+# ---------------------------------------------------------------------------
+# 11. Dictionary and resource references
+# ---------------------------------------------------------------------------
+
+
+def test_missing_dictionary_key(run) -> None:
+    mission = make_mission()
+    mission["sortie"] = "DictKey_sortie_7"
+    mission["maxDictId"] = 7
+    _, out = run(mission)
+    assert "mission: 'DictKey_sortie_7' is not in l10n/DEFAULT/dictionary" in out
+
+
+def test_missing_resource_key_in_trigger_string(run) -> None:
+    mission = make_mission()
+    mission["trig"]["actions"] = [
+        'a_do_script_file(getValueResourceByKey("ResKey_Missing"));'
+    ]
+    _, out = run(mission)
+    assert "mission: 'ResKey_Missing' is not in l10n/DEFAULT/mapResource" in out
+
+
+def test_resource_file_missing(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    mission_dir = write_mission_dir(tmp_path)
+    (mission_dir / "l10n" / "DEFAULT" / "Script.lua").unlink()
+    assert cm.run_checks(mission_dir) == 1
+    out = capsys.readouterr().out
+    assert "mapResource.ResKey_Script: file 'Script.lua' is missing" in out
+
+
+def test_dictionary_id_above_max_dict_id(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    mission_dir = write_mission_dir(tmp_path)
+    dictionary = make_dictionary()
+    dictionary["DictKey_ActionText_12"] = "Hello"
+    write_lua(mission_dir / "l10n" / "DEFAULT" / "dictionary", "dictionary", dictionary)
+    assert cm.run_checks(mission_dir) == 1
+    out = capsys.readouterr().out
+    assert "dictionary.DictKey_ActionText_12: ID 12 is greater than maxDictId 0" in out
 
 
 # ---------------------------------------------------------------------------
