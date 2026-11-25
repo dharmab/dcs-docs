@@ -6,7 +6,9 @@ Upstream spec: [ACMI flight recordings 2.2](https://raia-software-inc.gitbook.io
 
 ## Usage
 
-Recordings are too large for an AI agent's context window. A multi-hour multiplayer session can be hundreds of megabytes zipped. The first query against a recording builds a SQLite cache next to the file (`<file>.db`). This can take a while for a long session. Later queries are fast. The tool reads and writes `<file>.db` next to the recording, so copy each recording to its own empty directory before querying it. Otherwise a `.db` file shipped alongside a recording is used as the cache.
+Recordings are too large for an AI agent's context window. A multi-hour multiplayer session can be hundreds of megabytes zipped. The first query against a recording builds a SQLite cache in the system temp directory. This can take a while for a long session. Later queries are fast. Caches unused for a day are deleted automatically.
+
+The tool strips control characters and terminal escape codes from names and messages, and rejects zipped recordings that decompress to more than 4 GiB.
 
 You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
 `python acmi_query.py`.
