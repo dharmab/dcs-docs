@@ -740,8 +740,9 @@ def check_parking_starts(mission: dict[str, Any], diag: DiagnosticCollector) -> 
 # ---------------------------------------------------------------------------
 
 BEACON_TYPE_TACAN = 4
-# system values by channel mode: ship, tanker, ground vehicle
-TACAN_SYSTEMS = {"X": {3, 4, 18}, "Y": {3, 5, 19}}
+# system values by channel mode: ship (3), tanker (4, 5), air-to-air (13, 14),
+# ground vehicle (18, 19)
+TACAN_SYSTEMS = {"X": {3, 4, 13, 18}, "Y": {3, 5, 14, 19}}
 
 
 def tacan_frequency_hz(channel: int, mode: str, aa: bool) -> int:
