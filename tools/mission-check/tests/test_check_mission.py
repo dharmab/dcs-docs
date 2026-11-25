@@ -276,9 +276,18 @@ def test_error_count_is_reported(run) -> None:
 
 def test_missing_file(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     mission_dir = write_mission_dir(tmp_path)
-    (mission_dir / "options").unlink()
+    (mission_dir / "warehouses").unlink()
     assert cm.run_checks(mission_dir) == 1
-    assert "options: required file is missing" in capsys.readouterr().out
+    assert "warehouses: required file is missing" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("name", ["options", "theatre"])
+def test_optional_file_may_be_missing(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], name: str
+) -> None:
+    mission_dir = write_mission_dir(tmp_path)
+    (mission_dir / name).unlink()
+    assert cm.run_checks(mission_dir) == 0, capsys.readouterr().out
 
 
 def test_unparseable_lua(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
