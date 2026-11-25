@@ -450,7 +450,7 @@ Groups are containers for one or more units that share a common route and task.
 | `hiddenOnPlanner` | boolean | Hidden in mission planner                                                                                       |
 | `hiddenOnMFD`     | boolean | Hidden on MFD displays                                                                                          |
 | `lateActivation`  | boolean | Requires trigger to spawn; also used on `dynSpawnTemplate` groups to hide them from the traditional slot screen |
-| `uncontrolled`    | boolean | Starts with engines off, no AI                                                                                  |
+| `uncontrolled`    | boolean | Starts with engines off, no AI. Defaults to `false` when absent                                                 |
 | `start_time`      | number  | Spawn time offset (seconds)                                                                                     |
 | `frequency`       | number  | Radio frequency (MHz)                                                                                           |
 | `modulation`      | number  | Radio modulation (0=AM, 1=FM)                                                                                   |
