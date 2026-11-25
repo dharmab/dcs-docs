@@ -24,7 +24,7 @@ Trigger actions can embed Lua scripts.
 
 ### theatre
 
-A plain text file containing the map (theatre) name, such as "Caucasus", "Nevada", "PersianGulf", or "Syria". The top-level `theatre` key in the [`mission`](mission-file-schema.md) table has the same value.
+A plain text file containing the map (theatre) name, such as "Caucasus", "Nevada", "PersianGulf", or "Syria". The top-level `theatre` key in the [`mission`](mission-file-schema.md) table has the same value. The file is optional, because the map comes from `mission.theatre`.[^optional-files]
 
 ### warehouses
 
@@ -34,7 +34,7 @@ Key fields for each airbase entry include `coalition`, `unlimitedAircrafts`, `un
 
 ### options
 
-A Lua table containing mission difficulty settings that can override the player's options. It also contains leftover global options from whoever last saved the mission, including graphics settings and username. DCS ignores most of this extra data.
+A Lua table containing mission difficulty settings that can override the player's options. It also contains leftover global options from whoever last saved the mission, including graphics settings and username. DCS ignores most of this extra data. The file is optional.[^optional-files]
 
 ### l10n Directory
 
@@ -73,3 +73,5 @@ When repacking a MIZ file, ensure that:
 3. No additional compression metadata is added that could confuse DCS
 
 <!-- TODO: QA - Verify specific compression settings required when repacking MIZ files (compression level, method, store vs deflate) -->
+
+[^optional-files]: The mission loader in `MissionEditor/modules/me_mission.lua` reads the map from `mission.theatre` and reads `options` only when the file exists. 376 of the missions bundled with DCS World have no `theatre` file, and 7 have no `options` file.
