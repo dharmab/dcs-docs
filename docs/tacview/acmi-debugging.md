@@ -13,7 +13,9 @@ cd tools/acmi-query
 uv run acmi-query summary ~/Downloads/Tacview-....zip.acmi
 ```
 
-The first command builds a SQLite cache next to the recording (`<file>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later commands are fast. Rebuild with `index --force`.
+The first command builds a SQLite cache in the system temp directory (`acmi-query/<sha256 of recording>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later commands are fast. Caches unused for a day are deleted automatically. Rebuild with `index --force`.
+
+The tool strips control characters and terminal escape codes from names and messages, and rejects zipped recordings that decompress to more than 4 GiB.
 
 ### Commands
 

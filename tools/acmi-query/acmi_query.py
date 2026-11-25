@@ -1,20 +1,29 @@
 """Index and query Tacview ACMI recordings from DCS World.
 
-The first query against a recording parses it into a SQLite cache next to the
-file (``<file>.db``). Later queries read the cache.
+The first query against a recording parses it into a SQLite cache in the
+system temp directory, named by the SHA-256 of the recording. Later queries read
+the cache. Caches unused for a day are deleted.
+
+Recordings are untrusted input. Text from them is stripped of control and
+format characters before it is stored, so it cannot drive the terminal. Zipped
+recordings larger than MAX_TEXT_BYTES when decompressed are rejected.
 """
 
 from __future__ import annotations
 
 import argparse
 import bisect
+import hashlib
 import io
 import itertools
 import json
 import math
+import os
 import re
 import sqlite3
+import stat
 import sys
+import tempfile
 import time
 import zipfile
 from collections import defaultdict
@@ -22,7 +31,9 @@ from collections.abc import Iterator
 from datetime import datetime, timedelta
 from pathlib import Path
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
+CACHE_MAX_AGE_S = 24 * 3600
+MAX_TEXT_BYTES = 4 * 1024**3
 UNIT_SAMPLE_INTERVAL = 1.0
 GRID_DEG = 0.01
 LAUNCHER_RADIUS_M = 900.0
@@ -108,6 +119,19 @@ SPEED_PROPS = frozenset({"IAS", "TAS", "CAS"})
 
 ESCAPED_SPLIT = re.compile(r"(?<!\\),")
 
+# C0 and C1 control characters (including ESC and newline), zero-width
+# characters, and bidirectional overrides.
+UNSAFE_CHARS = re.compile(
+    "[\x00-\x1f\x7f-\x9f\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]"
+)
+
+
+def clean(value: str | None) -> str | None:
+    """Replace characters that could drive a terminal or hide text."""
+    if value is None:
+        return None
+    return UNSAFE_CHARS.sub(" ", value)
+
 
 def classify(type_tags: str) -> str:
     tags = set(type_tags.split("+"))
@@ -142,7 +166,17 @@ def iter_lines(path: Path) -> Iterator[str]:
     """Yield logical ACMI lines, joining backslash-continued lines."""
     if zipfile.is_zipfile(path):
         archive = zipfile.ZipFile(path)
-        member = archive.infolist()[0]
+        members = archive.infolist()
+        if len(members) != 1:
+            sys.exit(f"error: {path} must hold exactly one file, found {len(members)}")
+        member = members[0]
+        # ZipExtFile stops reading at the declared size, so this bounds the
+        # decompressed text.
+        if member.file_size > MAX_TEXT_BYTES:
+            sys.exit(
+                f"error: {path} decompresses to {member.file_size} bytes, "
+                f"over the {MAX_TEXT_BYTES} byte limit"
+            )
         stream = io.TextIOWrapper(archive.open(member), encoding="utf-8-sig")
     else:
         stream = open(path, encoding="utf-8-sig")  # noqa: SIM115
@@ -261,7 +295,7 @@ class Indexer:
             id_str, sep, rest = line.partition(",")
             if not sep:
                 key, _, value = line.partition("=")
-                self.meta[key] = value
+                self.meta[clean(key) or ""] = clean(value) or ""
                 continue
             if id_str == "0":
                 self.global_prop(rest)
@@ -315,7 +349,7 @@ class Indexer:
             parts = value.replace("\\,", ",").split("|")
             ids = ",".join(parts[1:-1]) if len(parts) > 2 else ""
             text = parts[-1] if len(parts) > 1 else ""
-            self.events.append((self.t, parts[0], ids, text))
+            self.events.append((self.t, clean(parts[0]), clean(ids), clean(text)))
             return
         if key == "AuthenticationKey":
             return
@@ -324,7 +358,7 @@ class Indexer:
             self.ref_lat = float(value)
         elif key == "ReferenceLongitude":
             self.ref_lon = float(value)
-        self.meta[key] = value
+        self.meta[clean(key) or ""] = clean(value) or ""
 
     def update_transform(self, obj: Obj, value: str) -> None:
         parts = value.split("|")
@@ -431,13 +465,13 @@ class Indexer:
                 obj.rowid,
                 format(obj.acmi_id, "x"),
                 obj.kind,
-                p.get("Type"),
-                p.get("Name"),
-                p.get("Pilot"),
-                p.get("Group"),
-                p.get("Color"),
-                p.get("Coalition"),
-                p.get("Country"),
+                clean(p.get("Type")),
+                clean(p.get("Name")),
+                clean(p.get("Pilot")),
+                clean(p.get("Group")),
+                clean(p.get("Color")),
+                clean(p.get("Coalition")),
+                clean(p.get("Country")),
                 obj.first_t,
                 self.t,
                 int(removed),
@@ -463,24 +497,60 @@ class Indexer:
         self.events.clear()
 
 
+def cache_dir() -> Path:
+    """Return a cache directory only the current user can write to."""
+    path = Path(tempfile.gettempdir()) / "acmi-query"
+    path.mkdir(mode=0o700, exist_ok=True)
+    info = path.lstat()
+    is_real_dir = stat.S_ISDIR(info.st_mode)
+    if not is_real_dir:
+        sys.exit(f"error: cache path {path} is not a directory")
+    # Windows temp directories are per user and have no POSIX owner or mode.
+    if hasattr(os, "getuid"):
+        owned_by_user = info.st_uid == os.getuid()
+        others_have_access = info.st_mode & 0o077 != 0
+        if not owned_by_user or others_have_access:
+            sys.exit(f"error: cache directory {path} is shared with other users")
+    return path
+
+
+def prune_cache(directory: Path) -> None:
+    """Delete cache files unused for CACHE_MAX_AGE_S."""
+    cutoff = time.time() - CACHE_MAX_AGE_S
+    for entry in directory.iterdir():
+        try:
+            if entry.stat().st_mtime < cutoff:
+                entry.unlink()
+        except FileNotFoundError:
+            continue
+
+
 def cache_path(acmi: Path) -> Path:
-    return acmi.with_name(acmi.name + ".db")
+    with acmi.open("rb") as f:
+        digest = hashlib.file_digest(f, "sha256").hexdigest()
+    directory = cache_dir()
+    prune_cache(directory)
+    return directory / f"{digest}.db"
 
 
 def build_index(acmi: Path, db_path: Path) -> None:
-    tmp = db_path.with_name(db_path.name + ".tmp")
+    tmp = db_path.with_name(f"{db_path.name}.{os.getpid()}.tmp")
     tmp.unlink(missing_ok=True)
     db = sqlite3.connect(tmp)
-    db.execute("PRAGMA journal_mode = OFF")
-    db.execute("PRAGMA synchronous = OFF")
-    db.executescript(SCHEMA)
     start = time.monotonic()
-    print(f"Indexing {acmi.name} ...", file=sys.stderr)
-    Indexer(db).run(acmi)
-    db.executescript(INDEXES)
-    db.commit()
-    db.close()
-    tmp.replace(db_path)
+    try:
+        db.execute("PRAGMA journal_mode = OFF")
+        db.execute("PRAGMA synchronous = OFF")
+        db.executescript(SCHEMA)
+        print(f"Indexing {acmi.name} ...", file=sys.stderr)
+        Indexer(db).run(acmi)
+        db.executescript(INDEXES)
+        db.commit()
+        db.close()
+        tmp.replace(db_path)
+    finally:
+        db.close()
+        tmp.unlink(missing_ok=True)
     print(f"Indexed in {time.monotonic() - start:.0f}s -> {db_path}", file=sys.stderr)
 
 
@@ -488,10 +558,10 @@ def open_db(acmi: Path, force: bool = False) -> sqlite3.Connection:
     if not acmi.exists():
         sys.exit(f"error: {acmi} not found")
     db_path = cache_path(acmi)
-    stale = (
-        force or not db_path.exists() or db_path.stat().st_mtime < acmi.stat().st_mtime
-    )
+    stale = force or not db_path.exists()
     if not stale:
+        # Keep caches in use from being pruned.
+        db_path.touch()
         db = sqlite3.connect(db_path)
         row = db.execute(
             "SELECT value FROM meta WHERE key = 'SchemaVersion'"
