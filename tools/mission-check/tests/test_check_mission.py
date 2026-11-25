@@ -699,6 +699,17 @@ def test_parking_id_must_be_string(run) -> None:
     assert "'parking_id' must be a string, got 36" in out
 
 
+def test_numeric_parking_passes(run) -> None:
+    code, out = run(make_parking_mission(parking=55, parking_id="36"))
+    assert code == 0, out
+
+
+@pytest.mark.parametrize("value", [55.5, True, {"spot": 55}])
+def test_parking_must_be_string_or_integer(run, value: Any) -> None:
+    _, out = run(make_parking_mission(parking=value, parking_id="36"))
+    assert "'parking' must be a string or integer, got" in out
+
+
 def test_ship_parking_start_needs_no_parking(run) -> None:
     mission = make_mission()
     add_carrier(mission)

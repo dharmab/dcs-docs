@@ -711,7 +711,11 @@ PARKING_WAYPOINT_TYPES = {"TakeOffParking", "TakeOffParkingHot"}
 
 
 def check_parking_starts(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
-    """Units starting from airfield parking need string parking and parking_id."""
+    """Units starting from airfield parking need parking and a string parking_id.
+
+    The Mission Editor saves parking as a string or an integer and reads it with
+    tonumber.
+    """
     for _side, _cat, _ci, _gi, path, group in iter_groups(mission):
         route = group.get("route")
         if not isinstance(route, dict):
@@ -731,6 +735,12 @@ def check_parking_starts(mission: dict[str, Any], diag: DiagnosticCollector) -> 
                 value = unit.get(field)
                 if value is None:
                     diag.fail(upath, f"airfield parking start needs '{field}'")
+                elif field == "parking":
+                    if isinstance(value, bool) or not isinstance(value, int | str):
+                        diag.fail(
+                            upath,
+                            f"'parking' must be a string or integer, got {value!r}",
+                        )
                 elif not isinstance(value, str):
                     diag.fail(upath, f"'{field}' must be a string, got {value!r}")
 
