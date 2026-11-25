@@ -430,9 +430,14 @@ def test_static_unit_still_needs_other_fields(run) -> None:
     assert "'skill'" not in out
 
 
-def test_static_unit_skill_is_still_validated(run) -> None:
-    _, out = run(make_static_mission(skill="Expert"))
-    assert "unknown skill 'Expert'" in out
+@pytest.mark.parametrize("skill", ["Average", "Expert"])
+def test_static_unit_with_skill(run, skill: str) -> None:
+    code, out = run(make_static_mission(skill=skill))
+    assert code == 1
+    assert (
+        "coalition.red.country[0].static.group[0].units[0]: static units have no skill"
+    ) in out
+    assert "unknown skill" not in out
 
 
 @pytest.mark.parametrize("category", ["vehicle", "ship"])

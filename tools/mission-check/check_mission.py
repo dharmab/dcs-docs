@@ -350,7 +350,7 @@ REQUIRED_GROUP_FIELDS = {"groupId", "name", "units", "route", "x", "y"}
 AIRCRAFT_GROUP_FIELDS = {"task", "uncontrolled"}
 
 REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "x", "y", "heading"}
-# The Mission Editor saves static objects without a skill
+# Static objects have no skill
 SKILLED_UNIT_FIELDS = {"skill"}
 AIRCRAFT_UNIT_FIELDS = {"alt", "alt_type", "speed", "psi", "payload"}
 
@@ -390,7 +390,10 @@ def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -
             upath = f"{path}.units[{ui}]"
             _check_alt_type(upath, unit, diag)
             skill = unit.get("skill")
-            if skill is not None and skill not in VALID_SKILLS:
+            if category == "static":
+                if skill is not None:
+                    diag.fail(upath, "static units have no skill")
+            elif skill is not None and skill not in VALID_SKILLS:
                 diag.fail(upath, f"unknown skill '{skill}'")
             ureq = set(REQUIRED_UNIT_FIELDS)
             if category != "static":
