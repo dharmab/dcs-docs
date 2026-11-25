@@ -17,9 +17,10 @@ uv run terrain-geodata export --out ../../docs/data/terrains --terrain Caucasus
 On Windows the install folder is read from the registry (standalone or Steam).
 Elsewhere, or to use a different install, pass `--dcs-path` or set the
 `DCS_PATH` environment variable. `--out` defaults to `docs/data/terrains`
-relative to the current directory. `--resolution`
-sets the land cover pixel size (default 100 m). `--jobs` sets the number of
-worker processes (default one per CPU).
+relative to the current directory. `--resolution` sets the land cover pixel
+size (default 100 m) and `--elevation-resolution` the elevation pixel size
+(default 1 km). `--jobs` sets the number of worker processes (default one per
+CPU).
 
 Re-run the export after a DCS update that touches terrains, then review the diff
 of each `terrain.json`.
@@ -32,6 +33,7 @@ of each `terrain.json`.
 | `places.csv`, `places` layer | `Map/towns.lua`, `Map/*.gn4`                |
 | Other `features.gpkg` layers | `Map/*.sup5` (Mission Editor map overlay)   |
 | `landcover.tif`              | `Surface/*.surface5` (terrain mesh)         |
+| `elevation.tif`              | `Surface/*.surface5` (terrain mesh)         |
 
 The binary layouts are documented in the module docstrings:
 [landscape.py](terrain_geodata/landscape.py) (shared header and streams),

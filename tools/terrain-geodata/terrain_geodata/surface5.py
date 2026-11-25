@@ -147,6 +147,9 @@ class LandCover:
     # tell roads from railways in the map overlay, whose colours vary by terrain.
     road_mask: np.ndarray
     rail_mask: np.ndarray
+    # float32 height in metres of the base mesh at each pixel centre of
+    # ``TilePlan.elevation_grid``, NaN outside the mesh.
+    elevation: np.ndarray
 
     def mask_fractions(self, en: np.ndarray) -> tuple[float, float]:
         """Fraction of (easting, northing) points on road and on rail pixels."""
@@ -218,6 +221,7 @@ class TilePlan:
 
     data_offset: int
     grid: Grid
+    elevation_grid: Grid
     # Byte range of each tile's node in the metadata, in file order.
     spans: list[tuple[int, int]]
 
@@ -231,9 +235,14 @@ class TileRaster:
     img: np.ndarray
     road: np.ndarray
     rail: np.ndarray
+    # On the elevation grid: top-left pixel and a float32 canvas, NaN where
+    # the tile has no triangle.
+    elevation_row: int
+    elevation_col: int
+    elevation: np.ndarray
 
 
-def plan_tiles(path: Path, resolution: float) -> TilePlan:
+def plan_tiles(path: Path, resolution: float, elevation_resolution: float) -> TilePlan:
     """Index the most detailed tile group and the raster grid that covers it."""
     data_offset, type_name = read_header(path)
     if type_name != "landscape5::Surface5File":
@@ -255,15 +264,23 @@ def plan_tiles(path: Path, resolution: float) -> TilePlan:
     duplicates = len(tiles) - len({t.translation for t in tiles})
     if duplicates > len(tiles) // 100:
         raise FormatError(f"{duplicates} duplicate tiles in the first group")
+    return TilePlan(
+        data_offset,
+        _grid(tiles, resolution),
+        _grid(tiles, elevation_resolution),
+        spans,
+    )
+
+
+def _grid(tiles: list[Tile], resolution: float) -> Grid:
     west, south, east, north = _extent(tiles, resolution)
-    grid = Grid(
+    return Grid(
         west,
         north,
         resolution,
         round((east - west) / resolution),
         round((north - south) / resolution),
     )
-    return TilePlan(data_offset, grid, spans)
 
 
 def _tile_node(meta: bytes, start: int) -> Tile:
@@ -292,7 +309,11 @@ def _max_edge(tris: np.ndarray) -> np.ndarray:
 
 
 def rasterize_tiles(
-    path: Path, data_offset: int, grid: Grid, spans: list[tuple[int, int]]
+    path: Path,
+    data_offset: int,
+    grid: Grid,
+    elevation_grid: Grid,
+    spans: list[tuple[int, int]],
 ) -> list[TileRaster]:
     """Draw a run of consecutive tiles from ``TilePlan.spans``, each on its own
     canvas. Compositing every run in order with ``assemble`` gives the same
@@ -307,7 +328,7 @@ def rasterize_tiles(
             seg = meta[start - first : end - first]
             tile = _tile_node(seg, 0)
             _scan_tile(seg, tile)
-            raster = _rasterize_tile(bulk, tile, grid)
+            raster = _rasterize_tile(bulk, tile, grid, elevation_grid)
             if raster is not None:
                 rasters.append(raster)
     return rasters
@@ -316,7 +337,9 @@ def rasterize_tiles(
 _IMG, _ROAD, _RAIL = range(3)
 
 
-def _rasterize_tile(bulk: BulkData, tile: Tile, grid: Grid) -> TileRaster | None:
+def _rasterize_tile(
+    bulk: BulkData, tile: Tile, grid: Grid, elevation_grid: Grid
+) -> TileRaster | None:
     base = next((r for r in tile.records if "TRITYPE" in r.streams), None)
     if tile.pbase is None or base is None:
         return None
@@ -372,14 +395,97 @@ def _rasterize_tile(bulk: BulkData, tile: Tile, grid: Grid) -> TileRaster | None
     for canvas, tris_px, value in fills:
         # OpenCV reads each row of an (n, 3) two-channel array as one polygon.
         cv2.fillPoly(canvases[canvas], tris_px - offset, value, shift=4)
-    return TileRaster(row0, col0, *canvases)
+    # Sea and lake triangles hold the bed, not the water surface; leave them
+    # out so water is nodata. Rivers stay, as they are narrow enough that
+    # holes along every valley would get in the way of slope checks.
+    height = pos[:, 1] + tile.translation[1]
+    dry = tri[(types & (SEA | LAKE)) == 0]
+    erow, ecol, elevation = _elevation_tile(en[dry], height[dry], elevation_grid)
+    return TileRaster(row0, col0, *canvases, erow, ecol, elevation)
 
 
-def assemble(grid: Grid, rasters: list[TileRaster], tile_count: int) -> LandCover:
+def _elevation_tile(
+    tris_en: np.ndarray, tris_h: np.ndarray, grid: Grid
+) -> tuple[int, int, np.ndarray]:
+    """Heights of one tile's triangles on a canvas covering their extent."""
+    if not len(tris_en):
+        return 0, 0, np.full((0, 0), np.nan, np.float32)
+    lo, hi = tris_en.reshape(-1, 2).min(axis=0), tris_en.reshape(-1, 2).max(axis=0)
+    res = grid.resolution
+    col0 = max(int(np.floor((lo[0] - grid.west) / res)), 0)
+    col1 = min(int(np.ceil((hi[0] - grid.west) / res)) + 1, grid.width)
+    row0 = max(int(np.floor((grid.north - hi[1]) / res)), 0)
+    row1 = min(int(np.ceil((grid.north - lo[1]) / res)) + 1, grid.height)
+    shape = (max(row1 - row0, 0), max(col1 - col0, 0))
+    return row0, col0, _interpolate(tris_en, tris_h, grid, row0, col0, shape)
+
+
+def _interpolate(
+    tris_en: np.ndarray,
+    tris_h: np.ndarray,
+    grid: Grid,
+    row0: int,
+    col0: int,
+    shape: tuple[int, ...],
+) -> np.ndarray:
+    """Linearly interpolate triangle vertex heights at every pixel centre.
+
+    ``tris_en`` is ``(n, 3, 2)`` (easting, northing) and ``tris_h`` ``(n, 3)``.
+    Returns a float32 canvas of ``shape`` whose top-left pixel is ``(row0,
+    col0)`` in the grid, NaN where no triangle covers the pixel centre.
+    """
+    out = np.full(shape, np.nan, np.float32)
+    if not len(tris_en):
+        return out
+    res = grid.resolution
+    # Triangle corners in pixel units relative to the canvas, centres on integers.
+    c = (tris_en[..., 0] - grid.west) / res - 0.5 - col0
+    r = (grid.north - tris_en[..., 1]) / res - 0.5 - row0
+    h, w = shape
+    cmin = np.maximum(np.ceil(c.min(axis=1)), 0).astype(np.int64)
+    cmax = np.minimum(np.floor(c.max(axis=1)), w - 1).astype(np.int64)
+    rmin = np.maximum(np.ceil(r.min(axis=1)), 0).astype(np.int64)
+    rmax = np.minimum(np.floor(r.max(axis=1)), h - 1).astype(np.int64)
+    ncols = np.maximum(cmax - cmin + 1, 0)
+    count = ncols * np.maximum(rmax - rmin + 1, 0)
+    keep = count > 0
+    if not keep.any():
+        return out
+    c, r, tris_h = c[keep], r[keep], tris_h[keep]
+    cmin, rmin, ncols, count = cmin[keep], rmin[keep], ncols[keep], count[keep]
+
+    # One candidate per pixel centre in each triangle's bounding box.
+    t = np.repeat(np.arange(len(count)), count)
+    k = np.arange(len(t)) - np.repeat(np.cumsum(count) - count, count)
+    pc = cmin[t] + k % ncols[t]
+    pr = rmin[t] + k // ncols[t]
+
+    # Barycentric weights of each candidate.
+    c0, c1, c2 = c[t, 0], c[t, 1], c[t, 2]
+    r0, r1, r2 = r[t, 0], r[t, 1], r[t, 2]
+    det = (r1 - r2) * (c0 - c2) + (c2 - c1) * (r0 - r2)
+    ok = np.abs(det) > 1e-12
+    det = np.where(ok, det, 1.0)
+    w0 = ((r1 - r2) * (pc - c2) + (c2 - c1) * (pr - r2)) / det
+    w1 = ((r2 - r0) * (pc - c2) + (c0 - c2) * (pr - r2)) / det
+    w2 = 1.0 - w0 - w1
+    eps = -1e-9
+    inside = ok & (w0 >= eps) & (w1 >= eps) & (w2 >= eps)
+    value = w0 * tris_h[t, 0] + w1 * tris_h[t, 1] + w2 * tris_h[t, 2]
+    out[pr[inside], pc[inside]] = value[inside]
+    return out
+
+
+def assemble(
+    grid: Grid, elevation_grid: Grid, rasters: list[TileRaster], tile_count: int
+) -> LandCover:
     """Composite tile rasters, given in tile order, into the land cover."""
     img = np.zeros((grid.height, grid.width), np.uint8)
     road_mask = np.zeros_like(img)
     rail_mask = np.zeros_like(img)
+    elevation = np.full(
+        (elevation_grid.height, elevation_grid.width), np.nan, np.float32
+    )
     for r in rasters:
         h, w = r.img.shape
         window = (slice(r.row, r.row + h), slice(r.col, r.col + w))
@@ -387,6 +493,12 @@ def assemble(grid: Grid, rasters: list[TileRaster], tile_count: int) -> LandCove
         np.copyto(img[window], r.img, where=r.img != 0)
         road_mask[window] |= r.road
         rail_mask[window] |= r.rail
+        eh, ew = r.elevation.shape
+        window = (
+            slice(r.elevation_row, r.elevation_row + eh),
+            slice(r.elevation_col, r.elevation_col + ew),
+        )
+        np.copyto(elevation[window], r.elevation, where=~np.isnan(r.elevation))
     kernel = np.ones((3, 3), np.uint8)
     return LandCover(
         img,
@@ -396,6 +508,7 @@ def assemble(grid: Grid, rasters: list[TileRaster], tile_count: int) -> LandCove
         tile_count,
         cv2.dilate(road_mask, kernel),
         cv2.dilate(rail_mask, kernel),
+        elevation,
     )
 
 

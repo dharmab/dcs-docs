@@ -88,6 +88,12 @@ def main(argv: list[str] | None = None) -> None:
         help="Land cover pixel size in metres (default: 100)",
     )
     p_export.add_argument(
+        "--elevation-resolution",
+        type=float,
+        default=1000.0,
+        help="Elevation pixel size in metres (default: 1000)",
+    )
+    p_export.add_argument(
         "--jobs",
         type=int,
         default=os.process_cpu_count() or 1,
@@ -115,7 +121,12 @@ def main(argv: list[str] | None = None) -> None:
     version = export.dcs_version(dcs_path)
     started = time.monotonic()
     export.export_terrains(
-        terrains, args.out, args.resolution, version, max(args.jobs, 1)
+        terrains,
+        args.out,
+        args.resolution,
+        args.elevation_resolution,
+        version,
+        max(args.jobs, 1),
     )
     print(f"exported {len(terrains)} terrains in {time.monotonic() - started:.0f} s")
 

@@ -174,6 +174,48 @@ def _write_landcover(
         dst.update_tags(1, **{f"CLASS_{c.value}": c.name for c in surface5.CLASSES})
 
 
+ELEVATION_NODATA = -32768
+
+
+def _write_elevation(
+    path: Path, data: np.ndarray, grid: surface5.Grid, crs_wkt: str
+) -> None:
+    """Write heights rounded to whole metres as int16, which compresses to a
+    fraction of float32 and is finer than the interpolation error."""
+    heights = np.where(np.isnan(data), ELEVATION_NODATA, np.round(data))
+    transform = Affine(grid.resolution, 0, grid.west, 0, -grid.resolution, grid.north)
+    with rasterio.open(
+        path,
+        "w",
+        driver="COG",
+        width=grid.width,
+        height=grid.height,
+        count=1,
+        dtype="int16",
+        crs=crs_wkt,
+        transform=transform,
+        nodata=ELEVATION_NODATA,
+        compress="DEFLATE",
+        predictor=2,
+        level=9,
+        overview_resampling="average",
+        blocksize=512,
+        num_threads="ALL_CPUS",
+    ) as dst:
+        dst.write(heights.astype(np.int16), 1)
+        dst.set_band_description(1, "terrain height above sea level")
+        dst.update_tags(1, UNITS="metre")
+        dst.update_tags(1, UNITTYPE="m")
+
+
+def _elevation_stats(data: np.ndarray) -> dict[str, float]:
+    valid = data[~np.isnan(data)]
+    return {
+        "min_m": round(float(valid.min()), 1),
+        "max_m": round(float(valid.max()), 1),
+    }
+
+
 def _read_places(
     src: TerrainSource,
 ) -> tuple[list[luafiles.Town], list[geonames.Label], projection.Projection]:
@@ -224,6 +266,7 @@ def export_terrains(
     terrains: list[TerrainSource],
     out_root: Path,
     resolution: float,
+    elevation_resolution: float,
     version: str | None,
     workers: int,
 ) -> None:
@@ -236,7 +279,9 @@ def export_terrains(
     ranked = sorted(terrains, key=_work_estimate, reverse=True)
     schedule.run(
         [
-            _export_job(src, out_root, resolution, version, workers, rank)
+            _export_job(
+                src, out_root, resolution, elevation_resolution, version, workers, rank
+            )
             for rank, src in enumerate(ranked)
         ],
         workers,
@@ -247,6 +292,7 @@ def _export_job(
     src: TerrainSource,
     out_root: Path,
     resolution: float,
+    elevation_resolution: float,
     version: str | None,
     workers: int,
     rank: int,
@@ -264,7 +310,11 @@ def _export_job(
     if src.map_overlay is not None:
         calls["sets"] = Call(urgent, sup5.read_line_sets, (src.map_overlay,))
     if src.surface is not None:
-        calls["plan"] = Call(urgent, surface5.plan_tiles, (src.surface, resolution))
+        calls["plan"] = Call(
+            urgent,
+            surface5.plan_tiles,
+            (src.surface, resolution, elevation_resolution),
+        )
     got = yield calls
     towns, labels, proj = got["places"]
     crs = proj.crs(src.theatre)
@@ -317,12 +367,19 @@ def _export_job(
             i: Call(
                 bulk,
                 surface5.rasterize_tiles,
-                (src.surface, plan.data_offset, plan.grid, chunk),
+                (
+                    src.surface,
+                    plan.data_offset,
+                    plan.grid,
+                    plan.elevation_grid,
+                    chunk,
+                ),
             )
             for i, chunk in enumerate(chunks)
         }
         lc = surface5.assemble(
             plan.grid,
+            plan.elevation_grid,
             [r for i in range(len(chunks)) for r in rasters[i]],
             len(plan.spans),
         )
@@ -333,6 +390,11 @@ def _export_job(
             urgent,
             _write_landcover,
             (out / "landcover.tif", lc.data, plan.grid, crs_wkt),
+        )
+        final["elevation.tif"] = Call(
+            urgent,
+            _write_elevation,
+            (out / "elevation.tif", lc.elevation, plan.elevation_grid, crs_wkt),
         )
     decisions: dict[str, str] = {}
     if "sets" in got:
@@ -400,6 +462,10 @@ def _export_job(
                 "z_max": lc.west + width * resolution,
             },
             "area_km2": surface5.class_stats(lc),
+        }
+        meta["elevation"] = {
+            "resolution_m": elevation_resolution,
+            **_elevation_stats(lc.elevation),
         }
         log(f"  landcover: {width}x{height} px from {lc.tile_count} tiles")
 

@@ -10,6 +10,7 @@ The folder name is the theatre id that missions store in `mission.theatre`.
 | `places.csv`    | CSV                     | Named places with lat/long and DCS `x`/`z`                        |
 | `features.gpkg` | GeoPackage (SQLite)     | Vector layers from the Mission Editor map                         |
 | `landcover.tif` | Cloud-optimized GeoTIFF | 100 m land cover classes from the terrain mesh                    |
+| `elevation.tif` | Cloud-optimized GeoTIFF | 1 km ground height in metres from the terrain mesh                |
 
 All geometry is in the terrain's own transverse Mercator projection, so GIS
 coordinates are DCS coordinates: **easting is DCS `z` and northing is DCS
@@ -77,8 +78,8 @@ Things to keep in mind:
   buildings are likely, not that a spot is blocked.
 - Roads and railways are too narrow for 100 m pixels and are not in the
   raster; use the vector layers.
-- `land` includes steep mountainsides. The raster has no elevation; check slope
-  with `land.getHeight` in a mission before placing ground units.
+- `land` includes steep mountainsides. Check slope at runtime by sampling
+  `land.getHeight` around a spot before placing ground units there.
 - Large areas at the map edges are low-detail filler mesh. They are classed
   (mostly `land` and `sea`) but have no towns, roads or forest.
 
@@ -91,6 +92,68 @@ with rasterio.open("docs/data/terrains/Caucasus/landcover.tif") as src:
     x, z = -276848.2, 646568.0  # Senaki, from places.csv
     [value] = next(src.sample([(z, x)]))
     print(src.tags(1)[f"CLASS_{value}"])
+```
+
+## Elevation
+
+`elevation.tif` is a single-band `int16` raster of height above sea level in
+whole metres, with 1 km pixels. Each pixel is the terrain mesh height at its
+centre, interpolated across the triangle under it[^elev]. Sea, lakes and
+pixels outside the mesh are `-32768` (the raster's nodata value). `terrain.json`
+records the pixel size and the lowest and highest values under `elevation`.
+
+It is meant for planning at map scale: which areas are mountains, valleys or
+plains, where low ground runs between ridges, and roughly how high a region
+sits. Anything that depends on the exact spot, such as slope under a unit or
+line of sight, belongs at runtime with `land.getHeight`, `land.getIP` and
+`land.isVisible`.
+
+The committed files are 1 km to keep the repository small. For finer
+heights, re-export a terrain with a smaller pixel; the mesh holds vertices
+about 50 m apart in detailed areas, so going below that adds no detail:
+
+```bash
+cd tools/terrain-geodata
+uv run terrain-geodata export --out /tmp/terrains --terrain Caucasus --elevation-resolution 50
+```
+
+Things to keep in mind:
+
+- Sea and lakes are masked out (nodata) to keep the files small. The mesh
+  under them is the bed, which reaches thousands of metres below sea level and
+  was a large share of the file on maps with deep sea.
+- Rivers are not masked. A river is tens of metres wide, so a pixel only
+  lands on one when its centre falls on the river surface, and then it holds
+  the height of the river bed. Masking rivers
+  would leave scattered holes along valleys. Use `landcover.tif` or the
+  `rivers` layer to find rivers.
+- A pixel is the height at one point, not the average or peak of the square
+  kilometre around it. Ridgelines, cliffs and narrow valleys between pixel
+  centres do not show up.
+- `elevation.tif` also contains overviews: copies at 2, 4 and on the larger
+  terrains 8 km pixels, which GIS tools read when zoomed out. Each overview
+  pixel is the mean of the pixels it covers, so zoomed-out views show average
+  heights and flatten peaks. Reads at full resolution, such as `sample` or
+  `read(1)`, are unaffected.
+
+Sample a height, and find the places above 1,500 m:
+
+```python
+import csv
+import rasterio
+
+with rasterio.open("docs/data/terrains/Caucasus/elevation.tif") as src:
+    x, z = -276848.2, 646568.0  # Senaki, from places.csv
+    [height] = next(src.sample([(z, x)]))
+    print(height)
+
+    rows = list(csv.DictReader(open("docs/data/terrains/Caucasus/places.csv")))
+    points = [(float(r["z"]), float(r["x"])) for r in rows]
+    high = [
+        r["name"]
+        for r, [h] in zip(rows, src.sample(points))
+        if h != src.nodata and h > 1500
+    ]
 ```
 
 ## Feature Layers
@@ -169,5 +232,7 @@ uv run terrain-geodata export --out ../../docs/data/terrains
 
 On Windows the install is found through the registry; elsewhere pass
 `--dcs-path`. `terrain.json` records the DCS version the files came from.
+
+[^elev]: Read from the vertex heights (`Pbase`) of the most detailed tiles in `Surface/*.surface5`. Checked against the beacons that carry a `position` in `Beacons.lua` (every terrain except Normandy and Mariana Islands WWII). At the committed 1 km, 1,107 of the 1,131 beacons fall on a land pixel. For those, the median difference from the beacon height is 0.5 m, and 90% are within 6.7 m. The largest misses, up to 130 m, are on steep ground, where the pixel centre is several hundred metres from the beacon on a different slope.
 
 [^proj]: Fitted by the export tool against `Beacons.lua` (`position` and `positionGeo` of each beacon) and the Mission Editor town labels paired with `Map/towns.lua`. The Caucasus and Syria parameters match pydcs's `dcs/terrain/projections`.
