@@ -139,20 +139,21 @@ def iter_groups(
 REQUIRED_FILES = [
     "mission",
     "warehouses",
-    "options",
-    "theatre",
     os.path.join("l10n", "DEFAULT", "dictionary"),
     os.path.join("l10n", "DEFAULT", "mapResource"),
 ]
+# Checked when present. The terrain comes from mission.theatre.
+OPTIONAL_FILES = ["options", "theatre"]
 
 
 def check_files(mission_dir: Path, diag: DiagnosticCollector) -> dict[str, Any]:
-    """Check required files exist and parse, returning parsed data keyed by filename."""
+    """Check mission files exist and parse, returning parsed data keyed by filename."""
     parsed: dict[str, Any] = {}
-    for rel in REQUIRED_FILES:
+    for rel in REQUIRED_FILES + OPTIONAL_FILES:
         fpath = mission_dir / rel
         if not fpath.is_file():
-            diag.fail(rel, "required file is missing")
+            if rel in REQUIRED_FILES:
+                diag.fail(rel, "required file is missing")
             continue
         content = fpath.read_text(encoding="utf-8", errors="replace")
         if rel == "theatre":
@@ -194,7 +195,7 @@ MISSION_REQUIRED_KEYS = {
 
 
 def check_mission_schema(
-    mission: dict[str, Any], theatre_text: str, diag: DiagnosticCollector
+    mission: dict[str, Any], theatre_text: str | None, diag: DiagnosticCollector
 ) -> None:
     for key in sorted(MISSION_REQUIRED_KEYS):
         if key not in mission:
@@ -222,7 +223,11 @@ def check_mission_schema(
                 diag.fail(f"mission.coalition.{ck}", "missing 'country' table")
 
     mission_theatre = mission.get("theatre")
-    if isinstance(mission_theatre, str) and mission_theatre != theatre_text:
+    if (
+        theatre_text is not None
+        and isinstance(mission_theatre, str)
+        and mission_theatre != theatre_text
+    ):
         diag.fail(
             "mission.theatre",
             f"value '{mission_theatre}' does not match theatre file '{theatre_text}'",
@@ -875,7 +880,7 @@ def run_checks(mission_dir: Path) -> int:
 
     mission_data = parsed.get("mission")
     warehouses_data = parsed.get("warehouses")
-    theatre_text = parsed.get("theatre", "")
+    theatre_text = parsed.get("theatre")
 
     if isinstance(mission_data, dict):
         check_mission_schema(mission_data, theatre_text, diag)

@@ -2,7 +2,9 @@
 
 Validates a DCS MIZ file or unpacked MIZ directory. Validation includes:
 
-- The required files exist and parse as Lua
+- The `mission`, `warehouses`, `dictionary`, and `mapResource` files exist and
+  parse as Lua, and `options` parses when present
+- `mission.theatre` matches the `theatre` file when present
 - The `mission` table matches the schema
 - Warehouse entries for airfields, ships, and FARPs are valid
 - Groups and units have the required fields, and valid `skill` and `alt_type`
