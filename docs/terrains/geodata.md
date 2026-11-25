@@ -119,9 +119,13 @@ uv run terrain-geodata export --out /tmp/terrains --terrain Caucasus --elevation
 
 Things to keep in mind:
 
-- Sea and lakes have no height: the mesh there is the bed, not the water
-  surface. Rivers are kept, so river pixels hold the mesh height of the
-  river bed.
+- Sea and lakes are masked out (nodata). The mesh under them is the bed, not
+  the water surface, and reaches thousands of metres below sea level.
+- Rivers are not masked. A river is tens of metres wide, so a pixel only
+  lands on one when its centre falls on the river surface, and then it holds
+  the height of the river bed. Masking rivers
+  would leave scattered holes along valleys. Use `landcover.tif` or the
+  `rivers` layer to find rivers.
 - A pixel is the height at one point, not the average or peak of the square
   kilometre around it. Ridgelines, cliffs and narrow valleys between pixel
   centres do not show up.
