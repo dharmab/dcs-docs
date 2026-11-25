@@ -7,10 +7,17 @@ for what the output contains and how to use it.
 
 ## Usage
 
+You must use [uv](https://docs.astral.sh/uv/) to run this tool. Trying to run it
+with just `python terrain_geodata/cli.py` will not work.
+
 ```bash
+# Enter the tool's project directory
 cd tools/terrain-geodata
+# List the terrains found in the DCS install
 uv run terrain-geodata list
+# Export every terrain to docs/data/terrains
 uv run terrain-geodata export --out ../../docs/data/terrains
+# Export only the Caucasus terrain
 uv run terrain-geodata export --out ../../docs/data/terrains --terrain Caucasus
 ```
 
