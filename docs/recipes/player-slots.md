@@ -274,31 +274,31 @@ Player aircraft are placed in `coalition.[side].country[n].plane.group`. Each gr
 
 ### Unit-Level Fields
 
-| Field         | Type   | Description                                                     |
-| ------------- | ------ | --------------------------------------------------------------- |
-| `unitId`      | number | Unique unit ID (must be unique across all units in mission)     |
-| `name`        | string | Unit name (displayed in slot selection)                         |
-| `type`        | string | Aircraft type string (e.g., "F-16C_50", "F/A-18C_hornet")       |
-| `skill`       | string | `"Player"` for singleplayer, `"Client"` for multiplayer/dynamic |
-| `x`           | number | Position X (same as group for parking start)                    |
-| `y`           | number | Position Y (same as group for parking start)                    |
-| `alt`         | number | Altitude (meters, typically airfield elevation)                 |
-| `alt_type`    | string | Altitude reference ("BARO" or "RADIO")                          |
-| `speed`       | number | Initial speed (m/s)                                             |
-| `heading`     | number | Heading (radians)                                               |
-| `psi`         | number | Orientation angle (radians, typically same as heading)          |
-| `parking`     | string | Parking spot number at the airfield                             |
-| `parking_id`  | string | Parking spot identifier                                         |
-| `onboard_num` | string | Aircraft tail number                                            |
-| `livery_id`   | string | Livery/skin name                                                |
-| `payload`     | table  | Weapons and stores configuration                                |
-| `callsign`    | table  | Callsign configuration                                          |
+| Field         | Type              | Description                                                     |
+| ------------- | ----------------- | --------------------------------------------------------------- |
+| `unitId`      | number            | Unique unit ID (must be unique across all units in mission)     |
+| `name`        | string            | Unit name (displayed in slot selection)                         |
+| `type`        | string            | Aircraft type string (e.g., "F-16C_50", "F/A-18C_hornet")       |
+| `skill`       | string            | `"Player"` for singleplayer, `"Client"` for multiplayer/dynamic |
+| `x`           | number            | Position X (same as group for parking start)                    |
+| `y`           | number            | Position Y (same as group for parking start)                    |
+| `alt`         | number            | Altitude (meters, typically airfield elevation)                 |
+| `alt_type`    | string            | Altitude reference ("BARO" or "RADIO")                          |
+| `speed`       | number            | Initial speed (m/s)                                             |
+| `heading`     | number            | Heading (radians)                                               |
+| `psi`         | number            | Orientation angle (radians, typically same as heading)          |
+| `parking`     | string or integer | Parking spot number at the airfield                             |
+| `parking_id`  | string            | Parking spot identifier                                         |
+| `onboard_num` | string            | Aircraft tail number                                            |
+| `livery_id`   | string            | Livery/skin name                                                |
+| `payload`     | table             | Weapons and stores configuration                                |
+| `callsign`    | table             | Callsign configuration                                          |
 
 ## Parking Spot Assignment
 
 When starting from an airfield parking area, you must specify both `parking` and `parking_id`:
 
-- `parking` - The parking spot number (as a string, e.g., "23")
+- `parking` - The parking spot number, as a string or an integer (e.g., "23" or 23)[^parking-type]
 - `parking_id` - The parking spot identifier (as a string, e.g., "17")
 
 These values are airfield-specific and can be found by:
@@ -669,3 +669,5 @@ When adding player slots, verify:
 [^nevatim-bugs]: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).
 
 [^ramon-bugs]: [Ramon Airbase taxiways and parking spots](https://forum.dcs.world/topic/343531-ramon-airbase-taxiways-and-parking-spots/) and [Sticky Tarmac at Ramon Airbase](https://forum.dcs.world/topic/364031-sticky-tarmac-at-ramon-airbase/).
+
+[^parking-type]: `fixParking` in `MissionEditor/modules/me_parking.lua` reads `parking` with `tonumber`. 1,220 of the missions bundled with DCS World store it as an integer.
