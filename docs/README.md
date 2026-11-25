@@ -86,6 +86,6 @@ The [units/](units/) directory contains equipment and capability data:
 
 ### Debugging
 
-| Document                                               | Description                                                            |
-| ------------------------------------------------------ | ---------------------------------------------------------------------- |
-| [tacview/acmi-debugging.md](tacview/acmi-debugging.md) | Reading Tacview ACMI recordings to debug AI behavior and spawn scripts |
+| Document                                    | Description                                                            |
+| ------------------------------------------- | ---------------------------------------------------------------------- |
+| [acmi-query](../tools/acmi-query/README.md) | Reading Tacview ACMI recordings to debug AI behavior and spawn scripts |

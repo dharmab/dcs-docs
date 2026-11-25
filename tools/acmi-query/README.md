@@ -1,19 +1,26 @@
-# Debugging Missions with Tacview ACMI Recordings
+# acmi-query
 
-Tacview records DCS sessions as ACMI files. An ACMI file shows what AI units and spawn scripts actually did: when groups spawned and despawned, where aircraft flew, who fired what, and what died. This page covers the file format, the quirks of DCS recordings, and the `acmi-query` tool for reading them.
+Tacview records DCS sessions as ACMI files. An ACMI file shows what AI units and spawn scripts actually did: when groups spawned and despawned, where aircraft flew, who fired what, and what died. `acmi-query` indexes and queries these recordings. This page also covers the quirks of DCS recordings and the file format.
 
 Upstream spec: [ACMI flight recordings 2.2](https://raia-software-inc.gitbook.io/tacview/technical-documentation/acmi-telemetry-file-format).
 
-## Reading a Recording
+## Usage
 
-Recordings are too large to read directly (a 7-hour multiplayer session is 160 MB zipped, 400 MB of text). Use `tools/acmi-query`:
+Recordings are too large for an AI agent's context window. A multi-hour multiplayer session can be hundreds of megabytes zipped. The first query against a recording builds a SQLite cache next to the file (`<file>.db`). This can take a while for a long session. Later queries are fast. The tool reads and writes `<file>.db` next to the recording, so copy each recording to its own empty directory before querying it. Otherwise a `.db` file shipped alongside a recording is used as the cache.
+
+You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
+`python acmi_query.py`.
 
 ```bash
-cd tools/acmi-query
-uv run acmi-query summary ~/Downloads/Tacview-....zip.acmi
+# Show the mission, DCS version, duration, and object counts
+uv run acmi-query summary Tacview-example.zip.acmi
+# Show when each group spawned and how many units it lost
+uv run acmi-query groups Tacview-example.zip.acmi
+# Show missile and bomb launches by one group
+uv run acmi-query shots Tacview-example.zip.acmi --launcher "SA-11 Site 1"
+# Rebuild the cache
+uv run acmi-query index Tacview-example.zip.acmi --force
 ```
-
-The first command builds a SQLite cache next to the recording (`<file>.db`, about half the text size). This takes about 15 seconds for 400 MB. Later commands are fast. Rebuild with `index --force`.
 
 ### Commands
 
@@ -104,3 +111,14 @@ Longitude and latitude are degree offsets from `ReferenceLongitude` and `Referen
 - `Navaid+Static+Bullseye`
 
 `acmi-query` stores units at 1 Hz, weapons at full rate, and short-lived objects as spawn and removal points only.
+
+## Development
+
+```bash
+# Install the tool and the dev dependencies (ruff, ty)
+uv sync --group dev
+# Lint the code
+uv run ruff check .
+# Type check the code
+uv run ty check
+```

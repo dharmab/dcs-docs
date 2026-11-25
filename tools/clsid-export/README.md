@@ -4,8 +4,11 @@ Generates a bidirectional lookup table mapping DCS weapon display names to CLSID
 
 ## Usage
 
+You must use [uv](https://docs.astral.sh/uv/) to run this script. Trying to run it
+with just `python generate_clsid_lookup.py` will not work.
+
 ```bash
-cd tools/clsid-export
+# Regenerate docs/data/clsid-lookup.json from the latest datamine
 uv run generate-clsid-lookup
 ```
 
@@ -73,10 +76,13 @@ jq '[.by_clsid | to_entries[] | .value.category] | group_by(.) | map({category: 
 
 ## Development
 
-Install dependencies and run linting:
+Install dependencies, then run the linter and type checker:
 
 ```bash
+# Install the tool and the dev dependencies (ruff, ty)
 uv sync --group dev
+# Lint the code
 uv run ruff check .
+# Type check the code
 uv run ty check
 ```
