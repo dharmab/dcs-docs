@@ -188,12 +188,12 @@ The `type` field is the beacon type. TACAN is `4`. See [Beacon Types](../enums/a
 
 The `system` field is the beacon system (see [Beacon Systems](../enums/ai.md#beacon-systems)). For TACAN, it depends on what kind of unit transmits the beacon:
 
-| Unit                             | X mode                       | Y mode                       |
-| -------------------------------- | ---------------------------- | ---------------------------- |
-| Ship                             | `3` (`TACAN`)                | `3` (`TACAN`)                |
-| Tanker aircraft                  | `4` (`TACAN_TANKER_MODE_X`)  | `5` (`TACAN_TANKER_MODE_Y`)  |
-| Ground vehicle                   | `18` (`TACAN_MOBILE_MODE_X`) | `19` (`TACAN_MOBILE_MODE_Y`) |
-| Other aircraft (air-to-air)[^aa] | `13` (`TACAN_AA_MODE_X`)     | `14` (`TACAN_AA_MODE_Y`)     |
+| Unit                                  | X mode                       | Y mode                       |
+| ------------------------------------- | ---------------------------- | ---------------------------- |
+| Ship                                  | `3` (`TACAN`)                | `3` (`TACAN`)                |
+| Tanker aircraft                       | `4` (`TACAN_TANKER_MODE_X`)  | `5` (`TACAN_TANKER_MODE_Y`)  |
+| Ground vehicle                        | `18` (`TACAN_MOBILE_MODE_X`) | `19` (`TACAN_MOBILE_MODE_Y`) |
+| Non-tanker aircraft (air-to-air)[^aa] | `13` (`TACAN_AA_MODE_X`)     | `14` (`TACAN_AA_MODE_Y`)     |
 
 The `type` and `system` values are separate: a carrier's TACAN uses `type = 4` and `system = 3`.
 
