@@ -347,7 +347,8 @@ def check_warehouse_schema(
 # ---------------------------------------------------------------------------
 
 REQUIRED_GROUP_FIELDS = {"groupId", "name", "units", "route", "x", "y"}
-AIRCRAFT_GROUP_FIELDS = {"task", "uncontrolled"}
+# uncontrolled is optional: a group without it is not uncontrolled
+AIRCRAFT_GROUP_FIELDS = {"task"}
 
 REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "skill", "x", "y", "heading"}
 AIRCRAFT_UNIT_FIELDS = {"alt", "alt_type", "speed", "psi", "payload"}

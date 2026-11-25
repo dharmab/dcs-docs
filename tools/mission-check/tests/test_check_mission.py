@@ -381,6 +381,13 @@ def test_missing_aircraft_group_field(run) -> None:
     assert f"{GROUP_PATH}: missing required group field 'task'" in out
 
 
+def test_aircraft_group_without_uncontrolled_passes(run) -> None:
+    mission = make_mission()
+    del blue_group(mission)["uncontrolled"]
+    code, out = run(mission)
+    assert code == 0, out
+
+
 def test_missing_unit_field(run) -> None:
     mission = make_mission()
     del blue_group(mission)["units"][0]["skill"]
