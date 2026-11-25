@@ -80,8 +80,8 @@ The [units/](units/) directory contains equipment and capability data:
 
 ### Terrain Reference
 
-| Document                                   | Description                                                                      |
-| ------------------------------------------ | -------------------------------------------------------------------------------- |
+| Document                                   | Description                                                                                    |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | [terrains/geodata.md](terrains/geodata.md) | Projections, land cover and elevation rasters, and map features for every terrain as GIS files |
 
 ### Debugging
