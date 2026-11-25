@@ -5,9 +5,8 @@ aircraft, plus an index `README.md`, listing the available liveries.
 
 ## Usage
 
-You must use [uv](https://docs.astral.sh/uv/) to run this tool. Trying to run it
-with just `python extract_liveries.py` will not work unless your system Python is
-3.14 or later.
+You must use [uv](https://docs.astral.sh/uv/) to run this tool, not
+`python extract_liveries.py`.
 
 ```bash
 # Enter the tool's project directory
