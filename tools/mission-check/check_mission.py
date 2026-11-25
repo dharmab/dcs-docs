@@ -388,7 +388,9 @@ def check_warehouse_schema(
 REQUIRED_GROUP_FIELDS = {"groupId", "name", "units", "route", "x", "y"}
 AIRCRAFT_GROUP_FIELDS = {"task", "uncontrolled"}
 
-REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "skill", "x", "y", "heading"}
+REQUIRED_UNIT_FIELDS = {"unitId", "name", "type", "x", "y", "heading"}
+# Static objects have no skill
+SKILLED_UNIT_FIELDS = {"skill"}
 AIRCRAFT_UNIT_FIELDS = {"alt", "alt_type", "speed", "psi", "payload"}
 
 VALID_SKILLS = {"Average", "Good", "High", "Excellent", "Random", "Client", "Player"}
@@ -427,9 +429,14 @@ def check_groups_and_units(mission: dict[str, Any], diag: DiagnosticCollector) -
             upath = f"{path}.units[{ui}]"
             _check_alt_type(upath, unit, diag)
             skill = unit.get("skill")
-            if skill is not None and skill not in VALID_SKILLS:
+            if category == "static":
+                if skill is not None:
+                    diag.fail(upath, "static units have no skill")
+            elif skill is not None and skill not in VALID_SKILLS:
                 diag.fail(upath, f"unknown skill '{skill}'")
             ureq = set(REQUIRED_UNIT_FIELDS)
+            if category != "static":
+                ureq |= SKILLED_UNIT_FIELDS
             if category in AIRCRAFT_CATEGORIES:
                 ureq |= AIRCRAFT_UNIT_FIELDS
             for field in sorted(ureq):

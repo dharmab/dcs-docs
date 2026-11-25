@@ -6,7 +6,7 @@ Validates a DCS MIZ file or unpacked MIZ directory. Validation includes:
 - The `mission` table matches the schema
 - Warehouse entries for airfields, ships, and FARPs are valid
 - Groups and units have the required fields, and valid `skill` and `alt_type`
-  values
+  values. Static units have no `skill`.
 - Dynamic spawn templates are valid
 - Group and unit IDs are unique
 - Airfield references are consistent

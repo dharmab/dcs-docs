@@ -458,6 +458,70 @@ def test_missing_unit_field(run) -> None:
     assert f"{GROUP_PATH}.units[0]: missing required unit field 'skill'" in out
 
 
+def make_static_mission(**unit_overrides: Any) -> dict[str, Any]:
+    mission = make_mission()
+    unit: dict[str, Any] = {
+        "unitId": 20,
+        "name": "Hangar-1",
+        "type": "Hangar A",
+        "category": "Fortifications",
+        "x": 0,
+        "y": 0,
+        "heading": 0,
+    }
+    unit.update(unit_overrides)
+    group = {
+        "groupId": 20,
+        "name": "Hangar",
+        "units": [unit],
+        "route": {"points": [{"x": 0, "y": 0}]},
+        "x": 0,
+        "y": 0,
+    }
+    mission["coalition"]["red"]["country"][0]["static"] = {"group": [group]}
+    return mission
+
+
+def test_static_unit_does_not_need_skill(run) -> None:
+    code, out = run(make_static_mission())
+    assert code == 0, out
+
+
+def test_static_unit_still_needs_other_fields(run) -> None:
+    mission = make_static_mission()
+    del mission["coalition"]["red"]["country"][0]["static"]["group"][0]["units"][0][
+        "type"
+    ]
+    _, out = run(mission)
+    assert (
+        "coalition.red.country[0].static.group[0].units[0]: "
+        "missing required unit field 'type'"
+    ) in out
+    assert "'skill'" not in out
+
+
+@pytest.mark.parametrize("skill", ["Average", "Expert"])
+def test_static_unit_with_skill(run, skill: str) -> None:
+    code, out = run(make_static_mission(skill=skill))
+    assert code == 1
+    assert (
+        "coalition.red.country[0].static.group[0].units[0]: static units have no skill"
+    ) in out
+    assert "unknown skill" not in out
+
+
+@pytest.mark.parametrize("category", ["vehicle", "ship"])
+def test_non_static_unit_needs_skill(run, category: str) -> None:
+    mission = make_static_mission()
+    country = mission["coalition"]["red"]["country"][0]
+    country[category] = country.pop("static")
+    _, out = run(mission)
+    assert (
+        f"coalition.red.country[0].{category}.group[0].units[0]: "
+        "missing required unit field 'skill'"
+    ) in out
+
+
 def test_missing_aircraft_unit_field(run) -> None:
     mission = make_mission()
     del blue_group(mission)["units"][0]["payload"]
