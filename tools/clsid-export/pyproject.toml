@@ -3,6 +3,7 @@ name = "clsid-export"
 version = "0.1.0"
 description = "Generate CLSID lookup table from DCS Lua datamine"
 requires-python = ">=3.14"
+license = "MIT"
 dependencies = ["luadata>=1.0.5", "structlog>=26.1.0"]
 
 [dependency-groups]

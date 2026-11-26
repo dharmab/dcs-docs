@@ -3,6 +3,7 @@ name = "acmi-query"
 version = "0.1.0"
 description = "Index and query Tacview ACMI recordings from DCS World"
 requires-python = ">=3.14"
+license = "MIT"
 dependencies = ["humanize>=4.17.0", "structlog>=26.1.0"]
 
 [dependency-groups]
