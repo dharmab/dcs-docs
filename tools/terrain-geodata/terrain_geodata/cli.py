@@ -8,7 +8,12 @@ import sys
 import time
 from pathlib import Path
 
+import humanize
+import structlog
+
 from . import export
+
+log = structlog.get_logger()
 
 # Registry values that hold the install folder: standalone (current and the
 # retired OpenBeta branch), then Steam's uninstall entry for app 223750.
@@ -42,13 +47,17 @@ def _registry_dcs_path() -> Path | None:
 
 
 def _dcs_path(arg: str | None) -> Path:
-    value = arg or os.environ.get("DCS_PATH")
-    if value:
-        return Path(value)
+    if arg:
+        log.info("using DCS World install from --dcs-path", path=arg)
+        return Path(arg)
+    env_path = os.environ.get("DCS_PATH")
+    if env_path:
+        log.info("using DCS World install from DCS_PATH", path=env_path)
+        return Path(env_path)
     path = _registry_dcs_path()
     if path is None:
         sys.exit("pass --dcs-path or set DCS_PATH to the DCS World install folder")
-    print(f"using DCS World install at {path}", file=sys.stderr)
+    log.info("using DCS World install from the registry", path=str(path))
     return path
 
 
@@ -110,8 +119,10 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     args = parser.parse_args(argv)
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
     dcs_path = _dcs_path(args.dcs_path)
     terrains = export.discover(dcs_path)
+    log.info("found terrains", count=len(terrains))
 
     if args.command == "list":
         for t in terrains:
@@ -127,7 +138,14 @@ def main(argv: list[str] | None = None) -> None:
         ]
         if not terrains:
             sys.exit(f"no terrain matches {args.terrain}")
+        log.info("selected terrains", terrains=[t.theatre for t in terrains])
     version = export.dcs_version(dcs_path)
+    log.info(
+        "exporting terrains",
+        terrains=[t.theatre for t in terrains],
+        dcs_version=version,
+        jobs=max(args.jobs, 1),
+    )
     started = time.monotonic()
     export.export_terrains(
         terrains,
@@ -137,7 +155,11 @@ def main(argv: list[str] | None = None) -> None:
         version,
         max(args.jobs, 1),
     )
-    print(f"exported {len(terrains)} terrains in {time.monotonic() - started:.0f} s")
+    log.info(
+        "exported terrains",
+        terrains=len(terrains),
+        duration=humanize.precisedelta(time.monotonic() - started, format="%0.0f"),
+    )
 
 
 if __name__ == "__main__":

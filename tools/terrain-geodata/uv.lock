@@ -51,6 +51,15 @@ wheels = [
 ]
 
 [[package]]
+name = "humanize"
+version = "4.17.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d0/a7/5391f6db94bf16289ca63ce2632eef2eba7b9991e701016ac66f04539d47/humanize-4.17.0.tar.gz", hash = "sha256:1d6a36c453dbfbb3f0b34601d2e0b4ce5d48d780305cd45714843f0068fde6ac", size = 90688, upload-time = "2026-11-12T12:33:34.37Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0c/74/bb970f876202aa0e8c4a1e9904f0b3482e73c752512962b7e957091d5acf/humanize-4.17.0-py3-none-any.whl", hash = "sha256:02d0899527760efe18011944f882df4970943b4cdff7b5a0ba7fed43a576ef98", size = 133715, upload-time = "2026-11-12T12:33:32.955Z" },
+]
+
+[[package]]
 name = "luaparser"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -346,10 +355,20 @@ wheels = [
 ]
 
 [[package]]
+name = "structlog"
+version = "26.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5e/89/b4a0bcfdf4f71a3dea31379f095929613d7e4528a0996bca6aa964cd0dca/structlog-26.1.0.tar.gz", hash = "sha256:f63a716cbd1b1291cf7661de7794b455acfa4c43c5bcf1630e6ad5ddc1adb3b7", size = 1459881, upload-time = "2026-06-06T07:33:39.348Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a9/18/489c97b834dfff9cf2fc2507cede4bcd4b11e67f84bc462acd1992496f86/structlog-26.1.0-py3-none-any.whl", hash = "sha256:e081a26d6c373e6d201eca24eede26d8ffab07f88f477822e679183428d3d91e", size = 73764, upload-time = "2026-06-06T07:33:38.046Z" },
+]
+
+[[package]]
 name = "terrain-geodata"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "humanize" },
     { name = "luaparser" },
     { name = "numpy" },
     { name = "opencv-python-headless" },
@@ -357,6 +376,7 @@ dependencies = [
     { name = "pyproj" },
     { name = "rasterio" },
     { name = "shapely" },
+    { name = "structlog" },
 ]
 
 [package.dev-dependencies]
@@ -367,6 +387,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "humanize", specifier = ">=4.17.0" },
     { name = "luaparser", specifier = ">=4.2.0" },
     { name = "numpy", specifier = ">=2.3" },
     { name = "opencv-python-headless", specifier = ">=4.12" },
@@ -374,6 +395,7 @@ requires-dist = [
     { name = "pyproj", specifier = ">=3.7" },
     { name = "rasterio", specifier = ">=1.4" },
     { name = "shapely", specifier = ">=2.1" },
+    { name = "structlog", specifier = ">=26.1.0" },
 ]
 
 [package.metadata.requires-dev]

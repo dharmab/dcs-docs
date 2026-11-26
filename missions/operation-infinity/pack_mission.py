@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "humanize>=4.17.0",
+#     "structlog>=26.1.0",
+# ]
+# ///
 """
 Pack Operation Infinity mission source files into a .miz archive.
 
 Usage:
-    python pack_mission.py [--output OUTPUT_PATH]
+    uv run pack_mission.py [--output OUTPUT_PATH]
 
 The script reads from the src/ directory and produces a .miz file.
 """
@@ -12,6 +19,11 @@ import argparse
 import sys
 import zipfile
 from pathlib import Path
+
+import humanize
+import structlog
+
+log = structlog.get_logger()
 
 
 def get_script_dir() -> Path:
@@ -102,16 +114,15 @@ def pack_mission(output_path: Path | None = None) -> Path:
         "OperationInfinity.lua",
     ]
 
-    # Create MIZ archive
+    log.info("packing mission", path=str(output_path))
     with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as miz:
         # Add root files
         for filename in root_files:
             src_path = src_dir / filename
             if src_path.exists():
                 miz.write(src_path, filename)
-                print(f"  Added: {filename}")
             else:
-                print(f"  WARNING: Missing file: {filename}")
+                log.warning("skipping missing file", file=filename)
 
         # Add l10n files
         l10n_dir = src_dir / "l10n" / "DEFAULT"
@@ -120,12 +131,14 @@ def pack_mission(output_path: Path | None = None) -> Path:
             archive_path = f"l10n/DEFAULT/{filename}"
             if src_path.exists():
                 miz.write(src_path, archive_path)
-                print(f"  Added: {archive_path}")
             else:
-                print(f"  WARNING: Missing file: {archive_path}")
+                log.warning("skipping missing file", file=archive_path)
 
-    print(f"\nCreated: {output_path}")
-    print(f"Size: {output_path.stat().st_size / 1024:.1f} KB")
+    log.info(
+        "packed mission",
+        path=str(output_path),
+        size=humanize.naturalsize(output_path.stat().st_size),
+    )
     return output_path
 
 
@@ -172,48 +185,35 @@ def main() -> int:
     script_dir = get_script_dir()
     src_dir = script_dir / "src"
 
-    print("Operation Infinity Mission Packer")
-    print("=" * 40)
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
 
-    # Validate source directory exists
     if not src_dir.exists():
-        print(f"ERROR: Source directory not found: {src_dir}")
+        log.error("source directory not found", path=str(src_dir))
         return 1
 
-    # Check for missing files
+    log.info("validating source files", path=str(src_dir))
     missing = validate_src_directory(src_dir)
 
     if missing:
-        print("\nMissing files:")
-        for f in missing:
-            print(f"  - {f}")
-
+        log.warning("required files missing", files=missing)
         if args.validate:
             return 1
-
-        print("\nProceeding with available files...")
+        log.info("packing available files despite missing files")
     else:
-        print("All required files present.")
+        log.info("all required files present")
 
     if args.validate:
-        print("\nValidation passed.")
         return 0
 
-    print("\nPacking mission...")
     try:
         output_path = pack_mission(args.output)
-
-        if args.list:
-            list_contents(output_path)
-
-        print("\nSuccess!")
-        return 0
-    except Exception as e:
-        print(f"\nERROR: {e}")
-        import traceback
-
-        traceback.print_exc()
+    except Exception:
+        log.exception("packing failed")
         return 1
+
+    if args.list:
+        list_contents(output_path)
+    return 0
 
 
 if __name__ == "__main__":

@@ -31,6 +31,11 @@ from collections.abc import Iterator
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import humanize
+import structlog
+
+log = structlog.get_logger()
+
 SCHEMA_VERSION = 5
 CACHE_MAX_AGE_S = 24 * 3600
 MAX_TEXT_BYTES = 4 * 1024**3
@@ -517,12 +522,20 @@ def cache_dir() -> Path:
 def prune_cache(directory: Path) -> None:
     """Delete cache files unused for CACHE_MAX_AGE_S."""
     cutoff = time.time() - CACHE_MAX_AGE_S
+    pruned = 0
     for entry in directory.iterdir():
         try:
             if entry.stat().st_mtime < cutoff:
                 entry.unlink()
+                pruned += 1
         except FileNotFoundError:
             continue
+    if pruned:
+        log.info(
+            "pruned cached indexes",
+            files=pruned,
+            max_age=humanize.precisedelta(CACHE_MAX_AGE_S),
+        )
 
 
 def cache_path(acmi: Path) -> Path:
@@ -542,7 +555,7 @@ def build_index(acmi: Path, db_path: Path) -> None:
         db.execute("PRAGMA journal_mode = OFF")
         db.execute("PRAGMA synchronous = OFF")
         db.executescript(SCHEMA)
-        print(f"Indexing {acmi.name} ...", file=sys.stderr)
+        log.info("indexing recording", file=acmi.name)
         Indexer(db).run(acmi)
         db.executescript(INDEXES)
         db.commit()
@@ -551,15 +564,23 @@ def build_index(acmi: Path, db_path: Path) -> None:
     finally:
         db.close()
         tmp.unlink(missing_ok=True)
-    print(f"Indexed in {time.monotonic() - start:.0f}s -> {db_path}", file=sys.stderr)
+    log.info(
+        "indexed recording",
+        duration=humanize.precisedelta(time.monotonic() - start, format="%0.0f"),
+        index=str(db_path),
+    )
 
 
 def open_db(acmi: Path, force: bool = False) -> sqlite3.Connection:
     if not acmi.exists():
         sys.exit(f"error: {acmi} not found")
     db_path = cache_path(acmi)
-    stale = force or not db_path.exists()
-    if not stale:
+    cache_exists = db_path.exists()
+    if force:
+        log.info("rebuilding index", reason="--force")
+    elif not cache_exists:
+        log.info("building index", reason="no cached index")
+    else:
         # Keep caches in use from being pruned.
         db_path.touch()
         db = sqlite3.connect(db_path)
@@ -570,6 +591,7 @@ def open_db(acmi: Path, force: bool = False) -> sqlite3.Connection:
             db.row_factory = sqlite3.Row
             return db
         db.close()
+        log.info("rebuilding index", reason="schema version changed")
     build_index(acmi, db_path)
     db = sqlite3.connect(db_path)
     db.row_factory = sqlite3.Row
@@ -1383,6 +1405,7 @@ def main() -> None:
     add("guns", cmd_guns, "Gun/cannon/AAA fire aggregated by shooter")
 
     args = parser.parse_args()
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
     args.func(args)
 
 
