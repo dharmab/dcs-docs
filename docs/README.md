@@ -92,11 +92,12 @@ Classes are object types.
 
 ### AI
 
-| Document                                             | Description            |
-| ---------------------------------------------------- | ---------------------- |
-| [ai/tasks.md](scripting/reference/ai/tasks.md)       | AI task definitions    |
-| [ai/commands.md](scripting/reference/ai/commands.md) | AI command definitions |
-| [ai/options.md](scripting/reference/ai/options.md)   | AI behavior options    |
+| Document                                             | Description             |
+| ---------------------------------------------------- | ----------------------- |
+| [ai/tasks.md](scripting/reference/ai/tasks.md)       | AI task definitions     |
+| [ai/commands.md](scripting/reference/ai/commands.md) | AI command definitions  |
+| [ai/options.md](scripting/reference/ai/options.md)   | AI behavior options     |
+| [enums/ai.md](scripting/reference/enums/ai.md)       | AI-related enumerations |
 
 ### Events
 
@@ -112,10 +113,9 @@ Classes are object types.
 
 ### Enums
 
-| Document                                                     | Description             |
-| ------------------------------------------------------------ | ----------------------- |
-| [enums/coalition.md](scripting/reference/enums/coalition.md) | Coalition enumeration   |
-| [enums/ai.md](scripting/reference/enums/ai.md)               | AI-related enumerations |
+| Document                                                     | Description           |
+| ------------------------------------------------------------ | --------------------- |
+| [enums/coalition.md](scripting/reference/enums/coalition.md) | Coalition enumeration |
 
 ### Server Hooks
 
