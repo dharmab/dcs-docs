@@ -98,14 +98,24 @@ Classes are object types.
 | [ai/commands.md](scripting/reference/ai/commands.md) | AI command definitions |
 | [ai/options.md](scripting/reference/ai/options.md)   | AI behavior options    |
 
-### Events, Types, and Enums
+### Events
+
+| Document                                                 | Description            |
+| -------------------------------------------------------- | ---------------------- |
+| [events/events.md](scripting/reference/events/events.md) | Event system reference |
+
+### Types
 
 | Document                                                         | Description                 |
 | ---------------------------------------------------------------- | --------------------------- |
-| [events/events.md](scripting/reference/events/events.md)         | Event system reference      |
 | [types/coordinates.md](scripting/reference/types/coordinates.md) | Vec2, Vec3, Position3 types |
-| [enums/coalition.md](scripting/reference/enums/coalition.md)     | Coalition enumeration       |
-| [enums/ai.md](scripting/reference/enums/ai.md)                   | AI-related enumerations     |
+
+### Enums
+
+| Document                                                     | Description             |
+| ------------------------------------------------------------ | ----------------------- |
+| [enums/coalition.md](scripting/reference/enums/coalition.md) | Coalition enumeration   |
+| [enums/ai.md](scripting/reference/enums/ai.md)               | AI-related enumerations |
 
 ### Server Hooks
 
