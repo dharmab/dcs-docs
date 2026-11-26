@@ -1,6 +1,6 @@
 # JTAC Setup Guide
 
-This recipe configures AI Joint Terminal Attack Controllers (JTACs) and Forward Air Controllers (FACs) by editing the mission Lua file. A JTAC provides target coordinates, laser designation, and smoke marks for Close Air Support (CAS).
+This recipe configures AI Joint Terminal Attack Controllers (JTACs) and Forward Air Controllers (FACs) by editing the mission [Lua](https://www.lua.org/about.html) file. A JTAC provides target coordinates, laser designation, and smoke marks for Close Air Support (CAS).
 
 > **Note:** JTAC setup in DCS can be finicky. Line of sight, range, and unit selection all affect reliability. Ground units need a clear line of sight to targets, while UAVs are more consistent because they operate from altitude. Expect some experimentation to get reliable designation.
 

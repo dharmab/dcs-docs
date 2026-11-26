@@ -269,7 +269,7 @@ net.force_player_slot(playerID, 0, '')
 string net.lua2json(any value)
 ```
 
-Converts a Lua value to a JSON string.
+Converts a [Lua](https://www.lua.org/about.html) value to a JSON string.
 
 **Parameters:**
 

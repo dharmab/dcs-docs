@@ -1,6 +1,6 @@
 # Weather and Time Configuration
 
-This recipe sets weather, fog, haze, and time by editing the mission Lua file. Weather affects gameplay, visuals, and AI behavior.
+This recipe sets weather, fog, haze, and time by editing the mission [Lua](https://www.lua.org/about.html) file. Weather affects gameplay, visuals, and AI behavior.
 
 This recipe uses the static weather system with cloud presets, which provides the volumetric clouds added in DCS 2.7. Do not use the dynamic weather system with cyclones.
 

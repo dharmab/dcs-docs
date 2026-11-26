@@ -1,6 +1,6 @@
 # Convoy Route Setup
 
-This recipe creates ground convoys that drive on roads by editing the mission Lua file. Use convoys for supply lines, troop movements, or interdiction targets.
+This recipe creates ground convoys that drive on roads by editing the mission [Lua](https://www.lua.org/about.html) file. Use convoys for supply lines, troop movements, or interdiction targets.
 
 > **Note:** DCS ground AI pathfinding has known quirks. Vehicles sometimes leave roads, especially at complex intersections or when resuming from a hold command. The techniques in this guide reduce these problems but cannot eliminate them.
 

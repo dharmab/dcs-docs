@@ -1,6 +1,6 @@
 # Carrier Strike Group Setup
 
-This recipe creates a U.S. Navy Carrier Strike Group (CSG) by editing the mission Lua file. The CSG is built around the CVN-74 John C. Stennis, escorted by Ticonderoga-class cruisers, Arleigh Burke-class destroyers, and a plane guard rescue helicopter.
+This recipe creates a U.S. Navy Carrier Strike Group (CSG) by editing the mission [Lua](https://www.lua.org/about.html) file. The CSG is built around the CVN-74 John C. Stennis, escorted by Ticonderoga-class cruisers, Arleigh Burke-class destroyers, and a plane guard rescue helicopter.
 
 ## Overview
 

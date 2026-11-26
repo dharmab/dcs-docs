@@ -1,6 +1,6 @@
 # Adding Player Slots at an Airfield
 
-This recipe creates player aircraft slots at an airfield by editing the mission Lua file. Player slots let people fly aircraft in both singleplayer and multiplayer missions.
+This recipe creates player aircraft slots at an airfield by editing the mission [Lua](https://www.lua.org/about.html) file. Player slots let people fly aircraft in both singleplayer and multiplayer missions.
 
 ## Overview
 

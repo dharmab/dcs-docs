@@ -1,6 +1,6 @@
 # DCS World Mission Editor
 
-The Mission Editor (ME) is the DCS World GUI for building standalone, campaign, training, and multiplayer missions. Mission designers control mission behavior with triggers, AI tasks, environment settings, and Lua scripts.
+The Mission Editor (ME) is the DCS World GUI for building standalone, campaign, training, and multiplayer missions. Mission designers control mission behavior with triggers, AI tasks, environment settings, and [Lua](https://www.lua.org/about.html) scripts.
 
 ## Contents
 

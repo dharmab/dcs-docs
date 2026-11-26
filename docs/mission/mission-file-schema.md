@@ -1,6 +1,6 @@
 # Mission File Schema
 
-The `mission` file is a Lua table containing the complete mission definition. This page documents every top-level key and its nested structures.
+The `mission` file is a [Lua](https://www.lua.org/about.html) table containing the complete mission definition. This page documents every top-level key and its nested structures.
 
 > **Important:** DCS fails to load a mission that omits a required key. Use `{}` for an unused required table, such as `goals` in a mission without scoring.
 

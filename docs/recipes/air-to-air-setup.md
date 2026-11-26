@@ -1,6 +1,6 @@
 # AI Air-to-Air Fighter Configuration
 
-This recipe configures AI fighters for air-to-air roles by editing the mission Lua file. It covers Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort.
+This recipe configures AI fighters for air-to-air roles by editing the mission [Lua](https://www.lua.org/about.html) file. It covers Combat Air Patrol, Fighter Sweep, Intercept, and Strike Escort.
 
 For dynamic spawning of interceptors in response to player actions, see the [Dynamic Air Intercept Script](air-intercept-script.md). This recipe covers AI fighters placed in the mission file.
 

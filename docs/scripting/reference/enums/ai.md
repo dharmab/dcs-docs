@@ -229,7 +229,7 @@ The named values below combine these bits:
 | LR AAM              | `16777216`    | `0x1000000`   | 24           | Long-range air-to-air missiles                                             |
 | Decoys              | `8589934592`  | `0x200000000` | 33           |                                                                            |
 
-A category's value is the sum of its members' bits. For example, Bombs (`0x7F0`, bits 4-10) is Iron bombs (`0xF0`) + Cluster bombs (`0x300`) + Candle bombs (`0x400`). To allow several classes that do not overlap, add their values: Guided bombs + ASM is `14 + 4161536 = 4161550` (`0x3F800E`). Use addition rather than bitwise operators, because Lua 5.1 has no bitwise operators and some values do not fit in 32 bits.
+A category's value is the sum of its members' bits. For example, Bombs (`0x7F0`, bits 4-10) is Iron bombs (`0xF0`) + Cluster bombs (`0x300`) + Candle bombs (`0x400`). To allow several classes that do not overlap, add their values: Guided bombs + ASM is `14 + 4161536 = 4161550` (`0x3F800E`). Use addition rather than bitwise operators, because [Lua](https://www.lua.org/about.html) 5.1 has no bitwise operators and some values do not fit in 32 bits.
 
 `RTB_ON_OUT_OF_AMMO` accepts every named value except Decoys and the shell values.
 

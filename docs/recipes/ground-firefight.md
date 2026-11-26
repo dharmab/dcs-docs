@@ -1,6 +1,6 @@
 # Ground Firefight Setup
 
-This recipe creates a front-line firefight between AI ground forces by editing the mission Lua file. The groups fire at points near each other instead of at each other, so the fight lasts without destroying either side.
+This recipe creates a front-line firefight between AI ground forces by editing the mission [Lua](https://www.lua.org/about.html) file. The groups fire at points near each other instead of at each other, so the fight lasts without destroying either side.
 
 > **Note:** All ground units can run out of ammunition. Position ammunition carriers (M30 Cargo Carrier) within 100 meters of any units you want to sustain prolonged fire. Without resupply, units run out and stop firing.
 
