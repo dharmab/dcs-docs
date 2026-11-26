@@ -1,7 +1,10 @@
 # terrain-geodata
 
-Reads terrain data from a DCS World install and writes standard GIS
-files to `docs/data/terrains/<theatre>/`.
+Reads terrain data from a DCS World install and exports it to
+[`docs/data/terrains/<theatre>/`](../../docs/data/terrains/): land cover
+classes such as forest, town and water, ground elevation, named places, map
+features such as roads, railways, rivers and borders, and the terrain's
+projection, which converts lat/long to DCS coordinates.
 
 ## Usage
 
@@ -27,8 +30,9 @@ CPU).
 
 ## Output
 
-Each terrain's files are in `docs/data/terrains/<theatre>/`, where `<theatre>`
-is the theatre id that missions store in `mission.theatre`, such as `Caucasus`.
+Each terrain's files are in
+[`docs/data/terrains/<theatre>/`](../../docs/data/terrains/), where
+`<theatre>` is the theatre id that missions store in `mission.theatre`, such as `Caucasus`.
 
 | File            | Format                  | Contents                                                          |
 | --------------- | ----------------------- | ----------------------------------------------------------------- |

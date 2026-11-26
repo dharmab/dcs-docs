@@ -11,12 +11,12 @@ A monorepo for building DCS World missions. It contains reference documentation,
 
 ## Layout
 
-| Path        | Contents                                                   |
-| ----------- | ---------------------------------------------------------- |
-| `docs/`     | Tutorials, how-to guides, and reference for mission making |
-| `tools/`    | CLI tools for automating parts of mission making           |
-| `missions/` | Missions I've made                                         |
-| `liveries/` | Livery names for each unit                                 |
+| Path                     | Contents                                                   |
+| ------------------------ | ---------------------------------------------------------- |
+| [`docs/`](docs/)         | Tutorials, how-to guides, and reference for mission making |
+| [`tools/`](tools/)       | CLI tools for automating parts of mission making           |
+| [`missions/`](missions/) | Missions I've made                                         |
+| [`liveries/`](liveries/) | Livery names for each unit                                 |
 
 ## Documentation
 
