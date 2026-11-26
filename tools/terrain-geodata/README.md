@@ -18,12 +18,15 @@ uv run terrain-geodata list
 uv run terrain-geodata export --out ../../docs/data/terrains
 # Export only the Caucasus terrain
 uv run terrain-geodata export --out ../../docs/data/terrains --terrain Caucasus
+# Export the Caucasus terrain with 25 m land cover and 50 m elevation pixels
+uv run terrain-geodata export --out /tmp/terrains --terrain Caucasus \
+  --landcover-resolution 25 --elevation-resolution 50
 ```
 
 On Windows the install folder is read from the registry (standalone or Steam).
 Elsewhere, or to use a different install, pass `--dcs-path` or set the
 `DCS_PATH` environment variable. `--out` defaults to `docs/data/terrains`
-relative to the current directory. `--resolution` sets the land cover pixel
+relative to the current directory. `--landcover-resolution` sets the land cover pixel
 size (default 100 m) and `--elevation-resolution` the elevation pixel size
 (default 1 km). `--jobs` sets the number of worker processes (default one per
 CPU).
@@ -86,7 +89,7 @@ z, x = to_dcs.transform(41.6, 41.6)  # (longitude, latitude) in, (z, x) out
 ### Land Cover
 
 `landcover.tif` is a single-band `uint8` raster with the pixel size set by
-`--resolution` (default 100 m). Each pixel value is the class of
+`--landcover-resolution` (default 100 m). Each pixel value is the class of
 the terrain mesh triangle under the pixel centre. Where classes overlap, the
 class with the higher value is used (a river through a forest is `river`).
 
