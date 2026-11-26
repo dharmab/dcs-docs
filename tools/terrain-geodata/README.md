@@ -93,18 +93,22 @@ z, x = to_dcs.transform(41.6, 41.6)  # (longitude, latitude) in, (z, x) out
 the terrain mesh triangle under the pixel centre. Where classes overlap, the
 class with the higher value is used (a river through a forest is `river`).
 
-| Value | Class    | Meaning                                                         |
-| ----- | -------- | --------------------------------------------------------------- |
-| 0     | `nodata` | Outside the terrain mesh                                        |
-| 1     | `land`   | Open ground: grass, scrub, rock, desert, snow                   |
-| 2     | `field`  | Farmland                                                        |
-| 3     | `forest` | Forest                                                          |
-| 4     | `town`   | Built-up ground texture: cities, villages and scattered housing |
-| 5     | `beach`  | Beach and the shoreline strip                                   |
-| 6     | `river`  | River surface                                                   |
-| 7     | `lake`   | Lake or reservoir                                               |
-| 8     | `sea`    | Sea                                                             |
-| 9     | `runway` | Runway and airfield paving                                      |
+![Caucasus land cover](images/caucasus/landcover.webp)
+
+| Value | Class    | Color       | Meaning                                                         |
+| ----- | -------- | ----------- | --------------------------------------------------------------- |
+| 0     | `nodata` | Transparent | Outside the terrain mesh                                        |
+| 1     | `land`   | Beige       | Open ground: grass, scrub, rock, desert, snow                   |
+| 2     | `field`  | Light green | Farmland                                                        |
+| 3     | `forest` | Green       | Forest                                                          |
+| 4     | `town`   | Red         | Built-up ground texture: cities, villages and scattered housing |
+| 5     | `beach`  | Pale yellow | Beach and the shoreline strip                                   |
+| 6     | `river`  | Light blue  | River surface                                                   |
+| 7     | `lake`   | Blue        | Lake or reservoir                                               |
+| 8     | `sea`    | Dark blue   | Sea                                                             |
+| 9     | `runway` | Dark grey   | Runway and airfield paving                                      |
+
+The colors are the raster's color table, which GIS tools also use.
 
 Things to keep in mind:
 
@@ -137,6 +141,11 @@ whole metres, with the pixel size set by `--elevation-resolution` (default
 centre, interpolated across the triangle under it. Sea, lakes and
 pixels outside the mesh are `-32768` (the raster's nodata value). `terrain.json`
 records the pixel size and the lowest and highest values under `elevation`.
+
+![Caucasus elevation](images/caucasus/elevation.webp)
+
+The preview colors height from green at sea level through tan and brown to
+white above 4,000 m, with hillshading. Nodata is transparent.
 
 Use it for planning at map scale: which areas are mountains, valleys or
 plains, where low ground lies between ridges, and the approximate height of a
