@@ -8,11 +8,11 @@ Server hooks are a scripting environment for DCS World servers, independent of a
 
 Server hooks differ from mission scripting (the SSE) in several important ways:
 
-| Aspect      | Mission Scripting   | Server Hooks                |
-| ----------- | ------------------- | --------------------------- |
-| Location    | Inside `.miz` files | `$WRITE_DIR/Scripts/Hooks/` |
-| Lua State   | Mission environment | GUI/hooks environment       |
-| Persistence | Resets each mission | Persists across missions    |
+| Aspect                                      | Mission Scripting   | Server Hooks                |
+| ------------------------------------------- | ------------------- | --------------------------- |
+| Location                                    | Inside `.miz` files | `$WRITE_DIR/Scripts/Hooks/` |
+| [Lua](https://www.lua.org/about.html) State | Mission environment | GUI/hooks environment       |
+| Persistence                                 | Resets each mission | Persists across missions    |
 
 ### Available APIs
 
@@ -1532,6 +1532,6 @@ Use `print()` for quick debugging; output appears in `dcs.log`.
 
 ## See Also
 
-- [Simulator Scripting Engine](../../simulator-scripting-engine.md) - Mission scripting (different API from server hooks)
-- [Events](../events/events.md) - Mission scripting events (not available in hooks)
-- [Coalition](../enums/coalition.md) - Coalition enumeration values
+- [Scripting Environments](../../simulator-scripting-engine.md#scripting-environments) - When to use a server hook instead of a mission script
+- [net](../singletons/net.md) - `net` functions shared with mission scripts
+- [Restore Unit Life](../../../recipes/restore-unit-life.md) - Example of a hook that runs code in the mission environment with `net.dostring_in`
