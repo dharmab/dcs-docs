@@ -10,6 +10,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import luadata
+import structlog
+
+log = structlog.get_logger()
 
 
 def clone_datamine(temp_dir: Path) -> Path:
@@ -17,13 +20,13 @@ def clone_datamine(temp_dir: Path) -> Path:
     repo_url = "https://github.com/Quaggles/dcs-lua-datamine.git"
     repo_path = temp_dir / "dcs-lua-datamine"
 
-    print(f"Cloning {repo_url}...")
+    log.info("cloning datamine", url=repo_url)
     subprocess.run(
         ["git", "clone", "--depth", "1", repo_url, str(repo_path)],
         check=True,
         capture_output=True,
     )
-    print("Clone complete.")
+    log.info("cloned datamine", path=str(repo_path))
     return repo_path
 
 
@@ -42,7 +45,7 @@ def iter_launcher_files(repo_path: Path) -> Generator[Path]:
     """Iterate over all launcher Lua files."""
     launcher_dir = repo_path / "_G" / "launcher"
     if not launcher_dir.exists():
-        print(f"Warning: launcher directory not found at {launcher_dir}")
+        log.warning("launcher directory not found", path=str(launcher_dir))
         return
 
     yield from launcher_dir.glob("*.lua")
@@ -108,7 +111,7 @@ def parse_launcher_file(file_path: Path) -> dict | None:
     try:
         content = file_path.read_text(encoding="utf-8", errors="replace")
     except OSError as e:
-        print(f"Warning: Could not read {file_path}: {e}")
+        log.warning("could not read file", path=str(file_path), error=str(e))
         return None
 
     # Extract just the table portion from the assignment
@@ -123,7 +126,7 @@ def parse_launcher_file(file_path: Path) -> dict | None:
     try:
         data = luadata.unserialize(table_str)
     except Exception as e:
-        print(f"Warning: Could not parse {file_path.name}: {e}")
+        log.warning("could not parse file", file=file_path.name, error=str(e))
         return None
 
     if not isinstance(data, dict):
@@ -157,6 +160,8 @@ def build_lookup_data(repo_path: Path) -> dict:
 
     file_count = 0
     parsed_count = 0
+
+    log.info("parsing launcher files")
 
     for lua_file in iter_launcher_files(repo_path):
         file_count += 1
@@ -192,7 +197,7 @@ def build_lookup_data(repo_path: Path) -> dict:
                 by_display_name[display_name] = []
             by_display_name[display_name].append(clsid)
 
-    print(f"Processed {file_count} files, parsed {parsed_count} entries.")
+    log.info("parsed launcher files", files=file_count, entries=parsed_count)
     return {
         "by_clsid": by_clsid,
         "by_display_name": by_display_name,
@@ -201,6 +206,8 @@ def build_lookup_data(repo_path: Path) -> dict:
 
 def main() -> int:
     """Main entry point."""
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
+
     # Determine output path
     script_dir = Path(__file__).parent
     output_dir = script_dir.parent.parent / "docs" / "data"
@@ -216,11 +223,14 @@ def main() -> int:
         try:
             repo_path = clone_datamine(temp_path)
         except subprocess.CalledProcessError as e:
-            print(f"Error cloning repository: {e}")
+            log.error("could not clone datamine", error=str(e))
             return 1
 
-        # Get DCS version
         dcs_version = get_dcs_version(repo_path)
+        if dcs_version is None:
+            log.warning("DCS version not found in datamine", dcs_version=None)
+        else:
+            log.info("read DCS version", dcs_version=dcs_version)
 
         # Build lookup data
         lookup_data = build_lookup_data(repo_path)
@@ -238,11 +248,11 @@ def main() -> int:
         "by_display_name": by_display_name,
     }
 
-    # Write output
+    log.info("writing lookup table", path=str(output_file))
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
-    print(f"Wrote {len(by_clsid)} entries to {output_file}")
+    log.info("wrote lookup table", entries=len(by_clsid), path=str(output_file))
     return 0
 
 

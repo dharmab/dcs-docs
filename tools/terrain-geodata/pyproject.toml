@@ -11,6 +11,7 @@ dependencies = [
   "pyproj>=3.7",
   "rasterio>=1.4",
   "shapely>=2.1",
+  "structlog>=26.1.0",
 ]
 
 [dependency-groups]

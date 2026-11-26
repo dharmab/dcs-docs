@@ -28,7 +28,10 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
+import structlog
 from rasterio.windows import from_bounds
+
+log = structlog.get_logger()
 
 THEATRE = "Caucasus"
 
@@ -255,14 +258,22 @@ def render_mock_lua(
 
 def write_mock_terrain(terrain_dir: Path, output: Path) -> None:
     landcover = terrain_dir / "landcover.tif"
+    log.info("reading land cover for mock terrain", path=str(landcover))
     classes, north_x, west_z, pixel = read_window(landcover, MOCK_Z_MIN)
     surface = surface_types(classes)
-    roads = read_roads(terrain_dir / "features.gpkg")
+    features = terrain_dir / "features.gpkg"
+    log.info("reading roads", path=str(features))
+    roads = read_roads(features)
     crs = json.loads((terrain_dir / "terrain.json").read_text())["crs"]
     output.write_text(render_mock_lua(surface, north_x, west_z, pixel, roads, crs))
-    print(
-        f"Wrote {output.name}: {surface.shape[0]} x {surface.shape[1]} cells of "
-        f"{pixel:g} m, {len(roads)} roads, {output.stat().st_size / 1024:.0f} KB"
+    log.info(
+        "wrote mock terrain",
+        file=output.name,
+        rows=surface.shape[0],
+        columns=surface.shape[1],
+        cell_m=pixel,
+        roads=len(roads),
+        size_kb=round(output.stat().st_size / 1024),
     )
 
 
@@ -303,16 +314,23 @@ def render_lua(mask: np.ndarray, north_x: float, west_z: float, cell: float) -> 
 
 
 def main() -> int:
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
     script_dir = get_script_dir()
     terrain_dir = script_dir.parents[1] / "docs" / "data" / "terrains" / THEATRE
     landcover = terrain_dir / "landcover.tif"
     output = script_dir / "src" / "l10n" / "DEFAULT" / "TerrainData.lua"
 
+    log.info("building terrain mask", path=str(landcover))
     mask, north_x, west_z, cell = build_mask(landcover)
     output.write_text(render_lua(mask, north_x, west_z, cell))
-    print(
-        f"Wrote {output.name}: {mask.shape[0]} x {mask.shape[1]} cells of {cell:g} m, "
-        f"{mask.mean():.0%} blocked, {output.stat().st_size / 1024:.0f} KB"
+    log.info(
+        "wrote terrain mask",
+        file=output.name,
+        rows=mask.shape[0],
+        columns=mask.shape[1],
+        cell_m=cell,
+        blocked=f"{mask.mean():.0%}",
+        size_kb=round(output.stat().st_size / 1024),
     )
     write_mock_terrain(terrain_dir, script_dir / "tests" / "mock_terrain.lua")
     return 0

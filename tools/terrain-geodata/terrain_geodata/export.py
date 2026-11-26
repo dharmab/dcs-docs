@@ -14,12 +14,15 @@ import numpy as np
 import pyogrio.raw
 import rasterio
 import shapely
+import structlog
 from pyproj import Transformer
 from rasterio.transform import Affine
 from shapely.geometry.base import BaseGeometry
 
 from . import geonames, luafiles, projection, schedule, sup5, surface5
 from .schedule import Call
+
+logger = structlog.get_logger()
 
 
 @dataclass(frozen=True)
@@ -298,13 +301,13 @@ def _export_job(
     rank: int,
 ) -> schedule.Job:
     urgent, bulk = (0, rank), (1, rank)
+    log = logger.bind(theatre=src.theatre)
     out = out_root / src.theatre
+    log.info("exporting terrain", folder=src.folder.name, out=str(out))
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
     started = time.monotonic()
-    lines = [f"{src.theatre} ({src.folder.name})"]
-    log = lines.append
 
     calls = {"places": Call(urgent, _read_places, (src,))}
     if src.map_overlay is not None:
@@ -319,10 +322,14 @@ def _export_job(
     towns, labels, proj = got["places"]
     crs = proj.crs(src.theatre)
     crs_wkt = crs.to_wkt()
-    log(
-        f"  projection: lon_0={proj.central_meridian} x_0={proj.false_easting} "
-        f"y_0={proj.false_northing} ({proj.point_count} points, "
-        f"rms {proj.rms_error_m} m, max {proj.max_error_m} m)"
+    log.info(
+        "fitted projection",
+        lon_0=proj.central_meridian,
+        x_0=proj.false_easting,
+        y_0=proj.false_northing,
+        points=proj.point_count,
+        rms_error_m=proj.rms_error_m,
+        max_error_m=proj.max_error_m,
     )
 
     # Places: lat/long from towns.lua, DCS position from the map label when there
@@ -363,6 +370,7 @@ def _export_job(
     if plan is not None:
         assert src.surface is not None
         chunks = _chunks(plan.spans, workers)
+        log.info("rasterizing land cover", tiles=len(plan.spans), chunks=len(chunks))
         rasters = yield {
             i: Call(
                 bulk,
@@ -407,6 +415,7 @@ def _export_job(
             final[layer] = Call(
                 urgent, sup5.build_geometry, (sup5.LAYERS[layer], parts)
             )
+    log.info("writing rasters and building feature layers", steps=list(final))
     layers = yield final
 
     layer_counts: dict[str, int] = {"places": len(place_rows)}
@@ -424,10 +433,10 @@ def _export_job(
                 gtype = "Polygon"
                 fields = {"area_m2": np.round(shapely.area(arr), 0)}
             _write_gpkg_layer(gpkg, layer, geoms, crs_wkt, gtype, fields)
-        log("  features: " + ", ".join(f"{k} {v}" for k, v in layer_counts.items()))
+        log.info("wrote features", **layer_counts)
         skipped = [k for k, v in decisions.items() if v == "skipped"]
         if skipped:
-            log(f"  skipped map materials: {', '.join(skipped)}")
+            log.warning("skipped map materials", materials=skipped)
 
     meta: dict = {
         "theatre": src.theatre,
@@ -467,10 +476,9 @@ def _export_job(
             "resolution_m": elevation_resolution,
             **_elevation_stats(lc.elevation),
         }
-        log(f"  landcover: {width}x{height} px from {lc.tile_count} tiles")
+        log.info("wrote land cover", width=width, height=height, tiles=lc.tile_count)
 
     (out / "terrain.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    log(f"  done in {time.monotonic() - started:.0f} s")
-    print("\n".join(lines), flush=True)
+    log.info("exported terrain", seconds=round(time.monotonic() - started))

@@ -11,9 +11,13 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import structlog
+
 # Windows-specific imports for registry access
 if sys.platform == "win32":
     import winreg
+
+log = structlog.get_logger()
 
 
 @dataclass
@@ -153,6 +157,7 @@ def collect_all_liveries(dcs_root: Path) -> dict[str, LiveryEntry]:
     entries: dict[str, LiveryEntry] = {}
 
     for livery_root in find_livery_roots(dcs_root):
+        log.info("scanning livery folder", path=str(livery_root))
         # Each subdirectory in a livery root is a livery entry (aircraft variant)
         for entry_dir in livery_root.iterdir():
             if not entry_dir.is_dir():
@@ -232,10 +237,11 @@ def write_output(entries: dict[str, LiveryEntry], output_dir: Path) -> None:
 
     # Write index
     index_content = generate_index_markdown(entries)
+    log.info("writing livery files", path=str(output_dir))
     (output_dir / "README.md").write_text(index_content, encoding="utf-8")
-    print(f"Wrote index: {output_dir / 'README.md'}")
 
     # Write individual entry files
+    written = 0
     for entry_name, entry in entries.items():
         if not entry.liveries:
             continue
@@ -244,7 +250,8 @@ def write_output(entries: dict[str, LiveryEntry], output_dir: Path) -> None:
         content = generate_markdown_for_entry(entry)
         filepath = output_dir / filename
         filepath.write_text(content, encoding="utf-8")
-        print(f"Wrote: {filepath} ({len(entry.liveries)} liveries)")
+        written += 1
+    log.info("wrote livery files", files=written, path=str(output_dir))
 
 
 def main() -> int:
@@ -265,30 +272,27 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
 
     # Find DCS installation
     if args.dcs_root:
         dcs_root = args.dcs_root
         if not dcs_root.exists():
-            print(f"Error: Specified DCS root does not exist: {dcs_root}")
+            log.error("--dcs-root does not exist", path=str(dcs_root))
             return 1
     else:
+        log.info("searching for DCS World installation")
         dcs_root = find_dcs_installation()
         if dcs_root is None:
-            print("Error: Could not find DCS World installation.")
-            print("Please specify the path with --dcs-root")
+            log.error("could not find DCS World installation", hint="pass --dcs-root")
             return 1
 
-    print(f"DCS installation: {dcs_root}")
+    log.info("using DCS World installation", path=str(dcs_root))
 
-    # Collect all liveries
     entries = collect_all_liveries(dcs_root)
-    print(f"Found {len(entries)} livery entries")
+    log.info("collected liveries", entries=len(entries))
 
-    # Write output
     write_output(entries, args.output_dir)
-
-    print(f"\nDone! Generated {len(entries)} livery files in {args.output_dir}")
     return 0
 
 

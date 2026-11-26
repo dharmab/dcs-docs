@@ -7,7 +7,7 @@ requires-python = ">=3.14"
 dependencies = []
 
 [dependency-groups]
-dev = ["numpy", "psutil", "rasterio", "ruff", "ty"]
+dev = ["numpy", "psutil", "rasterio", "ruff", "structlog>=26.1.0", "ty"]
 
 [tool.uv]
 package = false

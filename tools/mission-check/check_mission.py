@@ -14,6 +14,9 @@ from pathlib import Path
 from typing import Any
 
 import luadata
+import structlog
+
+log = structlog.get_logger()
 
 # ---------------------------------------------------------------------------
 # Diagnostic collector
@@ -935,6 +938,7 @@ def check_references(
 def run_checks(mission_dir: Path) -> int:
     """Run all validation checks on the given mission directory. Returns exit code."""
     diag = DiagnosticCollector()
+    log.info("checking mission", path=str(mission_dir))
 
     parsed = check_files(mission_dir, diag)
 
@@ -984,6 +988,7 @@ def main() -> int:
         help="Path to a mission directory or .miz file",
     )
     args = parser.parse_args()
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
 
     if args.command != "check":
         parser.print_help()
@@ -991,21 +996,19 @@ def main() -> int:
 
     target: Path = args.path
     if not target.exists():
-        print(f"Error: path does not exist: {target}", file=sys.stderr)
+        log.error("path does not exist", path=str(target))
         return 2
 
     if target.is_file() and target.suffix == ".miz":
         with tempfile.TemporaryDirectory() as tmpdir:
+            log.info("extracting mission", path=str(target))
             with zipfile.ZipFile(target, "r") as zf:
                 zf.extractall(tmpdir)
             return run_checks(Path(tmpdir))
     elif target.is_dir():
         return run_checks(target)
     else:
-        print(
-            f"Error: path must be a directory or .miz file: {target}",
-            file=sys.stderr,
-        )
+        log.error("path must be a directory or .miz file", path=str(target))
         return 2
 
 

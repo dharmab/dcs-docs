@@ -1,6 +1,9 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["psutil"]
+# dependencies = [
+#     "psutil",
+#     "structlog>=26.1.0",
+# ]
 # ///
 """
 Pull the latest repo, repack Operation Infinity, and restart the DCS server.
@@ -24,6 +27,7 @@ import tempfile
 from pathlib import Path
 
 import psutil
+import structlog
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PACK_SCRIPT = REPO_ROOT / "missions" / "operation-infinity" / "pack_mission.py"
@@ -31,6 +35,8 @@ DEFAULT_SERVER_EXE = Path(
     r"C:\Program Files\Eagle Dynamics\DCS World Server\bin\DCS_server.exe"
 )
 SERVER_PROCESS_NAMES = {"dcs_server.exe", "dcs.exe"}
+
+log = structlog.get_logger()
 
 
 def find_server_processes() -> list[psutil.Process]:
@@ -48,15 +54,16 @@ def stop_server(timeout: int) -> Path | None:
     """Stop running DCS servers. Returns the executable path of the first one."""
     procs = find_server_processes()
     if not procs:
-        print("    No running server found")
+        log.info("no running server found")
         return None
+    log.info("killing server", pids=[p.pid for p in procs])
     exe = Path(procs[0].info["exe"])  # ty: ignore[missing-attribute]
     for proc in procs:
         proc.kill()
     _, alive = psutil.wait_procs(procs, timeout=timeout)
     if alive:
         raise RuntimeError(f"Server did not exit within {timeout}s: {alive}")
-    print(f"    Stopped {len(procs)} process(es)")
+    log.info("stopped server", processes=len(procs))
     return exe
 
 
@@ -73,33 +80,44 @@ def main() -> int:
     parser.add_argument("--saved-games", type=Path, default=Path.home() / "Saved Games")
     parser.add_argument("--stop-timeout", type=int, default=60)
     args = parser.parse_args()
+    structlog.configure(logger_factory=structlog.PrintLoggerFactory(sys.stderr))
 
     missions_dir = args.saved_games / args.write_dir / "Missions"
     target = missions_dir / "Operation Infinity.miz"
 
-    print(f"==> Pulling {REPO_ROOT}")
+    log.info("pulling repository", path=str(REPO_ROOT))
     subprocess.run(["git", "-C", str(REPO_ROOT), "pull", "--ff-only"], check=True)
 
     with tempfile.TemporaryDirectory() as tmp:
         staging = Path(tmp) / "Operation Infinity.miz"
 
-        print("==> Packing mission")
+        log.info("packing mission")
         subprocess.run(
             [sys.executable, str(PACK_SCRIPT), "--output", str(staging)], check=True
         )
 
-        print("==> Stopping DCS server")
-        server_exe = stop_server(args.stop_timeout) or args.server_exe
+        log.info("looking for running server")
+        running_exe = stop_server(args.stop_timeout)
+        if running_exe is None:
+            server_exe = args.server_exe
+            log.info("using --server-exe", exe=str(server_exe))
+        else:
+            server_exe = running_exe
+            log.info("reusing running server's executable", exe=str(server_exe))
 
-        print(f"==> Installing mission to {target}")
+        log.info("installing mission", path=str(target))
         missions_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(staging, target)
 
-    print(f"==> Starting {server_exe}")
     if not server_exe.exists():
-        print(f"ERROR: Server executable not found: {server_exe} (pass --server-exe)")
+        log.error(
+            "server executable not found",
+            exe=str(server_exe),
+            hint="pass --server-exe",
+        )
         return 1
-    subprocess.Popen(
+    log.info("starting server", exe=str(server_exe), write_dir=args.write_dir)
+    server = subprocess.Popen(
         [str(server_exe), "-w", args.write_dir],
         cwd=server_exe.parent,
         creationflags=getattr(subprocess, "DETACHED_PROCESS", 0)
@@ -107,7 +125,7 @@ def main() -> int:
         close_fds=True,
     )
 
-    print("Done.")
+    log.info("started server", pid=server.pid)
     return 0
 
 
