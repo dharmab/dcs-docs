@@ -1,6 +1,6 @@
 # Simulator Scripting Engine
 
-The Simulator Scripting Engine (SSE) runs Lua scripts inside a DCS World mission and provides the functions those scripts use to read and control the simulation. For example, scripts can:
+The Simulator Scripting Engine (SSE) runs [Lua](https://www.lua.org/about.html) scripts inside a DCS World mission and provides the functions those scripts use to read and control the simulation. For example, scripts can:
 
 - Spawn groups during the mission
 - React to events such as shots, kills, and takeoffs
@@ -12,7 +12,7 @@ The Simulator Scripting Engine (SSE) runs Lua scripts inside a DCS World mission
 
 - [Overview](#overview)
 - [Scripting Environments](#scripting-environments)
-- [Lua Basics](#lua-basics)
+- [Standard Library Availability](#standard-library-availability)
 - [Data Types](#data-types)
 - [Scripting Concepts](#scripting-concepts)
 - [Adding Scripts to Missions](#adding-scripts-to-missions)
@@ -37,11 +37,7 @@ Use a mission script for behavior specific to one mission. Use a server hook for
 
 The two environments do not share variables, and most functions are available in only one of them. Most of this documentation, including the `coalition`, `trigger`, and `world` singletons, applies only to mission scripts. The [Available APIs](reference/hooks/server-hooks.md#available-apis) table lists which APIs each environment can call.
 
-## Lua Basics
-
-For an introduction to the Lua programming language, including variables, tables, control structures, loops, functions, and other fundamentals, see [Lua Basics for DCS Scripting](lua-basics.md).
-
-### Standard Library Availability
+## Standard Library Availability
 
 Mission scripts have access to most of the Lua standard library, including `math`, `string`, and `table`. Missions are shared online and downloaded from multiplayer servers, and their scripts run without any prompt, so a malicious mission could harm the computer that runs it. To prevent this, `Scripts/MissionScripting.lua` sets six globals to `nil` before any mission script runs: `io`, `lfs`, `os`, `require`, `loadlib`, and `package`. Without `io`, `lfs` (LuaFileSystem), and `os`, a script cannot read, write, or delete files, or start other programs through the operating system shell. Without `require`, `loadlib`, and `package`, a script cannot load Lua modules or DLLs.
 
@@ -346,8 +342,8 @@ The execution order is:
 2. **Group Spawn Conditions** - Evaluate during mission loading
 3. **MISSION START Triggers** - Execute at mission start
 4. **Waypoint 1 Scripts** - Execute as groups spawn at their first waypoints
-5. **TIME LESS Triggers** - Triggers that are already true at mission start
-6. **TIME MORE Triggers** - Triggers that become true after time elapses
+5. **Triggers true at mission start** - Triggers whose conditions are true at time 0, such as `TIME LESS 1`
+6. **Triggers true later** - Triggers whose conditions first become true after time 0, such as `TIME MORE 0`
 7. **Waypoint 2+ Scripts** - Execute as groups reach subsequent waypoints
 
 Within a single trigger, conditions and actions evaluate top to bottom in the order they appear in the editor. If trigger A is above trigger B in the trigger list and both execute at the same time, trigger A runs first.

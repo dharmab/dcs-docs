@@ -7,7 +7,7 @@ This directory contains documentation for DCS World mission design and scripting
 If you're new to DCS World mission creation, work through these documents in order:
 
 1. **[Mission Editor Guide](mission-editor.md)** - Learn the graphical interface for creating missions, including unit placement, route planning, triggers, and AI tasking
-2. **[Lua Basics](scripting/lua-basics.md)** - Essential Lua programming concepts for scripting
+2. **[Lua Basics](scripting/lua-basics.md)** - Essential [Lua](https://www.lua.org/about.html) programming concepts for scripting
 3. **[Simulator Scripting Engine](scripting/simulator-scripting-engine.md)** - Programmatic mission control through the SSE API
 4. **[Scripting API Reference](#scripting-api-reference)** - Detailed API documentation for specific functions and objects
 

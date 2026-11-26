@@ -6,7 +6,7 @@ This directory documents the DCS World Simulator Scripting Engine (SSE).
 
 If you're new to DCS scripting, read these in order:
 
-1. **[lua-basics.md](lua-basics.md)** - Lua fundamentals
+1. **[lua-basics.md](lua-basics.md)** - [Lua](https://www.lua.org/about.html) fundamentals
 2. **[simulator-scripting-engine.md](simulator-scripting-engine.md)** - How scripts interact with the simulation
 3. **API Reference** - Look up specific functions as needed
 

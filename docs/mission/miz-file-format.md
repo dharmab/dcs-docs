@@ -6,7 +6,7 @@ A MIZ file is a DCS World mission. It is a ZIP archive containing the files that
 
 ### mission
 
-A Lua table containing the main mission data. See [Mission File Schema](mission-file-schema.md).
+A [Lua](https://www.lua.org/about.html) table containing the main mission data. See [Mission File Schema](mission-file-schema.md).
 
 The mission file defines:
 

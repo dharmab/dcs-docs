@@ -1,6 +1,6 @@
 # AWACS/AEW&C Aircraft Setup
 
-This recipe creates an Airborne Warning and Control System (AWACS) or Airborne Early Warning & Control (AEW&C) aircraft by editing the mission Lua file. An AWACS provides radar coverage, broadcasts on datalink, and answers player radio requests for bogey dope and vectors.
+This recipe creates an Airborne Warning and Control System (AWACS) or Airborne Early Warning & Control (AEW&C) aircraft by editing the mission [Lua](https://www.lua.org/about.html) file. An AWACS provides radar coverage, broadcasts on datalink, and answers player radio requests for bogey dope and vectors.
 
 > **Note on In-Game AWACS Limitations:** The built-in DCS AWACS radio provides limited information, uses non-standard brevity, and lacks the situational awareness features that many players expect. For multiplayer servers, consider an external GCI/AWACS bot such as [SkyEye](https://github.com/dharmab/skyeye/) on a separate frequency. The in-game AWACS aircraft is still useful for **datalink (Link-16) contacts** via EPLRS.
 

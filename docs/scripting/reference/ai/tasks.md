@@ -87,7 +87,7 @@ local controlled = {
 - `task` (table): The inner task.
 - `condition` (table): Start conditions, checked once when the task is reached.
   - `time` (number): Mission time in seconds.
-  - `condition` (string): Lua code that returns true or false.
+  - `condition` (string): [Lua](https://www.lua.org/about.html) code that returns true or false.
   - `userFlag` (string): Flag name to check.
   - `userFlagValue` (boolean): Expected flag value.
   - `probability` (number): Chance of running, 0-100.

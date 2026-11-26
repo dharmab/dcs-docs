@@ -1,6 +1,6 @@
 # SAM Site Deployment Guide
 
-This recipe places Surface-to-Air Missile (SAM) sites by editing the mission Lua file. It covers how each system is composed, which radars it depends on, and where to place it.
+This recipe places Surface-to-Air Missile (SAM) sites by editing the mission [Lua](https://www.lua.org/about.html) file. It covers how each system is composed, which radars it depends on, and where to place it.
 
 > **Note:** Most SAM systems need several vehicles. A launcher usually needs a tracking radar, and the radar may need a search radar or command post. A launcher alone does not work.
 

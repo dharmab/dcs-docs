@@ -1,6 +1,6 @@
 # Aerial Refueling Tanker Setup
 
-This recipe creates tankers by editing the mission Lua file. A tanker flies an anchored track, broadcasts a TACAN beacon for navigation, and refuels aircraft that request it.
+This recipe creates tankers by editing the mission [Lua](https://www.lua.org/about.html) file. A tanker flies an anchored track, broadcasts a TACAN beacon for navigation, and refuels aircraft that request it.
 
 ## Overview
 

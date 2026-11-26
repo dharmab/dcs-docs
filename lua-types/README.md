@@ -6,7 +6,7 @@ Without the stubs, lua-language-server reports every SSE global as undefined. Wi
 
 ## Usage
 
-In this repository, `.luarc.json` at the repository root adds `lua-types` to `workspace.library` and sets the runtime to Lua 5.1. Editors with a lua-language-server extension read this file automatically. To lint all Lua files from the command line, run:
+In this repository, `.luarc.json` at the repository root adds `lua-types` to `workspace.library` and sets the runtime to [Lua](https://www.lua.org/about.html) 5.1. Editors with a lua-language-server extension read this file automatically. To lint all Lua files from the command line, run:
 
 ```sh
 lua-language-server --check . --checklevel=Warning

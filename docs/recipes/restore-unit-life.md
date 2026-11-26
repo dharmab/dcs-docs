@@ -4,7 +4,7 @@ The mission scripting API has no `unit:setLife()`. There are two workarounds: ca
 
 ## Set life with a trigger command
 
-Run this in a Lua environment with `net.dostring_in` access, such as a server hook, with permission to execute code in the `mission` state (see [cross-environment execution](../scripting/reference/singletons/net.md#netdostring_in)). The hook needs the target unit's numeric ID, not its name or a `Unit` object. In mission scripting, `unit:getID()` returns the ID; pass it to the hook through your own integration.
+Run this in a [Lua](https://www.lua.org/about.html) environment with `net.dostring_in` access, such as a server hook, with permission to execute code in the `mission` state (see [cross-environment execution](../scripting/reference/singletons/net.md#netdostring_in)). The hook needs the target unit's numeric ID, not its name or a `Unit` object. In mission scripting, `unit:getID()` returns the ID; pass it to the hook through your own integration.
 
 ```lua
 -- In a server hook; unitId is the target unit's numeric ID.

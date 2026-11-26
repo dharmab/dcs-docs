@@ -1,6 +1,6 @@
 # Lua Basics for DCS Scripting
 
-This document covers enough Lua to start writing DCS World scripts.
+This document covers enough [Lua](https://www.lua.org/about.html) to start writing DCS World scripts.
 
 DCS uses Lua 5.1. Features from newer versions of the language are not available.
 

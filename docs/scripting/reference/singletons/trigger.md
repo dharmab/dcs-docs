@@ -714,7 +714,7 @@ The `trigger.action.setAITask` function makes one of a group's Triggered Actions
 - `group` (Group): The group.
 - `taskIndex` (number): The index of the task in the group's Triggered Actions list.
 
-To give a group a task built in Lua, use `controller:setTask` instead; see [controller](../classes/controller.md).
+To give a group a task built in [Lua](https://www.lua.org/about.html), use `controller:setTask` instead; see [controller](../classes/controller.md).
 
 ## trigger.action.pushAITask
 
