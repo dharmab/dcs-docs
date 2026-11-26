@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["structlog>=26.1.0"]
+# dependencies = [
+#     "humanize>=4.17.0",
+#     "structlog>=26.1.0",
+# ]
 # ///
 """
 Pack Operation Infinity mission source files into a .miz archive.
@@ -17,6 +20,7 @@ import sys
 import zipfile
 from pathlib import Path
 
+import humanize
 import structlog
 
 log = structlog.get_logger()
@@ -133,7 +137,7 @@ def pack_mission(output_path: Path | None = None) -> Path:
     log.info(
         "packed mission",
         path=str(output_path),
-        size_kb=round(output_path.stat().st_size / 1024, 1),
+        size=humanize.naturalsize(output_path.stat().st_size),
     )
     return output_path
 

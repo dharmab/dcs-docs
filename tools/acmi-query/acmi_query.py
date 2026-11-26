@@ -31,6 +31,7 @@ from collections.abc import Iterator
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import humanize
 import structlog
 
 log = structlog.get_logger()
@@ -531,7 +532,9 @@ def prune_cache(directory: Path) -> None:
             continue
     if pruned:
         log.info(
-            "pruned cached indexes", files=pruned, max_age_h=CACHE_MAX_AGE_S // 3600
+            "pruned cached indexes",
+            files=pruned,
+            max_age=humanize.precisedelta(CACHE_MAX_AGE_S),
         )
 
 
@@ -563,7 +566,7 @@ def build_index(acmi: Path, db_path: Path) -> None:
         tmp.unlink(missing_ok=True)
     log.info(
         "indexed recording",
-        seconds=round(time.monotonic() - start),
+        duration=humanize.precisedelta(time.monotonic() - start, format="%0.0f"),
         index=str(db_path),
     )
 

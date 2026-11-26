@@ -26,6 +26,7 @@ import struct
 import sys
 from pathlib import Path
 
+import humanize
 import numpy as np
 import rasterio
 import structlog
@@ -273,7 +274,7 @@ def write_mock_terrain(terrain_dir: Path, output: Path) -> None:
         columns=surface.shape[1],
         cell_m=pixel,
         roads=len(roads),
-        size_kb=round(output.stat().st_size / 1024),
+        size=humanize.naturalsize(output.stat().st_size),
     )
 
 
@@ -330,7 +331,7 @@ def main() -> int:
         columns=mask.shape[1],
         cell_m=cell,
         blocked=f"{mask.mean():.0%}",
-        size_kb=round(output.stat().st_size / 1024),
+        size=humanize.naturalsize(output.stat().st_size),
     )
     write_mock_terrain(terrain_dir, script_dir / "tests" / "mock_terrain.lua")
     return 0

@@ -8,6 +8,7 @@ import sys
 import time
 from pathlib import Path
 
+import humanize
 import structlog
 
 from . import export
@@ -157,7 +158,7 @@ def main(argv: list[str] | None = None) -> None:
     log.info(
         "exported terrains",
         terrains=len(terrains),
-        seconds=round(time.monotonic() - started),
+        duration=humanize.precisedelta(time.monotonic() - started, format="%0.0f"),
     )
 
 

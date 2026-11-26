@@ -10,6 +10,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+import humanize
 import numpy as np
 import pyogrio.raw
 import rasterio
@@ -481,4 +482,5 @@ def _export_job(
     (out / "terrain.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    log.info("exported terrain", seconds=round(time.monotonic() - started))
+    elapsed = humanize.precisedelta(time.monotonic() - started, format="%0.0f")
+    log.info("exported terrain", duration=elapsed)

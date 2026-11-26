@@ -1,6 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
+#     "humanize>=4.17.0",
 #     "psutil",
 #     "structlog>=26.1.0",
 # ]
