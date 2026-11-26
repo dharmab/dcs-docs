@@ -11,12 +11,13 @@ A monorepo for building DCS World missions. It contains reference documentation,
 
 ## Layout
 
-| Path                     | Contents                                                   |
-| ------------------------ | ---------------------------------------------------------- |
-| [`docs/`](docs/)         | Tutorials, how-to guides, and reference for mission making |
-| [`tools/`](tools/)       | CLI tools for automating parts of mission making           |
-| [`missions/`](missions/) | Missions I've made                                         |
-| [`liveries/`](liveries/) | Livery names for each unit                                 |
+| Path                       | Contents                                                   |
+| -------------------------- | ---------------------------------------------------------- |
+| [`docs/`](docs/)           | Tutorials, how-to guides, and reference for mission making |
+| [`tools/`](tools/)         | CLI tools for automating parts of mission making           |
+| [`missions/`](missions/)   | Missions I've made                                         |
+| [`liveries/`](liveries/)   | Livery names for each unit                                 |
+| [`lua-types/`](lua-types/) | lua-language-server type stubs for the SSE Lua API         |
 
 ## Documentation
 
