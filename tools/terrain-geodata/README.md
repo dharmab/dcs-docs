@@ -93,7 +93,7 @@ z, x = to_dcs.transform(41.6, 41.6)  # (longitude, latitude) in, (z, x) out
 the terrain mesh triangle under the pixel centre. Where classes overlap, the
 class with the higher value is used (a river through a forest is `river`).
 
-![Land cover of the eastern Caucasus map](images/caucasus/landcover.webp)
+![Land cover of the eastern Caucasus map](images/caucasus/landcover.webp "The image shows the eastern part of the Caucasus map, which has the detailed mesh. The colors are the raster's color table, which GIS tools also use.")
 
 | Value | Class    | Color       | Meaning                                                         |
 | ----- | -------- | ----------- | --------------------------------------------------------------- |
@@ -107,9 +107,6 @@ class with the higher value is used (a river through a forest is `river`).
 | 7     | `lake`   | Blue        | Lake or reservoir                                               |
 | 8     | `sea`    | Dark blue   | Sea                                                             |
 | 9     | `runway` | Dark grey   | Runway and airfield paving                                      |
-
-The image shows the eastern part of the Caucasus map, which has the detailed
-mesh. The colors are the raster's color table, which GIS tools also use.
 
 Things to keep in mind:
 
@@ -143,11 +140,10 @@ centre, interpolated across the triangle under it. Sea, lakes and
 pixels outside the mesh are `-32768` (the raster's nodata value). `terrain.json`
 records the pixel size and the lowest and highest values under `elevation`.
 
-![Elevation of the eastern Caucasus map](images/caucasus/elevation.webp)
+![Elevation of the eastern Caucasus map](images/caucasus/elevation.webp "The image shows the eastern part of the Caucasus map, which has the detailed mesh.")
 
-The image shows the same area. Height is colored from green at sea level
-through tan and brown to white above 4,000 m, with hillshading. Nodata is
-transparent.
+The image colors height from green at sea level through tan and brown to white
+above 4,000 m, with hillshading. Nodata is transparent.
 
 Use it for planning at map scale: which areas are mountains, valleys or
 plains, where low ground lies between ridges, and the approximate height of a
