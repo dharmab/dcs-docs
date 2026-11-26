@@ -82,6 +82,15 @@ h.test("EWR track inside cue range turns the site on", function()
     h.eq(ctx.samSite.lastCueSource, "EWR cue")
 end)
 
+h.test("EWR detection of a blue missile is not a cue", function()
+    local ctx = setup()
+    local missile =
+        ctx.env.makeWeapon({ guidance = Weapon.GuidanceType.RADAR_ACTIVE, x = SITE.x + 50 * KM, z = SITE.y })
+    ctx.env.detections[ctx.ewr.name] = { missile }
+    ctx.env.advance(IADS.config.updateInterval)
+    h.ok(not ctx.emitting())
+end)
+
 h.test("EWR track outside cue range leaves the site dark", function()
     local ctx = setup()
     ctx.intruder(100 * KM)

@@ -179,6 +179,12 @@ local function isBlueAircraft(object)
     if not object or not object:isExist() then
         return false
     end
+    -- Detections include weapons, whose getDesc().category is a Weapon.Category
+    -- value that can equal a Unit.Category value
+    local objectIsUnit = object:getCategory() == Object.Category.UNIT
+    if not objectIsUnit then
+        return false
+    end
     if object:getCoalition() ~= coalition.side.BLUE then
         return false
     end
