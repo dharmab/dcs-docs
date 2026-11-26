@@ -174,11 +174,17 @@ The `controller:getDetectedTargets` method returns targets detected by the unit 
 
 **Returns:** An array of detected target tables. Each table contains `object`, `visible`, `type`, and `distance` fields.
 
+The `object` field can be a `Unit` or a `Weapon`. A radar can detect missiles in flight, for example. `Weapon` has no `getID` or `getGroup` method. Check `object:getCategory()` against `Object.Category.UNIT` before calling `Unit` methods. A weapon's `getDesc().category` is a `Weapon.Category` value, and `Weapon.Category.MISSILE` equals `Unit.Category.HELICOPTER`, so `getDesc().category` alone does not identify aircraft.
+
 ```lua
 local targets = controller:getDetectedTargets(Controller.Detection.RADAR + Controller.Detection.VISUAL)
 for _, target in ipairs(targets) do
-    if target.object and target.object:isExist() then
-        env.info("Detected: " .. target.object:getName())
+    local object = target.object
+    if object and object:isExist() then
+        local objectIsUnit = object:getCategory() == Object.Category.UNIT
+        if objectIsUnit then
+            env.info("Detected unit: " .. object:getName() .. " (ID " .. object:getID() .. ")")
+        end
     end
 end
 ```

@@ -533,6 +533,9 @@ function Mock.install(options)
         function weapon:getCategory()
             return Object.Category.WEAPON
         end
+        function weapon:getCoalition()
+            return spec.side or coalition.side.BLUE
+        end
         return weapon
     end
 
