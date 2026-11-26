@@ -215,15 +215,14 @@ has data for every terrain.
 
 The `roads` layer may not include every road in the 3D terrain.
 
-Query a layer with SQLite. Geometry is stored as GeoPackage binary, so use a
-GIS library to read geometry:
+SQLite can query the attribute columns:
 
 ```bash
 sqlite3 docs/data/terrains/Caucasus/features.gpkg \
   "SELECT count(*), round(sum(length_m) / 1000) AS km FROM railways"
 ```
 
-Or with `pyogrio`/`geopandas`:
+Use a GIS library such as `geopandas` to read geometry:
 
 ```python
 import geopandas as gpd
