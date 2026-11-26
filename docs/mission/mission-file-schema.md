@@ -695,6 +695,6 @@ DCS uses a flat Cartesian coordinate system in meters, measured from a theatre-s
 
 In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3 `{x = x, y = alt, z = y}`.
 
-Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [Terrain Geodata](../terrains/geodata.md#coordinate-system).
+Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [terrain-geodata](../../tools/terrain-geodata/README.md#coordinate-system).
 
 [^static-skill]: `unload_static_groups` in `MissionEditor/modules/me_mission.lua` saves static units without a `skill` field, and none of the 265,749 static units in the missions bundled with DCS World has one.

@@ -25,7 +25,7 @@ A monorepo for building DCS World missions. It contains reference documentation,
 - [units/](docs/units/) - Aircraft, ground, sea, and weapon data
 - [recipes/](docs/recipes/) - Step-by-step guides for editing mission files directly: tankers, AWACS, SAM sites, player slots, and more
 - [factions/](docs/factions/) - Strangereal faction unit lists
-- [terrains/geodata.md](docs/terrains/geodata.md) - Terrain GIS data
+- [data/terrains/](docs/data/terrains/) - Terrain GIS data, documented in [tools/terrain-geodata](tools/terrain-geodata/README.md)
 - [wisdom.md](docs/wisdom.md) - Mission design tips and pitfalls
 
 New mission designers can start with the [Mission Editor Guide](docs/mission-editor.md), [Lua Basics](docs/scripting/lua-basics.md), and the [Simulator Scripting Engine](docs/scripting/simulator-scripting-engine.md) overview.
