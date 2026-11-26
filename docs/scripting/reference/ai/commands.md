@@ -188,12 +188,14 @@ The `type` field is the beacon type. TACAN is `4`. See [Beacon Types](../enums/a
 
 The `system` field is the beacon system (see [Beacon Systems](../enums/ai.md#beacon-systems)). For TACAN, it depends on what kind of unit transmits the beacon:
 
-| Unit                                  | X mode                       | Y mode                       |
-| ------------------------------------- | ---------------------------- | ---------------------------- |
-| Ship                                  | `3` (`TACAN`)                | `3` (`TACAN`)                |
-| Tanker aircraft                       | `4` (`TACAN_TANKER_MODE_X`)  | `5` (`TACAN_TANKER_MODE_Y`)  |
-| Ground vehicle                        | `18` (`TACAN_MOBILE_MODE_X`) | `19` (`TACAN_MOBILE_MODE_Y`) |
-| Non-tanker aircraft (air-to-air)[^aa] | `13` (`TACAN_AA_MODE_X`)     | `14` (`TACAN_AA_MODE_Y`)     |
+| Unit                             | X mode                       | Y mode                       |
+| -------------------------------- | ---------------------------- | ---------------------------- |
+| Ship                             | `3` (`TACAN`)                | `3` (`TACAN`)                |
+| Tanker aircraft                  | `4` (`TACAN_TANKER_MODE_X`)  | `5` (`TACAN_TANKER_MODE_Y`)  |
+| Ground vehicle                   | `18` (`TACAN_MOBILE_MODE_X`) | `19` (`TACAN_MOBILE_MODE_Y`) |
+| Non-tanker aircraft (air-to-air) | `13` (`TACAN_AA_MODE_X`)     | `14` (`TACAN_AA_MODE_Y`)     |
+
+An air-to-air TACAN beacon (`13` or `14`) provides range and no bearing. Flights use it as a yardstick to read the distance between aircraft.
 
 The `type` and `system` values are separate: a carrier's TACAN uses `type = 4` and `system = 3`.
 
@@ -421,5 +423,3 @@ The `value` field sets the smoke trail state: `true` turns the smoke trail on, `
 - [AI Options](options.md) - AI behavior options
 - [AI Enums](../enums/ai.md) - Beacon types and systems
 - [Controller](../classes/controller.md) - Controller class for issuing commands
-
-[^aa]: `fill_TACAN` in `MissionEditor/modules/me_action_db.lua` assigns `13` or `14` to aircraft without a ground-style TACAN station, such as a fighter flight lead. These beacons carry `SIGNAL_TACAN_RANGE_AA` and no bearing (`Scripts/World/Radio/BeaconSites.lua`).

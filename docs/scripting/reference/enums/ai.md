@@ -104,7 +104,7 @@ AI.Task.WaypointType = {
 
 ## Beacon Types
 
-These constants are not defined in the mission scripting environment, so pass the numbers directly.[^beacons]
+These constants are not defined in the mission scripting environment, so pass the numbers directly.
 
 ```lua
 BEACON_TYPE_NULL = 0
@@ -132,7 +132,7 @@ BEACON_TYPE_TACAN_RANGE = 262144
 
 ## Beacon Systems
 
-`SystemName` is not defined in the mission scripting environment, so pass the numbers directly.[^beacons]
+`SystemName` is not defined in the mission scripting environment, so pass the numbers directly.
 
 ```lua
 SystemName = {
@@ -162,7 +162,7 @@ SystemName = {
 
 ## Weapon Flags
 
-Weapon flags are a bitmask of weapon classes. Each class occupies one or more bits, and broader categories combine the bits of their members. They are used by the `weaponType` field of attack tasks and by the [`RTB_ON_OUT_OF_AMMO`](../ai/options.md#rtb_on_out_of_ammo) option. There are no constants for them in the mission scripting environment, so pass the numbers directly.[^weapon-flags]
+Weapon flags are a bitmask of weapon classes. Each class occupies one or more bits, and broader categories combine the bits of their members. They are used by the `weaponType` field of attack tasks and by the [`RTB_ON_OUT_OF_AMMO`](../ai/options.md#rtb_on_out_of_ammo) option. There are no constants for them in the mission scripting environment, so pass the numbers directly.
 
 Each bit, or range of bits, is one weapon class:
 
@@ -238,7 +238,3 @@ A category's value is the sum of its members' bits. For example, Bombs (`0x7F0`,
 - [AI Tasks](../ai/tasks.md) - Task definitions using these enums
 - [AI Commands](../ai/commands.md) - Command definitions using beacon enums
 - [AI Options](../ai/options.md) - Option definitions
-
-[^beacons]: Defined in `Scripts/World/Radio/BeaconTypes.lua` and `Scripts/World/Radio/BeaconSites.lua` in the DCS install folder.
-
-[^weapon-flags]: Values from the weapon table in `MissionEditor/modules/me_action_db.lua` in the DCS install folder.

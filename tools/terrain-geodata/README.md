@@ -48,7 +48,7 @@ These files can be read in tools like QGIS, GDAL, `rasterio` and `geopandas`.
 
 Each terrain is a transverse Mercator projection on the WGS84 ellipsoid with
 scale factor 0.9996 and latitude of origin 0. `x` increases to the north and `z`
-to the east, in metres[^proj].
+to the east, in metres.
 
 | Theatre              | Central meridian | False easting (m) | False northing (m) | Fit error |
 | -------------------- | ---------------- | ----------------- | ------------------ | --------- |
@@ -127,7 +127,7 @@ with rasterio.open("docs/data/terrains/Caucasus/landcover.tif") as src:
 `elevation.tif` is a single-band `int16` raster of height above sea level in
 whole metres, with the pixel size set by `--elevation-resolution` (default
 1 km). Each pixel is the terrain mesh height at its
-centre, interpolated across the triangle under it[^elev]. Sea, lakes and
+centre, interpolated across the triangle under it. Sea, lakes and
 pixels outside the mesh are `-32768` (the raster's nodata value). `terrain.json`
 records the pixel size and the lowest and highest values under `elevation`.
 
@@ -247,7 +247,3 @@ not assign to a layer. Lines with a road-like material name (`Road`, `Rail`,
 `Railway`) are assigned to `roads` or `railways` based on the type of the mesh
 triangles under them. To assign a set that matches neither, plot it to identify
 it, then add it to `OVERLAY_OVERRIDES` in [export.py](terrain_geodata/export.py).
-
-[^elev]: Read from the vertex heights (`Pbase`) of the most detailed tiles in `Surface/*.surface5`. Checked against the beacons that have a `position` in `Beacons.lua` (every terrain except Normandy and Mariana Islands WWII). At the committed 1 km, 1,107 of the 1,131 beacons are on a land pixel. For those, the median difference from the beacon height is 0.5 m, and 90% are within 6.7 m. The largest differences, up to 130 m, are on steep ground, where the pixel centre is several hundred metres from the beacon on a different slope.
-
-[^proj]: Fitted by the export tool against `Beacons.lua` (`position` and `positionGeo` of each beacon) and the Mission Editor town labels paired with `Map/towns.lua`. The Caucasus and Syria parameters match pydcs's `dcs/terrain/projections`.
