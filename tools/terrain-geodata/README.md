@@ -142,9 +142,6 @@ records the pixel size and the lowest and highest values under `elevation`.
 
 ![Elevation of the eastern Caucasus map](images/caucasus/elevation.webp "The image shows the eastern part of the Caucasus map, which has the detailed mesh.")
 
-The image colors height from green at sea level through tan and brown to white
-above 4,000 m, with hillshading. Nodata is transparent.
-
 Use it for planning at map scale: which areas are mountains, valleys or
 plains, where low ground lies between ridges, and the approximate height of a
 region. For anything that depends on the exact spot, such as slope under a unit
