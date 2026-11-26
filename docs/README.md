@@ -67,6 +67,7 @@ Singletons are global namespace objects.
 | [timer](scripting/reference/singletons/timer.md)                      | Mission time and scheduled functions       |
 | [world](scripting/reference/singletons/world.md)                      | Event handlers and object searches         |
 | [coalition](scripting/reference/singletons/coalition.md)              | Coalition-related operations               |
+| [coalition.side](scripting/reference/enums/coalition.md)              | Coalition IDs: neutral, red, blue          |
 | [trigger](scripting/reference/singletons/trigger.md)                  | Trigger zones and actions                  |
 | [coord](scripting/reference/singletons/coord.md)                      | Coordinate conversions                     |
 | [land](scripting/reference/singletons/land.md)                        | Terrain queries                            |
@@ -110,12 +111,6 @@ Classes are object types.
 | Document                                                         | Description                 |
 | ---------------------------------------------------------------- | --------------------------- |
 | [types/coordinates.md](scripting/reference/types/coordinates.md) | Vec2, Vec3, Position3 types |
-
-### Enums
-
-| Document                                                     | Description           |
-| ------------------------------------------------------------ | --------------------- |
-| [enums/coalition.md](scripting/reference/enums/coalition.md) | Coalition enumeration |
 
 ### Server Hooks
 
