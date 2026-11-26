@@ -3,6 +3,7 @@ name = "livery-export"
 version = "0.1.0"
 description = "Extract livery lists from DCS World installation"
 requires-python = ">=3.14"
+license = "MIT"
 dependencies = ["structlog>=26.1.0"]
 
 [dependency-groups]
