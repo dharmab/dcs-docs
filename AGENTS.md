@@ -10,12 +10,11 @@ Documentation for AI agents building tools and content for DCS World.
   - `units/` - Aircraft, ground, sea, and weapon reference
   - `recipes/` - Step-by-step guides for editing mission files directly (tankers, AWACS, SAMs, slots, comm plan, etc.)
   - `factions/` - Strangereal faction unit lists
-  - `terrains/geodata.md` - Terrain GIS files in `data/terrains/<theatre>/`: projection, places, map features, land cover
   - `wisdom.md` - Mission design tips and pitfalls
 - `tools/` - Python CLIs, each with its own `pyproject.toml`. Notable:
   - `mission-check/` - Validates a mission directory or `.miz`: `uv run check-mission check <path>`
   - `acmi-query/` - Queries Tacview recordings; see `tools/acmi-query/README.md`
-  - `terrain-geodata/` - Exports terrain GIS files from the DCS install to `docs/data/terrains/`
+  - `terrain-geodata/` - Exports terrain GIS files from the DCS install to `docs/data/terrains/`. Its README documents the output: projection, places, map features, land cover, elevation
 - `missions/` - Extracted `.miz` source directories; `missions/*/tests/` hold offline Lua tests (`make test`)
 - `lua-types/dcs.lua` - lua-language-server stubs for the SSE API. `make lint-lua` checks mission Lua against them
 

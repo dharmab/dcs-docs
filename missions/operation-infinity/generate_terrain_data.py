@@ -46,7 +46,7 @@ MOCK_Z_MIN = 150_000
 # Each mask cell covers FACTOR x FACTOR raster pixels (100 m pixels -> 200 m cells)
 FACTOR = 2
 
-# Land cover classes from docs/terrains/geodata.md
+# Land cover classes from tools/terrain-geodata/README.md
 NODATA = 0
 FOREST = 3
 RIVER = 6
