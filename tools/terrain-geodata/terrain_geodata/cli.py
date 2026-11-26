@@ -82,10 +82,19 @@ def main(argv: list[str] | None = None) -> None:
         help="Theatre id or terrain folder name; repeat for several (default: all)",
     )
     p_export.add_argument(
-        "--resolution",
+        "--landcover-resolution",
         type=float,
         default=100.0,
         help="Land cover pixel size in metres (default: 100)",
+    )
+    # Deprecated alias for --landcover-resolution, hidden from --help.
+    p_export.add_argument(
+        "--resolution",
+        dest="landcover_resolution",
+        type=float,
+        default=argparse.SUPPRESS,
+        help=argparse.SUPPRESS,
+        deprecated=True,
     )
     p_export.add_argument(
         "--elevation-resolution",
@@ -123,7 +132,7 @@ def main(argv: list[str] | None = None) -> None:
     export.export_terrains(
         terrains,
         args.out,
-        args.resolution,
+        args.landcover_resolution,
         args.elevation_resolution,
         version,
         max(args.jobs, 1),
