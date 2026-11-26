@@ -495,4 +495,4 @@ controller:setOption(AI.Option.Naval.id.ROE, AI.Option.Naval.val.ROE.WEAPON_HOLD
 - [AI Enums](../enums/ai.md) - AI-related enumerations
 - [Controller](../classes/controller.md) - Controller class for issuing options
 
-[^na-options]: The Mission Editor labels these values "BYPASS AND ESCAPE (N/A)" and "USE WHEN FLYING NEAR ENEMIES (N/A)" in `MissionEditor/modules/me_action_db.lua`. ED does not say what "N/A" means.
+[^na-options]: The Mission Editor labels these values "BYPASS AND ESCAPE (N/A)" and "USE WHEN FLYING NEAR ENEMIES (N/A)". ED does not say what "N/A" means.

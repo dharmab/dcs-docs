@@ -266,7 +266,7 @@ Returns the absolute path, resolving any symbolic links.
 
 ### Sim Control API (Sim.*)
 
-The `Sim` table contains simulation control functions. Older scripts call the same functions through `DCS.*`, which still works.[^sim-dcs]
+The `Sim` table contains simulation control functions. Older scripts call the same functions through `DCS.*`, which still works.
 
 #### Sim.setUserCallbacks
 
@@ -411,7 +411,7 @@ Returns available slots for a coalition.
 
 **Parameters:**
 
-- `coalition` (string): `"red"` or `"blue"`.[^slots-arg]
+- `coalition` (string): `"red"` or `"blue"`.
 
 **Returns:** An array of slot tables, each containing:
 
@@ -1372,7 +1372,7 @@ Called when a radio command is issued.
 
 ### Undocumented Callbacks
 
-These callbacks are undocumented, so they may change between versions.[^undocumented-callbacks]
+These callbacks are undocumented, so they may change between versions.
 
 | Callback                                     | Notes                                                                                                                                                                      |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1535,9 +1535,3 @@ Use `print()` for quick debugging; output appears in `dcs.log`.
 - [Simulator Scripting Engine](../../simulator-scripting-engine.md) - Mission scripting (different API from server hooks)
 - [Events](../events/events.md) - Mission scripting events (not available in hooks)
 - [Coalition](../enums/coalition.md) - Coalition enumeration values
-
-[^sim-dcs]: `Sim.*` is the name in ED's current `API/Sim_ControlAPI.md`. DCS's own `Scripts/Hooks/*.lua` and `MissionEditor/GameGUI.lua` still use `DCS.*`.
-
-[^slots-arg]: ED's `API/Sim_ControlAPI.md` names this parameter `coalitionID`, but every call in DCS's own GUI and hook scripts passes the name string, e.g. `DCS.getAvailableSlots("red")`.
-
-[^undocumented-callbacks]: Used by the hook scripts that ship in `Scripts/Hooks/` (`multiplayerCoalitionBlocker.lua`, `multislot.lua`, `common.lua`) but missing from `API/Sim_ControlAPI.md`.

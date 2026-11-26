@@ -422,4 +422,4 @@ The `value` field sets the smoke trail state: `true` turns the smoke trail on, `
 - [AI Enums](../enums/ai.md) - Beacon types and systems
 - [Controller](../classes/controller.md) - Controller class for issuing commands
 
-[^aa]: `fill_TACAN` in `MissionEditor/modules/me_action_db.lua` assigns `13` or `14` to aircraft without a ground-style TACAN station, such as a fighter flight lead. These beacons carry `SIGNAL_TACAN_RANGE_AA` and no bearing (`Scripts/World/Radio/BeaconSites.lua`).
+[^aa]: For example, a fighter flight lead. Air-to-air TACAN beacons provide range and no bearing.

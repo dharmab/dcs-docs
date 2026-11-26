@@ -248,6 +248,6 @@ not assign to a layer. Lines with a road-like material name (`Road`, `Rail`,
 triangles under them. To assign a set that matches neither, plot it to identify
 it, then add it to `OVERLAY_OVERRIDES` in [export.py](terrain_geodata/export.py).
 
-[^elev]: Read from the vertex heights (`Pbase`) of the most detailed tiles in `Surface/*.surface5`. Checked against the beacons that have a `position` in `Beacons.lua` (every terrain except Normandy and Mariana Islands WWII). At the committed 1 km, 1,107 of the 1,131 beacons are on a land pixel. For those, the median difference from the beacon height is 0.5 m, and 90% are within 6.7 m. The largest differences, up to 130 m, are on steep ground, where the pixel centre is several hundred metres from the beacon on a different slope.
+[^elev]: Compared with the beacon heights in each terrain's beacon list, the median difference at 1 km is 0.5 m, and 90% of beacons on land pixels are within 6.7 m. Differences up to 130 m occur on steep ground, where the pixel centre is several hundred metres from the beacon.
 
-[^proj]: Fitted by the export tool against `Beacons.lua` (`position` and `positionGeo` of each beacon) and the Mission Editor town labels paired with `Map/towns.lua`. The Caucasus and Syria parameters match pydcs's `dcs/terrain/projections`.
+[^proj]: The parameters are fitted to beacon and town positions. The Caucasus and Syria parameters match the projections in [pydcs](https://github.com/pydcs/dcs/tree/master/dcs/terrain/projections).

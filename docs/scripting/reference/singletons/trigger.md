@@ -761,7 +761,7 @@ If `flagValue` is omitted, the `addOtherCommand*` functions set the flag to `tru
 - [controller](../classes/controller.md) - Setting AI tasks from Lua
 - [MIZ File Format](../../../mission/miz-file-format.md) - Where sound files go in the archive
 
-[^markers]: Hoggit Wiki, [DCS func markToAll](https://wiki.hoggitworld.com/view/DCS_func_markToAll), [DCS func markToCoalition](https://wiki.hoggitworld.com/view/DCS_func_markToCoalition), [DCS func markToGroup](https://wiki.hoggitworld.com/view/DCS_func_markToGroup), [DCS func circleToAll](https://wiki.hoggitworld.com/view/DCS_func_circleToAll), and [DCS func removeMark](https://wiki.hoggitworld.com/view/DCS_func_removeMark). These functions are engine-side; no installed Lua file defines them.
+[^markers]: Hoggit Wiki, [DCS func markToAll](https://wiki.hoggitworld.com/view/DCS_func_markToAll), [DCS func markToCoalition](https://wiki.hoggitworld.com/view/DCS_func_markToCoalition), [DCS func markToGroup](https://wiki.hoggitworld.com/view/DCS_func_markToGroup), [DCS func circleToAll](https://wiki.hoggitworld.com/view/DCS_func_circleToAll), and [DCS func removeMark](https://wiki.hoggitworld.com/view/DCS_func_removeMark).
 
 [^text]: Hoggit Wiki, [DCS func outTextForCountry](https://wiki.hoggitworld.com/view/DCS_func_outTextForCountry).
 

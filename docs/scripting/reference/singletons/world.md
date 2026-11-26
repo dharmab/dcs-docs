@@ -31,7 +31,7 @@ end
 world.addEventHandler(deathLogger)
 ```
 
-Handler behavior:[^event-handlers]
+Handler behavior:
 
 - Calling `world.addEventHandler` again with the same table has no effect: its `onEvent` still runs once per event.
 - The order in which handlers run is not defined.
@@ -182,5 +182,3 @@ The `world.getMarkPanels` function returns all map markers currently visible.
 - [object](../classes/object.md) - Object categories and base class
 - [coalition](coalition.md) - Coalition-specific object queries
 - [airbase](../classes/airbase.md) - Airbase objects
-
-[^event-handlers]: `Scripts/World/EventHandlers.lua` stores handlers in `world.eventHandlers` keyed by the handler table, and `world.onEvent` calls each with `pairs` and no `pcall`.

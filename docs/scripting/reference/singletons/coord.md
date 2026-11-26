@@ -36,7 +36,7 @@ The `coord.LOtoLL` function converts game XYZ coordinates to Latitude/Longitude/
 
 **Parameters:**
 
-- `point` (Vec3): The game coordinates, where y is altitude.[^lotoll]
+- `point` (Vec3): The game coordinates, where y is altitude.
 
 **Returns:** Three numbers representing the latitude, longitude, and altitude.
 
@@ -88,5 +88,3 @@ The `coord.MGRStoLL` function converts MGRS coordinates to Latitude/Longitude.
 - [land](land.md) - Terrain height queries
 
 [^lltolo]: [MOOSE `Core/Point.lua`](https://github.com/FlightControl-Master/MOOSE/blob/master/Moose%20Development/Moose/Core/Point.lua) (`COORDINATE:NewFromLLDD`, `COORDINATE:GetNorthCorrectionRadians`) and [MIST](https://github.com/mrSkortch/MissionScriptingTools/blob/master/mist.lua) (`mist.getNorthCorrection`) call `coord.LLtoLO(lat, lon)` and read `.x` and `.z` from the result.
-
-[^lotoll]: `Scripts/Speech/NATO.lua` in the DCS install calls `coord.LOtoLL(point)` with a single point table.

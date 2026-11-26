@@ -2,7 +2,7 @@
 
 The `mission` file is a Lua table containing the complete mission definition. This page documents every top-level key and its nested structures.
 
-> **Important:** DCS fails to load a mission that omits a required key. Use `{}` for an unused required table, such as `goals` in a mission without scoring.[^required]
+> **Important:** DCS fails to load a mission that omits a required key. Use `{}` for an unused required table, such as `goals` in a mission without scoring.
 
 ## Top-Level Keys
 
@@ -37,8 +37,6 @@ The `mission` file is a Lua table containing the complete mission definition. Th
 | `trigrules`               | table  | No       | Trigger rules with conditions and actions                                    |
 | `version`                 | number | Yes      | Mission file format version                                                  |
 | `weather`                 | table  | Yes      | Weather configuration                                                        |
-
-[^required]: `goals`, `result`, and `trig` are needed to run the mission. The mission loader in `MissionEditor/modules/me_mission.lua` raises a Lua error when `coalition`, `coalitions`, `currentKey`, `start_time`, `version`, or `weather` is nil. Each key marked No either has a default in the loader or is missing from some of the missions bundled with DCS World.
 
 ---
 
@@ -574,7 +572,7 @@ Groups are containers for one or more units that share a common route and task.
 | `livery_id` | string | Livery/skin name               |
 | `rate`      | string | (Unsure - possibly spawn rate) | <!-- TODO: QA - Verify what the rate field means for static objects --> |
 
-Static objects have no `skill`.[^static-skill]
+Static objects have no `skill`.
 
 ---
 
@@ -696,5 +694,3 @@ DCS uses a flat Cartesian coordinate system in meters, measured from a theatre-s
 In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3 `{x = x, y = alt, z = y}`.
 
 Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [terrain-geodata](../../tools/terrain-geodata/README.md#coordinate-system).
-
-[^static-skill]: `unload_static_groups` in `MissionEditor/modules/me_mission.lua` saves static units without a `skill` field, and none of the 265,749 static units in the missions bundled with DCS World has one.
