@@ -20,11 +20,11 @@
   "features": {
     "layers": {
       "places": 1225,
-      "roads": 652,
+      "roads": 645,
       "railways": 0,
       "rivers": 0,
       "power_lines": 93,
-      "borders": 0,
+      "borders": 79,
       "urban_areas": 384,
       "runways": 0
     },
@@ -34,8 +34,8 @@
       "Road/LINELIST/colorIndex=5": "roads",
       "Town/TRI/colorIndex=4": "urban_areas",
       "Undef/TRI/colorIndex=10": "skipped",
-      "Undef/TRI/colorIndex=13": "skipped",
-      "Undef/TRI/colorIndex=2": "skipped",
+      "Undef/TRI/colorIndex=13": "borders",
+      "Undef/TRI/colorIndex=2": "borders",
       "Undef/TRI/colorIndex=7": "skipped",
       "Undef/TRI/colorIndex=8": "skipped",
       "Undef/TRI/colorIndex=9": "skipped"
