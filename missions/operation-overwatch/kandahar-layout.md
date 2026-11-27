@@ -94,6 +94,26 @@ The screenshots were taken in an empty new mission, so these icons belong to the
 
 Every stand had `Term_Index_0` = -1 and `TO_AC` = false. `fDistToRW` is the distance to the runway in metres.
 
+## Decoration in the Mission
+
+The mission's static groups are named `KAF <type> #NN`, and a comment above each one gives its stand (`term_index` in the CSV). Statics sit on stand positions. Aircraft face the runway or down the runway axis (toward the SW), depending on the row. The stand groups below are by position along the runway, from the CSV, not by ME label.
+
+| Area                                     | Stands (`term_index`)                             | Statics                                    |
+| ---------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
+| SE, paved area 900 m SW of the threshold | 13, 31, 216, 24                                   | Motor pool: MaxxPro, Stryker, HMMWV, HEMTT |
+| SE, helicopter row at the SW end         | 187, 6                                            | UH-60A                                     |
+| SE, dense block (N rows)                 | 163, 301, 286, 251, 55, 122, 304, 48              | Belgian and Dutch F-16A MLU, HEMTT, HMMWV  |
+| SE, widely spaced block (M rows)         | 170, 206, 108, 119, 89, 255                       | C-17A, RAF and USAF C-130, IL-76MD         |
+| SE, helicopter block (L-H)               | 125, 66, 21, 148, 191, 111                        | Canadian and RAF CH-47D, Mi-8              |
+| SE, K row                                | 309, 107, 299, 260, 194                           | MQ-9, MQ-1, Predator ground station        |
+| SE, flight line parallel to the runway   | 146, 110, 269, 182, 209, 79, 181, 41, 172         | A-10C, F/A-18C, HEMTT, M939                |
+| SE, PAN row                              | 15, 115, 68, 222                                  | AV-8B                                      |
+| SE, AAF row and shelters at the NE end   | 175, 128, 279, 272, 29                            | Mirage 2000, HMMWV, C-RAM                  |
+| NW, middle block                         | 84, 166, 254, 219, 226, 22                        | Tornado GR4, RAF crash tender, M939        |
+| Kandahar Heliport                        | 50, 59, 71, 30, 36, 11, 67, 64, 68, 37, 6, 20, 15 | AH-64D, UH-60A, CH-47F, HEMTT, M939, C-RAM |
+
+The NW big stands near midfield, the NW shelters, and most of the NE blocks are left free for Dynamic Spawn.
+
 ## Decorating Tips
 
 - Don't place statics on stands that players or AI spawn on. Look up which stands the mission's groups use (`parking` / `parking_id`; see the [player slots recipe](../../docs/recipes/player-slots.md)).

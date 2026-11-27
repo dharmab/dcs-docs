@@ -12,7 +12,7 @@ The mission file is hand-written and has not been opened in DCS. Pack it with `u
 - The AV-8B radio layout, and radio presets for the helicopters, which have none.
 - Kandahar elevation (`alt = 1017`) and FARP heights.
 
-Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at each FARP, FARP statics with fuel and ammo trucks, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
+Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at each FARP, FARP statics with fuel and ammo trucks, 76 decoration statics (aircraft and vehicles) at Kandahar and Kandahar Heliport, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
 
 `TerrainData.lua` is generated; do not edit it. It contains the area of operations polygon (Kandahar and Helmand provinces) and a 200 m mask of tasking sites, built from `docs/data/terrains/Afghanistan/`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the site rules. The generator's docstring and constants define a site.
 
@@ -58,8 +58,9 @@ Nothing has run on a server yet. Check these first:
 - Whether the AFAC MQ-9 talks on the radio menu with invisible targets.
 - `country.id.INSURGENTS` for red. The mission file's coalition setup must include it.
 - `CHAP_MATV` and `M30_CC` spawn and behave as expected.
+- Kandahar decoration: each static sits on its stand, faces a sensible way (headings are estimates from the stand pattern), and gets its country's default livery (no `livery_id` is set). Blue includes UK, France, Canada, The Netherlands, and Belgium for these statics. Dynamic Spawn still finds free stands for every type, including the F-14 and F-15E. The statics are `hidden` on the F10 map.
 - Whether RPG and DShK FireAtPoint at 400-900 m keeps firing; RPG-7 range is short of the far end.
 
 ## Not Implemented
 
-Scenario types other than Firefight, tasking modifiers, light vehicles driving away when the enemy breaks, failure on friendly loss (hits only draw a cease-fire call), base decoration, helicopter radio presets, and CH-47 transport taskings.
+Scenario types other than Firefight, tasking modifiers, light vehicles driving away when the enemy breaks, failure on friendly loss (hits only draw a cease-fire call), FARP and structure decoration (tents, HESCO, hangars), helicopter radio presets, and CH-47 transport taskings.

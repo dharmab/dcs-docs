@@ -25,7 +25,7 @@ mission = {
         ["zoom"] = 300000,
     },
     ["coalitions"] = {
-        ["blue"] = {2},
+        ["blue"] = {2, 4, 5, 8, 10, 11},
         ["red"] = {17}, -- TODO(dcs): check country.id.INSURGENTS
     },
     ["weather"] = {
@@ -2576,6 +2576,1758 @@ mission = {
                                     },
                                 },
                             },
+                            -- Kandahar decoration: static aircraft and vehicles on stands. Positions come from
+                            -- kandahar-parking.csv; headings are estimates. See kandahar-layout.md.
+                            -- Kandahar stand 170
+                            [3] = {
+                                ["groupId"] = 301,
+                                ["name"] = "KAF C-17A #01",
+                                ["x"] = -271620.4,
+                                ["y"] = -30745.9,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271620.4,
+                                            ["y"] = -30745.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 301,
+                                        ["name"] = "KAF C-17A #01",
+                                        ["type"] = "C-17A",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271620.4,
+                                        ["y"] = -30745.9,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 206
+                            [4] = {
+                                ["groupId"] = 302,
+                                ["name"] = "KAF C-17A #02",
+                                ["x"] = -271469.0,
+                                ["y"] = -30539.7,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271469.0,
+                                            ["y"] = -30539.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 302,
+                                        ["name"] = "KAF C-17A #02",
+                                        ["type"] = "C-17A",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271469.0,
+                                        ["y"] = -30539.7,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 89
+                            [5] = {
+                                ["groupId"] = 303,
+                                ["name"] = "KAF C-130 #03",
+                                ["x"] = -271534.4,
+                                ["y"] = -30487.9,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271534.4,
+                                            ["y"] = -30487.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 303,
+                                        ["name"] = "KAF C-130 #03",
+                                        ["type"] = "C-130",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271534.4,
+                                        ["y"] = -30487.9,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 255
+                            [6] = {
+                                ["groupId"] = 304,
+                                ["name"] = "KAF IL-76MD #01",
+                                ["x"] = -271367.6,
+                                ["y"] = -30255.7,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271367.6,
+                                            ["y"] = -30255.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 304,
+                                        ["name"] = "KAF IL-76MD #01",
+                                        ["type"] = "IL-76MD",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271367.6,
+                                        ["y"] = -30255.7,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 299
+                            [7] = {
+                                ["groupId"] = 305,
+                                ["name"] = "KAF MQ-1 #01",
+                                ["x"] = -271088.1,
+                                ["y"] = -29947.4,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271088.1,
+                                            ["y"] = -29947.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 305,
+                                        ["name"] = "KAF MQ-1 #01",
+                                        ["type"] = "RQ-1A Predator",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271088.1,
+                                        ["y"] = -29947.4,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 260
+                            [8] = {
+                                ["groupId"] = 306,
+                                ["name"] = "KAF MQ-1 #02",
+                                ["x"] = -271119.0,
+                                ["y"] = -29923.8,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271119.0,
+                                            ["y"] = -29923.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 306,
+                                        ["name"] = "KAF MQ-1 #02",
+                                        ["type"] = "RQ-1A Predator",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271119.0,
+                                        ["y"] = -29923.8,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 146
+                            [9] = {
+                                ["groupId"] = 307,
+                                ["name"] = "KAF A-10C #01",
+                                ["x"] = -270552.9,
+                                ["y"] = -29226.9,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270552.9,
+                                            ["y"] = -29226.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 307,
+                                        ["name"] = "KAF A-10C #01",
+                                        ["type"] = "A-10C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270552.9,
+                                        ["y"] = -29226.9,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 110
+                            [10] = {
+                                ["groupId"] = 308,
+                                ["name"] = "KAF A-10C #02",
+                                ["x"] = -270536.4,
+                                ["y"] = -29204.1,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270536.4,
+                                            ["y"] = -29204.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 308,
+                                        ["name"] = "KAF A-10C #02",
+                                        ["type"] = "A-10C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270536.4,
+                                        ["y"] = -29204.1,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 269
+                            [11] = {
+                                ["groupId"] = 309,
+                                ["name"] = "KAF A-10C #03",
+                                ["x"] = -270521.5,
+                                ["y"] = -29184.4,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270521.5,
+                                            ["y"] = -29184.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 309,
+                                        ["name"] = "KAF A-10C #03",
+                                        ["type"] = "A-10C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270521.5,
+                                        ["y"] = -29184.4,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 182
+                            [12] = {
+                                ["groupId"] = 310,
+                                ["name"] = "KAF A-10C #04",
+                                ["x"] = -270500.8,
+                                ["y"] = -29155.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270500.8,
+                                            ["y"] = -29155.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 310,
+                                        ["name"] = "KAF A-10C #04",
+                                        ["type"] = "A-10C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270500.8,
+                                        ["y"] = -29155.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 209
+                            [13] = {
+                                ["groupId"] = 311,
+                                ["name"] = "KAF F/A-18C #01",
+                                ["x"] = -270410.6,
+                                ["y"] = -29030.8,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270410.6,
+                                            ["y"] = -29030.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 311,
+                                        ["name"] = "KAF F/A-18C #01",
+                                        ["type"] = "F/A-18C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270410.6,
+                                        ["y"] = -29030.8,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 79
+                            [14] = {
+                                ["groupId"] = 312,
+                                ["name"] = "KAF F/A-18C #02",
+                                ["x"] = -270394.3,
+                                ["y"] = -29006.5,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270394.3,
+                                            ["y"] = -29006.5,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 312,
+                                        ["name"] = "KAF F/A-18C #02",
+                                        ["type"] = "F/A-18C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270394.3,
+                                        ["y"] = -29006.5,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 181
+                            [15] = {
+                                ["groupId"] = 313,
+                                ["name"] = "KAF F/A-18C #03",
+                                ["x"] = -270368.6,
+                                ["y"] = -28971.4,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270368.6,
+                                            ["y"] = -28971.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 313,
+                                        ["name"] = "KAF F/A-18C #03",
+                                        ["type"] = "F/A-18C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270368.6,
+                                        ["y"] = -28971.4,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 41
+                            [16] = {
+                                ["groupId"] = 314,
+                                ["name"] = "KAF F/A-18C #04",
+                                ["x"] = -270351.7,
+                                ["y"] = -28948.1,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270351.7,
+                                            ["y"] = -28948.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 314,
+                                        ["name"] = "KAF F/A-18C #04",
+                                        ["type"] = "F/A-18C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270351.7,
+                                        ["y"] = -28948.1,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 15
+                            [17] = {
+                                ["groupId"] = 315,
+                                ["name"] = "KAF AV-8B #01",
+                                ["x"] = -270023.3,
+                                ["y"] = -28432.8,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270023.3,
+                                            ["y"] = -28432.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 315,
+                                        ["name"] = "KAF AV-8B #01",
+                                        ["type"] = "AV8BNA",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270023.3,
+                                        ["y"] = -28432.8,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 115
+                            [18] = {
+                                ["groupId"] = 316,
+                                ["name"] = "KAF AV-8B #02",
+                                ["x"] = -270008.6,
+                                ["y"] = -28443.7,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270008.6,
+                                            ["y"] = -28443.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 316,
+                                        ["name"] = "KAF AV-8B #02",
+                                        ["type"] = "AV8BNA",
+                                        ["category"] = "Planes",
+                                        ["x"] = -270008.6,
+                                        ["y"] = -28443.7,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 68
+                            [19] = {
+                                ["groupId"] = 317,
+                                ["name"] = "KAF AV-8B #03",
+                                ["x"] = -269994.1,
+                                ["y"] = -28455.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269994.1,
+                                            ["y"] = -28455.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 317,
+                                        ["name"] = "KAF AV-8B #03",
+                                        ["type"] = "AV8BNA",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269994.1,
+                                        ["y"] = -28455.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 222
+                            [20] = {
+                                ["groupId"] = 318,
+                                ["name"] = "KAF AV-8B #04",
+                                ["x"] = -269979.3,
+                                ["y"] = -28465.8,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269979.3,
+                                            ["y"] = -28465.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 318,
+                                        ["name"] = "KAF AV-8B #04",
+                                        ["type"] = "AV8BNA",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269979.3,
+                                        ["y"] = -28465.8,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 187
+                            [21] = {
+                                ["groupId"] = 319,
+                                ["name"] = "KAF UH-60A #01",
+                                ["x"] = -272047.6,
+                                ["y"] = -31279.5,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272047.6,
+                                            ["y"] = -31279.5,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 319,
+                                        ["name"] = "KAF UH-60A #01",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -272047.6,
+                                        ["y"] = -31279.5,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 6
+                            [22] = {
+                                ["groupId"] = 320,
+                                ["name"] = "KAF UH-60A #02",
+                                ["x"] = -272017.2,
+                                ["y"] = -31236.7,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272017.2,
+                                            ["y"] = -31236.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 320,
+                                        ["name"] = "KAF UH-60A #02",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -272017.2,
+                                        ["y"] = -31236.7,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 50
+                            [23] = {
+                                ["groupId"] = 321,
+                                ["name"] = "KAF AH-64D #01",
+                                ["x"] = -269505.3,
+                                ["y"] = -30110.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269505.3,
+                                            ["y"] = -30110.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 321,
+                                        ["name"] = "KAF AH-64D #01",
+                                        ["type"] = "AH-64D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269505.3,
+                                        ["y"] = -30110.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 59
+                            [24] = {
+                                ["groupId"] = 322,
+                                ["name"] = "KAF AH-64D #02",
+                                ["x"] = -269485.3,
+                                ["y"] = -30124.0,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269485.3,
+                                            ["y"] = -30124.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 322,
+                                        ["name"] = "KAF AH-64D #02",
+                                        ["type"] = "AH-64D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269485.3,
+                                        ["y"] = -30124.0,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 71
+                            [25] = {
+                                ["groupId"] = 323,
+                                ["name"] = "KAF AH-64D #03",
+                                ["x"] = -269463.6,
+                                ["y"] = -30139.7,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269463.6,
+                                            ["y"] = -30139.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 323,
+                                        ["name"] = "KAF AH-64D #03",
+                                        ["type"] = "AH-64D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269463.6,
+                                        ["y"] = -30139.7,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 30
+                            [26] = {
+                                ["groupId"] = 324,
+                                ["name"] = "KAF AH-64D #04",
+                                ["x"] = -269442.7,
+                                ["y"] = -30154.9,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269442.7,
+                                            ["y"] = -30154.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 324,
+                                        ["name"] = "KAF AH-64D #04",
+                                        ["type"] = "AH-64D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269442.7,
+                                        ["y"] = -30154.9,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 36
+                            [27] = {
+                                ["groupId"] = 325,
+                                ["name"] = "KAF UH-60A #03",
+                                ["x"] = -269457.5,
+                                ["y"] = -30045.4,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269457.5,
+                                            ["y"] = -30045.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 325,
+                                        ["name"] = "KAF UH-60A #03",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269457.5,
+                                        ["y"] = -30045.4,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 11
+                            [28] = {
+                                ["groupId"] = 326,
+                                ["name"] = "KAF UH-60A #04",
+                                ["x"] = -269437.4,
+                                ["y"] = -30058.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269437.4,
+                                            ["y"] = -30058.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 326,
+                                        ["name"] = "KAF UH-60A #04",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269437.4,
+                                        ["y"] = -30058.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 67
+                            [29] = {
+                                ["groupId"] = 327,
+                                ["name"] = "KAF UH-60A #05",
+                                ["x"] = -269415.4,
+                                ["y"] = -30074.2,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269415.4,
+                                            ["y"] = -30074.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 327,
+                                        ["name"] = "KAF UH-60A #05",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269415.4,
+                                        ["y"] = -30074.2,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 64
+                            [30] = {
+                                ["groupId"] = 328,
+                                ["name"] = "KAF UH-60A #06",
+                                ["x"] = -269394.4,
+                                ["y"] = -30089.4,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269394.4,
+                                            ["y"] = -30089.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 328,
+                                        ["name"] = "KAF UH-60A #06",
+                                        ["type"] = "UH-60A",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269394.4,
+                                        ["y"] = -30089.4,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 68
+                            [31] = {
+                                ["groupId"] = 329,
+                                ["name"] = "KAF CH-47F #01",
+                                ["x"] = -269153.5,
+                                ["y"] = -29775.3,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269153.5,
+                                            ["y"] = -29775.3,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 329,
+                                        ["name"] = "KAF CH-47F #01",
+                                        ["type"] = "CH-47Fbl1",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269153.5,
+                                        ["y"] = -29775.3,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 37
+                            [32] = {
+                                ["groupId"] = 330,
+                                ["name"] = "KAF CH-47F #02",
+                                ["x"] = -269117.7,
+                                ["y"] = -29800.4,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269117.7,
+                                            ["y"] = -29800.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 330,
+                                        ["name"] = "KAF CH-47F #02",
+                                        ["type"] = "CH-47Fbl1",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269117.7,
+                                        ["y"] = -29800.4,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 6
+                            [33] = {
+                                ["groupId"] = 331,
+                                ["name"] = "KAF CH-47F #03",
+                                ["x"] = -269082.0,
+                                ["y"] = -29826.2,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269082.0,
+                                            ["y"] = -29826.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 331,
+                                        ["name"] = "KAF CH-47F #03",
+                                        ["type"] = "CH-47Fbl1",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -269082.0,
+                                        ["y"] = -29826.2,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 304
+                            [34] = {
+                                ["groupId"] = 332,
+                                ["name"] = "KAF HEMTT Tanker #01",
+                                ["x"] = -271815.8,
+                                ["y"] = -30997.7,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271815.8,
+                                            ["y"] = -30997.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 332,
+                                        ["name"] = "KAF HEMTT Tanker #01",
+                                        ["type"] = "M978 HEMTT Tanker",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -271815.8,
+                                        ["y"] = -30997.7,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 48
+                            [35] = {
+                                ["groupId"] = 333,
+                                ["name"] = "KAF HMMWV #01",
+                                ["x"] = -271787.5,
+                                ["y"] = -30960.2,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271787.5,
+                                            ["y"] = -30960.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 333,
+                                        ["name"] = "KAF HMMWV #01",
+                                        ["type"] = "Hummer",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -271787.5,
+                                        ["y"] = -30960.2,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 194
+                            [36] = {
+                                ["groupId"] = 334,
+                                ["name"] = "KAF Predator GCS #01",
+                                ["x"] = -271077.3,
+                                ["y"] = -29888.0,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271077.3,
+                                            ["y"] = -29888.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 334,
+                                        ["name"] = "KAF Predator GCS #01",
+                                        ["type"] = "Predator GCS",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -271077.3,
+                                        ["y"] = -29888.0,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 194
+                            [37] = {
+                                ["groupId"] = 335,
+                                ["name"] = "KAF Predator TrojanSpirit #01",
+                                ["x"] = -271084.5,
+                                ["y"] = -29897.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271084.5,
+                                            ["y"] = -29897.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 335,
+                                        ["name"] = "KAF Predator TrojanSpirit #01",
+                                        ["type"] = "Predator TrojanSpirit",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -271084.5,
+                                        ["y"] = -29897.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 172
+                            [38] = {
+                                ["groupId"] = 336,
+                                ["name"] = "KAF HEMTT Tanker #02",
+                                ["x"] = -270464.4,
+                                ["y"] = -29045.0,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270464.4,
+                                            ["y"] = -29045.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 336,
+                                        ["name"] = "KAF HEMTT Tanker #02",
+                                        ["type"] = "M978 HEMTT Tanker",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -270464.4,
+                                        ["y"] = -29045.0,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 172
+                            [39] = {
+                                ["groupId"] = 337,
+                                ["name"] = "KAF M939 Truck #01",
+                                ["x"] = -270470.4,
+                                ["y"] = -29053.0,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -270470.4,
+                                            ["y"] = -29053.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 337,
+                                        ["name"] = "KAF M939 Truck #01",
+                                        ["type"] = "M 818",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -270470.4,
+                                        ["y"] = -29053.0,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 20
+                            [40] = {
+                                ["groupId"] = 338,
+                                ["name"] = "KAF HEMTT Tanker #03",
+                                ["x"] = -269398.3,
+                                ["y"] = -30181.6,
+                                ["heading"] = 2.5083,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269398.3,
+                                            ["y"] = -30181.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 338,
+                                        ["name"] = "KAF HEMTT Tanker #03",
+                                        ["type"] = "M978 HEMTT Tanker",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -269398.3,
+                                        ["y"] = -30181.6,
+                                        ["heading"] = 2.5083,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 20
+                            [41] = {
+                                ["groupId"] = 339,
+                                ["name"] = "KAF M939 Truck #03",
+                                ["x"] = -269404.3,
+                                ["y"] = -30189.6,
+                                ["heading"] = 2.5083,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269404.3,
+                                            ["y"] = -30189.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 339,
+                                        ["name"] = "KAF M939 Truck #03",
+                                        ["type"] = "M 818",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -269404.3,
+                                        ["y"] = -30189.6,
+                                        ["heading"] = 2.5083,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 29
+                            [42] = {
+                                ["groupId"] = 340,
+                                ["name"] = "KAF C-RAM #01",
+                                ["x"] = -269866.3,
+                                ["y"] = -28141.8,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269866.3,
+                                            ["y"] = -28141.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 340,
+                                        ["name"] = "KAF C-RAM #01",
+                                        ["type"] = "HEMTT_C-RAM_Phalanx",
+                                        ["category"] = "Air Defence",
+                                        ["x"] = -269866.3,
+                                        ["y"] = -28141.8,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Heliport stand 15
+                            [43] = {
+                                ["groupId"] = 341,
+                                ["name"] = "KAF C-RAM #02",
+                                ["x"] = -268815.6,
+                                ["y"] = -30078.6,
+                                ["heading"] = 2.5083,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -268815.6,
+                                            ["y"] = -30078.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 341,
+                                        ["name"] = "KAF C-RAM #02",
+                                        ["type"] = "HEMTT_C-RAM_Phalanx",
+                                        ["category"] = "Air Defence",
+                                        ["x"] = -268815.6,
+                                        ["y"] = -30078.6,
+                                        ["heading"] = 2.5083,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 31
+                            [44] = {
+                                ["groupId"] = 342,
+                                ["name"] = "KAF MaxxPro #01",
+                                ["x"] = -272214.6,
+                                ["y"] = -31498.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272214.6,
+                                            ["y"] = -31498.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 342,
+                                        ["name"] = "KAF MaxxPro #01",
+                                        ["type"] = "MaxxPro_MRAP",
+                                        ["category"] = "Armor",
+                                        ["x"] = -272214.6,
+                                        ["y"] = -31498.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 31
+                            [45] = {
+                                ["groupId"] = 343,
+                                ["name"] = "KAF MaxxPro #02",
+                                ["x"] = -272218.7,
+                                ["y"] = -31504.2,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272218.7,
+                                            ["y"] = -31504.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 343,
+                                        ["name"] = "KAF MaxxPro #02",
+                                        ["type"] = "MaxxPro_MRAP",
+                                        ["category"] = "Armor",
+                                        ["x"] = -272218.7,
+                                        ["y"] = -31504.2,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 31
+                            [46] = {
+                                ["groupId"] = 344,
+                                ["name"] = "KAF MaxxPro #03",
+                                ["x"] = -272222.8,
+                                ["y"] = -31509.8,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272222.8,
+                                            ["y"] = -31509.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 344,
+                                        ["name"] = "KAF MaxxPro #03",
+                                        ["type"] = "MaxxPro_MRAP",
+                                        ["category"] = "Armor",
+                                        ["x"] = -272222.8,
+                                        ["y"] = -31509.8,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 13
+                            [47] = {
+                                ["groupId"] = 345,
+                                ["name"] = "KAF Stryker #01",
+                                ["x"] = -272244.4,
+                                ["y"] = -31480.8,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272244.4,
+                                            ["y"] = -31480.8,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 345,
+                                        ["name"] = "KAF Stryker #01",
+                                        ["type"] = "M1126 Stryker ICV",
+                                        ["category"] = "Armor",
+                                        ["x"] = -272244.4,
+                                        ["y"] = -31480.8,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 13
+                            [48] = {
+                                ["groupId"] = 346,
+                                ["name"] = "KAF Stryker #02",
+                                ["x"] = -272249.2,
+                                ["y"] = -31487.2,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272249.2,
+                                            ["y"] = -31487.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 346,
+                                        ["name"] = "KAF Stryker #02",
+                                        ["type"] = "M1126 Stryker ICV",
+                                        ["category"] = "Armor",
+                                        ["x"] = -272249.2,
+                                        ["y"] = -31487.2,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 216
+                            [49] = {
+                                ["groupId"] = 347,
+                                ["name"] = "KAF HMMWV #03",
+                                ["x"] = -272271.7,
+                                ["y"] = -31459.5,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272271.7,
+                                            ["y"] = -31459.5,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 347,
+                                        ["name"] = "KAF HMMWV #03",
+                                        ["type"] = "Hummer",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -272271.7,
+                                        ["y"] = -31459.5,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 216
+                            [50] = {
+                                ["groupId"] = 348,
+                                ["name"] = "KAF HMMWV #04",
+                                ["x"] = -272276.5,
+                                ["y"] = -31465.9,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272276.5,
+                                            ["y"] = -31465.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 348,
+                                        ["name"] = "KAF HMMWV #04",
+                                        ["type"] = "Hummer",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -272276.5,
+                                        ["y"] = -31465.9,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 24
+                            [51] = {
+                                ["groupId"] = 349,
+                                ["name"] = "KAF HEMTT Tanker #04",
+                                ["x"] = -272227.5,
+                                ["y"] = -31398.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272227.5,
+                                            ["y"] = -31398.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 349,
+                                        ["name"] = "KAF HEMTT Tanker #04",
+                                        ["type"] = "M978 HEMTT Tanker",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -272227.5,
+                                        ["y"] = -31398.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 24
+                            [52] = {
+                                ["groupId"] = 350,
+                                ["name"] = "KAF HEMTT Tanker #05",
+                                ["x"] = -272233.5,
+                                ["y"] = -31406.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -272233.5,
+                                            ["y"] = -31406.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 350,
+                                        ["name"] = "KAF HEMTT Tanker #05",
+                                        ["type"] = "M978 HEMTT Tanker",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -272233.5,
+                                        ["y"] = -31406.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
                         },
                     },
                     ["vehicle"] = {
@@ -2767,6 +4519,961 @@ mission = {
                                                 },
                                             },
                                         },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                [2] = {
+                    ["id"] = 4,
+                    ["name"] = "UK",
+                    ["static"] = {
+                        ["group"] = {
+                            -- Kandahar decoration
+                            -- Kandahar stand 108
+                            [1] = {
+                                ["groupId"] = 351,
+                                ["name"] = "KAF C-130 #01",
+                                ["x"] = -271555.2,
+                                ["y"] = -30652.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271555.2,
+                                            ["y"] = -30652.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 351,
+                                        ["name"] = "KAF C-130 #01",
+                                        ["type"] = "C-130",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271555.2,
+                                        ["y"] = -30652.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 119
+                            [2] = {
+                                ["groupId"] = 352,
+                                ["name"] = "KAF C-130 #02",
+                                ["x"] = -271385.3,
+                                ["y"] = -30415.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271385.3,
+                                            ["y"] = -30415.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 352,
+                                        ["name"] = "KAF C-130 #02",
+                                        ["type"] = "C-130",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271385.3,
+                                        ["y"] = -30415.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 309
+                            [3] = {
+                                ["groupId"] = 353,
+                                ["name"] = "KAF MQ-9 #01",
+                                ["x"] = -271198.1,
+                                ["y"] = -30033.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271198.1,
+                                            ["y"] = -30033.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 353,
+                                        ["name"] = "KAF MQ-9 #01",
+                                        ["type"] = "MQ-9 Reaper",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271198.1,
+                                        ["y"] = -30033.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 107
+                            [4] = {
+                                ["groupId"] = 354,
+                                ["name"] = "KAF MQ-9 #02",
+                                ["x"] = -271180.7,
+                                ["y"] = -29998.1,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271180.7,
+                                            ["y"] = -29998.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 354,
+                                        ["name"] = "KAF MQ-9 #02",
+                                        ["type"] = "MQ-9 Reaper",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271180.7,
+                                        ["y"] = -29998.1,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 21
+                            [5] = {
+                                ["groupId"] = 355,
+                                ["name"] = "KAF CH-47D #03",
+                                ["x"] = -271265.6,
+                                ["y"] = -30107.9,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271265.6,
+                                            ["y"] = -30107.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 355,
+                                        ["name"] = "KAF CH-47D #03",
+                                        ["type"] = "CH-47D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271265.6,
+                                        ["y"] = -30107.9,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 148
+                            [6] = {
+                                ["groupId"] = 356,
+                                ["name"] = "KAF CH-47D #04",
+                                ["x"] = -271190.8,
+                                ["y"] = -30162.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271190.8,
+                                            ["y"] = -30162.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 356,
+                                        ["name"] = "KAF CH-47D #04",
+                                        ["type"] = "CH-47D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271190.8,
+                                        ["y"] = -30162.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 84
+                            [7] = {
+                                ["groupId"] = 357,
+                                ["name"] = "KAF Tornado GR4 #01",
+                                ["x"] = -269767.1,
+                                ["y"] = -29537.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269767.1,
+                                            ["y"] = -29537.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 357,
+                                        ["name"] = "KAF Tornado GR4 #01",
+                                        ["type"] = "Tornado GR4",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269767.1,
+                                        ["y"] = -29537.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 166
+                            [8] = {
+                                ["groupId"] = 358,
+                                ["name"] = "KAF Tornado GR4 #02",
+                                ["x"] = -269822.0,
+                                ["y"] = -29497.0,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269822.0,
+                                            ["y"] = -29497.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 358,
+                                        ["name"] = "KAF Tornado GR4 #02",
+                                        ["type"] = "Tornado GR4",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269822.0,
+                                        ["y"] = -29497.0,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 254
+                            [9] = {
+                                ["groupId"] = 359,
+                                ["name"] = "KAF Tornado GR4 #03",
+                                ["x"] = -269903.4,
+                                ["y"] = -29437.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269903.4,
+                                            ["y"] = -29437.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 359,
+                                        ["name"] = "KAF Tornado GR4 #03",
+                                        ["type"] = "Tornado GR4",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269903.4,
+                                        ["y"] = -29437.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 219
+                            [10] = {
+                                ["groupId"] = 360,
+                                ["name"] = "KAF Tornado GR4 #04",
+                                ["x"] = -269840.5,
+                                ["y"] = -29396.6,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269840.5,
+                                            ["y"] = -29396.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 360,
+                                        ["name"] = "KAF Tornado GR4 #04",
+                                        ["type"] = "Tornado GR4",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269840.5,
+                                        ["y"] = -29396.6,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 226
+                            [11] = {
+                                ["groupId"] = 361,
+                                ["name"] = "KAF Crash Tender #01",
+                                ["x"] = -269845.1,
+                                ["y"] = -29480.4,
+                                ["heading"] = 2.5083,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269845.1,
+                                            ["y"] = -29480.4,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 361,
+                                        ["name"] = "KAF Crash Tender #01",
+                                        ["type"] = "tacr2a",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -269845.1,
+                                        ["y"] = -29480.4,
+                                        ["heading"] = 2.5083,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 22
+                            [12] = {
+                                ["groupId"] = 362,
+                                ["name"] = "KAF M939 Truck #02",
+                                ["x"] = -269872.7,
+                                ["y"] = -29460.0,
+                                ["heading"] = 2.5083,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269872.7,
+                                            ["y"] = -29460.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 362,
+                                        ["name"] = "KAF M939 Truck #02",
+                                        ["type"] = "M 818",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -269872.7,
+                                        ["y"] = -29460.0,
+                                        ["heading"] = 2.5083,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                [3] = {
+                    ["id"] = 5,
+                    ["name"] = "France",
+                    ["static"] = {
+                        ["group"] = {
+                            -- Kandahar decoration
+                            -- Kandahar stand 175
+                            [1] = {
+                                ["groupId"] = 363,
+                                ["name"] = "KAF M-2000C #01",
+                                ["x"] = -269720.9,
+                                ["y"] = -28075.2,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269720.9,
+                                            ["y"] = -28075.2,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 363,
+                                        ["name"] = "KAF M-2000C #01",
+                                        ["type"] = "M-2000C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269720.9,
+                                        ["y"] = -28075.2,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 128
+                            [2] = {
+                                ["groupId"] = 364,
+                                ["name"] = "KAF M-2000C #02",
+                                ["x"] = -269708.1,
+                                ["y"] = -28058.0,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269708.1,
+                                            ["y"] = -28058.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 364,
+                                        ["name"] = "KAF M-2000C #02",
+                                        ["type"] = "M-2000C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269708.1,
+                                        ["y"] = -28058.0,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 279
+                            [3] = {
+                                ["groupId"] = 365,
+                                ["name"] = "KAF M-2000C #03",
+                                ["x"] = -269696.6,
+                                ["y"] = -28040.1,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269696.6,
+                                            ["y"] = -28040.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 365,
+                                        ["name"] = "KAF M-2000C #03",
+                                        ["type"] = "M-2000C",
+                                        ["category"] = "Planes",
+                                        ["x"] = -269696.6,
+                                        ["y"] = -28040.1,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 272
+                            [4] = {
+                                ["groupId"] = 366,
+                                ["name"] = "KAF HMMWV #02",
+                                ["x"] = -269683.4,
+                                ["y"] = -28023.3,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -269683.4,
+                                            ["y"] = -28023.3,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 366,
+                                        ["name"] = "KAF HMMWV #02",
+                                        ["type"] = "Hummer",
+                                        ["category"] = "Unarmed",
+                                        ["x"] = -269683.4,
+                                        ["y"] = -28023.3,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                [4] = {
+                    ["id"] = 8,
+                    ["name"] = "Canada",
+                    ["static"] = {
+                        ["group"] = {
+                            -- Kandahar decoration
+                            -- Kandahar stand 125
+                            [1] = {
+                                ["groupId"] = 367,
+                                ["name"] = "KAF CH-47D #01",
+                                ["x"] = -271336.0,
+                                ["y"] = -30177.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271336.0,
+                                            ["y"] = -30177.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 367,
+                                        ["name"] = "KAF CH-47D #01",
+                                        ["type"] = "CH-47D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271336.0,
+                                        ["y"] = -30177.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 66
+                            [2] = {
+                                ["groupId"] = 368,
+                                ["name"] = "KAF CH-47D #02",
+                                ["x"] = -271245.9,
+                                ["y"] = -30243.6,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271245.9,
+                                            ["y"] = -30243.6,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 368,
+                                        ["name"] = "KAF CH-47D #02",
+                                        ["type"] = "CH-47D",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271245.9,
+                                        ["y"] = -30243.6,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 191
+                            [3] = {
+                                ["groupId"] = 369,
+                                ["name"] = "KAF Mi-8 #01",
+                                ["x"] = -271306.4,
+                                ["y"] = -30137.3,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271306.4,
+                                            ["y"] = -30137.3,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 369,
+                                        ["name"] = "KAF Mi-8 #01",
+                                        ["type"] = "Mi-8MT",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271306.4,
+                                        ["y"] = -30137.3,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 111
+                            [4] = {
+                                ["groupId"] = 370,
+                                ["name"] = "KAF Mi-8 #02",
+                                ["x"] = -271216.3,
+                                ["y"] = -30203.5,
+                                ["heading"] = 5.6499,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271216.3,
+                                            ["y"] = -30203.5,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 370,
+                                        ["name"] = "KAF Mi-8 #02",
+                                        ["type"] = "Mi-8MT",
+                                        ["category"] = "Helicopters",
+                                        ["x"] = -271216.3,
+                                        ["y"] = -30203.5,
+                                        ["heading"] = 5.6499,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                [5] = {
+                    ["id"] = 10,
+                    ["name"] = "The Netherlands",
+                    ["static"] = {
+                        ["group"] = {
+                            -- Kandahar decoration
+                            -- Kandahar stand 251
+                            [1] = {
+                                ["groupId"] = 371,
+                                ["name"] = "KAF F-16A MLU #04",
+                                ["x"] = -271854.2,
+                                ["y"] = -30911.9,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271854.2,
+                                            ["y"] = -30911.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 371,
+                                        ["name"] = "KAF F-16A MLU #04",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271854.2,
+                                        ["y"] = -30911.9,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 55
+                            [2] = {
+                                ["groupId"] = 372,
+                                ["name"] = "KAF F-16A MLU #05",
+                                ["x"] = -271838.7,
+                                ["y"] = -30923.0,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271838.7,
+                                            ["y"] = -30923.0,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 372,
+                                        ["name"] = "KAF F-16A MLU #05",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271838.7,
+                                        ["y"] = -30923.0,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 122
+                            [3] = {
+                                ["groupId"] = 373,
+                                ["name"] = "KAF F-16A MLU #06",
+                                ["x"] = -271803.7,
+                                ["y"] = -30948.7,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271803.7,
+                                            ["y"] = -30948.7,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 373,
+                                        ["name"] = "KAF F-16A MLU #06",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271803.7,
+                                        ["y"] = -30948.7,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                [6] = {
+                    ["id"] = 11,
+                    ["name"] = "Belgium",
+                    ["static"] = {
+                        ["group"] = {
+                            -- Kandahar decoration
+                            -- Kandahar stand 163
+                            [1] = {
+                                ["groupId"] = 374,
+                                ["name"] = "KAF F-16A MLU #01",
+                                ["x"] = -271865.3,
+                                ["y"] = -30961.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271865.3,
+                                            ["y"] = -30961.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 374,
+                                        ["name"] = "KAF F-16A MLU #01",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271865.3,
+                                        ["y"] = -30961.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 301
+                            [2] = {
+                                ["groupId"] = 375,
+                                ["name"] = "KAF F-16A MLU #02",
+                                ["x"] = -271849.1,
+                                ["y"] = -30973.1,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271849.1,
+                                            ["y"] = -30973.1,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 375,
+                                        ["name"] = "KAF F-16A MLU #02",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271849.1,
+                                        ["y"] = -30973.1,
+                                        ["heading"] = 4.0791,
+                                    },
+                                },
+                            },
+                            -- Kandahar stand 286
+                            [3] = {
+                                ["groupId"] = 376,
+                                ["name"] = "KAF F-16A MLU #03",
+                                ["x"] = -271832.0,
+                                ["y"] = -30985.9,
+                                ["heading"] = 4.0791,
+                                ["dead"] = false,
+                                ["hidden"] = true,
+                                ["route"] = {
+                                    ["points"] = {
+                                        [1] = {
+                                            ["alt"] = 0,
+                                            ["type"] = "",
+                                            ["name"] = "",
+                                            ["x"] = -271832.0,
+                                            ["y"] = -30985.9,
+                                            ["speed"] = 0,
+                                            ["formation_template"] = "",
+                                            ["action"] = "",
+                                        },
+                                    },
+                                },
+                                ["units"] = {
+                                    [1] = {
+                                        ["unitId"] = 376,
+                                        ["name"] = "KAF F-16A MLU #03",
+                                        ["type"] = "F-16A MLU",
+                                        ["category"] = "Planes",
+                                        ["x"] = -271832.0,
+                                        ["y"] = -30985.9,
+                                        ["heading"] = 4.0791,
                                     },
                                 },
                             },

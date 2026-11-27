@@ -50,23 +50,23 @@ Hand-built. Player slots use Dynamic Spawn for every player type at Kandahar and
 
 Static aircraft represent as many of the September 2010 Kandahar units as DCS has types for:
 
-| Unit                               | Static type                     |
-| ---------------------------------- | ------------------------------- |
-| RAF Tornado detachment             | `Tornado GR4`                   |
-| USAF 81st/354th EFS                | `A-10C`                         |
-| Belgian and Dutch F-16 detachments | `F-16A MLU`                     |
-| French Mirage 2000D detachment     | `M-2000C`                       |
-| USMC VMFA-122                      | `F/A-18C`                       |
-| USMC Harriers                      | `AV-8B N/A`                     |
-| RAF No. 39 Sqn and USAF UAVs       | `MQ-9 Reaper`, `MQ-1A Predator` |
-| RAF and USAF airlift               | `C-130`, `C-130J-30`, `C-17A`   |
-| Contract airlift                   | `IL-76MD`, `Mi-8MTV2`           |
-| US Army 101st CAB                  | `CH-47F`, `UH-60A`, `AH-64D`    |
-| Canadian Air Wing, RAF 1310 Flight | `CH-47D`                        |
+| Unit                               | Static type (country)                  |
+| ---------------------------------- | -------------------------------------- |
+| RAF Tornado detachment             | `Tornado GR4` (UK)                     |
+| USAF 81st/354th EFS                | `A-10C`                                |
+| Belgian and Dutch F-16 detachments | `F-16A MLU` (Belgium, The Netherlands) |
+| French Mirage 2000D detachment     | `M-2000C` (France)                     |
+| USMC VMFA-122                      | `F/A-18C`                              |
+| USMC Harriers                      | `AV8BNA`                               |
+| RAF No. 39 Sqn and USAF UAVs       | `MQ-9 Reaper` (UK), `RQ-1A Predator`   |
+| RAF and USAF airlift               | `C-130` (UK and USA), `C-17A`          |
+| Contract airlift                   | `IL-76MD`, `Mi-8MT` (Canada)           |
+| US Army 101st CAB                  | `CH-47Fbl1`, `UH-60A`, `AH-64D`        |
+| Canadian Air Wing, RAF 1310 Flight | `CH-47D` (Canada, UK)                  |
 
-No DCS types exist for the MC-12W, CU-170 Heron, or CH-146 Griffon.
+No DCS types exist for the MC-12W, CU-170 Heron, or CH-146 Griffon. The RAF C-130J uses the `C-130`, and RAF Harrier GR7/GR9s (at Kandahar 2004–2009) have no type. The statics mix units from across 2004–2010 rather than one date.
 
-Static aircraft must not occupy parking stands that Dynamic Spawn needs. Place them on stands reserved for decoration or off-stand on aprons. Vehicles and structures (fuel trucks, hardened shelters, C-RAM) fill out the base. `docs/wisdom.md` warns that heavy airbase decoration hurts multiplayer performance, so measure frame rate and server load as the count grows.
+Statics sit on parking stands, which keeps them on pavement and stops Dynamic Spawn from using those stands. They take 55 of Kandahar's 318 stands and 13 of the heliport's 88; the rest stay free for players. Ground vehicles fill out the base: HEMTT fuel trucks, M939 trucks and HMMWVs on the flight line, an RAF crash tender by the Tornados, Predator ground control stations by the UAVs, two C-RAMs, and an MRAP and Stryker motor pool on the paved area south-west of the runway. `kandahar-layout.md` lists the areas. `docs/wisdom.md` warns that heavy airbase decoration hurts multiplayer performance, so measure frame rate and server load with the 76 statics in place.
 
 ### FARPs
 
