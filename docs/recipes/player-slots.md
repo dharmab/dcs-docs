@@ -208,6 +208,12 @@ A template group requires `dynSpawnTemplate = true` and `lateActivation = true` 
 },
 ```
 
+### Template Loadouts
+
+The spawn dialog fills the pylon grid from the template unit's `payload.pylons`, keyed by station number, and keeps each pylon's `settings` (fuzes, laser codes). Players can change the stores before spawning. The template's livery and `AddPropAircraft` also carry over.[^spawn-dialog]
+
+The dialog does not read the template's `payload.chaff`, `payload.flare`, `payload.fuel`, or `payload.gun`. Fuel and gun start at 100%, and chaff and flares start at the type's defaults. Players can move the chaff and flare sliders only on types whose countermeasure load is editable. Types such as the AV-8B and F-14 set their load through an `AddPropAircraft` entry instead (`EWDispenserTFL` through `EWDispenserBR`, and `ALE39Loadout`).
+
 ### Dynamic Spawn Advantages
 
 - **Reduced mission complexity**: One template per aircraft type instead of dozens of individual slots
@@ -665,6 +671,8 @@ When adding player slots, verify:
 - [DCS Forum: Dynamic Spawn Guide](https://forum.dcs.world/topic/352814-dynamic-spawn-guide/) - Official ED guide
 
 ## References
+
+[^spawn-dialog]: `Scripts/UI/MultiplayerSelectRoleMap/MultiplayerSelectAirdromeDialog.lua` in the DCS install.
 
 [^nevatim-bugs]: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).
 

@@ -468,7 +468,35 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{6D21ECEA-F85B-4E8D-9D51-31DC9B8AA4EF}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{444BA8AE-82A7-4345-842E-76154EFCCA46}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{GBU_54_V_1B}",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [8] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [9] = {
+                                                    ["CLSID"] = "{69926055-0DA8-4530-9F2F-C86B157EA9F6}",
+                                                },
+                                                [10] = {
+                                                    ["CLSID"] = "{A111396E-D3E8-4b9c-8AC9-2432489304D5}",
+                                                },
+                                                [11] = {
+                                                    ["CLSID"] = "LAU-105_1*AIM-9M_R",
+                                                },
+                                            },
                                             ["fuel"] = 3017,
                                             ["flare"] = 240,
                                             ["chaff"] = 240,
@@ -635,11 +663,38 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [2] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{GBU_54_V_1B}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{GAU_12_Equalizer}",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{A111396E-D3E8-4b9c-8AC9-2432489304D5}",
+                                                },
+                                                [6] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                            },
                                             ["fuel"] = 3519.423,
-                                            ["flare"] = 120,
-                                            ["chaff"] = 60,
+                                            ["flare"] = 180,
+                                            ["chaff"] = 0,
                                             ["gun"] = 100,
+                                        },
+                                        ["AddPropAircraft"] = {
+                                            ["EWDispenserBL"] = 2,
+                                            ["EWDispenserBR"] = 2,
+                                            ["EWDispenserTBL"] = 2,
+                                            ["EWDispenserTBR"] = 2,
+                                            ["EWDispenserTFL"] = 2,
+                                            ["EWDispenserTFR"] = 2,
                                         },
                                         ["callsign"] = {
                                             [1] = 5,
@@ -802,7 +857,38 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{8A0BE8AE-58D4-4572-9263-3144C0D06364}",
+                                                },
+                                                [6] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [8] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                                [9] = {
+                                                    ["CLSID"] = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+                                                },
+                                                [11] = {
+                                                    ["CLSID"] = "{AN_AAQ_33}",
+                                                },
+                                            },
                                             ["fuel"] = 3249,
                                             ["flare"] = 60,
                                             ["chaff"] = 60,
@@ -969,7 +1055,35 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{AAQ-28_LEFT}",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{FPU_8A_FUEL_TANK}",
+                                                },
+                                                [6] = {
+                                                    ["CLSID"] = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{GBU-38}",
+                                                },
+                                                [8] = {
+                                                    ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}",
+                                                },
+                                                [9] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                            },
                                             ["fuel"] = 4900,
                                             ["flare"] = 60,
                                             ["chaff"] = 60,
@@ -1176,7 +1290,38 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{F15E_EXTTANK}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{CFT_L_GBU_54_x_3}",
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{F-15E_AAQ-14_LANTIRN}",
+                                                },
+                                                [9] = {
+                                                    ["CLSID"] = "{F-15E_AAQ-13_LANTIRN}",
+                                                },
+                                                [12] = {
+                                                    ["CLSID"] = "{CFT_R_GBU_12_x_4}",
+                                                },
+                                                [13] = {
+                                                    ["CLSID"] = "{6CEB49FC-DED8-4DED-B053-E1F033FF72D3}",
+                                                },
+                                                [14] = {
+                                                    ["CLSID"] = "{F15E_EXTTANK}",
+                                                },
+                                                [15] = {
+                                                    ["CLSID"] = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+                                                },
+                                            },
                                             ["fuel"] = 6100,
                                             ["flare"] = 60,
                                             ["chaff"] = 120,
@@ -1363,11 +1508,95 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{LAU-7 wtip - AIM-9M}",
+                                                    ["settings"] = {
+                                                        ["NFP_PRESID"] = "MDRN_M_A_AIM9",
+                                                        ["NFP_VIS_DrawArgNo_57"] = 0.1,
+                                                    },
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{SHOULDER AIM-7M}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{F14-300gal}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "{BRU-32 GBU-38}",
+                                                    ["settings"] = {
+                                                        ["01_prfx_arm_delay_ctrl_FMU139CB_LD"] = 4,
+                                                        ["01_prfx_function_delay_ctrl_FMU139CB_LD"] = 0,
+                                                        ["NFP_PRESID"] = "MDRN_B_A_PGM_TWINWELL",
+                                                        ["NFP_PRESVER"] = 2,
+                                                        ["NFP_VIS_DrawArgNo_55"] = 0.1,
+                                                        ["NFP_VIS_DrawArgNo_56"] = 0.5,
+                                                        ["NFP_VIS_DrawArgNo_57"] = 1,
+                                                        ["NFP_fuze_type_nose"] = "EMPTY_NOSE",
+                                                        ["NFP_fuze_type_tail"] = "FMU139CB_LD",
+                                                    },
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{BRU-32 GBU-12}",
+                                                    ["settings"] = {
+                                                        ["01_prfx_arm_delay_ctrl_FMU139CB_LD"] = 4,
+                                                        ["01_prfx_function_delay_ctrl_FMU139CB_LD"] = 0,
+                                                        ["NFP_PRESID"] = "Paveway_II",
+                                                        ["NFP_PRESVER"] = 2,
+                                                        ["NFP_VIS_DrawArgNo_55"] = 0.1,
+                                                        ["NFP_VIS_DrawArgNo_57"] = 1,
+                                                        ["NFP_fuze_type_tail"] = "FMU139CB_LD",
+                                                        ["laser_code"] = 1688,
+                                                    },
+                                                },
+                                                [6] = {
+                                                    ["CLSID"] = "{BRU-32 GBU-38}",
+                                                    ["settings"] = {
+                                                        ["01_prfx_arm_delay_ctrl_FMU139CB_LD"] = 4,
+                                                        ["01_prfx_function_delay_ctrl_FMU139CB_LD"] = 0,
+                                                        ["NFP_PRESID"] = "MDRN_B_A_PGM_TWINWELL",
+                                                        ["NFP_PRESVER"] = 2,
+                                                        ["NFP_VIS_DrawArgNo_55"] = 0.1,
+                                                        ["NFP_VIS_DrawArgNo_56"] = 0.5,
+                                                        ["NFP_VIS_DrawArgNo_57"] = 1,
+                                                        ["NFP_fuze_type_nose"] = "EMPTY_NOSE",
+                                                        ["NFP_fuze_type_tail"] = "FMU139CB_LD",
+                                                    },
+                                                },
+                                                [7] = {
+                                                    ["CLSID"] = "{BRU-32 GBU-12}",
+                                                    ["settings"] = {
+                                                        ["01_prfx_arm_delay_ctrl_FMU139CB_LD"] = 4,
+                                                        ["01_prfx_function_delay_ctrl_FMU139CB_LD"] = 0,
+                                                        ["NFP_PRESID"] = "Paveway_II",
+                                                        ["NFP_PRESVER"] = 2,
+                                                        ["NFP_VIS_DrawArgNo_55"] = 0.1,
+                                                        ["NFP_VIS_DrawArgNo_57"] = 1,
+                                                        ["NFP_fuze_type_tail"] = "FMU139CB_LD",
+                                                        ["laser_code"] = 1688,
+                                                    },
+                                                },
+                                                [8] = {
+                                                    ["CLSID"] = "{F14-300gal}",
+                                                },
+                                                [9] = {
+                                                    ["CLSID"] = "{F14-LANTIRN-TP}",
+                                                },
+                                                [10] = {
+                                                    ["CLSID"] = "{LAU-7 wtip - AIM-9M}",
+                                                    ["settings"] = {
+                                                        ["NFP_PRESID"] = "MDRN_M_A_AIM9",
+                                                        ["NFP_VIS_DrawArgNo_57"] = 0.1,
+                                                    },
+                                                },
+                                            },
                                             ["fuel"] = 7348,
                                             ["flare"] = 60,
-                                            ["chaff"] = 140,
+                                            ["chaff"] = 0,
                                             ["gun"] = 100,
+                                        },
+                                        ["AddPropAircraft"] = {
+                                            ["ALE39Loadout"] = 0,
                                         },
                                         ["callsign"] = {
                                             [1] = 2,
@@ -1530,7 +1759,17 @@ mission = {
                                             },
                                         },
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [2] = {
+                                                    ["CLSID"] = "{M2KC_02_RPL541}",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{M2KC_RAFAUT_GBU12}",
+                                                },
+                                                [8] = {
+                                                    ["CLSID"] = "{M2KC_08_RPL541}",
+                                                },
+                                            },
                                             ["fuel"] = 3165,
                                             ["flare"] = 112,
                                             ["chaff"] = 112,
@@ -2171,7 +2410,17 @@ mission = {
                                         ["onboard_num"] = "080",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "{CH47_PORT_M240H}",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{CH47_STBD_M240H}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{CH47_AFT_M240H}",
+                                                },
+                                            },
                                             ["fuel"] = 3600,
                                             ["flare"] = 120,
                                             ["chaff"] = 120,
@@ -2242,7 +2491,23 @@ mission = {
                                         ["onboard_num"] = "021",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "M261_MK151",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "M261_MK151",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{IAFS_ComboPak_100}",
+                                                },
+                                            },
                                             ["fuel"] = 1438,
                                             ["flare"] = 60,
                                             ["chaff"] = 30,
@@ -2314,7 +2579,14 @@ mission = {
                                         ["onboard_num"] = "022",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "OH58D_M3P_L500",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{M260_M151}",
+                                                },
+                                            },
                                             ["fuel"] = 454,
                                             ["flare"] = 30,
                                             ["chaff"] = 30,
@@ -2386,7 +2658,23 @@ mission = {
                                         ["onboard_num"] = "023",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "M261_MK151",
+                                                },
+                                                [2] = {
+                                                    ["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",
+                                                },
+                                                [3] = {
+                                                    ["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",
+                                                },
+                                                [4] = {
+                                                    ["CLSID"] = "M261_MK151",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{IAFS_ComboPak_100}",
+                                                },
+                                            },
                                             ["fuel"] = 1438,
                                             ["flare"] = 60,
                                             ["chaff"] = 30,
@@ -2458,7 +2746,14 @@ mission = {
                                         ["onboard_num"] = "024",
                                         ["livery_id"] = "default",
                                         ["payload"] = {
-                                            ["pylons"] = {},
+                                            ["pylons"] = {
+                                                [1] = {
+                                                    ["CLSID"] = "OH58D_M3P_L500",
+                                                },
+                                                [5] = {
+                                                    ["CLSID"] = "{M260_M151}",
+                                                },
+                                            },
                                             ["fuel"] = 454,
                                             ["flare"] = 30,
                                             ["chaff"] = 30,

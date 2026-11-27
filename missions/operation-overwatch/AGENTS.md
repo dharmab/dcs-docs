@@ -63,6 +63,7 @@ Nothing has run on a server yet. Check these first:
 - Whether the AFAC MQ-9 talks on the radio menu with invisible targets.
 - `CHAP_MATV` and `M30_CC` spawn and behave as expected.
 - Kandahar decoration: each static sits on its stand, faces a sensible way (headings are estimates from the stand pattern), and gets its country's default livery (no `livery_id` is set). Blue includes UK, France, Canada, The Netherlands, Belgium, and Ukraine for these statics. Contract airlift (IL-76MD, An-26, Yak-40) is under Ukraine with an explicit `livery_id`, because those types have no USA livery. The contract Mi-8s stay under USA, which has the `USA_AFG` livery. Dynamic Spawn still finds free stands for every type, including the F-14 and F-15E. The Massun92 ground equipment (power carts, tugs, light carts, cargo pallets) shows up and sits clear of the aircraft. 535 statics do not hurt load time or frame rate on the server. The statics are `hidden` on the F10 map. The Mission Editor also leaves `hidden` groups off its own map until Show Hidden is ticked in the units list panel.
+- Template loadouts (2004-2010 CAS, GBU-54 included) prefill the spawn dialog. Whether the AV-8B's flare-only `EWDispenser*` and the F-14B(U)'s `ALE39Loadout = 0` from the template's `AddPropAircraft` apply to the spawned aircraft. Other types start with their default chaff and flares; players move the slider.
 - Whether RPG and DShK FireAtPoint at 400-900 m keeps firing; RPG-7 range is short of the far end.
 
 ## To Do
