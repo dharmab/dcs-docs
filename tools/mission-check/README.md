@@ -18,9 +18,8 @@ Validates a DCS MIZ file or unpacked MIZ directory. Validation includes:
   a string `parking_id`
 - TACAN beacons have a valid channel and mode, a `system` that matches the
   mode, and a frequency that matches the channel
-- When `drawings.options` is present, `drawings.layers` lists each of the `Red`,
-  `Blue`, `Neutral`, `Common`, and `Author` layers exactly once, and no other
-  layer
+- When `drawings.options` is present, `drawings.layers` has exactly the `Red`,
+  `Blue`, `Neutral`, `Common`, and `Author` layers
 - Every `DictKey_*` and `ResKey_*` in the mission exists in `dictionary` and
   `mapResource`, every `mapResource` file exists, and no dictionary ID is
   greater than `maxDictId`
