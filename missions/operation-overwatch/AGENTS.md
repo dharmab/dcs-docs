@@ -6,11 +6,16 @@ CAS mission on the Afghanistan terrain. Tunables live in `OperationOverwatch.con
 
 The mission file is hand-written and has not been opened in DCS. Pack it with `uv run pack_mission.py`. Values that need a DCS install are marked `TODO(dcs)` (`grep -rn "TODO(dcs)" src`):
 
-- Kandahar's airdromeId (placeholder `9999` in `mission` and `warehouses`) and a parking stand for each Kandahar template. The Mission Editor also writes every other Afghanistan airport into `warehouses`.
-- `wsType` for `AV8BNA`, `CH-47Fbl1`, `AH-64D_BLK_II`, and `OH-58D` (placeholders end in `0`). A wrong `wsType` shows the type greyed out with `(0)` in the spawn dialog.
-- `country.id.INSURGENTS` (`17` in `coalitions` and the red country).
+- A parking stand for the CH-47F template at Kandahar. It still uses stand `1`, which is the M-2000C template's. No ME label is known for any Kandahar helicopter stand.
 - The AV-8B radio layout, and radio presets for the helicopters, which have none.
-- Kandahar elevation (`alt = 1017`) and FARP heights.
+- FARP heights. The helicopter templates use `alt = 0` `RADIO`. The 1 km elevation export is too coarse to give the ground height.
+
+Values taken from the DCS install:
+
+- Kandahar is airdrome `7` (`airfield7` in `Mods/terrains/Afghanistan/beacons.lua`). `warehouses` lists only Kandahar and the FARPs. The Mission Editor also writes every other Afghanistan airport.
+- `country.id.INSURGENTS` is `17`. `Scripts/Database/db_countries.lua` numbers countries in order from 0 and skips 14.
+- `wsType` values come from the most common value in the ME-saved `.miz` files that ship with the install. The fourth number can change when modules are added, so values in old saves vary.
+- Fixed-wing template stands, by `term_index` (`kandahar-parking.csv`) and ME label: A-10C `297` J01, AV-8B `203` J03, F-16C `28` W01, F/A-18C `16` W02, F-15E `174` S04, F-14B(U) `258` T02, M-2000C `1` Y01 (a `Term_Type` 72 stand). Each label pair comes from an installed Afghanistan mission and matches the runway side given in `kandahar-layout.md`. Position and `alt` are the stand's from the CSV. None of the stands has a decoration static, but whether each one is big enough for its type has not been checked.
 
 Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at each FARP, FARP statics with fuel and ammo trucks, 76 decoration statics (aircraft and vehicles) at Kandahar and Kandahar Heliport, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
 
@@ -56,7 +61,6 @@ Style follows Operation Infinity: `array[#array + 1] = value`, named constants f
 Nothing has run on a server yet. Check these first:
 
 - Whether the AFAC MQ-9 talks on the radio menu with invisible targets.
-- `country.id.INSURGENTS` for red. The mission file's coalition setup must include it.
 - `CHAP_MATV` and `M30_CC` spawn and behave as expected.
 - Kandahar decoration: each static sits on its stand, faces a sensible way (headings are estimates from the stand pattern), and gets its country's default livery (no `livery_id` is set). Blue includes UK, France, Canada, The Netherlands, and Belgium for these statics. Dynamic Spawn still finds free stands for every type, including the F-14 and F-15E. The statics are `hidden` on the F10 map.
 - Whether RPG and DShK FireAtPoint at 400-900 m keeps firing; RPG-7 range is short of the far end.

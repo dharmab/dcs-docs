@@ -1,9 +1,8 @@
 warehouses = {
     ["airports"] = {
         -- Kandahar (BLUE - fixed-wing and CH-47F dynamic spawn)
-        -- TODO(dcs): Kandahar airdromeId, and the other Afghanistan airports
-        -- (the Mission Editor writes every airport on the map)
-        [9999] = {
+        -- Airdrome 7 (airfield7 in the terrain's beacons.lua and radio.lua)
+        [7] = {
             ["coalition"] = "BLUE",
             ["supplier"] = true,
             ["unlimitedAircrafts"] = false,
@@ -22,7 +21,7 @@ warehouses = {
             ["aircrafts"] = {
                 ["planes"] = {
                     ["A-10C_2"] = { ["wsType"] = { 1, 1, 6, 264 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 1 },
-                    ["AV8BNA"] = { ["wsType"] = { 1, 1, 6, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 2 }, -- TODO(dcs): wsType from an ME save
+                    ["AV8BNA"] = { ["wsType"] = { 1, 1, 1, 266 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 2 },
                     ["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 3 },
                     ["FA-18C_hornet"] = { ["wsType"] = { 1, 1, 1, 280 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 4 },
                     ["F-15ESE"] = { ["wsType"] = { 1, 1, 1, 327 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 5 },
@@ -30,7 +29,7 @@ warehouses = {
                     ["M-2000C"] = { ["wsType"] = { 1, 1, 1, 284 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 7 },
                 },
                 ["helicopters"] = {
-                    ["CH-47Fbl1"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 8 }, -- TODO(dcs): wsType from an ME save
+                    ["CH-47Fbl1"] = { ["wsType"] = { 1, 2, 5, 329 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 8 },
                 },
             },
             ["weapons"] = {},
@@ -69,8 +68,8 @@ warehouses = {
             ["aircrafts"] = {
                 ["planes"] = {},
                 ["helicopters"] = {
-                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 }, -- TODO(dcs): wsType from an ME save
-                    ["OH-58D"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 }, -- TODO(dcs): wsType from an ME save
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 },
+                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 },
                 },
             },
             ["weapons"] = {},
@@ -107,8 +106,8 @@ warehouses = {
             ["aircrafts"] = {
                 ["planes"] = {},
                 ["helicopters"] = {
-                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 }, -- TODO(dcs): wsType from an ME save
-                    ["OH-58D"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 }, -- TODO(dcs): wsType from an ME save
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
+                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
                 },
             },
             ["weapons"] = {},
