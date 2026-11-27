@@ -1,36 +1,37 @@
 {
   "theatre": "GermanyCW",
   "terrain_folder": "GermanyColdWar",
-  "dcs_version": "2.9.31.29434",
+  "dcs_version": "2.9.32.30490",
   "crs": {
     "proj4": "+proj=tmerc +lat_0=0 +lon_0=21 +k_0=0.9996 +x_0=35427.617 +y_0=-6061633.131 +ellps=WGS84 +units=m +no_defs",
     "central_meridian": 21,
     "scale_factor": 0.9996,
-    "false_easting": 35427.61672601121,
-    "false_northing": -6061633.130931277,
+    "false_easting": 35427.6169260905,
+    "false_northing": -6061633.13061583,
     "easting_axis": "DCS z",
     "northing_axis": "DCS x",
-    "fit_points": 540,
-    "fit_rms_error_m": 0.038,
-    "fit_max_error_m": 0.065
+    "fit_points": 661,
+    "fit_rms_error_m": 0.039,
+    "fit_max_error_m": 0.068
   },
   "places": {
-    "count": 127
+    "count": 200
   },
   "features": {
     "layers": {
-      "places": 127,
-      "roads": 173,
+      "places": 200,
+      "roads": 215,
       "railways": 167,
       "rivers": 0,
       "power_lines": 0,
       "borders": 20,
-      "urban_areas": 27,
+      "urban_areas": 30,
       "runways": 0
     },
     "map_overlay_sources": {
       "Building/TRI/colorIndex=12": "skipped",
       "GeoName/TRI/colorIndex=13": "skipped",
+      "GeoName/TRI/colorIndex=14": "skipped",
       "Road/LINELIST/colorIndex=11": "railways",
       "Road/LINELIST/colorIndex=12": "borders",
       "Road/LINELIST/colorIndex=5": "roads",
@@ -39,25 +40,25 @@
   },
   "landcover": {
     "resolution_m": 100.0,
-    "width": 12194,
+    "width": 12193,
     "height": 10207,
     "extent": {
       "x_min": -744800.0,
       "x_max": 275900.0,
       "z_min": -1280500.0,
-      "z_max": -61100.0
+      "z_max": -61200.0
     },
     "area_km2": {
-      "nodata": 111418.9,
-      "land": 586968.9,
-      "field": 66099.1,
-      "forest": 137541.4,
-      "town": 16416.6,
-      "beach": 138.7,
-      "river": 2500.0,
-      "lake": 5863.7,
-      "sea": 317240.7,
-      "runway": 453.6
+      "nodata": 111035.2,
+      "land": 570769.8,
+      "field": 74178.5,
+      "forest": 141997.5,
+      "town": 18600.3,
+      "beach": 58.6,
+      "river": 3055.5,
+      "lake": 7303.4,
+      "sea": 317010.2,
+      "runway": 530.5
     }
   },
   "elevation": {
