@@ -259,6 +259,5 @@ not assign to a layer. Lines with a road-like material name (`Road`, `Rail`,
 triangles under them. To assign a set that matches neither, plot it to identify
 it, then add it to `OVERLAY_OVERRIDES` in [export.py](terrain_geodata/export.py).
 Some maps draw lines as thin polygon strips instead of line sets (Afghanistan
-draws its borders this way). Overriding such a polygon set to a line layer
-reduces each strip to its centreline. Dots in dash-dot lines and wider
-copies of the same line are dropped, and the gaps between dashes are joined.
+draws its borders this way). Override such a set to a line layer to export its
+centrelines.
