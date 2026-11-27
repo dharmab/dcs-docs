@@ -260,4 +260,11 @@ triangles under them. To assign a set that matches neither, plot it to identify
 it, then add it to `OVERLAY_OVERRIDES` in [export.py](terrain_geodata/export.py).
 Some maps draw lines as thin polygon strips instead of line sets (Afghanistan
 draws its borders this way). Override such a set to a line layer to export its
-centrelines.
+centrelines. For example, this exports Afghanistan's `Undef/TRI/colorIndex=13`
+and `Undef/TRI/colorIndex=2` polygon sets as border lines:
+
+```python
+OVERLAY_OVERRIDES = {
+    "Afghanistan": {("Undef", "13"): "borders", ("Undef", "2"): "borders"},
+}
+```
