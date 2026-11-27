@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import csv
+import functools
 import json
 import re
 import shutil
 import time
+import warnings
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,6 +20,10 @@ import rasterio
 import shapely
 import structlog
 from pyproj import Transformer
+from rasterio.errors import NotGeoreferencedWarning
+
+# Compiled, without type stubs.
+from rasterio.shutil import copy as copy_dataset  # ty: ignore[import-not-found]
 from rasterio.transform import Affine
 from shapely.geometry.base import BaseGeometry
 
@@ -150,76 +157,119 @@ def _write_gpkg_layer(
     )
 
 
-def _write_landcover(
-    path: Path, data: np.ndarray, grid: surface5.Grid, crs_wkt: str
+_GDAL_TYPES = {"u1": "Byte", "<i2": "Int16"}
+
+
+def _write_cog(
+    path: Path,
+    raw: Path,
+    dtype: str,
+    grid: surface5.Grid,
+    crs_wkt: str,
+    nodata: int,
+    describe: Callable[[rasterio.io.DatasetWriter], None],
+    **options: str | int,
 ) -> None:
-    transform = Affine(grid.resolution, 0, grid.west, 0, -grid.resolution, grid.north)
-    # The COG driver can only copy, so rasterio stages the raster in memory and
-    # builds the tiled, overviewed file when the dataset closes. Blocks are
-    # compressed independently, so threads do not change the output.
-    with rasterio.open(
+    """Write a Cloud Optimized GeoTIFF from a raw raster file on disk.
+
+    The COG driver can only copy another dataset, so a VRT presents the raw file
+    to GDAL, which reads it a block at a time rather than all at once. Blocks are
+    compressed independently, so threads do not change the output.
+    """
+    itemsize = np.dtype(dtype).itemsize
+    vrt = raw.with_suffix(raw.suffix + ".vrt")
+    vrt.write_text(
+        f'''<VRTDataset rasterXSize="{grid.width}" rasterYSize="{grid.height}">
+  <VRTRasterBand dataType="{_GDAL_TYPES[dtype]}" band="1" subClass="VRTRawRasterBand">
+    <SourceFilename relativeToVRT="1">{raw.name}</SourceFilename>
+    <ImageOffset>0</ImageOffset>
+    <PixelOffset>{itemsize}</PixelOffset>
+    <LineOffset>{itemsize * grid.width}</LineOffset>
+    <ByteOrder>LSB</ByteOrder>
+  </VRTRasterBand>
+</VRTDataset>
+''',
+        encoding="utf-8",
+    )
+    with warnings.catch_warnings():
+        # The VRT has no georeferencing until it is set here.
+        warnings.simplefilter("ignore", NotGeoreferencedWarning)
+        with rasterio.open(vrt, "r+") as ds:
+            ds.crs = crs_wkt
+            ds.transform = Affine(
+                grid.resolution, 0, grid.west, 0, -grid.resolution, grid.north
+            )
+            ds.nodata = nodata
+            describe(ds)
+    copy_dataset(
+        vrt,
         path,
-        "w",
         driver="COG",
-        width=grid.width,
-        height=grid.height,
-        count=1,
-        dtype="uint8",
-        crs=crs_wkt,
-        transform=transform,
-        nodata=0,
         compress="DEFLATE",
         level=9,
-        overview_resampling="mode",
         blocksize=512,
         num_threads="ALL_CPUS",
-    ) as dst:
-        dst.write(data, 1)
-        dst.write_colormap(1, {c.value: (*c.color, 255) for c in surface5.CLASSES})
-        dst.set_band_description(1, "land cover class")
-        dst.update_tags(1, **{f"CLASS_{c.value}": c.name for c in surface5.CLASSES})
+        **options,
+    )
+
+
+def _write_landcover(
+    path: Path, classes: Path, grid: surface5.Grid, crs_wkt: str
+) -> dict[str, float]:
+    """Write the land cover raster and return the area of each class."""
+
+    def describe(ds: rasterio.io.DatasetWriter) -> None:
+        ds.write_colormap(1, {c.value: (*c.color, 255) for c in surface5.CLASSES})
+        ds.set_band_description(1, "land cover class")
+        ds.update_tags(1, **{f"CLASS_{c.value}": c.name for c in surface5.CLASSES})
+
+    _write_cog(
+        path, classes, "u1", grid, crs_wkt, 0, describe, overview_resampling="mode"
+    )
+    data = np.memmap(classes, "u1", "r", shape=(grid.height, grid.width))
+    return surface5.class_stats(data, grid.resolution)
 
 
 ELEVATION_NODATA = -32768
 
 
 def _write_elevation(
-    path: Path, data: np.ndarray, grid: surface5.Grid, crs_wkt: str
-) -> None:
+    path: Path, elevation: Path, grid: surface5.Grid, crs_wkt: str
+) -> dict[str, float]:
     """Write heights rounded to whole metres as int16, which compresses to a
-    fraction of float32 and is finer than the interpolation error."""
-    heights = np.where(np.isnan(data), ELEVATION_NODATA, np.round(data))
-    transform = Affine(grid.resolution, 0, grid.west, 0, -grid.resolution, grid.north)
-    with rasterio.open(
+    fraction of float32 and is finer than the interpolation error. Returns the
+    lowest and highest height."""
+    shape = (grid.height, grid.width)
+    data = np.memmap(elevation, "<f4", "r", shape=shape)
+    raw = elevation.with_suffix(".i16")
+    heights = np.memmap(raw, "<i2", "w+", shape=shape)
+    lo, hi = np.inf, -np.inf
+    for rows in surface5.strips(data):
+        strip = data[rows]
+        nan = np.isnan(strip)
+        if not nan.all():
+            lo, hi = min(lo, np.nanmin(strip)), max(hi, np.nanmax(strip))
+        heights[rows] = np.where(nan, ELEVATION_NODATA, np.round(strip))
+    heights.flush()
+    del data, heights
+
+    def describe(ds: rasterio.io.DatasetWriter) -> None:
+        ds.set_band_description(1, "terrain height above sea level")
+        ds.update_tags(1, UNITS="metre")
+        ds.update_tags(1, UNITTYPE="m")
+
+    _write_cog(
         path,
-        "w",
-        driver="COG",
-        width=grid.width,
-        height=grid.height,
-        count=1,
-        dtype="int16",
-        crs=crs_wkt,
-        transform=transform,
-        nodata=ELEVATION_NODATA,
-        compress="DEFLATE",
+        raw,
+        "<i2",
+        grid,
+        crs_wkt,
+        ELEVATION_NODATA,
+        describe,
         predictor=2,
-        level=9,
         overview_resampling="average",
-        blocksize=512,
-        num_threads="ALL_CPUS",
-    ) as dst:
-        dst.write(heights.astype(np.int16), 1)
-        dst.set_band_description(1, "terrain height above sea level")
-        dst.update_tags(1, UNITS="metre")
-        dst.update_tags(1, UNITTYPE="m")
-
-
-def _elevation_stats(data: np.ndarray) -> dict[str, float]:
-    valid = data[~np.isnan(data)]
-    return {
-        "min_m": round(float(valid.min()), 1),
-        "max_m": round(float(valid.max()), 1),
-    }
+    )
+    return {"min_m": round(float(lo), 1), "max_m": round(float(hi), 1)}
 
 
 def _read_places(
@@ -236,20 +286,28 @@ def _read_places(
 # every worker.
 _CHUNK_BYTES = 4_000_000
 _CHUNKS_PER_WORKER = 3
+# Runs are also cut at about this many bytes of rasters, which bounds the memory
+# each run takes in its worker and while it waits to be composited.
+_CHUNK_RASTER_BYTES = 64 << 20
 
 
-def _chunks(spans: list[tuple[int, int]], workers: int) -> list[list[tuple[int, int]]]:
+def _chunks(plan: surface5.TilePlan, workers: int) -> list[list[tuple[int, int]]]:
+    spans = plan.spans
     total = spans[-1][1] - spans[0][0]
     target = min(_CHUNK_BYTES, total / (workers * _CHUNKS_PER_WORKER))
     chunks: list[list[tuple[int, int]]] = []
     run: list[tuple[int, int]] = []
-    size = 0
-    for span in spans:
+    size = raster_size = 0
+    for span, raster_bytes in zip(spans, plan.raster_bytes, strict=True):
+        if run and raster_size + raster_bytes > _CHUNK_RASTER_BYTES:
+            chunks.append(run)
+            run, size, raster_size = [], 0, 0
         run.append(span)
         size += span[1] - span[0]
+        raster_size += raster_bytes
         if size >= target:
             chunks.append(run)
-            run, size = [], 0
+            run, size, raster_size = [], 0, 0
     if run:
         chunks.append(run)
     return chunks
@@ -310,6 +368,7 @@ def _export_job(
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
+    staging = out / "staging"
     started = time.monotonic()
 
     calls = {"places": Call(urgent, _read_places, (src,))}
@@ -372,9 +431,12 @@ def _export_job(
     plan: surface5.TilePlan | None = got.get("plan")
     if plan is not None:
         assert src.surface is not None
-        chunks = _chunks(plan.spans, workers)
+        chunks = _chunks(plan, workers)
         log.info("rasterizing land cover", tiles=len(plan.spans), chunks=len(chunks))
-        rasters = yield {
+        # Rasters are composited on disk as each run of tiles comes back.
+        staging.mkdir()
+        compositor = surface5.Compositor(staging, plan.grid, plan.elevation_grid)
+        yield {
             i: Call(
                 bulk,
                 surface5.rasterize_tiles,
@@ -385,27 +447,24 @@ def _export_job(
                     plan.elevation_grid,
                     chunk,
                 ),
+                functools.partial(compositor.add, i),
             )
             for i, chunk in enumerate(chunks)
         }
-        lc = surface5.assemble(
-            plan.grid,
-            plan.elevation_grid,
-            [r for i in range(len(chunks)) for r in rasters[i]],
-            len(plan.spans),
-        )
+        lc = compositor.finish(len(plan.spans))
+        del compositor
 
     final: dict[str, Call] = {}
-    if plan is not None and lc is not None:
+    if lc is not None:
         final["landcover.tif"] = Call(
             urgent,
             _write_landcover,
-            (out / "landcover.tif", lc.data, plan.grid, crs_wkt),
+            (out / "landcover.tif", lc.classes, lc.grid, crs_wkt),
         )
         final["elevation.tif"] = Call(
             urgent,
             _write_elevation,
-            (out / "elevation.tif", lc.elevation, plan.elevation_grid, crs_wkt),
+            (out / "elevation.tif", lc.elevation, lc.elevation_grid, crs_wkt),
         )
     decisions: dict[str, str] = {}
     if "sets" in got:
@@ -418,8 +477,12 @@ def _export_job(
             final[layer] = Call(
                 urgent, sup5.build_geometry, (sup5.LAYERS[layer], parts)
             )
+    if lc is not None:
+        lc.close()
     log.info("writing rasters and building feature layers", steps=list(final))
     layers = yield final
+    if staging.exists():
+        shutil.rmtree(staging)
 
     layer_counts: dict[str, int] = {"places": len(place_rows)}
     if src.map_overlay is not None:
@@ -462,22 +525,23 @@ def _export_job(
     }
 
     if lc is not None:
-        height, width = lc.data.shape
+        g = lc.grid
+        height, width = g.height, g.width
         meta["landcover"] = {
             "resolution_m": resolution,
             "width": width,
             "height": height,
             "extent": {
-                "x_min": lc.north - height * resolution,
-                "x_max": lc.north,
-                "z_min": lc.west,
-                "z_max": lc.west + width * resolution,
+                "x_min": g.north - height * resolution,
+                "x_max": g.north,
+                "z_min": g.west,
+                "z_max": g.west + width * resolution,
             },
-            "area_km2": surface5.class_stats(lc),
+            "area_km2": layers["landcover.tif"],
         }
         meta["elevation"] = {
             "resolution_m": elevation_resolution,
-            **_elevation_stats(lc.elevation),
+            **layers["elevation.tif"],
         }
         log.info("wrote land cover", width=width, height=height, tiles=lc.tile_count)
 
