@@ -145,7 +145,7 @@ Each role has sub-fields: `Neutral`, `Blue`, `Red` (boolean).
 
 ### drawings.layers
 
-Array of drawing layers with visibility and objects. Required when `drawings.options` is present, and ignored otherwise. Contains exactly one entry for each of the five layers: `Red`, `Blue`, `Neutral`, `Common` and `Author`. A layer's array index sets its order in the Mission Editor. A missing layer, including an empty `layers` table, or a layer with any other name, stops the mission from loading in the Mission Editor. A missing layer logs `attempt to compare two nil values`.[^drawing-layers]
+Array of drawing layers with visibility and objects. Required when `drawings.options` is present, and ignored otherwise. Contains exactly the `Red`, `Blue`, `Neutral`, `Common`, and `Author` layers, in any order. The array index sets the layer order in the Mission Editor. A missing or unknown layer stops the mission from loading in the Mission Editor.
 
 | Field     | Type    | Description                                                 |
 | --------- | ------- | ----------------------------------------------------------- |
@@ -704,5 +704,3 @@ DCS uses a flat Cartesian coordinate system in meters, measured from a theatre-s
 In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds altitude as `y` and moves east-west to `z`, so a mission `{x, y}` is the Vec3 `{x = x, y = alt, z = y}`.
 
 Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [terrain-geodata](../../tools/terrain-geodata/README.md#coordinate-system).
-
-[^drawing-layers]: `MissionEditor/modules/me_draw_panel.lua`, `loadFromMission`.
