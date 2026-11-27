@@ -145,13 +145,13 @@ Each role has sub-fields: `Neutral`, `Blue`, `Red` (boolean).
 
 ### drawings.layers
 
-Array of drawing layers with visibility and objects. When `drawings.options` is present, list each of the five layers exactly once, in this order: `Red`, `Blue`, `Neutral`, `Common`, `Author`. The Mission Editor sorts its layers by their index in this array. A layer missing from the array has no index, and the sort fails with `attempt to compare two nil values`. The mission then never finishes loading. An empty `layers` table fails the same way. A layer with any other name also breaks loading. The Mission Editor reads `layers` only when `drawings.options` is present.[^drawing-layers]
+Array of drawing layers with visibility and objects. Required when `drawings.options` is present, and ignored otherwise. Contains exactly one entry for each of the five layers: `Red`, `Blue`, `Neutral`, `Common` and `Author`. A layer's array index sets its order in the Mission Editor. A missing layer, including an empty `layers` table, or a layer with any other name, stops the mission from loading in the Mission Editor.[^drawing-layers]
 
-| Field     | Type    | Description                                               |
-| --------- | ------- | --------------------------------------------------------- |
-| `visible` | boolean | Whether layer is visible                                  |
-| `name`    | string  | Layer name ("Red", "Blue", "Neutral", "Common", "Author") |
-| `objects` | table   | Array of drawing objects                                  |
+| Field     | Type    | Description                                                 |
+| --------- | ------- | ----------------------------------------------------------- |
+| `visible` | boolean | Whether layer is visible                                    |
+| `name`    | string  | Layer name: `Red`, `Blue`, `Neutral`, `Common`, or `Author` |
+| `objects` | table   | Array of drawing objects                                    |
 
 ```lua
 ["layers"] = {
@@ -705,4 +705,4 @@ In Lua scripting, Vec2 uses the same `x` and `y` as the mission file. Vec3 adds 
 
 Headings are in radians, clockwise from the `+x` (north) axis. The projection for each theatre is listed in [terrain-geodata](../../tools/terrain-geodata/README.md#coordinate-system).
 
-[^drawing-layers]: `MissionEditor/modules/me_draw_panel.lua`, `loadFromMission`: when `drawings.options` is present, each listed layer is looked up by name (`layerFind`, which returns nil for an unknown name) and gets `layer.order = i`. Then `table.sort(layers_, function(layer1, layer2) return layer1.order < layer2.order end)` runs.
+[^drawing-layers]: `MissionEditor/modules/me_draw_panel.lua`, `loadFromMission`: when `drawings.options` is present, each listed layer is looked up by name (`layerFind`, which returns nil for an unknown name) and gets `layer.order = i`. Then `table.sort(layers_, function(layer1, layer2) return layer1.order < layer2.order end)` runs. A built-in layer missing from `layers` has no `order`, so the sort fails with `attempt to compare two nil values`. An unknown name fails when `loadFromMission` indexes the nil layer.
