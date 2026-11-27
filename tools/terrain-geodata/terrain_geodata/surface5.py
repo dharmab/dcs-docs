@@ -136,34 +136,58 @@ class Tile:
     pbase: Stream | None = None
 
 
+# Bits of the road / railway mask raster.
+ROAD_BIT, RAIL_BIT = 1, 2
+
+
 @dataclass
 class LandCover:
-    data: np.ndarray  # uint8, row 0 = north
-    west: float  # easting (DCS z) of the left edge
-    north: float  # northing (DCS x) of the top edge
-    resolution: float
+    """Composited rasters, kept in raw files on disk rather than in memory.
+
+    Each file holds one row-major array, row 0 at the north edge, little-endian.
+    """
+
+    grid: Grid
+    elevation_grid: Grid
     tile_count: int
-    # Pixels touched by road / railway triangles, grown by one pixel. Used to
-    # tell roads from railways in the map overlay, whose colours vary by terrain.
-    road_mask: np.ndarray
-    rail_mask: np.ndarray
+    # uint8 class values on ``grid``.
+    classes: Path
     # float32 height in metres of the base mesh at each pixel centre of
-    # ``TilePlan.elevation_grid``, NaN outside the mesh.
-    elevation: np.ndarray
+    # ``elevation_grid``, NaN outside the mesh.
+    elevation: Path
+    # uint8 on ``grid``, mapped from disk: ``ROAD_BIT`` and ``RAIL_BIT`` mark
+    # pixels touched by road and railway triangles. Used to tell roads from
+    # railways in the map overlay, whose colours vary by terrain.
+    masks: np.ndarray
 
     def mask_fractions(self, en: np.ndarray) -> tuple[float, float]:
-        """Fraction of (easting, northing) points on road and on rail pixels."""
-        h, w = self.data.shape
-        col = np.floor((en[:, 0] - self.west) / self.resolution).astype(np.int64)
-        row = np.floor((self.north - en[:, 1]) / self.resolution).astype(np.int64)
+        """Fraction of (easting, northing) points on road and on rail pixels,
+        with the masks grown by one pixel."""
+        g = self.grid
+        h, w = self.masks.shape
+        col = np.floor((en[:, 0] - g.west) / g.resolution).astype(np.int64)
+        row = np.floor((g.north - en[:, 1]) / g.resolution).astype(np.int64)
         inside = (col >= 0) & (col < w) & (row >= 0) & (row < h)
         if not inside.any():
             return 0.0, 0.0
         col, row = col[inside], row[inside]
+        # Grow the masks at the sampled points only: a 3 x 3 dilation that
+        # ignores pixels beyond the edge, as cv2.dilate does.
+        bits = np.zeros(len(col), np.uint8)
+        for dr in (-1, 0, 1):
+            r = row + dr
+            for dc in (-1, 0, 1):
+                c = col + dc
+                ok = (r >= 0) & (r < h) & (c >= 0) & (c < w)
+                bits[ok] |= self.masks[r[ok], c[ok]]
         return (
-            float(self.road_mask[row, col].mean()),
-            float(self.rail_mask[row, col].mean()),
+            float(((bits & ROAD_BIT) != 0).mean()),
+            float(((bits & RAIL_BIT) != 0).mean()),
         )
+
+    def close(self) -> None:
+        """Unmap the masks file, so that it can be deleted."""
+        self.masks = np.zeros((0, 0), np.uint8)
 
 
 def _scan_tile(seg: bytes, tile: Tile) -> None:
@@ -224,6 +248,10 @@ class TilePlan:
     elevation_grid: Grid
     # Byte range of each tile's node in the metadata, in file order.
     spans: list[tuple[int, int]]
+    # Rough size in bytes of each tile's rasters, from its bounding box. Most
+    # tiles are small, but low-detail tiles at the map edges can be hundreds of
+    # kilometres across.
+    raster_bytes: list[int]
 
 
 @dataclass
@@ -233,8 +261,7 @@ class TileRaster:
     row: int
     col: int
     img: np.ndarray
-    road: np.ndarray
-    rail: np.ndarray
+    masks: np.ndarray  # ROAD_BIT and RAIL_BIT
     # On the elevation grid: top-left pixel and a float32 canvas, NaN where
     # the tile has no triangle.
     elevation_row: int
@@ -269,7 +296,17 @@ def plan_tiles(path: Path, resolution: float, elevation_resolution: float) -> Ti
         _grid(tiles, resolution),
         _grid(tiles, elevation_resolution),
         spans,
+        [
+            # Land cover classes and masks are 1 byte each, elevation 4.
+            2 * _bbox_pixels(t, resolution) + 4 * _bbox_pixels(t, elevation_resolution)
+            for t in tiles
+        ],
     )
+
+
+def _bbox_pixels(tile: Tile, resolution: float) -> int:
+    b = tile.bbox
+    return round(((b[5] - b[2]) / resolution + 2) * ((b[3] - b[0]) / resolution + 2))
 
 
 def _grid(tiles: list[Tile], resolution: float) -> Grid:
@@ -316,7 +353,7 @@ def rasterize_tiles(
     spans: list[tuple[int, int]],
 ) -> list[TileRaster]:
     """Draw a run of consecutive tiles from ``TilePlan.spans``, each on its own
-    canvas. Compositing every run in order with ``assemble`` gives the same
+    canvas. Compositing every run with ``Compositor`` gives the same
     raster as drawing all tiles onto one canvas."""
     first, last = spans[0][0], spans[-1][1]
     with path.open("rb") as f:
@@ -401,7 +438,9 @@ def _rasterize_tile(
     height = pos[:, 1] + tile.translation[1]
     dry = tri[(types & (SEA | LAKE)) == 0]
     erow, ecol, elevation = _elevation_tile(en[dry], height[dry], elevation_grid)
-    return TileRaster(row0, col0, *canvases, erow, ecol, elevation)
+    img, road, rail = canvases
+    masks = road * np.uint8(ROAD_BIT) | rail * np.uint8(RAIL_BIT)
+    return TileRaster(row0, col0, img, masks, erow, ecol, elevation)
 
 
 def _elevation_tile(
@@ -476,40 +515,76 @@ def _interpolate(
     return out
 
 
-def assemble(
-    grid: Grid, elevation_grid: Grid, rasters: list[TileRaster], tile_count: int
-) -> LandCover:
-    """Composite tile rasters, given in tile order, into the land cover."""
-    img = np.zeros((grid.height, grid.width), np.uint8)
-    road_mask = np.zeros_like(img)
-    rail_mask = np.zeros_like(img)
-    elevation = np.full(
-        (elevation_grid.height, elevation_grid.width), np.nan, np.float32
-    )
-    for r in rasters:
+def strips(a: np.ndarray, size: int = 64 << 20) -> list[slice]:
+    """Row ranges of ``a`` holding about ``size`` bytes each."""
+    step = max(size // max(a[:1].nbytes, 1), 1)
+    return [slice(i, i + step) for i in range(0, len(a), step)]
+
+
+def _raw(path: Path, grid: Grid, dtype: str, fill: float) -> np.memmap:
+    """Map a new raw raster file the size of ``grid``, filled with ``fill``."""
+    mm = np.memmap(path, dtype, "w+", shape=(grid.height, grid.width))
+    if fill != 0:
+        for rows in strips(mm):
+            mm[rows] = fill
+    return mm
+
+
+class Compositor:
+    """Composites tile rasters into raw files in ``folder``, so that peak
+    memory does not grow with the raster size.
+
+    Runs of tiles may arrive in any order. Each run waits until the runs before
+    it are in, so the result is the same as drawing every tile in tile order.
+    """
+
+    def __init__(self, folder: Path, grid: Grid, elevation_grid: Grid) -> None:
+        self.grid = grid
+        self.elevation_grid = elevation_grid
+        self._classes = _raw(folder / "landcover.u8", grid, "u1", 0)
+        self._masks = _raw(folder / "masks.u8", grid, "u1", 0)
+        self._elevation = _raw(folder / "elevation.f32", elevation_grid, "<f4", np.nan)
+        self._waiting: dict[int, list[TileRaster]] = {}
+        self._next = 0
+
+    def add(self, index: int, rasters: list[TileRaster]) -> None:
+        """Take the rasters of run ``index``, counting from 0 in tile order."""
+        self._waiting[index] = rasters
+        while self._next in self._waiting:
+            for r in self._waiting.pop(self._next):
+                self._paste(r)
+            self._next += 1
+
+    def _paste(self, r: TileRaster) -> None:
         h, w = r.img.shape
         window = (slice(r.row, r.row + h), slice(r.col, r.col + w))
         # Every class value is non-zero, so a zero pixel is one the tile left alone.
-        np.copyto(img[window], r.img, where=r.img != 0)
-        road_mask[window] |= r.road
-        rail_mask[window] |= r.rail
+        np.copyto(self._classes[window], r.img, where=r.img != 0)
+        self._masks[window] |= r.masks
         eh, ew = r.elevation.shape
         window = (
             slice(r.elevation_row, r.elevation_row + eh),
             slice(r.elevation_col, r.elevation_col + ew),
         )
-        np.copyto(elevation[window], r.elevation, where=~np.isnan(r.elevation))
-    kernel = np.ones((3, 3), np.uint8)
-    return LandCover(
-        img,
-        grid.west,
-        grid.north,
-        grid.resolution,
-        tile_count,
-        cv2.dilate(road_mask, kernel),
-        cv2.dilate(rail_mask, kernel),
-        elevation,
-    )
+        np.copyto(self._elevation[window], r.elevation, where=~np.isnan(r.elevation))
+
+    def finish(self, tile_count: int) -> LandCover:
+        """Flush the files once every run is in."""
+        if self._waiting:
+            raise ValueError(f"tile run {self._next} never arrived")
+        for mm in (self._classes, self._masks, self._elevation):
+            mm.flush()
+        lc = LandCover(
+            self.grid,
+            self.elevation_grid,
+            tile_count,
+            Path(str(self._classes.filename)),
+            Path(str(self._elevation.filename)),
+            self._masks,
+        )
+        # Unmap the files that other processes read next.
+        del self._classes, self._elevation
+        return lc
 
 
 def _to_px(en: np.ndarray, grid: Grid) -> np.ndarray:
@@ -552,8 +627,10 @@ def _forest_triangles(
     return np.concatenate(parts_en), np.concatenate(parts_px)
 
 
-def class_stats(lc: LandCover) -> dict[str, float]:
+def class_stats(data: np.ndarray, resolution: float) -> dict[str, float]:
     """Area of each class in square kilometres."""
-    counts = np.bincount(lc.data.ravel(), minlength=len(CLASSES))
-    px_km2 = (lc.resolution / 1000.0) ** 2
+    counts = np.zeros(len(CLASSES), np.int64)
+    for rows in strips(data):
+        counts += np.bincount(data[rows].ravel(), minlength=len(CLASSES))
+    px_km2 = (resolution / 1000.0) ** 2
     return {c.name: round(float(counts[c.value]) * px_km2, 1) for c in CLASSES}

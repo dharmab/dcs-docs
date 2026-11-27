@@ -31,6 +31,10 @@ size (default 100 m) and `--elevation-resolution` the elevation pixel size
 (default 1 km). `--jobs` sets the number of worker processes (default one per
 CPU).
 
+An export at the default resolutions uses about 3 GB of RAM and 1 GB of
+temporary disk space. With 25 m land cover it uses up to about 8 GB of RAM and
+16 GB of temporary disk space.
+
 ## Output
 
 Each terrain's files are in

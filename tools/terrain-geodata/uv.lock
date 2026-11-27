@@ -383,6 +383,7 @@ dependencies = [
 dev = [
     { name = "ruff" },
     { name = "ty" },
+    { name = "types-rasterio" },
 ]
 
 [package.metadata]
@@ -402,6 +403,7 @@ requires-dist = [
 dev = [
     { name = "ruff" },
     { name = "ty" },
+    { name = "types-rasterio", specifier = ">=1.5.2.20261122" },
 ]
 
 [[package]]
@@ -427,4 +429,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/cd/fe/fc14a66f6a7464a6b7ebd2440f7becd2146aa865f7516b22d44df29c1f3a/ty-0.0.107-py3-none-win32.whl", hash = "sha256:40b4c00666db9bcfe112b320522192ae598c0982f3c7270ce62eb313ffabb373", size = 13966366, upload-time = "2026-11-18T21:07:51.826Z" },
     { url = "https://files.pythonhosted.org/packages/a0/ad/1c992fb038f33a34f32f1ebc57ac4023ab60b4530e2bbf3fdd5e6d97753e/ty-0.0.107-py3-none-win_amd64.whl", hash = "sha256:e9b5e292a0b39105e1068ff176f355eb645b45d9f6aa91765ca739069ed13c12", size = 14895905, upload-time = "2026-11-18T21:07:54.814Z" },
     { url = "https://files.pythonhosted.org/packages/4e/93/83c2fa56dd6ab9f9d1253621ae79a5bbc2f3fc2bb3e562f2e8cd1ad5df5c/ty-0.0.107-py3-none-win_arm64.whl", hash = "sha256:c5f4eb4ea3c84ab755dafb7d09abee8d6fbd582db5371d858443f0c85e72dcd3", size = 14031494, upload-time = "2026-11-18T21:07:57.714Z" },
+]
+
+[[package]]
+name = "types-rasterio"
+version = "1.5.2.20261122"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "affine" },
+    { name = "click" },
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/74/9443ae4b5b80aa5b417a97feab03bda571c34ccfd37c0003dbb0d6135068/types_rasterio-1.5.2.20261122.tar.gz", hash = "sha256:dd8127075355e77bce34cb1a7c6802da13baf43cb7a5e009e35693dd615c63fc", size = 28391, upload-time = "2026-11-22T09:00:45.863Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/60/d0/55e6bd8bfb7b13af25a938d7fc100c48b771b6c96901007960cb2647608c/types_rasterio-1.5.2.20261122-py3-none-any.whl", hash = "sha256:65142ecdfdb227a4ceb12dfacb18891c7c6851031cd2ddc3cfeea4bd19b9a649", size = 39344, upload-time = "2026-11-22T09:00:45.052Z" },
 ]
