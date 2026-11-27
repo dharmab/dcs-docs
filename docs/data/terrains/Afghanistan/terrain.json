@@ -1,0 +1,72 @@
+{
+  "theatre": "Afghanistan",
+  "terrain_folder": "Afghanistan",
+  "dcs_version": "2.9.32.30490",
+  "crs": {
+    "proj4": "+proj=tmerc +lat_0=0 +lon_0=63 +k_0=0.9996 +x_0=-300150 +y_0=-3759657 +ellps=WGS84 +units=m +no_defs",
+    "central_meridian": 63,
+    "scale_factor": 0.9996,
+    "false_easting": -300150,
+    "false_northing": -3759657,
+    "easting_axis": "DCS z",
+    "northing_axis": "DCS x",
+    "fit_points": 1218,
+    "fit_rms_error_m": 0.029,
+    "fit_max_error_m": 0.071
+  },
+  "places": {
+    "count": 1225
+  },
+  "features": {
+    "layers": {
+      "places": 1225,
+      "roads": 645,
+      "railways": 0,
+      "rivers": 0,
+      "power_lines": 93,
+      "borders": 79,
+      "urban_areas": 384,
+      "runways": 0
+    },
+    "map_overlay_sources": {
+      "ELT/LINELIST/colorIndex=9": "power_lines",
+      "GeoName/TRI/colorIndex=7": "skipped",
+      "Road/LINELIST/colorIndex=5": "roads",
+      "Town/TRI/colorIndex=4": "urban_areas",
+      "Undef/TRI/colorIndex=10": "skipped",
+      "Undef/TRI/colorIndex=13": "borders",
+      "Undef/TRI/colorIndex=2": "borders",
+      "Undef/TRI/colorIndex=7": "skipped",
+      "Undef/TRI/colorIndex=8": "skipped",
+      "Undef/TRI/colorIndex=9": "skipped"
+    }
+  },
+  "landcover": {
+    "resolution_m": 100.0,
+    "width": 14681,
+    "height": 18491,
+    "extent": {
+      "x_min": -1266500.0,
+      "x_max": 582600.0,
+      "z_min": -654800.0,
+      "z_max": 813300.0
+    },
+    "area_km2": {
+      "nodata": 95497.6,
+      "land": 2328684.5,
+      "field": 16694.7,
+      "forest": 1.6,
+      "town": 7931.5,
+      "beach": 0.0,
+      "river": 4889.3,
+      "lake": 2788.1,
+      "sea": 258148.7,
+      "runway": 27.8
+    }
+  },
+  "elevation": {
+    "resolution_m": 1000.0,
+    "min_m": 0.0,
+    "max_m": 7717.9
+  }
+}

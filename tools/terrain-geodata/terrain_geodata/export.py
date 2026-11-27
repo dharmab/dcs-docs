@@ -40,6 +40,8 @@ class TerrainSource:
 # Map overlay line sets that sit on neither road nor rail mesh, by theatre:
 # (material, colorIndex) -> layer. Checked by plotting each set.
 OVERLAY_OVERRIDES: dict[str, dict[tuple[str, str], str]] = {
+    # National (13) and province (2) borders, drawn as thin triangle strips.
+    "Afghanistan": {("Undef", "13"): "borders", ("Undef", "2"): "borders"},
     # Drawn as "Road" but traces the inner-German and national borders.
     "GermanyCW": {("Road", "12"): "borders"},
 }

@@ -59,6 +59,7 @@ to the east, in metres.
 
 | Theatre              | Central meridian | False easting (m) | False northing (m) | Fit error |
 | -------------------- | ---------------- | ----------------- | ------------------ | --------- |
+| `Afghanistan`        | 63°              | -300,150          | -3,759,657         | 7 cm      |
 | `Caucasus`           | 33°              | -99,517           | -4,998,115         | 7 cm      |
 | `GermanyCW`          | 21°              | 35,427.617        | -6,061,633.131     | 7 cm      |
 | `Kola`               | 21°              | -62,702           | -7,543,625         | 6 cm      |
@@ -257,3 +258,13 @@ not assign to a layer. Lines with a road-like material name (`Road`, `Rail`,
 `Railway`) are assigned to `roads` or `railways` based on the type of the mesh
 triangles under them. To assign a set that matches neither, plot it to identify
 it, then add it to `OVERLAY_OVERRIDES` in [export.py](terrain_geodata/export.py).
+Some maps draw lines as thin polygon strips instead of line sets (Afghanistan
+draws its borders this way). Override such a set to a line layer to export its
+centrelines. For example, this exports Afghanistan's `Undef/TRI/colorIndex=13`
+and `Undef/TRI/colorIndex=2` polygon sets as border lines:
+
+```python
+OVERLAY_OVERRIDES = {
+    "Afghanistan": {("Undef", "13"): "borders", ("Undef", "2"): "borders"},
+}
+```
