@@ -16,6 +16,8 @@ Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type 
 
 `TerrainData.lua` is generated; do not edit it. It contains the area of operations polygon (Kandahar and Helmand provinces) and a 200 m mask of tasking sites, built from `docs/data/terrains/Afghanistan/`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the site rules. The generator's docstring and constants define a site.
 
+`kandahar-layout.md` describes Kandahar's aprons and stand rows, for placing statics. `kandahar-parking.csv` lists every stand at Kandahar and Kandahar Heliport, from `airbase:getParking()` logged in game.
+
 The FARP positions and check-in point in the config were chosen from the export: open ground with no fields or compounds within 300 m. Check them in the Mission Editor before building the FARPs.
 
 ## Scripts

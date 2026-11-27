@@ -1,0 +1,109 @@
+# Kandahar Airbase Layout Notes
+
+Notes for decorating Kandahar with statics in Operation Overwatch. They come from four Mission Editor screenshots (satellite view, north up). Stand names are read off the map labels. Small or overlapping labels are marked _(unclear)_.
+
+## Overview
+
+- Location: about 31.50° N, 65.85° E (from the ME cursor readouts), on the Afghanistan map.
+- One runway, oriented SW–NE (05/23), with a full-length parallel taxiway on each side.
+- There are two airbase objects:
+  - **Kandahar**: the fixed-wing field, with aprons along both sides of the runway.
+  - **Kandahar Heliport**: a separate airbase north-west of the runway, with helicopter-only stands.
+- Stands whose names end in `-H` are helicopter-only.
+- Terrain around the field:
+  - North and north-west: irrigated farmland and villages.
+  - South-east: the built-up camp (a dense grid of buildings and tents), a quartered circular reservoir, and a small pond on the east edge.
+  - East: a highway running NNW–SSE past the NE end of the runway, with a canal to the north-east.
+  - South-west and west: open desert, plus a large empty paved area west of the SW threshold.
+
+## South-East Side (Main Apron)
+
+The apron is one continuous strip along the SE taxiway. From the SW threshold to the NE end:
+
+| Area    | Stands                                               | Notes                                                 |
+| ------- | ---------------------------------------------------- | ----------------------------------------------------- |
+| SW tip  | small cluster of `-H` stands _(unclear)_             | at the far SW corner of the apron                     |
+| O row   | `O01`–`O08`, plus `D1`/`D2`-style labels _(unclear)_ | a short spur just NE of the SW tip                    |
+| OS row  | `OS01`–`OS11` _(unclear prefix)_                     | a diagonal row of shelters along the apron edge       |
+| N block | `N01`–`N04`, `N17`–`N25`                             | `N17`–`N25` are packed tightly together               |
+| M block | `M01`–`M07`, `M10`–`M12`, `M16`–`M20`                | widely spaced on the open apron; suits large aircraft |
+| L row   | `L12-H`–`L16-H`                                      | helicopter stands near the K row                      |
+| K row   | `K01`–`K06`                                          | small spur at the NE end of the M block               |
+| J row   | `J01`… _(unclear)_                                   |                                                       |
+| I row   | `I01`–`I08`                                          |                                                       |
+| H row   | `H01`–`H20`                                          | about midfield                                        |
+| G row   | `G01`–`G10`                                          |                                                       |
+| PAN row | `PAN01`–`PAN15`                                      | dense diagonal stands                                 |
+| AAF row | `AAF01`–`AAF15`                                      | the NE end of the SE side                             |
+
+There is also a lone stand near the SW threshold whose label looks like `24AS01` _(unclear)_.
+
+Behind the apron, toward the camp, there is room for revetments, tents, containers, and fuel or ammo dumps. The camp's building grid starts right behind the M, N, and O rows.
+
+## North-West Side
+
+From the SW end to the NE end:
+
+| Area         | Stands                     | Notes                                                  |
+| ------------ | -------------------------- | ------------------------------------------------------ |
+| S row        | `S01`–`S15`                | in front of large hangars (dark roofs)                 |
+| Z / Y blocks | `Z01`–`Z24`, `Y01`–`Y24`   | a large apron in diagonal rows                         |
+| X block      | `X01`–`X19`                | next to the Y/Z blocks                                 |
+| UAE row      | `UAE01`–`UAE12`            | in front of two hangars                                |
+| W row        | `W01`–`W12` _(approx.)_    | beside large dark hangars and shelters                 |
+| V / U rows   | `V01`…, `U01`… _(unclear)_ | between the W and T rows                               |
+| T row        | `T01`–`T13`                | the north-easternmost NW stands, close to the heliport |
+
+There is also a dense cluster of stands north of the AAF row, across the NE end of the runway. They were too crowded to read.
+
+## Kandahar Heliport
+
+- The heliport lies north-west of the T/U/V rows and north of the S row. The ME shows it as its own airbase.
+- It has two pads:
+  - West pad: `MST59-H`–`MST66-H`.
+  - Centre pad: `MST67-H`–`MST89-H`.
+- A large square grid apron to the south-west holds many more `MST…-H` stands, too dense to read.
+- The heliport is bordered by farmland to the north and west, which makes a natural perimeter for a fence, HESCO, or guard posts.
+
+## Existing Objects
+
+White map icons appear at several places:
+
+- The open ground south of the runway at midfield, behind the H/I rows.
+- Near the AAF row.
+- In the compound north-east of the field, by the highway.
+- Next to the heliport.
+
+The screenshots were taken in an empty new mission, so these icons belong to the map, not to statics placed by a mission. Leave room around them. There is also a navaid symbol south of the runway near the J row.
+
+## Parking Dump
+
+[`kandahar-parking.csv`](kandahar-parking.csv) lists every stand from `airbase:getParking()`, logged in game: 406 stands in total. Positions are map `x`/`z` with `y` as altitude, plus latitude and longitude. The Mission Editor stand labels (`X01`, `MST62-H`) are not in the dump.
+
+| Airbase           | ID  | Reference point (x, z) | Runway              | Stands by `Term_Type`               |
+| ----------------- | --- | ---------------------- | ------------------- | ----------------------------------- |
+| Kandahar          | 7   | -269628.5, -28470.8    | `23`, 2981 m × 60 m | 257 × 104, 25 × 72, 34 × 40, 2 × 16 |
+| Kandahar Heliport | 15  | -268791.7, -29800.1    | `23`, 219 m × 45 m  | 86 × 40, 2 × 16                     |
+
+`Term_Type` values, per the Hoggit wiki:
+
+- `104`: open-air stand
+- `72`: open-air stand or shelter
+- `40`: helicopter only
+- `16`: runway spawn point
+
+Every stand had `Term_Index_0` = -1 and `TO_AC` = false. `fDistToRW` is the distance to the runway in metres.
+
+## Decorating Tips
+
+- Don't place statics on stands that players or AI spawn on. Look up which stands the mission's groups use (`parking` / `parking_id`; see the [player slots recipe](../../docs/recipes/player-slots.md)).
+- The ME labels give no exact coordinates. To get exact stand positions, run a one-off mission that logs [`airbase:getParking()`](../../docs/scripting/reference/classes/airbase.md#airbasegetparking) for both airbases:
+
+```lua
+for _, name in ipairs({ "Kandahar", "Kandahar Heliport" }) do
+    local ab = Airbase.getByName(name)
+    for _, s in ipairs(ab:getParking()) do
+        env.info(string.format("%s %s type=%s x=%.1f z=%.1f", name, s.Term_Index, s.Term_Type, s.vTerminalPos.x, s.vTerminalPos.z))
+    end
+end
+```
