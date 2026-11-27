@@ -1,7 +1,6 @@
 LUA_FILES := $(shell git ls-files '*.lua')
 PY_TOOLS := $(patsubst %/pyproject.toml,%,$(wildcard tools/*/pyproject.toml))
-# Only missions with a mission file; Operation Overwatch has scripts only until
-# its mission file is built
+# Only missions with a mission file
 MISSIONS := $(abspath $(patsubst %/mission,%,$(wildcard missions/*/src/mission)))
 LUA_TEST_DIRS := $(wildcard missions/*/tests)
 PY_TEST_TOOLS := $(patsubst %/tests,%,$(wildcard tools/*/tests))

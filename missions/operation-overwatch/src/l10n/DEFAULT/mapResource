@@ -1,0 +1,11 @@
+mapResource = {
+    ["ResKey_Logging"] = "Logging.lua",
+    ["ResKey_Units"] = "Units.lua",
+    ["ResKey_Spatial"] = "Spatial.lua",
+    ["ResKey_TerrainData"] = "TerrainData.lua",
+    ["ResKey_EnemyForce"] = "EnemyForce.lua",
+    ["ResKey_Sites"] = "Sites.lua",
+    ["ResKey_Firefight"] = "Firefight.lua",
+    ["ResKey_Tasking"] = "Tasking.lua",
+    ["ResKey_OperationOverwatch"] = "OperationOverwatch.lua",
+}

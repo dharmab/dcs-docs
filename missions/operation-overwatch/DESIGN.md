@@ -195,8 +195,11 @@ Dynamically generated transport taskings for the CH-47F, using the same check-in
 
 ## Support Assets
 
-- Tankers: one boom and one basket track over the Registan desert south of the green zones, between Kandahar and Helmand (`docs/recipes/tanker-setup.md`). The boom track runs east-west at `x = -310000` from `z = -130000` to `z = -60000`. The basket track runs east-west at `x = -330000` from `z = -140000` to `z = -70000`. Both legs are 70 km, and the nearest tasking site is 24 km from the boom track and 14 km from the basket track.
-- AWACS: datalink only. Voice GCI from SkyEye (`docs/recipes/awacs-setup.md`).
+- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 18 km from the nearest tasking site.
+  - Texaco (KC-135, fighter boom, 270.5, TACAN 100X): FL200, 280 KIAS, hot leg `z = -160000` to `-90000`. F-16C and F-15E.
+  - Arco (KC-135MPRS, basket, 270.1, TACAN 101X): FL180, 250 KIAS, hot leg `z = -140000` to `-70000`. Probe-equipped aircraft.
+  - Shell (KC-135, slow boom, 270.7, TACAN 102X): FL150, 200 KIAS, hot leg `z = -150000` to `-80000`. A-10C, which cannot keep up with Texaco when loaded.
+- AWACS: E-3A Overlord on an east-west race-track at FL300 over the Registan, `x = -300000` from `z = -170000` to `z = -20000`. Datalink only. Voice GCI from SkyEye (`docs/recipes/awacs-setup.md`).
 - JTAC: one MQ-9 Reaper per tasking, orbiting overhead. No ground JTACs; `docs/recipes/jtac-setup.md` rates UAVs as the most reliable.
 
 ## Communications

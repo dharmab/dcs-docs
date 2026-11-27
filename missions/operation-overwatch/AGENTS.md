@@ -4,7 +4,15 @@ CAS mission on the Afghanistan terrain. Tunables live in `OperationOverwatch.con
 
 ## Status
 
-Scripts and offline tests only. The mission file (`src/mission`, `theatre`, `warehouses`, `options`, `dictionary`, `mapResource`) and `pack_mission.py` do not exist yet, so `make check-missions` and mission-check's `test_repo_missions_pass` skip this mission until `src/mission` exists.
+The mission file is hand-written and has not been opened in DCS. Pack it with `uv run pack_mission.py`. Values that need a DCS install are marked `TODO(dcs)` (`grep -rn "TODO(dcs)" src`):
+
+- Kandahar's airdromeId (placeholder `9999` in `mission` and `warehouses`) and a parking stand for each Kandahar template. The Mission Editor also writes every other Afghanistan airport into `warehouses`.
+- `wsType` for `AV8BNA`, `CH-47Fbl1`, `AH-64D_BLK_II`, and `OH-58D` (placeholders end in `0`). A wrong `wsType` shows the type greyed out with `(0)` in the spawn dialog.
+- `country.id.INSURGENTS` (`17` in `coalitions` and the red country).
+- The AV-8B radio layout, and radio presets for the helicopters, which have none.
+- Kandahar elevation (`alt = 1017`) and FARP heights.
+
+Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at each FARP, FARP statics with fuel and ammo trucks, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
 
 `TerrainData.lua` is generated; do not edit it. It contains the area of operations polygon (Kandahar and Helmand provinces) and a 200 m mask of tasking sites, built from `docs/data/terrains/Afghanistan/`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the site rules. The generator's docstring and constants define a site.
 
@@ -22,7 +30,7 @@ Load order:
 6. `Tasking.lua` - tasking lifecycle, success and abandonment, JTAC calls, laser
 7. `OperationOverwatch.lua` - config, events, per-flight F10 menus
 
-When adding a script, update `Harness.scripts` in `tests/harness.lua`. `tests/script_list_test.lua` fails if it disagrees with `l10n/DEFAULT`. Once the mission file exists, also update the load trigger, `mapResource`, and `pack_mission.py`, and extend the test as in Operation Infinity.
+When adding a script, update `Harness.scripts` in `tests/harness.lua`, the load trigger (`trigrules` and `trig.actions`) in `mission`, `mapResource`, and both lists in `pack_mission.py`. `tests/script_list_test.lua` fails if any of them disagree. `tests/mission_test.lua` checks that the mission's FARPs, helicopter templates, and JTAC presets match the config.
 
 Style follows Operation Infinity: `array[#array + 1] = value`, named constants for magic numbers, verbose logging.
 
@@ -52,4 +60,4 @@ Nothing has run on a server yet. Check these first:
 
 ## Not Implemented
 
-Scenario types other than Firefight, tasking modifiers, light vehicles driving away when the enemy breaks, failure on friendly loss (hits only draw a cease-fire call), tankers, AWACS, base decoration, and CH-47 transport taskings.
+Scenario types other than Firefight, tasking modifiers, light vehicles driving away when the enemy breaks, failure on friendly loss (hits only draw a cease-fire call), base decoration, helicopter radio presets, and CH-47 transport taskings.

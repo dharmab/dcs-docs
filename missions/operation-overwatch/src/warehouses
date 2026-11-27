@@ -1,0 +1,129 @@
+warehouses = {
+    ["airports"] = {
+        -- Kandahar (BLUE - fixed-wing and CH-47F dynamic spawn)
+        -- TODO(dcs): Kandahar airdromeId, and the other Afghanistan airports
+        -- (the Mission Editor writes every airport on the map)
+        [9999] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {
+                    ["A-10C_2"] = { ["wsType"] = { 1, 1, 6, 264 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 1 },
+                    ["AV8BNA"] = { ["wsType"] = { 1, 1, 6, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 2 }, -- TODO(dcs): wsType from an ME save
+                    ["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 3 },
+                    ["FA-18C_hornet"] = { ["wsType"] = { 1, 1, 1, 280 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 4 },
+                    ["F-15ESE"] = { ["wsType"] = { 1, 1, 1, 327 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 5 },
+                    ["F-14BU"] = { ["wsType"] = { 1, 1, 1, 351 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 6 },
+                    ["M-2000C"] = { ["wsType"] = { 1, 1, 1, 284 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 7 },
+                },
+                ["helicopters"] = {
+                    ["CH-47Fbl1"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 8 }, -- TODO(dcs): wsType from an ME save
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
+    ["warehouses"] = {
+        -- FARP Pasab (BLUE - AH-64D and OH-58D dynamic spawn)
+        [101] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 }, -- TODO(dcs): wsType from an ME save
+                    ["OH-58D"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 }, -- TODO(dcs): wsType from an ME save
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+        -- FARP Gereshk (BLUE - AH-64D and OH-58D dynamic spawn)
+        [102] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 }, -- TODO(dcs): wsType from an ME save
+                    ["OH-58D"] = { ["wsType"] = { 1, 1, 3, 0 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 }, -- TODO(dcs): wsType from an ME save
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
+}

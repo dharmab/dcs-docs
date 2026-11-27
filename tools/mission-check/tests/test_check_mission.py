@@ -702,6 +702,36 @@ def test_template_on_ship_passes(run) -> None:
     assert code == 0, out
 
 
+def test_template_on_farp_passes(run) -> None:
+    mission = make_template_mission()
+    farp = {
+        "unitId": 100,
+        "name": "FARP",
+        "type": "FARP",
+        "category": "Heliports",
+        "x": 0,
+        "y": 0,
+        "heading": 0,
+    }
+    mission["coalition"]["blue"]["country"][0]["static"] = {
+        "group": [
+            {
+                "groupId": 100,
+                "name": "FARP",
+                "units": [farp],
+                "route": {"points": [{"x": 0, "y": 0}]},
+                "x": 0,
+                "y": 0,
+            }
+        ]
+    }
+    blue_group(mission)["route"]["points"] = [{"linkUnit": 100, "helipadId": 100}]
+    warehouses = make_warehouses()
+    warehouses["warehouses"] = {100: {"coalition": "BLUE", "dynamicSpawn": True}}
+    code, out = run(mission, warehouses)
+    assert code == 0, out
+
+
 def test_template_helipad_mismatch(run) -> None:
     mission = make_template_mission()
     add_carrier(mission)
@@ -716,7 +746,7 @@ def test_template_link_unit_not_a_ship(run) -> None:
     mission = make_template_mission()
     blue_group(mission)["route"]["points"] = [{"linkUnit": 100}]
     _, out = run(mission)
-    assert "linkUnit 100 is not a ship unit in the mission" in out
+    assert "linkUnit 100 is not a ship or FARP unit in the mission" in out
     assert "linkUnit 100 has no entry in warehouses.warehouses" in out
 
 
