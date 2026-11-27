@@ -870,7 +870,48 @@ def check_tacan_beacons(mission: dict[str, Any], diag: DiagnosticCollector) -> N
 
 
 # ---------------------------------------------------------------------------
-# 11. Dictionary and resource references
+# 11. Drawing layers
+# ---------------------------------------------------------------------------
+
+DRAWING_LAYERS = ("Red", "Blue", "Neutral", "Common", "Author")
+
+
+def check_drawing_layers(mission: dict[str, Any], diag: DiagnosticCollector) -> None:
+    """With drawings.options present, the Mission Editor needs all five layers.
+
+    It sorts its built-in layers by their index in drawings.layers, so a missing
+    layer fails the sort, and a layer with an unknown name is looked up as nil.
+    """
+    drawings = mission.get("drawings")
+    if not isinstance(drawings, dict) or "options" not in drawings:
+        return
+    layers = drawings.get("layers")
+    path = "mission.drawings.layers"
+    if not isinstance(layers, (dict, list)):
+        diag.fail(path, "required when drawings.options is present")
+        return
+
+    seen: dict[str, str] = {}
+    for li, layer in _items(layers):
+        lpath = f"{path}[{li}]"
+        name = layer.get("name") if isinstance(layer, dict) else None
+        if name not in DRAWING_LAYERS:
+            diag.fail(
+                lpath,
+                f"layer name {name!r} must be one of {', '.join(DRAWING_LAYERS)}",
+            )
+        elif name in seen:
+            diag.fail(lpath, f"duplicate layer '{name}' (first seen at {seen[name]})")
+        else:
+            seen[name] = lpath
+
+    for name in DRAWING_LAYERS:
+        if name not in seen:
+            diag.fail(path, f"missing layer '{name}'")
+
+
+# ---------------------------------------------------------------------------
+# 12. Dictionary and resource references
 # ---------------------------------------------------------------------------
 
 DICT_KEY_RE = re.compile(r"DictKey_\w+")
@@ -963,6 +1004,7 @@ def run_checks(mission_dir: Path) -> int:
         check_coalition_countries(mission_data, diag)
         check_parking_starts(mission_data, diag)
         check_tacan_beacons(mission_data, diag)
+        check_drawing_layers(mission_data, diag)
         check_references(
             mission_dir,
             mission_data,

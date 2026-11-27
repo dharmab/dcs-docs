@@ -1024,7 +1024,66 @@ def test_non_tacan_beacon_ignored(run) -> None:
 
 
 # ---------------------------------------------------------------------------
-# 11. Dictionary and resource references
+# 11. Drawing layers
+# ---------------------------------------------------------------------------
+
+LAYERS_PATH = "mission.drawings.layers"
+
+
+def make_drawings_mission(layer_names: list[str] | None) -> dict[str, Any]:
+    mission = make_mission()
+    drawings: dict[str, Any] = {"options": {"hiddenOnF10Map": {}}}
+    if layer_names is not None:
+        drawings["layers"] = [
+            {"visible": True, "name": name, "objects": []} for name in layer_names
+        ]
+    mission["drawings"] = drawings
+    return mission
+
+
+def test_all_drawing_layers_pass(run) -> None:
+    code, out = run(make_drawings_mission(list(cm.DRAWING_LAYERS)))
+    assert code == 0, out
+
+
+def test_drawing_layers_without_options_pass(run) -> None:
+    mission = make_mission()
+    mission["drawings"] = {}
+    code, out = run(mission)
+    assert code == 0, out
+
+
+def test_empty_drawing_layers(run) -> None:
+    _, out = run(make_drawings_mission([]))
+    for name in cm.DRAWING_LAYERS:
+        assert f"{LAYERS_PATH}: missing layer '{name}'" in out
+
+
+def test_missing_author_layer(run) -> None:
+    _, out = run(make_drawings_mission(["Red", "Blue", "Neutral", "Common"]))
+    assert f"{LAYERS_PATH}: missing layer 'Author'" in out
+    assert "missing layer 'Red'" not in out
+
+
+def test_drawing_layers_required_with_options(run) -> None:
+    _, out = run(make_drawings_mission(None))
+    assert f"{LAYERS_PATH}: required when drawings.options is present" in out
+
+
+def test_unknown_drawing_layer(run) -> None:
+    _, out = run(make_drawings_mission([*cm.DRAWING_LAYERS, "Green"]))
+    assert f"{LAYERS_PATH}[5]: layer name 'Green' must be one of" in out
+
+
+def test_duplicate_drawing_layer(run) -> None:
+    _, out = run(make_drawings_mission([*cm.DRAWING_LAYERS, "Red"]))
+    assert (
+        f"{LAYERS_PATH}[5]: duplicate layer 'Red' (first seen at {LAYERS_PATH}[0])"
+    ) in out
+
+
+# ---------------------------------------------------------------------------
+# 12. Dictionary and resource references
 # ---------------------------------------------------------------------------
 
 
