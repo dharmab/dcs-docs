@@ -145,7 +145,7 @@ Each role has sub-fields: `Neutral`, `Blue`, `Red` (boolean).
 
 ### drawings.layers
 
-Array of drawing layers with visibility and objects. Required when `drawings.options` is present, and ignored otherwise. Contains exactly the `Red`, `Blue`, `Neutral`, `Common`, and `Author` layers, in any order. The array index sets the layer order in the Mission Editor. A missing or unknown layer stops the mission from loading in the Mission Editor.
+Array of drawing layers with visibility and objects. Required when `drawings.options` is present, and ignored otherwise. Contains exactly the `Red`, `Blue`, `Neutral`, `Common`, and `Author` layers, in any order. The array index sets the layer order in the Mission Editor.
 
 | Field     | Type    | Description                                                 |
 | --------- | ------- | ----------------------------------------------------------- |
