@@ -114,6 +114,34 @@ The mission's static groups are named `KAF <type> #NN`, and a comment above each
 
 The NW big stands near midfield, the NW shelters, and most of the NE blocks are left free for Dynamic Spawn.
 
+### Second Pass
+
+Statics with group IDs 401 and up were added by a one-off script, by these rules:
+
+- Each zone continues the theme above. It fills a share of its free stands, with the type mix set by weights. A stand goes to the first zone in the table that matches it:
+
+  | Zone (along the runway from the SW threshold)     | Share | Types                                                                   |
+  | ------------------------------------------------- | ----- | ----------------------------------------------------------------------- |
+  | J ramp by the terminal (stands 296, 240, 183, 76) | 100%  | Yak-40, An-26 (Ukraine)                                                 |
+  | Any stand 45 m or more from its nearest stand     | 85%   | C-17A, IL-76MD (Ukraine), C-130 (USAF, RAF), C-130J (USAF, RAF, Canada) |
+  | NW, 1450 to 1800 m (Y and Z blocks)               | 40%   | An-26, Yak-40 (Ukraine)                                                 |
+  | SE, -1100 to -250 m (N rows)                      | 55%   | Belgian and Dutch F-16A MLU                                             |
+  | SE, -250 to 450 m (M rows)                        | 50%   | C-130 (USAF, RAF), C-17A, A-10C                                         |
+  | SE, 450 to 1000 m (K row)                         | 50%   | MQ-9, MQ-1                                                              |
+  | SE, 1000 to 2200 m (flight line)                  | 55%   | A-10C, F/A-18C                                                          |
+  | SE, 2200 to 2700 m (PAN row)                      | 55%   | AV-8B, F/A-18C                                                          |
+  | SE, 2700 to 3400 m (AAF row)                      | 45%   | Mirage 2000, Mi-8                                                       |
+  | NW, 2000 to 2500 m (middle block)                 | 45%   | Tornado GR4                                                             |
+  | NW, 2500 to 3400 m (NE blocks)                    | 25%   | Dutch F-16A MLU, A-10C, Tornado GR4                                     |
+  | Kandahar Heliport                                 | 65%   | AH-64D, UH-60A, OH-58D, CH-47F, RAF and Canadian CH-47D                 |
+
+- A type goes only on a stand whose nearest other stand is far enough away for it. For example, 18 m for fighters, 30 m for Chinooks, and 55 m for the C-17. The biggest types get the widest stands first.
+- Never filled: Kandahar's `Term_Type` 40 helicopter stands (the CH-47F spawns there), the seven template stands, and the NW midfield except its wide stands and the Y and Z blocks. Kandahar keeps 133 free fixed-wing stands and 26 free helicopter stands. Kandahar Heliport has no Dynamic Spawn, so it is filled more heavily.
+- At Kandahar, a new aircraft takes the heading of the nearest earlier static aircraft within 150 m. Otherwise it faces the runway. At Kandahar Heliport, helicopters face square to their row of stands. Rows across the runway axis face down it, toward the SW, like the hand-placed helicopters. The single column of stands on the west edge faces the apron (143.7°).
+- About three in four aircraft get one or two pieces of ground equipment by the nose. For helicopters it goes ahead of the nose, clear of the rotor disc. Fighters get Massun92 power carts, air conditioners, bomb loaders, light carts, and tugs. Heavies get tugs and fuel trucks. The J ramp's civil aircraft get buses, Land Rovers, tugs, and fuel trucks. Helicopters get HEMTTs, HMMWVs, and power carts. No equipment is within 18 m of a free Kandahar stand, or within 11 m of another occupied stand.
+- Cargo aircraft (C-17A, IL-76MD, C-130, C-130J, An-26) also get a row of two to four Massun92 pallets, containers, and cargo loaders beside the rear fuselage, behind the wing.
+- The equipment's comment reads `Kandahar stand N ground equipment` (or `Heliport stand N ground equipment`), for the stand of the aircraft it serves.
+
 ## Decorating Tips
 
 - Don't place statics on stands that players or AI spawn on. Look up which stands the mission's groups use (`parking` / `parking_id`; see the [player slots recipe](../../docs/recipes/player-slots.md)).
