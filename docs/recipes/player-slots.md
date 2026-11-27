@@ -18,20 +18,20 @@ A mission typically uses one approach:
 - **Traditional multiplayer**: Multiple units with `skill = "Client"` for each available slot
 - **Dynamic spawn (recommended for multiplayer)**: One template per aircraft type with `dynSpawnTemplate = true`, players spawn from warehouse inventory
 
-## Dynamic Spawn System (Recommended for Multiplayer)
+## Dynamic Spawn (Recommended for Multiplayer)
 
-The dynamic spawn system, added in DCS 2.9, lets players spawn any aircraft in the airfield's warehouse without a pre-placed slot for every possible aircraft. This makes the mission file much simpler and removes the limit on how many aircraft slots fit at a single airfield.
+Dynamic spawn lets players spawn any aircraft a base's warehouse stocks, without a pre-placed slot for each one. A mission needs one template group per aircraft type instead of dozens of slots, and the number of players at a base is limited only by warehouse stock and free parking. Dynamic spawn is multiplayer only.
 
-### How Dynamic Spawn Works
+A dynamic spawn mission has two parts:
 
-1. Enable dynamic spawn on the airfield via warehouse settings
-2. Create template aircraft groups with `dynSpawnTemplate = true`
-3. Players select aircraft type, loadout, and spawn location in-game
-4. Aircraft spawn from warehouse inventory (can be unlimited or restricted)
+1. **A warehouse entry** for each base, with `dynamicSpawn = true`. It sets which types the base offers and how many.
+2. **A template group** for each aircraft type, with `dynSpawnTemplate = true`. It sets the waypoints, radios, livery, and starting loadout for that type.
 
-### Enabling Dynamic Spawn on an Airfield
+In game, players pick a base, a type, a parking spot, and a loadout in the multiplayer spawn dialog.
 
-Dynamic spawn is enabled via the airfield's warehouse configuration in `warehouses` (a separate file in the .miz archive):
+### Warehouse Settings
+
+Each airfield's entry lives in `warehouses["airports"]` (a separate file in the .miz archive), keyed by airdrome ID:
 
 ```lua
 -- In the warehouses file
@@ -40,6 +40,7 @@ warehouses = {
         [15] = {  -- Airfield ID (e.g. 15 = Krymsk)
             ["coalition"] = "BLUE",
             ["dynamicSpawn"] = true,           -- Enables dynamic spawn at this airfield
+            ["allowHotStart"] = true,          -- Offers hot start; cold start only without it
             ["unlimitedAircrafts"] = true,      -- Unlimited aircraft inventory
             ["unlimitedFuel"] = true,
             ["unlimitedMunitions"] = true,
@@ -64,13 +65,29 @@ warehouses = {
 }
 ```
 
-The key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. To restrict types, add entries like `["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["initialAmount"] = 10, ["unlimited"] = false }` (see the wsType note below).
+The key is `aircrafts` (plural), not `aircraft`. When `unlimitedAircrafts = true`, the `aircrafts` table can be empty. To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`), keyed by type name. Each stock entry takes `wsType` (required), `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
 
-### Enabling Dynamic Spawn on a Ship
+**Every aircraft stock entry needs `wsType`.** The sim matches stock to aircraft types by this 4-number type ID, not by the type-name key. An entry without `wsType` counts as zero, so in the spawn dialog every type shows `(0)` and is greyed out. The ME always writes `wsType` (and, when `dynamicSpawn = true`, writes the full stock list even with `unlimitedAircrafts = true`). Copy the values from an ME-saved `warehouses` file, such as a stock mission under `Mods/aircraft/*/Missions`. Some values:
 
-Carriers (and FARPs) have their own warehouse under `warehouses["warehouses"]`, keyed by the ship's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. The multiplayer spawn dialog lists such ships as "Aircraft carrier" bases.
+| Type            | wsType       | Type             | wsType       |
+| --------------- | ------------ | ---------------- | ------------ |
+| `A-10C_2`       | 1, 1, 6, 264 | `F-15C`          | 1, 1, 1, 6   |
+| `F-14A-135-GR`  | 1, 1, 1, 279 | `F-15ESE`        | 1, 1, 1, 327 |
+| `F-14B`         | 1, 1, 1, 278 | `F-16C_50`       | 1, 1, 1, 275 |
+| `F-14BU`        | 1, 1, 1, 351 | `F-4E-45MC`      | 1, 1, 1, 328 |
+| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17`          | 1, 1, 1, 271 |
+| `M-2000C`       | 1, 1, 1, 284 | `Mirage-F1CE`    | 1, 1, 1, 302 |
+| `MiG-29A`       | 1, 1, 1, 2   | `Su-25`          | 1, 1, 6, 16  |
+| `MiG-29G`       | 1, 1, 1, 49  | `Su-25T`         | 1, 1, 6, 54  |
+| `MiG-29S`       | 1, 1, 1, 50  | `MiG-29 Fulcrum` | 1, 1, 1, 343 |
 
-To offer only specific types, set `unlimitedAircrafts = false` and stock each type under `aircrafts.planes` (or `aircrafts.helicopters`) keyed by type name. Each stock entry takes `wsType` (required), `initialAmount`, `unlimited` (per-type unlimited), and `linkDynTempl` (the `groupId` of that type's template group for this base). The spawn dialog shows only flyable types that can operate from the base, greys out types with no stock, and hides the count for unlimited types.
+Module aircraft get the fourth number assigned at load time (`WSTYPE_PLACEHOLDER`), so re-check it against a fresh ME save after a major DCS update. `mission-check` fails any stock entry missing `wsType`.
+
+The Mission Editor fills in every type missing from `aircrafts` with `initialAmount = 100` when it loads a mission (`Config/AirportsEquipment.lua`). If a mission with restricted stock is re-saved in the ME, check the base's resource manager and zero out any added types.
+
+### Ships and FARPs
+
+Carriers and FARPs have their own warehouse under `warehouses["warehouses"]`, keyed by the unit's `unitId` rather than an airdrome ID. The entry uses the same fields as an airfield. The spawn dialog lists such ships as "Aircraft carrier" bases. This carrier offers only two types:
 
 ```lua
 -- In the warehouses file
@@ -98,24 +115,6 @@ warehouses = {
 }
 ```
 
-**Every aircraft stock entry needs `wsType`.** The sim matches stock to aircraft types by this 4-number type ID, not by the type-name key. An entry without `wsType` counts as zero, so in the multiplayer spawn dialog every type shows `(0)` and is greyed out, at airfields and on carriers alike. The ME always writes `wsType` (and, when `dynamicSpawn = true`, writes the full stock list even with `unlimitedAircrafts = true`). Copy the values from an ME-saved `warehouses` file, such as a stock mission under `Mods/aircraft/*/Missions`. Some values for DCS 2.9:
-
-| Type            | wsType       | Type             | wsType       |
-| --------------- | ------------ | ---------------- | ------------ |
-| `A-10C_2`       | 1, 1, 6, 264 | `F-15C`          | 1, 1, 1, 6   |
-| `F-14A-135-GR`  | 1, 1, 1, 279 | `F-15ESE`        | 1, 1, 1, 327 |
-| `F-14B`         | 1, 1, 1, 278 | `F-16C_50`       | 1, 1, 1, 275 |
-| `F-14BU`        | 1, 1, 1, 351 | `F-4E-45MC`      | 1, 1, 1, 328 |
-| `FA-18C_hornet` | 1, 1, 1, 280 | `JF-17`          | 1, 1, 1, 271 |
-| `M-2000C`       | 1, 1, 1, 284 | `Mirage-F1CE`    | 1, 1, 1, 302 |
-| `MiG-29A`       | 1, 1, 1, 2   | `Su-25`          | 1, 1, 6, 16  |
-| `MiG-29G`       | 1, 1, 1, 49  | `Su-25T`         | 1, 1, 6, 54  |
-| `MiG-29S`       | 1, 1, 1, 50  | `MiG-29 Fulcrum` | 1, 1, 1, 343 |
-
-Module aircraft get the fourth number assigned at load time (`WSTYPE_PLACEHOLDER`), so re-check it against a fresh ME save after a major DCS update. `mission-check` fails any stock entry missing `wsType`.
-
-The Mission Editor fills in every type missing from `aircrafts` with `initialAmount = 100` when it loads a mission (`Config/AirportsEquipment.lua`). If a mission with a restricted carrier is re-saved in the ME, check the carrier's resource manager and zero out any added types.
-
 A ship template's first waypoint links to the ship with `linkUnit` and `helipadId` (both the ship's `unitId`) instead of `airdromeId`:
 
 ```lua
@@ -128,11 +127,11 @@ A ship template's first waypoint links to the ship with `linkUnit` and `helipadI
 },
 ```
 
-The Stennis definition has `numParking = 4`, so only a handful of aircraft can sit on deck at once.
+The Stennis definition has `numParking = 4`, so only a handful of aircraft can sit on deck at once. Whether dynamic spawn works on the Supercarrier module is unverified.
 
-### Dynamic Spawn Template Group
+### Template Groups
 
-A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. `lateActivation` keeps the template out of the traditional slot selection screen:
+A template group requires `dynSpawnTemplate = true` and `lateActivation = true` at the group level. `lateActivation` keeps the template out of the traditional slot selection screen. Each aircraft type at a base needs its own template:
 
 ```lua
 [1] = {
@@ -208,26 +207,9 @@ A template group requires `dynSpawnTemplate = true` and `lateActivation = true` 
 },
 ```
 
-### Template Loadouts
+Every aircraft spawned from a template shares its waypoints. The spawn dialog also starts from the template unit's livery, `AddPropAircraft`, and `payload.pylons`. Pylons are keyed by station number, and each pylon's `settings` (fuzes, laser codes) carry over. An empty `pylons` table spawns a clean aircraft. Players can change any of these before spawning.
 
-The spawn dialog fills the pylon grid from the template unit's `payload.pylons`, keyed by station number, and keeps each pylon's `settings` (fuzes, laser codes). Players can change the stores before spawning. The template's livery and `AddPropAircraft` also carry over.[^spawn-dialog]
-
-The dialog does not read the template's `payload.chaff`, `payload.flare`, `payload.fuel`, or `payload.gun`. Fuel and gun start at 100%, and chaff and flares start at the type's defaults. Players can move the chaff and flare sliders only on types whose countermeasure load is editable. Types such as the AV-8B and F-14 set their load through an `AddPropAircraft` entry instead (`EWDispenserTFL` through `EWDispenserBR`, and `ALE39Loadout`).
-
-### Dynamic Spawn Advantages
-
-- **Reduced mission complexity**: One template per aircraft type instead of dozens of individual slots
-- **Flexible player count**: Unlimited players can spawn (within warehouse limits)
-- **In-game loadout selection**: Players choose weapons, fuel, and livery when spawning
-- **Waypoint sharing**: All spawned aircraft of a type inherit the template's waypoints
-
-### Dynamic Spawn Limitations
-
-- Multiplayer only (not available in singleplayer)
-- Supercarrier module behavior is unverified (older notes claim dynamic spawn does not work on it). Carriers in general are supported; see "Enabling Dynamic Spawn on a Ship"
-- Template groups must use `lateActivation = true` to prevent them from appearing as traditional slots
-- Each aircraft type needs its own template if you want custom waypoints
-- Hot start requires `allowHotStart = true` in the warehouse configuration; without it, only cold start is available
+The dialog ignores the template's `payload.chaff`, `payload.flare`, `payload.fuel`, and `payload.gun`. Fuel and gun start at 100%, and chaff and flares start at the type's defaults. Players can move the chaff and flare sliders only on types whose countermeasure load is editable. Types such as the AV-8B and F-14 set their load through [`AddPropAircraft`](#aircraft-specific-properties) instead (`EWDispenserTFL` through `EWDispenserBR`, and `ALE39Loadout`).
 
 ---
 
@@ -671,8 +653,6 @@ When adding player slots, verify:
 - [DCS Forum: Dynamic Spawn Guide](https://forum.dcs.world/topic/352814-dynamic-spawn-guide/) - Official ED guide
 
 ## References
-
-[^spawn-dialog]: `Scripts/UI/MultiplayerSelectRoleMap/MultiplayerSelectAirdromeDialog.lua` in the DCS install.
 
 [^nevatim-bugs]: [2.9 Nevatim ramp starts still bugged](https://forum.dcs.world/topic/335545-29-nevatim-ramp-starts-still-bugged), [Nevatim Parking spots 8-22 cannot accommodate large aircraft](https://forum.dcs.world/topic/356219-nevatim-parking-spots-8-22-cannot-accommodate-large-aircraft/), and [NEVATIM TAXI ROUTES](https://forum.dcs.world/topic/379511-nevatim-taxi-routes/).
 
