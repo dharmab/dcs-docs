@@ -59,6 +59,7 @@ to the east, in metres.
 
 | Theatre              | Central meridian | False easting (m) | False northing (m) | Fit error |
 | -------------------- | ---------------- | ----------------- | ------------------ | --------- |
+| `Afghanistan`        | 63°              | -300,150          | -3,759,657         | 7 cm      |
 | `Caucasus`           | 33°              | -99,517           | -4,998,115         | 7 cm      |
 | `GermanyCW`          | 21°              | 35,427.617        | -6,061,633.131     | 7 cm      |
 | `Kola`               | 21°              | -62,702           | -7,543,625         | 6 cm      |
