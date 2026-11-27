@@ -1,12 +1,9 @@
 -- =============================================================================
 -- SITES
 -- Chooses tasking locations at runtime.
--- Fixed-wing taskings go anywhere in the area of operations. Rotary-wing
--- taskings go within a radius of a FARP.
---
--- The area of operations, FARP positions, and terrain rules wait for the
--- Afghanistan terrain export. Until then isValidPoint only checks the surface
--- type.
+-- Taskings are placed on tasking sites from TerrainData.lua: farmland and open
+-- ground near compounds in the area of operations. Fixed-wing taskings go on
+-- any site. Rotary-wing taskings go on a site within a radius of a FARP.
 -- =============================================================================
 
 if _G.SitesLoaded then
@@ -20,6 +17,9 @@ Sites = {}
 local log = Logging:create("Sites")
 
 local MAX_ATTEMPTS = 200
+-- Rotary sites cover a small part of a FARP's radius, so rejection sampling
+-- needs more attempts
+local ROTARY_ATTEMPTS = 2000
 local FULL_CIRCLE_DEGREES = 360
 
 -- Ray-casting point-in-polygon test. polygon is an array of { x, y }.
@@ -41,17 +41,6 @@ function Sites:pointInPolygon(point, polygon)
     return inside
 end
 
-function Sites:boundingBox(polygon)
-    local box = { minX = math.huge, maxX = -math.huge, minY = math.huge, maxY = -math.huge }
-    for _, p in ipairs(polygon) do
-        box.minX = math.min(box.minX, p.x)
-        box.maxX = math.max(box.maxX, p.x)
-        box.minY = math.min(box.minY, p.y)
-        box.maxY = math.max(box.maxY, p.y)
-    end
-    return box
-end
-
 -- True bearing in degrees from one map point to another. DCS x is north and
 -- y (z in 3D) is east.
 function Sites:bearingDegrees(from, to)
@@ -67,8 +56,126 @@ function Sites:offset(origin, bearing, distance)
     }
 end
 
--- TODO(terrain): add land cover, slope, and distance from towns and roads
--- once docs/data/terrains/Afghanistan/ exists.
+-- Decoded site mask rows, keyed by row index. Each row is a list of
+-- cumulative run ends; odd runs are non-site, even runs are site.
+local decodedRows = {}
+local decodedGrid = nil
+-- Cumulative site counts per row, built on the first pick
+local cumulativeCounts = nil
+local countsGrid = nil
+
+local function siteGrid()
+    return OperationOverwatch.config.siteGrid
+end
+
+local function decodeRow(grid, rowIndex)
+    if decodedGrid ~= grid then
+        decodedRows = {}
+        decodedGrid = grid
+    end
+    local row = decodedRows[rowIndex]
+    if row then
+        return row
+    end
+    row = {}
+    local columnEnd = 0
+    for runLength in grid.rows[rowIndex]:gmatch("%d+") do
+        columnEnd = columnEnd + tonumber(runLength)
+        row[#row + 1] = columnEnd
+    end
+    decodedRows[rowIndex] = row
+    return row
+end
+
+local function siteCounts(grid)
+    if countsGrid ~= grid then
+        cumulativeCounts = {}
+        local total = 0
+        for count in grid.siteCounts:gmatch("%d+") do
+            total = total + tonumber(count)
+            cumulativeCounts[#cumulativeCounts + 1] = total
+        end
+        countsGrid = grid
+    end
+    return cumulativeCounts
+end
+
+-- Index of the first entry in an ascending list that is >= value
+local function firstAtLeast(list, value)
+    local low, high = 1, #list
+    while low < high do
+        local middle = math.floor((low + high) / 2)
+        if list[middle] >= value then
+            high = middle
+        else
+            low = middle + 1
+        end
+    end
+    return low
+end
+
+-- True when the point is on a tasking site cell
+function Sites:isSite(point)
+    local grid = siteGrid()
+    if not grid then
+        return false
+    end
+    local rowIndex = math.floor((grid.northX - point.x) / grid.cellSize) + 1
+    local column = math.floor((point.y - grid.westZ) / grid.cellSize) + 1
+    local rowIsInGrid = rowIndex >= 1 and rowIndex <= #grid.rows
+    local columnIsInGrid = column >= 1 and column <= grid.columns
+    if not (rowIsInGrid and columnIsInGrid) then
+        return false
+    end
+    local row = decodeRow(grid, rowIndex)
+    return firstAtLeast(row, column) % 2 == 0
+end
+
+-- A random point on a tasking site, each site cell equally likely, or nil
+-- when the grid has no sites
+function Sites:randomSite()
+    local grid = siteGrid()
+    if not grid then
+        return nil
+    end
+    local counts = siteCounts(grid)
+    local total = counts[#counts] or 0
+    if total == 0 then
+        return nil
+    end
+
+    local pick = math.random(total)
+    local rowIndex = firstAtLeast(counts, pick)
+    local previousRowsTotal = counts[rowIndex - 1] or 0
+    local siteInRow = pick - previousRowsTotal
+
+    -- Walk the site runs to the column of the nth site cell in the row
+    local row = decodeRow(grid, rowIndex)
+    local column = nil
+    local runStart = 0
+    for i, runEnd in ipairs(row) do
+        local isSiteRun = i % 2 == 0
+        local runLength = runEnd - runStart
+        if isSiteRun then
+            if siteInRow <= runLength then
+                column = runStart + siteInRow
+                break
+            end
+            siteInRow = siteInRow - runLength
+        end
+        runStart = runEnd
+    end
+    if not column then
+        log("Site counts disagree with row " .. rowIndex)
+        return nil
+    end
+
+    return {
+        x = grid.northX - (rowIndex - 1 + math.random()) * grid.cellSize,
+        y = grid.westZ + (column - 1 + math.random()) * grid.cellSize,
+    }
+end
+
 function Sites:isValidPoint(point)
     local surface = land.getSurfaceType({ x = point.x, y = point.y })
     return surface == land.SurfaceType.LAND
@@ -79,16 +186,11 @@ function Sites:isInAreaOfOperations(point)
     return polygon ~= nil and self:pointInPolygon(point, polygon)
 end
 
-local function randomPointInAreaOfOperations(polygon)
-    local box = Sites:boundingBox(polygon)
-    for _ = 1, MAX_ATTEMPTS do
-        local candidate = {
-            x = box.minX + math.random() * (box.maxX - box.minX),
-            y = box.minY + math.random() * (box.maxY - box.minY),
-        }
-        if Sites:pointInPolygon(candidate, polygon) then
-            return candidate
-        end
+local function rotaryCandidate(config)
+    local farp = config.farps[math.random(#config.farps)]
+    local candidate = Spatial:randomPointInRadius(farp.position, config.rotaryTaskingRadius)
+    if Sites:isSite(candidate) then
+        return candidate
     end
     return nil
 end
@@ -98,23 +200,27 @@ end
 -- Returns a map point { x, y }, or nil when no valid site was found.
 function Sites:pickTaskingCenter(flightCategory)
     local config = OperationOverwatch.config
-    local polygon = config.areaOfOperations
-    if not polygon then
+    if not config.areaOfOperations then
         log("No area of operations configured")
         return nil
     end
+    if not config.siteGrid then
+        log("No site grid configured")
+        return nil
+    end
+    local isRotary = flightCategory == "rotary"
+    if isRotary and #config.farps == 0 then
+        log("No FARPs configured")
+        return nil
+    end
 
-    for attempt = 1, MAX_ATTEMPTS do
+    local attempts = isRotary and ROTARY_ATTEMPTS or MAX_ATTEMPTS
+    for attempt = 1, attempts do
         local candidate
-        if flightCategory == "rotary" then
-            if #config.farps == 0 then
-                log("No FARPs configured")
-                return nil
-            end
-            local farp = config.farps[math.random(#config.farps)]
-            candidate = Spatial:randomPointInRadius(farp.position, config.rotaryTaskingRadius)
+        if isRotary then
+            candidate = rotaryCandidate(config)
         else
-            candidate = randomPointInAreaOfOperations(polygon)
+            candidate = self:randomSite()
         end
 
         if candidate then
@@ -134,7 +240,7 @@ function Sites:pickTaskingCenter(flightCategory)
             end
         end
     end
-    log("No valid " .. flightCategory .. " site after " .. MAX_ATTEMPTS .. " attempts")
+    log("No valid " .. flightCategory .. " site after " .. attempts .. " attempts")
     return nil
 end
 

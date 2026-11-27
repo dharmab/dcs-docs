@@ -51,14 +51,20 @@ OperationOverwatch.config = {
     },
     rotaryTaskingRadius = 20 * METERS_PER_NAUTICAL_MILE,
 
-    -- TODO(terrain): these wait for the Afghanistan terrain export.
-    -- areaOfOperations: polygon of map points { x, y } covering Kandahar and
-    -- Helmand provinces.
-    areaOfOperations = nil,
-    -- farps: array of { name, position = { x, y } }
-    farps = {},
-    -- checkInPoint: map point { x, y }
-    checkInPoint = nil,
+    -- Polygon of map points { x, y } covering Kandahar and Helmand provinces,
+    -- and the tasking site mask. Both are generated in TerrainData.lua.
+    areaOfOperations = TerrainData.areaOfOperations,
+    siteGrid = TerrainData,
+    -- Open ground with no fields or compounds within 300 m. FARP Pasab is at
+    -- FOB Pasab (formerly FOB Wilson) on Highway 1 in Zhari district. FARP
+    -- Gereshk is 9 km west of Gereshk, covering Sangin, Gereshk, Lashkar Gah,
+    -- and Nad-e Ali.
+    farps = {
+        { name = "FARP Pasab", position = { x = -262650, y = -68950 } },
+        { name = "FARP Gereshk", position = { x = -237350, y = -160450 } },
+    },
+    -- On Highway 1 halfway between Kandahar Airfield and Camp Bastion
+    checkInPoint = { x = -257475, y = -108266 },
 }
 
 OperationOverwatch.state = {

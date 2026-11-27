@@ -252,7 +252,9 @@ def test_valid_mission_passes(run) -> None:
 
 def test_repo_missions_pass(capsys: pytest.CaptureFixture[str]) -> None:
     missions_root = Path(__file__).resolve().parents[3] / "missions"
-    mission_dirs = sorted(missions_root.glob("*/src"))
+    # Missions without a mission file have scripts only and are not checked,
+    # matching the check-missions target in the Makefile
+    mission_dirs = sorted(p.parent for p in missions_root.glob("*/src/mission"))
     if not mission_dirs:
         pytest.skip("no missions in repository")
     for mission_dir in mission_dirs:

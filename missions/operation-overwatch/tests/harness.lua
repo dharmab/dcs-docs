@@ -18,6 +18,7 @@ Harness.scripts = {
     "Logging",
     "Units",
     "Spatial",
+    "TerrainData",
     "EnemyForce",
     "Sites",
     "Firefight",
@@ -28,8 +29,9 @@ Harness.scripts = {
 Harness.missionDir = missionDir
 Harness.scriptsDir = scriptsDir
 
--- A placeholder area of operations and FARP for tests, until the terrain
--- export gives real ones
+-- A placeholder area of operations, FARP, and site grid for tests. The mock
+-- terrain is flat open land around the origin, far from the real area of
+-- operations in TerrainData.lua.
 Harness.testArea = {
     { x = -50000, y = -50000 },
     { x = 50000, y = -50000 },
@@ -39,6 +41,26 @@ Harness.testArea = {
 Harness.testFarps = {
     { name = "Test FARP", position = { x = 0, y = 0 } },
 }
+
+-- A site grid over the test area where every cell is a site
+local TEST_GRID_CELLS = 100
+local function buildTestGrid()
+    local rows = {}
+    local counts = {}
+    for i = 1, TEST_GRID_CELLS do
+        rows[i] = "0," .. TEST_GRID_CELLS
+        counts[i] = TEST_GRID_CELLS
+    end
+    return {
+        cellSize = 1000,
+        northX = 50000,
+        westZ = -50000,
+        columns = TEST_GRID_CELLS,
+        siteCounts = table.concat(counts, ","),
+        rows = rows,
+    }
+end
+Harness.testGrid = buildTestGrid()
 
 -- Globals that Scripts/MissionScripting.lua sets to nil before mission
 -- scripts run (docs/scripting/simulator-scripting-engine.md)
@@ -85,7 +107,9 @@ end
 -- Load the scripts into a fresh environment and return the mock state.
 -- options.seed: math.randomseed value (default 1)
 -- options.surfaceAt: passed to the mock
--- options.noArea: leave the area of operations and FARPs unset
+-- options.noArea: leave the area of operations, FARPs, and site grid unset
+-- options.realTerrain: keep the generated area of operations, site grid, and
+-- FARPs from TerrainData.lua and the config
 function Harness.load(options)
     options = options or {}
     resetGlobals()
@@ -97,9 +121,15 @@ function Harness.load(options)
         setfenv(chunk, scriptEnv)
         chunk()
     end
-    if not options.noArea then
-        OperationOverwatch.config.areaOfOperations = Harness.testArea
-        OperationOverwatch.config.farps = Harness.testFarps
+    local config = OperationOverwatch.config
+    if options.noArea then
+        config.areaOfOperations = nil
+        config.farps = {}
+        config.siteGrid = nil
+    elseif not options.realTerrain then
+        config.areaOfOperations = Harness.testArea
+        config.farps = Harness.testFarps
+        config.siteGrid = Harness.testGrid
     end
     return env
 end

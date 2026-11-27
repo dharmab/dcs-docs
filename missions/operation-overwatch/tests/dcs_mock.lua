@@ -5,9 +5,9 @@
 -- A small stateful stand-in for the DCS mission scripting environment.
 -- Enum values come from docs/scripting/reference. Behavior is simplified:
 -- flat terrain, no AI, units only move when a test moves them.
--- Copied from Operation Infinity. There is no Afghanistan terrain export yet,
--- so the terrain is flat open land with no airbases or roads, and coordinates
--- are a fake linear projection.
+-- Copied from Operation Infinity. The terrain is flat open land with no
+-- airbases or roads, and coordinates are a fake linear projection. Tests of
+-- site selection on real terrain read the generated TerrainData.lua instead.
 -- =============================================================================
 
 local Mock = {}

@@ -70,7 +70,12 @@ Static aircraft must not occupy parking stands that Dynamic Spawn needs. Place t
 
 ### FARPs
 
-Two hand-built FARPs with fuel, ammo, and ground crew: one in Kandahar province and one in Helmand province. Locations wait for the terrain export.
+Two hand-built FARPs with fuel, ammo, and ground crew:
+
+- **FARP Pasab** at FOB Pasab (formerly FOB Wilson) on Highway 1 in Zhari district, Kandahar province: `x = -262650`, `z = -68950`.
+- **FARP Gereshk**, 9 km west of Gereshk on Highway 1, Helmand province: `x = -237350`, `z = -160450`. Sangin, Gereshk, Lashkar Gah, and Nad-e Ali are within 20 nm.
+
+Both positions are open ground with no fields or compounds within 300 m in the land cover export.
 
 ## CAS Tasking Flow
 
@@ -81,11 +86,13 @@ Two hand-built FARPs with fuel, ammo, and ground crew: one in Kandahar province 
 5. The players attack. The tasking succeeds when every key unit is destroyed or 70% of the enemy force is destroyed. Key units are the ones the JTAC names in the brief, such as technicals and ZU-23s. The JTAC then calls the enemy broken, and the remaining enemy units are removed.
 6. Players RTB or request another tasking.
 
-There is one check-in point, shared by all aircraft. It is a briefed starting point, not a requirement.
+There is one check-in point, shared by all aircraft, on Highway 1 halfway between Kandahar Airfield and Camp Bastion (`x = -257475`, `z = -108266`). It is a briefed starting point, not a requirement.
 
 ### Tasking Placement
 
-Fixed-wing taskings are placed anywhere in the area of operations, Kandahar and Helmand provinces, independent of the flight's position and the check-in point. Transit and fuel management across the area are part of the gameplay. Sites are chosen at runtime from valid terrain rather than a hand-picked list, so taskings repeat less.
+Fixed-wing taskings are placed on any tasking site in the area of operations, Kandahar and Helmand provinces, independent of the flight's position and the check-in point. Transit and fuel management across the area are part of the gameplay. Sites are chosen at runtime from a generated site mask rather than a hand-picked list, so taskings repeat less.
+
+A tasking site is open ground or farmland with compounds within 1 km, outside cities, at least 5 km from airfields, on flat ground. These rules select the green zones along the Helmand and Arghandab rivers, where the 2010 fighting was, and leave out the open desert, which has no compounds for the enemy to fire from. `generate_terrain_data.py` builds the mask from the terrain export.
 
 Helicopter taskings (AH-64D, OH-58D) are placed within 20 nm of a FARP, so rotary-wing flights get transits suited to their speed and range.
 
@@ -188,7 +195,7 @@ Dynamically generated transport taskings for the CH-47F, using the same check-in
 
 ## Support Assets
 
-- Tankers: one boom and one basket track between Kandahar and Helmand (`docs/recipes/tanker-setup.md`). Track positions wait for the terrain export.
+- Tankers: one boom and one basket track over the Registan desert south of the green zones, between Kandahar and Helmand (`docs/recipes/tanker-setup.md`). The boom track runs east-west at `x = -310000` from `z = -130000` to `z = -60000`. The basket track runs east-west at `x = -330000` from `z = -140000` to `z = -70000`. Both legs are 70 km, and the nearest tasking site is 24 km from the boom track and 14 km from the basket track.
 - AWACS: datalink only. Voice GCI from SkyEye (`docs/recipes/awacs-setup.md`).
 - JTAC: one MQ-9 Reaper per tasking, orbiting overhead. No ground JTACs; `docs/recipes/jtac-setup.md` rates UAVs as the most reliable.
 
@@ -198,15 +205,5 @@ Follow `docs/recipes/comm-plan.md`, except for JTACs. Each of the 4 tasking slot
 
 ## Technical Notes
 
-- There is no Afghanistan terrain export in `docs/data/terrains/`. Runtime site selection (as in Operation Infinity's `TerrainData.lua`) needs one from `tools/terrain-geodata/`.
+- `TerrainData.lua` is generated from `docs/data/terrains/Afghanistan/` by `generate_terrain_data.py`. It contains the area of operations polygon and the tasking site mask.
 - Candidate reuse from Operation Infinity: `Logging`, `Units`, `Spatial`, `Terrain`, `Formations`, `Virtualization`, and the offline test harness.
-
-## Waiting on Terrain Export
-
-These need the Afghanistan terrain and its exported data:
-
-- FARP locations.
-- Check-in point location.
-- Tanker track positions.
-- Terrain rules for valid tasking sites (land cover, slope, distance from towns and roads).
-- Province boundaries for the area of operations.
