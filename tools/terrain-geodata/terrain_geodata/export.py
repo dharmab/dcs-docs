@@ -21,9 +21,7 @@ import shapely
 import structlog
 from pyproj import Transformer
 from rasterio.errors import NotGeoreferencedWarning
-
-# Compiled, without type stubs.
-from rasterio.shutil import copy as copy_dataset  # ty: ignore[import-not-found]
+from rasterio.shutil import copy as copy_dataset
 from rasterio.transform import Affine
 from shapely.geometry.base import BaseGeometry
 
@@ -168,7 +166,8 @@ def _write_cog(
     crs_wkt: str,
     nodata: int,
     describe: Callable[[rasterio.io.DatasetWriter], None],
-    **options: str | int,
+    overview_resampling: str,
+    predictor: int = 1,
 ) -> None:
     """Write a Cloud Optimized GeoTIFF from a raw raster file on disk.
 
@@ -209,7 +208,8 @@ def _write_cog(
         level=9,
         blocksize=512,
         num_threads="ALL_CPUS",
-        **options,
+        predictor=predictor,
+        overview_resampling=overview_resampling,
     )
 
 

@@ -31,10 +31,9 @@ size (default 100 m) and `--elevation-resolution` the elevation pixel size
 (default 1 km). `--jobs` sets the number of worker processes (default one per
 CPU).
 
-Rasters are built on disk rather than in memory, in a `staging` folder in each
-terrain's output folder that is deleted when the export finishes. It needs 2
-bytes per land cover pixel and 6 per elevation pixel, so Kola with 25 m land
-cover needs about 16 GB of free space.
+An export at the default resolutions uses about 3 GB of RAM and 1 GB of
+temporary disk space. With 25 m land cover it uses up to about 8 GB of RAM and
+16 GB of temporary disk space.
 
 ## Output
 
