@@ -70,12 +70,10 @@ Statics sit on parking stands, which keeps them on pavement and stops Dynamic Sp
 
 ### FARPs
 
-Two hand-built FARPs with fuel, ammo, and ground crew:
+Two FARPs with fuel, ammo, and ground crew:
 
-- **FARP Pasab** at FOB Pasab (formerly FOB Wilson) on Highway 1 in Zhari district, Kandahar province: `x = -262650`, `z = -68950`.
-- **FARP Gereshk**, 9 km west of Gereshk on Highway 1, Helmand province: `x = -237350`, `z = -160450`. Sangin, Gereshk, Lashkar Gah, and Nad-e Ali are within 20 nm.
-
-Both positions are open ground with no fields or compounds within 300 m in the land cover export.
+- **FARP Pasab** at FOB Pasab (formerly FOB Wilson) on Highway 1 in Zhari district, Kandahar province: `x = -262271.9`, `z = -68797.5`. The Afghanistan map models the FOB, so this is an Invisible FARP on the FOB's old airstrip, a 420 m strip on heading 080 north of the camp. White tyres mark the FARP pad and three decorative pads to make a flight line, with tents, an ammo dump, a fuel depot, and a windsock on the north side, away from the camp.
+- **FARP Gereshk**, 9 km west of Gereshk on Highway 1, Helmand province: `x = -237350`, `z = -160450`. Sangin, Gereshk, Lashkar Gah, and Nad-e Ali are within 20 nm. It is a hand-built FARP on open ground with no fields or compounds within 300 m in the land cover export.
 
 ## CAS Tasking Flow
 
