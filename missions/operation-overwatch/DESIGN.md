@@ -219,7 +219,7 @@ Dynamically generated transport taskings for the CH-47F, using the same check-in
 
 ## Support Assets
 
-- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 16 km from the nearest tasking site.
+- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 16 km from the nearest tasking site. Each tanker spawns at a different point on its hot leg (Texaco 10 km in, Shell 40 km, Arco 60 km), so they do not start in formation and their turns fall out of step.
   - Texaco (KC-135, fighter boom, 270.5, TACAN 100X): FL200, 280 KIAS, hot leg `z = -160000` to `-90000`. F-16C and F-15E.
   - Arco (KC-135MPRS, basket, 270.1, TACAN 101X): FL180, 250 KIAS, hot leg `z = -140000` to `-70000`. Probe-equipped aircraft.
   - Shell (KC-135, slow boom, 270.7, TACAN 102X): FL150, 200 KIAS, hot leg `z = -150000` to `-80000`. A-10C, which cannot keep up with Texaco when loaded.
