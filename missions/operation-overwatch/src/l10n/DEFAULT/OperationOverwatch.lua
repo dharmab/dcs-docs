@@ -48,6 +48,8 @@ OperationOverwatch.config = {
     rotaryCasTypes = {
         ["AH-64D_BLK_II"] = true,
         ["OH-58D"] = true,
+        -- Stands in for the USMC UH-1N and UH-1Y
+        ["UH-1H"] = true,
     },
     rotaryTaskingRadius = 20 * METERS_PER_NAUTICAL_MILE,
 

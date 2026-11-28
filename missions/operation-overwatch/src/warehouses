@@ -105,6 +105,7 @@ warehouses = {
                 ["helicopters"] = {
                     ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
                     ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
+                    ["UH-1H"] = { ["wsType"] = { 1, 2, 6, 166 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 26 },
                 },
             },
             ["weapons"] = {},
@@ -181,6 +182,7 @@ warehouses = {
                 ["helicopters"] = {
                     ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 },
                     ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 },
+                    ["UH-1H"] = { ["wsType"] = { 1, 2, 6, 166 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 25 },
                 },
             },
             ["weapons"] = {},

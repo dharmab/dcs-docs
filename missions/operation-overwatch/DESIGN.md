@@ -34,11 +34,13 @@ Reasons for the date:
 | Base     | Aircraft                                                       |
 | -------- | -------------------------------------------------------------- |
 | Kandahar | A-10C, AV-8B, F-16C, F/A-18C, F-15E, F-14B(U), M-2000C, CH-47F |
-| FARPs    | AH-64D, OH-58D                                                 |
+| FARPs    | AH-64D, OH-58D, UH-1H                                          |
 
 The M-2000C stands in for the French Mirage 2000D detachment at Kandahar. Slots favor the spirit of the setting over exact basing. USMC AV-8Bs left Kandahar in May 2010 and returned in 2011. The F-14 retired in 2006 but flew CAS over Afghanistan from carriers earlier in the war.
 
 The CH-47F flies from Kandahar, where US, Canadian, and RAF Chinooks were based.
+
+The UH-1H stands in for the USMC UH-1N and UH-1Y of the HMLA squadrons at Camp Bastion, as it does for the Bastion statics. It uses the grey `US NAVY` livery, and the template loadout approximates the UH-1N and UH-1Y: two 7-shot M151 rocket pods and two door miniguns (the GAU-17 is an M134).
 
 Following `docs/wisdom.md`, fixed-wing and rotary-wing flights get separate taskings with their own threat levels and distances.
 
@@ -114,7 +116,7 @@ Fixed-wing taskings are placed on any tasking site in the area of operations, Ka
 
 A tasking site is open ground or farmland with compounds within 1 km, outside cities, at least 5 km from airfields, on flat ground. These rules select the green zones along the Helmand and Arghandab rivers, where the 2010 fighting was, and leave out the open desert, which has no compounds for the enemy to fire from. `generate_terrain_data.py` builds the mask from the terrain export.
 
-Helicopter taskings (AH-64D, OH-58D) are placed within 20 nm of a FARP, so rotary-wing flights get transits suited to their speed and range.
+Helicopter taskings (AH-64D, OH-58D, UH-1H) are placed within 20 nm of a FARP, so rotary-wing flights get transits suited to their speed and range.
 
 ### Multiplayer
 
