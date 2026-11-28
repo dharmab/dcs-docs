@@ -74,15 +74,15 @@ Statics sit on parking stands, which keeps them on pavement and stops Dynamic Sp
 
 Camp Bastion (airdrome `10`) and Camp Bastion Heliport (airdrome `13`) are decorated with the aircraft that flew from Bastion in 2006–2010. Bastion opened in 2006 as the British base in Helmand. The Joint Helicopter Force flew from it, and from 2009 the USMC flew from the same airfield, next to Camp Leatherneck.[^bastion-oob][^mag40]
 
-| Unit                                       | Static type (country)            |
-| ------------------------------------------ | -------------------------------- |
-| RAF Chinook HC2, Joint Helicopter Force    | `CH-47D` (UK)                    |
-| Army Air Corps Apache AH1                  | `AH-64D` (UK)                    |
-| RAF Hercules detachment, C-130K and C-130J | `C-130`, `C-130J-30` (UK)        |
-| USMC KC-130J                               | `KC130`                          |
-| USMC CH-53E, MAG-40 and 3rd MAW (Fwd)      | `CH-53E`                         |
-| USMC AH-1W and UH-1N/Y, HMLA squadrons     | `AH-1W`, `UH-1H`                 |
-| Visiting strategic airlift                 | `C-17A`                          |
+| Unit                                       | Static type (country)     |
+| ------------------------------------------ | ------------------------- |
+| RAF Chinook HC2, Joint Helicopter Force    | `CH-47D` (UK)             |
+| Army Air Corps Apache AH1                  | `AH-64D` (UK)             |
+| RAF Hercules detachment, C-130K and C-130J | `C-130`, `C-130J-30` (UK) |
+| USMC KC-130J                               | `KC130`                   |
+| USMC CH-53E, MAG-40 and 3rd MAW (Fwd)      | `CH-53E`                  |
+| USMC AH-1W and UH-1N/Y, HMLA squadrons     | `AH-1W`, `UH-1H`          |
+| Visiting strategic airlift                 | `C-17A`                   |
 
 No DCS types exist for the Lynx, Merlin HC3, Sea King HC4 and ASaC7, MV-22B, CH-53D, or Hermes 450 UAV. The `UH-1H` stands in for the USMC UH-1N and UH-1Y, in the grey `US NAVY` livery. USMC Harriers flew from Bastion only from 2012, so there are none.
 

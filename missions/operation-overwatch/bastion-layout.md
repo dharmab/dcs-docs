@@ -12,31 +12,31 @@ The `term_index` numbers DCS gives these stands are not in the files, and at the
 
 ## Rows
 
-| Airbase   | Rows                    | Stands | Spacing  | Notes                                        |
-| --------- | ----------------------- | ------ | -------- | -------------------------------------------- |
-| Bastion   | `A`, `B`, `NA`, `SA`    | 7      | 86–110 m | Widely spaced heavy stands                   |
-| Bastion   | `C`, `D`                | 17     | 45–102 m | Two loops of cargo stands                    |
-| Bastion   | `E`, `G`, `H`, `H-H`    | 26     | 30–62 m  | Medium stands at the south end               |
-| Bastion   | `J`                     | 29     | 34–91 m  | Long medium row, a few wide stands           |
-| Bastion   | `K-H`                   | 28     | 23 m     | Helicopter-only block                        |
-| Bastion   | `L`                     | 49     | 25–34 m  | The largest block, two double rows           |
-| Heliport  | `ARN-H`                 | 14     | 26–35 m  | Two facing columns on the west side          |
-| Heliport  | `PGS-H`                 | 10     | 29–31 m  | Two rows on the east side                    |
-| Heliport  | `TRJ-H`                 | 8      | 36–72 m  | One row; holds the AH-64D and OH-58D templates (`TRJ04-H`, `TRJ03-H`) |
+| Airbase  | Rows                 | Stands | Spacing  | Notes                                                                 |
+| -------- | -------------------- | ------ | -------- | --------------------------------------------------------------------- |
+| Bastion  | `A`, `B`, `NA`, `SA` | 7      | 86–110 m | Widely spaced heavy stands                                            |
+| Bastion  | `C`, `D`             | 17     | 45–102 m | Two loops of cargo stands                                             |
+| Bastion  | `E`, `G`, `H`, `H-H` | 26     | 30–62 m  | Medium stands at the south end                                        |
+| Bastion  | `J`                  | 29     | 34–91 m  | Long medium row, a few wide stands                                    |
+| Bastion  | `K-H`                | 28     | 23 m     | Helicopter-only block                                                 |
+| Bastion  | `L`                  | 49     | 25–34 m  | The largest block, two double rows                                    |
+| Heliport | `ARN-H`              | 14     | 26–35 m  | Two facing columns on the west side                                   |
+| Heliport | `PGS-H`              | 10     | 29–31 m  | Two rows on the east side                                             |
+| Heliport | `TRJ-H`              | 8      | 36–72 m  | One row; holds the AH-64D and OH-58D templates (`TRJ04-H`, `TRJ03-H`) |
 
 ## Decoration in the Mission
 
 The statics were placed by a one-off script. Their groups are named `BSN <type> #NN` at Camp Bastion and `BSN Heli <type> #NN` at the heliport, with group IDs from 1001. A comment above each gives its airbase and stand label.
 
-| Zone                         | Share | Types                                      |
-| ---------------------------- | ----- | ------------------------------------------ |
+| Zone                                   | Share | Types                                                              |
+| -------------------------------------- | ----- | ------------------------------------------------------------------ |
 | Bastion `A`, `B`, `C`, `D`, `NA`, `SA` | 85%   | RAF C-130 and C-130J, USMC KC-130J, two C-17A on the widest stands |
-| Bastion `J`                  | 60%   | USMC CH-53E, KC-130J on the wide stands    |
-| Bastion `K-H`                | 55%   | USMC AH-1W, UH-1H (for the UH-1N/Y)        |
-| Bastion `L`                  | 60%   | UK AH-64D and CH-47D                       |
-| Bastion `E`, `G`, `H`, `H-H` | 60%   | UK CH-47D, USMC CH-53E                     |
-| Heliport `ARN-H`, `PGS-H`    | 55%   | UK AH-64D and CH-47D                       |
-| Heliport `TRJ-H`             | 0%    | Left free for Dynamic Spawn                |
+| Bastion `J`                            | 60%   | USMC CH-53E, KC-130J on the wide stands                            |
+| Bastion `K-H`                          | 55%   | USMC AH-1W, UH-1H (for the UH-1N/Y)                                |
+| Bastion `L`                            | 60%   | UK AH-64D and CH-47D                                               |
+| Bastion `E`, `G`, `H`, `H-H`           | 60%   | UK CH-47D, USMC CH-53E                                             |
+| Heliport `ARN-H`, `PGS-H`              | 55%   | UK AH-64D and CH-47D                                               |
+| Heliport `TRJ-H`                       | 0%    | Left free for Dynamic Spawn                                        |
 
 - A type goes only on a stand whose nearest other stand is far enough away for it: 55 m for the C-17A, 45 m for the Hercules types, 30 m for the CH-47D and CH-53E, and 18 m for the attack helicopters.
 - Aircraft face the heading in `bastion-parking.csv`.
