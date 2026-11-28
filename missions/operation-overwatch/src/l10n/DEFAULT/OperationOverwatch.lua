@@ -55,14 +55,15 @@ OperationOverwatch.config = {
     -- and the tasking site mask. Both are generated in TerrainData.lua.
     areaOfOperations = TerrainData.areaOfOperations,
     siteGrid = TerrainData,
-    -- FARP Pasab is an Invisible FARP on the old airstrip at FOB Pasab
-    -- (formerly FOB Wilson), on Highway 1 in Zhari district; the map models
-    -- the FOB. FARP Gereshk is on open ground with no fields or compounds
-    -- within 300 m, 9 km west of Gereshk, covering Sangin, Gereshk, Lashkar
-    -- Gah, and Nad-e Ali.
+    -- Helicopter bases that rotary taskings are placed around. FARP Pasab is
+    -- an Invisible FARP on the old airstrip at FOB Pasab (formerly FOB
+    -- Wilson), on Highway 1 in Zhari district; the map models the FOB. Camp
+    -- Bastion Heliport is the map's own airbase (airdrome 13); Gereshk,
+    -- Lashkar Gah, and Nad-e Ali are within the rotary radius, Sangin is not.
+    -- Its position is between the two template stands.
     farps = {
         { name = "FARP Pasab", position = { x = -262271.9, y = -68797.5 } },
-        { name = "FARP Gereshk", position = { x = -237350, y = -160450 } },
+        { name = "Camp Bastion Heliport", airdromeId = 13, position = { x = -234452, y = -185246 } },
     },
     -- On Highway 1 halfway between Kandahar Airfield and Camp Bastion
     checkInPoint = { x = -257475, y = -108266 },

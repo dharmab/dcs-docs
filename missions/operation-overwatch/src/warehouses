@@ -46,6 +46,45 @@ warehouses = {
                 ["InitFuel"] = 100000000,
             },
         },
+        -- Camp Bastion Heliport (BLUE - AH-64D and OH-58D dynamic spawn)
+        -- Airdrome 13 (airfield13, Camp_Bastion_Heli, in the terrain's radio.lua)
+        [13] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
+                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
     },
     ["warehouses"] = {
         -- FARP Pasab (BLUE - AH-64D and OH-58D dynamic spawn)
@@ -70,44 +109,6 @@ warehouses = {
                 ["helicopters"] = {
                     ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 },
                     ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 },
-                },
-            },
-            ["weapons"] = {},
-            ["gasoline"] = {
-                ["InitFuel"] = 100000000,
-            },
-            ["methanol_mixture"] = {
-                ["InitFuel"] = 100000000,
-            },
-            ["diesel"] = {
-                ["InitFuel"] = 100000000,
-            },
-            ["jet_fuel"] = {
-                ["InitFuel"] = 100000000,
-            },
-        },
-        -- FARP Gereshk (BLUE - AH-64D and OH-58D dynamic spawn)
-        [102] = {
-            ["coalition"] = "BLUE",
-            ["supplier"] = true,
-            ["unlimitedAircrafts"] = false,
-            ["unlimitedFuel"] = true,
-            ["unlimitedMunitions"] = true,
-            ["OperatingLevel_Air"] = 10,
-            ["OperatingLevel_Eqp"] = 10,
-            ["OperatingLevel_Fuel"] = 10,
-            ["dynamicSpawn"] = true,
-            ["allowHotStart"] = true,
-            ["speed"] = 16.666666,
-            ["periodicity"] = 30,
-            ["size"] = 100,
-            ["suppliers"] = {},
-            ["dynamicCargo"] = true,
-            ["aircrafts"] = {
-                ["planes"] = {},
-                ["helicopters"] = {
-                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
-                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
                 },
             },
             ["weapons"] = {},

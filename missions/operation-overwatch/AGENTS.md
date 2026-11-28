@@ -12,18 +12,19 @@ The mission file is hand-written and has not been opened in DCS. Pack it with `u
 
 Values taken from the DCS install:
 
-- Kandahar is airdrome `7` (`airfield7` in `Mods/terrains/Afghanistan/beacons.lua`). `warehouses` lists only Kandahar and the FARPs. The Mission Editor also writes every other Afghanistan airport.
+- Kandahar is airdrome `7` (`airfield7` in `Mods/terrains/Afghanistan/beacons.lua`). Camp Bastion Heliport is airdrome `13` (`airfield13`, `Camp_Bastion_Heli`, in `radio.lua`). `warehouses` lists only Kandahar, Camp Bastion Heliport, and FARP Pasab.
+- Camp Bastion Heliport template stands, from the installed `IA-Afgham-AH64D-*` missions, which park AH-64Ds there: AH-64D stand `16` `TRJ04-H`, OH-58D stand `24` `TRJ03-H`, `alt = 886`. Neither stand has been checked for OH-58D fit. The Mission Editor also writes every other Afghanistan airport.
 - `country.id.INSURGENTS` is `17`. `Scripts/Database/db_countries.lua` numbers countries in order from 0 and skips 14.
 - `wsType` values come from the most common value in the ME-saved `.miz` files that ship with the install. The fourth number can change when modules are added, so values in old saves vary.
 - Fixed-wing template stands, by `term_index` (`kandahar-parking.csv`) and ME label: A-10C `297` J01, AV-8B `203` J03, F-16C `28` W01, F/A-18C `16` W02, F-15E `174` S04, F-14B(U) `258` T02, M-2000C `1` Y01 (a `Term_Type` 72 stand). Each label pair comes from an installed Afghanistan mission and matches the runway side given in `kandahar-layout.md`. Position and `alt` are the stand's from the CSV. None of the stands has a decoration static, but whether each one is big enough for its type has not been checked.
 
-Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at each FARP, FARP statics with fuel and ammo trucks, 535 decoration statics (aircraft, vehicles, and ground support equipment) at Kandahar and Kandahar Heliport, 22 at the FARP Pasab flight line, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
+Mission contents: dynamic spawn templates at Kandahar for every fixed-wing type and the CH-47F, AH-64D and OH-58D templates at FARP Pasab and Camp Bastion Heliport, the FARP Pasab static with fuel and ammo trucks, 535 decoration statics (aircraft, vehicles, and ground support equipment) at Kandahar and Kandahar Heliport, 22 at the FARP Pasab flight line, the Texaco and Arco tankers, the Overlord AWACS, and the script load trigger. Main radio presets follow the comm card in `dictionary`.
 
 `TerrainData.lua` is generated; do not edit it. It contains the area of operations polygon (Kandahar and Helmand provinces) and a 200 m mask of tasking sites, built from `docs/data/terrains/Afghanistan/`. Regenerate with `uv run python generate_terrain_data.py` after a terrain re-export or a change to the site rules. The generator's docstring and constants define a site.
 
 `kandahar-layout.md` describes Kandahar's aprons and stand rows, for placing statics. `kandahar-parking.csv` lists every stand at Kandahar and Kandahar Heliport, from `airbase:getParking()` logged in game.
 
-FARP Gereshk's position and the check-in point were chosen from the export: open ground with no fields or compounds within 300 m. FARP Pasab is an Invisible FARP (`Invisible FARP`, shape `invisiblefarp`, one pad) on the old airstrip north of FOB Pasab, which the map models. The strip ends were measured with the Mission Editor ruler: x -262291, y -68906 to x -262218, y -68492, heading 080. Pad markers sit on the strip centreline at 50 m spacing, and the support area is 30 m north of it, because FOB buildings start within 30 m south of the centreline.
+The check-in point was chosen from the export: open ground with no fields or compounds within 300 m. FARP Pasab is an Invisible FARP (`Invisible FARP`, shape `invisiblefarp`, one pad) on the old airstrip north of FOB Pasab, which the map models. The strip ends were measured with the Mission Editor ruler: x -262291, y -68906 to x -262218, y -68492, heading 080. Pad markers sit on the strip centreline at 50 m spacing, and the support area is 30 m north of it, because FOB buildings start within 30 m south of the centreline.
 
 ## Scripts
 
@@ -65,11 +66,11 @@ Nothing has run on a server yet. Check these first:
 - Kandahar decoration: each static sits on its stand, faces a sensible way (headings are estimates from the stand pattern), and gets its country's default livery (no `livery_id` is set). Blue includes UK, France, Canada, The Netherlands, Belgium, and Ukraine for these statics. Contract airlift (IL-76MD, An-26, Yak-40) is under Ukraine with an explicit `livery_id`, because those types have no USA livery. The contract Mi-8s stay under USA, which has the `USA_AFG` livery. Dynamic Spawn still finds free stands for every type, including the F-14 and F-15E. The Massun92 ground equipment (power carts, tugs, light carts, cargo pallets) shows up and sits clear of the aircraft. 535 statics do not hurt load time or frame rate on the server. The statics are `hidden` on the F10 map. The Mission Editor also leaves `hidden` groups off its own map until Show Hidden is ticked in the units list panel.
 - Template loadouts (2004-2010 CAS, GBU-54 included) prefill the spawn dialog. Whether the AV-8B's flare-only `EWDispenser*` and the F-14B(U)'s `ALE39Loadout = 0` from the template's `AddPropAircraft` apply to the spawned aircraft. Other types start with their default chaff and flares; players move the slider.
 - FARP Pasab: helicopters spawn on the Invisible FARP and can rearm and refuel there. Only one helicopter can spawn at a time, because the FARP has one pad. The tyres sit on the strip and the tents and trucks just north of it, clear of FOB buildings. Positions come from a screenshot ruler, so each could be off by up to 10 m.
+- Camp Bastion Heliport: the AH-64D and OH-58D spawn there, it shows blue, and helicopters can rearm and refuel from its warehouse.
 - Whether RPG and DShK FireAtPoint at 400-900 m keeps firing; RPG-7 range is short of the far end.
 
 ## To Do
 
-- Replace FARP Gereshk, the western FARP, with Camp Bastion, which is also modeled on the Afghanistan map.
 - Set the coalition airbases to blue, including the heliports.
 
 ## Not Implemented
