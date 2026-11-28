@@ -46,6 +46,42 @@ warehouses = {
                 ["InitFuel"] = 100000000,
             },
         },
+        -- Camp Bastion (BLUE - decoration only, no player slots; fuel and ammo for visitors)
+        -- Airdrome 10 (airfield10, Camp_Bastion, in the terrain's radio.lua)
+        [10] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = false,
+            ["allowHotStart"] = false,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = false,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {},
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
         -- Camp Bastion Heliport (BLUE - AH-64D and OH-58D dynamic spawn)
         -- Airdrome 13 (airfield13, Camp_Bastion_Heli, in the terrain's radio.lua)
         [13] = {
@@ -70,6 +106,42 @@ warehouses = {
                     ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
                     ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
                 },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+        -- Kandahar Heliport (BLUE - decoration only, no player slots; fuel and ammo for visitors)
+        -- Airdrome 15 (airfield15, Kandahar_Heli, in the terrain's radio.lua)
+        [15] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = false,
+            ["allowHotStart"] = false,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = false,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {},
             },
             ["weapons"] = {},
             ["gasoline"] = {

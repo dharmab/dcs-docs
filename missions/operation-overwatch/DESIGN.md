@@ -68,6 +68,28 @@ No DCS types exist for the MC-12W, CU-170 Heron, or CH-146 Griffon. The RAF C-13
 
 Statics sit on parking stands, which keeps them on pavement and stops Dynamic Spawn from using those stands. They take 55 of Kandahar's 318 stands and 13 of the heliport's 88; the rest stay free for players. Ground vehicles fill out the base: HEMTT fuel trucks, M939 trucks and HMMWVs on the flight line, an RAF crash tender by the Tornados, Predator ground control stations by the UAVs, two C-RAMs, and an MRAP and Stryker motor pool on the paved area south-west of the runway. `kandahar-layout.md` lists the areas. `docs/wisdom.md` warns that heavy airbase decoration hurts multiplayer performance, so measure frame rate and server load with the 76 statics in place.
 
+### Camp Bastion
+
+Camp Bastion (airdrome `10`) and Camp Bastion Heliport (airdrome `13`) are decorated with the aircraft that flew from Bastion in 2006–2010. Bastion opened in 2006 as the British base in Helmand. The Joint Helicopter Force flew from it, and from 2009 the USMC flew from the same airfield, next to Camp Leatherneck.[^bastion-oob][^mag40]
+
+| Unit                                       | Static type (country)            |
+| ------------------------------------------ | -------------------------------- |
+| RAF Chinook HC2, Joint Helicopter Force    | `CH-47D` (UK)                    |
+| Army Air Corps Apache AH1                  | `AH-64D` (UK)                    |
+| RAF Hercules detachment, C-130K and C-130J | `C-130`, `C-130J-30` (UK)        |
+| USMC KC-130J                               | `KC130`                          |
+| USMC CH-53E, MAG-40 and 3rd MAW (Fwd)      | `CH-53E`                         |
+| USMC AH-1W and UH-1N/Y, HMLA squadrons     | `AH-1W`, `UH-1H`                 |
+| Visiting strategic airlift                 | `C-17A`                          |
+
+No DCS types exist for the Lynx, Merlin HC3, Sea King HC4 and ASaC7, MV-22B, CH-53D, or Hermes 450 UAV. The `UH-1H` stands in for the USMC UH-1N and UH-1Y, in the grey `US NAVY` livery. USMC Harriers flew from Bastion only from 2012, so there are none.
+
+Camp Bastion is blue with unlimited fuel and munitions, but has no Dynamic Spawn or player slots, so 97 of its 156 stands have a static. Bastion Heliport has Dynamic Spawn, so its `TRJ` row (the template stands) stays empty and 19 of its 32 stands stay free. `bastion-layout.md` lists the zones and placement rules.
+
+[^bastion-oob]: [Operation Herrick aerial order of battle](https://en.wikipedia.org/wiki/Operation_Herrick_aerial_order_of_battle), Wikipedia.
+
+[^mag40]: [Marine Aircraft Group 40](https://en.wikipedia.org/wiki/Marine_Aircraft_Group_40), Wikipedia; [Osprey joins the fight in Afghanistan](https://www.dvidshub.net/news/41203/osprey-joins-fight-afghanistan), DVIDS; [Osprey at War](https://www.smithsonianmag.com/air-space-magazine/osprey-at-war-10288204/), Air & Space.
+
 ### FARPs
 
 Two helicopter bases with fuel, ammo, and ground crew:
