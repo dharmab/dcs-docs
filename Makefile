@@ -1,6 +1,7 @@
 LUA_FILES := $(shell git ls-files '*.lua')
 PY_TOOLS := $(patsubst %/pyproject.toml,%,$(wildcard tools/*/pyproject.toml))
-MISSIONS := $(abspath $(wildcard missions/*/src))
+# Only missions with a mission file
+MISSIONS := $(abspath $(patsubst %/mission,%,$(wildcard missions/*/src/mission)))
 LUA_TEST_DIRS := $(wildcard missions/*/tests)
 PY_TEST_TOOLS := $(patsubst %/tests,%,$(wildcard tools/*/tests))
 LUA ?= luajit
@@ -34,8 +35,10 @@ check-format-lua: ## Check Lua formatting
 	stylua --check $(LUA_FILES)
 
 # Checks DCS API calls against the stubs in lua-types/
+# Each mission is its own workspace (missions/*/.luarc.json), since missions
+# copy shared scripts such as Logging.lua that would collide as globals
 lint-lua: ## Lint Lua
-	lua-language-server --check . --checklevel=Warning
+	set -e; for dir in $(wildcard missions/*/.luarc.json); do lua-language-server --check $$(dirname $$dir) --checklevel=Warning; done
 
 # DCS uses Lua 5.1. Newer lua releases break 5.1 code, so the tests run on
 # luajit, which implements 5.1. luajit also accepts some Lua 5.2 syntax, such

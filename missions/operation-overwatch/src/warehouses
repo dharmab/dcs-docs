@@ -1,0 +1,203 @@
+warehouses = {
+    ["airports"] = {
+        -- Kandahar (BLUE - fixed-wing and CH-47F dynamic spawn)
+        -- Airdrome 7 (airfield7 in the terrain's beacons.lua and radio.lua)
+        [7] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {
+                    ["A-10C_2"] = { ["wsType"] = { 1, 1, 6, 264 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 1 },
+                    ["AV8BNA"] = { ["wsType"] = { 1, 1, 1, 266 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 2 },
+                    ["F-16C_50"] = { ["wsType"] = { 1, 1, 1, 275 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 3 },
+                    ["FA-18C_hornet"] = { ["wsType"] = { 1, 1, 1, 280 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 4 },
+                    ["F-15ESE"] = { ["wsType"] = { 1, 1, 1, 327 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 5 },
+                    ["F-14BU"] = { ["wsType"] = { 1, 1, 1, 351 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 6 },
+                    ["M-2000C"] = { ["wsType"] = { 1, 1, 1, 284 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 7 },
+                },
+                ["helicopters"] = {
+                    ["CH-47Fbl1"] = { ["wsType"] = { 1, 2, 5, 329 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 8 },
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+        -- Camp Bastion (BLUE - decoration only, no player slots; fuel and ammo for visitors)
+        -- Airdrome 10 (airfield10, Camp_Bastion, in the terrain's radio.lua)
+        [10] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = false,
+            ["allowHotStart"] = false,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = false,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {},
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+        -- Camp Bastion Heliport (BLUE - AH-64D and OH-58D dynamic spawn)
+        -- Airdrome 13 (airfield13, Camp_Bastion_Heli, in the terrain's radio.lua)
+        [13] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 23 },
+                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 24 },
+                    ["UH-1H"] = { ["wsType"] = { 1, 2, 6, 166 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 26 },
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+        -- Kandahar Heliport (BLUE - decoration only, no player slots; fuel and ammo for visitors)
+        -- Airdrome 15 (airfield15, Kandahar_Heli, in the terrain's radio.lua)
+        [15] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = false,
+            ["allowHotStart"] = false,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = false,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {},
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
+    ["warehouses"] = {
+        -- FARP Pasab (BLUE - AH-64D and OH-58D dynamic spawn)
+        [101] = {
+            ["coalition"] = "BLUE",
+            ["supplier"] = true,
+            ["unlimitedAircrafts"] = false,
+            ["unlimitedFuel"] = true,
+            ["unlimitedMunitions"] = true,
+            ["OperatingLevel_Air"] = 10,
+            ["OperatingLevel_Eqp"] = 10,
+            ["OperatingLevel_Fuel"] = 10,
+            ["dynamicSpawn"] = true,
+            ["allowHotStart"] = true,
+            ["speed"] = 16.666666,
+            ["periodicity"] = 30,
+            ["size"] = 100,
+            ["suppliers"] = {},
+            ["dynamicCargo"] = true,
+            ["aircrafts"] = {
+                ["planes"] = {},
+                ["helicopters"] = {
+                    ["AH-64D_BLK_II"] = { ["wsType"] = { 1, 2, 6, 300 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 21 },
+                    ["OH-58D"] = { ["wsType"] = { 1, 2, 6, 168 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 22 },
+                    ["UH-1H"] = { ["wsType"] = { 1, 2, 6, 166 }, ["unlimited"] = true, ["initialAmount"] = 100, ["linkDynTempl"] = 25 },
+                },
+            },
+            ["weapons"] = {},
+            ["gasoline"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["methanol_mixture"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["diesel"] = {
+                ["InitFuel"] = 100000000,
+            },
+            ["jet_fuel"] = {
+                ["InitFuel"] = 100000000,
+            },
+        },
+    },
+}

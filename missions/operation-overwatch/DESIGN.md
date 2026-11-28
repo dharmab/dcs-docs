@@ -1,0 +1,236 @@
+# Operation Overwatch - Design
+
+Status: draft
+
+A close air support (CAS) mission on the Afghanistan terrain, set during the War in Afghanistan. Players take off from a hand-built Kandahar Airfield or forward arming and refueling points (FARPs). When a flight checks in on station, the mission generates a CAS tasking: friendly ground forces in contact with insurgents, controlled by a JTAC.
+
+## Goals
+
+- CAS is the core activity: find the friendlies, find the enemy, get cleared by the JTAC, and attack without fratricide.
+- Each check-in produces a fresh tasking, so repeat sessions differ.
+- Fixed-wing and rotary-wing flights get tasks suited to their speed, sensors, and weapons.
+- Hand-built bases give a stable, believable home: Kandahar and the FARPs do not change between sessions.
+
+## Non-Goals
+
+- SEAD/DEAD and air-to-air. The enemy has no aircraft and no radar SAMs.
+- Strategic campaign state. Taskings are independent.
+- Night operations.
+- Difficulty settings.
+
+## Setting
+
+Historical War in Afghanistan. Coalition (blue) aircraft operate from Kandahar Airfield in support of coalition ground forces. The enemy (red) is insurgent forces: infantry, technicals, mortars, and light AAA.
+
+Date: 23 September 2010, daytime, during Operation Dragon Strike. The 101st Airborne launched Dragon Strike on 15 September 2010 to clear Zhari district, west of Kandahar City. Friendly vehicles of the period include MRAPs, M-ATVs, and Strykers.
+
+Reasons for the date:
+
+- 2010 was the peak year for enemy-initiated attacks, and insurgents favored direct fire over IEDs that year. Direct fire declined in 2011 as IED use rose. Kandahar and Helmand had over 60% of the violence in late 2010.
+- Late September is still in the June-September fighting season and is cooler than mid-September, which helps helicopter performance at Kandahar's elevation.
+
+## Player Aircraft
+
+| Base     | Aircraft                                                       |
+| -------- | -------------------------------------------------------------- |
+| Kandahar | A-10C, AV-8B, F-16C, F/A-18C, F-15E, F-14B(U), M-2000C, CH-47F |
+| FARPs    | AH-64D, OH-58D, UH-1H                                          |
+
+The M-2000C stands in for the French Mirage 2000D detachment at Kandahar. Slots favor the spirit of the setting over exact basing. USMC AV-8Bs left Kandahar in May 2010 and returned in 2011. The F-14 retired in 2006 but flew CAS over Afghanistan from carriers earlier in the war.
+
+The CH-47F flies from Kandahar, where US, Canadian, and RAF Chinooks were based.
+
+The UH-1H stands in for the USMC UH-1N and UH-1Y of the HMLA squadrons at Camp Bastion, as it does for the Bastion statics. It uses the grey `US NAVY` livery, and the template loadout approximates the UH-1N and UH-1Y: two 7-shot M151 rocket pods and two door miniguns (the GAU-17 is an M134).
+
+Following `docs/wisdom.md`, fixed-wing and rotary-wing flights get separate taskings with their own threat levels and distances.
+
+## Bases
+
+### Kandahar Airfield
+
+Hand-built. Player slots use Dynamic Spawn for every player type at Kandahar and the FARPs, following `docs/recipes/player-slots.md`.
+
+Static aircraft represent as many of the September 2010 Kandahar units as DCS has types for:
+
+| Unit                               | Static type (country)                  |
+| ---------------------------------- | -------------------------------------- |
+| RAF Tornado detachment             | `Tornado GR4` (UK)                     |
+| USAF 81st/354th EFS                | `A-10C`                                |
+| Belgian and Dutch F-16 detachments | `F-16A MLU` (Belgium, The Netherlands) |
+| French Mirage 2000D detachment     | `M-2000C` (France)                     |
+| USMC VMFA-122                      | `F/A-18C`                              |
+| USMC Harriers                      | `AV8BNA`                               |
+| RAF No. 39 Sqn and USAF UAVs       | `MQ-9 Reaper` (UK), `RQ-1A Predator`   |
+| RAF and USAF airlift               | `C-130` (UK and USA), `C-17A`          |
+| Contract airlift                   | `IL-76MD`, `Mi-8MT` (Canada)           |
+| US Army 101st CAB                  | `CH-47Fbl1`, `UH-60A`, `AH-64D`        |
+| Canadian Air Wing, RAF 1310 Flight | `CH-47D` (Canada, UK)                  |
+
+No DCS types exist for the MC-12W, CU-170 Heron, or CH-146 Griffon. The RAF C-130J uses the `C-130`, and RAF Harrier GR7/GR9s (at Kandahar 2004–2009) have no type. The statics mix units from across 2004–2010 rather than one date.
+
+Statics sit on parking stands, which keeps them on pavement and stops Dynamic Spawn from using those stands. They take 55 of Kandahar's 318 stands and 13 of the heliport's 88; the rest stay free for players. Ground vehicles fill out the base: HEMTT fuel trucks, M939 trucks and HMMWVs on the flight line, an RAF crash tender by the Tornados, Predator ground control stations by the UAVs, two C-RAMs, and an MRAP and Stryker motor pool on the paved area south-west of the runway. `kandahar-layout.md` lists the areas. `docs/wisdom.md` warns that heavy airbase decoration hurts multiplayer performance, so measure frame rate and server load with the 76 statics in place.
+
+### Camp Bastion
+
+Camp Bastion (airdrome `10`) and Camp Bastion Heliport (airdrome `13`) are decorated with the aircraft that flew from Bastion in 2006–2010. Bastion opened in 2006 as the British base in Helmand. The Joint Helicopter Force flew from it, and from 2009 the USMC flew from the same airfield, next to Camp Leatherneck.[^bastion-oob][^mag40]
+
+| Unit                                       | Static type (country)     |
+| ------------------------------------------ | ------------------------- |
+| RAF Chinook HC2, Joint Helicopter Force    | `CH-47D` (UK)             |
+| Army Air Corps Apache AH1                  | `AH-64D` (UK)             |
+| RAF Hercules detachment, C-130K and C-130J | `C-130`, `C-130J-30` (UK) |
+| USMC KC-130J                               | `KC130`                   |
+| USMC CH-53E, MAG-40 and 3rd MAW (Fwd)      | `CH-53E`                  |
+| USMC AH-1W and UH-1N/Y, HMLA squadrons     | `AH-1W`, `UH-1H`          |
+| Visiting strategic airlift                 | `C-17A`                   |
+
+No DCS types exist for the Lynx, Merlin HC3, Sea King HC4 and ASaC7, MV-22B, CH-53D, or Hermes 450 UAV. The `UH-1H` stands in for the USMC UH-1N and UH-1Y, in the grey `US NAVY` livery. USMC Harriers flew from Bastion only from 2012, so there are none.
+
+Camp Bastion is blue with unlimited fuel and munitions, but has no Dynamic Spawn or player slots, so 97 of its 156 stands have a static. Bastion Heliport has Dynamic Spawn, so its `TRJ` row (the template stands) stays empty and 19 of its 32 stands stay free. `bastion-layout.md` lists the zones and placement rules.
+
+[^bastion-oob]: [Operation Herrick aerial order of battle](https://en.wikipedia.org/wiki/Operation_Herrick_aerial_order_of_battle), Wikipedia.
+
+[^mag40]: [Marine Aircraft Group 40](https://en.wikipedia.org/wiki/Marine_Aircraft_Group_40), Wikipedia; [Osprey joins the fight in Afghanistan](https://www.dvidshub.net/news/41203/osprey-joins-fight-afghanistan), DVIDS; [Osprey at War](https://www.smithsonianmag.com/air-space-magazine/osprey-at-war-10288204/), Air & Space.
+
+### FARPs
+
+Two helicopter bases with fuel, ammo, and ground crew:
+
+- **FARP Pasab** at FOB Pasab (formerly FOB Wilson) on Highway 1 in Zhari district, Kandahar province: `x = -262271.9`, `z = -68797.5`. The Afghanistan map models the FOB, so this is an Invisible FARP on the FOB's old airstrip, a 420 m strip on heading 080 north of the camp. White tyres mark the FARP pad and three decorative pads to make a flight line, with tents, an ammo dump, a fuel depot, and a windsock on the north side, away from the camp.
+- **Camp Bastion Heliport**, the map's own heliport on the north side of Camp Bastion, Helmand province: airdrome `13`, templates on stands 16 (`TRJ04-H`) and 24 (`TRJ03-H`) at about `x = -234452`, `z = -185246`. Gereshk, Lashkar Gah, and Nad-e Ali are within 20 nm. Sangin is 35 nm away. Camp Bastion was the main British and USMC base in Helmand, so its heliport fits the setting. It is an airbase, so its warehouse supplies fuel and ammo, and it needs no support trucks.
+
+## CAS Tasking Flow
+
+1. Players take off from Kandahar. Helicopters take off from Kandahar or a FARP.
+2. Optionally, players refuel from a tanker.
+3. Players fly toward the briefed check-in point and check in with the F10 Check In command. The command is added to the flight's group menu after takeoff (`S_EVENT_TAKEOFF`) and works anywhere while airborne, so a flight can request another tasking right after finishing one.
+4. The mission generates a CAS tasking: a friendly element in contact with an enemy force, controlled by a JTAC (`docs/recipes/jtac-setup.md`) who gives the situation, target description, and marks (smoke, laser).
+5. The players attack. The tasking succeeds when every key unit is destroyed or 70% of the enemy force is destroyed. Key units are the ones the JTAC names in the brief, such as technicals and ZU-23s. The JTAC then calls the enemy broken, and the remaining enemy units are removed.
+6. Players RTB or request another tasking.
+
+There is one check-in point, shared by all aircraft, on Highway 1 halfway between Kandahar Airfield and Camp Bastion (`x = -257475`, `z = -108266`). It is a briefed starting point, not a requirement.
+
+### Tasking Placement
+
+Fixed-wing taskings are placed on any tasking site in the area of operations, Kandahar and Helmand provinces, independent of the flight's position and the check-in point. Transit and fuel management across the area are part of the gameplay. Sites are chosen at runtime from a generated site mask rather than a hand-picked list, so taskings repeat less.
+
+A tasking site is open ground or farmland with at least a quarter farmland within 500 m, at least 1 km from the map's town outlines, at least 5 km from airfields, on flat ground. These rules select the irrigated green zones along the Helmand and Arghandab rivers, where the 2010 fighting was, including Nad-e Ali, Marjah, Zhari, and Panjwai, and leave out the open desert. `generate_terrain_data.py` builds the mask from the terrain export. The export's `town` land cover does not mark compounds in the green zones, so the mission finds compounds at runtime from scenery objects (`world.searchObjects`).
+
+Each side of a firefight fights from a compound or from the fields. The enemy takes the densest compound among a dozen points 400-900 m from the patrol, or open ground when none has buildings. Half the time the patrol holds a compound within 250 m of the site. Units in a compound stand within 20 m of its buildings and walls. Every unit keeps clear of scenery objects, 4 m for dismounts and 10 m for vehicles, so none spawns inside a building. The brief says where each side is.
+
+Helicopter taskings (AH-64D, OH-58D, UH-1H) are placed within 20 nm of a FARP, so rotary-wing flights get transits suited to their speed and range.
+
+### Multiplayer
+
+Up to 8 players. Up to 4 taskings run at once, so players can work one tasking together or fly separate ones. Each airborne flight's F10 menu has two items:
+
+- **Check In:** generates a new tasking for the flight. When 4 taskings are active, Check In tells the flight to use Join Tasking instead.
+- **Join Tasking:** a submenu listing all active taskings, most recent first. Each entry shows the tasking's name, type, and location. Selecting one assigns the flight to that tasking and sends it the JTAC's check-in brief. The submenu is rebuilt for every flight when a tasking starts or ends. With at most 4 entries, the F10 page limit does not matter.
+
+The enemy force does not scale with the number of flights. A tasking also ends, and all its units are removed, 10 minutes after its last assigned flight lands, dies, or disconnects.
+
+### Scenario Types
+
+The first version has one scenario type: troops in contact (firefight). The others are candidates for later versions. The scenarios favor drama over realism: enemies are more numerous and more exposed than real insurgents were, and timelines are compressed.
+
+"Rotary" and "Fixed" mark which flights a scenario suits.
+
+#### Troops in Contact: Firefight
+
+Rotary, Fixed. A friendly patrol is pinned by insurgents in a compound or treeline. The two sides trade fire with AI-controlled tracers and RPGs, so the fight is visible from altitude. The success rule is the default (key units or 70% of the enemy).
+
+The enemy is 400-900 m from the friendlies, spread over about 150 m. Afghanistan firefights were long range: about half of engagements were beyond 300 m, and insurgents often fired from 500 m or more off high ground, where troops could not see who was shooting at them (Ehrhart, "Increasing Small Arms Lethality in Afghanistan: Taking Back the Infantry Half-Kilometer", 2009). The JTAC's brief reflects this: the enemy count and range are estimates, the friendlies cannot see the shooters, and the smoke marks the approximate enemy position. Finding the enemy is part of the task.
+
+#### Troops in Contact: Convoy Ambush
+
+Rotary, Fixed. A friendly convoy is stopped on a road after an IED disables the lead vehicle. The enemy is on high ground or in compounds along the road (`docs/recipes/convoy-route.md`). After the tasking succeeds, the convoy resumes its route, and the tasking ends when the convoy reaches its destination. Variant: the ambush starts after check-in, and the flight is already overhead escorting the convoy.
+
+#### Show of Force
+
+Rotary, Fixed. A crowd or a group of fighting-age males is massing near a friendly patrol, and the JTAC wants them to disperse without anyone firing. The JTAC names a point, a run-in heading, and a maximum height. The pass counts when an aircraft crosses within a set distance of the point, below the height, and within 30° of the heading. On a good pass the enemy group drives or walks away and the tasking succeeds. A pass that is too high or from the wrong direction draws "negative effect, make another pass." Releasing weapons fails the tasking. Flares on the pass are a crowd-pleaser and could count as a bonus.
+
+#### Cache Destruction
+
+Rotary, Fixed. Friendlies have found a weapons cache in a compound and cannot carry it out. The JTAC holds the flight until the friendly element withdraws past a safe distance, then clears the attack. Destroying the cache static triggers a chain of secondary explosions with `trigger.action.explosion`. An attack before the clearance, or one that hits the friendlies, fails the tasking.
+
+#### Mortar or Rocket Team
+
+Fixed, Rotary. A FOB is under indirect fire. Counter-battery radar gives the point of origin as a grid, and the JTAC gives an area, not a precise target. The flight searches for the team, which fires a salvo every few minutes and packs up to move if not found in time. Mortar impacts on the FOB give the scenario a clock.
+
+#### Squirters
+
+Rotary, Fixed. Insurgents break contact from a fight in technicals and light vehicles. The JTAC keeps eyes on with the Reaper and calls the vehicles' movement. The flight must strike them before they reach a village, where the JTAC calls them "off limits" and the tasking fails.
+
+#### IED Emplacers
+
+Rotary. Two or three men are digging in on a route that a convoy will use within the hour. The JTAC can't clear the attack until the men show hostile intent, such as uncoiling wire or retrieving a weapon. The rules are tight, so this scenario fits the slower, sensor-heavy OH-58D and AH-64D.
+
+#### Raid Support
+
+Rotary, Fixed. Friendly special forces raid a compound to capture a commander. The flight arrives before the raid and watches the compound. When the raid starts, the flight strikes enemy reinforcements and squirters. The friendlies are inside the compound throughout, so every attack is danger close.
+
+### Tasking Modifiers
+
+A modifier changes the rules of a scenario. A tasking draws zero or one modifier, chosen to fit the scenario:
+
+- **Danger close:** friendlies are within 100 m of the target. The JTAC requires the flight to acknowledge, and any friendly loss fails the tasking.
+- **Collateral concern:** civilians or a mosque are near the target. The JTAC restricts weapons, such as guns or rockets only, or no bombs heavier than 500 lb.
+- **Final attack heading:** the JTAC restricts the run-in heading to keep the effects away from the friendlies.
+- **Time on target:** the attack must happen within a short window, timed to a friendly maneuver.
+
+### Enemy Composition
+
+Each tasking rolls its enemy force from a pool, so players do not know what they will face until they arrive. Unit types are in `docs/units/ground.md`.
+
+| Element        | Types                                      | Fixed-wing | Rotary-wing | Count |
+| -------------- | ------------------------------------------ | ---------- | ----------- | ----- |
+| Riflemen       | `Infantry AK Ins`                          | Always     | Always      | 6-12  |
+| RPG gunners    | `Soldier RPG`                              | Always     | Always      | 1-3   |
+| Technicals     | `HL_DSHK`, `HL_KORD`, `tt_DSHK`, `tt_KORD` | 70%        | 70%         | 1-3   |
+| Light vehicles | `UAZ-469`, `VAZ Car`                       | 50%        | 50%         | 1-2   |
+| ZU-23          | `HL_ZU-23`, `tt_ZU-23`, `ZU-23 Insurgent`  | 25%        | 15%         | 1     |
+| MANPADS        | `Igla manpad INS`                          | 15%        | 10%         | 1     |
+
+Light vehicles are unarmed. They carry fighters to the fight and drive away when the enemy breaks.
+
+Skill is randomized per unit among the upper tiers, following `docs/wisdom.md`.
+
+Scenario adjustments:
+
+- **Show of Force:** riflemen and light vehicles only, holding fire, plus the MANPADS roll. If the MANPADS launches, the enemy opens fire and the tasking becomes a firefight.
+- **Cache Destruction:** half the usual counts. The enemy probes the friendlies while they withdraw.
+- **Mortar or Rocket Team:** adds a `2B11 mortar` or a rocket technical (`HL_B8M1`, `tt_B8M1`) as the key unit. No ZU-23.
+- **Squirters:** technicals and light vehicles always, 2-4 of each. No ZU-23.
+- **IED Emplacers:** 2-3 riflemen and one light vehicle. No other rolls.
+
+### MANPADS
+
+The MANPADS is a surprise. The JTAC never names it as a key unit, and it is placed 1-2 km from the main enemy, on high ground or in a compound, so the threat comes from an unexpected direction.
+
+The JTAC's brief may include "reports of a SAM team in the area." The warning is a hint, not a guarantee: it is given for 50% of taskings with a MANPADS and 20% of taskings without one. After a launch, the JTAC calls "SAM launch" with a bearing from the friendlies, and the MANPADS becomes a key unit.
+
+### Threats
+
+Low to medium. Small arms and RPGs in every tasking, technicals in most, and a ZU-23 or MANPADS in some.
+
+## Stretch Goal: CH-47 Transport Taskings
+
+Dynamically generated transport taskings for the CH-47F, using the same check-in flow as CAS: move troops or cargo between Kandahar, the FARPs, and FOBs. Details wait until CAS taskings work.
+
+## Support Assets
+
+- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 16 km from the nearest tasking site. Each tanker spawns at a different point on its hot leg (Texaco 10 km in, Shell 40 km, Arco 60 km), so they do not start in formation and their turns fall out of step.
+  - Texaco (KC-135, fighter boom, 270.5, TACAN 100X): FL200, 280 KIAS, hot leg `z = -160000` to `-90000`. F-16C and F-15E.
+  - Arco (KC-135MPRS, basket, 270.1, TACAN 101X): FL180, 250 KIAS, hot leg `z = -140000` to `-70000`. Probe-equipped aircraft.
+  - Shell (KC-135, slow boom, 270.7, TACAN 102X): FL150, 200 KIAS, hot leg `z = -150000` to `-80000`. A-10C, which cannot keep up with Texaco when loaded.
+- AWACS: E-3A Overlord on an east-west race-track at FL300 over the Registan, `x = -300000` from `z = -170000` to `z = -20000`. Datalink only. Voice GCI from SkyEye (`docs/recipes/awacs-setup.md`).
+- JTAC: one MQ-9 Reaper per tasking, orbiting overhead. No ground JTACs; `docs/recipes/jtac-setup.md` rates UAVs as the most reliable.
+
+## Communications
+
+Follow `docs/recipes/comm-plan.md`, except for JTACs. Each of the 4 tasking slots has a fixed JTAC frequency on UHF AM (256.1, 256.3, 256.5, 256.7), preset in every player aircraft. The recipe puts JTACs on FM, which the M-2000C cannot tune, and fixed-wing CAS check-ins of the period were on UHF. The tasking's check-in brief names its frequency.
+
+## Technical Notes
+
+- `TerrainData.lua` is generated from `docs/data/terrains/Afghanistan/` by `generate_terrain_data.py`. It contains the area of operations polygon and the tasking site mask.
+- Candidate reuse from Operation Infinity: `Logging`, `Units`, `Spatial`, `Terrain`, `Formations`, `Virtualization`, and the offline test harness.

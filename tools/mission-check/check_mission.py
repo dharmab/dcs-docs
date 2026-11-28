@@ -478,14 +478,17 @@ def check_dyn_spawn_templates(
     if not isinstance(unit_warehouses, dict):
         unit_warehouses = {}
 
-    # Ship unit IDs (valid linkUnit targets) and template groupId -> unit type
+    # Ship and FARP unit IDs (valid linkUnit targets) and template groupId ->
+    # unit type. FARPs are static units in the Heliports category.
     ship_units: set[Any] = set()
     template_types: dict[Any, Any] = {}
     for _side, category, _ci, _gi, _path, group in iter_groups(mission):
         for _ui, unit in _items(group.get("units") or {}):
             if not isinstance(unit, dict):
                 continue
-            if category == "ship":
+            is_ship = category == "ship"
+            is_farp = category == "static" and unit.get("category") == "Heliports"
+            if is_ship or is_farp:
                 ship_units.add(unit.get("unitId"))
             if group.get("dynSpawnTemplate") and group.get("groupId") is not None:
                 template_types.setdefault(group["groupId"], unit.get("type"))
@@ -545,8 +548,8 @@ def check_dyn_spawn_templates(
             if link_unit not in ship_units:
                 diag.fail(
                     path,
-                    f"first waypoint linkUnit {link_unit} is not a ship unit "
-                    f"in the mission",
+                    f"first waypoint linkUnit {link_unit} is not a ship or FARP "
+                    f"unit in the mission",
                 )
             base = unit_warehouses.get(link_unit)
             label = f"unit warehouse {link_unit}"
