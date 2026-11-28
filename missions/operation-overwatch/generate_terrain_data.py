@@ -12,11 +12,15 @@ src/l10n/DEFAULT/TerrainData.lua with:
   polygon. The province borders in features.gpkg do not join into closed
   polygons, so the generator widens them by BORDER_GAP_M to close the gaps,
   takes the province areas between them, and merges the two provinces.
-- A 200 m mask of tasking sites. A site is open ground or farmland with
-  compounds (land cover `town`) nearby but not a city, on flat ground, away from
-  airfields. These are the green zones along the Helmand and Arghandab rivers,
-  where the Firefight scenario places a patrol pinned by insurgents in
-  compounds.
+- A 200 m mask of tasking sites. A site is open ground or farmland in the
+  irrigated green zones along the Helmand and Arghandab rivers: mostly farmland
+  around it, outside the cities, on flat ground, away from airfields. The
+  Firefight scenario places a patrol there, pinned by insurgents in the fields
+  or in compounds, which the mission finds at runtime from scenery objects.
+
+  The land cover `town` class does not mark compounds here: it covers whole
+  stretches of some farmland and misses the compounds in the rest. Cities come
+  from the map's town outlines instead.
 
 Each mask row is a string of comma-separated run lengths, alternating non-site
 and site and starting with non-site. siteCounts lists the number of site cells
@@ -58,20 +62,17 @@ AREA_SIMPLIFY_M = 500
 # Land cover classes from tools/terrain-geodata/README.md
 LAND = 1
 FIELD = 2
-TOWN = 4
 RUNWAY = 9
 SITE_CLASSES = (LAND, FIELD)
 ELEVATION_NODATA = -32768
 
-# Fraction of town pixels within COMPOUND_RADIUS_M of a site: enough for
-# compounds the enemy can fire from, not so many that the site is in a village
-COMPOUND_RADIUS_M = 1000
-MIN_COMPOUND_FRACTION = 0.03
-MAX_COMPOUND_FRACTION = 0.25
-# Fraction of town pixels within CITY_RADIUS_M of a site. Keeps sites out of
-# Kandahar City, Lashkar Gah, and the other large towns.
-CITY_RADIUS_M = 3000
-MAX_CITY_FRACTION = 0.12
+# Fraction of farmland pixels within FARMLAND_RADIUS_M of a site. Keeps sites
+# in the green zones, out of the desert and its scattered hamlets.
+FARMLAND_RADIUS_M = 500
+MIN_FARMLAND_FRACTION = 0.25
+# Sites stay this far from the map's town outlines (features.gpkg
+# `urban_areas`): Kandahar City, Lashkar Gah, and the other large towns
+MIN_CITY_DISTANCE_M = 1000
 # Taskings stay clear of airfields
 MIN_RUNWAY_DISTANCE_M = 5000
 # Highest minus lowest elevation in the 3 x 3 km block around a site. Rejects
@@ -196,24 +197,32 @@ def build_sites(
     inside = rasterize(
         [(area, 1)], out_shape=classes.shape, transform=transform, fill=0
     ).astype(bool)
-    town = (classes == TOWN).astype(float)
-    compounds = disk_mean(town, round(COMPOUND_RADIUS_M / pixel))
-    city = disk_mean(town, round(CITY_RADIUS_M / pixel))
+    farmland = disk_mean(
+        (classes == FIELD).astype(float), round(FARMLAND_RADIUS_M / pixel)
+    )
+    cities = rasterize(
+        [
+            (town, 1)
+            for town in read_geometries(terrain_dir / "features.gpkg", "urban_areas")
+        ],
+        out_shape=classes.shape,
+        transform=transform,
+        fill=0,
+    ).astype(bool)
+    city_distance = ndimage.distance_transform_edt(~cities) * pixel
     runway_distance = ndimage.distance_transform_edt(classes != RUNWAY) * pixel
     relief = relief_on_grid(terrain_dir / "elevation.tif", classes.shape, transform)
 
     open_ground = np.isin(classes, SITE_CLASSES)
-    has_compounds = compounds >= MIN_COMPOUND_FRACTION
-    not_in_village = compounds <= MAX_COMPOUND_FRACTION
-    not_in_city = city <= MAX_CITY_FRACTION
+    in_green_zone = farmland >= MIN_FARMLAND_FRACTION
+    clear_of_cities = city_distance >= MIN_CITY_DISTANCE_M
     clear_of_airfields = runway_distance >= MIN_RUNWAY_DISTANCE_M
     flat = relief <= MAX_RELIEF_M
     site = (
         inside
         & open_ground
-        & has_compounds
-        & not_in_village
-        & not_in_city
+        & in_green_zone
+        & clear_of_cities
         & clear_of_airfields
         & flat
     )

@@ -50,6 +50,7 @@ end
 
 -- Install a fresh mock environment into _G and return its state table.
 -- options.surfaceAt: function(x, z) returning the surface type (default LAND)
+-- options.scenery: array of map points { x, y } of scenery objects (default none)
 function Mock.install(options)
     options = options or {}
 
@@ -76,6 +77,7 @@ function Mock.install(options)
             return SURFACE_LAND
         end,
         wind = options.wind or { x = 0, z = 0 },
+        scenery = options.scenery or {},
         nextObjectId = AUTO_ID_START,
     }
 
@@ -639,8 +641,30 @@ function Mock.install(options)
                 end
             end
         end,
-        searchObjects = function()
-            return 0
+        -- Spheres only, tested in 2D against scenery object positions
+        searchObjects = function(category, volume, handler)
+            if category ~= Object.Category.SCENERY or volume.id ~= world.VolumeType.SPHERE then
+                return 0
+            end
+            local center = volume.params.point
+            local radius = volume.params.radius
+            local count = 0
+            for _, object in ipairs(env.scenery) do
+                local dx = object.x - center.x
+                local dz = object.y - center.z
+                if dx * dx + dz * dz <= radius * radius then
+                    count = count + 1
+                    local found = {
+                        getPoint = function()
+                            return { x = object.x, y = TERRAIN_HEIGHT, z = object.y }
+                        end,
+                    }
+                    if handler(found) == false then
+                        return count
+                    end
+                end
+            end
+            return count
         end,
         getAirbases = function()
             return airbaseObjects

@@ -44,13 +44,14 @@ Style follows Operation Infinity: `array[#array + 1] = value`, named constants f
 
 ## Tests
 
-`luajit tests/run.lua tests/*_test.lua` from this directory, or `make test`. `tests/dcs_mock.lua` is Operation Infinity's mock with flat open land, no airbases or roads, and a fake coordinate projection. `harness.load()` replaces the area of operations, FARPs, and site grid with placeholders around the origin (`Harness.testArea`, `Harness.testFarps`, `Harness.testGrid`). Pass `realTerrain = true` to keep the generated data, or `noArea = true` to leave them unset. `harness.takeOff()` adds an airborne player and fires `S_EVENT_TAKEOFF`.
+`luajit tests/run.lua tests/*_test.lua` from this directory, or `make test`. `tests/dcs_mock.lua` is Operation Infinity's mock with flat open land, no airbases or roads, and a fake coordinate projection. Pass `scenery`, a list of map points, to place scenery objects for `world.searchObjects`. `harness.load()` replaces the area of operations, FARPs, and site grid with placeholders around the origin (`Harness.testArea`, `Harness.testFarps`, `Harness.testGrid`). Pass `realTerrain = true` to keep the generated data, or `noArea = true` to leave them unset. `harness.takeOff()` adds an airborne player and fires `S_EVENT_TAKEOFF`.
 
 ## Design Decisions
 
 - Flights are player groups, keyed by group name. Check In appears after `S_EVENT_TAKEOFF` and is removed on land, crash, eject, death, or leaving the unit.
 - Fixed-wing flights get `fixed` taskings on any site in the area, each site cell equally likely. Helicopters in `rotaryCasTypes` get `rotary` taskings on a site near a FARP, found by rejection sampling inside the FARP radius.
-- Sites are open ground or farmland with compounds within 1 km, outside cities, at least 5 km from airfields, on flat ground. These are the green zones along the Helmand and Arghandab rivers. The open desert has no sites. Other helicopters (CH-47F) get no menu.
+- Sites are open ground or farmland in the green zones along the Helmand and Arghandab rivers: a quarter farmland within 500 m, 1 km from the map's town outlines, 5 km from airfields, on flat ground. The open desert has no sites. Other helicopters (CH-47F) get no menu.
+- The land cover `town` class does not mark compounds in the green zones: it covers whole stretches of some farmland and misses the compounds in the rest. Compounds come from scenery objects at runtime (`Sites:sceneryNear`). Each side fights from a compound (units within 20 m of its buildings) or from the fields, and every unit keeps 4 m (dismounts) or 10 m (vehicles) from scenery objects.
 - The enemy is 400-900 m from the friendlies. Afghanistan engagements were long range and troops often could not see the shooters, so the brief gives an estimated count and range and smoke marks the approximate position.
 - Every ground group is invisible to AI, so the two sides cannot kill each other while FireAtPoint runs. Friendlies are also immortal. Players see and attack the enemy normally.
 - AI sensors cannot see invisible groups, so the MQ-9's `FAC_EngageGroup` task may never find its target. The script lasers the first living key unit from the MQ-9 itself (`Spot.createLaser`, code `laserCode`) and pops smoke on each check-in brief.
@@ -69,6 +70,7 @@ Nothing has run on a server yet. Check these first:
 - FARP Pasab: helicopters spawn on the Invisible FARP and can rearm and refuel there. Only one helicopter can spawn at a time, because the FARP has one pad. The tyres sit on the strip and the tents and trucks just north of it, clear of FOB buildings. Positions come from a screenshot ruler, so each could be off by up to 10 m.
 - Camp Bastion, Kandahar Heliport, and Camp Bastion Heliport show blue on the F10 map, and helicopters can rearm and refuel at all three.
 - Camp Bastion Heliport: the AH-64D, OH-58D, and UH-1H spawn there. The UH-1H also spawns at FARP Pasab, gets rotary CAS taskings, and its livery and loadout prefill the spawn dialog.
+- `world.searchObjects(Object.Category.SCENERY, ...)` finds the Afghanistan compounds (buildings and walls) and is fast enough for the per-unit clearance checks. Whether it also returns trees, which would count as compounds. Whether units 4 m and 10 m from an object stand outside it, since the search may test object centers rather than outlines.
 - Whether RPG and DShK FireAtPoint at 400-900 m keeps firing; RPG-7 range is short of the far end.
 
 ## To Do

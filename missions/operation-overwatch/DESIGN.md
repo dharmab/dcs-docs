@@ -114,7 +114,9 @@ There is one check-in point, shared by all aircraft, on Highway 1 halfway betwee
 
 Fixed-wing taskings are placed on any tasking site in the area of operations, Kandahar and Helmand provinces, independent of the flight's position and the check-in point. Transit and fuel management across the area are part of the gameplay. Sites are chosen at runtime from a generated site mask rather than a hand-picked list, so taskings repeat less.
 
-A tasking site is open ground or farmland with compounds within 1 km, outside cities, at least 5 km from airfields, on flat ground. These rules select the green zones along the Helmand and Arghandab rivers, where the 2010 fighting was, and leave out the open desert, which has no compounds for the enemy to fire from. `generate_terrain_data.py` builds the mask from the terrain export.
+A tasking site is open ground or farmland with at least a quarter farmland within 500 m, at least 1 km from the map's town outlines, at least 5 km from airfields, on flat ground. These rules select the irrigated green zones along the Helmand and Arghandab rivers, where the 2010 fighting was, including Nad-e Ali, Marjah, Zhari, and Panjwai, and leave out the open desert. `generate_terrain_data.py` builds the mask from the terrain export. The export's `town` land cover does not mark compounds in the green zones, so the mission finds compounds at runtime from scenery objects (`world.searchObjects`).
+
+Each side of a firefight fights from a compound or from the fields. The enemy takes the densest compound among a dozen points 400-900 m from the patrol, or open ground when none has buildings. Half the time the patrol holds a compound within 250 m of the site. Units in a compound stand within 20 m of its buildings and walls. Every unit keeps clear of scenery objects, 4 m for dismounts and 10 m for vehicles, so none spawns inside a building. The brief says where each side is.
 
 Helicopter taskings (AH-64D, OH-58D, UH-1H) are placed within 20 nm of a FARP, so rotary-wing flights get transits suited to their speed and range.
 
@@ -217,7 +219,7 @@ Dynamically generated transport taskings for the CH-47F, using the same check-in
 
 ## Support Assets
 
-- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 18 km from the nearest tasking site.
+- Tankers: three KC-135s stacked by altitude over the Registan desert, 50 km south of Highway 1 (`docs/recipes/tanker-setup.md`). Each flies an anchored track with a 70 km hot leg flown east along `x = -300000` and the return leg to the south, away from the green zones. Every racetrack is at least 16 km from the nearest tasking site.
   - Texaco (KC-135, fighter boom, 270.5, TACAN 100X): FL200, 280 KIAS, hot leg `z = -160000` to `-90000`. F-16C and F-15E.
   - Arco (KC-135MPRS, basket, 270.1, TACAN 101X): FL180, 250 KIAS, hot leg `z = -140000` to `-70000`. Probe-equipped aircraft.
   - Shell (KC-135, slow boom, 270.7, TACAN 102X): FL150, 200 KIAS, hot leg `z = -150000` to `-80000`. A-10C, which cannot keep up with Texaco when loaded.

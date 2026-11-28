@@ -199,13 +199,17 @@ function Tasking:briefText(tasking)
 
     local lines = {
         string.format("%s, %.2f %s. Troops in contact.", slot.callsign, slot.frequency, slot.modulationName),
-        "Friendlies: " .. self:formatGrid(spawned.friendlyCenter) .. ", marked by green smoke.",
+        "Friendlies: "
+            .. self:formatGrid(spawned.friendlyCenter)
+            .. (spawned.friendlyInCompound and ", holding a compound" or ", in the fields")
+            .. ", marked by green smoke.",
         -- Friendlies cannot see the shooters at these ranges, so the count and
         -- the mark are estimates
         string.format(
-            "Friendlies taking fire from an estimated %d dismounts, %03d true, %d meters. "
+            "Friendlies taking fire from an estimated %d dismounts %s, %03d true, %d meters. "
                 .. "Friendlies cannot see the shooters. Red smoke marks the approximate enemy position.",
             riflemen,
+            spawned.enemyInCompound and "in compounds" or "in the fields",
             bearing,
             math.floor(distance / ESTIMATE_ROUNDING_METERS + 0.5) * ESTIMATE_ROUNDING_METERS
         ),

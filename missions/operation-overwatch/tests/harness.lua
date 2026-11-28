@@ -106,7 +106,7 @@ end
 
 -- Load the scripts into a fresh environment and return the mock state.
 -- options.seed: math.randomseed value (default 1)
--- options.surfaceAt: passed to the mock
+-- options.surfaceAt, options.scenery: passed to the mock
 -- options.noArea: leave the area of operations, FARPs, and site grid unset
 -- options.realTerrain: keep the generated area of operations, site grid, and
 -- FARPs from TerrainData.lua and the config

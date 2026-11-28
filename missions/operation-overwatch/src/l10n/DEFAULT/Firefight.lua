@@ -3,6 +3,10 @@
 -- Spawns the troops-in-contact scenario: a friendly patrol, the enemy force,
 -- and an MQ-9 JTAC.
 --
+-- Each side fights from a compound when one is nearby, or from the fields.
+-- Units in a compound stand next to its buildings and walls, and every unit
+-- keeps clear of scenery objects so none spawns inside one.
+--
 -- The two sides fire at points near each other (docs/recipes/ground-firefight.md)
 -- so the fight lasts until players break it. Every ground group is invisible:
 -- WEAPON_HOLD does not stop ground AI from engaging while FireAtPoint runs
@@ -34,12 +38,29 @@ local ENEMY_SPREAD_METERS = 150
 -- unexpected direction
 local MANPADS_DISTANCE_MIN_METERS = 1000
 local MANPADS_DISTANCE_MAX_METERS = 2000
+-- Lets the MANPADS step aside when its point is inside a building
+local MANPADS_SPREAD_METERS = 20
 -- FireAtPoint aim points fall short of the other side by this much
 local FIRE_SHORT_METERS = 60
 local FIRE_RADIUS_METERS = 50
 local FIRE_EXPENDITURE_QUANTITY = 200
 local FIRE_WANDER_METERS = 40
 local UNIT_PLACEMENT_ATTEMPTS = 20
+
+-- Chance the friendly patrol holds a compound instead of crossing the fields,
+-- when the site has a compound within FRIENDLY_COMPOUND_DISTANCE_METERS
+Firefight.friendlyCompoundChance = 0.5
+local FRIENDLY_COMPOUND_DISTANCE_METERS = 250
+-- Radius around each side's center searched for the buildings it uses as cover
+local FRIENDLY_COMPOUND_RADIUS_METERS = 60
+local ENEMY_COMPOUND_RADIUS_METERS = ENEMY_SPREAD_METERS
+-- Units in a compound stand within this distance of a building or wall
+local COVER_DISTANCE_METERS = 20
+-- Distance from any scenery object. Vehicles need more room than dismounts.
+-- TODO(dcs): check that units at these clearances stand outside buildings and
+-- walls; the search may test object centers rather than their outlines.
+local INFANTRY_CLEARANCE_METERS = 4
+local VEHICLE_CLEARANCE_METERS = 10
 
 -- MQ-9 orbit (docs/recipes/jtac-setup.md: within 5 km of the targets)
 local JTAC_HEIGHT_AGL_METERS = 3000
@@ -94,7 +115,31 @@ local function aimPointShortOf(from, to)
     }
 end
 
-local function placeUnit(center, spread)
+local infantryRoles = {
+    [EnemyForce.Role.RIFLEMAN] = true,
+    [EnemyForce.Role.RPG] = true,
+    [EnemyForce.Role.MANPADS] = true,
+}
+
+local function isInfantry(spec)
+    return spec.infantry or infantryRoles[spec.role] == true
+end
+
+-- A point for one unit: next to a building in cover when cover is given,
+-- otherwise within spread of center. Clear of scenery when possible, then on
+-- valid ground, then the center.
+local function placeUnit(center, spread, clearance, cover)
+    for _ = 1, UNIT_PLACEMENT_ATTEMPTS do
+        local point
+        if cover and #cover > 0 then
+            point = Spatial:randomPointInRadius(cover[math.random(#cover)], COVER_DISTANCE_METERS)
+        else
+            point = Spatial:randomPointInRadius(center, spread)
+        end
+        if Sites:isClear(point, clearance) then
+            return point
+        end
+    end
     for _ = 1, UNIT_PLACEMENT_ATTEMPTS do
         local point = Spatial:randomPointInRadius(center, spread)
         if Sites:isValidPoint(point) then
@@ -104,13 +149,15 @@ local function placeUnit(center, spread)
     return center
 end
 
--- Build a ground group. specs: array of { type, skill }
--- options: invisible, immortal, holdFire, fireAt (map point)
+-- Build a ground group. specs: array of { type, skill, role, infantry }
+-- options: invisible, immortal, holdFire, fireAt (map point), cover (map
+-- points of buildings to stand next to)
 local function buildGroundGroup(name, center, spread, facing, specs, options)
     local groupId = Units:getNextGroupId()
     local units = {}
     for i, spec in ipairs(specs) do
-        local point = placeUnit(center, spread)
+        local clearance = isInfantry(spec) and INFANTRY_CLEARANCE_METERS or VEHICLE_CLEARANCE_METERS
+        local point = placeUnit(center, spread, clearance, options.cover)
         units[#units + 1] = {
             unitId = Units:getNextUnitId(),
             name = name .. "-" .. i,
@@ -195,7 +242,7 @@ local function friendlySpecs()
     end
     for _, dismount in ipairs(Firefight.friendlyDismounts) do
         for _ = 1, dismount.count do
-            specs[#specs + 1] = { type = dismount.type }
+            specs[#specs + 1] = { type = dismount.type, infantry = true }
         end
     end
     specs[#specs + 1] = { type = Firefight.ammoCarrierType }
@@ -313,11 +360,45 @@ function Firefight:spawn(tasking)
     local config = OperationOverwatch.config
     local prefix = "OW-T" .. tasking.id
     local friendlyCenter = tasking.center
-    local enemyCenter = Sites:pickPointNear(friendlyCenter, CONTACT_DISTANCE_MIN_METERS, CONTACT_DISTANCE_MAX_METERS)
+    local friendlyCover = nil
+    if math.random() < Firefight.friendlyCompoundChance then
+        local compound = Sites:pickCompoundNear(
+            friendlyCenter,
+            0,
+            FRIENDLY_COMPOUND_DISTANCE_METERS,
+            FRIENDLY_COMPOUND_RADIUS_METERS
+        )
+        if compound then
+            friendlyCenter = compound.center
+            friendlyCover = compound.buildings
+        end
+    end
+
+    local enemyCenter, enemyCover
+    local enemyCompound = Sites:pickCompoundNear(
+        friendlyCenter,
+        CONTACT_DISTANCE_MIN_METERS,
+        CONTACT_DISTANCE_MAX_METERS,
+        ENEMY_COMPOUND_RADIUS_METERS
+    )
+    if enemyCompound then
+        enemyCenter = enemyCompound.center
+        enemyCover = enemyCompound.buildings
+    else
+        enemyCenter = Sites:pickPointNear(friendlyCenter, CONTACT_DISTANCE_MIN_METERS, CONTACT_DISTANCE_MAX_METERS)
+    end
     if not enemyCenter then
         log(prefix .. ": no valid enemy position")
         return nil
     end
+    log(
+        string.format(
+            "%s: friendlies %s, enemy %s",
+            prefix,
+            friendlyCover and ("in a compound of " .. #friendlyCover .. " objects") or "in the fields",
+            enemyCover and ("in a compound of " .. #enemyCover .. " objects") or "in the fields"
+        )
+    )
 
     local towardEnemy = math.atan2(enemyCenter.y - friendlyCenter.y, enemyCenter.x - friendlyCenter.x)
     local towardFriendlies = towardEnemy + math.pi
@@ -325,6 +406,8 @@ function Firefight:spawn(tasking)
     local result = {
         friendlyCenter = friendlyCenter,
         enemyCenter = enemyCenter,
+        friendlyInCompound = friendlyCover ~= nil,
+        enemyInCompound = enemyCover ~= nil,
         groupNames = {},
         friendlyUnitNames = {},
         enemyUnitNames = {},
@@ -359,7 +442,7 @@ function Firefight:spawn(tasking)
         FRIENDLY_SPREAD_METERS,
         towardEnemy,
         friendlySpecs(),
-        { immortal = true, invisible = true, fireAt = friendlyAim }
+        { immortal = true, invisible = true, fireAt = friendlyAim, cover = friendlyCover }
     )
     track(spawn(config.blueCountryId, Group.Category.GROUND, friendlyData), friendlyData, false)
     result.fireGroups[#result.fireGroups + 1] = { name = friendlyData.name, aim = friendlyAim }
@@ -369,9 +452,13 @@ function Firefight:spawn(tasking)
         {
             suffix = "-Fire",
             roles = { Role.RIFLEMAN, Role.RPG, Role.TECHNICAL },
-            options = { invisible = true, fireAt = enemyAim },
+            options = { invisible = true, fireAt = enemyAim, cover = enemyCover },
         },
-        { suffix = "-Vehicles", roles = { Role.LIGHT_VEHICLE }, options = { invisible = true, holdFire = true } },
+        {
+            suffix = "-Vehicles",
+            roles = { Role.LIGHT_VEHICLE },
+            options = { invisible = true, holdFire = true, cover = enemyCover },
+        },
         { suffix = "-AAA", roles = { Role.ZU23 }, options = { invisible = true } },
     }
     local fireGroupId
@@ -399,9 +486,14 @@ function Firefight:spawn(tasking)
     if #manpadsSpecs > 0 then
         local manpadsCenter = Sites:pickPointNear(enemyCenter, MANPADS_DISTANCE_MIN_METERS, MANPADS_DISTANCE_MAX_METERS)
         if manpadsCenter then
-            local data = buildGroundGroup(prefix .. "-Enemy-MANPADS", manpadsCenter, 0, 0, manpadsSpecs, {
-                invisible = true,
-            })
+            local data = buildGroundGroup(
+                prefix .. "-Enemy-MANPADS",
+                manpadsCenter,
+                MANPADS_SPREAD_METERS,
+                0,
+                manpadsSpecs,
+                { invisible = true }
+            )
             local group = spawn(config.redCountryId, Group.Category.GROUND, data)
             track(group, data, true, manpadsSpecs)
             if group then

@@ -2,8 +2,11 @@
 -- SITES
 -- Chooses tasking locations at runtime.
 -- Taskings are placed on tasking sites from TerrainData.lua: farmland and open
--- ground near compounds in the area of operations. Fixed-wing taskings go on
--- any site. Rotary-wing taskings go on a site within a radius of a FARP.
+-- ground in the green zones of the area of operations. Fixed-wing taskings go
+-- on any site. Rotary-wing taskings go on a site within a radius of a FARP.
+--
+-- The land cover does not show compounds, so they are found at runtime from
+-- scenery objects (buildings and compound walls) near a site.
 -- =============================================================================
 
 if _G.SitesLoaded then
@@ -21,6 +24,13 @@ local MAX_ATTEMPTS = 200
 -- needs more attempts
 local ROTARY_ATTEMPTS = 2000
 local FULL_CIRCLE_DEGREES = 360
+-- Candidate points tried when looking for a compound
+local COMPOUND_CANDIDATES = 12
+-- Scenery objects collected per compound search. More adds nothing to unit
+-- placement and costs time in dense villages.
+local COMPOUND_OBJECT_LIMIT = 60
+-- Search spheres start this far above the ground
+local SEARCH_HEIGHT_METERS = 1
 
 -- Ray-casting point-in-polygon test. polygon is an array of { x, y }.
 function Sites:pointInPolygon(point, polygon)
@@ -184,6 +194,53 @@ end
 function Sites:isInAreaOfOperations(point)
     local polygon = OperationOverwatch.config.areaOfOperations
     return polygon ~= nil and self:pointInPolygon(point, polygon)
+end
+
+-- Scenery objects within radius of a map point, as map points { x, y }. Stops
+-- after limit objects when limit is given.
+function Sites:sceneryNear(point, radius, limit)
+    local found = {}
+    local volume = {
+        id = world.VolumeType.SPHERE,
+        params = {
+            point = { x = point.x, y = land.getHeight(point) + SEARCH_HEIGHT_METERS, z = point.y },
+            radius = radius,
+        },
+    }
+    world.searchObjects(Object.Category.SCENERY, volume, function(object)
+        local ok, position = pcall(object.getPoint, object)
+        if ok and position then
+            found[#found + 1] = { x = position.x, y = position.z }
+        end
+        return limit == nil or #found < limit
+    end)
+    return found
+end
+
+-- True when a unit can stand at the point: valid ground and no scenery object
+-- within clearance
+function Sites:isClear(point, clearance)
+    if not self:isValidPoint(point) then
+        return false
+    end
+    return #self:sceneryNear(point, clearance, 1) == 0
+end
+
+-- The densest compound among points between minDistance and maxDistance from
+-- origin: { center, buildings } where buildings are the scenery objects within
+-- radius of center. nil when no candidate has scenery within radius.
+function Sites:pickCompoundNear(origin, minDistance, maxDistance, radius)
+    local best = nil
+    for _ = 1, COMPOUND_CANDIDATES do
+        local candidate = self:pickPointNear(origin, minDistance, maxDistance)
+        if candidate then
+            local buildings = self:sceneryNear(candidate, radius, COMPOUND_OBJECT_LIMIT)
+            if #buildings > 0 and (not best or #buildings > #best.buildings) then
+                best = { center = candidate, buildings = buildings }
+            end
+        end
+    end
+    return best
 end
 
 local function rotaryCandidate(config)
